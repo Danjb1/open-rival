@@ -20,6 +20,8 @@ These screenshots can then be run through my [Sprite Extractor](https://github.c
 
 The sound files can be extracted from *SOUNDS.DAT* using Watto's [Game Extractor](http://www.watto.org/game_extractor.html). These are mostly WAV files, but there are also a handful of [RIFF files](http://www.vgmpf.com/Wiki/index.php/MDS) that I have not yet figured out how to play.
 
+For some reason, these sounds seem to be of a worse - or at least, different - quality than those heard in-game.
+
 ### Music
 
 The music was ripped directly from the game's CD using Windows Media Player.
