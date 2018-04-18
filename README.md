@@ -24,7 +24,17 @@ For some reason, these sounds seem to be of a worse - or at least, different - q
 
 ### Music
 
+#### WMA
+
 The music was ripped directly from the game's CD using Windows Media Player.
+
+Track 11 seems to be the same as Track 14, but with a few seconds of silence at the end.
+
+#### MIDS
+
+The MIDS files were contained within *SOUNDS.DAT* alongside the sound effects, but they had a ".riff" file extension and the length field (byte 0x4) was 8 higher than it should be. The fixed files can be played in [foobar2000](https://www.foobar2000.org/) using the [MIDI Player](https://www.foobar2000.org/components/view/foo_midi) component by *kode54*.
+
+Track 6 was duplicated.
 
 ### Videos
 
