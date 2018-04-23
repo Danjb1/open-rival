@@ -44,13 +44,13 @@
  - **039:** Human - Ship Sinking (duplicate)
  - **040:** Human - Under Threat 1
  - **041:** Human - Under Threat 2
- - **042:** Greenskin - Serf 1
- - **043:** Greenskin - Serf 2
- - **044:** Greenskin - Serf 3
- - **045:** Greenskin - Serf 4
- - **046:** Greenskin - Serf 5
- - **047:** Greenskin - Serf 6
- - **048:** Greenskin - Serf 2 (duplicate)
+ - **042:** Human - Peasant 1
+ - **043:** Human - Peasant 2
+ - **044:** Human - Peasant 3
+ - **045:** Human - Peasant 4
+ - **046:** Human - Peasant 5
+ - **047:** Human - Peasant 6
+ - **048:** Human - Peasant 2 (duplicate)
  - **049:** Human - Bowman 1
  - **050:** Human - Bowman 2
  - **051:** Human - Bowman 3
@@ -131,87 +131,87 @@
  - **126:** Human - Zeppelin 6
  - **127:** Greenskin - Death
  - **128:** Greenskin - Ship Sinking
- - **129:** Greenskin - 
- - **130:** Greenskin - 
- - **131:** Greenskin - 
- - **132:** Greenskin - 
- - **133:** Greenskin - 
- - **134:** Greenskin - 
+ - **129:** Greenskin - Serf 1
+ - **130:** Greenskin - Serf 2
+ - **131:** Greenskin - Serf 3
+ - **132:** Greenskin - Serf 4
+ - **133:** Greenskin - Serf 5
+ - **134:** Greenskin - Serf 6
  - **135:** Greenskin - 
  - **136:** Greenskin - 
  - **137:** Greenskin - 
- - **138:** Greenskin - 
- - **139:** Greenskin - 
- - **140:** Greenskin - 
- - **141:** Greenskin - 
- - **142:** Greenskin - 
- - **143:** Greenskin - 
- - **144:** Greenskin - 
- - **145:** Greenskin - 
- - **146:** Greenskin - 
- - **147:** Greenskin - 
- - **148:** Greenskin - 
- - **149:** Greenskin - 
- - **150:** Greenskin - 
- - **151:** Greenskin - 
- - **152:** Greenskin - 
- - **153:** Greenskin - 
- - **154:** Greenskin - 
- - **155:** Greenskin - 
- - **156:** Greenskin - 
- - **157:** Greenskin - 
- - **158:** Greenskin - 
- - **159:** Greenskin - 
- - **160:** Greenskin - 
- - **161:** Greenskin - 
- - **162:** Greenskin - 
- - **163:** Greenskin - 
- - **164:** Greenskin - 
- - **165:** Greenskin - 
- - **166:** Greenskin - 
- - **167:** Greenskin - 
- - **168:** Greenskin - 
- - **169:** Greenskin - 
- - **170:** Greenskin - 
- - **171:** Greenskin - 
- - **172:** Greenskin - 
- - **173:** Greenskin - 
+ - **138:** Greenskin - Rock Thrower 1
+ - **139:** Greenskin - Rock Thrower 2
+ - **140:** Greenskin - Rock Thrower 3
+ - **141:** Greenskin - Rock Thrower 4
+ - **142:** Greenskin - Rock Thrower 5
+ - **143:** Greenskin - Rock Thrower 6
+ - **144:** Greenskin - Horde Rider 1
+ - **145:** Greenskin - Horde Rider 2
+ - **146:** Greenskin - Horde Rider 3
+ - **147:** Greenskin - Horde Rider 4
+ - **148:** Greenskin - Horde Rider 5
+ - **149:** Greenskin - Horde Rider 6
+ - **150:** Greenskin - Warlord 1
+ - **151:** Greenskin - Warlord 2
+ - **152:** Greenskin - Warlord 3
+ - **153:** Greenskin - Warlord 4
+ - **154:** Greenskin - Warlord 5
+ - **155:** Greenskin - Warlord 6
+ - **156:** Greenskin - Gnome Boomer 1
+ - **157:** Greenskin - Gnome Boomer 2
+ - **158:** Greenskin - Gnome Boomer 3
+ - **159:** Greenskin - Gnome Boomer 4
+ - **160:** Greenskin - Gnome Boomer 5
+ - **161:** Greenskin - Gnome Boomer 6
+ - **162:** Greenskin - Rogue 1
+ - **163:** Greenskin - Rogue 2
+ - **164:** Greenskin - Rogue 3
+ - **165:** Greenskin - Rogue 4
+ - **166:** Greenskin - Rogue 5
+ - **167:** Greenskin - Rogue 6
+ - **168:** Greenskin - Catapult 1
+ - **169:** Greenskin - Catapult 2
+ - **170:** Greenskin - Catapult 3
+ - **171:** Greenskin - Catapult 4
+ - **172:** Greenskin - Catapult 5
+ - **173:** Greenskin - Catapult 6
  - **174:** Greenskin - 
  - **175:** Greenskin - 
  - **176:** Greenskin - 
  - **177:** Greenskin - 
  - **178:** Greenskin - 
  - **179:** Greenskin - 
- - **180:** Greenskin - 
- - **181:** Greenskin - 
- - **182:** Greenskin - 
- - **183:** Greenskin - 
- - **184:** Greenskin - 
- - **185:** Greenskin - 
- - **186:** Greenskin - 
- - **187:** Greenskin - 
- - **188:** Greenskin - 
- - **189:** Greenskin - 
- - **190:** Greenskin - 
- - **191:** Greenskin - 
+ - **180:** Greenskin - Necromancer 1
+ - **181:** Greenskin - Necromancer 2
+ - **182:** Greenskin - Necromancer 3
+ - **183:** Greenskin - Necromancer 4
+ - **184:** Greenskin - Necromancer 5
+ - **185:** Greenskin - Necromancer 6
+ - **186:** Greenskin - Priest of Doom 1
+ - **187:** Greenskin - Priest of Doom 2
+ - **188:** Greenskin - Priest of Doom 3
+ - **189:** Greenskin - Priest of Doom 4
+ - **190:** Greenskin - Priest of Doom 5
+ - **191:** Greenskin - Priest of Doom 6
  - **192:** Greenskin - 
  - **193:** Greenskin - 
  - **194:** Greenskin - 
  - **195:** Greenskin - 
  - **196:** Greenskin - 
  - **197:** Greenskin - 
- - **198:** Greenskin - 
- - **199:** Greenskin - 
- - **200:** Greenskin - 
- - **201:** Greenskin - 
- - **202:** Greenskin - 
- - **203:** Greenskin - 
- - **204:** Greenskin - 
- - **205:** Greenskin - 
- - **206:** Greenskin - 
- - **207:** Greenskin - 
- - **208:** Greenskin - 
- - **209:** Greenskin - 
+ - **198:** Greenskin - Troll Galley 1
+ - **199:** Greenskin - Troll Galley 2
+ - **200:** Greenskin - Troll Galley 3
+ - **201:** Greenskin - Troll Galley 4
+ - **202:** Greenskin - Troll Galley 5
+ - **203:** Greenskin - Troll Galley 6
+ - **204:** Greenskin - Warbat 1
+ - **205:** Greenskin - Warbat 2
+ - **206:** Greenskin - Warbat 3
+ - **207:** Greenskin - Warbat 4
+ - **208:** Greenskin - Warbat 5
+ - **209:** Greenskin - Warbat 6
  - **210:** Greenskin - 
  - **211:** Greenskin - 
  - **212:** Greenskin - 

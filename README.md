@@ -32,7 +32,7 @@ Track 11 seems to be the same as Track 14, but with a few seconds of silence at 
 
 #### MID
 
-The MID files were contained within *SOUNDS.DAT* alongside the sound effects and can be played in [foobar2000](https://www.foobar2000.org/) using the [MIDI Player](https://www.foobar2000.org/components/view/foo_midi) component by *kode54*.
+The MID files were contained within *SOUNDS.DAT* alongside the sound effects and can be played in [foobar2000](https://www.foobar2000.org/) using the [MIDI Player](https://www.foobar2000.org/components/view/foo_midi) component by **kode54**.
 
 Track 6 was duplicated.
 
