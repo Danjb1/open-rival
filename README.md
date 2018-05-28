@@ -10,7 +10,7 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 ### Graphics
 
-The game's images are presumably stored in the file called *IMAGES.DAT*, but apparently this file actually contains dynamically-loaded code, and it is certainly not a format I recognise.
+The game's images are stored in the file called *IMAGES.DAT*, but this is very difficult to decipher. You can read more about this [here](/image-reader).
 
 I have attempted to extract the game's graphics through a somewhat more manual process with the help of DxWnd author **ghotik** (full thread [here](https://sourceforge.net/p/dxwnd/discussion/general/thread/19bc4f4b/)). This involves running the game through the wrapper program DxWnd, with some special settings enabled to allow screenshots to be taken in rapid succession.
 
