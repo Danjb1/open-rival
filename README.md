@@ -16,19 +16,7 @@ The game's images are stored in the file called *IMAGES.DAT*, but this is very d
 
 #### Manual Extraction
 
-I have attempted to extract the game's graphics through a somewhat more manual process with the help of DxWnd author **ghotik** (full thread [here](https://sourceforge.net/p/dxwnd/discussion/general/thread/19bc4f4b/)). This involves running the game through the wrapper program DxWnd, with some special settings enabled to allow screenshots to be taken in rapid succession.
-
-These screenshots can then be run through my [Sprite Extractor](https://github.com/Danjb1/sprite-extractor), [Colour Remover](https://github.com/Danjb1/colour-remover) and [Stray Pixel Cleaner](https://github.com/Danjb1/stray-pixel-cleaner) to extract individual sprites, but the process is imperfect and the resulting images still need touching up by hand.
-
-I have preserved the shadows but separated them from the main images. It is possible the shadows could be generated programmatically instead. The closest I have been able to achieve is using the following Skew transform in Photoshop:
-
-    Centre reference point x: +7
-    Centre reference point y: +14
-    Horizontal scale: 80%
-    Vertical scale: 55%
-    Angle: 0
-    Horizontal skew: -40
-    Vertical skew: 0
+I have attempted to extract the game's graphics through a somewhat more manual process with the help of DxWnd author **ghotik** (full thread [here](https://sourceforge.net/p/dxwnd/discussion/general/thread/19bc4f4b/)). This involves running the game through the wrapper program DxWnd, with some special settings enabled to allow screenshots to be taken in rapid succession. More about this [here](/GFX.md).
 
 ### Sound
 
