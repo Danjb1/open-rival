@@ -42,6 +42,10 @@ Track 6 was duplicated.
 
 These are taken from the game's *MOVIES* directory.
 
+### Maps
+
+The scenario (*.sco*) format is under analysis and will be documented [here](./MAPS.md).
+
 ## Legal Stuff
 
 I have tried to track down the copyright holders, even the original developers, but I have had very little response. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
