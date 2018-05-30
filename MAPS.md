@@ -6,73 +6,75 @@ The following analysis was performed with the help of VBinDiff.
 
  - Data is saved in little-endian format unless otherwise specified.
 
+ - Offsets are written assuming a default map called "My map" with 2 units and start locations.
+
  - If a scenario cannot be read, the editor will display an error: "Invalid scenario file!"
 
 ## Header
 
     8 bytes             Unknown (51 81 00 00 5B 81 00 00)
-    1 byte              Terrain type (0x02 for meadows, 0x03 for wilderness)
+    1 byte              Terrain type (0x02 = Meadows, 0x03 = Wilderness)
     1 byte              Unknown (0x06)
     <=32 bytes          Map name
     1 byte              String terminator (0x28)
-    1 byte              Map height
-    3 bytes             (Empty)
-    1 byte              Map width
-    3 bytes             (Empty)
+    4 bytes             Map height
+    4 bytes             Map width
+    33 bytes            Unknown
+    1 byte              Player 1 Race (0x02 = Human, 0x03 = Greenskin, 0x04 = Elf)
 
 ## Building Defaults
 
-    Starting at offset 0x101E (for a map called "My map")
+Starting at offset 0x101E.
 
-    Buildings:
+Buildings:
 
-        Human - Castle
-        Human - Gold Mill
-        Human - Archery Range
-        Human - Armoury
-        Human - Barracks
-        Human - Holy Stables
-        Human - Fire Guild
-        Human - Temple
-        Human - Mage Tower
-        Human - Shipyard
-        Human - Watch Tower
-        Human - Wall
-        Greenskin - Fortress
-        Greenskin - Hoard Keep
-        Greenskin - Fort
-        Greenskin - Blacksmith
-        Greenskin - Battle Quarters
-        Greenskin - Black Nest
-        Greenskin - Weird Workshop
-        Greenskin - Unholy Chapel
-        Greenskin - Altar of Doom
-        Greenskin - Docks
-        Greenskin - Guard Tower
-        Greenskin - Greenskin Wall
-        Elf - Elven Keep
-        Elf - Treasury
-        Elf - Combat Camp
-        Elf - Arsenal
-        Elf - Duel Range
-        Elf - Holy Nest
-        Elf - Miner Guildhall
-        Elf - Abbey Tower
-        Elf - Council of Runes
-        Elf - Harbour
-        Elf - Warning Tower
-        Elf - Tree Wall
+    Human - Castle
+    Human - Gold Mill
+    Human - Archery Range
+    Human - Armoury
+    Human - Barracks
+    Human - Holy Stables
+    Human - Fire Guild
+    Human - Temple
+    Human - Mage Tower
+    Human - Shipyard
+    Human - Watch Tower
+    Human - Wall
+    Greenskin - Fortress
+    Greenskin - Hoard Keep
+    Greenskin - Fort
+    Greenskin - Blacksmith
+    Greenskin - Battle Quarters
+    Greenskin - Black Nest
+    Greenskin - Weird Workshop
+    Greenskin - Unholy Chapel
+    Greenskin - Altar of Doom
+    Greenskin - Docks
+    Greenskin - Guard Tower
+    Greenskin - Greenskin Wall
+    Elf - Elven Keep
+    Elf - Treasury
+    Elf - Combat Camp
+    Elf - Arsenal
+    Elf - Duel Range
+    Elf - Holy Nest
+    Elf - Miner Guildhall
+    Elf - Abbey Tower
+    Elf - Council of Runes
+    Elf - Harbour
+    Elf - Warning Tower
+    Elf - Tree Wall
 
-    Each building is 25 bytes:
+Each building consists of 25 bytes:
 
-        2 bytes         Hitpoints
-        2 bytes         Armour
-        1 byte          (Empty)
-        1 byte          Sight
-        1 byte          Range
-        2 bytes         (Empty)
-        1 byte          0xFF
-        15 bytes        (Empty)
+    2 bytes         Hitpoints
+    2 bytes         Armour
+    1 byte          (Empty)
+    1 byte          Sight
+    1 byte          Range
+    2 bytes         (Empty)
+    1 byte          0xFF
+    15 bytes        (Empty)
 
 ## Troop Defaults
 
@@ -140,18 +142,55 @@ TODO.
 
 ## Units
 
-TODO.
+Starting at offset 0x80DD.
 
-### Facings
+    4 bytes         Number of units
 
-    00 = South
-    01 = South-west
-    02 = West
-    03 = North-west
-    04 = North
-    05 = North-east
-    06 = East
-    07 = South-east
+Each unit on the map consists of 60 bytes:
+
+    1 byte          Type
+    2 bytes         (Empty)
+    1 byte          Facing (0x00 = South, 0x01 = South-west, etc.)
+    1 byte          (Empty)
+    2 bytes         X
+    2 bytes         Y
+    2 bytes         (Empty)
+    2 bytes         Hitpoints
+    1 byte          Magic points
+    2 bytes         Armour
+    1 byte          (Empty)
+    1 bytes         Type2 (not race specific - see table below)
+    1 byte          Sight
+    1 byte          Range
+    2 bytes         (Empty)
+    1 byte          Special colour (0xFF = Default, 0x00 = Red, 0x01 = Cyan, etc.)
+    1 byte          Prisoner (0x00 or 0x01)
+    2 bytes         Gold cost
+    2 bytes         Wood cost
+    12 bytes        Name
+    13 bytes        (Empty)
+    1 byte          Upgrade 1 enabled (0x00 or 0x01)
+    1 byte          Upgrade 2 enabled (0x00 or 0x01)
+    1 byte          Upgrade 3 enabled (0x00 or 0x01)
+    1 byte          Upgrade 4 enabled (0x00 or 0x01)
+    1 byte          Fighting area (0x00 = No Limit, 0x01 = Stand Ground, 0x02 = Range 1, etc.)
+
+### Unit Type
+
+    Type    Type2       Unit
+    ------------------------------------------
+    0x33    0x03        Human - Peasant
+    0x34    0x04        Human - Bowman
+    0x35    0x07        Human - Light Cavalry
+    0x36    0x08        Human - Knight
+    0x37    0x0A        Human - Fire Master
+    0x38    0x0B        Human - Thief
+    0x39    0x0C        Human - Ballista
+    0x3A    0x00        Human - Chariot of War
+    0x3B    0x0E        Human - Wizard
+    0x3C    0x12        Human - Priest
+    0x41    0x03        Greenskin - Serf
+    0x4F    0x03        Elf - Yeoman
 
 ## Objects
 
