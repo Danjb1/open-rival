@@ -6,7 +6,7 @@ The following analysis was performed with the help of VBinDiff.
 
  - Data is saved in little-endian format unless otherwise specified.
 
- - Offsets are written assuming a default map called "My map" with 2 units and start locations.
+ - Offsets are written assuming a default 64x40 map called "My map" with 2 units and start locations.
 
  - If a scenario cannot be read, the editor will display an error: "Invalid scenario file!"
 
@@ -146,7 +146,7 @@ Starting at offset 0x80DD.
 
     4 bytes         Number of units
 
-Each unit on the map consists of 60 bytes:
+Each unit on the map consists of 57 bytes:
 
     1 byte          Type
     2 bytes         (Empty)
@@ -154,7 +154,7 @@ Each unit on the map consists of 60 bytes:
     1 byte          (Empty)
     2 bytes         X
     2 bytes         Y
-    2 bytes         (Empty)
+    1 byte           (Empty)
     2 bytes         Hitpoints
     1 byte          Magic points
     2 bytes         Armour
@@ -190,6 +190,7 @@ Each unit on the map consists of 60 bytes:
     0x3B    0x0E        Human - Wizard
     0x3C    0x12        Human - Priest
     0x41    0x03        Greenskin - Serf
+    0x42    0x16        Greenskin - Rock Thrower
     0x4F    0x03        Elf - Yeoman
 
 ## Objects
