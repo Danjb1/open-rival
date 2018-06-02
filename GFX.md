@@ -42,20 +42,6 @@ Individual sprites can be extracted manually, but the process is time-consuming 
 
 1. Run [Sprite Fixer](https://github.com/Danjb1/sprite-fixer) to consolidate any duplicates and fix any highlighted pixels
 
-1. Check over the images and remove or fix any pixels that are still highlighted
+1. Check over the images in case there are any accidental holes
 
-1. Run [Colour Remover](https://github.com/Danjb1/colour-remover) to remove the shadows
-
-1. *(Optional)* Run [Stray Pixel Cleaner](https://github.com/Danjb1/stray-pixel-cleaner) if needed
-
-## Shadow Generation
-
-This process preserves the shadows but separates them from the main images. It is possible the shadows could be generated programmatically instead. The following Skew transform is Photoshop gets pretty close:
-
-    Centre reference point x: +7
-    Centre reference point y: +14
-    Horizontal scale: 80%
-    Vertical scale: 55%
-    Angle: 0
-    Horizontal skew: -40
-    Vertical skew: 0
+1. Find the first frame of the animation, and rename the images accordingly
