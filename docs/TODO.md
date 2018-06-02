@@ -2,6 +2,10 @@
 
  - *(Ongoing)* Extract graphics
 
+ - *(Ongoing)* Decipher map format
+
+    - Determine checksum algorithm by trial and error or reverse-engineering save routine
+
  - Create game loop
 
  - Map rendering ([zig-zag approach](/docs/MECHANICS.md))
