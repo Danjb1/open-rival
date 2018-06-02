@@ -16,7 +16,7 @@ The game's images are stored in the file called *IMAGES.DAT*, but this is very d
 
 #### Manual Extraction
 
-I have attempted to extract the game's graphics through a somewhat more manual process with the help of DxWnd author **ghotik** (full thread [here](https://sourceforge.net/p/dxwnd/discussion/general/thread/19bc4f4b/)). This involves running the game through the wrapper program DxWnd, with some special settings enabled to allow screenshots to be taken in rapid succession. More about this [here](/GFX.md).
+I have attempted to extract the game's graphics through a somewhat more manual process with the help of DxWnd author **ghotik** (full thread [here](https://sourceforge.net/p/dxwnd/discussion/general/thread/19bc4f4b/)). This involves running the game through the wrapper program DxWnd, with some special settings enabled to allow screenshots to be taken in rapid succession. More about this [here](/docs/GFX.md).
 
 ### Sound
 
@@ -44,7 +44,7 @@ These are taken from the game's *MOVIES* directory.
 
 ### Maps
 
-The scenario (*.sco*) format is under analysis and will be documented [here](./MAPS.md).
+The scenario (*.sco*) format is under analysis and will be documented [here](/docs/MAPS.md).
 
 ## Legal Stuff
 
