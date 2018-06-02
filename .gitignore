@@ -1,0 +1,13 @@
+# Visual Studio settings
+.vs
+
+# System files
+Thumbs.db
+
+# Build results
+Debug/
+
+# SDL
+/Open-Rival/SDL2-2.0.8
+/Open-Rival/SDL2_image-2.0.3
+/Open-Rival/*.dll
