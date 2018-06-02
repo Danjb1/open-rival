@@ -2,9 +2,11 @@
 
 Rival Realms comes with 2 files, *IMAGES.DAT* and *IMOFFS.DAT*. The latter contains the image offsets, while the former contains the image data.
 
-The format of these files has not yet been determined. A friend of mine who specialises in reverse engineering has suggested that the image data is actually dynamically-loaded code that renders the images, and one of the original developers has confirmed this to be the case, at least for the character images.
+The character images are not actually stored as data; instead, the image-rendering routines used to render the characters are stored directly as assembly code, and executed dynamically. This was determined by a professional reverse engineer and confirmed by one of the original developers.
 
-However, Watto, developer of [Game Extractor](http://www.watto.org/game_extractor.html), has attempted to decipher the format. His findings can be found below, and within this project can be found my attempts to read the files based on his suggested structure.
+Watto, developer of [Game Extractor](http://www.watto.org/game_extractor.html), has attempted to decipher these file formats. His findings can be found below, and within this project can be found my attempts to read the files based on his suggested structure.
+
+It may be possible to determine the offset of each image-rendering routine, and execute them dynamically just as the original game does.
 
     +--------------------------------------+
     | Rival Realms IMOFFS.DAT + IMAGES.DAT |
