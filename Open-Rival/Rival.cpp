@@ -1,5 +1,7 @@
 #include "Rival.h"
 
+using namespace std;
+
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
@@ -16,7 +18,7 @@ bool init() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
 		return false;
 	}
 
@@ -29,14 +31,14 @@ bool init() {
 			SDL_WINDOW_SHOWN);
 
 	if (window == NULL) {
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+		cout << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
 		return false;
 	}
 
 	// Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags)) {
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << endl;
 		return false;
 	}
 
@@ -50,7 +52,7 @@ bool loadTitleImage() {
 
 	titleImage = loadSurface("gfx/title.png");
 	if (titleImage == NULL) {
-		printf("Failed to load PNG image!\n");
+		cout << "Failed to load PNG image!" << endl;
 		return false;
 	}
 
@@ -65,14 +67,14 @@ SDL_Surface* loadSurface(std::string path) {
 	// Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 	if (loadedSurface == NULL) {
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+		cout << "Unable to load image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << endl;
 		return NULL;
 	}
 
 	// Convert surface to screen format
 	optimizedSurface = SDL_ConvertSurface(loadedSurface, screenSurface->format, NULL);
 	if (optimizedSurface == NULL) {
-		printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		cout << "Unable to optimise image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << endl;
 	}
 
 	// Get rid of old loaded surface
@@ -95,37 +97,60 @@ void close() {
 	SDL_Quit();
 }
 
+void keyDown(SDL_Keycode keyCode) {
+	switch (keyCode) {
+	case SDLK_UP:
+		cout << "UP\n";
+		break;
+
+	case SDLK_DOWN:
+		cout << "DOWN\n";
+		break;
+
+	case SDLK_LEFT:
+		cout << "LEFT\n";
+		break;
+
+	case SDLK_RIGHT:
+		cout << "RIGHT\n";
+		break;
+
+	default:
+		break;
+	}
+}
+
 int main(int argc, char* args[]) {
 
 	// Start up SDL and create window
 	if (!init()) {
-		printf("Failed to initialize!\n");
+		cout << "Failed to initialise!\n";
 		close();
 		return 1;
 	}
 
 	// Load title image
 	if (!loadTitleImage()) {
-		printf("Failed to load title image!\n");
+		cout << "Failed to load title image!\n";
 		close();
 		return 1;
 	}
 
-	// Main loop flag
-	bool quit = false;
-
 	// Event handler
 	SDL_Event e;
 
-	// While application is running
-	while (!quit) {
+	// Run our game loop until the application is closed
+	bool exiting = false;
+	while (!exiting) {
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0) {
 
-			// User requests quit
+			// User requests exiting
 			if (e.type == SDL_QUIT) {
-				quit = true;
+				exiting = true;
+			} else if (e.type == SDL_KEYDOWN) {
+				keyDown(e.key.keysym.sym);
 			}
 		}
 
