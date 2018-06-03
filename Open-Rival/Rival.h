@@ -11,8 +11,8 @@ bool init();
 // Loads the title image
 bool loadTitleImage();
 
-// Loads a surface from a file
-SDL_Surface* loadSurface(std::string path);
+// Loads an image as a texture
+SDL_Texture* loadTexture(std::string path);
 
 // Frees media and shuts down SDL
 void close();
