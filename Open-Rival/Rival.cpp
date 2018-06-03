@@ -8,11 +8,11 @@ const int SCREEN_HEIGHT = 600;
 // The window we'll be rendering to
 SDL_Window* window = NULL;
 
-// The surface contained by the window
-SDL_Surface* screenSurface = NULL;
+// The window renderer
+SDL_Renderer* renderer = NULL;
 
-// Title image to be rendered
-SDL_Surface* titleImage = NULL;
+// Current displayed texture
+SDL_Texture* titleTexture = NULL;
 
 bool init() {
 
@@ -20,6 +20,11 @@ bool init() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
 		return false;
+	}
+
+	// Set texture filtering to linear
+	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
+		cout << "Warning: Linear texture filtering not enabled!" << endl;
 	}
 
 	// Create window
@@ -35,6 +40,16 @@ bool init() {
 		return false;
 	}
 
+	// Create renderer for window
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (renderer == NULL) {
+		cout << "Renderer could not be created! SDL Error: %s\n" << SDL_GetError() << endl;
+		return false;
+	}
+
+	// Initialise renderer colour
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
 	// Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags)) {
@@ -42,16 +57,13 @@ bool init() {
 		return false;
 	}
 
-	// Get the surface contained by the window
-	screenSurface = SDL_GetWindowSurface(window);
-
 	return true;
 }
 
 bool loadTitleImage() {
 
-	titleImage = loadSurface("gfx/title.png");
-	if (titleImage == NULL) {
+	titleTexture = loadTexture("gfx/title.png");
+	if (titleTexture == NULL) {
 		cout << "Failed to load PNG image!" << endl;
 		return false;
 	}
@@ -59,10 +71,7 @@ bool loadTitleImage() {
 	return true;
 }
 
-SDL_Surface* loadSurface(std::string path) {
-
-	// The final optimized image
-	SDL_Surface* optimizedSurface = NULL;
+SDL_Texture* loadTexture(std::string path) {
 
 	// Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
@@ -71,29 +80,33 @@ SDL_Surface* loadSurface(std::string path) {
 		return NULL;
 	}
 
-	// Convert surface to screen format
-	optimizedSurface = SDL_ConvertSurface(loadedSurface, screenSurface->format, NULL);
-	if (optimizedSurface == NULL) {
-		cout << "Unable to optimise image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << endl;
+	// Create texture from surface pixels
+	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+	if (newTexture == NULL) {
+		cout << "Unable to create texture from " << path.c_str() << "! SDL Error: " << SDL_GetError() << endl;
+		return NULL;
 	}
 
 	// Get rid of old loaded surface
 	SDL_FreeSurface(loadedSurface);
 
-	return optimizedSurface;
+	return newTexture;
 }
 
 void close() {
 
-	// Free loaded image
-	SDL_FreeSurface(titleImage);
-	titleImage = NULL;
+	// Free loaded texture
+	SDL_DestroyTexture(titleTexture);
+	titleTexture = NULL;
 
 	// Destroy window
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	window = NULL;
+	renderer = NULL;
 
 	// Quit SDL subsystems
+	IMG_Quit();
 	SDL_Quit();
 }
 
@@ -154,11 +167,14 @@ int main(int argc, char* args[]) {
 			}
 		}
 
-		// Apply the image
-		SDL_BlitSurface(titleImage, NULL, screenSurface, NULL);
+		// Clear screen
+		SDL_RenderClear(renderer);
 
-		// Update the surface
-		SDL_UpdateWindowSurface(window);
+		// Render texture to screen
+		SDL_RenderCopy(renderer, titleTexture, NULL, NULL);
+
+		// Update screen
+		SDL_RenderPresent(renderer);
 	}
 
 	// Free resources and close SDL
