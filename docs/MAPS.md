@@ -351,6 +351,8 @@ TODO.
 
  - Some typos in the weapon names in the Scenario Editor have been corrected here, e.g. White -> Cyan monsters.
 
+<!-- End of list -->
+
     Bomb
     Trap
     Axe - Workers
