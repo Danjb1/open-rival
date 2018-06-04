@@ -27,44 +27,7 @@ The following analysis was performed with the help of VBinDiff.
 
 Starting at offset 0x101E.
 
-Buildings:
-
-    Human - Castle
-    Human - Gold Mill
-    Human - Archery Range
-    Human - Armoury
-    Human - Barracks
-    Human - Holy Stables
-    Human - Fire Guild
-    Human - Temple
-    Human - Mage Tower
-    Human - Shipyard
-    Human - Watch Tower
-    Human - Wall
-    Greenskin - Fortress
-    Greenskin - Hoard Keep
-    Greenskin - Fort
-    Greenskin - Blacksmith
-    Greenskin - Battle Quarters
-    Greenskin - Black Nest
-    Greenskin - Weird Workshop
-    Greenskin - Unholy Chapel
-    Greenskin - Altar of Doom
-    Greenskin - Docks
-    Greenskin - Guard Tower
-    Greenskin - Greenskin Wall
-    Elf - Elven Keep
-    Elf - Treasury
-    Elf - Combat Camp
-    Elf - Arsenal
-    Elf - Duel Range
-    Elf - Holy Nest
-    Elf - Miner Guildhall
-    Elf - Abbey Tower
-    Elf - Council of Runes
-    Elf - Harbour
-    Elf - Warning Tower
-    Elf - Tree Wall
+Buildings are ordered by type (see Appendices).
 
 Each building consists of 25 bytes:
 
@@ -74,16 +37,16 @@ Each building consists of 25 bytes:
     1 byte          Sight
     1 byte          Range
     2 bytes         (Empty)
-    1 byte          0xFF
+    1 byte          Colour (see Appendices)
     15 bytes        (Empty)
 
 ## Troop Defaults
 
 Starting at offset 0x0496.
 
-Unit are ordered by type (see below).
+Units are ordered by type (see Appendices).
 
-Each unit consists of 8 bytes:
+Each unit consists of 47 bytes:
 
     2 bytes         Hitpoints
     2 bytes         Magic points
@@ -91,14 +54,48 @@ Each unit consists of 8 bytes:
     1 byte          Unknown (0x03)
     1 byte          Sight
     1 byte          Range
+    2 bytes         (Empty)
+    1 byte          Colour (see Appendices)
+    36 bytes        (Empty)
 
 ## Monster Defaults
 
-TODO.
+Starting at offset 0x1FEF.
+
+Monsters are ordered by type (see Appendices).
+
+Each monster consists of 47 bytes:
+
+    2 bytes         Hitpoints
+    2 bytes         Magic points
+    2 bytes         Armor
+    1 byte          Unknown (0x3E)
+    1 byte          Sight
+    1 byte          Range
+    2 bytes         (Empty)
+    1 byte          Colour (see Appendices)
+    35 bytes        (Empty)
 
 ## Weapon Defaults
 
-TODO.
+Starting at offset 0x17FC.
+
+Weapons are ordered by type (see Appendices).
+
+Each weapon consists of 21 bytes:
+
+    2 bytes         Move space
+    2 bytes         Move time
+    2 bytes         Damage
+    2 bytes         Penetrate
+    2 bytes         Accuracy
+    1 byte          Effect range
+    1 byte          Attack range
+    2 bytes         Mana cost
+    4 bytes         Reload time (ms)
+    1 byte          (Empty)
+    1 byte          Unknown (0x7E)
+    1 byte          (Empty)
 
 ## Upgrade Properties
 
@@ -163,7 +160,7 @@ Each building on the map consists of 23 bytes:
     1 byte          Range
     1 byte          Upgrade 1 enabled (0x00 or 0x01)
     1 byte          Upgrade 2 enabled (0x00 or 0x01)
-    1 byte          Special colour (0xFF = Default, 0x00 = Red, 0x01 = Cyan, etc.)
+    1 byte          Special colour (see Appendices)
     1 byte          Prisoner (0x00 or 0x01)
     12 bytes        Name
 
@@ -175,9 +172,9 @@ Starting at offset 0x80DD.
 
 Each unit on the map consists of 57 bytes:
 
-    1 byte          Type
+    1 byte          Type (see Appendices)
     2 bytes         (Empty)
-    1 byte          Facing (0x00 = South, 0x01 = South-west, etc.)
+    1 byte          Facing (see Appendices)
     1 byte          (Empty)
     2 bytes         X
     2 bytes         Y
@@ -186,11 +183,11 @@ Each unit on the map consists of 57 bytes:
     1 byte          Magic points
     2 bytes         Armour
     1 byte          (Empty)
-    1 bytes         Type2 (not race specific - see table below)
+    1 byte          Type2 (see Appendices)
     1 byte          Sight
     1 byte          Range
     2 bytes         (Empty)
-    1 byte          Special colour (0xFF = Default, 0x00 = Red, 0x01 = Cyan, etc.)
+    1 byte          Special colour (see Appendices)
     1 byte          Prisoner (0x00 or 0x01)
     2 bytes         Gold cost
     2 bytes         Wood cost
@@ -206,7 +203,71 @@ Each unit on the map consists of 57 bytes:
     - Add for 1 Player:  0x2D30 (03 -> 0B)
     - Add for 2 Players: 0x31B4 (03 -> 13)
 
-### Unit Type
+## Traps
+
+Starting at offset 0x814D.
+
+    4 bytes         Number of traps
+    1 byte          X
+    1 byte          Y
+    1 byte          Player (00 = P1)
+
+## Objects
+
+TODO.
+
+## Footer (end of file)
+
+    16 bytes            Unknown (75 72 78 7C 84 54 34 F4 74 74 74 74 74 74 74 74)
+    1 byte              Checksum?
+
+    Offset     Bytes                                                 Checksum
+    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 61 70  =>  11
+    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 62 70  =>  12
+    0000 0000: 51 81 00 00 5B 81 00 00  03 06 4D 79 20 6D 61 70  =>  10
+
+## Appendices
+
+### Buildings
+
+    Human - Castle
+    Human - Gold Mill
+    Human - Archery Range
+    Human - Armoury
+    Human - Barracks
+    Human - Holy Stables
+    Human - Fire Guild
+    Human - Temple
+    Human - Mage Tower
+    Human - Shipyard
+    Human - Watch Tower
+    Human - Wall
+    Greenskin - Fortress
+    Greenskin - Hoard Keep
+    Greenskin - Fort
+    Greenskin - Blacksmith
+    Greenskin - Battle Quarters
+    Greenskin - Black Nest
+    Greenskin - Weird Workshop
+    Greenskin - Unholy Chapel
+    Greenskin - Altar of Doom
+    Greenskin - Docks
+    Greenskin - Guard Tower
+    Greenskin - Greenskin Wall
+    Elf - Elven Keep
+    Elf - Treasury
+    Elf - Combat Camp
+    Elf - Arsenal
+    Elf - Duel Range
+    Elf - Holy Nest
+    Elf - Miner Guildhall
+    Elf - Abbey Tower
+    Elf - Council of Runes
+    Elf - Harbour
+    Elf - Warning Tower
+    Elf - Tree Wall
+
+### Units
 
     Type    Type2       Unit
     ------------------------------------------
@@ -253,25 +314,159 @@ Each unit on the map consists of 57 bytes:
     0x5B    0x31        Elf - Sky Rider (Height = 0xAF)
     0x5C    0x00        Elf - Magic Chopper (Height = 0x96)
 
-## Traps
+### Monsters
 
-Starting at offset 0x814D.
+    Black Sea Monster
+    Blue Sea Monster
+    Green Sea Monster
+    Black Snake
+    Red Snake
+    Green Snake
+    Yellow Snake
+    Black Gryphon
+    Yellow Gryphon
+    Cyan Gryphon
+    Black Hydra
+    Blue Hydra
+    Green Hydra
+    Black Golem
+    Blue Golem
+    Cyan Golem
+    Black Devil
+    Red Devil
+    Orange Devil
+    Yellow Devil
+    Black Skeleton
+    Red Skeleton
+    Cyan Skeleton
+    Yellow Skeleton
+    Black Dragon
+    Red Dragon
+    Violet Dragon
+    Blue Dragon
+    Orange Dragon
+    Green Dragon
 
-    4 bytes         Number of traps
-    1 byte          X
-    1 byte          Y
-    1 byte          Player (00 = P1)
+### Weapons
 
-## Objects
+ - Some typos in the weapon names in the Scenario Editor have been corrected here, e.g. White -> Cyan monsters.
 
-TODO.
+    Bomb
+    Trap
+    Axe - Workers
+    Arrow - Archers
+    One Arrow - Pegas
+    Three Arrows - Pegas
+    Light Sword - Cavalry
+    Sword - Knight
+    Mace - Knight
+    Dagger - Fire Master
+    Dagger - Thief
+    Big Arrow - Ballista
+    Projectile - Battleship
+    Flash Light - Wizard
+    Fire Ball - Wizard
+    Frozen Breath - Wizard
+    Cursed Rain - Wizard
+    Flash Light - Priest
+    Dispel Mana - Priest
+    Reveal Traps - Priest
+    Poison Cropland - Priest
+    Stone - Rock Thrower
+    Spear - Horde Rider
+    Battle Axe - Warlord
+    Poison Spit - Warlord
+    Dagger - Gnome Boomer
+    Dagger - Rogue
+    War Stick - Storm Trooper
+    Giant Rock - Catapult
+    Boulder - Troll Galley
+    Flames - War Bat
+    Flash Light - Priest of Doom
+    Death Typhoon - Priest of Doom
+    Hyena Howl - Priest of Doom
+    Poison Breath - Priest of Doom
+    Flash Light - Necromancer
+    Drain Life - Necromancer
+    Reveal Traps - Necromancer
+    Cursed Land - Necromancer
+    Arrow - Archer
+    Fire Arrow - Archer
+    Halberd - Centaur
+    Flame Ring - Centaur
+    Dagger - Dwarf Miner
+    Dagger - Scout
+    Cannon Ball - Bombard
+    Shell - Arquebusier
+    Projectile - Warship
+    Flash Light - Sky Rider
+    Lightning - Sky Rider
+    Flash Light - Mage
+    Touch of Chaos - Mage
+    Magic Barrier - Mage
+    Blindness - Mage
+    Flash Light - Druid
+    Berserker - Druid
+    Lightning Bolt - Druid
+    Flash Light - Enchanter
+    Reveal Traps - Enchanter
+    Healing - Enchanter
+    Light Defence Arrow
+    Black Sea Monster weapon
+    Blue Sea Monster weapon
+    Green Sea Monster weapon
+    Black Snake weapon
+    Red Snake weapon
+    Green Snake weapon
+    Yellow Snake weapon
+    Black Gryphon weapon
+    Yellow Gryphon weapon
+    White Gryphon weapon
+    Black Hydra weapon
+    Blue Hydra weapon
+    Green Hydra weapon
+    Black Golem weapon
+    Blue Golem weapon
+    Cyan Golem weapon
+    Black Devil weapon
+    Red Devil weapon
+    Orange Devil weapon
+    Yellow Devil weapon
+    Black Skeleton weapon
+    Red Skeleton weapon
+    Cyan Skeleton weapon
+    Yellow Skeleton weapon
+    Black Dragon weapon
+    Red Dragon weapon
+    Violet Dragon weapon
+    Blue Dragon weapon
+    Orange Dragon weapon
+    Green Dragon weapon
+    Key-Door Destroyer
+    Soul Damnation
+    Spyral Scroll
+    Wave Scroll
+    Teleport Scroll
 
-## Footer (end of file)
+### Facings
 
-    16 bytes            Unknown (75 72 78 7C 84 54 34 F4 74 74 74 74 74 74 74 74)
-    1 byte              Checksum?
+    0x00 = South
+    0x01 = South-west
+    0x02 = West
+    0x03 = North-west
+    0x04 = North
+    0x05 = North-east
+    0x06 = East
+    0x07 = South-east
 
-    Offset     Bytes                                                 Checksum
-    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 61 70  =>  11
-    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 62 70  =>  12
-    0000 0000: 51 81 00 00 5B 81 00 00  03 06 4D 79 20 6D 61 70  =>  10
+### Colours
+
+    0xFF = Default
+    0x00 = Red
+    0x01 = Cyan
+    0x02 = Green
+    0x03 = Yellow
+    0x04 = Orange
+    0x05 = Violet
+    0x06 = Blue
+    0x07 = Black
