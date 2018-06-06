@@ -8,7 +8,7 @@ The following analysis was performed with the help of VBinDiff.
 
  - Offsets are written assuming a default 64x40 map called "My map" with 2 units and start locations.
 
- - If a scenario cannot be read, the editor will display an error: "Invalid scenario file!"
+ - If a scenario cannot be read (or if the LRC is invalid), the editor will display an error: "Invalid scenario file!"
 
 ## Header
 
@@ -99,7 +99,16 @@ Each weapon consists of 21 bytes:
 
 ## Upgrade Properties
 
-TODO.
+Starting at offset 0x0C7D.
+
+Upgrades are ordered by type (see Appendices).
+
+Each upgrade consists of 16 bytes:
+
+    4 bytes         Amount
+    4 bytes         Gold Cost
+    4 bytes         Wood Cost
+    4 bytes         Unknown (icon / type?)
 
 ## Unit Production Costs
 
@@ -219,12 +228,7 @@ TODO.
 ## Footer (end of file)
 
     16 bytes            Unknown (75 72 78 7C 84 54 34 F4 74 74 74 74 74 74 74 74)
-    1 byte              Checksum?
-
-    Offset     Bytes                                                 Checksum
-    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 61 70  =>  11
-    0000 0000: 51 81 00 00 5B 81 00 00  02 06 4D 79 20 6D 62 70  =>  12
-    0000 0000: 51 81 00 00 5B 81 00 00  03 06 4D 79 20 6D 61 70  =>  10
+    1 byte              LRC
 
 ## Appendices
 
@@ -349,9 +353,9 @@ TODO.
 
 ### Weapons
 
- - Some typos in the weapon names in the Scenario Editor have been corrected here, e.g. White -> Cyan monsters.
+ - Some typos present in the Scenario Editor have been corrected here, e.g. White -> Cyan monsters.
 
-<!-- End of list -->
+<!-- End of bullet list -->
 
     Bomb
     Trap
@@ -449,6 +453,126 @@ TODO.
     Spyral Scroll
     Wave Scroll
     Teleport Scroll
+
+### Upgrades
+
+ - Some typos present in the Scenario Editor have been corrected here.
+
+<!-- End of bullet list -->
+
+    Armor - Knight
+    Armor - Chariot of War
+    Armor - Sea Barge
+    Armor - Battleship
+    Armor - Zeppelin
+    Armor - Warlord
+    Armor - Storm Trooper
+    Armor - Landing Craft
+    Armor - Troll Galley
+    Armor - Balloon
+    Armor - Centaur
+    Armor - Bark
+    Armor - Warship
+    Armor - Magic Chopper
+    Damage - Light Cavalry
+    Damage - Knight
+    Damage - Ballista
+    Damage - Battleship
+    Damage - Warlord
+    Damage - Storm Trooper
+    Damage - Troll Galley
+    Damage - Warship
+    Speed - Light Cavalry
+    Speed - Chariot of War
+    Speed - Horde Rider
+    Accuracy - Bowman
+    Accuracy - Knight
+    Accuracy - Ballista
+    Accuracy - Battleship
+    Accuracy - Rock Thrower
+    Accuracy - Catapult
+    Accuracy - Troll Galley
+    Accuracy - Archer
+    Accuracy - Centaur
+    Accuracy - Bombard
+    Accuracy - Arquebusier
+    Accuracy - Warship
+    Latency - Bowman
+    Latency - Battleship
+    Latency - Rock Thrower
+    Latency - Troll Galley
+    Latency - Archer
+    Latency - Warship
+    Sight - Bowman
+    Sight - Rock Thrower
+    Range - Bowman
+    Range - Pegas Rider
+    Range - Archer
+    Knight - Mace
+    Pegas Rider - Burst 3 Arrows
+    Warlord - Poison Spit
+    Warbat - Capture
+    Centaur - Flame Ring
+    Archer - Fire Arrow
+    Sky Rider - Lightning
+    Human - Create Bomb
+    Human - Create Trap
+    Human - Land / Water
+    Human - Repair
+    Greenskin - Create Bomb
+    Greenskin - Create Trap
+    Greenskin - Land / Water
+    Greenskin - Repair
+    Elf - Create Bomb
+    Elf - Create Trap
+    Elf - Land / Water
+    Elf - Repair
+    Human Thief - Swiftness
+    Greenskin Rogue - Swiftness
+    Elf Scout - Swiftness
+    Human Thief - Invisibility
+    Greenskin Rogue - Invisibility
+    Elf Scout - Invisibility
+    Wizard - Magic Shield
+    Wizard - Fire Ball
+    Wizard - Frozen Breath
+    Wizard - Cursed Rain
+    Priest - Magic Shield
+    Priest - Dispel Mana
+    Priest - Reveal Traps
+    Priest - Poison Cropland
+    Priest of Doom - Magic Shield
+    Priest of Doom - Death Typhoon
+    Priest of Doom - Hyena Howl
+    Priest of Doom - Poisonous Breath
+    Necromancer - Magic Shield
+    Necromancer - Drain Life
+    Necromancer - Reveal Traps
+    Necromancer - Cursed Land
+    Mage - Magic Shield
+    Mage - Magic Barrier
+    Mage - Blindness
+    Mage - Touch of Chaos
+    Druid - Magic Shield
+    Druid - Teleport
+    Druid - Berserk
+    Druid - Lightning Bolt
+    Enchanter - Magic Shield
+    Enchanter - Teleport
+    Enchanter - Reveal Traps
+    Enchanter - Healing
+    Human - Train 3 Units
+    Greenskin - Train 3 Units
+    Elf - Train 3 Units
+    Human - Increase Wood Production
+    Greenskin - Increase Wood Production
+    Elf - Increase Wood Production
+    Human Tower - Watch
+    Greenskin Tower - Watch
+    Elf Tower - Watch
+    Human - Defence
+    Greenskin - Defence
+    Elf - Defence
 
 ### Facings
 
