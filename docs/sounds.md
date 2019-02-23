@@ -1,4 +1,6 @@
-# Buildings
+# Sounds
+
+## Buildings
 
  - **001:** Human - Castle
  - **002:** Human - Gold Mill
@@ -37,7 +39,7 @@
  - **035:** Elf - Warning Tower
  - **036:** Elf - Tree Wall
 
-# Voices
+## Voices
 
  - **037:** Human - Ship Sinking
  - **038:** Human - Death
@@ -308,7 +310,7 @@
  - **303:** Elf - Magic Chopper 5
  - **304:** Elf - Magic Chopper 6
 
-# Effects
+## Effects
 
  - **305:** Roar?
  - **306:** Spell 1
