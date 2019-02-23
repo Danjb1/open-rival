@@ -12,8 +12,8 @@ The following analysis was performed with the help of VBinDiff.
 
 ## Header
 
-    4 bytes             Unknown (?? 81 00 00) - offset?
-    4 bytes             Unknown (?? 81 00 00) - offset?
+    4 bytes             Unknown (?? 81 00 00) - end of terrain offset?
+    4 bytes             Unknown (?? 81 00 00) - footer offset?
     1 byte              Terrain type (0x02 = Meadows, 0x03 = Wilderness)
     1 byte              Unknown (0x06)
     <=32 bytes          Map name
@@ -112,20 +112,68 @@ Each upgrade consists of 16 bytes:
 
 ## Unit Production Costs
 
-TODO.
+Starting at offset 0x142D.
+
+First buildings are listed, then units, ordered by type (see Appendices).
+
+Each item consists of 12 bytes:
+
+    2 bytes         Gold cost
+    2 bytes         Wood cost
+    4 bytes         Time of construction
+    4 bytes         Experience need (buildings) / increase percent (units)
 
 ## Available Buildings ("Scenario Properties")
 
-TODO.
+Starting at offset 0x1FDE.
+
+Each entry consists of 1 byte (0x00 = Disabled, 0x01 = Enabled), in the order listed:
+
+    Crop Land
+    Gold Mill / Treasury / Hoard Keep
+    Archery Range / Combat Camp / Fort
+    Armoury / Arsenal / Blacksmith
+    Barracks / Duel Range / Battle Quarters
+    Holy Stables / Holy Nest / Black Nest
+    Fire Guild / Miner Guildhall / Weird Workshop
+    Temple / Abbey Tower / Unholy Cathedral
+    Mage Tower / Council of Runes / Altar of Doom
+    Shipyard / Harbour / Docks
+    Watch Tower / Warning Tower / Guard Tower
+    Human Wall / Tree Wall / Greenskin Wall
 
 ## Hire Troops Restrictions
 
-TODO.
+Starting at offset 0x25C0.
+
+Each entry consists of 1 byte (0x00 = Disabled, 0x01 = Enabled).
+
+There is an entry for all Human units, ordered by unit type (see Appendices). Presumably the same entries are used for other races, but only Human units are listed in the Scenario Editor.
+
+After all unit types is another byte for "Must Hire".
 
 ## Scenario Goals
 
-TODO.
+Starting at offset 0x8178 (immediately before the footer).
 
+    # No goals:
+    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 74                                                                         74 74 74 74 74 74
+
+    # Build 1 Human Castle:
+    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 74 7F 74 75 AF AF 74 AF AF AF AF 74 40 A2 8D                            74 74 74 74 74 74
+
+    # Build 1 Human Castle at (11, 4) - radius 4
+    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 75 7F 74 78 AF AF 74 7B 74 74 74 78 74 74 74                            74 74 74 74 74 74
+    
+    # Destroy Player 2 Human Castle
+    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 72 7F 74 72 AF AF 74 AF AF AF AF 74 40 A2 8D                            74 74 74 74 74 74
+    
+    # Touch Human Peasant with ID 1 to (13, 7)
+    75 72 78 7C 84 54 34 F4 72 75 81 74 74 74 77 74 74 74 74 7B 74 74 74 78 74 74 74 75 73 63 74 AF AF 75 74 81 74 74 74 77 74 74 74 74 74 74 74 74 74
+    
+    # Touch Item (Gold) to (13, 7)
+    75 72 78 7C 84 54 34 F4 72 75 81 74 74 74 77 74 74 74 74 7B 74 74 74 78 74 74 74 75 78 AF AF AF 74 AF 74 81 74 74 74 77 74 74 74 74 74 74 74 74 74
+    
 ## Alliances
 
 TODO.
@@ -187,7 +235,7 @@ Each unit on the map consists of 57 bytes:
     1 byte          (Empty)
     2 bytes         X
     2 bytes         Y
-    1 byte          Height? (0x00 for Land Units)
+    1 byte          Player (00 = P1, 01 = P2, etc.)
     2 bytes         Hitpoints
     1 byte          Magic points
     2 bytes         Armour
@@ -219,7 +267,7 @@ Starting at offset 0x814D.
     4 bytes         Number of traps
     1 byte          X
     1 byte          Y
-    1 byte          Player (00 = P1)
+    1 byte          Player (00 = P1, 01 = P2, etc.)
 
 ## Objects
 
@@ -227,7 +275,6 @@ TODO.
 
 ## Footer (end of file)
 
-    16 bytes            Unknown (75 72 78 7C 84 54 34 F4 74 74 74 74 74 74 74 74)
     1 byte              LRC
 
 ## Appendices
@@ -287,8 +334,8 @@ TODO.
     0x3C    0x12        Human - Priest
                         Human - Sea Barge
                         Human - Battleship
-    0x3F    0x05        Human - Pegas Rider (Height = 0xA0)
-    0x40    0x00        Human - Zeppelin (Height = 0x78)
+    0x3F    0x05        Human - Pegas Rider
+    0x40    0x00        Human - Zeppelin
     0x41    0x03        Greenskin - Serf
     0x42    0x16        Greenskin - Rock Thrower
     0x43    0x17        Greenskin - Horde Rider
@@ -301,8 +348,8 @@ TODO.
     0x4A    0x24        Greenskin - Necromancer
                         Greenskin - Landing Craft
                         Greenskin - Troll Galley
-    0x4D    0x1F        Greenskin - Warbat (Height = 0xB4)
-    0x4E    0x00        Greenskin - Balloon (Height = 0x78)
+    0x4D    0x1F        Greenskin - Warbat
+    0x4E    0x00        Greenskin - Balloon
     0x4F    0x03        Elf - Yeoman
     0x50    0x28        Elf - Archer
     0x51    0x33        Elf - Druid
@@ -315,8 +362,8 @@ TODO.
     0x58    0x3A        Elf - Enchanter
                         Elf - Bark
                         Elf - Warship
-    0x5B    0x31        Elf - Sky Rider (Height = 0xAF)
-    0x5C    0x00        Elf - Magic Chopper (Height = 0x96)
+    0x5B    0x31        Elf - Sky Rider
+    0x5C    0x00        Elf - Magic Chopper
 
 ### Monsters
 
