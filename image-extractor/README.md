@@ -2,7 +2,7 @@
 
 **IMAGES.DAT** contains assembly code to render the majority of the game's images.
 
-Thanks to **0xa0000** of [Reddit](https://www.reddit.com/r/asm/comments/as8ivk/how_can_i_call_a_stored_routine_with_unknown/egtl489/), we can call this code directly via `image_reader.exe`, to allow us to extract the images to individual files.
+Thanks to **0xa0000** of [Reddit](https://www.reddit.com/r/asm/comments/as8ivk/how_can_i_call_a_stored_routine_with_unknown/egtl489/), we can call this code directly, to allow us to extract the images to individual files.
 
 Other images (for example, the interface) can be extracted from screenshots. These can be taken by running the game through [DxWnd](https://sourceforge.net/projects/dxwnd/).
 
@@ -14,8 +14,23 @@ Compile using any C compiler, for example in the Developer Command Prompt for Vi
 
 ## Run
 
-Run the executable, and the images will be extracted to an "images" directory.
+Run the executable, and the images will be extracted to an "images" directory (this may need to be created).
 
 ## Palettes
 
-The game's palettes were extracted from a 24-bit screenshot taken using DxWnd. The palette was exported using Photoshop to an ACT file, and converted to text by running `convert_palette.py`.
+Some images have parts that can change colour, for example units that change colour based on their team. This program specifies which colours from the game's palette should be used for these parts.
+
+A visual representation of the game's palette is available [here](palette.png).
+
+The palette was captured in a 24-bit screenshot taken using DxWnd. This was exported to an ACT file using Photoshop, and converted to text by running [this script](convert_palette.py).
+
+The team colours start at index 160:
+
+    160 - Red
+    166 - Cyan
+    172 - Green
+    178 - Yellow
+    184 - Orange
+    190 - Violet
+    196 - Blue
+    202 - Black
