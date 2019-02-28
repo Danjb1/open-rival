@@ -1,23 +1,95 @@
 # To Do
 
- - *(Ongoing)* Extract graphics
+## Image Preparation
 
- - *(Ongoing)* Decipher map format
+ - Images should conform to standard sizes (64x64, 128x128, etc.)
+ - Where should sprites be positioned within their bounds?
+    - They need to line up with other sprites in their animation
+    - A consistent offset should be used to position sprites within tiles
+ - Colour-changeable parts should use unique colours (outside the usual palette)
+ - Group images into textures:
+    - Interface (menus, items, icons)
+    - Tiles
+    - Scenery (rocks, trees, chests)
+    - Buildings - Human
+    - Buildings - Elf
+    - Buildings - Greenskin
+    - Units - Human (should this be even more fine-grained?)
+    - Units - Elf
+    - Units - Greenskin
+    - Units - Monsters
+    - Effects (spells, bombs, traps?, cropland?)
 
-    - Determine checksum algorithm by trial and error or reverse-engineering save routine
+## Engine
 
- - Map rendering ([zig-zag approach](/docs/MECHANICS.md))
+ - Create data structures:
+    - Map
+    - TileType
+    - UnitType
+    - BuildingType
+    - ItemType
+    - GameObject
+        - Unit
+        - Building
+        - Obstacle
+        - Door
+ - Game loop
 
- - Unit rendering
+## Game Logic
 
- - Mouse picking
+ - Use the Command Pattern to manipulate game state?
+ - Moving units to adjacent tiles
+ - Pathfinding
+ - Building
+ - Training
+ - Resting
+ - Attacking
+ - Upgrades
+ - Experience
+ - Food
+ - Items
+ - Spells
+ - Monster AI
+ - Player AI
 
- - Unit sound effects
+## Input
 
- - Animation support
+ - Selecting units (render to a texture with mouse picking shader)
+ - Drag-select
 
- - Play music
+## Rendering
 
- - UI rendering
+ - Shader used for mouse picking
+ - Shader that can apply a [palette-swapping effect](https://gamedev.stackexchange.com/questions/43294/creating-a-retro-style-palette-swapping-effect-in-opengl)
+    - Option 1: use an actual palette texture, and images with indexed colours
+    - Option 2: create image masks to indicate which parts should change colour
+ - Render Interface
+ - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))
+ - Render Buildings
+ - Render Obstacles
+ - Render Units
+    - Different orientations
+    - Different animations
+ - High resolution support (!)
 
- - Colour mask support
+## Sound
+
+ - Play sounds when selecting units
+ - Play sounds when instructing units to move
+
+## Music
+
+ - WMA
+ - MIDI
+
+## Menus
+
+ - Main menu
+ - Loading screen
+ - Custom map menu
+ - Pause menu
+
+## File Formats
+
+ - Decipher scenario format
+ - Find campaign map data
