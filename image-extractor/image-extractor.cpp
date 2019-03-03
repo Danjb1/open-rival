@@ -290,8 +290,10 @@ void call_code(void* code) {
 #endif
 
 void* read_file(const char* filename, uint32_t* size) {
-	FILE* fp = fopen(filename, "rb");
-	if (!fp) {
+
+	FILE *fp;
+	errno_t err;
+	if ((err = fopen_s(&fp, filename, "r")) != 0) {
 		perror(filename);
 		return NULL;
 	}
@@ -322,11 +324,14 @@ void reset_image(void) {
 }
 
 int write_image(const char* filename, int w, int h) {
-	FILE* fp = fopen(filename, "wb");
-	if (!fp) {
+
+	FILE *fp;
+	errno_t err;
+	if ((err = fopen_s(&fp, filename, "wb")) != 0) {
 		perror(filename);
 		return 0;
 	}
+
 	fputc(0x00, fp); // ID Length
 	fputc(0x00, fp); // Color map type
 	fputc(0x02, fp); // Image type (uncompressed true-color)
@@ -452,7 +457,7 @@ uint8_t* find_end(uint8_t* start, uint8_t* end, int* read_from_esi) {
 
 int main() {
 	uint32_t size;
-	uint8_t* data = read_file("images.dat", &size);
+	uint8_t* data = (uint8_t*) read_file("images.dat", &size);
 	if (!data) {
 		return 1;
 	}
