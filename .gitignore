@@ -12,10 +12,5 @@ Debug/
 /Open-Rival/SDL2_image-2.0.3
 /Open-Rival/*.dll
 
-# Image Extractor scripts / data
-/image-extractor/images
-/image-extractor/compile.bat
-/image-extractor/*.obj
-/image-extractor/*.exe
-/image-extractor/IMAGES.DAT
+# User preferences
 /image-extractor/*.user

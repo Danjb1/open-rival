@@ -8,9 +8,9 @@ Other images (for example, the interface) can be extracted from screenshots. The
 
 ## Build
 
-Compile using any C compiler, for example in the Developer Command Prompt for Visual Studio:
+Build using Visual Studio.
 
-    cl image_extractor.c -D WIN32
+The executable will be created in a "Debug" directory. `IMAGES.DAT` should be placed in this same directory.
 
 ## Run
 
