@@ -16,6 +16,8 @@ The executable will be created in a "Debug" directory. `IMAGES.DAT` should be pl
 
 Run the executable, and the images will be extracted to an "images" directory (this may need to be created).
 
+A full list of images can be found [here](/docs/images.md).
+
 ## Palettes
 
 Some images have parts that can change colour, for example units that change colour based on their team. This program specifies which colours from the game's palette should be used for these parts.
