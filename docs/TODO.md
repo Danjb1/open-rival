@@ -6,6 +6,7 @@
  - Where should sprites be positioned within their bounds?
     - They need to line up with other sprites in their animation
     - A consistent offset should be used to position sprites within tiles
+    - (Theory) Images are already drawn at the right offset if images are kept to a standard size
  - Colour-changeable parts should use unique colours (outside the usual palette)
  - Group images into textures:
     - Interface (menus, items, icons)
