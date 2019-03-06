@@ -7,7 +7,6 @@
     - They need to line up with other sprites in their animation
     - A consistent offset should be used to position sprites within tiles
     - (Theory) Images are already drawn at the right offset if images are kept to a standard size
- - Colour-changeable parts should use unique colours (outside the usual palette)
  - Group images into textures:
     - Interface (menus, items, icons)
     - Tiles
@@ -60,6 +59,7 @@
 
 ## Rendering
 
+ - Texture rendering with SDL and modern OpenGL
  - Shader used for mouse picking
  - Shader that can apply a [palette-swapping effect](https://gamedev.stackexchange.com/questions/43294/creating-a-retro-style-palette-swapping-effect-in-opengl)
     - Option 1: use an actual palette texture, and images with indexed colours

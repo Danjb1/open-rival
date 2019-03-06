@@ -7,10 +7,9 @@ Thumbs.db
 # Build results
 Debug/
 
-# SDL
-/Open-Rival/SDL2-2.0.8
-/Open-Rival/SDL2_image-2.0.3
-/Open-Rival/*.dll
+# Libraries
+/Open-Rival/libs/
+*.dll
 
 # User preferences
-/image-extractor/*.user
+*.user
