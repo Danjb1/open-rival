@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open-Rival", "Open-Rival.vcxproj", "{AE6B3FDA-A900-4013-82C7-110DA7895525}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render-Test", "Render-Test\Render-Test.vcxproj", "{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,8 +23,19 @@ Global
 		{AE6B3FDA-A900-4013-82C7-110DA7895525}.Release|x64.Build.0 = Release|x64
 		{AE6B3FDA-A900-4013-82C7-110DA7895525}.Release|x86.ActiveCfg = Release|Win32
 		{AE6B3FDA-A900-4013-82C7-110DA7895525}.Release|x86.Build.0 = Release|Win32
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Debug|x64.ActiveCfg = Debug|x64
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Debug|x64.Build.0 = Debug|x64
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Debug|x86.ActiveCfg = Debug|Win32
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Debug|x86.Build.0 = Debug|Win32
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Release|x64.ActiveCfg = Release|x64
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Release|x64.Build.0 = Release|x64
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Release|x86.ActiveCfg = Release|Win32
+		{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DE4160C-8B08-4453-9B61-344EB12267D4}
 	EndGlobalSection
 EndGlobal
