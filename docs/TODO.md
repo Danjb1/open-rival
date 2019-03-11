@@ -1,5 +1,9 @@
 # To Do
 
+## General
+
+ - Are all DLL files needed?
+
 ## Image Preparation
 
  - Images should conform to standard sizes (64x64, 128x128, etc.)
