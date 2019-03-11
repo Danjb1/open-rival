@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Rival.h"
 
 using namespace std;
