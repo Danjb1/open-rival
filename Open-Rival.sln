@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open-Rival", "Open-Rival.vcxproj", "{AE6B3FDA-A900-4013-82C7-110DA7895525}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open-Rival", "Open-Rival\Open-Rival.vcxproj", "{AE6B3FDA-A900-4013-82C7-110DA7895525}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render-Test", "Render-Test\Render-Test.vcxproj", "{4A0FB724-A46A-4F28-AEF5-DE57BAC3CD34}"
 EndProject

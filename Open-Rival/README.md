@@ -2,10 +2,14 @@
 
 ## Dependencies
 
- - [SDL2](http://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
+ - [glew](http://glew.sourceforge.net/)
 
- - [SDL_image](http://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php)
+ - [SDL2](https://www.libsdl.org/download-2.0.php)
+
+ - [SDL_image](https://www.libsdl.org/projects/SDL_image/)
 
 ## Build
 
-Build using Visual Studio after installing dependencies as described above.
+Build using Visual Studio after installing the above dependencies.
+
+See [project setup](docs/project_setup.md) for more details.

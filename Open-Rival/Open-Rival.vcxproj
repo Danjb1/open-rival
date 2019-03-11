@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2-2.0.8\include;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2_image-2.0.3\lib\x86;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2-2.0.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\libs\SDL2_image-2.0.3\lib\x86;$(ProjectDir)\libs\SDL2-2.0.8\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
