@@ -1,5 +1,9 @@
 #include "RenderTest.h"
 
+#define STBI_ONLY_TGA
+#define STBI_NO_HDR
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -12,6 +16,7 @@
 #include <gl\glu.h>
 
 #include "ShaderUtils.h"
+#include "stb_image.h"
 
 namespace rival {
 
@@ -27,7 +32,11 @@ SDL_GLContext gContext;
 // Shader
 GLuint gProgramID = 0;
 GLint gVertexPos2DLocation = -1;
+GLint gVertexTexCoordLocation = -1;
+GLint gTextureUnitLocation = -1;
+GLuint textureID;
 GLuint gVBO = 0;
+GLuint gTexCoordVBO = 0;
 GLuint gIBO = 0;
 
 bool init() {
@@ -82,6 +91,34 @@ bool init() {
         return false;
     }
 
+    // Load texture
+    int width, height, n;
+    stbi_set_flip_vertically_on_load(1);
+    unsigned char *data = stbi_load("res\\textures\\knight.tga", &width, &height, &n, 0);
+    if (data == NULL) {
+        printf("Failed to load image!\n");
+        printf("Error: %s\n", stbi_failure_reason());
+        return false;
+    }
+
+    // Generate texture
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glBindTexture(GL_TEXTURE_2D, NULL);
+
+    // Check for error
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        printf("Error loading texture from %p pixels! %s\n", data, gluErrorString(error));
+        return false;
+    }
+
+    // Free image data (no longer needed)
+    stbi_image_free(data);
+
     return true;
 }
 
@@ -94,7 +131,7 @@ bool initGL() {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     // Read / set vertex source
-    std::string vertexShaderSource = rival::readShaderSource("shaders\\texture.vert");
+    std::string vertexShaderSource = rival::readShaderSource("res\\shaders\\texture.vert");
     const char* vertexShaderSource2 = vertexShaderSource.c_str();
     glShaderSource(vertexShader, 1, &vertexShaderSource2, NULL);
 
@@ -117,7 +154,7 @@ bool initGL() {
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Read / set fragment source
-    std::string fragmentShaderSource = readShaderSource("shaders\\texture.frag");
+    std::string fragmentShaderSource = readShaderSource("res\\shaders\\texture.frag");
     const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
     glShaderSource(fragmentShader, 1, &fragmentShaderSource2, NULL);
 
@@ -148,15 +185,29 @@ bool initGL() {
         return false;
     }
 
-    // Get vertex attribute location
-    gVertexPos2DLocation = glGetAttribLocation(gProgramID, "pos");
+    // Get vertex attribute locations
+    gVertexPos2DLocation = glGetAttribLocation(gProgramID, "in_vertex");
     if (gVertexPos2DLocation == -1) {
-        printf("pos is not a valid glsl program variable!\n");
+        printf("in_vertex is not a valid glsl program variable!\n");
         return false;
+    }
+    gVertexTexCoordLocation = glGetAttribLocation(gProgramID, "in_tex_coord");
+    if (gVertexTexCoordLocation == -1) {
+        printf("in_tex_coord is not a valid glsl program variable!\n");
+        return false;
+    }
+
+    // Get uniform locations
+    gTextureUnitLocation = glGetUniformLocation(gProgramID, "tex");
+    if (gTextureUnitLocation == -1) {
+        printf("tex is not a valid glsl program variable!\n");
     }
 
     // Initialize clear color
     glClearColor(0.f, 0.f, 0.f, 1.f);
+
+    //Enable texturing
+    glEnable(GL_TEXTURE_2D);
 
     // VBO data
     GLfloat vertexData[] = {
@@ -165,14 +216,25 @@ bool initGL() {
         0.5f,  0.5f,
         -0.5f,  0.5f
     };
+    GLfloat texCoordData[] = {
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1
+    };
 
     // IBO data
     GLuint indexData[] = { 0, 1, 2, 3 };
 
-    // Create VBO
+    // Create vertex pos VBO
     glGenBuffers(1, &gVBO);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
     glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
+
+    // Create tex coord VBO
+    glGenBuffers(1, &gTexCoordVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
+    glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), texCoordData, GL_STATIC_DRAW);
 
     // Create IBO
     glGenBuffers(1, &gIBO);
@@ -186,18 +248,41 @@ void render() {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Render quad
+    // Use shader
     glUseProgram(gProgramID);
+
+    // Use texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Prepare
     glEnableVertexAttribArray(gVertexPos2DLocation);
+    glEnableVertexAttribArray(gVertexTexCoordLocation);
+    glUniform1i(gTextureUnitLocation, 0);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
     glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
+    glVertexAttribPointer(gVertexTexCoordLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+
+    // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+
+    // Render
     glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+
+    // Clean up
     glDisableVertexAttribArray(gVertexPos2DLocation);
+    glDisableVertexAttribArray(gVertexTexCoordLocation);
+    glBindTexture(GL_TEXTURE_2D, NULL);
     glUseProgram(NULL);
 }
 
 void close() {
+
+    // Delete texture
+    if (textureID != 0 ) {
+        glDeleteTextures(1, &textureID);
+        textureID = 0;
+    }
 
     // Deallocate program
     glDeleteProgram(gProgramID);
@@ -214,6 +299,7 @@ void close() {
 
 int main(int argc, char* args[]) {
 
+    // Initialise SDL
     if (!rival::init()) {
         printf("Failed to initialize!\n");
         rival::close();
@@ -236,7 +322,6 @@ int main(int argc, char* args[]) {
     }
 
     rival::close();
-
     return 0;
 }
 
