@@ -63,7 +63,6 @@
 
 ## Rendering
 
- - Texture rendering with SDL and modern OpenGL
  - Shader used for mouse picking
  - Shader that can apply a [palette-swapping effect](https://gamedev.stackexchange.com/questions/43294/creating-a-retro-style-palette-swapping-effect-in-opengl)
     - Option 1: use an actual palette texture, and images with indexed colours
