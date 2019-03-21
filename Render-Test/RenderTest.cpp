@@ -94,6 +94,7 @@ bool init() {
     // Load texture
     int width, height, n;
     stbi_set_flip_vertically_on_load(1);
+    stbi_set_skip_tga_palette_lookup(1);
     unsigned char *data = stbi_load("res\\textures\\knight.tga", &width, &height, &n, 0);
     if (data == NULL) {
         printf("Failed to load image!\n");

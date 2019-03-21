@@ -466,6 +466,9 @@ extern "C" {
     // flip the image vertically, so the first pixel in the output array is the bottom left
     STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip);
 
+    // skip the palette lookup for TGA images; just return the palette index for each pixel
+    STBIDEF void stbi_set_skip_tga_palette_lookup(int flag_true_if_should_skip);
+
     // ZLIB client - used by PNG, available for other purposes
 
     STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen);
@@ -999,6 +1002,13 @@ static int stbi__vertically_flip_on_load = 0;
 STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip)
 {
     stbi__vertically_flip_on_load = flag_true_if_should_flip;
+}
+
+static int stbi__skip_tga_palette_lookup = 0;
+
+STBIDEF void stbi_set_skip_tga_palette_lookup(int flag_true_if_should_skip)
+{
+    stbi__skip_tga_palette_lookup = flag_true_if_should_skip;
 }
 
 static void *stbi__load_main(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri, int bpc)
@@ -5718,7 +5728,11 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
                     }
                     pal_idx *= tga_comp;
                     for (j = 0; j < tga_comp; ++j) {
-                        raw_data[j] = tga_palette[pal_idx + j];
+                        if (stbi__skip_tga_palette_lookup) {
+                            raw_data[j] = pal_idx;
+                        } else {
+                            raw_data[j] = tga_palette[pal_idx + j];
+                        }
                     }
                 }
                 else if (tga_rgb16) {
