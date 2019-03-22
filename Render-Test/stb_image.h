@@ -5726,11 +5726,13 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
                         // invalid index
                         pal_idx = 0;
                     }
-                    pal_idx *= tga_comp;
-                    for (j = 0; j < tga_comp; ++j) {
-                        if (stbi__skip_tga_palette_lookup) {
+                    if (stbi__skip_tga_palette_lookup) {
+                        for (j = 0; j < tga_comp; ++j) {
                             raw_data[j] = pal_idx;
-                        } else {
+                        }
+                    } else {
+                        pal_idx *= tga_comp;
+                        for (j = 0; j < tga_comp; ++j) {
                             raw_data[j] = tga_palette[pal_idx + j];
                         }
                     }
