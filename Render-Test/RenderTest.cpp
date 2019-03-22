@@ -34,7 +34,9 @@ GLuint gProgramID = 0;
 GLint gVertexPos2DLocation = -1;
 GLint gVertexTexCoordLocation = -1;
 GLint gTextureUnitLocation = -1;
+GLint gPaletteTextureUnitLocation;
 GLuint textureID;
+GLuint paletteTextureID;
 GLuint gVBO = 0;
 GLuint gTexCoordVBO = 0;
 GLuint gIBO = 0;
@@ -120,6 +122,44 @@ bool init() {
     // Free image data (no longer needed)
     stbi_image_free(data);
 
+    // Create palette texture
+    unsigned char *palette = new unsigned char[256 * 4];
+
+    // 0-128 = GREEN
+    for (int i = 1; i < 128; i++) {
+        palette[i * 4] = 0;
+        palette[i * 4 + 1] = 0xff;
+        palette[i * 4 + 2] = 0;
+        palette[i * 4 + 3] = 0xff;
+    }
+
+    // 129-254 = RED
+    for (int i = 129; i < 256; i++) {
+        palette[i * 4] = 0xff;
+        palette[i * 4 + 1] = 0;
+        palette[i * 4 + 2] = 0;
+        palette[i * 4 + 3] = 0xff;
+    }
+
+    // 255: WHITE
+    for (int i = 255; i < 256; i++) {
+        palette[i * 4] = 0xff;
+        palette[i * 4 + 1] = 0xff;
+        palette[i * 4 + 2] = 0xff;
+        palette[i * 4 + 3] = 0xff;
+    }
+
+    glGenTextures(1, &paletteTextureID);
+    glBindTexture(GL_TEXTURE_2D, paletteTextureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, palette);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, NULL);
+
+    delete palette;
+
     return true;
 }
 
@@ -203,6 +243,10 @@ bool initGL() {
     if (gTextureUnitLocation == -1) {
         printf("tex is not a valid glsl program variable!\n");
     }
+    gPaletteTextureUnitLocation = glGetUniformLocation(gProgramID, "palette");
+    if (gPaletteTextureUnitLocation == -1) {
+        printf("palette is not a valid glsl program variable!\n");
+    }
 
     // Initialize clear color
     glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -252,13 +296,17 @@ void render() {
     // Use shader
     glUseProgram(gProgramID);
 
-    // Use texture
+    // Use textures
+    glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, textureID);
+    glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+    glBindTexture(GL_TEXTURE_2D, paletteTextureID);
 
     // Prepare
     glEnableVertexAttribArray(gVertexPos2DLocation);
     glEnableVertexAttribArray(gVertexTexCoordLocation);
     glUniform1i(gTextureUnitLocation, 0);
+    glUniform1i(gPaletteTextureUnitLocation, 1);
     glBindBuffer(GL_ARRAY_BUFFER, gVBO);
     glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
     glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
@@ -279,10 +327,14 @@ void render() {
 
 void close() {
 
-    // Delete texture
-    if (textureID != 0 ) {
+    // Delete textures
+    if (textureID != 0) {
         glDeleteTextures(1, &textureID);
         textureID = 0;
+    }
+    if (paletteTextureID != 0) {
+        glDeleteTextures(1, &paletteTextureID);
+        paletteTextureID = 0;
     }
 
     // Deallocate program
