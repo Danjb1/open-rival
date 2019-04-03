@@ -64,9 +64,6 @@
 ## Rendering
 
  - Shader used for mouse picking
- - Shader that can apply a [palette-swapping effect](https://gamedev.stackexchange.com/questions/43294/creating-a-retro-style-palette-swapping-effect-in-opengl)
-    - Option 1: use an actual palette texture, and images with indexed colours
-    - Option 2: create image masks to indicate which parts should change colour
  - Render Interface
  - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))
  - Render Buildings
