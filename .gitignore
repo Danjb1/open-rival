@@ -17,4 +17,5 @@ Debug/
 # Raw images
 /images
 /image-extractor/images
+/texture-builder/images
 IMAGES.DAT

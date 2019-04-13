@@ -14,7 +14,7 @@
 | 0631     | 0633   | Troop overlays                       |              |
 | 0634     | -      | Treestump                            |              |
 | 0635     | 0645   | Scenario goals                       |              |
-| 0646     | 0675   | ???                                  |              |
+| 0646     | 0675   | Fog of War                           |              |
 | 0676     | 0681   | Move cursor                          |              |
 | 0682     | 0683   | Building construction site           |              |
 | 0684     | 0687   | Ship sink effect                     |              |
