@@ -13,10 +13,7 @@
     - Buildings - Human
     - Buildings - Elf
     - Buildings - Greenskin
-    - Units - Human (should this be even more fine-grained?)
-    - Units - Elf
-    - Units - Greenskin
-    - Units - Monsters
+    - Units (1 texture per unit)
     - Effects (spells, bombs, traps?, cropland?)
 
 ## Engine
