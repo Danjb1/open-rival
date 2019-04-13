@@ -13,3 +13,8 @@ Debug/
 
 # User preferences
 *.user
+
+# Raw images
+/images
+/image-extractor/images
+IMAGES.DAT
