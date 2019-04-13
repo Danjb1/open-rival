@@ -6,11 +6,6 @@
 
 ## Image Preparation
 
- - Images should conform to standard sizes (64x64, 128x128, etc.)
- - Where should sprites be positioned within their bounds?
-    - They need to line up with other sprites in their animation
-    - A consistent offset should be used to position sprites within tiles
-    - (Theory) Images are already drawn at the right offset if images are kept to a standard size
  - Group images into textures:
     - Interface (menus, items, icons)
     - Tiles
