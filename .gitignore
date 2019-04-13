@@ -19,3 +19,6 @@ Debug/
 /image-extractor/images
 /texture-builder/images
 IMAGES.DAT
+
+# Program output
+/texture-builder/textures
