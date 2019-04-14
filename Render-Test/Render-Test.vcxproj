@@ -158,7 +158,6 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderTest.h" />
     <ClInclude Include="ShaderUtils.h" />
-    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
