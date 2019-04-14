@@ -70,6 +70,10 @@ public:
         this->data = data;
     }
 
+    ~Image() {
+        free(this->data);
+    }
+
     int getWidth() {
         return width;
     }

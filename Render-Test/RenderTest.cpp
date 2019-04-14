@@ -1,9 +1,5 @@
 #include "RenderTest.h"
 
-#define STBI_ONLY_TGA
-#define STBI_NO_HDR
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -16,7 +12,6 @@
 #include <gl\glu.h>
 
 #include "ShaderUtils.h"
-#include "stb_image.h"
 
 namespace rival {
 
@@ -83,6 +78,73 @@ const uint32_t PALETTE[PALETTE_SIZE] = {
     0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,	0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffff00
 };
 
+class Image {
+
+private:
+
+    int width;
+    int height;
+    unsigned char *data;
+
+public:
+
+    Image(int width, int height) {
+        this->width = width;
+        this->height = height;
+        this->data = new unsigned char[width * height];
+    }
+
+    Image(int width, int height, unsigned char *data) {
+        this->width = width;
+        this->height = height;
+        this->data = data;
+    }
+
+    ~Image() {
+        free(this->data);
+    }
+
+    int getWidth() {
+        return width;
+    }
+
+    int getHeight() {
+        return height;
+    }
+
+    unsigned char* getData() {
+        return data;
+    }
+
+};
+
+/**
+ * Loads an image from a file.
+ *
+ * This is basically the reverse of `write_image` from image-extractor,
+ * skipping all the data we don't care about.
+ */
+Image loadImage(std::string filename) {
+    std::cout << "Loading: " << filename << "\n";
+
+    std::ifstream ifs(filename, std::ios::binary | std::ios::in);
+    if (!ifs) {
+        throw std::runtime_error("Failed to load image!");
+    }
+
+    // Read sprite dimensions
+    ifs.seekg(12);
+    int width = ifs.get() | (ifs.get() << 8);
+    int height = ifs.get() | (ifs.get() << 8);
+
+    // Read pixel data
+    unsigned char *data = new unsigned char[width * height];
+    ifs.seekg(1042);
+    ifs.read((char*)data, width * height);
+
+    return Image(width, height, data);
+}
+
 bool init() {
 
     // Initialize SDL
@@ -136,20 +198,13 @@ bool init() {
     }
 
     // Load texture
-    int width, height, n;
-    stbi_set_flip_vertically_on_load(1);
-    stbi_set_skip_tga_palette_lookup(1);
-    unsigned char *data = stbi_load("res\\textures\\knight.tga", &width, &height, &n, 0);
-    if (data == NULL) {
-        printf("Failed to load image!\n");
-        printf("Error: %s\n", stbi_failure_reason());
-        return false;
-    }
+    Image sprite = loadImage("res\\textures\\knight.tga");
+    std::cout << "Sprite is " << sprite.getWidth() << " x " << sprite.getHeight();
 
     // Generate texture
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, sprite.getWidth(), sprite.getHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, sprite.getData());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, NULL);
@@ -157,12 +212,9 @@ bool init() {
     // Check for error
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        printf("Error loading texture from %p pixels! %s\n", data, gluErrorString(error));
+        printf("Error loading texture from %p pixels! %s\n", sprite.getData(), gluErrorString(error));
         return false;
     }
-
-    // Free image data (no longer needed)
-    stbi_image_free(data);
 
     // Create palette texture
     unsigned char *palette = new unsigned char[PALETTE_SIZE * PALETTE_CHANNELS];
