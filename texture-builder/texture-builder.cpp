@@ -4,12 +4,6 @@
 #include <iostream>
 #include <string>
 
-#define STBI_ONLY_TGA
-#define STBI_NO_HDR
-#define STB_IMAGE_IMPLEMENTATION
-
-#include "stb_image.h"
-
 const int TEXTURE_WIDTH = 2048;
 const int TEXTURE_HEIGHT = 2048;
 
@@ -84,28 +78,44 @@ public:
 
 };
 
+/**
+ * Loads an image from a file.
+ *
+ * This is basically the reverse of `write_image` from image-extractor,
+ * skipping all the data we don't care about.
+ */
 Image loadImage(std::string filename) {
     std::cout << "Loading: " << filename << "\n";
 
-    int width, height, n;
-    stbi_set_flip_vertically_on_load(1);
-    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &n, 0);
-
-    if (data == NULL) {
-        printf("Failed to load image!\n");
-        printf("Error: %s\n", stbi_failure_reason());
-        throw std::runtime_error("Error loading image");
+    std::ifstream ifs(filename, std::ios::binary | std::ios::in);
+    if (!ifs) {
+        throw std::runtime_error("Failed to load image!");
     }
+
+    // Read sprite dimensions
+    ifs.seekg(12);
+    int width = ifs.get() | (ifs.get() << 8);
+    int height = ifs.get() | (ifs.get() << 8);
+
+    // Read pixel data
+    unsigned char *data = new unsigned char[width * height];
+    ifs.seekg(1042);
+    ifs.read((char*) data, width * height);
 
     return Image(width, height, data);
 }
 
-int writeImage(const char* filename, Image& image) {
+/**
+ * Writes an image to file.
+ *
+ * Based on `write_image` from image-extractor.
+ */
+int writeImage(std::string filename, Image& image) {
 
     // Open file for writing
-    FILE* fp = fopen(filename, "wb");
+    FILE* fp = fopen(filename.c_str(), "wb");
     if (!fp) {
-        perror(filename);
+        perror(filename.c_str());
         return 0;
     }
 
@@ -168,6 +178,24 @@ int writeImage(const char* filename, Image& image) {
     return 1;
 }
 
+/**
+ * Copies pixels from one image into another.
+ */
+void copyImage(Image& src, Image& dst, int dstX, int dstY) {
+    unsigned char* srcData = src.getData();
+    unsigned char* dstData = dst.getData();
+
+    for (int y = 0; y < src.getHeight(); y++) {
+        for (int x = 0; x < src.getWidth(); x++) {
+
+            int srcIndex = (y * src.getWidth()) + x;
+            int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
+
+            dstData[dstIndex] = srcData[srcIndex];
+        }
+    }
+}
+
 int main() {
 
     // Create an empty texture
@@ -175,15 +203,40 @@ int main() {
     Image texture = Image(TEXTURE_WIDTH, TEXTURE_HEIGHT, data);
 
     // Load our definition file
-    std::ifstream file("definitions/unit_human_knight.def");
+    std::string filename = "unit_human_knight";
+    std::ifstream file("definitions/" + filename + ".def");
     std::string line;
 
+    int x = 0;
+    int y = 0;
+
+    int lastWidth = -1;
+    int lastHeight = -1;
+
     while (std::getline(file, line)) {
+
         Image sprite = loadImage("images/" + line);
-        // TODO: add image to texture
-        // TODO: start a new row once we hit the max image size
+
+        // Check dimensions against the previous sprite
+        if (lastWidth < 0) {
+            lastWidth = sprite.getWidth();
+            lastHeight = sprite.getHeight();
+        } else if (lastWidth != sprite.getWidth()
+                || lastHeight != sprite.getHeight()) {
+            std::cout << "Sprite dimensions do not match!\n";
+            break;
+        }
+
+        copyImage(sprite, texture, x, y);
+
+        x += sprite.getWidth();
+
+        if (x >= texture.getWidth()) {
+            x = 0;
+            y += sprite.getHeight();
+        }
     }
 
     // Save the final texture
-    writeImage("textures/out.tga", texture);
+    writeImage("textures/" + filename + ".tga", texture);
 }
