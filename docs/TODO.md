@@ -6,14 +6,11 @@
 
 ## Image Preparation
 
- - Group images into textures:
+ - Group remaining images into textures:
     - Interface (menus, items, icons)
-    - Tiles
     - Scenery (rocks, trees, chests)
-    - Buildings - Human
-    - Buildings - Elf
-    - Buildings - Greenskin
-    - Units (1 texture per unit)
+    - Greenskin units
+    - Elf units
     - Effects (spells, bombs, traps?, cropland?)
 
 ## Engine
