@@ -24,8 +24,8 @@
 | 0859     | 0893   | Death animations                     |              |
 | 0894     | 1049   | Human: Peasant                       | :heavy_check_mark: |
 | 1050     | 1229   | Human: Bowman                        | :heavy_check_mark: |
-| ????     | ????   | Human: Light Cavalry                 | :heavy_check_mark: |
-| ????     | ????   | Human: Knight                        | :heavy_check_mark: |
+| 1230     | 1345   | Human: Light Cavalry                 | :heavy_check_mark: |
+| 1346     | 1549   | Human: Knight                        | :heavy_check_mark: |
 | ????     | ????   | Human: Fire Master                   | :heavy_check_mark: |
 | ????     | ????   | Human: Thief                         | :heavy_check_mark: |
 | ????     | ????   | Human: Ballista                      | :heavy_check_mark: |
@@ -88,23 +88,44 @@ The unit animations appear in this order:
  - Stationary (north-east)
  - Stationary (east)
  - Stationary (south-east)
- - Walking - 6 frames (south)
- - Walking - 6 frames (south-west)
- - Walking - 6 frames (west)
- - Walking - 6 frames (north-west)
- - Walking - 6 frames (north)
- - Walking - 6 frames (north-east)
- - Walking - 6 frames (east)
- - Walking - 6 frames (south-east)
- - Attacking - 6 frames (south)
- - Attacking - 6 frames (south-west)
- - Attacking - 6 frames (west)
- - Attacking - 6 frames (north-west)
- - Attacking - 6 frames (north)
- - Attacking - 6 frames (north-east)
- - Attacking - 6 frames (east)
- - Attacking - 6 frames (south-east)
+ - Walking (south)
+ - Walking (south-west)
+ - Walking (west)
+ - Walking (north-west)
+ - Walking (north)
+ - Walking (north-east)
+ - Walking (east)
+ - Walking (south-east)
+ - Attacking (south)
+ - Attacking (south-west)
+ - Attacking (west)
+ - Attacking (north-west)
+ - Attacking (north)
+ - Attacking (north-east)
+ - Attacking (east)
+ - Attacking (south-east)
  - Dying - 3 frames (south-west)
  - Dying - 3 frames (north-west)
  - Dying - 3 frames (north-east)
  - Dying - 3 frames (south-east)
+ - Special (south)
+ - Special (south-west)
+ - Special (west)
+ - Special (north-west)
+ - Special (north)
+ - Special (north-east)
+ - Special (east)
+ - Special (south-east)
+
+The animations are different lengths for different units:
+
+### Peasant
+
+ - Walking - 6 frames
+ - Attacking - 6 frames
+
+### Knight
+
+ - Walking - 8 frames
+ - Attacking - 13 frames
+ - Special - 2 frames
