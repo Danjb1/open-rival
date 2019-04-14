@@ -61,17 +61,16 @@ public:
     Image(int width, int height) {
         this->width = width;
         this->height = height;
-        this->data = new unsigned char[width * height];
+
+        // TODO: dynamically-allocated memory is never deleted
+        data = new unsigned char[width * height];
+        std::fill_n(data, width * height, 0xff);
     }
 
     Image(int width, int height, unsigned char *data) {
         this->width = width;
         this->height = height;
         this->data = data;
-    }
-
-    ~Image() {
-        free(this->data);
     }
 
     int getWidth() {
@@ -108,6 +107,7 @@ Image loadImage(std::string filename) {
     int height = ifs.get() | (ifs.get() << 8);
 
     // Read pixel data
+    // TODO: dynamically-allocated memory is never deleted
     unsigned char *data = new unsigned char[width * height];
     ifs.seekg(1042);
     ifs.read((char*) data, width * height);
