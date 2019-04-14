@@ -139,7 +139,7 @@ Image loadImage(std::string filename) {
 
     // Read pixel data
     unsigned char *data = new unsigned char[width * height];
-    ifs.seekg(1042);
+    ifs.seekg(786);
     ifs.read((char*)data, width * height);
 
     return Image(width, height, data);
@@ -329,7 +329,7 @@ bool initGL() {
     }
 
     // Initialize clear color
-    glClearColor(0.f, 0.f, 0.f, 1.f);
+    glClearColor(0.5f, 0.5f, 1.f, 1.f);
 
     // Enable texturing
     glEnable(GL_TEXTURE_2D);
