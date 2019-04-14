@@ -3,9 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
-const int TEXTURE_WIDTH = 2048;
-const int TEXTURE_HEIGHT = 2048;
+const int MAX_TEXTURE_SIZE = 2048;
 
 // Number of colours in the palette
 const int PALETTE_SIZE = 256;
@@ -57,6 +57,12 @@ private:
     unsigned char *data;
 
 public:
+
+    Image(int width, int height) {
+        this->width = width;
+        this->height = height;
+        this->data = new unsigned char[width * height];
+    }
 
     Image(int width, int height, unsigned char *data) {
         this->width = width;
@@ -196,14 +202,29 @@ void copyImage(Image& src, Image& dst, int dstX, int dstY) {
     }
 }
 
+/**
+ * Rounds a number up to the nearest power of 2.
+ *
+ * See:
+ * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+ */
+int nextPowerOf2(int v) {
+
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v++;
+
+    return v;
+}
+
 int main() {
 
-    // Create an empty texture
-    unsigned char *data = new unsigned char[TEXTURE_WIDTH * TEXTURE_HEIGHT];
-    Image texture = Image(TEXTURE_WIDTH, TEXTURE_HEIGHT, data);
-
     // Load our definition file
-    std::string filename = "unit_human_knight";
+    std::string filename = "scenery_meadow";
     std::ifstream file("definitions/" + filename + ".def");
     std::string line;
 
@@ -213,6 +234,9 @@ int main() {
     int lastWidth = -1;
     int lastHeight = -1;
 
+    std::vector<Image> sprites;
+
+    // Load all sprites from the definition file
     while (std::getline(file, line)) {
 
         Image sprite = loadImage("images/" + line);
@@ -221,12 +245,52 @@ int main() {
         if (lastWidth < 0) {
             lastWidth = sprite.getWidth();
             lastHeight = sprite.getHeight();
-        } else if (lastWidth != sprite.getWidth()
-                || lastHeight != sprite.getHeight()) {
-            std::cout << "Sprite dimensions do not match!\n";
-            break;
+        }
+        else if (lastWidth != sprite.getWidth()
+            || lastHeight != sprite.getHeight()) {
+            throw new std::runtime_error("Sprite dimensions do not match!");
         }
 
+        sprites.push_back(sprite);
+    }
+
+    // Find the optimal texture size:
+    // Start with a single long row of sprites, and keep splitting it until
+    // we find a suitable size with minimal wasted space
+    int tmpWidth = nextPowerOf2(lastWidth * sprites.size());
+    int tmpHeight = lastHeight;
+    int dataSize = tmpWidth * tmpHeight;
+    int best = dataSize;
+    int bestWidth = tmpWidth;
+    int bestHeight = tmpHeight;
+
+    while (tmpWidth > 256) {
+
+        tmpWidth /= 2;
+        tmpHeight *= 2;
+
+        int area = tmpWidth * tmpHeight;
+        int wastedSpace = area - dataSize;
+
+        if (bestWidth > MAX_TEXTURE_SIZE || wastedSpace < best) {
+            best = wastedSpace;
+            bestWidth = tmpWidth;
+            bestHeight = tmpHeight;
+        }
+    }
+
+    std::cout << "Optimal size is " << bestWidth << " x " << bestHeight << "\n";
+
+    if (bestWidth > MAX_TEXTURE_SIZE || bestHeight > MAX_TEXTURE_SIZE) {
+        throw new std::runtime_error("Sprites will not fit!");
+    }
+
+    // Create an empty texture
+    Image texture = Image(bestWidth, bestHeight);
+
+    // Draw the sprites to the texture
+    for (Image sprite : sprites) {
+        std::cout << "Copying sprite to " << x << " x " << y << "\n";
         copyImage(sprite, texture, x, y);
 
         x += sprite.getWidth();
