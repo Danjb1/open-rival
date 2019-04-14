@@ -84,24 +84,22 @@ private:
 
     int width;
     int height;
-    unsigned char *data;
+    std::shared_ptr<unsigned char> data;
 
 public:
 
     Image(int width, int height) {
         this->width = width;
         this->height = height;
-        this->data = new unsigned char[width * height];
+
+        data = std::shared_ptr<unsigned char>(new unsigned char[width * height]);
+        std::fill_n(data.get(), width * height, 0xff);
     }
 
-    Image(int width, int height, unsigned char *data) {
+    Image(int width, int height, std::shared_ptr<unsigned char> data) {
         this->width = width;
         this->height = height;
         this->data = data;
-    }
-
-    ~Image() {
-        free(this->data);
     }
 
     int getWidth() {
@@ -112,7 +110,7 @@ public:
         return height;
     }
 
-    unsigned char* getData() {
+    std::shared_ptr<unsigned char> getData() {
         return data;
     }
 
@@ -138,9 +136,10 @@ Image loadImage(std::string filename) {
     int height = ifs.get() | (ifs.get() << 8);
 
     // Read pixel data
-    unsigned char *data = new unsigned char[width * height];
+    std::shared_ptr<unsigned char> data =
+        std::shared_ptr<unsigned char>(new unsigned char[width * height]);
     ifs.seekg(786);
-    ifs.read((char*)data, width * height);
+    ifs.read((char*)data.get(), width * height);
 
     return Image(width, height, data);
 }
@@ -204,7 +203,7 @@ bool init() {
     // Generate texture
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, sprite.getWidth(), sprite.getHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, sprite.getData());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, sprite.getWidth(), sprite.getHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, sprite.getData().get());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, NULL);
@@ -212,7 +211,7 @@ bool init() {
     // Check for error
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        printf("Error loading texture from %p pixels! %s\n", sprite.getData(), gluErrorString(error));
+        printf("Error loading texture from %p pixels! %s\n", sprite.getData().get(), gluErrorString(error));
         return false;
     }
 

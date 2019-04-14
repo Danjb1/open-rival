@@ -54,7 +54,7 @@ private:
 
     int width;
     int height;
-    unsigned char *data;
+    std::shared_ptr<unsigned char> data;
 
 public:
 
@@ -62,12 +62,11 @@ public:
         this->width = width;
         this->height = height;
 
-        // TODO: dynamically-allocated memory is never deleted
-        data = new unsigned char[width * height];
-        std::fill_n(data, width * height, 0xff);
+        data = std::shared_ptr<unsigned char>(new unsigned char[width * height]);
+        std::fill_n(data.get(), width * height, 0xff);
     }
 
-    Image(int width, int height, unsigned char *data) {
+    Image(int width, int height, std::shared_ptr<unsigned char> data) {
         this->width = width;
         this->height = height;
         this->data = data;
@@ -81,7 +80,7 @@ public:
         return height;
     }
 
-    unsigned char* getData() {
+    std::shared_ptr<unsigned char> getData() {
         return data;
     }
 
@@ -107,10 +106,10 @@ Image loadImage(std::string filename) {
     int height = ifs.get() | (ifs.get() << 8);
 
     // Read pixel data
-    // TODO: dynamically-allocated memory is never deleted
-    unsigned char *data = new unsigned char[width * height];
+    std::shared_ptr<unsigned char> data =
+            std::shared_ptr<unsigned char>(new unsigned char[width * height]);
     ifs.seekg(1042);
-    ifs.read((char*) data, width * height);
+    ifs.read((char*) data.get(), width * height);
 
     return Image(width, height, data);
 }
@@ -176,10 +175,10 @@ int writeImage(std::string filename, Image& image) {
     }
 
     // Pixel data
-    unsigned char* data = image.getData();
+    std::shared_ptr<unsigned char> data = image.getData();
     for (int y = 0; y < image.getHeight(); ++y) {
         for (int x = 0; x < image.getWidth(); ++x) {
-            const uint8_t index = data[x + y * image.getWidth()];
+            const uint8_t index = data.get()[x + y * image.getWidth()];
             fputc(index, fp);
         }
     }
@@ -192,8 +191,8 @@ int writeImage(std::string filename, Image& image) {
  * Copies pixels from one image into another.
  */
 void copyImage(Image& src, Image& dst, int dstX, int dstY) {
-    unsigned char* srcData = src.getData();
-    unsigned char* dstData = dst.getData();
+    std::shared_ptr<unsigned char> srcData = src.getData();
+    std::shared_ptr<unsigned char> dstData = dst.getData();
 
     for (int y = 0; y < src.getHeight(); y++) {
         for (int x = 0; x < src.getWidth(); x++) {
@@ -201,7 +200,7 @@ void copyImage(Image& src, Image& dst, int dstX, int dstY) {
             int srcIndex = (y * src.getWidth()) + x;
             int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
 
-            dstData[dstIndex] = srcData[srcIndex];
+            dstData.get()[dstIndex] = srcData.get()[srcIndex];
         }
     }
 }
