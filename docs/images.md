@@ -37,7 +37,7 @@
 | 2066     | 2217   | Human: Pegas Rider                   | :heavy_check_mark: |
 | 2218     | 2225   | Human: Zeppelin                      | :heavy_check_mark: |
 | 2226     | 2381   | Greenskin: Serf                      | :heavy_check_mark: |
-| 2382     | 2397   | Greenskin: Rock Thrower              | :heavy_check_mark: |
+| 2382     | 2497   | Greenskin: Rock Thrower              | :heavy_check_mark: |
 | 2498     | 2581   | Greenskin: Horde Rider               | :heavy_check_mark: |
 | 2582     | 2753   | Greenskin: Warlord                   | :heavy_check_mark: |
 | 2754     | 2865   | Greenskin: Gnome Boomer              | :heavy_check_mark: |
@@ -74,7 +74,7 @@
 | 5155     | 5202   | Magic bolt                           |              |
 | 5203     | 5216   | Forcefield                           |              |
 | 5217     | 6256   | Spells and projectiles               |              |
-| 6257     | 5261   | Hourglass                            |              |
+| 6257     | 6261   | Hourglass                            |              |
 
 ## Units
 
@@ -104,10 +104,10 @@ The unit animations appear in this order:
  - Attacking (north-east)
  - Attacking (east)
  - Attacking (south-east)
- - Dying - 3 frames (south-west)
- - Dying - 3 frames (north-west)
- - Dying - 3 frames (north-east)
- - Dying - 3 frames (south-east)
+ - Dying (south-west)
+ - Dying (north-west)
+ - Dying (north-east)
+ - Dying (south-east)
  - Special (south)
  - Special (south-west)
  - Special (west)
@@ -123,9 +123,11 @@ The animations are different lengths for different units:
 
  - Walking - 6 frames
  - Attacking - 6 frames
+ - Dying - 3 frames
 
 ### Knight
 
  - Walking - 8 frames
  - Attacking - 13 frames
+ - Dying - 3 frames
  - Special - 2 frames
