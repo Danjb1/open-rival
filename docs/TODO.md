@@ -7,10 +7,9 @@
 ## Image Preparation
 
  - Group remaining images into textures:
+    - Monsters
     - Interface (menus, items, icons)
     - Scenery (rocks, trees, chests)
-    - Greenskin units
-    - Elf units
     - Effects (spells, bombs, traps?, cropland?)
 
 ## Engine
@@ -60,6 +59,7 @@
  - Render Units
     - Different orientations
     - Different animations
+ - Fog of war
  - High resolution support (!)
 
 ## Sound

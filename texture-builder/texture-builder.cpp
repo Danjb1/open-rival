@@ -5,6 +5,58 @@
 #include <string>
 #include <vector>
 
+const std::string FILENAMES[49] = {
+    "buildings_elf",
+    "buildings_greenskin",
+    "buildings_human",
+    "scenery_meadow",
+    "scenery_wilderness",
+    "tiles_meadow",
+    "tiles_wilderness",
+    "unit_elf_archer",
+    "unit_elf_arquebusier",
+    "unit_elf_bark",
+    "unit_elf_bombard",
+    "unit_elf_centaur",
+    "unit_elf_druid",
+    "unit_elf_dwarf_miner",
+    "unit_elf_enchanter",
+    "unit_elf_mage",
+    "unit_elf_magic_chopper",
+    "unit_elf_scout",
+    "unit_elf_sky_rider",
+    "unit_elf_warship",
+    "unit_elf_yeoman",
+    "unit_greenskin_balloon",
+    "unit_greenskin_catapult",
+    "unit_greenskin_gnome_boomer",
+    "unit_greenskin_horde_rider",
+    "unit_greenskin_landing_craft",
+    "unit_greenskin_necromancer",
+    "unit_greenskin_priest_of_doom",
+    "unit_greenskin_rock_thrower",
+    "unit_greenskin_rogue",
+    "unit_greenskin_serf",
+    "unit_greenskin_storm_trooper",
+    "unit_greenskin_troll_galley",
+    "unit_greenskin_warbat",
+    "unit_greenskin_warlord",
+    "unit_human_ballista",
+    "unit_human_battleship",
+    "unit_human_bowman",
+    "unit_human_chariot_of_war",
+    "unit_human_fire_master",
+    "unit_human_knight",
+    "unit_human_light_cavalry",
+    "unit_human_peasant",
+    "unit_human_pegas_rider",
+    "unit_human_priest",
+    "unit_human_sea_barge",
+    "unit_human_thief",
+    "unit_human_wizard",
+    "unit_human_zeppelin"
+};
+
 const int MAX_TEXTURE_SIZE = 2048;
 
 // Number of colours in the palette
@@ -93,11 +145,10 @@ public:
  * skipping all the data we don't care about.
  */
 Image loadImage(std::string filename) {
-    std::cout << "Loading: " << filename << "\n";
 
     std::ifstream ifs(filename, std::ios::binary | std::ios::in);
     if (!ifs) {
-        throw std::runtime_error("Failed to load image!");
+        throw std::runtime_error("Failed to load image: " + filename);
     }
 
     // Read sprite dimensions
@@ -224,10 +275,7 @@ int nextPowerOf2(int v) {
     return v;
 }
 
-int main() {
-
-    // Load our definition file
-    std::string filename = "scenery_meadow";
+void createTexture(std::string filename) {
     std::ifstream file("definitions/" + filename + ".def");
     std::string line;
 
@@ -293,7 +341,6 @@ int main() {
 
     // Draw the sprites to the texture
     for (Image sprite : sprites) {
-        std::cout << "Copying sprite to " << x << " x " << y << "\n";
         copyImage(sprite, texture, x, y);
 
         x += sprite.getWidth();
@@ -306,4 +353,16 @@ int main() {
 
     // Save the final texture
     writeImage("textures/" + filename + ".tga", texture);
+}
+
+int main() {
+    for (std::string filename : FILENAMES) {
+        try {
+            std::cout << "Processing: " + filename + "\n";
+            createTexture(filename);
+        } catch (const std::runtime_error& e) {
+            std::cout << e.what();
+            std::cout << "Skipping file: " << filename << "\n";
+        }
+    }
 }
