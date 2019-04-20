@@ -5,14 +5,14 @@
 
 #include <gl\glew.h>
 
-namespace rival {
+namespace Rival {
 
-std::string readShaderSource(const char* filename);
+    std::string readShaderSource(const char* filename);
 
-void printProgramLog(GLuint program);
+    void printProgramLog(GLuint program);
 
-void printShaderLog(GLuint shader);
+    void printShaderLog(GLuint shader);
 
-} // namespace rival
+}
 
-#endif  // SHADER_UTILS_H
+#endif // SHADER_UTILS_H

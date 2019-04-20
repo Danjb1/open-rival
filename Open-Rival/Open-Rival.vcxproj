@@ -24,11 +24,13 @@
     </ClCompile>
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\ShaderUtils.h" />
+    <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

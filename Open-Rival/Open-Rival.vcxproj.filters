@@ -20,6 +20,9 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h">
@@ -29,6 +32,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ShaderUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
