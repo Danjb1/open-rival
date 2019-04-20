@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "Window.h"
+
 namespace Rival {
 
     class Rival {
@@ -29,22 +31,29 @@ namespace Rival {
 
     private:
 
-        const int SCREEN_WIDTH = 800;
-        const int SCREEN_HEIGHT = 600;
-
-        // The window we'll be rendering to
-        SDL_Window* window = NULL;
-
-        // The window renderer
-        SDL_Renderer* renderer = NULL;
-
-        // Current displayed texture
-        SDL_Texture* titleTexture = NULL;
+        const int WINDOW_WIDTH = 800;
+        const int WINDOW_HEIGHT = 600;
+        const std::string WINDOW_TITLE = "Rival Realms";
 
         /**
-         * Starts up SDL and creates the window.
+         * Window used to display the game.
          */
-        bool initSDL();
+        std::unique_ptr<Window> window;
+
+        /**
+         * The window renderer.
+         */
+        SDL_Renderer* renderer = NULL;
+
+        /**
+         * Initialises SDL.
+         */
+        void initSDL();
+
+        /**
+         * Creates the Window.
+         */
+        std::unique_ptr<Window> createWindow();
 
         /**
          * Loads the title image.
