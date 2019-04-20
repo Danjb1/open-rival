@@ -24,7 +24,7 @@ private:
     /**
      * Starts up SDL and creates the window.
      */
-    bool init();
+    bool initSDL();
 
     /**
      * Loads the title image.

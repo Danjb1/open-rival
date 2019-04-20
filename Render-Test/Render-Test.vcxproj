@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Danjb\Stuff\open-rival\Open-Rival\libs\glew-2.1.0\include;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2-2.0.8\include;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Danjb\Stuff\open-rival\Open-Rival\libs\glew-2.1.0\lib\Release\Win32;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2_image-2.0.3\lib\x86;D:\Danjb\Stuff\open-rival\Open-Rival\libs\SDL2-2.0.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Open-Rival\libs\glew-2.1.0\include;..\Open-Rival\libs\SDL2-2.0.8\include;..\Open-Rival\libs\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Open-Rival\libs\glew-2.1.0\lib\Release\Win32;..\Open-Rival\libs\SDL2_image-2.0.3\lib\x86;..\Open-Rival\libs\SDL2-2.0.8\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
