@@ -2,7 +2,7 @@
 
 #include "Rival.h"
 
-bool Rival::init() {
+bool Rival::initSDL () {
 
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -107,7 +107,7 @@ void Rival::keyDown(SDL_Keycode keyCode) {
 void Rival::initialise() {
 
     // Start up SDL and create window
-    if (!init()) {
+    if (!initSDL()) {
         exit();
         throw new std::runtime_error("Failed to initialise");
     }
@@ -176,8 +176,17 @@ void Rival::exit() {
  * Entry point for the application.
  */
 int main(int argc, char* args[]) {
-    Rival rival = Rival();
-    rival.initialise();
-    rival.start();
+
+    try {
+
+        Rival rival = Rival();
+        rival.initialise();
+        rival.start();
+
+    } catch (std::runtime_error e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+
     return 0;
 }
