@@ -1,59 +1,94 @@
 #include "pch.h"
-
 #include "Rival.h"
+
+/**
+ * Entry point for the application.
+ */
+int main(int argc, char* args[]) {
+
+    Rival::Rival rival = Rival::Rival();
+
+    try {
+        rival.initialise();
+    } catch (std::runtime_error e) {
+        std::cerr << "Failed to initialise" << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+
+    try {
+        rival.start();
+    } catch (std::runtime_error e) {
+        std::cerr << "Error during gameplay" << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+
+    return 0;
+}
 
 namespace Rival {
 
-    bool Rival::initSDL() {
-
-        // Initialize SDL
-        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-            return false;
-        }
-
-        // Create window
-        window = SDL_CreateWindow("Rival Realms",
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            SCREEN_WIDTH,
-            SCREEN_HEIGHT,
-            SDL_WINDOW_SHOWN);
-
-        if (window == NULL) {
-            std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-            return false;
-        }
-
-        // Create renderer for window
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        if (renderer == NULL) {
-            std::cout << "Renderer could not be created! SDL Error: %s\n" << SDL_GetError() << std::endl;
-            return false;
-        }
-
-        // Initialise renderer colour
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-        // Initialize PNG loading
-        int imgFlags = IMG_INIT_PNG;
-        if (!(IMG_Init(imgFlags) & imgFlags)) {
-            std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
-            return false;
-        }
-
-        return true;
+    void Rival::initialise() {
+        initSDL();
+        window = createWindow();
     }
 
-    bool Rival::loadTitleImage() {
+    void Rival::initSDL() {
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            std::cerr << "SDL could not initialize!" << std::endl;
+            throw new std::runtime_error(SDL_GetError());
+        }
+    }
 
-        titleTexture = loadTexture("res/textures/knight.tga");
-        if (titleTexture == NULL) {
-            std::cout << "Failed to load PNG image!" << std::endl;
-            return false;
+    std::unique_ptr<Window> Rival::createWindow() {
+        Window window = Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+        window.create();
+
+        return std::make_unique<Window>(window);
+    }
+
+    void Rival::start() {
+
+        // Event handler
+        SDL_Event e;
+
+        // Run our game loop until the application is exitd
+        bool exiting = false;
+        while (!exiting) {
+
+            // Handle events on queue
+            while (SDL_PollEvent(&e) != 0) {
+
+                // User requests exiting
+                if (e.type == SDL_QUIT) {
+                    exiting = true;
+                } else if (e.type == SDL_KEYDOWN) {
+                    keyDown(e.key.keysym.sym);
+                }
+            }
+
+            // Clear screen
+            SDL_RenderClear(renderer);
+
+            // Update screen
+            SDL_RenderPresent(renderer);
         }
 
-        return true;
+        // Free resources and exit SDL
+        exit();
+    }
+
+    void Rival::exit() {
+
+        // Destroy window
+        SDL_DestroyRenderer(renderer);
+        window->destroy();
+        renderer = NULL;
+
+        // Quit SDL subsystems
+        IMG_Quit();
+        SDL_Quit();
     }
 
     SDL_Texture* Rival::loadTexture(std::string path) {
@@ -101,90 +136,4 @@ namespace Rival {
         }
     }
 
-    void Rival::initialise() {
-
-        // Start up SDL and create window
-        if (!initSDL()) {
-            exit();
-            throw new std::runtime_error("Failed to initialise");
-        }
-
-        // Load title image
-        if (!loadTitleImage()) {
-            exit();
-            throw new std::runtime_error("Failed to load title image");
-        }
-
-    }
-
-    void Rival::start() {
-
-        // Event handler
-        SDL_Event e;
-
-        // Run our game loop until the application is exitd
-        bool exiting = false;
-        while (!exiting) {
-
-            // Handle events on queue
-            while (SDL_PollEvent(&e) != 0) {
-
-                // User requests exiting
-                if (e.type == SDL_QUIT) {
-                    exiting = true;
-                } else if (e.type == SDL_KEYDOWN) {
-                    keyDown(e.key.keysym.sym);
-                }
-            }
-
-            // Clear screen
-            SDL_RenderClear(renderer);
-
-            // Render texture to screen
-            SDL_RenderCopy(renderer, titleTexture, NULL, NULL);
-
-            // Update screen
-            SDL_RenderPresent(renderer);
-        }
-
-        // Free resources and exit SDL
-        exit();
-    }
-
-    void Rival::exit() {
-
-        // Free loaded texture
-        SDL_DestroyTexture(titleTexture);
-        titleTexture = NULL;
-
-        // Destroy window
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        window = NULL;
-        renderer = NULL;
-
-        // Quit SDL subsystems
-        IMG_Quit();
-        SDL_Quit();
-    }
-
-}
-
-/**
- * Entry point for the application.
- */
-int main(int argc, char* args[]) {
-
-    try {
-
-        Rival::Rival rival = Rival::Rival();
-        rival.initialise();
-        rival.start();
-
-    } catch (std::runtime_error e) {
-        std::cerr << e.what() << std::endl;
-        return 1;
-    }
-
-    return 0;
 }
