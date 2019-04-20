@@ -5,17 +5,57 @@
 #include <iostream>
 #include <string>
 
-// Starts up SDL and creates window
-bool init();
+class Rival {
 
-// Loads the title image
-bool loadTitleImage();
+private:
 
-// Loads an image as a texture
-SDL_Texture* loadTexture(std::string path);
+    const int SCREEN_WIDTH = 800;
+    const int SCREEN_HEIGHT = 600;
 
-// Frees media and shuts down SDL
-void close();
+    // The window we'll be rendering to
+    SDL_Window* window = NULL;
 
-// Handles keyDown events
-void keyDown(SDL_Keycode keyCode);
+    // The window renderer
+    SDL_Renderer* renderer = NULL;
+
+    // Current displayed texture
+    SDL_Texture* titleTexture = NULL;
+
+    /**
+     * Starts up SDL and creates the window.
+     */
+    bool init();
+
+    /**
+     * Loads the title image.
+     */
+    bool loadTitleImage();
+
+    /**
+     * Loads an image as a texture
+     */
+    SDL_Texture* loadTexture(std::string path);
+
+    /**
+     * Handles keyDown events.
+     */
+    void keyDown(SDL_Keycode keyCode);
+
+public:
+
+    /**
+     * Initialises the game.
+     */
+    void initialise();
+
+    /**
+     * Runs the game.
+     */
+    void start();
+
+    /**
+     * Frees media and shuts down SDL.
+     */
+    void exit();
+
+};
