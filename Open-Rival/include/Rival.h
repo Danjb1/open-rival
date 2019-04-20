@@ -1,61 +1,68 @@
-#pragma once
+#ifndef RIVAL_H
+#define RIVAL_H
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 #include <string>
 
-class Rival {
+namespace Rival {
 
-private:
+    class Rival {
 
-    const int SCREEN_WIDTH = 800;
-    const int SCREEN_HEIGHT = 600;
+    public:
 
-    // The window we'll be rendering to
-    SDL_Window* window = NULL;
+        /**
+         * Initialises the game.
+         */
+        void initialise();
 
-    // The window renderer
-    SDL_Renderer* renderer = NULL;
+        /**
+         * Runs the game.
+         */
+        void start();
 
-    // Current displayed texture
-    SDL_Texture* titleTexture = NULL;
+        /**
+         * Frees media and shuts down SDL.
+         */
+        void exit();
 
-    /**
-     * Starts up SDL and creates the window.
-     */
-    bool initSDL();
+    private:
 
-    /**
-     * Loads the title image.
-     */
-    bool loadTitleImage();
+        const int SCREEN_WIDTH = 800;
+        const int SCREEN_HEIGHT = 600;
 
-    /**
-     * Loads an image as a texture
-     */
-    SDL_Texture* loadTexture(std::string path);
+        // The window we'll be rendering to
+        SDL_Window* window = NULL;
 
-    /**
-     * Handles keyDown events.
-     */
-    void keyDown(SDL_Keycode keyCode);
+        // The window renderer
+        SDL_Renderer* renderer = NULL;
 
-public:
+        // Current displayed texture
+        SDL_Texture* titleTexture = NULL;
 
-    /**
-     * Initialises the game.
-     */
-    void initialise();
+        /**
+         * Starts up SDL and creates the window.
+         */
+        bool initSDL();
 
-    /**
-     * Runs the game.
-     */
-    void start();
+        /**
+         * Loads the title image.
+         */
+        bool loadTitleImage();
 
-    /**
-     * Frees media and shuts down SDL.
-     */
-    void exit();
+        /**
+         * Loads an image as a texture
+         */
+        SDL_Texture* loadTexture(std::string path);
 
-};
+        /**
+         * Handles keyDown events.
+         */
+        void keyDown(SDL_Keycode keyCode);
+
+    };
+
+}
+
+#endif // RIVAL_H
