@@ -2,7 +2,7 @@
 
 ## General
 
- - Are all DLL files needed?
+ - Set window icon
 
 ## Image Preparation
 
