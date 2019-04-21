@@ -2,7 +2,6 @@
 #define RIVAL_H
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include <iostream>
 #include <string>
 
@@ -33,7 +32,7 @@ namespace Rival {
 
         const int WINDOW_WIDTH = 800;
         const int WINDOW_HEIGHT = 600;
-        const std::string WINDOW_TITLE = "Rival Realms";
+        const char* WINDOW_TITLE = "Rival Realms";
 
         /**
          * Window used to display the game.

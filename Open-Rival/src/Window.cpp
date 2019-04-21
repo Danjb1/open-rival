@@ -7,7 +7,7 @@
 
 namespace Rival {
 
-    Window::Window(int width, int height, std::string title) {
+    Window::Window(int width, int height, const char* title) {
         this->width = width;
         this->height = height;
         this->title = title;
@@ -15,7 +15,7 @@ namespace Rival {
 
     void Window::create() {
 
-        windowRef = SDL_CreateWindow(title.c_str(),
+        windowRef = SDL_CreateWindow(title,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             width,
@@ -31,6 +31,10 @@ namespace Rival {
     void Window::destroy() {
         SDL_DestroyWindow(windowRef);
         windowRef = NULL;
+    }
+
+    void Window::swapBuffers() {
+        SDL_GL_SwapWindow(windowRef);
     }
 
 }

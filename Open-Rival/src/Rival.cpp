@@ -68,11 +68,8 @@ namespace Rival {
                 }
             }
 
-            // Clear screen
-            SDL_RenderClear(renderer);
-
-            // Update screen
-            SDL_RenderPresent(renderer);
+            // TODO: Render
+            window->swapBuffers();
         }
 
         // Free resources and exit SDL
@@ -82,35 +79,10 @@ namespace Rival {
     void Rival::exit() {
 
         // Destroy window
-        SDL_DestroyRenderer(renderer);
         window->destroy();
-        renderer = NULL;
 
-        // Quit SDL subsystems
-        IMG_Quit();
+        // Quit SDL
         SDL_Quit();
-    }
-
-    SDL_Texture* Rival::loadTexture(std::string path) {
-
-        // Load image at specified path
-        SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-        if (loadedSurface == NULL) {
-            std::cout << "Unable to load image " << path.c_str() << "! SDL_image Error: " << IMG_GetError() << std::endl;
-            return NULL;
-        }
-
-        // Create texture from surface pixels
-        SDL_Texture* newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-        if (newTexture == NULL) {
-            std::cout << "Unable to create texture from " << path.c_str() << "! SDL Error: " << SDL_GetError() << std::endl;
-            return NULL;
-        }
-
-        // Get rid of old loaded surface
-        SDL_FreeSurface(loadedSurface);
-
-        return newTexture;
     }
 
     void Rival::keyDown(SDL_Keycode keyCode) {

@@ -11,11 +11,13 @@ namespace Rival {
 
     public:
 
-        Window(int width, int height, std::string title);
+        Window(int width, int height, const char* title);
 
         void create();
 
         void destroy();
+
+        void swapBuffers();
 
     private:
 
@@ -25,7 +27,7 @@ namespace Rival {
 
         int height;
 
-        std::string title;
+        const char* title;
 
     };
 
