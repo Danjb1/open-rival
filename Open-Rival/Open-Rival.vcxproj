@@ -84,8 +84,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\SDL2_image-2.0.3\include;$(ProjectDir)libs\glew-2.1.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)libs\SDL2_image-2.0.3\lib\x86;$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,7 +97,7 @@
       <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glu32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
