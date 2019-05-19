@@ -17,11 +17,15 @@ namespace Rival {
 
         void destroy();
 
+        void use();
+
         void swapBuffers();
 
     private:
 
         SDL_Window* windowRef;
+
+        SDL_GLContext glContext;
 
         int width;
 
