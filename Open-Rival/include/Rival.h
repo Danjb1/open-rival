@@ -24,6 +24,11 @@ namespace Rival {
         void start();
 
         /**
+         * Renders the current frame.
+         */
+        void render();
+
+        /**
          * Frees media and shuts down SDL.
          */
         void exit();
@@ -48,6 +53,16 @@ namespace Rival {
          * Initialises SDL.
          */
         void initSDL();
+
+        /**
+         * Initialises GLEW.
+         */
+        void initGLEW();
+
+        /**
+         * Initialises OpenGL.
+         */
+        void initGL();
 
         /**
          * Creates the Window.
