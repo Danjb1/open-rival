@@ -24,7 +24,7 @@ namespace Rival {
 
         if (windowRef == NULL) {
             std::cerr << "Window could not be created!" << std::endl;
-            throw new std::runtime_error(SDL_GetError());
+            throw std::runtime_error(SDL_GetError());
         }
     }
 
@@ -39,7 +39,7 @@ namespace Rival {
 
         if (glContext == NULL) {
             std::cerr << "OpenGL context could not be created!" << std::endl;
-            throw new std::runtime_error(SDL_GetError());
+            throw std::runtime_error(SDL_GetError());
         }
     }
 
