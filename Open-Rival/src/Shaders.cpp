@@ -25,7 +25,7 @@ namespace Rival {
                 glGetUniformLocation(programId, "palette");
 
         if (!textureShader.isValid()) {
-            throw new std::runtime_error("Failed to create texture shader");
+            throw std::runtime_error("Failed to create texture shader");
         }
     }
 

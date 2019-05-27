@@ -14,7 +14,7 @@ int main(int argc, char* args[]) {
 
     try {
         rival.initialise();
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error& e) {
         std::cerr << "Failed to initialise" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
@@ -22,7 +22,7 @@ int main(int argc, char* args[]) {
 
     try {
         rival.start();
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error& e) {
         std::cerr << "Error during gameplay" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
@@ -46,7 +46,7 @@ namespace Rival {
     void Rival::initSDL() {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             std::cerr << "SDL could not initialise!" << std::endl;
-            throw new std::runtime_error(SDL_GetError());
+            throw std::runtime_error(SDL_GetError());
         }
     }
 
@@ -73,7 +73,7 @@ namespace Rival {
         if (glewError != GLEW_OK) {
             std::cerr << "Error initialising GLEW:"
                     << glewGetErrorString(glewError) << std::endl;
-            throw new std::runtime_error("Failed to initialise GLEW");
+            throw std::runtime_error("Failed to initialise GLEW");
         }
     }
 
@@ -118,7 +118,7 @@ namespace Rival {
         if (error != GL_NO_ERROR) {
             printf("Error loading texture from %p pixels! %s\n",
                     sprite.getData().get(), gluErrorString(error));
-            throw new std::runtime_error("Failed to load texture");
+            throw std::runtime_error("Failed to load texture");
         }
 
         return textureId;

@@ -299,7 +299,7 @@ void createTexture(std::string filename) {
         }
         else if (lastWidth != sprite.getWidth()
             || lastHeight != sprite.getHeight()) {
-            throw new std::runtime_error("Sprite dimensions do not match!");
+            throw std::runtime_error("Sprite dimensions do not match!");
         }
 
         sprites.push_back(sprite);
@@ -333,7 +333,7 @@ void createTexture(std::string filename) {
     std::cout << "Optimal size is " << bestWidth << " x " << bestHeight << "\n";
 
     if (bestWidth > MAX_TEXTURE_SIZE || bestHeight > MAX_TEXTURE_SIZE) {
-        throw new std::runtime_error("Sprites will not fit!");
+        throw std::runtime_error("Sprites will not fit!");
     }
 
     // Create an empty texture
