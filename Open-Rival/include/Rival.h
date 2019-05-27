@@ -23,16 +23,6 @@ namespace Rival {
          */
         void start();
 
-        /**
-         * Renders the current frame.
-         */
-        void render();
-
-        /**
-         * Frees media and shuts down SDL.
-         */
-        void exit();
-
     private:
 
         const int WINDOW_WIDTH = 800;
@@ -65,6 +55,11 @@ namespace Rival {
         void initGL();
 
         /**
+         * Loads the game's textures.
+         */
+        void loadTextures();
+
+        /**
          * Creates the Window.
          */
         std::unique_ptr<Window> createWindow();
@@ -83,6 +78,21 @@ namespace Rival {
          * Handles keyDown events.
          */
         void keyDown(SDL_Keycode keyCode);
+
+        /**
+         * Renders the current frame.
+         */
+        void render();
+
+        /**
+         * Updates the game.
+         */
+        void update();
+
+        /**
+         * Frees media and shuts down SDL.
+         */
+        void exit();
 
     };
 
