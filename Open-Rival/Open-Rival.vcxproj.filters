@@ -49,5 +49,8 @@
     <ClInclude Include="include\Image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Palette.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
