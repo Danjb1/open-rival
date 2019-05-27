@@ -1,6 +1,7 @@
 #ifndef RIVAL_H
 #define RIVAL_H
 
+#include <gl\glew.h>
 #include <SDL.h>
 #include <iostream>
 #include <string>
@@ -28,6 +29,15 @@ namespace Rival {
         const int WINDOW_WIDTH = 800;
         const int WINDOW_HEIGHT = 600;
         const char* WINDOW_TITLE = "Rival Realms";
+
+        bool initialised = false;
+
+        GLuint textureId = 0;
+        GLuint paletteTextureId = 0;
+
+        GLuint gVBO = 0;
+        GLuint gTexCoordVBO = 0;
+        GLuint gIBO = 0;
 
         /**
          * Window used to display the game.
@@ -57,22 +67,17 @@ namespace Rival {
         /**
          * Loads the game's textures.
          */
-        void loadTextures();
+        GLuint loadTexture(std::string filename);
+
+        /**
+         * Creates a texture to hold the game's palette.
+         */
+        GLuint createPaletteTexture();
 
         /**
          * Creates the Window.
          */
         std::unique_ptr<Window> createWindow();
-
-        /**
-         * Loads the title image.
-         */
-        bool loadTitleImage();
-
-        /**
-         * Loads an image as a texture
-         */
-        SDL_Texture* loadTexture(std::string path);
 
         /**
          * Handles keyDown events.

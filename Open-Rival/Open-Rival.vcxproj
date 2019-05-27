@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Shaders.h" />

@@ -15,10 +15,14 @@ namespace Rival {
 
         textureShader = TextureShader();
         textureShader.programId = programId;
-        textureShader.vertexAttribLocation = glGetAttribLocation(programId, "in_vertex");
-        textureShader.texCoordAttribLocation = glGetAttribLocation(programId, "in_tex_coord");
-        textureShader.texUnitUniformLocation = glGetUniformLocation(programId, "tex");
-        textureShader.paletteTexUnitUniformLocation = glGetUniformLocation(programId, "palette");
+        textureShader.vertexAttribLocation =
+                glGetAttribLocation(programId, "in_vertex");
+        textureShader.texCoordAttribLocation =
+                glGetAttribLocation(programId, "in_tex_coord");
+        textureShader.texUnitUniformLocation =
+                glGetUniformLocation(programId, "tex");
+        textureShader.paletteTexUnitUniformLocation =
+                glGetUniformLocation(programId, "palette");
 
         if (!textureShader.isValid()) {
             throw new std::runtime_error("Failed to create texture shader");
