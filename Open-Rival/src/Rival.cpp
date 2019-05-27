@@ -3,6 +3,8 @@
 
 #include <gl\glew.h>
 
+#include "Shaders.h"
+
 /**
  * Entry point for the application.
  */
@@ -88,91 +90,11 @@ namespace Rival {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        initialiseShaders();
+
         // Copied from RenderTest - needs refactoring
+
         /*
-
-        // Generate program
-        gProgramID = glCreateProgram();
-
-        // Create vertex shader
-        GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-        // Read / set vertex source
-        std::string vertexShaderSource = rival::readShaderSource("res\\shaders\\texture.vert");
-        const char* vertexShaderSource2 = vertexShaderSource.c_str();
-        glShaderSource(vertexShader, 1, &vertexShaderSource2, NULL);
-
-        // Compile vertex source
-        glCompileShader(vertexShader);
-
-        // Check vertex shader for errors
-        GLint vShaderCompiled = GL_FALSE;
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
-        if (vShaderCompiled != GL_TRUE) {
-            printf("Unable to compile vertex shader %d!\n", vertexShader);
-            printShaderLog(vertexShader);
-            return false;
-        }
-
-        // Attach vertex shader to program
-        glAttachShader(gProgramID, vertexShader);
-
-        // Create fragment shader
-        GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-        // Read / set fragment source
-        std::string fragmentShaderSource = readShaderSource("res\\shaders\\texture.frag");
-        const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource2, NULL);
-
-        // Compile fragment source
-        glCompileShader(fragmentShader);
-
-        // Check fragment shader for errors
-        GLint fShaderCompiled = GL_FALSE;
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
-        if (fShaderCompiled != GL_TRUE) {
-            printf("Unable to compile fragment shader %d!\n", fragmentShader);
-            printShaderLog(fragmentShader);
-            return false;
-        }
-
-        // Attach fragment shader to program
-        glAttachShader(gProgramID, fragmentShader);
-
-        // Link program
-        glLinkProgram(gProgramID);
-
-        // Check for errors
-        GLint programSuccess = GL_TRUE;
-        glGetProgramiv(gProgramID, GL_LINK_STATUS, &programSuccess);
-        if (programSuccess != GL_TRUE) {
-            printf("Error linking program %d!\n", gProgramID);
-            printProgramLog(gProgramID);
-            return false;
-        }
-
-        // Get vertex attribute locations
-        gVertexPos2DLocation = glGetAttribLocation(gProgramID, "in_vertex");
-        if (gVertexPos2DLocation == -1) {
-            printf("in_vertex is not a valid glsl program variable!\n");
-            return false;
-        }
-        gVertexTexCoordLocation = glGetAttribLocation(gProgramID, "in_tex_coord");
-        if (gVertexTexCoordLocation == -1) {
-            printf("in_tex_coord is not a valid glsl program variable!\n");
-            return false;
-        }
-
-        // Get uniform locations
-        gTextureUnitLocation = glGetUniformLocation(gProgramID, "tex");
-        if (gTextureUnitLocation == -1) {
-            printf("tex is not a valid glsl program variable!\n");
-        }
-        gPaletteTextureUnitLocation = glGetUniformLocation(gProgramID, "palette");
-        if (gPaletteTextureUnitLocation == -1) {
-            printf("palette is not a valid glsl program variable!\n");
-        }
 
         // VBO data
         GLfloat vertexData[] = {
