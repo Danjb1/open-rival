@@ -14,7 +14,7 @@ int main(int argc, char* args[]) {
 
     try {
         rival.initialise();
-    } catch (std::runtime_error& e) {
+    } catch (const std::runtime_error& e) {
         std::cerr << "Failed to initialise" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
@@ -22,7 +22,7 @@ int main(int argc, char* args[]) {
 
     try {
         rival.start();
-    } catch (std::runtime_error& e) {
+    } catch (const std::runtime_error& e) {
         std::cerr << "Error during gameplay" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
@@ -111,7 +111,7 @@ namespace Rival {
                 0, GL_RED, GL_UNSIGNED_BYTE, sprite.getData()->data());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glBindTexture(GL_TEXTURE_2D, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         // Check for error
         GLenum error = glGetError();
@@ -148,7 +148,7 @@ namespace Rival {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glBindTexture(GL_TEXTURE_2D, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         delete palette;
 
@@ -248,22 +248,22 @@ namespace Rival {
         glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
         glBindBuffer(GL_ARRAY_BUFFER, gVBO);
         glVertexAttribPointer(textureShader.vertexAttribLocation, 2,
-                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
         glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
         glVertexAttribPointer(textureShader.texCoordAttribLocation, 2,
-                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
 
         // Bind index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
 
         // Render
-        glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, nullptr);
 
         // Clean up
         glDisableVertexAttribArray(textureShader.vertexAttribLocation);
         glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
-        glBindTexture(GL_TEXTURE_2D, NULL);
-        glUseProgram(NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glUseProgram(0);
     }
 
     void Rival::exit() const {

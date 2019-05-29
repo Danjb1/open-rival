@@ -19,7 +19,7 @@ namespace Rival {
             height,
             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
-        if (windowRef == NULL) {
+        if (windowRef == nullptr) {
             std::cerr << "Window could not be created!" << std::endl;
             throw std::runtime_error(SDL_GetError());
         }
@@ -27,14 +27,14 @@ namespace Rival {
 
     void Window::destroy() {
         SDL_DestroyWindow(windowRef);
-        windowRef = NULL;
+        windowRef = nullptr;
     }
 
     void Window::use() {
 
         glContext = SDL_GL_CreateContext(windowRef);
 
-        if (glContext == NULL) {
+        if (glContext == nullptr) {
             std::cerr << "OpenGL context could not be created!" << std::endl;
             throw std::runtime_error(SDL_GetError());
         }

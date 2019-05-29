@@ -8,7 +8,7 @@
 
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include <gl\glu.h>
+#include <gl/glu.h>
 
 namespace Rival {
 
