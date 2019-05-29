@@ -19,7 +19,7 @@ namespace Rival {
         return buffer.str();
     }
 
-    void printProgramLog(GLuint program) {
+    void printProgramLog(const GLuint program) {
 
         if (!glIsProgram(program)) {
             printf("Name %d is not a program\n", program);
@@ -47,7 +47,7 @@ namespace Rival {
         delete[] infoLog;
     }
 
-    void printShaderLog(GLuint shader) {
+    void printShaderLog(const GLuint shader) {
 
         if (!glIsShader(shader)) {
             printf("Name %d is not a shader\n", shader);

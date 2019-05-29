@@ -5,29 +5,30 @@
 
 namespace Rival {
 
-    Image::Image(int width, int height) :
+    Image::Image(const int width, const int height) :
         width(width),
         height(height),
         data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
 
-    Image::Image(int width, int height, std::unique_ptr<std::vector<unsigned char>> data):
+    Image::Image(const int width, const int height,
+        std::unique_ptr<std::vector<unsigned char>> data) :
             width(width),
             height(height),
             data(std::move(data)) {}
 
-    int Image::getWidth() {
+    int Image::getWidth() const {
         return width;
     }
 
-    int Image::getHeight() {
+    int Image::getHeight() const {
         return height;
     }
 
-    std::vector<unsigned char>* Image::getData() {
+    std::vector<unsigned char>* Image::getData() const {
         return data.get();
     }
 
-    Image loadImage(std::string filename) {
+    Image loadImage(const std::string filename) {
         std::cout << "Loading: " << filename << "\n";
 
         std::ifstream ifs(filename, std::ios::binary | std::ios::in);

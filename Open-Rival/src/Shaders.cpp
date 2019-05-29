@@ -94,7 +94,7 @@ namespace Rival {
         return programId;
     }
 
-    bool TextureShader::isValid() {
+    bool TextureShader::isValid() const {
 
         if (programId == 0) {
             printf("Could not generate program ID\n");

@@ -52,12 +52,12 @@ namespace Rival {
         /**
          * Initialises SDL.
          */
-        void initSDL();
+        void initSDL() const;
 
         /**
          * Initialises GLEW.
          */
-        void initGLEW();
+        void initGLEW() const;
 
         /**
          * Initialises OpenGL.
@@ -67,27 +67,27 @@ namespace Rival {
         /**
          * Loads the game's textures.
          */
-        GLuint loadTexture(std::string filename);
+        GLuint loadTexture(const std::string filename) const;
 
         /**
          * Creates a texture to hold the game's palette.
          */
-        GLuint createPaletteTexture();
+        GLuint createPaletteTexture() const;
 
         /**
          * Creates the Window.
          */
-        std::unique_ptr<Window> createWindow();
+        std::unique_ptr<Window> createWindow() const;
 
         /**
          * Handles keyDown events.
          */
-        void keyDown(SDL_Keycode keyCode);
+        void keyDown(const SDL_Keycode keyCode) const;
 
         /**
          * Renders the current frame.
          */
-        void render();
+        void render() const;
 
         /**
          * Updates the game.
@@ -97,7 +97,7 @@ namespace Rival {
         /**
          * Frees media and shuts down SDL.
          */
-        void exit();
+        void exit() const;
 
     };
 
