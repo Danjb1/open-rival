@@ -7,11 +7,8 @@
 
 namespace Rival {
 
-    Window::Window(int width, int height, const char* title) {
-        this->width = width;
-        this->height = height;
-        this->title = title;
-    }
+    Window::Window(const int width, const int height, const char* title) :
+        width(width), height(height), title(title) {}
 
     void Window::create() {
 
@@ -43,7 +40,7 @@ namespace Rival {
         }
     }
 
-    void Window::swapBuffers() {
+    void Window::swapBuffers() const {
         SDL_GL_SwapWindow(windowRef);
     }
 

@@ -11,7 +11,7 @@ namespace Rival {
 
     public:
 
-        Window(int width, int height, const char* title);
+        Window(const int width, const int height, const char* title);
 
         void create();
 
@@ -19,7 +19,7 @@ namespace Rival {
 
         void use();
 
-        void swapBuffers();
+        void swapBuffers() const;
 
     private:
 

@@ -12,7 +12,7 @@ namespace Rival {
         GLint texCoordAttribLocation;
         GLint texUnitUniformLocation;
         GLint paletteTexUnitUniformLocation;
-        bool isValid();
+        bool isValid() const;
     };
 
     extern TextureShader textureShader;

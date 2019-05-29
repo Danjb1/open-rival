@@ -43,14 +43,14 @@ namespace Rival {
         paletteTextureId = createPaletteTexture();
     }
 
-    void Rival::initSDL() {
+    void Rival::initSDL() const {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             std::cerr << "SDL could not initialise!" << std::endl;
             throw std::runtime_error(SDL_GetError());
         }
     }
 
-    std::unique_ptr<Window> Rival::createWindow() {
+    std::unique_ptr<Window> Rival::createWindow() const {
 
         // Set window attributes
         // Use OpenGL 3.1 core
@@ -65,7 +65,7 @@ namespace Rival {
         return std::make_unique<Window>(window);
     }
 
-    void Rival::initGLEW() {
+    void Rival::initGLEW() const {
 
         glewExperimental = GL_TRUE;
         GLenum glewError = glewInit();
@@ -97,7 +97,7 @@ namespace Rival {
         initialiseShaders();
     }
 
-    GLuint Rival::loadTexture(std::string filename) {
+    GLuint Rival::loadTexture(const std::string filename) const {
 
         // Load image data
         Image sprite = loadImage(filename);
@@ -124,7 +124,7 @@ namespace Rival {
         return textureId;
     }
 
-    GLuint Rival::createPaletteTexture() {
+    GLuint Rival::createPaletteTexture() const {
 
         // Create palette texture
         unsigned char *palette = new unsigned char[PALETTE_BYTES];
@@ -228,7 +228,7 @@ namespace Rival {
         initialised = true;
     }
 
-    void Rival::render() {
+    void Rival::render() const {
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -266,7 +266,7 @@ namespace Rival {
         glUseProgram(NULL);
     }
 
-    void Rival::exit() {
+    void Rival::exit() const {
 
         // Destroy window
         window->destroy();
@@ -275,7 +275,7 @@ namespace Rival {
         SDL_Quit();
     }
 
-    void Rival::keyDown(SDL_Keycode keyCode) {
+    void Rival::keyDown(const SDL_Keycode keyCode) const {
         switch (keyCode) {
         case SDLK_UP:
             std::cout << "UP\n";
