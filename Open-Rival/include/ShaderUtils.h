@@ -9,9 +9,9 @@ namespace Rival {
 
     std::string readShaderSource(const char* filename);
 
-    void printProgramLog(GLuint program);
+    void printProgramLog(const GLuint program);
 
-    void printShaderLog(GLuint shader);
+    void printShaderLog(const GLuint shader);
 
 }
 

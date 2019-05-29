@@ -17,16 +17,16 @@ namespace Rival {
 
     public:
 
-        Image(int width, int height);
+        Image(const int width, const int height);
 
-        Image(int width, int height,
+        Image(const int width, const int height,
                 std::unique_ptr<std::vector<unsigned char>> data);
 
-        int getWidth();
+        int getWidth() const;
 
-        int getHeight();
+        int getHeight() const;
 
-        std::vector<unsigned char>* getData();
+        std::vector<unsigned char>* getData() const;
 
     };
 
@@ -36,7 +36,7 @@ namespace Rival {
      * This is basically the reverse of `write_image` from image-extractor,
      * skipping all the data we don't care about.
      */
-    Image loadImage(std::string filename);
+    Image loadImage(const std::string filename);
 
 }
 
