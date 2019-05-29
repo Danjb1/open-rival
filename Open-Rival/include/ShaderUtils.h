@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <gl\glew.h>
+#include <gl/glew.h>
 
 namespace Rival {
 

@@ -1,7 +1,7 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
-#include <gl\glew.h>
+#include <gl/glew.h>
 
 namespace Rival {
 

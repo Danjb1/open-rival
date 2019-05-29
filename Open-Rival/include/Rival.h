@@ -1,7 +1,7 @@
 #ifndef RIVAL_H
 #define RIVAL_H
 
-#include <gl\glew.h>
+#include <gl/glew.h>
 #include <SDL.h>
 #include <iostream>
 #include <string>
@@ -47,7 +47,7 @@ namespace Rival {
         /**
          * The window renderer.
          */
-        SDL_Renderer* renderer = NULL;
+        SDL_Renderer* renderer = nullptr;
 
         /**
          * Initialises SDL.

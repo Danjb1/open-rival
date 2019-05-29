@@ -39,7 +39,7 @@ namespace Rival {
         // Read / set vertex source
         std::string vertexShaderSource = readShaderSource(vertShader);
         const char* vertexShaderSource2 = vertexShaderSource.c_str();
-        glShaderSource(vertexShader, 1, &vertexShaderSource2, NULL);
+        glShaderSource(vertexShader, 1, &vertexShaderSource2, nullptr);
 
         // Compile vertex source
         glCompileShader(vertexShader);
@@ -62,7 +62,7 @@ namespace Rival {
         // Read / set fragment source
         std::string fragmentShaderSource = readShaderSource(fragShader);
         const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource2, NULL);
+        glShaderSource(fragmentShader, 1, &fragmentShaderSource2, nullptr);
 
         // Compile fragment source
         glCompileShader(fragmentShader);
