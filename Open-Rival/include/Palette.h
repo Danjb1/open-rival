@@ -6,16 +6,16 @@
 namespace Rival {
 
     // Number of colours in the palette
-    const int PALETTE_SIZE = 256;
+    const int paletteSize = 256;
 
     // Number of channels per colour of the palette
-    const int PALETTE_CHANNELS = 4;
+    const int paletteChannels = 4;
 
     // Number of bytes required to store the palette
-    const int PALETTE_BYTES = PALETTE_SIZE * PALETTE_CHANNELS;
+    const int paletteBytes = paletteSize * paletteChannels;
 
     // The game's colour palette
-    const uint32_t PALETTE[PALETTE_SIZE] = {
+    const uint32_t palette[paletteSize] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,	0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,	0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,	0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,

@@ -26,9 +26,9 @@ namespace Rival {
 
     private:
 
-        const int WINDOW_WIDTH = 800;
-        const int WINDOW_HEIGHT = 600;
-        const char* WINDOW_TITLE = "Rival Realms";
+        const int windowWidth = 800;
+        const int windowHeight = 600;
+        const char* windowTitle = "Rival Realms";
 
         bool initialised = false;
 
