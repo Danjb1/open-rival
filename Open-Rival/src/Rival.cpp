@@ -59,7 +59,7 @@ namespace Rival {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                 SDL_GL_CONTEXT_PROFILE_CORE);
 
-        Window window = Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+        Window window = Window(windowWidth, windowHeight, windowTitle);
         window.create();
 
         return std::make_unique<Window>(window);
@@ -127,30 +127,30 @@ namespace Rival {
     GLuint Rival::createPaletteTexture() const {
 
         // Create palette texture
-        unsigned char *palette = new unsigned char[PALETTE_BYTES];
+        unsigned char *data = new unsigned char[paletteBytes];
 
-        for (int i = 0; i < PALETTE_SIZE; i++) {
-            int start = i * PALETTE_CHANNELS;
-            uint32_t col = PALETTE[i];
+        for (int i = 0; i < paletteSize; i++) {
+            int start = i * paletteChannels;
+            uint32_t col = palette[i];
             // RGBA
-            palette[start] = (col & 0xff000000) >> 24;
-            palette[start + 1] = (col & 0x00ff0000) >> 16;
-            palette[start + 2] = (col & 0x0000ff00) >> 8;
-            palette[start + 3] = col & 0x000000ff;
+            data[start] = (col & 0xff000000) >> 24;
+            data[start + 1] = (col & 0x00ff0000) >> 16;
+            data[start + 2] = (col & 0x0000ff00) >> 8;
+            data[start + 3] = col & 0x000000ff;
         }
 
         GLuint textureId = 0;
         glGenTextures(1, &textureId);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1,
-                0, GL_RGBA,GL_UNSIGNED_BYTE, palette);
+                0, GL_RGBA,GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        delete palette;
+        delete data;
 
         return textureId;
     }
