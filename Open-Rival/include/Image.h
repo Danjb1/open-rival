@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 namespace Rival {
 
@@ -12,19 +13,20 @@ namespace Rival {
 
         int width;
         int height;
-        std::shared_ptr<unsigned char> data;
+        std::unique_ptr<std::vector<unsigned char>> data;
 
     public:
 
         Image(int width, int height);
 
-        Image(int width, int height, std::shared_ptr<unsigned char> data);
+        Image(int width, int height,
+                std::unique_ptr<std::vector<unsigned char>> data);
 
         int getWidth();
 
         int getHeight();
 
-        std::shared_ptr<unsigned char> getData();
+        std::vector<unsigned char>* getData();
 
     };
 

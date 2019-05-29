@@ -5,19 +5,15 @@
 
 namespace Rival {
 
-    Image::Image(int width, int height) {
-        this->width = width;
-        this->height = height;
+    Image::Image(int width, int height) :
+        width(width),
+        height(height),
+        data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
 
-        data = std::shared_ptr<unsigned char>(new unsigned char[width * height]);
-        std::fill_n(data.get(), width * height, 0xff);
-    }
-
-    Image::Image(int width, int height, std::shared_ptr<unsigned char> data) {
-        this->width = width;
-        this->height = height;
-        this->data = data;
-    }
+    Image::Image(int width, int height, std::unique_ptr<std::vector<unsigned char>> data):
+            width(width),
+            height(height),
+            data(std::move(data)) {}
 
     int Image::getWidth() {
         return width;
@@ -27,8 +23,8 @@ namespace Rival {
         return height;
     }
 
-    std::shared_ptr<unsigned char> Image::getData() {
-        return data;
+    std::vector<unsigned char>* Image::getData() {
+        return data.get();
     }
 
     Image loadImage(std::string filename) {
@@ -45,12 +41,12 @@ namespace Rival {
         int height = ifs.get() | (ifs.get() << 8);
 
         // Read pixel data
-        std::shared_ptr<unsigned char> data =
-            std::shared_ptr<unsigned char>(new unsigned char[width * height]);
+        std::unique_ptr<std::vector<unsigned char>> data =
+                std::make_unique<std::vector<unsigned char>>(width * height);
         ifs.seekg(786);
-        ifs.read((char*)data.get(), width * height);
+        ifs.read((char*)data.get()->data(), width * height);
 
-        return Image(width, height, data);
+        return Image(width, height, std::move(data));
     }
 
 };
