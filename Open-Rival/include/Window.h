@@ -13,8 +13,6 @@ namespace Rival {
 
         Window(const int width, const int height, const char* title);
 
-        void create();
-
         void destroy();
 
         void use();

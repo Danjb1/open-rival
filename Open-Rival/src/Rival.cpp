@@ -5,37 +5,12 @@
 #include "Palette.h"
 #include "Shaders.h"
 
-/**
- * Entry point for the application.
- */
-int main(int /* argc */, char* /* args[] */) {
-
-    Rival::Rival rival;
-
-    try {
-        rival.initialise();
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to initialise\n";
-        std::cerr << e.what() << "\n";
-        return 1;
-    }
-
-    try {
-        rival.start();
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Error during gameplay\n";
-        std::cerr << e.what() << "\n";
-        return 1;
-    }
-
-    return 0;
-}
-
 namespace Rival {
 
-    void Rival::initialise() {
+    void Rival::initialize() {
         initSDL();
-        window = createWindow();
+        window = std::make_unique<Window>(
+                windowWidth, windowHeight, windowTitle);
         window->use();
         initGLEW();
         initGL();
@@ -44,25 +19,19 @@ namespace Rival {
     }
 
     void Rival::initSDL() const {
+
+        SDL_SetMainReady();
+
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             std::cerr << "SDL could not initialise!\n";
             throw std::runtime_error(SDL_GetError());
         }
-    }
 
-    std::unique_ptr<Window> Rival::createWindow() const {
-
-        // Set window attributes
         // Use OpenGL 3.1 core
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-                SDL_GL_CONTEXT_PROFILE_CORE);
-
-        Window window(windowWidth, windowHeight, windowTitle);
-        window.create();
-
-        return std::make_unique<Window>(window);
+            SDL_GL_CONTEXT_PROFILE_CORE);
     }
 
     void Rival::initGLEW() const {
@@ -155,7 +124,7 @@ namespace Rival {
 
     void Rival::update() {
 
-        if (initialised) {
+        if (initialized) {
             return;
         }
 
@@ -194,7 +163,7 @@ namespace Rival {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData,
                 GL_STATIC_DRAW);
 
-        initialised = true;
+        initialized = true;
     }
 
     void Rival::render() const {

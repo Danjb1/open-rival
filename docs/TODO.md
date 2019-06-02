@@ -4,6 +4,7 @@
 
  - Set window icon
  - Log to file
+ - Unit tests
 
 ## Image Preparation
 

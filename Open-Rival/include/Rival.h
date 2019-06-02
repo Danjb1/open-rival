@@ -17,7 +17,7 @@ namespace Rival {
         /**
          * Initialises the game.
          */
-        void initialise();
+        void initialize();
 
         /**
          * Runs the game.
@@ -30,7 +30,7 @@ namespace Rival {
         const int windowHeight = 600;
         const char* windowTitle = "Rival Realms";
 
-        bool initialised = false;
+        bool initialized = false;
 
         GLuint textureId = 0;
         GLuint paletteTextureId = 0;
@@ -68,11 +68,6 @@ namespace Rival {
          * Loads the game's textures.
          */
         GLuint loadTexture(const std::string filename) const;
-
-        /**
-         * Creates the Window.
-         */
-        std::unique_ptr<Window> createWindow() const;
 
         /**
          * Handles keyDown events.
