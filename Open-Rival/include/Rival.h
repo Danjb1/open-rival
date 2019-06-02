@@ -70,11 +70,6 @@ namespace Rival {
         GLuint loadTexture(const std::string filename) const;
 
         /**
-         * Creates a texture to hold the game's palette.
-         */
-        GLuint createPaletteTexture() const;
-
-        /**
          * Creates the Window.
          */
         std::unique_ptr<Window> createWindow() const;
