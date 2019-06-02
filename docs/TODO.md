@@ -3,6 +3,7 @@
 ## General
 
  - Set window icon
+ - Log to file
 
 ## Image Preparation
 

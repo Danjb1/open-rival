@@ -8,23 +8,23 @@
 /**
  * Entry point for the application.
  */
-int main(int argc, char* args[]) {
+int main(int /* argc */, char* /* args[] */) {
 
-    Rival::Rival rival = Rival::Rival();
+    Rival::Rival rival;
 
     try {
         rival.initialise();
     } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to initialise" << std::endl;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Failed to initialise\n";
+        std::cerr << e.what() << "\n";
         return 1;
     }
 
     try {
         rival.start();
     } catch (const std::runtime_error& e) {
-        std::cerr << "Error during gameplay" << std::endl;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Error during gameplay\n";
+        std::cerr << e.what() << "\n";
         return 1;
     }
 
@@ -45,7 +45,7 @@ namespace Rival {
 
     void Rival::initSDL() const {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            std::cerr << "SDL could not initialise!" << std::endl;
+            std::cerr << "SDL could not initialise!\n";
             throw std::runtime_error(SDL_GetError());
         }
     }
@@ -59,7 +59,7 @@ namespace Rival {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                 SDL_GL_CONTEXT_PROFILE_CORE);
 
-        Window window = Window(windowWidth, windowHeight, windowTitle);
+        Window window(windowWidth, windowHeight, windowTitle);
         window.create();
 
         return std::make_unique<Window>(window);
@@ -72,7 +72,7 @@ namespace Rival {
 
         if (glewError != GLEW_OK) {
             std::cerr << "Error initialising GLEW:"
-                    << glewGetErrorString(glewError) << std::endl;
+                    << glewGetErrorString(glewError) << "\n";
             throw std::runtime_error("Failed to initialise GLEW");
         }
     }
@@ -120,37 +120,6 @@ namespace Rival {
                     sprite.getData(), gluErrorString(error));
             throw std::runtime_error("Failed to load texture");
         }
-
-        return textureId;
-    }
-
-    GLuint Rival::createPaletteTexture() const {
-
-        // Create palette texture
-        unsigned char *data = new unsigned char[paletteBytes];
-
-        for (int i = 0; i < paletteSize; i++) {
-            int start = i * paletteChannels;
-            uint32_t col = palette[i];
-            // RGBA
-            data[start] = (col & 0xff000000) >> 24;
-            data[start + 1] = (col & 0x00ff0000) >> 16;
-            data[start + 2] = (col & 0x0000ff00) >> 8;
-            data[start + 3] = col & 0x000000ff;
-        }
-
-        GLuint textureId = 0;
-        glGenTextures(1, &textureId);
-        glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 1,
-                0, GL_RGBA,GL_UNSIGNED_BYTE, data);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        delete data;
 
         return textureId;
     }
