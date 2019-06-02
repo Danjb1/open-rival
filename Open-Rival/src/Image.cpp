@@ -45,7 +45,7 @@ namespace Rival {
         std::unique_ptr<std::vector<unsigned char>> data =
                 std::make_unique<std::vector<unsigned char>>(width * height);
         ifs.seekg(786);
-        ifs.read((char*)data.get()->data(), width * height);
+        ifs.read(reinterpret_cast<char*>(data.get()->data()), width * height);
 
         return Image(width, height, std::move(data));
     }
