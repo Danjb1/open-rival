@@ -12,4 +12,4 @@
 
 Build using Visual Studio after installing the above dependencies.
 
-See [project setup](docs/project_setup.md) for more details.
+See [project setup](/docs/project_setup.md) for more details.
