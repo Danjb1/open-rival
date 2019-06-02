@@ -3,7 +3,7 @@
 ## Installer
 
  - Fully automate image extraction and texture composition
- - Automate sound extraction (file format unknown)
+ - Automate sound extraction
  - Script to extract all assets from game directory
 
 ## General
@@ -16,7 +16,7 @@
 
  - Ensure images are always square!
  - When building textures, centre too-small images within their frame
- - Group remaining images into textures
+ - `img_5922_00F9FCC5.tga` is not extracted correctly (empty image?)
  - Extract menu / interface images
 
 ## Engine
