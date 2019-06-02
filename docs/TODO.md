@@ -1,5 +1,11 @@
 # To Do
 
+## Installer
+
+ - Fully automate image extraction and texture composition
+ - Automate sound extraction (file format unknown)
+ - Script to extract all assets from game directory
+
 ## General
 
  - Set window icon
@@ -8,11 +14,10 @@
 
 ## Image Preparation
 
- - Group remaining images into textures:
-    - Monsters
-    - Interface (menus, items, icons)
-    - Scenery (rocks, trees, chests)
-    - Effects (spells, bombs, traps?, cropland?)
+ - Ensure images are always square!
+ - When building textures, centre too-small images within their frame
+ - Group remaining images into textures
+ - Extract menu / interface images
 
 ## Engine
 
