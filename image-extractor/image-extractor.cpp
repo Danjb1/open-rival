@@ -76,6 +76,14 @@ BOOL make_executable(void* data, uint32_t size) {
     return VirtualProtect(data, size, PAGE_EXECUTE_READWRITE, &old);
 }
 
+/**
+ * Attempts to create the given directory.
+ */
+bool create_directory(const char* filename) {
+    return CreateDirectoryA(filename, NULL) ||
+        ERROR_ALREADY_EXISTS == GetLastError();
+}
+
 #endif ////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -312,7 +320,7 @@ int nextPowerOf2(int v) {
 /**
  * Entry point for the application.
  */
-int main() {
+int main(int argc, char *argv[]) {
 
     // Read the file
     uint32_t size;
@@ -332,6 +340,20 @@ int main() {
     int i = 0;
     uint8_t* start = data + HEADER_SIZE;
     uint8_t* end = data + size;
+
+    // Allow a specific image to be extracted
+    if (argc == 2) {
+        long image_address = strtol(argv[1], NULL, 16);
+        printf("%08X\n", image_address);
+        start = data + image_address;
+        end = start + 1;
+    }
+
+    // Create the "images" directory
+    if (!create_directory("images")) {
+        printf("Could not create \"images\" directory\n");
+        return 3;
+    }
 
     // Extract the images!
     for (uint8_t* code = start; code < end; ++i) {
@@ -355,9 +377,23 @@ int main() {
             }
         }
 
+        // Ensure the image is not empty
+        if (w == 0) {
+            w = 1;
+        }
+        if (h == 0) {
+            h = 1;
+        }
+
+        // Ensure the image is square
+        if (w > h) {
+            h = w;
+        } else if (h > w) {
+            w = h;
+        }
+
         // Round image dimensions to nearest power of 2
-        w = nextPowerOf2(w);
-        h = nextPowerOf2(h);
+        w = h = nextPowerOf2(w);
 
         printf("images/img_%04d_%08X.tga: %dx%d\n", i, code - data, w, h);
 
