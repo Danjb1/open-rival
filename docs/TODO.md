@@ -14,9 +14,7 @@
 
 ## Image Preparation
 
- - Ensure images are always square!
  - When building textures, centre too-small images within their frame
- - `img_5922_00F9FCC5.tga` is not extracted correctly (empty image?)
  - Extract menu / interface images
 
 ## Engine
