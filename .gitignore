@@ -15,10 +15,10 @@ Debug/
 *.user
 
 # Raw images
-/images
 /image-extractor/images
 /texture-builder/images
 IMAGES.DAT
 
-# Program output
+# Textures
+/Open-Rival/res/textures
 /texture-builder/textures
