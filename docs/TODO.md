@@ -14,7 +14,6 @@
 
 ## Image Preparation
 
- - When building textures, centre too-small images within their frame
  - Extract menu / interface images
 
 ## Engine
