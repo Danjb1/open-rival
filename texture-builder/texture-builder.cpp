@@ -1,61 +1,12 @@
 #include "pch.h"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-const std::string FILENAMES[49] = {
-    "buildings_elf",
-    "buildings_greenskin",
-    "buildings_human",
-    "scenery_meadow",
-    "scenery_wilderness",
-    "tiles_meadow",
-    "tiles_wilderness",
-    "unit_elf_archer",
-    "unit_elf_arquebusier",
-    "unit_elf_bark",
-    "unit_elf_bombard",
-    "unit_elf_centaur",
-    "unit_elf_druid",
-    "unit_elf_dwarf_miner",
-    "unit_elf_enchanter",
-    "unit_elf_mage",
-    "unit_elf_magic_chopper",
-    "unit_elf_scout",
-    "unit_elf_sky_rider",
-    "unit_elf_warship",
-    "unit_elf_yeoman",
-    "unit_greenskin_balloon",
-    "unit_greenskin_catapult",
-    "unit_greenskin_gnome_boomer",
-    "unit_greenskin_horde_rider",
-    "unit_greenskin_landing_craft",
-    "unit_greenskin_necromancer",
-    "unit_greenskin_priest_of_doom",
-    "unit_greenskin_rock_thrower",
-    "unit_greenskin_rogue",
-    "unit_greenskin_serf",
-    "unit_greenskin_storm_trooper",
-    "unit_greenskin_troll_galley",
-    "unit_greenskin_warbat",
-    "unit_greenskin_warlord",
-    "unit_human_ballista",
-    "unit_human_battleship",
-    "unit_human_bowman",
-    "unit_human_chariot_of_war",
-    "unit_human_fire_master",
-    "unit_human_knight",
-    "unit_human_light_cavalry",
-    "unit_human_peasant",
-    "unit_human_pegas_rider",
-    "unit_human_priest",
-    "unit_human_sea_barge",
-    "unit_human_thief",
-    "unit_human_wizard",
-    "unit_human_zeppelin"
-};
+namespace fs = std::filesystem;
 
 const int MAX_TEXTURE_SIZE = 2048;
 
@@ -110,7 +61,7 @@ private:
 
 public:
 
-    Image(int width, int height) {
+    Image(const int width, const int height) {
         this->width = width;
         this->height = height;
 
@@ -118,21 +69,21 @@ public:
         std::fill_n(data.get(), width * height, 0xff);
     }
 
-    Image(int width, int height, std::shared_ptr<unsigned char> data) {
+    Image(const int width, const int height, const std::shared_ptr<unsigned char> data) {
         this->width = width;
         this->height = height;
         this->data = data;
     }
 
-    int getWidth() {
+    int getWidth() const {
         return width;
     }
 
-    int getHeight() {
+    int getHeight() const {
         return height;
     }
 
-    std::shared_ptr<unsigned char> getData() {
+    std::shared_ptr<unsigned char> getData() const {
         return data;
     }
 
@@ -144,7 +95,7 @@ public:
  * This is basically the reverse of `write_image` from image-extractor,
  * skipping all the data we don't care about.
  */
-Image loadImage(std::string filename) {
+Image loadImage(const std::string filename) {
 
     std::ifstream ifs(filename, std::ios::binary | std::ios::in);
     if (!ifs) {
@@ -170,7 +121,7 @@ Image loadImage(std::string filename) {
  *
  * Based on `write_image` from image-extractor.
  */
-int writeImage(std::string filename, Image& image) {
+int writeImage(const std::string filename, const Image& image) {
 
     // Open file for writing
     FILE* fp = fopen(filename.c_str(), "wb");
@@ -241,15 +192,20 @@ int writeImage(std::string filename, Image& image) {
 /**
  * Copies pixels from one image into another.
  */
-void copyImage(Image& src, Image& dst, int dstX, int dstY) {
+void copyImage(
+        const Image& src,
+        const Image& dst,
+        const int dstX,
+        const int dstY) {
+
     std::shared_ptr<unsigned char> srcData = src.getData();
     std::shared_ptr<unsigned char> dstData = dst.getData();
 
     for (int y = 0; y < src.getHeight(); y++) {
         for (int x = 0; x < src.getWidth(); x++) {
 
-            int srcIndex = (y * src.getWidth()) + x;
-            int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
+            const int srcIndex = (y * src.getWidth()) + x;
+            const int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
 
             dstData.get()[dstIndex] = srcData.get()[srcIndex];
         }
@@ -275,15 +231,15 @@ int nextPowerOf2(int v) {
     return v;
 }
 
-void createTexture(std::string filename) {
-    std::ifstream file("definitions/" + filename + ".def");
+void createTexture(fs::path path) {
+    std::ifstream file(path);
     std::string line;
 
     int x = 0;
     int y = 0;
 
-    int lastWidth = -1;
-    int lastHeight = -1;
+    int spriteWidth = -1;
+    int spriteHeight = -1;
 
     std::vector<Image> sprites;
 
@@ -292,28 +248,42 @@ void createTexture(std::string filename) {
 
         Image sprite = loadImage("images/" + line);
 
-        // Check dimensions against the previous sprite
-        if (lastWidth < 0) {
-            lastWidth = sprite.getWidth();
-            lastHeight = sprite.getHeight();
-        }
-        else if (lastWidth != sprite.getWidth()
-            || lastHeight != sprite.getHeight()) {
-            throw std::runtime_error("Sprite dimensions do not match!");
+        // Set the sprite size based on the first sprite
+        if (spriteWidth < 0) {
+            spriteWidth = sprite.getWidth();
+            spriteHeight = sprite.getHeight();
         }
 
-        sprites.push_back(sprite);
+        // Check dimensions against the expected sprite size
+        if (sprite.getWidth() > spriteWidth
+                || sprite.getHeight() > spriteHeight) {
+            // Sprite too large
+            throw std::runtime_error("Sprite is too large to fit!");
+
+        } else if (sprite.getWidth() < spriteWidth
+                || sprite.getHeight() < spriteHeight) {
+            // Sprite too small
+            Image resizedSprite = Image(spriteWidth, spriteHeight);
+            const int dstX = (spriteWidth - sprite.getWidth()) / 2;
+            const int dstY = (spriteHeight - sprite.getHeight()) / 2;
+            copyImage(sprite, resizedSprite, dstX, dstY);
+            sprites.push_back(resizedSprite);
+
+        } else {
+            // Sprite is ok!
+            sprites.push_back(sprite);
+        }
     }
 
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
     // we find a suitable size with minimal wasted space
-    int tmpWidth = nextPowerOf2(lastWidth * sprites.size());
-    int tmpHeight = lastHeight;
+    int tmpWidth = nextPowerOf2(spriteWidth * sprites.size());
+    int tmpHeight = spriteHeight;
     int dataSize = tmpWidth * tmpHeight;
     int best = dataSize;
-    int bestWidth = tmpWidth;
-    int bestHeight = tmpHeight;
+    int txWidth = tmpWidth;
+    int txHeight = tmpHeight;
 
     while (tmpWidth > 256) {
 
@@ -323,21 +293,20 @@ void createTexture(std::string filename) {
         int area = tmpWidth * tmpHeight;
         int wastedSpace = area - dataSize;
 
-        if (bestWidth > MAX_TEXTURE_SIZE || wastedSpace < best) {
+        if (txWidth > MAX_TEXTURE_SIZE || wastedSpace < best) {
             best = wastedSpace;
-            bestWidth = tmpWidth;
-            bestHeight = tmpHeight;
+            txWidth = tmpWidth;
+            txHeight = tmpHeight;
         }
     }
 
-    std::cout << "Optimal size is " << bestWidth << " x " << bestHeight << "\n";
-
-    if (bestWidth > MAX_TEXTURE_SIZE || bestHeight > MAX_TEXTURE_SIZE) {
+    if (txWidth > MAX_TEXTURE_SIZE || txHeight > MAX_TEXTURE_SIZE) {
+        std::cout << "Optimal size is " << txWidth << " x " << txHeight << "\n";
         throw std::runtime_error("Sprites will not fit!");
     }
 
     // Create an empty texture
-    Image texture = Image(bestWidth, bestHeight);
+    Image texture = Image(txWidth, txHeight);
 
     // Draw the sprites to the texture
     for (Image sprite : sprites) {
@@ -352,17 +321,22 @@ void createTexture(std::string filename) {
     }
 
     // Save the final texture
-    writeImage("textures/" + filename + ".tga", texture);
+    writeImage("./textures/" + path.filename().replace_extension(".tga").string(), texture);
 }
 
 int main() {
-    for (std::string filename : FILENAMES) {
+
+    std::vector<std::string> filenames;
+
+    const std::string path = "./definitions";
+    for (const fs::directory_entry& entry : fs::directory_iterator(path)) {
+        const fs::path path = entry.path();
         try {
-            std::cout << "Processing: " + filename + "\n";
-            createTexture(filename);
+            std::cout << "Processing: " << path.filename() << "\n";
+            createTexture(path);
         } catch (const std::runtime_error& e) {
-            std::cout << e.what();
-            std::cout << "Skipping file: " << filename << "\n";
+            std::cout << e.what() << "\n";
+            std::cout << "Skipping file: " << path.filename() << "\n";
         }
     }
 }
