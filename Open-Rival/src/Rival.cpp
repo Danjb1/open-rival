@@ -14,7 +14,7 @@ namespace Rival {
         window->use();
         initGLEW();
         initGL();
-        textureId = loadTexture("res\\textures\\knight.tga");
+        textureId = loadTexture("res\\textures\\unit_human_knight.tga");
         paletteTextureId = createPaletteTexture();
     }
 
@@ -204,10 +204,10 @@ namespace Rival {
         glUseProgram(0);
     }
 
-    void Rival::exit() const {
+    void Rival::exit() {
 
         // Destroy window
-        window->destroy();
+        window.reset();
 
         // Quit SDL
         SDL_Quit();

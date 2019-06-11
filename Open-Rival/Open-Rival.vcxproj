@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BinaryFileReader.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Palette.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BinaryFileReader.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />

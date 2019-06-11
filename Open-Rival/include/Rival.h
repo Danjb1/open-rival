@@ -87,7 +87,7 @@ namespace Rival {
         /**
          * Frees media and shuts down SDL.
          */
-        void exit() const;
+        void exit();
 
     };
 
