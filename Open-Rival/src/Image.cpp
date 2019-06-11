@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "BinaryFileReader.h"
+#include "Palette.h"
 
 namespace Rival {
 
@@ -50,10 +51,10 @@ namespace Rival {
         uint16_t height = reader.readShort();
         uint8_t bpp = reader.readByte();
 
-        // Skip some... (TODO)
-        reader.skip(769);
+        // Color palette
+        reader.skip(paletteBytes);
 
-        // Read pixel data
+        // Pixel data
         std::unique_ptr<std::vector<unsigned char>> data =
                 std::make_unique<std::vector<unsigned char>>(width * height);
         reader.read(data.get());
