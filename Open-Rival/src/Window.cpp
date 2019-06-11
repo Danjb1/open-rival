@@ -23,7 +23,7 @@ namespace Rival {
         }
     }
 
-    void Window::destroy() {
+    Window::~Window() {
         SDL_DestroyWindow(windowRef);
         windowRef = nullptr;
     }
