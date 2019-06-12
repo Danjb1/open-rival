@@ -24,7 +24,7 @@ namespace Rival {
                 createPaletteTexture());
 
         // Define Sprites
-        sprite = std::make_unique<Sprite>(*texture, 32, 32);
+        sprite = std::make_unique<Sprite>(*texture, 128, 128);
     }
 
     void Rival::initSDL() const {
