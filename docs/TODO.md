@@ -55,7 +55,6 @@
 
 ## Rendering
 
- - Flip image on load
  - Shader used for mouse picking
  - Render Interface
  - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))

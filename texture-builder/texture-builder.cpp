@@ -51,6 +51,21 @@ const uint32_t PALETTE[PALETTE_SIZE] = {
     0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffff00
 };
 
+///////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
+
+#include <windows.h>
+
+/**
+ * Attempts to create the given directory.
+ */
+bool create_directory(const char* filename) {
+    return CreateDirectoryA(filename, NULL) ||
+        ERROR_ALREADY_EXISTS == GetLastError();
+}
+
+#endif ////////////////////////////////////////////////////////////////////////
+
 class Image {
 
 private:
@@ -158,8 +173,8 @@ int writeImage(const std::string filename, const Image& image) {
     fputc(8, fp); // Bits per pixel
 
     // Image descriptor byte
-    // (8 = number of alpha bits, bit5: upper-left origin)
-    fputc(8 | 1 << 5, fp);
+    // (8 = number of alpha bits, bit5: lower-left origin)
+    fputc(8 | 0 << 5, fp);
 
     // Colour map data
     for (int i = 0; i < PALETTE_SIZE; ++i) {
@@ -178,8 +193,8 @@ int writeImage(const std::string filename, const Image& image) {
 
     // Pixel data
     std::shared_ptr<unsigned char> data = image.getData();
-    for (int y = 0; y < image.getHeight(); ++y) {
-        for (int x = 0; x < image.getWidth(); ++x) {
+    for (int y = image.getHeight() - 1; y >= 0; y--) {
+        for (int x = 0; x < image.getWidth(); x++) {
             const uint8_t index = data.get()[x + y * image.getWidth()];
             fputc(index, fp);
         }
@@ -325,6 +340,12 @@ void createTexture(fs::path path) {
 }
 
 int main() {
+
+    // Create the "textures" directory
+    if (!create_directory("textures")) {
+        std::cout << "Could not create \"textures\" directory\n";
+        return 3;
+    }
 
     std::vector<std::string> filenames;
 
