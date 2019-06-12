@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 
+#include "Sprite.h"
 #include "Texture.h"
 #include "Window.h"
 
@@ -36,6 +37,8 @@ namespace Rival {
         bool initialized = false;
 
         std::unique_ptr<Texture> texture;
+        std::unique_ptr<Sprite> sprite;
+
         std::unique_ptr<Texture> paletteTexture;
 
         GLuint gVBO = 0;

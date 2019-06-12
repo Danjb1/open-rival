@@ -16,10 +16,15 @@ namespace Rival {
         window->use();
         initGLEW();
         initGL();
+
+        // Load Textures
         texture = std::make_unique<Texture>(
                 loadTexture("res\\textures\\unit_human_knight.tga"));
         paletteTexture = std::make_unique<Texture>(
                 createPaletteTexture());
+
+        // Define Sprites
+        sprite = std::make_unique<Sprite>(*texture, 32, 32);
     }
 
     void Rival::initSDL() const {
@@ -139,12 +144,6 @@ namespace Rival {
             0.5f,  0.5f,
             -0.5f,  0.5f
         };
-        GLfloat texCoordData[] = {
-            0, 0,
-            1, 0,
-            1, 1,
-            0, 1
-        };
 
         // IBO data
         GLuint indexData[] = { 0, 1, 2, 3 };
@@ -158,7 +157,7 @@ namespace Rival {
         // Create tex coord VBO
         glGenBuffers(1, &gTexCoordVBO);
         glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-        glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), texCoordData,
+        glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), sprite->getTexCoords(0).data(),
                 GL_STATIC_DRAW);
 
         // Create IBO
