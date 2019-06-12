@@ -12,7 +12,7 @@ These tutorials describe how to install each of our dependencies:
 
 ## Directory Structure
 
-These dependencies should be placed in the "libs" folder:
+These dependencies should be placed in the `libs` folder:
 
     +-- Open-Rival/
         +-- libs/

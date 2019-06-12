@@ -15,6 +15,7 @@
 ## Image Preparation
 
  - Extract menu / interface images
+ - Extract fonts
 
 ## Engine
 

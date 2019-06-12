@@ -10,13 +10,11 @@ Other images (for example, the interface) can be extracted from screenshots. The
 
 Build using Visual Studio.
 
-The executable will be created in a "Debug" directory.
-
 ## Run
 
 `IMAGES.DAT` should be placed in the directory from which the program is run.
 
-Run the executable, and the images will be extracted to an "images" directory (this may need to be created).
+Run the executable, and the images will be extracted to an `images` directory.
 
 A full list of images can be found [here](/docs/images.md).
 
