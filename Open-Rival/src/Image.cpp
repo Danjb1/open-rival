@@ -50,6 +50,7 @@ namespace Rival {
         uint16_t width = reader.readShort();
         uint16_t height = reader.readShort();
         uint8_t bpp = reader.readByte();
+        uint8_t imageDescriptor = reader.readByte();
 
         // Color palette
         reader.skip(paletteBytes);
