@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 
+#include "Texture.h"
 #include "Window.h"
 
 namespace Rival {
@@ -13,6 +14,8 @@ namespace Rival {
     class Rival {
 
     public:
+
+        Rival();
 
         /**
          * Initialises the game.
@@ -32,8 +35,8 @@ namespace Rival {
 
         bool initialized = false;
 
-        GLuint textureId = 0;
-        GLuint paletteTextureId = 0;
+        std::unique_ptr<Texture> texture;
+        std::unique_ptr<Texture> paletteTexture;
 
         GLuint gVBO = 0;
         GLuint gTexCoordVBO = 0;
@@ -67,7 +70,7 @@ namespace Rival {
         /**
          * Loads the game's textures.
          */
-        GLuint loadTexture(const std::string filename) const;
+        Texture loadTexture(const std::string filename) const;
 
         /**
          * Handles keyDown events.

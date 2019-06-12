@@ -29,6 +29,8 @@
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +41,8 @@
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
+    <ClInclude Include="include\Sprite.h" />
+    <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
