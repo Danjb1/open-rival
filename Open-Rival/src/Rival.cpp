@@ -7,6 +7,8 @@
 
 namespace Rival {
 
+    Rival::Rival() {}
+
     void Rival::initialize() {
         initSDL();
         window = std::make_unique<Window>(
@@ -14,8 +16,10 @@ namespace Rival {
         window->use();
         initGLEW();
         initGL();
-        textureId = loadTexture("res\\textures\\unit_human_knight.tga");
-        paletteTextureId = createPaletteTexture();
+        texture = std::make_unique<Texture>(
+                loadTexture("res\\textures\\unit_human_knight.tga"));
+        paletteTexture = std::make_unique<Texture>(
+                createPaletteTexture());
     }
 
     void Rival::initSDL() const {
@@ -66,18 +70,18 @@ namespace Rival {
         initialiseShaders();
     }
 
-    GLuint Rival::loadTexture(const std::string filename) const {
+    Texture Rival::loadTexture(const std::string filename) const {
 
         // Load image data
-        Image sprite = loadImage(filename);
+        Image img = loadImage(filename);
 
         // Generate texture
         GLuint textureId = 0;
         glGenTextures(1, &textureId);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
-                sprite.getWidth(), sprite.getHeight(),
-                0, GL_RED, GL_UNSIGNED_BYTE, sprite.getData()->data());
+                img.getWidth(), img.getHeight(),
+                0, GL_RED, GL_UNSIGNED_BYTE, img.getData()->data());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -86,11 +90,11 @@ namespace Rival {
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
             printf("Error loading texture from %p pixels! %s\n",
-                    sprite.getData(), gluErrorString(error));
+                    img.getData(), gluErrorString(error));
             throw std::runtime_error("Failed to load texture");
         }
 
-        return textureId;
+        return Texture(textureId, img.getWidth(), img.getHeight());
     }
 
     void Rival::start() {
@@ -175,9 +179,9 @@ namespace Rival {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-        glBindTexture(GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, texture->getId());
         glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
-        glBindTexture(GL_TEXTURE_2D, paletteTextureId);
+        glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
         // Prepare
         glEnableVertexAttribArray(textureShader.vertexAttribLocation);
