@@ -1,8 +1,9 @@
 #ifndef PALETTE_H
 #define PALETTE_H
 
-#include <gl/glew.h>
 #include <fstream>
+
+#include "Texture.h"
 
 namespace Rival {
 
@@ -54,7 +55,7 @@ namespace Rival {
     /**
      * Creates a texture to hold the game's palette.
      */
-    GLuint createPaletteTexture();
+    Texture createPaletteTexture();
 
 }
 

@@ -5,7 +5,7 @@
 
 namespace Rival {
 
-    GLuint createPaletteTexture() {
+    Texture createPaletteTexture() {
 
         // Create palette texture
         std::array<unsigned char, paletteBytes> data;
@@ -31,7 +31,7 @@ namespace Rival {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        return textureId;
+        return Texture(textureId, paletteSize, 1);
     }
 
 }
