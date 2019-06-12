@@ -3,7 +3,7 @@
 
 namespace Rival {
 
-    Texture::Texture(GLuint id, int width, int height) :
+    Texture::Texture(const GLuint id, const int width, const int height) :
         id(id),
         width(width),
         height(height) {}

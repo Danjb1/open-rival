@@ -9,15 +9,15 @@ namespace Rival {
 
     private:
 
-        GLuint id;
+        const GLuint id;
 
-        int width;
+        const int width;
 
-        int height;
+        const int height;
 
     public:
 
-        Texture(GLuint id, int width, int height);
+        Texture(const GLuint id, const int width, const int height);
 
         GLuint getId() const;
 
