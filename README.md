@@ -10,19 +10,19 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 ### [Open-Rival](/Open-Rival)
 
-The remake source.
+> Rival Realms remake.
 
 ### [audio-extractor](/audio-extractor)
 
-Utility to extract the original game's audio.
+> Utility to extract the original game's audio.
 
 ### [image-extractor](/image-extractor)
 
-Utility to extract the original game's images.
+> Utility to extract the original game's images.
 
 ### [texture-builder](/texture-builder)
 
-Utility to combine images into textures.
+> Utility to combine images into textures.
 
 ## Legal Stuff
 
