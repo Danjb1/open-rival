@@ -18,11 +18,17 @@ namespace Rival {
 
         const Texture& texture;
 
-        // Width of one frame of the Sprite's texture
+        // Width of one image within the texture
         const int width;
 
-        // Height of one frame of the Sprite's texture
+        // Height of one image within the texture
         const int height;
+
+        // Number of columns in the texture
+        const int xSize;
+
+        // Number of rows in the texture
+        const int ySize;
 
     public:
 
