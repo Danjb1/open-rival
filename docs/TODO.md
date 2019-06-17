@@ -1,23 +1,36 @@
 # To Do
 
-## Installer
+## Improvements
+
+ - Check for memory leaks
+ - Add `const` to method signatures
+ - Avoid using `this`?
+ - Create constants / enum for facing directions
+ - Simplify / tidy up map iteration
+ - Extract the texture co-ordinates passed to `glBufferData` to a local variable
+ - Split `render` method into smaller methods
+ - Don't generate new VAOs / VBOs every frame
+
+## Features
+
+### Installer
 
  - Fully automate image extraction and texture composition
  - Automate sound extraction
  - Script to extract all assets from game directory
 
-## General
+### General
 
  - Set window icon
  - Log to file
  - Unit tests
 
-## Image Preparation
+### Image Preparation
 
  - Extract menu / interface images
  - Extract fonts
 
-## Engine
+### Engine
 
  - Create data structures:
     - Map
@@ -32,7 +45,7 @@
         - Door
  - Game loop
 
-## Game Logic
+### Game Logic
 
  - Use the Command Pattern to manipulate game state?
  - Moving units to adjacent tiles
@@ -49,12 +62,12 @@
  - Monster AI
  - Player AI
 
-## Input
+### Input
 
  - Selecting units (render to a texture with mouse picking shader)
  - Drag-select
 
-## Rendering
+### Rendering
 
  - Shader used for mouse picking
  - Render Interface
@@ -67,24 +80,24 @@
  - Fog of war
  - High resolution support (!)
 
-## Sound
+### Sound
 
  - Play sounds when selecting units
  - Play sounds when instructing units to move
 
-## Music
+### Music
 
  - WMA
  - MIDI
 
-## Menus
+### Menus
 
  - Main menu
  - Loading screen
  - Custom map menu
  - Pause menu
 
-## File Formats
+### File Formats
 
  - Decipher scenario format
  - Find campaign map data
