@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 
+#include "Scene.h"
 #include "Sprite.h"
 #include "Texture.h"
 #include "Window.h"
@@ -34,8 +35,6 @@ namespace Rival {
         const int windowHeight = 600;
         const char* windowTitle = "Rival Realms";
 
-        bool initialized = false;
-
         std::unique_ptr<Texture> texture;
         std::unique_ptr<Sprite> sprite;
 
@@ -44,6 +43,8 @@ namespace Rival {
         GLuint gVBO = 0;
         GLuint gTexCoordVBO = 0;
         GLuint gIBO = 0;
+
+        std::unique_ptr <Scene> scene;
 
         /**
          * Window used to display the game.
@@ -83,7 +84,7 @@ namespace Rival {
         /**
          * Renders the current frame.
          */
-        void render() const;
+        void render();
 
         /**
          * Updates the game.

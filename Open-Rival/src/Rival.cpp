@@ -25,6 +25,13 @@ namespace Rival {
 
         // Define Sprites
         sprite = std::make_unique<Sprite>(*texture, 128, 128);
+
+        // Create the Scene
+        scene = std::make_unique<Scene>();
+
+        // Add a Unit
+        std::unique_ptr<Unit> unit = std::make_unique<Unit>(*sprite.get());
+        scene->addUnit(std::move(unit));
     }
 
     void Rival::initSDL() const {
@@ -132,44 +139,60 @@ namespace Rival {
     }
 
     void Rival::update() {
-
-        if (initialized) {
-            return;
+        std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
+        for (auto const& kv : units) {
+            const std::unique_ptr<Unit>& unit = kv.second;
+            uint8_t newFacing = (unit->getFacing() + 1) % 8;
+            unit->setFacing(newFacing);
         }
-
-        // VBO data
-        GLfloat vertexData[] = {
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f,  0.5f,
-            -0.5f,  0.5f
-        };
-
-        // IBO data
-        GLuint indexData[] = { 0, 1, 2, 3 };
-
-        // Create vertex pos VBO
-        glGenBuffers(1, &gVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-        glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData,
-                GL_STATIC_DRAW);
-
-        // Create tex coord VBO
-        glGenBuffers(1, &gTexCoordVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-        glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), sprite->getTexCoords(0).data(),
-                GL_STATIC_DRAW);
-
-        // Create IBO
-        glGenBuffers(1, &gIBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData,
-                GL_STATIC_DRAW);
-
-        initialized = true;
     }
 
-    void Rival::render() const {
+    void Rival::render() {
+
+        /*
+         * Build render data
+         */
+
+        std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
+
+        for (auto const& kv : units) {
+            const std::unique_ptr<Unit>& unit = kv.second;
+
+            // VBO data
+            GLfloat vertexData[] = {
+                -0.5f, -0.5f,
+                0.5f, -0.5f,
+                0.5f,  0.5f,
+                -0.5f,  0.5f
+            };
+
+            // IBO data
+            GLuint indexData[] = { 0, 1, 2, 3 };
+
+            // Create vertex pos VBO
+            glGenBuffers(1, &gVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+            glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData,
+                GL_STATIC_DRAW);
+
+            // Create tex coord VBO
+            int txIndex = unit->getFacing();
+            glGenBuffers(1, &gTexCoordVBO);
+            glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
+            glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat),
+                unit->getSprite().getTexCoords(txIndex).data(),
+                GL_STATIC_DRAW);
+
+            // Create IBO
+            glGenBuffers(1, &gIBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData,
+                GL_STATIC_DRAW);
+        }
+
+        /*
+         * Render
+         */
 
         glClear(GL_COLOR_BUFFER_BIT);
 
