@@ -172,22 +172,34 @@ namespace Rival {
             // Create vertex pos VBO
             glGenBuffers(1, &gVBO);
             glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-            glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData,
-                GL_STATIC_DRAW);
+            glBufferData(
+                    GL_ARRAY_BUFFER,
+                    2 * 4 * sizeof(GLfloat),
+                    vertexData,
+                    GL_STATIC_DRAW);
+
+            // Determine texture co-ordinates
+            int txIndex = unit->getFacing();
+            std::vector<GLfloat> texCoords =
+                    unit->getSprite().getTexCoords(txIndex);
 
             // Create tex coord VBO
-            int txIndex = unit->getFacing();
             glGenBuffers(1, &gTexCoordVBO);
             glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-            glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat),
-                unit->getSprite().getTexCoords(txIndex).data(),
-                GL_STATIC_DRAW);
+            glBufferData(
+                    GL_ARRAY_BUFFER,
+                    2 * 4 * sizeof(GLfloat),
+                    texCoords.data(),
+                    GL_STATIC_DRAW);
 
             // Create IBO
             glGenBuffers(1, &gIBO);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData,
-                GL_STATIC_DRAW);
+            glBufferData(
+                    GL_ELEMENT_ARRAY_BUFFER,
+                    4 * sizeof(GLuint),
+                    indexData,
+                    GL_STATIC_DRAW);
         }
 
         /*
@@ -211,17 +223,31 @@ namespace Rival {
         glUniform1i(textureShader.texUnitUniformLocation, 0);
         glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
         glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-        glVertexAttribPointer(textureShader.vertexAttribLocation, 2,
-                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
+        glVertexAttribPointer(
+                textureShader.vertexAttribLocation,
+                2,
+                GL_FLOAT,
+                GL_FALSE,
+                2 * sizeof(GLfloat),
+                nullptr);
         glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-        glVertexAttribPointer(textureShader.texCoordAttribLocation, 2,
-                GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr);
+        glVertexAttribPointer(
+                textureShader.texCoordAttribLocation,
+                2,
+                GL_FLOAT,
+                GL_FALSE,
+                2 * sizeof(GLfloat),
+                nullptr);
 
         // Bind index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
 
         // Render
-        glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(
+                GL_TRIANGLE_FAN,
+                4,
+                GL_UNSIGNED_INT,
+                nullptr);
 
         // Clean up
         glDisableVertexAttribArray(textureShader.vertexAttribLocation);
