@@ -7,7 +7,6 @@
  - Avoid using `this`?
  - Create constants / enum for facing directions
  - Simplify / tidy up map iteration
- - Extract the texture co-ordinates passed to `glBufferData` to a local variable
  - Split `render` method into smaller methods
  - Don't generate new VAOs / VBOs every frame
 
