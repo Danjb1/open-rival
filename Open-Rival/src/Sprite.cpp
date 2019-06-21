@@ -10,7 +10,7 @@ namespace Rival {
         xSize(texture.getWidth() / width),
         ySize(texture.getHeight() / height) {}
 
-    std::vector<GLfloat> Sprite::getTexCoords(const int index) const {
+    const std::vector<GLfloat> Sprite::getTexCoords(const int index) const {
 
         const int x = index % xSize;
         const int y = index / xSize;
