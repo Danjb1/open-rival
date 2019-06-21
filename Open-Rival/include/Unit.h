@@ -1,6 +1,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
+#include "Renderable.h"
 #include "Sprite.h"
 
 namespace Rival {
@@ -9,19 +10,13 @@ namespace Rival {
 
     private:
 
-        const Sprite& sprite;
+    public:
+
+        const Renderable renderable;
 
         std::uint8_t facing;
 
-    public:
-
-        Unit(const Sprite&);
-
-        const Sprite& getSprite() const;
-
-        uint8_t getFacing() const;
-
-        void setFacing(uint8_t facing);
+        Unit(const Sprite& sprite);
 
     };
 

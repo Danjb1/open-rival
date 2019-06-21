@@ -2,13 +2,12 @@
 
 ## Improvements
 
- - Check for memory leaks
+ - Update Renderable.txIndex based on Unit facing / animation
  - Add `const` to method signatures
- - Avoid using `this`?
  - Create constants / enum for facing directions
  - Simplify / tidy up map iteration
- - Split `render` method into smaller methods
- - Don't generate new VAOs / VBOs every frame
+ - Follow the Rule of Five
+ - Separate Renderable from Unit class
 
 ## Features
 

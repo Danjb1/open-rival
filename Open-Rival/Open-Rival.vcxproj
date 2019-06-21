@@ -26,6 +26,7 @@
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Unit.cpp" />
+    <ClCompile Include="src\UnitRenderer.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +42,7 @@
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\Renderable.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shaders.h" />
@@ -47,6 +50,7 @@
     <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Unit.h" />
+    <ClInclude Include="include\UnitRenderer.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
