@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Rival.h"
 
+#include <map>
+
 #include "Image.h"
 #include "Palette.h"
 #include "Shaders.h"
@@ -32,6 +34,9 @@ namespace Rival {
         // Add a Unit
         std::unique_ptr<Unit> unit = std::make_unique<Unit>(*sprite.get());
         scene->addUnit(std::move(unit));
+
+        // Create the UnitRenderer
+        unitRenderer = std::make_unique<UnitRenderer>(*paletteTexture.get());
     }
 
     void Rival::initSDL() const {
@@ -142,118 +147,13 @@ namespace Rival {
         std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
-            uint8_t newFacing = (unit->getFacing() + 1) % 8;
-            unit->setFacing(newFacing);
+            unit->facing = (unit->facing + 1) % 8;
         }
     }
 
     void Rival::render() {
-
-        /*
-         * Build render data
-         */
-
-        std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
-
-        for (auto const& kv : units) {
-            const std::unique_ptr<Unit>& unit = kv.second;
-
-            // VBO data
-            GLfloat vertexData[] = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f,  0.5f,
-                -0.5f,  0.5f
-            };
-
-            // IBO data
-            GLuint indexData[] = { 0, 1, 2, 3 };
-
-            // Create vertex pos VBO
-            glGenBuffers(1, &gVBO);
-            glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-            glBufferData(
-                    GL_ARRAY_BUFFER,
-                    2 * 4 * sizeof(GLfloat),
-                    vertexData,
-                    GL_STATIC_DRAW);
-
-            // Determine texture co-ordinates
-            int txIndex = unit->getFacing();
-            std::vector<GLfloat> texCoords =
-                    unit->getSprite().getTexCoords(txIndex);
-
-            // Create tex coord VBO
-            glGenBuffers(1, &gTexCoordVBO);
-            glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-            glBufferData(
-                    GL_ARRAY_BUFFER,
-                    2 * 4 * sizeof(GLfloat),
-                    texCoords.data(),
-                    GL_STATIC_DRAW);
-
-            // Create IBO
-            glGenBuffers(1, &gIBO);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
-            glBufferData(
-                    GL_ELEMENT_ARRAY_BUFFER,
-                    4 * sizeof(GLuint),
-                    indexData,
-                    GL_STATIC_DRAW);
-        }
-
-        /*
-         * Render
-         */
-
         glClear(GL_COLOR_BUFFER_BIT);
-
-        // Use shader
-        glUseProgram(textureShader.programId);
-
-        // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-        glBindTexture(GL_TEXTURE_2D, texture->getId());
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
-        glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
-
-        // Prepare
-        glEnableVertexAttribArray(textureShader.vertexAttribLocation);
-        glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
-        glUniform1i(textureShader.texUnitUniformLocation, 0);
-        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
-        glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-        glVertexAttribPointer(
-                textureShader.vertexAttribLocation,
-                2,
-                GL_FLOAT,
-                GL_FALSE,
-                2 * sizeof(GLfloat),
-                nullptr);
-        glBindBuffer(GL_ARRAY_BUFFER, gTexCoordVBO);
-        glVertexAttribPointer(
-                textureShader.texCoordAttribLocation,
-                2,
-                GL_FLOAT,
-                GL_FALSE,
-                2 * sizeof(GLfloat),
-                nullptr);
-
-        // Bind index buffer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
-
-        // Render
-        glDrawElements(
-                GL_TRIANGLE_FAN,
-                4,
-                GL_UNSIGNED_INT,
-                nullptr);
-
-        // Clean up
-        glDisableVertexAttribArray(textureShader.vertexAttribLocation);
-        glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glUseProgram(0);
+        unitRenderer->render(scene->getUnits());
     }
 
     void Rival::exit() {

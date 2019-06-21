@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "Texture.h"
+#include "UnitRenderer.h"
 #include "Window.h"
 
 namespace Rival {
@@ -37,14 +38,9 @@ namespace Rival {
 
         std::unique_ptr<Texture> texture;
         std::unique_ptr<Sprite> sprite;
-
         std::unique_ptr<Texture> paletteTexture;
-
-        GLuint gVBO = 0;
-        GLuint gTexCoordVBO = 0;
-        GLuint gIBO = 0;
-
-        std::unique_ptr <Scene> scene;
+        std::unique_ptr<Scene> scene;
+        std::unique_ptr<UnitRenderer> unitRenderer;
 
         /**
          * Window used to display the game.
