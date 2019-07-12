@@ -14,8 +14,6 @@ namespace Rival {
 
         const Sprite& sprite;
 
-        int txIndex = 0;
-
         GLuint positionVbo = 0;
 
         GLuint texCoordVbo = 0;
@@ -23,6 +21,8 @@ namespace Rival {
         GLuint ibo = 0;
 
     public:
+
+        int txIndex = 0;
 
         Renderable(const Sprite&);
 

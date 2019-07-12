@@ -12,7 +12,7 @@ namespace Rival {
 
     public:
 
-        const Renderable renderable;
+        Renderable renderable;
 
         std::uint8_t facing;
 

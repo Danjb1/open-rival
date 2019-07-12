@@ -2,7 +2,7 @@
 
 ## Improvements
 
- - Update Renderable.txIndex based on Unit facing / animation
+ - Use getters / setters instead of public fields?
  - Add `const` to method signatures
  - Create constants / enum for facing directions
  - Simplify / tidy up map iteration
@@ -73,7 +73,6 @@
  - Render Buildings
  - Render Obstacles
  - Render Units
-    - Different orientations
     - Different animations
  - Fog of war
  - High resolution support (!)
