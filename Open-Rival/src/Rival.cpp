@@ -148,6 +148,7 @@ namespace Rival {
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
             unit->facing = (unit->facing + 1) % 8;
+            unit->renderable.txIndex = unit->facing;
         }
     }
 
