@@ -47,4 +47,12 @@ namespace Rival {
         return sprite.texture.getId();
     }
 
+    int Renderable::getTxIndex() const {
+        return txIndex;
+    }
+
+    void Renderable::setTxIndex(int newTxIndex) {
+        txIndex = newTxIndex;
+    }
+
 }

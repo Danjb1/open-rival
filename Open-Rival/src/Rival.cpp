@@ -147,8 +147,8 @@ namespace Rival {
         std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
-            unit->facing = (unit->facing + 1) % 8;
-            unit->renderable.txIndex = unit->facing;
+            unit->rotateRight();
+            unit->getRenderable().setTxIndex(unit->getFacing());
         }
     }
 
