@@ -20,9 +20,9 @@ namespace Rival {
 
         GLuint ibo = 0;
 
-    public:
-
         int txIndex = 0;
+
+    public:
 
         Renderable(const Sprite&);
 
@@ -37,6 +37,10 @@ namespace Rival {
         std::vector<GLfloat> getTexCoords() const;
 
         GLuint getTextureId() const;
+
+        int getTxIndex() const;
+
+        void setTxIndex(int newTxIndex);
 
     };
 

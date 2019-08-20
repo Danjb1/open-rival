@@ -18,6 +18,7 @@ namespace Rival {
 
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
+            Renderable& renderable = unit->getRenderable();
 
             // Define vertex positions
             std::vector<GLfloat> vertexData = {
@@ -28,10 +29,10 @@ namespace Rival {
             };
 
             // Determine texture co-ordinates
-            std::vector<GLfloat> texCoords = unit->renderable.getTexCoords();
+            std::vector<GLfloat> texCoords = renderable.getTexCoords();
 
             // Create vertex position VBO
-            glBindBuffer(GL_ARRAY_BUFFER, unit->renderable.getPositionVbo());
+            glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
             glBufferData(
                 GL_ARRAY_BUFFER,
                 2 * 4 * sizeof(GLfloat),
@@ -39,7 +40,7 @@ namespace Rival {
                 GL_DYNAMIC_DRAW);
 
             // Create tex coord VBO
-            glBindBuffer(GL_ARRAY_BUFFER, unit->renderable.getTexCoordVbo());
+            glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
             glBufferData(
                 GL_ARRAY_BUFFER,
                 2 * 4 * sizeof(GLfloat),
@@ -48,7 +49,7 @@ namespace Rival {
 
             // Use textures
             glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-            glBindTexture(GL_TEXTURE_2D, unit->renderable.getTextureId());
+            glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
             glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
             glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
@@ -57,7 +58,7 @@ namespace Rival {
             glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
             glUniform1i(textureShader.texUnitUniformLocation, 0);
             glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
-            glBindBuffer(GL_ARRAY_BUFFER, unit->renderable.getPositionVbo());
+            glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
             glVertexAttribPointer(
                 textureShader.vertexAttribLocation,
                 2,
@@ -65,7 +66,7 @@ namespace Rival {
                 GL_FALSE,
                 2 * sizeof(GLfloat),
                 nullptr);
-            glBindBuffer(GL_ARRAY_BUFFER, unit->renderable.getTexCoordVbo());
+            glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
             glVertexAttribPointer(
                 textureShader.texCoordAttribLocation,
                 2,
@@ -75,7 +76,7 @@ namespace Rival {
                 nullptr);
 
             // Bind index buffer
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, unit->renderable.getIbo());
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
 
             // Render
             glDrawElements(
