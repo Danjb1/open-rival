@@ -2,8 +2,6 @@
 
 ## Improvements
 
- - Use getters / setters instead of public fields?
- - Add `const` to method signatures
  - Create constants / enum for facing directions
  - Simplify / tidy up map iteration
  - Follow the Rule of Five
