@@ -9,10 +9,6 @@ namespace Rival {
 
     class Scene {
 
-    private:
-
-        std::map<int, std::unique_ptr<Unit>> units;
-
     public:
 
         Scene();
@@ -20,6 +16,10 @@ namespace Rival {
         void addUnit(std::unique_ptr<Unit> unit);
 
         std::map<int, std::unique_ptr<Unit>>& getUnits();
+
+    private:
+
+        std::map<int, std::unique_ptr<Unit>> units;
 
     };
 

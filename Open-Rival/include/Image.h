@@ -9,13 +9,15 @@ namespace Rival {
 
     class Image {
 
-    private:
-
-        int width;
-        int height;
-        std::unique_ptr<std::vector<unsigned char>> data;
-
     public:
+
+        /**
+         * Loads an image from a file.
+         *
+         * This is basically the reverse of `write_image` from image-extractor,
+         * skipping all the data we don't care about.
+         */
+        static Image loadImage(const std::string filename);
 
         Image(const int width, const int height);
 
@@ -28,15 +30,13 @@ namespace Rival {
 
         std::vector<unsigned char>* getData() const;
 
-    };
+    private:
 
-    /**
-     * Loads an image from a file.
-     *
-     * This is basically the reverse of `write_image` from image-extractor,
-     * skipping all the data we don't care about.
-     */
-    Image loadImage(const std::string filename);
+        int width;
+        int height;
+        std::unique_ptr<std::vector<unsigned char>> data;
+
+    };
 
 }
 

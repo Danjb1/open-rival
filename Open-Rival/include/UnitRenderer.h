@@ -12,15 +12,15 @@ namespace Rival {
      */
     class UnitRenderer {
 
-    private:
-
-        const Texture& paletteTexture;
-
     public:
 
         UnitRenderer(Texture& paletteTexture);
 
         void render(std::map<int, std::unique_ptr<Unit>>& units) const;
+
+    private:
+
+        const Texture& paletteTexture;
 
     };
 
