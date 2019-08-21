@@ -9,6 +9,16 @@ namespace Rival {
 
     class Window {
 
+    public:
+
+        Window(const int width, const int height, const char* title);
+
+        ~Window();
+
+        void use();
+
+        void swapBuffers() const;
+
     private:
 
         SDL_Window* windowRef;
@@ -20,16 +30,6 @@ namespace Rival {
         int height;
 
         const char* title;
-
-    public:
-
-        Window(const int width, const int height, const char* title);
-
-        ~Window();
-
-        void use();
-
-        void swapBuffers() const;
 
     };
 

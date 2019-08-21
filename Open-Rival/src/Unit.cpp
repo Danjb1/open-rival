@@ -15,15 +15,17 @@ namespace Rival {
     }
 
     void Unit::rotateLeft() {
-        setFacing(facing - 1);
+        int newFacing = (static_cast<int>(facing) - 1) % 8;
+        setFacing(static_cast<Facing>(newFacing));
     }
 
     void Unit::rotateRight() {
-        setFacing(facing + 1);
+        int newFacing = (static_cast<int>(facing) + 1) % 8;
+        setFacing(static_cast<Facing>(newFacing));
     }
 
-    void Unit::setFacing(std::uint8_t newFacing) {
-        facing = newFacing % 8;
+    void Unit::setFacing(Facing newFacing) {
+        facing = newFacing;
     }
 
 }

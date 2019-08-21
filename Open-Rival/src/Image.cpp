@@ -31,7 +31,7 @@ namespace Rival {
         return data.get();
     }
 
-    Image loadImage(const std::string filename) {
+    Image Image::loadImage(const std::string filename) {
         std::cout << "Loading: " << filename << "\n";
 
         BinaryFileReader reader(filename);

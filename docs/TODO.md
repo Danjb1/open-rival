@@ -2,7 +2,6 @@
 
 ## Improvements
 
- - Create constants / enum for facing directions
  - Simplify / tidy up map iteration
  - Follow the Rule of Five
  - Separate Renderable from Unit class

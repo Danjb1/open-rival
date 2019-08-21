@@ -8,13 +8,18 @@ namespace Rival {
 
     class Unit {
 
-    private:
-
-        Renderable renderable;
-
-        std::uint8_t facing;
-
     public:
+
+        const enum Facing {
+            south,
+            southWest,
+            west,
+            northWest,
+            north,
+            northEast,
+            east,
+            southEast
+        };
 
         Unit(const Sprite& sprite);
 
@@ -22,11 +27,17 @@ namespace Rival {
 
         std::uint8_t getFacing() const;
 
-        void setFacing(std::uint8_t newFacing);
+        void setFacing(Facing facing);
 
         void rotateLeft();
 
         void rotateRight();
+
+    private:
+
+        Renderable renderable;
+
+        Facing facing = Facing::south;
 
     };
 

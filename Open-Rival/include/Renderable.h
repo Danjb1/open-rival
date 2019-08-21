@@ -10,18 +10,6 @@ namespace Rival {
      */
     class Renderable {
 
-    private:
-
-        const Sprite& sprite;
-
-        GLuint positionVbo = 0;
-
-        GLuint texCoordVbo = 0;
-
-        GLuint ibo = 0;
-
-        int txIndex = 0;
-
     public:
 
         Renderable(const Sprite&);
@@ -41,6 +29,18 @@ namespace Rival {
         int getTxIndex() const;
 
         void setTxIndex(int newTxIndex);
+
+    private:
+
+        const Sprite& sprite;
+
+        GLuint positionVbo = 0;
+
+        GLuint texCoordVbo = 0;
+
+        GLuint ibo = 0;
+
+        int txIndex = 0;
 
     };
 

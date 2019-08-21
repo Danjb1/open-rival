@@ -90,7 +90,7 @@ namespace Rival {
     Texture Rival::loadTexture(const std::string filename) const {
 
         // Load image data
-        Image img = loadImage(filename);
+        Image img = Image::loadImage(filename);
 
         // Generate texture
         GLuint textureId = 0;

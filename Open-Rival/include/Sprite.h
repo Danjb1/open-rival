@@ -14,6 +14,14 @@ namespace Rival {
      */
     class Sprite {
 
+    public:
+
+        const Texture& texture;
+
+        Sprite(const Texture&, const int width, const int height);
+
+        const std::vector<GLfloat> getTexCoords(const int index) const;
+
     private:
 
         // Width of one image within the texture
@@ -27,14 +35,6 @@ namespace Rival {
 
         // Number of rows in the texture
         const int ySize;
-
-    public:
-
-        const Texture& texture;
-
-        Sprite(const Texture&, const int width, const int height);
-
-        const std::vector<GLfloat> getTexCoords(const int index) const;
 
     };
 
