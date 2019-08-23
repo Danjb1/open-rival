@@ -9,8 +9,6 @@
 
 namespace Rival {
 
-    Rival::Rival() {}
-
     void Rival::initialize() {
         initSDL();
         window = std::make_unique<Window>(
