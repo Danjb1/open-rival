@@ -4,7 +4,7 @@
 namespace Rival {
 
     Renderable::Renderable(const Sprite& sprite) :
-        sprite(sprite) {
+            sprite(sprite) {
 
         glGenBuffers(1, &positionVbo);
         glGenBuffers(1, &ibo);
@@ -22,6 +22,7 @@ namespace Rival {
     }
 
     Renderable::~Renderable() {
+        std::cout << "destructor";
         glDeleteBuffers(1, &positionVbo);
         glDeleteBuffers(1, &ibo);
         glDeleteBuffers(1, &texCoordVbo);

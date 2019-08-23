@@ -4,7 +4,7 @@
 namespace Rival {
 
     Unit::Unit(const Sprite& sprite) :
-        renderable(Renderable(sprite)) {}
+        renderable(sprite) {}
 
     Renderable& Unit::getRenderable() {
         return renderable;

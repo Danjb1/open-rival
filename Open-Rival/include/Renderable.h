@@ -16,6 +16,11 @@ namespace Rival {
 
         ~Renderable();
 
+        Renderable(const Renderable& other) = delete;
+        Renderable(Renderable&& other) = delete;
+        Renderable& operator=(const Renderable& other) = delete;
+        Renderable& operator=(Renderable&& other) = delete;
+
         GLuint getPositionVbo() const;
 
         GLuint getTexCoordVbo() const;

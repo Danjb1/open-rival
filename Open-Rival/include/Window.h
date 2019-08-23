@@ -15,6 +15,11 @@ namespace Rival {
 
         ~Window();
 
+        Window(const Window& other) = delete;
+        Window(Window&& other) = delete;
+        Window& operator=(const Window& other) = delete;
+        Window& operator=(Window&& other) = delete;
+
         void use();
 
         void swapBuffers() const;

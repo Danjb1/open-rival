@@ -3,8 +3,9 @@
 ## Improvements
 
  - Simplify / tidy up map iteration
- - Follow the Rule of Five
  - Separate Renderable from Unit class
+ - Static code analysis
+ - Unit tests
 
 ## Features
 
@@ -34,15 +35,31 @@
     - BuildingType
     - ItemType
     - GameObject
-        - Unit
+        - Unit (Ground / Flying)
         - Building
         - Obstacle
         - Door
+        - Effect
+ - Scene organisation / traversal
+    - A single tile might have:
+        - Terrain
+        - Cropland
+        - A ground unit
+        - A flying unit
+        - An effect (such as a corpse animation)
+    - Ability to list all units
+    - Ability to get a unit by ID
+    - Ability to know which tile a given unit occupies
+    - Ability to know which GameObject and flying unit occupies a tile
+    - Ability to know the type of a tile
+    - Ability to deduce the passability of a tile
+    - Ability to list all effects
  - Game loop
 
 ### Game Logic
 
  - Use the Command Pattern to manipulate game state?
+ - Use the lockstep model for multiplayer?
  - Moving units to adjacent tiles
  - Pathfinding
  - Building

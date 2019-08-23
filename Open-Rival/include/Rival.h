@@ -18,8 +18,6 @@ namespace Rival {
 
     public:
 
-        Rival();
-
         /**
          * Initialises the game.
          */
