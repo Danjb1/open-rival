@@ -22,7 +22,6 @@ namespace Rival {
     }
 
     Renderable::~Renderable() {
-        std::cout << "destructor";
         glDeleteBuffers(1, &positionVbo);
         glDeleteBuffers(1, &ibo);
         glDeleteBuffers(1, &texCoordVbo);

@@ -2,8 +2,7 @@
 
 ## Improvements
 
- - Simplify / tidy up map iteration
- - Separate Renderable from Unit class
+ - Separate Sprite from Unit class
  - Static code analysis
  - Unit tests
 

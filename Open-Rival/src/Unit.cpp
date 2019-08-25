@@ -4,10 +4,14 @@
 namespace Rival {
 
     Unit::Unit(const Sprite& sprite) :
-        renderable(sprite) {}
+        sprite(sprite) {}
 
-    Renderable& Unit::getRenderable() {
-        return renderable;
+    void Unit::addedToScene(const int newId) {
+        id = newId;
+    }
+
+    const Sprite& Unit::getSprite() {
+        return sprite;
     }
 
     std::uint8_t Unit::getFacing() const {
@@ -26,6 +30,18 @@ namespace Rival {
 
     void Unit::setFacing(Facing newFacing) {
         facing = newFacing;
+    }
+
+    const bool Unit::isDeleted() {
+        return deleted;
+    }
+
+    void Unit::markForDeletion() {
+        deleted = true;
+    }
+
+    const int Unit::getId() {
+        return id;
     }
 
 }

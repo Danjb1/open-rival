@@ -16,6 +16,7 @@ namespace Rival {
 
         ~Renderable();
 
+        // Disable moving / copying
         Renderable(const Renderable& other) = delete;
         Renderable(Renderable&& other) = delete;
         Renderable& operator=(const Renderable& other) = delete;
