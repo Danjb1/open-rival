@@ -11,14 +11,41 @@ namespace Rival {
     UnitRenderer::UnitRenderer(Texture& paletteTexture) :
         paletteTexture(paletteTexture) {}
 
-    void UnitRenderer::render(std::map<int, std::unique_ptr<Unit>>& units) const {
+    Renderable& UnitRenderer::getOrCreateRenderable(
+                const std::unique_ptr<Unit>& unit) {
+
+        int id = unit->getId();
+
+        if (renderables.find(id) == renderables.end()) {
+            // No Renderable exists for this Unit; create one
+            const Sprite& sprite = unit->getSprite();
+            renderables.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(id),
+                    std::forward_as_tuple(sprite));
+        }
+
+        return renderables.at(id);
+    }
+
+    void UnitRenderer::render(std::map<int, std::unique_ptr<Unit>>& units) {
 
         // Use shader
         glUseProgram(textureShader.programId);
 
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
-            Renderable& renderable = unit->getRenderable();
+
+            // If Unit is deleted, remove the associated Renderable
+            if (unit->isDeleted()) {
+                renderables.erase(unit->getId());
+                continue;
+            }
+
+            // Get (or create) the Renderable for this Unit
+            Renderable& renderable = getOrCreateRenderable(unit);
+
+            // Set the txIndex as appropriate
+            renderable.setTxIndex(unit->getFacing());
 
             // Define vertex positions
             std::vector<GLfloat> vertexData = {

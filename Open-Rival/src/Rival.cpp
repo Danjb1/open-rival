@@ -146,7 +146,6 @@ namespace Rival {
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
             unit->rotateRight();
-            unit->getRenderable().setTxIndex(unit->getFacing());
         }
     }
 
