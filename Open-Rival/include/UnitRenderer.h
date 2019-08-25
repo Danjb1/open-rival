@@ -9,6 +9,9 @@ namespace Rival {
 
     /**
      * Class responsible for rendering Units.
+     *
+     * It creates a Renderable for each Unit, and holds onto the reference
+     * until that Unit is deleted.
      */
     class UnitRenderer {
 
@@ -16,11 +19,16 @@ namespace Rival {
 
         UnitRenderer(Texture& paletteTexture);
 
-        void render(std::map<int, std::unique_ptr<Unit>>& units) const;
+        void render(std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
 
         const Texture& paletteTexture;
+
+        std::map<int, Renderable> renderables;
+
+        Renderable& getOrCreateRenderable(
+                const std::unique_ptr<Unit>& unit);
 
     };
 

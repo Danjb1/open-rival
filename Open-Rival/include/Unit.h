@@ -23,19 +23,31 @@ namespace Rival {
 
         Unit(const Sprite& sprite);
 
-        Renderable& getRenderable();
+        void addedToScene(const int newId);
+
+        const Sprite& getSprite();
 
         std::uint8_t getFacing() const;
 
-        void setFacing(Facing facing);
+        void setFacing(Facing newFacing);
 
         void rotateLeft();
 
         void rotateRight();
 
+        const bool isDeleted();
+
+        void markForDeletion();
+
+        const int getId();
+
     private:
 
-        Renderable renderable;
+        int id = -1;
+
+        bool deleted = false;
+
+        const Sprite& sprite;
 
         Facing facing = Facing::south;
 

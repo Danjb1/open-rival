@@ -19,6 +19,8 @@ namespace Rival {
 
     private:
 
+        int nextId;
+
         std::map<int, std::unique_ptr<Unit>> units;
 
     };
