@@ -33,9 +33,12 @@ namespace Rival {
         const int windowWidth = 800;
         const int windowHeight = 600;
         const char* windowTitle = "Rival Realms";
+        const int numTextures = 50;
 
-        std::unique_ptr<std::vector<Texture>> textures;
-        std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites;
+        std::unique_ptr<std::vector<Texture>> textures =
+                std::make_unique<std::vector<Texture>>();
+        std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites =
+                std::make_unique<std::map<Unit::Type, Sprite>>();
         std::unique_ptr<Texture> paletteTexture;
         std::unique_ptr<Scene> scene;
         std::unique_ptr<UnitRenderer> unitRenderer;
@@ -51,19 +54,29 @@ namespace Rival {
         SDL_Renderer* renderer = nullptr;
 
         /**
-         * Initialises SDL.
+         * Initializes SDL.
          */
         void initSDL() const;
 
         /**
-         * Initialises GLEW.
+         * Initializes GLEW.
          */
         void initGLEW() const;
 
         /**
-         * Initialises OpenGL.
+         * Initializes OpenGL.
          */
         void initGL();
+
+        /**
+         * Loads the Textures and initializes the Sprites.
+         */
+        void initSprites();
+
+        /**
+         * Loads a Unit's Texture and initializes its Sprite.
+         */
+        void loadUnit(Unit::Type type, std::string imageFilename);
 
         /**
          * Loads the game's textures.
