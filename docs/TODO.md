@@ -2,7 +2,7 @@
 
 ## Improvements
 
- - Separate Sprite from Unit class
+ - Textures are never deleted
  - Static code analysis
  - Unit tests
 
