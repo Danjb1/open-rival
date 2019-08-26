@@ -20,11 +20,6 @@ namespace Rival {
 
         Sprite(const Texture&, const int width, const int height);
 
-        Sprite(const Sprite& other) = delete;
-        Sprite(Sprite&& other) = delete;
-        Sprite& operator=(const Sprite& other) = delete;
-        Sprite& operator=(Sprite&& other) = delete;
-
         const std::vector<GLfloat> getTexCoords(const int index) const;
 
     private:

@@ -10,24 +10,75 @@ namespace Rival {
 
     public:
 
-        const enum Facing {
-            south,
-            southWest,
-            west,
-            northWest,
-            north,
-            northEast,
-            east,
-            southEast
+        const enum Type {
+
+            // Human
+            Peasant,
+            Bowman,
+            LightCavalry,
+            Knight,
+            FireMaster,
+            Thief,
+            Ballista,
+            ChariotofWar,
+            Wizard,
+            Priest,
+            SeaBarge,
+            Battleship,
+            PegasRider,
+            Zeppelin,
+
+            // Greenskin
+            Serf,
+            RockThrower,
+            HordeRider,
+            Warlord,
+            GnomeBoomer,
+            Rogue,
+            Catapult,
+            StormTrooper,
+            PriestofDoom,
+            Necromancer,
+            LandingCraft,
+            TrollGalley,
+            Warbat,
+            Balloon,
+
+            // Elf
+            Yeoman,
+            Archer,
+            Druid,
+            Centaur,
+            DwarfMiner,
+            Scout,
+            Bombard,
+            Arquebusier,
+            Mage,
+            Enchanter,
+            Bark,
+            Warship,
+            SkyRider,
+            MagicChopper
         };
 
-        Unit(const Sprite& sprite);
+        const enum Facing {
+            South,
+            SouthWest,
+            West,
+            NorthWest,
+            North,
+            NorthEast,
+            East,
+            SouthEast
+        };
+
+        Unit(const Type type);
 
         void addedToScene(const int newId);
 
-        const Sprite& getSprite();
+        const Type getType() const;
 
-        std::uint8_t getFacing() const;
+        const Facing getFacing() const;
 
         void setFacing(Facing newFacing);
 
@@ -45,11 +96,11 @@ namespace Rival {
 
         int id = -1;
 
+        Type type;
+
         bool deleted = false;
 
-        const Sprite& sprite;
-
-        Facing facing = Facing::south;
+        Facing facing = Facing::South;
 
     };
 

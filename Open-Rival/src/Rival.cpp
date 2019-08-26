@@ -18,23 +18,30 @@ namespace Rival {
         initGL();
 
         // Load Textures
-        texture = std::make_unique<Texture>(
-                loadTexture("res\\textures\\unit_human_knight.tga"));
+        textures = std::make_unique<std::vector<Texture>>();
+        textures->push_back(loadTexture("res\\textures\\unit_human_knight.tga"));
+
+        // Define Unit Sprites
+        unitSprites = std::make_unique<std::map<Unit::Type, Sprite>>();
+        unitSprites->emplace(std::piecewise_construct,
+            std::forward_as_tuple(Unit::Type::Knight),
+            std::forward_as_tuple(textures->at(0), 128, 128));
+
+        // Initialize Palette Texture
         paletteTexture = std::make_unique<Texture>(
                 createPaletteTexture());
-
-        // Define Sprites
-        sprite = std::make_unique<Sprite>(*texture, 128, 128);
 
         // Create the Scene
         scene = std::make_unique<Scene>();
 
         // Add a Unit
-        std::unique_ptr<Unit> unit = std::make_unique<Unit>(*sprite.get());
+        std::unique_ptr<Unit> unit = std::make_unique<Unit>(Unit::Type::Knight);
         scene->addUnit(std::move(unit));
 
         // Create the UnitRenderer
-        unitRenderer = std::make_unique<UnitRenderer>(*paletteTexture.get());
+        unitRenderer = std::make_unique<UnitRenderer>(
+                *unitSprites.get(),
+                *paletteTexture.get());
     }
 
     void Rival::initSDL() const {
@@ -85,7 +92,7 @@ namespace Rival {
         initialiseShaders();
     }
 
-    Texture Rival::loadTexture(const std::string filename) const {
+    const Texture Rival::loadTexture(const std::string filename) const {
 
         // Load image data
         Image img = Image::loadImage(filename);

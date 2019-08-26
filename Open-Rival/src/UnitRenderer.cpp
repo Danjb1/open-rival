@@ -8,7 +8,10 @@
 
 namespace Rival {
 
-    UnitRenderer::UnitRenderer(Texture& paletteTexture) :
+    UnitRenderer::UnitRenderer(
+            std::map<Unit::Type, Sprite>& unitSprites,
+            Texture& paletteTexture) :
+        unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
     Renderable& UnitRenderer::getOrCreateRenderable(
@@ -18,7 +21,8 @@ namespace Rival {
 
         if (renderables.find(id) == renderables.end()) {
             // No Renderable exists for this Unit; create one
-            const Sprite& sprite = unit->getSprite();
+            const Unit::Type type = unit->getType();
+            const Sprite& sprite = unitSprites.at(type);
             renderables.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id),
                     std::forward_as_tuple(sprite));
