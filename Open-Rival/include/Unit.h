@@ -20,7 +20,7 @@ namespace Rival {
             FireMaster,
             Thief,
             Ballista,
-            ChariotofWar,
+            ChariotOfWar,
             Wizard,
             Priest,
             SeaBarge,
@@ -37,7 +37,7 @@ namespace Rival {
             Rogue,
             Catapult,
             StormTrooper,
-            PriestofDoom,
+            PriestOfDoom,
             Necromancer,
             LandingCraft,
             TrollGalley,
@@ -58,7 +58,17 @@ namespace Rival {
             Bark,
             Warship,
             SkyRider,
-            MagicChopper
+            MagicChopper,
+
+            // Monsters
+            Devil,
+            Dragon,
+            Golem,
+            Gryphon,
+            Hydra,
+            SeaMonster,
+            Skeleton,
+            Snake
         };
 
         const enum Facing {
