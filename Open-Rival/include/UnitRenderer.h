@@ -2,6 +2,7 @@
 #define UNIT_RENDERER_H
 
 #include <map>
+#include <string>
 
 #include "Unit.h"
 
@@ -17,11 +18,15 @@ namespace Rival {
 
     public:
 
-        UnitRenderer(Texture& paletteTexture);
+        UnitRenderer(
+                std::map<Unit::Type, Sprite>& unitSprites,
+                Texture& paletteTexture);
 
         void render(std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
+
+        const std::map<Unit::Type, Sprite>& unitSprites;
 
         const Texture& paletteTexture;
 

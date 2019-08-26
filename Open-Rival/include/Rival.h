@@ -34,8 +34,8 @@ namespace Rival {
         const int windowHeight = 600;
         const char* windowTitle = "Rival Realms";
 
-        std::unique_ptr<Texture> texture;
-        std::unique_ptr<Sprite> sprite;
+        std::unique_ptr<std::vector<Texture>> textures;
+        std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites;
         std::unique_ptr<Texture> paletteTexture;
         std::unique_ptr<Scene> scene;
         std::unique_ptr<UnitRenderer> unitRenderer;
@@ -68,7 +68,7 @@ namespace Rival {
         /**
          * Loads the game's textures.
          */
-        Texture loadTexture(const std::string filename) const;
+        const Texture loadTexture(const std::string filename) const;
 
         /**
          * Handles keyDown events.

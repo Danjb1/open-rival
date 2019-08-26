@@ -3,18 +3,18 @@
 
 namespace Rival {
 
-    Unit::Unit(const Sprite& sprite) :
-        sprite(sprite) {}
+    Unit::Unit(const Type type) :
+        type(type) {}
 
     void Unit::addedToScene(const int newId) {
         id = newId;
     }
 
-    const Sprite& Unit::getSprite() {
-        return sprite;
+    const Unit::Type Unit::getType() const {
+        return type;
     }
 
-    std::uint8_t Unit::getFacing() const {
+    const Unit::Facing Unit::getFacing() const {
         return facing;
     }
 
