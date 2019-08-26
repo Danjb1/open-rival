@@ -10,22 +10,24 @@
 namespace Rival {
 
     void Rival::initialize() {
+
+        // Initialize SDL
         initSDL();
+
+        // Create the Window
         window = std::make_unique<Window>(
                 windowWidth, windowHeight, windowTitle);
         window->use();
+
+        // Initialize OpenGL
         initGLEW();
         initGL();
 
-        // Load Textures
-        textures = std::make_unique<std::vector<Texture>>();
-        textures->push_back(loadTexture("res\\textures\\unit_human_knight.tga"));
+        // Allocate space for Textures
+        textures->reserve(numTextures);
 
-        // Define Unit Sprites
-        unitSprites = std::make_unique<std::map<Unit::Type, Sprite>>();
-        unitSprites->emplace(std::piecewise_construct,
-            std::forward_as_tuple(Unit::Type::Knight),
-            std::forward_as_tuple(textures->at(0), 128, 128));
+        // Initialize Sprites
+        initSprites();
 
         // Initialize Palette Texture
         paletteTexture = std::make_unique<Texture>(
@@ -34,9 +36,8 @@ namespace Rival {
         // Create the Scene
         scene = std::make_unique<Scene>();
 
-        // Add a Unit
-        std::unique_ptr<Unit> unit = std::make_unique<Unit>(Unit::Type::Knight);
-        scene->addUnit(std::move(unit));
+        // Add Units
+        scene->addUnit(std::make_unique<Unit>(Unit::Type::Knight));
 
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
@@ -90,6 +91,75 @@ namespace Rival {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         initialiseShaders();
+    }
+
+    void Rival::initSprites() {
+
+        // Human
+        loadUnit(Unit::Type::Ballista, "unit_human_ballista.tga");
+        loadUnit(Unit::Type::Battleship, "unit_human_battleship.tga");
+        loadUnit(Unit::Type::Bowman, "unit_human_bowman.tga");
+        loadUnit(Unit::Type::ChariotOfWar, "unit_human_chariot_of_war.tga");
+        loadUnit(Unit::Type::FireMaster, "unit_human_fire_master.tga");
+        loadUnit(Unit::Type::Knight, "unit_human_knight.tga");
+        loadUnit(Unit::Type::LightCavalry, "unit_human_light_cavalry.tga");
+        loadUnit(Unit::Type::Peasant, "unit_human_peasant.tga");
+        loadUnit(Unit::Type::PegasRider, "unit_human_pegas_rider.tga");
+        loadUnit(Unit::Type::Priest, "unit_human_priest.tga");
+        loadUnit(Unit::Type::SeaBarge, "unit_human_sea_barge.tga");
+        loadUnit(Unit::Type::Thief, "unit_human_thief.tga");
+        loadUnit(Unit::Type::Wizard, "unit_human_wizard.tga");
+        loadUnit(Unit::Type::Zeppelin, "unit_human_zeppelin.tga");
+
+        // Greenskin
+        loadUnit(Unit::Type::Balloon, "unit_greenskin_balloon.tga");
+        loadUnit(Unit::Type::Catapult, "unit_greenskin_catapult.tga");
+        loadUnit(Unit::Type::GnomeBoomer, "unit_greenskin_gnome_boomer.tga");
+        loadUnit(Unit::Type::HordeRider, "unit_greenskin_horde_rider.tga");
+        loadUnit(Unit::Type::LandingCraft, "unit_greenskin_landing_craft.tga");
+        loadUnit(Unit::Type::Necromancer, "unit_greenskin_necromancer.tga");
+        loadUnit(Unit::Type::PriestOfDoom, "unit_greenskin_priest_of_doom.tga");
+        loadUnit(Unit::Type::RockThrower, "unit_greenskin_rock_thrower.tga");
+        loadUnit(Unit::Type::Rogue, "unit_greenskin_rogue.tga");
+        loadUnit(Unit::Type::Serf, "unit_greenskin_serf.tga");
+        loadUnit(Unit::Type::StormTrooper, "unit_greenskin_storm_trooper.tga");
+        loadUnit(Unit::Type::TrollGalley, "unit_greenskin_troll_galley.tga");
+        loadUnit(Unit::Type::Warbat, "unit_greenskin_warbat.tga");
+        loadUnit(Unit::Type::Warlord, "unit_greenskin_warlord.tga");
+
+        // Elf
+        loadUnit(Unit::Type::Archer, "unit_elf_archer.tga");
+        loadUnit(Unit::Type::Arquebusier, "unit_elf_arquebusier.tga");
+        loadUnit(Unit::Type::Bark, "unit_elf_bark.tga");
+        loadUnit(Unit::Type::Bombard, "unit_elf_bombard.tga");
+        loadUnit(Unit::Type::Centaur, "unit_elf_centaur.tga");
+        loadUnit(Unit::Type::Druid, "unit_elf_druid.tga");
+        loadUnit(Unit::Type::DwarfMiner, "unit_elf_dwarf_miner.tga");
+        loadUnit(Unit::Type::Enchanter, "unit_elf_enchanter.tga");
+        loadUnit(Unit::Type::Mage, "unit_elf_mage.tga");
+        loadUnit(Unit::Type::MagicChopper, "unit_elf_magic_chopper.tga");
+        loadUnit(Unit::Type::Scout, "unit_elf_scout.tga");
+        loadUnit(Unit::Type::SkyRider, "unit_elf_sky_rider.tga");
+        loadUnit(Unit::Type::Warship, "unit_elf_warship.tga");
+        loadUnit(Unit::Type::Yeoman, "unit_elf_yeoman.tga");
+
+        // Monsters
+        loadUnit(Unit::Type::Devil, "unit_monster_devil.tga");
+        loadUnit(Unit::Type::Dragon, "unit_monster_dragon.tga");
+        loadUnit(Unit::Type::Golem, "unit_monster_golem.tga");
+        loadUnit(Unit::Type::Gryphon, "unit_monster_gryphon.tga");
+        loadUnit(Unit::Type::Hydra, "unit_monster_hydra.tga");
+        loadUnit(Unit::Type::SeaMonster, "unit_monster_sea_monster.tga");
+        loadUnit(Unit::Type::Skeleton, "unit_monster_skeleton.tga");
+        loadUnit(Unit::Type::Snake, "unit_monster_snake.tga");
+    }
+
+    void Rival::loadUnit(Unit::Type type, std::string imageFilename) {
+        textures->push_back(loadTexture("res\\textures\\" + imageFilename));
+        int index = textures->size() - 1;
+        unitSprites->emplace(std::piecewise_construct,
+            std::forward_as_tuple(type),
+            std::forward_as_tuple(textures->at(index), 128, 128));
     }
 
     const Texture Rival::loadTexture(const std::string filename) const {
