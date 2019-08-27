@@ -37,7 +37,7 @@ namespace Rival {
         scene = std::make_unique<Scene>();
 
         // Add Units
-        scene->addUnit(std::make_unique<Unit>(Unit::Type::Knight));
+        scene->addUnit(std::make_unique<Unit>(Unit::Type::Knight, 0, 0));
 
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(

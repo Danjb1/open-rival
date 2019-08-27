@@ -15,6 +15,8 @@ namespace Rival {
 
         textureShader = TextureShader();
         textureShader.programId = programId;
+        textureShader.viewProjMatrixUniformLocation =
+                glGetUniformLocation(programId, "view_proj_matrix");
         textureShader.vertexAttribLocation =
                 glGetAttribLocation(programId, "in_vertex");
         textureShader.texCoordAttribLocation =

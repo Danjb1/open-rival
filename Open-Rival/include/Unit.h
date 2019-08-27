@@ -82,7 +82,7 @@ namespace Rival {
             SouthEast
         };
 
-        Unit(const Type type);
+        Unit(const Type type, int x, int y);
 
         void addedToScene(const int newId);
 
@@ -102,6 +102,10 @@ namespace Rival {
 
         const int getId();
 
+        const int getX() const;
+
+        const int getY() const;
+
     private:
 
         int id = -1;
@@ -109,6 +113,10 @@ namespace Rival {
         Type type;
 
         bool deleted = false;
+
+        int x;
+
+        int y;
 
         Facing facing = Facing::South;
 

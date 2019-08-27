@@ -10,6 +10,8 @@ These tutorials describe how to install each of our dependencies:
 
  - [SDL2](http://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
 
+ - [GLM](https://github.com/g-truc/glm/blob/master/manual.md#-1-getting-started)
+
 ## Directory Structure
 
 These dependencies should be placed in the `libs` folder:
@@ -23,6 +25,7 @@ These dependencies should be placed in the `libs` folder:
 
     libs/SDL2-2.0.8/include
     libs/glew-2.1.0/include
+    libs/glm-0.9.9.5
 
 ## Library Directories
 
