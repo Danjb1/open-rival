@@ -12,7 +12,12 @@ namespace Rival {
 
         // Create IBO once, as this never changes
         // 4 vertices required to render a quad using GL_TRIANGLE_FAN
-        const std::vector<GLuint> indexData = { 0, 1, 2, 3 };
+        // We traverse them counter-clockwise to ensure they face forward:
+        //    0------1
+        //    | \    |
+        //    |   \..|
+        //    3----- 2
+        const std::vector<GLuint> indexData = { 0, 3, 2, 1 };
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(
             GL_ELEMENT_ARRAY_BUFFER,
