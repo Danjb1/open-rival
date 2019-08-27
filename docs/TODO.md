@@ -79,7 +79,7 @@
 
 ### Rendering
 
- - Translate unit position VBOs based on their position
+ - Use orthographic projection
  - Camera class
  - Shader used for mouse picking
  - Render Interface

@@ -61,6 +61,15 @@ namespace Rival {
                     4.0f / 3.0f,            // aspect
                     0.1f,                   // near
                     100.f);                 // far
+
+            /*
+            glm::mat4 projection = glm::ortho(
+                -10,    // left
+                10,     // right
+                10,     // bottom
+                -10);   // top
+            */
+
             glm::mat4 view = glm::translate(
                     glm::mat4(1.0f),
                     glm::vec3(0.0f, 0.0f, -1.0f));
@@ -68,11 +77,15 @@ namespace Rival {
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
+            float x1 = static_cast<float>(unit->getX()) -0.5f;
+            float y1 = static_cast<float>(unit->getY()) - 0.5f;
+            float x2 = static_cast<float>(unit->getX()) + 0.5f;
+            float y2 = static_cast<float>(unit->getY()) + 0.5f;
             std::vector<GLfloat> vertexData = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f,  0.5f,
-                -0.5f,  0.5f
+                x1, y1,
+                x2, y1,
+                x2, y2,
+                x1, y2
             };
 
             // Determine texture co-ordinates
