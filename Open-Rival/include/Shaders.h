@@ -7,11 +7,20 @@ namespace Rival {
 
     class TextureShader {
     public:
+
         GLuint programId;
+
+        // Vertex shader uniforms
+        GLint viewProjMatrixUniformLocation;
+
+        // Vertex shader attributes
         GLint vertexAttribLocation;
         GLint texCoordAttribLocation;
+
+        // Fragment shader uniforms
         GLint texUnitUniformLocation;
         GLint paletteTexUnitUniformLocation;
+
         bool isValid() const;
     };
 
