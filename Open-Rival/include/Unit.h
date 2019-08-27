@@ -102,9 +102,9 @@ namespace Rival {
 
         const int getId();
 
-        const int getX() const;
+        int getX() const;
 
-        const int getY() const;
+        int getY() const;
 
     private:
 

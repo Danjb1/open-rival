@@ -16,6 +16,10 @@ namespace Rival {
 
     public:
 
+        // Size of a single Unit image, in pixels
+        static const int unitWidthPx = 128;
+        static const int unitHeightPx = 128;
+
         const Texture& texture;
 
         Sprite(const Texture&, const int width, const int height);

@@ -6,7 +6,8 @@ namespace Rival {
     Unit::Unit(const Type type, int x, int y) :
         type(type),
         x(x),
-        y(y) {}
+        y(y) {
+    }
 
     void Unit::addedToScene(const int newId) {
         id = newId;
@@ -44,6 +45,14 @@ namespace Rival {
 
     const int Unit::getId() {
         return id;
+    }
+
+    int Unit::getX() const {
+        return x;
+    }
+
+    int Unit::getY() const {
+        return y;
     }
 
 }

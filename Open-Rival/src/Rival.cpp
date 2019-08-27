@@ -159,7 +159,10 @@ namespace Rival {
         int index = textures->size() - 1;
         unitSprites->emplace(std::piecewise_construct,
             std::forward_as_tuple(type),
-            std::forward_as_tuple(textures->at(index), 128, 128));
+            std::forward_as_tuple(
+                    textures->at(index),
+                    Sprite::unitWidthPx,
+                    Sprite::unitHeightPx));
     }
 
     const Texture Rival::loadTexture(const std::string filename) const {
