@@ -2,6 +2,7 @@
 
 ## Improvements
 
+ - Unit is rendered in top-left when it should be bottom-right
  - Static code analysis
  - Unit tests
 
@@ -79,8 +80,8 @@
 
 ### Rendering
 
- - Use orthographic projection
  - Camera class
+ - Default to pixel-perfect scale (dependent on ortho projection and camera position!)
  - Shader used for mouse picking
  - Render Interface
  - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))
