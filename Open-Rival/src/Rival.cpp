@@ -241,6 +241,7 @@ namespace Rival {
             const GLuint texId = texture.getId();
             glDeleteTextures(1, &texId);
         }
+        textures->clear();
 
         // Quit SDL
         SDL_Quit();
