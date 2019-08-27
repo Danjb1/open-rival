@@ -11,11 +11,11 @@ namespace Rival {
 
         Texture(const GLuint id, const int width, const int height);
 
-        GLuint getId() const;
+        const GLuint getId() const;
 
-        int getWidth() const;
+        const int getWidth() const;
 
-        int getHeight() const;
+        const int getHeight() const;
 
     private:
 

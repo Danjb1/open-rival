@@ -8,15 +8,15 @@ namespace Rival {
         width(width),
         height(height) {}
 
-    GLuint Texture::getId() const {
+    const GLuint Texture::getId() const {
         return id;
     }
 
-    int Texture::getWidth() const {
+    const int Texture::getWidth() const {
         return width;
     }
 
-    int Texture::getHeight() const {
+    const int Texture::getHeight() const {
         return height;
     }
 

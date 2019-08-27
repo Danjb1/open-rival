@@ -236,6 +236,12 @@ namespace Rival {
         // Destroy window
         window.reset();
 
+        // Delete Textures
+        for (Texture& texture : *textures.get()) {
+            const GLuint texId = texture.getId();
+            glDeleteTextures(1, &texId);
+        }
+
         // Quit SDL
         SDL_Quit();
     }

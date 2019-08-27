@@ -2,7 +2,6 @@
 
 ## Improvements
 
- - Textures are never deleted
  - Static code analysis
  - Unit tests
 
