@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "UnitRenderer.h"
 
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <map>
 
 #include "Palette.h"
@@ -51,6 +55,18 @@ namespace Rival {
             // Set the txIndex as appropriate
             renderable.setTxIndex(unit->getFacing());
 
+            // Determine view-projection matrix
+            glm::mat4 projection = glm::perspective(
+                    glm::radians(45.0f),    // fovy
+                    4.0f / 3.0f,            // aspect
+                    0.1f,                   // near
+                    100.f);                 // far
+            glm::mat4 view = glm::translate(
+                    glm::mat4(1.0f),
+                    glm::vec3(0.0f, 0.0f, -1.0f));
+
+            glm::mat4 viewProjMatrix = projection * view;
+
             // Define vertex positions
             std::vector<GLfloat> vertexData = {
                 -0.5f, -0.5f,
@@ -84,12 +100,20 @@ namespace Rival {
             glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
             glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
-            // Prepare
+            // Enable vertex attributes
             glEnableVertexAttribArray(textureShader.vertexAttribLocation);
             glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
+
+            // Set uniform values
+            glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
+                    1, GL_FALSE, &viewProjMatrix[0][0]);
             glUniform1i(textureShader.texUnitUniformLocation, 0);
             glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
+
+            // Use vertex position VBO
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
+
+            // Define vertex position VBO data format
             glVertexAttribPointer(
                 textureShader.vertexAttribLocation,
                 2,
@@ -97,7 +121,11 @@ namespace Rival {
                 GL_FALSE,
                 2 * sizeof(GLfloat),
                 nullptr);
+
+            // Use texture co-ordinate VBO
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
+
+            // Define texture co-ordinate VBO data format
             glVertexAttribPointer(
                 textureShader.texCoordAttribLocation,
                 2,

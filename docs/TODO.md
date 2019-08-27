@@ -79,6 +79,8 @@
 
 ### Rendering
 
+ - Translate unit position VBOs based on their position
+ - Camera class
  - Shader used for mouse picking
  - Render Interface
  - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))
