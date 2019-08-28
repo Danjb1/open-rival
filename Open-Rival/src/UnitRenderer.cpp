@@ -56,19 +56,24 @@ namespace Rival {
 
             // Determine view-projection matrix
             glm::mat4 projection = glm::ortho(
-                -2.0f,    // left
-                2.0f,     // right
-                2.0f,     // bottom
-                -2.0f);   // top
+                -3.0f,    // left
+                3.0f,     // right
+                3.0f,     // bottom
+                -3.0f);   // top
+
+            // Right handed rule:
+            // x points right
+            // y points down
+            // z points into the screen
             glm::mat4 view = glm::lookAt(
-                glm::vec3(0, 0, 1),     // camera position
+                glm::vec3(0, 0, -1),    // camera position
                 glm::vec3(0, 0, 0),     // look at
                 glm::vec3(0, -1, 0)     // up vector
             );
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
-            float x1 = static_cast<float>(unit->getX()) -0.5f;
+            float x1 = static_cast<float>(unit->getX()) - 0.5f;
             float y1 = static_cast<float>(unit->getY()) - 0.5f;
             float x2 = static_cast<float>(unit->getX()) + 0.5f;
             float y2 = static_cast<float>(unit->getY()) + 0.5f;
