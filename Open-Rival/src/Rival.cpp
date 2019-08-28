@@ -37,6 +37,7 @@ namespace Rival {
         scene = std::make_unique<Scene>();
 
         // Add Units
+        scene->addUnit(std::make_unique<Unit>(Unit::Type::LightCavalry, 0, 0));
         scene->addUnit(std::make_unique<Unit>(Unit::Type::Knight, 1, 1));
 
         // Create the UnitRenderer
@@ -84,7 +85,7 @@ namespace Rival {
         glClearColor(0.5f, 0.5f, 1.f, 1.f);
 
         // Enable back-face culling
-        glEnable(GL_CULL_FACE);
+        //glEnable(GL_CULL_FACE);
 
         // Enable texturing
         glEnable(GL_TEXTURE_2D);
