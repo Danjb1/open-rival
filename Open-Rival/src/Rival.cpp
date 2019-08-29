@@ -9,6 +9,10 @@
 
 namespace Rival {
 
+    // TMP:
+    std::vector<int> tiles(100, 0);
+    std::map<int, Sprite> tileSprites;
+
     void Rival::initialize() {
 
         // Initialize SDL
@@ -45,6 +49,19 @@ namespace Rival {
         unitRenderer = std::make_unique<UnitRenderer>(
                 *unitSprites.get(),
                 *paletteTexture.get());
+
+        // Create the TileRenderer
+        textures->push_back(loadTexture("res\\textures\\tiles_meadow.tga"));
+        int index = textures->size() - 1;
+        tileSprites.emplace(std::piecewise_construct,
+            std::forward_as_tuple(0),
+            std::forward_as_tuple(
+                textures->at(index),
+                Sprite::tileWidthPx,
+                Sprite::tileHeightPx));
+        tileRenderer = std::make_unique<TileRenderer>(
+            tileSprites,
+            *paletteTexture.get());
     }
 
     void Rival::initSDL() const {
@@ -237,6 +254,7 @@ namespace Rival {
 
     void Rival::render() {
         glClear(GL_COLOR_BUFFER_BIT);
+        tileRenderer->render(tiles);
         unitRenderer->render(scene->getUnits());
     }
 

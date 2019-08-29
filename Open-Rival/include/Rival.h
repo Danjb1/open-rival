@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "Texture.h"
+#include "TileRenderer.h"
 #include "UnitRenderer.h"
 #include "Window.h"
 
@@ -34,7 +35,7 @@ namespace Rival {
     private:
 
         const char* windowTitle = "Rival Realms";
-        const int numTextures = 50;
+        const int numTextures = 51;
 
         std::unique_ptr<std::vector<Texture>> textures =
                 std::make_unique<std::vector<Texture>>();
@@ -42,6 +43,7 @@ namespace Rival {
                 std::make_unique<std::map<Unit::Type, Sprite>>();
         std::unique_ptr<Texture> paletteTexture;
         std::unique_ptr<Scene> scene;
+        std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
 
         /**
