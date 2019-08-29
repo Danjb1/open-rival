@@ -2,7 +2,6 @@
 
 ## Improvements
 
- - Unit at (0, 0) is not visible
  - Static code analysis
  - Unit tests
 
