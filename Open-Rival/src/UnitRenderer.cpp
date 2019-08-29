@@ -83,8 +83,8 @@ namespace Rival {
             // Define vertex positions
             float width = static_cast<float>(Sprite::unitWidthPx);
             float height = static_cast<float>(Sprite::unitHeightPx);
-            float x = getUnitX(*unit.get());
-            float y = getUnitY(*unit.get());
+            float x = getUnitRenderPosX(*unit.get());
+            float y = getUnitRenderPosY(*unit.get());
             float x1 = x;
             float y1 = y;
             float x2 = x + width;

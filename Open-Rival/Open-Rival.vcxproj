@@ -28,11 +28,13 @@
     </ClCompile>
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Rival.cpp" />
+    <ClCompile Include="src\Scenario.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TileRenderer.cpp" />
     <ClCompile Include="src\Unit.cpp" />
     <ClCompile Include="src\UnitRenderer.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -44,11 +46,13 @@
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Renderable.h" />
     <ClInclude Include="include\Rival.h" />
+    <ClInclude Include="include\Scenario.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\TileRenderer.h" />
     <ClInclude Include="include\Unit.h" />
     <ClInclude Include="include\UnitRenderer.h" />
     <ClInclude Include="include\Window.h" />
