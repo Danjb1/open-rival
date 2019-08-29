@@ -3,9 +3,12 @@
 ## Improvements
 
  - Refactor "TMP" variables in Rival.cpp
- - Render Tiles at the correct positions
- - Create Tile Renderables once and re-use them
+ - Render all Tiles in one draw call
+ - Don't recreate Tile Renderables every frame
+ - Add support for animated tiles
+ - Simplify for-loop iteration with index
  - Share view matrix between Renderer classes
+ - Render Units at the correct positions
  - Static code analysis
  - Unit tests
 

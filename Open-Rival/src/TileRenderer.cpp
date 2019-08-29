@@ -23,11 +23,13 @@ namespace Rival {
         // Use shader
         glUseProgram(textureShader.programId);
 
-        for (auto i = tiles.begin(); i != tiles.end(); ++i) {
+        int i = 0;
+        for (int& tile : tiles) {
 
-            const int tile = tiles[*i];
-            int tileX = tile % 10; // where 10 is level width
-            int tileY = tile / 10;
+            const int tile = tiles[i];
+            int tileX = i % 10; // where 10 is level width
+            int tileY = i / 10;
+            i++;
 
             // Get the Renderable for this Tile
             const Sprite& sprite = tileSprites.at(tile);
@@ -58,7 +60,7 @@ namespace Rival {
             // Define vertex positions
             float width = static_cast<float>(Sprite::tileWidthPx);
             float height = static_cast<float>(Sprite::tileHeightPx);
-            float x = getTileRenderPosX(tileX);
+            float x = getTileRenderPosX(tileX, tileY);
             float y = getTileRenderPosY(tileY);
             float x1 = x;
             float y1 = y;
@@ -149,12 +151,16 @@ namespace Rival {
         glUseProgram(0);
     }
 
-    float TileRenderer::getTileRenderPosX(int x) {
-        return static_cast<float>(x) * 64;
+    float TileRenderer::getTileRenderPosX(int x, int y) {
+        if (y % 2 == 0) {
+            return static_cast<float>(x) * 64;
+        } else {
+            return static_cast<float>(x) * 64 + 32;
+        }
     }
 
     float TileRenderer::getTileRenderPosY(int y) {
-        return static_cast<float>(y) * 64;
+        return static_cast<float>(y) * 16;
     }
 
 }
