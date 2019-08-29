@@ -10,7 +10,7 @@
 namespace Rival {
 
     // TMP:
-    std::vector<int> tiles(100, 0);
+    std::vector<int> tiles(300, 0);
     std::map<int, Sprite> tileSprites;
 
     void Rival::initialize() {
