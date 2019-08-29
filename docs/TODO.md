@@ -2,7 +2,6 @@
 
 ## Improvements
 
- - Unit is rendered in top-left when it should be bottom-right
  - Static code analysis
  - Unit tests
 
