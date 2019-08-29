@@ -114,8 +114,14 @@ namespace Rival {
 
         bool deleted = false;
 
+        /**
+         * x co-ordinate of the Tile the Unit is occupying.
+         */
         int x;
 
+        /**
+         * y co-ordinate of the Tile the Unit is occupying.
+         */
         int y;
 
         Facing facing = Facing::South;

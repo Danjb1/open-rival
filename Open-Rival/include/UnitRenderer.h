@@ -35,6 +35,10 @@ namespace Rival {
         Renderable& getOrCreateRenderable(
                 const std::unique_ptr<Unit>& unit);
 
+        float getUnitRenderPosX(Unit& unit);
+
+        float getUnitRenderPosY(Unit& unit);
+
     };
 
 }
