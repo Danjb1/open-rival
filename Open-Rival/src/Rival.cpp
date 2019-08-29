@@ -85,7 +85,8 @@ namespace Rival {
         glClearColor(0.5f, 0.5f, 1.f, 1.f);
 
         // Enable back-face culling
-        //glEnable(GL_CULL_FACE);
+        glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CW);
 
         // Enable texturing
         glEnable(GL_TEXTURE_2D);

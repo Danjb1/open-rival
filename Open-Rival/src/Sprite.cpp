@@ -21,8 +21,8 @@ namespace Rival {
         const float tx2 = (x + 1) * width / txWidth;
 
         // Subtract from 1 to account for the bottom-left OpenGL origin
-        const float ty1 = 1 - ((y + 1) * height / txHeight);
-        const float ty2 = 1 - (y * height / txHeight);
+        const float ty1 = 1 - (y * height / txHeight);
+        const float ty2 = 1 - ((y + 1) * height / txHeight);
 
         return {
             tx1, ty1,
