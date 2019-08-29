@@ -81,10 +81,10 @@ namespace Rival {
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
-            float x = static_cast<float>(unit->getX());
-            float y = static_cast<float>(unit->getY());
             float width = static_cast<float>(Sprite::unitWidthPx);
             float height = static_cast<float>(Sprite::unitHeightPx);
+            float x = getUnitX(*unit.get());
+            float y = getUnitY(*unit.get());
             float x1 = x;
             float y1 = y;
             float x2 = x + width;
@@ -172,6 +172,14 @@ namespace Rival {
         }
 
         glUseProgram(0);
+    }
+
+    float UnitRenderer::getUnitRenderPosX(Unit& unit) {
+        return static_cast<float>(unit.getX()) * 64;
+    }
+
+    float UnitRenderer::getUnitRenderPosY(Unit& unit) {
+        return static_cast<float>(unit.getY()) * 64;
     }
 
 }
