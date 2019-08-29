@@ -31,9 +31,9 @@ namespace Rival {
 
         SDL_GLContext glContext;
 
-        int width;
+        const int width;
 
-        int height;
+        const int height;
 
         const char* title;
 
