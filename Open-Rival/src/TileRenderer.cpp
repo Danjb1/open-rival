@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "UnitRenderer.h"
+#include "TileRenderer.h"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -12,54 +12,31 @@
 
 namespace Rival {
 
-    UnitRenderer::UnitRenderer(
-            std::map<Unit::Type, Sprite>& unitSprites,
+    TileRenderer::TileRenderer(
+            std::map<int, Sprite>& tileSprites,
             Texture& paletteTexture) :
-        unitSprites(unitSprites),
+        tileSprites(tileSprites),
         paletteTexture(paletteTexture) {}
 
-    Renderable& UnitRenderer::getOrCreateRenderable(
-                const std::unique_ptr<Unit>& unit) {
-
-        int id = unit->getId();
-
-        if (renderables.find(id) == renderables.end()) {
-            // No Renderable exists for this Unit; create one
-            const Unit::Type type = unit->getType();
-            const Sprite& sprite = unitSprites.at(type);
-            renderables.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(id),
-                    std::forward_as_tuple(sprite));
-        }
-
-        return renderables.at(id);
-    }
-
-    void UnitRenderer::render(std::map<int, std::unique_ptr<Unit>>& units) {
+    void TileRenderer::render(std::vector<int>& tiles) {
 
         // Use shader
         glUseProgram(textureShader.programId);
 
-        for (auto const& kv : units) {
-            const std::unique_ptr<Unit>& unit = kv.second;
+        for (auto i = tiles.begin(); i != tiles.end(); ++i) {
 
-            // If Unit is deleted, remove the associated Renderable
-            if (unit->isDeleted()) {
-                renderables.erase(unit->getId());
-                continue;
-            }
+            const int tile = tiles[*i];
+            int tileX = tile % 10; // where 10 is level width
+            int tileY = tile / 10;
 
-            // Get (or create) the Renderable for this Unit
-            Renderable& renderable = getOrCreateRenderable(unit);
+            // Get the Renderable for this Tile
+            const Sprite& sprite = tileSprites.at(tile);
+            Renderable renderable(sprite);
 
             // Set the txIndex as appropriate
-            renderable.setTxIndex(unit->getFacing());
+            renderable.setTxIndex(tile);
 
             // Determine view matrix
-            // OpenGL uses right handed rule:
-            //  - x points right
-            //  - y points up
-            //  - z points out of the screen
             glm::mat4 view = glm::lookAt(
                 glm::vec3(0, 0, 1),     // camera position
                 glm::vec3(0, 0, 0),     // look at
@@ -67,8 +44,6 @@ namespace Rival {
             );
 
             // Determine projection matrix
-            // We want y to point down, so the top and bottom arguments are
-            // flipped
             float screenWidth = static_cast<float>(Rival::windowWidth);
             float screenHeight = static_cast<float>(Rival::windowHeight);
             glm::mat4 projection = glm::ortho(
@@ -81,10 +56,10 @@ namespace Rival {
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
-            float width = static_cast<float>(Sprite::unitWidthPx);
-            float height = static_cast<float>(Sprite::unitHeightPx);
-            float x = getUnitRenderPosX(*unit.get());
-            float y = getUnitRenderPosY(*unit.get());
+            float width = static_cast<float>(Sprite::tileWidthPx);
+            float height = static_cast<float>(Sprite::tileHeightPx);
+            float x = getTileRenderPosX(tileX);
+            float y = getTileRenderPosY(tileY);
             float x1 = x;
             float y1 = y;
             float x2 = x + width;
@@ -174,12 +149,12 @@ namespace Rival {
         glUseProgram(0);
     }
 
-    float UnitRenderer::getUnitRenderPosX(Unit& unit) {
-        return static_cast<float>(unit.getX()) * 64;
+    float TileRenderer::getTileRenderPosX(int x) {
+        return static_cast<float>(x) * 64;
     }
 
-    float UnitRenderer::getUnitRenderPosY(Unit& unit) {
-        return static_cast<float>(unit.getY()) * 64;
+    float TileRenderer::getTileRenderPosY(int y) {
+        return static_cast<float>(y) * 64;
     }
 
 }
