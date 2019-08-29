@@ -54,22 +54,27 @@ namespace Rival {
             // Set the txIndex as appropriate
             renderable.setTxIndex(unit->getFacing());
 
-            // Determine view-projection matrix
-            glm::mat4 projection = glm::ortho(
-                -3.0f,    // left
-                3.0f,     // right
-                3.0f,     // bottom
-                -3.0f);   // top
-
-            // Right handed rule:
-            // x points right
-            // y points down
-            // z points into the screen
+            // Determine view matrix
+            // OpenGL uses right handed rule:
+            //  - x points right
+            //  - y points up
+            //  - z points out of the screen
             glm::mat4 view = glm::lookAt(
-                glm::vec3(0, 0, -1),    // camera position
+                glm::vec3(0, 0, 1),     // camera position
                 glm::vec3(0, 0, 0),     // look at
-                glm::vec3(0, -1, 0)     // up vector
+                glm::vec3(0, 1, 0)      // up vector
             );
+
+            // Determine projection matrix
+            // We want y to point down, so the top and bottom arguments are
+            // flipped
+            glm::mat4 projection = glm::ortho(
+                -3.0f,      // left
+                3.0f,       // right
+                3.0f,       // bottom
+                -3.0f);     // top
+
+            // Combine matrices
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
