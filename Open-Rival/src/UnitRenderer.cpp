@@ -7,6 +7,7 @@
 #include <map>
 
 #include "Palette.h"
+#include "Rival.h"
 #include "Shaders.h"
 
 namespace Rival {
@@ -68,20 +69,26 @@ namespace Rival {
             // Determine projection matrix
             // We want y to point down, so the top and bottom arguments are
             // flipped
+            float screenWidth = static_cast<float>(Rival::windowWidth);
+            float screenHeight = static_cast<float>(Rival::windowHeight);
             glm::mat4 projection = glm::ortho(
-                -3.0f,      // left
-                3.0f,       // right
-                3.0f,       // bottom
-                -3.0f);     // top
+                0.0f,           // left
+                screenWidth,    // right
+                screenHeight,   // bottom
+                0.0f);          // top
 
             // Combine matrices
             glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
-            float x1 = static_cast<float>(unit->getX()) - 0.5f;
-            float y1 = static_cast<float>(unit->getY()) - 0.5f;
-            float x2 = static_cast<float>(unit->getX()) + 0.5f;
-            float y2 = static_cast<float>(unit->getY()) + 0.5f;
+            float x = static_cast<float>(unit->getX());
+            float y = static_cast<float>(unit->getY());
+            float width = static_cast<float>(Sprite::unitWidthPx);
+            float height = static_cast<float>(Sprite::unitHeightPx);
+            float x1 = x;
+            float y1 = y;
+            float x2 = x + width;
+            float y2 = y + height;
             std::vector<GLfloat> vertexData = {
                 x1, y1,
                 x2, y1,
