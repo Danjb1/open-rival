@@ -2,6 +2,7 @@
 
 ## Improvements
 
+ - Unit at (0, 0) is not visible
  - Static code analysis
  - Unit tests
 
@@ -80,7 +81,7 @@
 ### Rendering
 
  - Camera class
- - Default to pixel-perfect scale (dependent on ortho projection and camera position!)
+    - Zooming
  - Shader used for mouse picking
  - Render Interface
  - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))

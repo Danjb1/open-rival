@@ -18,6 +18,9 @@ namespace Rival {
 
     public:
 
+        static const int windowWidth = 800;
+        static const int windowHeight = 600;
+
         /**
          * Initialises the game.
          */
@@ -30,8 +33,6 @@ namespace Rival {
 
     private:
 
-        const int windowWidth = 800;
-        const int windowHeight = 600;
         const char* windowTitle = "Rival Realms";
         const int numTextures = 50;
 
