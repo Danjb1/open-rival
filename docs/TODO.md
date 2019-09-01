@@ -2,7 +2,6 @@
 
 ## Improvements
 
- - glVertexAttribPointer should only be called at VAO creation
  - Render all Tiles in one draw call
  - Don't recreate Tile Renderables every frame
  - Add support for animated tiles
