@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Renderable.h"
 
+#include "Shaders.h"
+
 namespace Rival {
 
     Renderable::Renderable(const Sprite& sprite) :
@@ -14,7 +16,7 @@ namespace Rival {
         glGenBuffers(1, &positionVbo);
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
-            positionVbo,
+            textureShader.vertexAttribIndex,
             2,
             GL_FLOAT,
             GL_FALSE,
@@ -25,7 +27,7 @@ namespace Rival {
         glGenBuffers(1, &texCoordVbo);
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
-            texCoordVbo,
+            textureShader.texCoordAttribIndex,
             2,
             GL_FLOAT,
             GL_FALSE,

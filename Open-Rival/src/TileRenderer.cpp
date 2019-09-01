@@ -105,18 +105,11 @@ namespace Rival {
             glBindVertexArray(renderable.getVao());
 
             // Enable vertex attributes
-            glEnableVertexAttribArray(textureShader.vertexAttribLocation);
-            glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
+            glEnableVertexAttribArray(textureShader.vertexAttribIndex);
+            glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
 
             // Send position data
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-            glVertexAttribPointer(
-                textureShader.vertexAttribLocation,
-                2,
-                GL_FLOAT,
-                GL_FALSE,
-                2 * sizeof(GLfloat),
-                nullptr);
             glBufferData(
                 GL_ARRAY_BUFFER,
                 2 * 4 * sizeof(GLfloat),
@@ -125,13 +118,6 @@ namespace Rival {
 
             // Send tex co-ord data
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-            glVertexAttribPointer(
-                textureShader.texCoordAttribLocation,
-                2,
-                GL_FLOAT,
-                GL_FALSE,
-                2 * sizeof(GLfloat),
-                nullptr);
             glBufferData(
                 GL_ARRAY_BUFFER,
                 2 * 4 * sizeof(GLfloat),
@@ -149,8 +135,8 @@ namespace Rival {
                 nullptr);
 
             // Disable vertex attributes
-            glDisableVertexAttribArray(textureShader.vertexAttribLocation);
-            glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
+            glDisableVertexAttribArray(textureShader.vertexAttribIndex);
+            glDisableVertexAttribArray(textureShader.texCoordAttribIndex);
         }
 
         // Clean up
