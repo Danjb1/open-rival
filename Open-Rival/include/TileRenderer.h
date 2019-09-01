@@ -33,9 +33,9 @@ namespace Rival {
 
         const Texture& paletteTexture;
 
-        float getTileRenderPosX(int x, int y);
+        int getTileRenderPosX(int x);
 
-        float getTileRenderPosY(int y);
+        int getTileRenderPosY(int x, int y);
 
     };
 

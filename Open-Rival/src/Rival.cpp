@@ -255,8 +255,8 @@ namespace Rival {
             std::forward_as_tuple(type),
             std::forward_as_tuple(
                 textures->at(txIndex),
-                Sprite::tileWidthPx,
-                Sprite::tileHeightPx));
+                Sprite::tileSpriteWidthPx,
+                Sprite::tileSpriteHeightPx));
     }
 
     void Rival::start() {

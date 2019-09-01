@@ -93,8 +93,8 @@ namespace Rival {
             // Define vertex positions
             float width = static_cast<float>(Sprite::unitWidthPx);
             float height = static_cast<float>(Sprite::unitHeightPx);
-            float x = getUnitRenderPosX(*unit.get());
-            float y = getUnitRenderPosY(*unit.get());
+            float x = static_cast<float>(getUnitRenderPosX(*unit.get()));
+            float y = static_cast<float>(getUnitRenderPosY(*unit.get()));
             float x1 = x;
             float y1 = y;
             float x2 = x + width;
@@ -174,12 +174,12 @@ namespace Rival {
         glUseProgram(0);
     }
 
-    float UnitRenderer::getUnitRenderPosX(Unit& unit) {
-        return static_cast<float>(unit.getX()) * 64;
+    int UnitRenderer::getUnitRenderPosX(Unit& unit) {
+        return unit.getX() * 64;
     }
 
-    float UnitRenderer::getUnitRenderPosY(Unit& unit) {
-        return static_cast<float>(unit.getY()) * 64;
+    int UnitRenderer::getUnitRenderPosY(Unit& unit) {
+        return unit.getY() * 64;
     }
 
 }
