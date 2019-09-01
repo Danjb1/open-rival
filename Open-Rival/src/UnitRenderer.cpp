@@ -40,6 +40,41 @@ namespace Rival {
         // Use shader
         glUseProgram(textureShader.programId);
 
+        // Determine view matrix
+        // OpenGL uses right handed rule:
+        //  - x points right
+        //  - y points up
+        //  - z points out of the screen
+        glm::mat4 view = glm::lookAt(
+            glm::vec3(0, 0, 1),     // camera position
+            glm::vec3(0, 0, 0),     // look at
+            glm::vec3(0, 1, 0)      // up vector
+        );
+
+        // Determine projection matrix
+        // We want y to point down, so the top and bottom arguments are
+        // flipped
+        float screenWidth = static_cast<float>(Rival::windowWidth);
+        float screenHeight = static_cast<float>(Rival::windowHeight);
+        glm::mat4 projection = glm::ortho(
+            0.0f,           // left
+            screenWidth,    // right
+            screenHeight,   // bottom
+            0.0f);          // top
+
+        // Combine matrices
+        glm::mat4 viewProjMatrix = projection * view;
+
+        // Set uniform values
+        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
+            1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniform1i(textureShader.texUnitUniformLocation, 0);
+        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
+
+        // Enable vertex attributes
+        glEnableVertexAttribArray(textureShader.vertexAttribLocation);
+        glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
+
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
 
@@ -54,31 +89,6 @@ namespace Rival {
 
             // Set the txIndex as appropriate
             renderable.setTxIndex(unit->getFacing());
-
-            // Determine view matrix
-            // OpenGL uses right handed rule:
-            //  - x points right
-            //  - y points up
-            //  - z points out of the screen
-            glm::mat4 view = glm::lookAt(
-                glm::vec3(0, 0, 1),     // camera position
-                glm::vec3(0, 0, 0),     // look at
-                glm::vec3(0, 1, 0)      // up vector
-            );
-
-            // Determine projection matrix
-            // We want y to point down, so the top and bottom arguments are
-            // flipped
-            float screenWidth = static_cast<float>(Rival::windowWidth);
-            float screenHeight = static_cast<float>(Rival::windowHeight);
-            glm::mat4 projection = glm::ortho(
-                0.0f,           // left
-                screenWidth,    // right
-                screenHeight,   // bottom
-                0.0f);          // top
-
-            // Combine matrices
-            glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
             float width = static_cast<float>(Sprite::unitWidthPx);
@@ -121,16 +131,6 @@ namespace Rival {
             glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
             glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
-            // Enable vertex attributes
-            glEnableVertexAttribArray(textureShader.vertexAttribLocation);
-            glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
-
-            // Set uniform values
-            glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
-                    1, GL_FALSE, &viewProjMatrix[0][0]);
-            glUniform1i(textureShader.texUnitUniformLocation, 0);
-            glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
-
             // Use vertex position VBO
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
 
@@ -164,12 +164,12 @@ namespace Rival {
                 4,
                 GL_UNSIGNED_INT,
                 nullptr);
-
-            // Clean up
-            glDisableVertexAttribArray(textureShader.vertexAttribLocation);
-            glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
-            glBindTexture(GL_TEXTURE_2D, 0);
         }
+
+        // Clean up
+        glDisableVertexAttribArray(textureShader.vertexAttribLocation);
+        glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         glUseProgram(0);
     }

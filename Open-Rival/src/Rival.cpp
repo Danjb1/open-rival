@@ -33,7 +33,7 @@ namespace Rival {
                 createPaletteTexture());
 
         // Create the Scene
-        scenario = std::make_unique<Scenario>(20, 20, false);
+        scenario = std::make_unique<Scenario>(64, 40, false);
 
         // Add Units
         scenario->addUnit(std::make_unique<Unit>(Unit::Type::LightCavalry, 0, 0));
@@ -298,7 +298,11 @@ namespace Rival {
 
     void Rival::render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        tileRenderer->render(scenario->getTiles(), scenario->isWilderness());
+        tileRenderer->render(
+                scenario->getTiles(),
+                scenario->getWidth(),
+                scenario->getHeight(),
+                scenario->isWilderness());
         unitRenderer->render(scenario->getUnits());
     }
 

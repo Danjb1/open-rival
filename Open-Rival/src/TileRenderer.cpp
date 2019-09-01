@@ -18,22 +18,61 @@ namespace Rival {
         tileSprites(tileSprites),
         paletteTexture(paletteTexture) {}
 
-    void TileRenderer::render(std::vector<int>& tiles, bool wilderness) {
-
-        // Use shader
-        glUseProgram(textureShader.programId);
+    void TileRenderer::render(
+            std::vector<int>& tiles,
+        int mapWidth,
+        int mapHeight,
+        bool wilderness) {
 
         // Pick which Sprite to use
         const Sprite& sprite = wilderness
             ? tileSprites.at(1)
             : tileSprites.at(0);
 
+        // Use shader
+        glUseProgram(textureShader.programId);
+
+        // Use textures
+        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glBindTexture(GL_TEXTURE_2D, sprite.texture.getId());
+        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+        // Determine view matrix
+        glm::mat4 view = glm::lookAt(
+            glm::vec3(0, 0, 1),     // camera position
+            glm::vec3(0, 0, 0),     // look at
+            glm::vec3(0, 1, 0)      // up vector
+        );
+
+        // Determine projection matrix
+        float screenWidth = static_cast<float>(Rival::windowWidth);
+        float screenHeight = static_cast<float>(Rival::windowHeight);
+        glm::mat4 projection = glm::ortho(
+            0.0f,           // left
+            screenWidth,    // right
+            screenHeight,   // bottom
+            0.0f);          // top
+
+        // Combine matrices
+        glm::mat4 viewProjMatrix = projection * view;
+
+        // Set uniform values
+        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
+            1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniform1i(textureShader.texUnitUniformLocation, 0);
+        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
+
+        // Enable vertex attributes
+        glEnableVertexAttribArray(textureShader.vertexAttribLocation);
+        glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
+
         int i = 0;
         for (int& tile : tiles) {
 
             const int tile = tiles[i];
-            int tileX = i % 10; // where 10 is level width
-            int tileY = i / 10;
+            int tileX = i % mapWidth;
+            int tileY = i / mapWidth;
             i++;
 
             // Get the Renderable for this Tile
@@ -41,25 +80,6 @@ namespace Rival {
 
             // Set the txIndex as appropriate
             renderable.setTxIndex(tile);
-
-            // Determine view matrix
-            glm::mat4 view = glm::lookAt(
-                glm::vec3(0, 0, 1),     // camera position
-                glm::vec3(0, 0, 0),     // look at
-                glm::vec3(0, 1, 0)      // up vector
-            );
-
-            // Determine projection matrix
-            float screenWidth = static_cast<float>(Rival::windowWidth);
-            float screenHeight = static_cast<float>(Rival::windowHeight);
-            glm::mat4 projection = glm::ortho(
-                0.0f,           // left
-                screenWidth,    // right
-                screenHeight,   // bottom
-                0.0f);          // top
-
-            // Combine matrices
-            glm::mat4 viewProjMatrix = projection * view;
 
             // Define vertex positions
             float width = static_cast<float>(Sprite::tileWidthPx);
@@ -96,22 +116,6 @@ namespace Rival {
                 texCoords.data(),
                 GL_DYNAMIC_DRAW);
 
-            // Use textures
-            glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-            glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-            glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
-            glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
-
-            // Enable vertex attributes
-            glEnableVertexAttribArray(textureShader.vertexAttribLocation);
-            glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
-
-            // Set uniform values
-            glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
-                    1, GL_FALSE, &viewProjMatrix[0][0]);
-            glUniform1i(textureShader.texUnitUniformLocation, 0);
-            glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
-
             // Use vertex position VBO
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
 
@@ -145,12 +149,12 @@ namespace Rival {
                 4,
                 GL_UNSIGNED_INT,
                 nullptr);
-
-            // Clean up
-            glDisableVertexAttribArray(textureShader.vertexAttribLocation);
-            glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
-            glBindTexture(GL_TEXTURE_2D, 0);
         }
+
+        // Clean up
+        glDisableVertexAttribArray(textureShader.vertexAttribLocation);
+        glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         glUseProgram(0);
     }
