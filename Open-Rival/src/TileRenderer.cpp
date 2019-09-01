@@ -82,10 +82,10 @@ namespace Rival {
             renderable.setTxIndex(tile);
 
             // Define vertex positions
-            float width = static_cast<float>(Sprite::tileWidthPx);
-            float height = static_cast<float>(Sprite::tileHeightPx);
-            float x = getTileRenderPosX(tileX, tileY);
-            float y = getTileRenderPosY(tileY);
+            float width = static_cast<float>(Sprite::tileSpriteWidthPx);
+            float height = static_cast<float>(Sprite::tileSpriteHeightPx);
+            float x = static_cast<float>(getTileRenderPosX(tileX));
+            float y = static_cast<float>(getTileRenderPosY(tileX, tileY));
             float x1 = x;
             float y1 = y;
             float x2 = x + width;
@@ -159,16 +159,18 @@ namespace Rival {
         glUseProgram(0);
     }
 
-    float TileRenderer::getTileRenderPosX(int x, int y) {
-        if (y % 2 == 0) {
-            return static_cast<float>(x) * 64;
-        } else {
-            return static_cast<float>(x) * 64 + 32;
-        }
+    int TileRenderer::getTileRenderPosX(int x) {
+        // Tiles co-ordinates are consistent in the x direction
+        return x * (Sprite::tileWidthPx / 2);
     }
 
-    float TileRenderer::getTileRenderPosY(int y) {
-        return static_cast<float>(y) * 16;
+    int TileRenderer::getTileRenderPosY(int x, int y) {
+        // Tiles co-ordinates zigzag up and down in the y direction
+        int renderPos = y * Sprite::tileHeightPx;
+        if (x % 2 == 1) {
+            renderPos += Sprite::tileHeightPx / 2;
+        }
+        return renderPos;
     }
 
 }
