@@ -2,6 +2,8 @@
 
 ## Improvements
 
+ - Original game uses slightly different tile co-ordinates
+    - A row is actually a zigzag (2 rows as we have defined it)
  - Render all Tiles in one draw call
  - Don't recreate Tile Renderables every frame
  - Add support for animated tiles
