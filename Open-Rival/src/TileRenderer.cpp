@@ -63,10 +63,6 @@ namespace Rival {
         glUniform1i(textureShader.texUnitUniformLocation, 0);
         glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
 
-        // Enable vertex attributes
-        glEnableVertexAttribArray(textureShader.vertexAttribLocation);
-        glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
-
         int i = 0;
         for (int& tile : tiles) {
 
@@ -100,26 +96,20 @@ namespace Rival {
             // Determine texture co-ordinates
             std::vector<GLfloat> texCoords = renderable.getTexCoords();
 
-            // Create vertex position VBO
+            // TODO:
+            // Build a large array of vertices positions, texture co-ordinates
+            // and indices, and move the below code outside the loop using
+            // GL_TRIANGLES
+
+            // Bind vertex array
+            glBindVertexArray(renderable.getVao());
+
+            // Enable vertex attributes
+            glEnableVertexAttribArray(textureShader.vertexAttribLocation);
+            glEnableVertexAttribArray(textureShader.texCoordAttribLocation);
+
+            // Send position data
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-            glBufferData(
-                GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                vertexData.data(),
-                GL_DYNAMIC_DRAW);
-
-            // Create tex coord VBO
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-            glBufferData(
-                GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                texCoords.data(),
-                GL_DYNAMIC_DRAW);
-
-            // Use vertex position VBO
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-
-            // Define vertex position VBO data format
             glVertexAttribPointer(
                 textureShader.vertexAttribLocation,
                 2,
@@ -127,11 +117,14 @@ namespace Rival {
                 GL_FALSE,
                 2 * sizeof(GLfloat),
                 nullptr);
+            glBufferData(
+                GL_ARRAY_BUFFER,
+                2 * 4 * sizeof(GLfloat),
+                vertexData.data(),
+                GL_DYNAMIC_DRAW);
 
-            // Use texture co-ordinate VBO
+            // Send tex co-ord data
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-
-            // Define texture co-ordinate VBO data format
             glVertexAttribPointer(
                 textureShader.texCoordAttribLocation,
                 2,
@@ -139,8 +132,13 @@ namespace Rival {
                 GL_FALSE,
                 2 * sizeof(GLfloat),
                 nullptr);
+            glBufferData(
+                GL_ARRAY_BUFFER,
+                2 * 4 * sizeof(GLfloat),
+                texCoords.data(),
+                GL_DYNAMIC_DRAW);
 
-            // Bind index buffer
+            // Send index data
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
 
             // Render
@@ -149,13 +147,14 @@ namespace Rival {
                 4,
                 GL_UNSIGNED_INT,
                 nullptr);
+
+            // Disable vertex attributes
+            glDisableVertexAttribArray(textureShader.vertexAttribLocation);
+            glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
         }
 
         // Clean up
-        glDisableVertexAttribArray(textureShader.vertexAttribLocation);
-        glDisableVertexAttribArray(textureShader.texCoordAttribLocation);
         glBindTexture(GL_TEXTURE_2D, 0);
-
         glUseProgram(0);
     }
 

@@ -22,6 +22,8 @@ namespace Rival {
         Renderable& operator=(const Renderable& other) = delete;
         Renderable& operator=(Renderable&& other) = delete;
 
+        GLuint getVao() const;
+
         GLuint getPositionVbo() const;
 
         GLuint getTexCoordVbo() const;
@@ -39,6 +41,8 @@ namespace Rival {
     private:
 
         const Sprite& sprite;
+
+        GLuint vao = 0;
 
         GLuint positionVbo = 0;
 
