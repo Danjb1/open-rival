@@ -9,6 +9,14 @@ namespace Rival {
             wilderness(wilderness),
             tiles(std::vector<int>(width * height, 0)) {}
 
+    int Scenario::getWidth() const {
+        return width;
+    }
+
+    int Scenario::getHeight() const {
+        return height;
+    }
+
     std::vector<int>& Scenario::getTiles() {
         return tiles;
     }
