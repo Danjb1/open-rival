@@ -21,7 +21,7 @@ namespace Rival {
                 std::map<int, Sprite>& tileSprites,
                 Texture& paletteTexture);
 
-        void render(std::vector<int>& tiles);
+        void render(std::vector<int>& tiles, bool wilderness);
 
     private:
 

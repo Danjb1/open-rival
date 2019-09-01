@@ -9,8 +9,26 @@ namespace Rival {
             wilderness(wilderness),
             tiles(std::vector<int>(width * height, 0)) {}
 
+    std::vector<int>& Scenario::getTiles() {
+        return tiles;
+    }
+
     int Scenario::getTile(const int x, const int y) const {
         return tiles[y * width + x];
+    }
+
+    bool Scenario::isWilderness() const {
+        return wilderness;
+    }
+
+    void Scenario::addUnit(std::unique_ptr<Unit> unit) {
+        units[nextId] = std::move(unit);
+        units[nextId]->addedToScene(nextId);
+        nextId++;
+    }
+
+    std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() {
+        return units;
     }
 
 }
