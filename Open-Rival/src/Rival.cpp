@@ -9,10 +9,6 @@
 
 namespace Rival {
 
-    // TMP:
-    std::vector<int> tiles(300, 0);
-    std::map<int, Sprite> tileSprites;
-
     void Rival::initialize() {
 
         // Initialize SDL
@@ -27,23 +23,22 @@ namespace Rival {
         initGLEW();
         initGL();
 
-        // Allocate space for Textures
-        textures->reserve(numTextures);
-
-        // Initialize Sprites
-        initSprites();
+        // Load resources
+        loadTextures();
+        initUnitSprites();
+        initTileSprites();
 
         // Initialize Palette Texture
         paletteTexture = std::make_unique<Texture>(
                 createPaletteTexture());
 
         // Create the Scene
-        scene = std::make_unique<Scene>();
+        scenario = std::make_unique<Scenario>(20, 20, false);
 
         // Add Units
-        scene->addUnit(std::make_unique<Unit>(Unit::Type::LightCavalry, 0, 0));
-        scene->addUnit(std::make_unique<Unit>(Unit::Type::Knight, 1, 1));
-        scene->addUnit(std::make_unique<Unit>(Unit::Type::Peasant, 4, 2));
+        scenario->addUnit(std::make_unique<Unit>(Unit::Type::LightCavalry, 0, 0));
+        scenario->addUnit(std::make_unique<Unit>(Unit::Type::Knight, 1, 1));
+        scenario->addUnit(std::make_unique<Unit>(Unit::Type::Peasant, 4, 2));
 
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
@@ -51,16 +46,8 @@ namespace Rival {
                 *paletteTexture.get());
 
         // Create the TileRenderer
-        textures->push_back(loadTexture("res\\textures\\tiles_meadow.tga"));
-        int index = textures->size() - 1;
-        tileSprites.emplace(std::piecewise_construct,
-            std::forward_as_tuple(0),
-            std::forward_as_tuple(
-                textures->at(index),
-                Sprite::tileWidthPx,
-                Sprite::tileHeightPx));
         tileRenderer = std::make_unique<TileRenderer>(
-            tileSprites,
+            *tileSprites.get(),
             *paletteTexture.get());
     }
 
@@ -116,103 +103,160 @@ namespace Rival {
         initialiseShaders();
     }
 
-    void Rival::initSprites() {
+    void Rival::loadTextures() {
 
-        // Human
-        loadUnit(Unit::Type::Ballista, "unit_human_ballista.tga");
-        loadUnit(Unit::Type::Battleship, "unit_human_battleship.tga");
-        loadUnit(Unit::Type::Bowman, "unit_human_bowman.tga");
-        loadUnit(Unit::Type::ChariotOfWar, "unit_human_chariot_of_war.tga");
-        loadUnit(Unit::Type::FireMaster, "unit_human_fire_master.tga");
-        loadUnit(Unit::Type::Knight, "unit_human_knight.tga");
-        loadUnit(Unit::Type::LightCavalry, "unit_human_light_cavalry.tga");
-        loadUnit(Unit::Type::Peasant, "unit_human_peasant.tga");
-        loadUnit(Unit::Type::PegasRider, "unit_human_pegas_rider.tga");
-        loadUnit(Unit::Type::Priest, "unit_human_priest.tga");
-        loadUnit(Unit::Type::SeaBarge, "unit_human_sea_barge.tga");
-        loadUnit(Unit::Type::Thief, "unit_human_thief.tga");
-        loadUnit(Unit::Type::Wizard, "unit_human_wizard.tga");
-        loadUnit(Unit::Type::Zeppelin, "unit_human_zeppelin.tga");
+        textures->reserve(numTextures);
 
-        // Greenskin
-        loadUnit(Unit::Type::Balloon, "unit_greenskin_balloon.tga");
-        loadUnit(Unit::Type::Catapult, "unit_greenskin_catapult.tga");
-        loadUnit(Unit::Type::GnomeBoomer, "unit_greenskin_gnome_boomer.tga");
-        loadUnit(Unit::Type::HordeRider, "unit_greenskin_horde_rider.tga");
-        loadUnit(Unit::Type::LandingCraft, "unit_greenskin_landing_craft.tga");
-        loadUnit(Unit::Type::Necromancer, "unit_greenskin_necromancer.tga");
-        loadUnit(Unit::Type::PriestOfDoom, "unit_greenskin_priest_of_doom.tga");
-        loadUnit(Unit::Type::RockThrower, "unit_greenskin_rock_thrower.tga");
-        loadUnit(Unit::Type::Rogue, "unit_greenskin_rogue.tga");
-        loadUnit(Unit::Type::Serf, "unit_greenskin_serf.tga");
-        loadUnit(Unit::Type::StormTrooper, "unit_greenskin_storm_trooper.tga");
-        loadUnit(Unit::Type::TrollGalley, "unit_greenskin_troll_galley.tga");
-        loadUnit(Unit::Type::Warbat, "unit_greenskin_warbat.tga");
-        loadUnit(Unit::Type::Warlord, "unit_greenskin_warlord.tga");
+        // Units - Human
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_ballista.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_battleship.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_bowman.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_chariot_of_war.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_fire_master.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_knight.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_light_cavalry.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_peasant.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_pegas_rider.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_priest.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_sea_barge.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_thief.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_wizard.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_human_zeppelin.tga"));
 
-        // Elf
-        loadUnit(Unit::Type::Archer, "unit_elf_archer.tga");
-        loadUnit(Unit::Type::Arquebusier, "unit_elf_arquebusier.tga");
-        loadUnit(Unit::Type::Bark, "unit_elf_bark.tga");
-        loadUnit(Unit::Type::Bombard, "unit_elf_bombard.tga");
-        loadUnit(Unit::Type::Centaur, "unit_elf_centaur.tga");
-        loadUnit(Unit::Type::Druid, "unit_elf_druid.tga");
-        loadUnit(Unit::Type::DwarfMiner, "unit_elf_dwarf_miner.tga");
-        loadUnit(Unit::Type::Enchanter, "unit_elf_enchanter.tga");
-        loadUnit(Unit::Type::Mage, "unit_elf_mage.tga");
-        loadUnit(Unit::Type::MagicChopper, "unit_elf_magic_chopper.tga");
-        loadUnit(Unit::Type::Scout, "unit_elf_scout.tga");
-        loadUnit(Unit::Type::SkyRider, "unit_elf_sky_rider.tga");
-        loadUnit(Unit::Type::Warship, "unit_elf_warship.tga");
-        loadUnit(Unit::Type::Yeoman, "unit_elf_yeoman.tga");
+        // Units - Greenskin
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_balloon.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_catapult.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_gnome_boomer.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_horde_rider.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_landing_craft.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_necromancer.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_priest_of_doom.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_rock_thrower.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_rogue.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_serf.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_storm_trooper.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_troll_galley.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_warbat.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_greenskin_warlord.tga"));
 
-        // Monsters
-        loadUnit(Unit::Type::Devil, "unit_monster_devil.tga");
-        loadUnit(Unit::Type::Dragon, "unit_monster_dragon.tga");
-        loadUnit(Unit::Type::Golem, "unit_monster_golem.tga");
-        loadUnit(Unit::Type::Gryphon, "unit_monster_gryphon.tga");
-        loadUnit(Unit::Type::Hydra, "unit_monster_hydra.tga");
-        loadUnit(Unit::Type::SeaMonster, "unit_monster_sea_monster.tga");
-        loadUnit(Unit::Type::Skeleton, "unit_monster_skeleton.tga");
-        loadUnit(Unit::Type::Snake, "unit_monster_snake.tga");
+        // Units - Elf
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_archer.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_arquebusier.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_bark.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_bombard.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_centaur.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_druid.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_dwarf_miner.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_enchanter.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_mage.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_magic_chopper.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_scout.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_sky_rider.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_warship.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_elf_yeoman.tga"));
+
+        // Units - Monsters
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_devil.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_dragon.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_golem.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_gryphon.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_hydra.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_sea_monster.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_skeleton.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "unit_monster_snake.tga"));
+
+        // Tiles
+        textures->push_back(Texture::loadTexture(txDir + "tiles_meadow.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "tiles_wilderness.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "tiles_fog.tga"));
     }
 
-    void Rival::loadUnit(Unit::Type type, std::string imageFilename) {
-        textures->push_back(loadTexture("res\\textures\\" + imageFilename));
-        int index = textures->size() - 1;
+    void Rival::initUnitSprites() {
+
+        int nextIndex = txIndexUnits;
+
+        // Human
+        initUnitSprite(Unit::Type::Ballista, nextIndex);
+        initUnitSprite(Unit::Type::Battleship, nextIndex++);
+        initUnitSprite(Unit::Type::Bowman, nextIndex++);
+        initUnitSprite(Unit::Type::ChariotOfWar, nextIndex++);
+        initUnitSprite(Unit::Type::FireMaster, nextIndex++);
+        initUnitSprite(Unit::Type::Knight, nextIndex++);
+        initUnitSprite(Unit::Type::LightCavalry, nextIndex++);
+        initUnitSprite(Unit::Type::Peasant, nextIndex++);
+        initUnitSprite(Unit::Type::PegasRider, nextIndex++);
+        initUnitSprite(Unit::Type::Priest, nextIndex++);
+        initUnitSprite(Unit::Type::SeaBarge, nextIndex++);
+        initUnitSprite(Unit::Type::Thief, nextIndex++);
+        initUnitSprite(Unit::Type::Wizard, nextIndex++);
+        initUnitSprite(Unit::Type::Zeppelin, nextIndex++);
+
+        // Greenskin
+        initUnitSprite(Unit::Type::Balloon, nextIndex++);
+        initUnitSprite(Unit::Type::Catapult, nextIndex++);
+        initUnitSprite(Unit::Type::GnomeBoomer, nextIndex++);
+        initUnitSprite(Unit::Type::HordeRider, nextIndex++);
+        initUnitSprite(Unit::Type::LandingCraft, nextIndex++);
+        initUnitSprite(Unit::Type::Necromancer, nextIndex++);
+        initUnitSprite(Unit::Type::PriestOfDoom, nextIndex++);
+        initUnitSprite(Unit::Type::RockThrower, nextIndex++);
+        initUnitSprite(Unit::Type::Rogue, nextIndex++);
+        initUnitSprite(Unit::Type::Serf, nextIndex++);
+        initUnitSprite(Unit::Type::StormTrooper, nextIndex++);
+        initUnitSprite(Unit::Type::TrollGalley, nextIndex++);
+        initUnitSprite(Unit::Type::Warbat, nextIndex++);
+        initUnitSprite(Unit::Type::Warlord, nextIndex++);
+
+        // Elf
+        initUnitSprite(Unit::Type::Archer, nextIndex++);
+        initUnitSprite(Unit::Type::Arquebusier, nextIndex++);
+        initUnitSprite(Unit::Type::Bark, nextIndex++);
+        initUnitSprite(Unit::Type::Bombard, nextIndex++);
+        initUnitSprite(Unit::Type::Centaur, nextIndex++);
+        initUnitSprite(Unit::Type::Druid, nextIndex++);
+        initUnitSprite(Unit::Type::DwarfMiner, nextIndex++);
+        initUnitSprite(Unit::Type::Enchanter, nextIndex++);
+        initUnitSprite(Unit::Type::Mage, nextIndex++);
+        initUnitSprite(Unit::Type::MagicChopper, nextIndex++);
+        initUnitSprite(Unit::Type::Scout, nextIndex++);
+        initUnitSprite(Unit::Type::SkyRider, nextIndex++);
+        initUnitSprite(Unit::Type::Warship, nextIndex++);
+        initUnitSprite(Unit::Type::Yeoman, nextIndex++);
+
+        // Monsters
+        initUnitSprite(Unit::Type::Devil, nextIndex++);
+        initUnitSprite(Unit::Type::Dragon, nextIndex++);
+        initUnitSprite(Unit::Type::Golem, nextIndex++);
+        initUnitSprite(Unit::Type::Gryphon, nextIndex++);
+        initUnitSprite(Unit::Type::Hydra, nextIndex++);
+        initUnitSprite(Unit::Type::SeaMonster, nextIndex++);
+        initUnitSprite(Unit::Type::Skeleton, nextIndex++);
+        initUnitSprite(Unit::Type::Snake, nextIndex++);
+    }
+
+    void Rival::initUnitSprite(Unit::Type type, int txIndex) {
         unitSprites->emplace(std::piecewise_construct,
             std::forward_as_tuple(type),
             std::forward_as_tuple(
-                    textures->at(index),
+                    textures->at(txIndex),
                     Sprite::unitWidthPx,
                     Sprite::unitHeightPx));
     }
 
-    const Texture Rival::loadTexture(const std::string filename) const {
+    void Rival::initTileSprites() {
+        int nextIndex = txIndexTiles;
+        initTileSprite(0, nextIndex++); // Meadow
+        initTileSprite(1, nextIndex++); // Wilderness
+        initTileSprite(2, nextIndex++); // Fog
+    }
 
-        // Load image data
-        Image img = Image::loadImage(filename);
-
-        // Generate texture
-        GLuint textureId = 0;
-        glGenTextures(1, &textureId);
-        glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
-                img.getWidth(), img.getHeight(),
-                0, GL_RED, GL_UNSIGNED_BYTE, img.getData()->data());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        // Check for error
-        GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
-            printf("Error loading texture from %p pixels! %s\n",
-                    img.getData(), gluErrorString(error));
-            throw std::runtime_error("Failed to load texture");
-        }
-
-        return Texture(textureId, img.getWidth(), img.getHeight());
+    void Rival::initTileSprite(int type, int txIndex) {
+        tileSprites->emplace(std::piecewise_construct,
+            std::forward_as_tuple(type),
+            std::forward_as_tuple(
+                textures->at(txIndex),
+                Sprite::tileWidthPx,
+                Sprite::tileHeightPx));
     }
 
     void Rival::start() {
@@ -245,7 +289,7 @@ namespace Rival {
     }
 
     void Rival::update() {
-        std::map<int, std::unique_ptr<Unit>>& units = scene->getUnits();
+        std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
             //unit->rotateRight();
@@ -254,8 +298,8 @@ namespace Rival {
 
     void Rival::render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        tileRenderer->render(tiles);
-        unitRenderer->render(scene->getUnits());
+        tileRenderer->render(scenario->getTiles(), scenario->isWilderness());
+        unitRenderer->render(scenario->getUnits());
     }
 
     void Rival::exit() {

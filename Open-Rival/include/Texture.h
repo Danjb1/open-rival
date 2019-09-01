@@ -2,6 +2,7 @@
 #define TEXTURE_H
 
 #include <gl/glew.h>
+#include <string>
 
 namespace Rival {
 
@@ -16,6 +17,8 @@ namespace Rival {
         const int getWidth() const;
 
         const int getHeight() const;
+
+        static const Texture loadTexture(const std::string filename);
 
     private:
 

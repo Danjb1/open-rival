@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "Scene.h"
+#include "Scenario.h"
 #include "Sprite.h"
 #include "Texture.h"
 #include "TileRenderer.h"
@@ -35,14 +35,20 @@ namespace Rival {
     private:
 
         const char* windowTitle = "Rival Realms";
-        const int numTextures = 51;
+
+        const std::string txDir = "res\\textures\\";
+        const int numTextures = 94;
+        const int txIndexUnits = 0;
+        const int txIndexTiles = 50;
 
         std::unique_ptr<std::vector<Texture>> textures =
                 std::make_unique<std::vector<Texture>>();
         std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites =
                 std::make_unique<std::map<Unit::Type, Sprite>>();
+        std::unique_ptr<std::map<int, Sprite>> tileSprites =
+                std::make_unique<std::map<int, Sprite>>();
         std::unique_ptr<Texture> paletteTexture;
-        std::unique_ptr<Scene> scene;
+        std::unique_ptr<Scenario> scenario;
         std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
 
@@ -72,19 +78,29 @@ namespace Rival {
         void initGL();
 
         /**
-         * Loads the Textures and initializes the Sprites.
+         * Loads the game's Textures.
          */
-        void initSprites();
+        void loadTextures();
 
         /**
-         * Loads a Unit's Texture and initializes its Sprite.
+         * Initializes the Sprites used by Units.
          */
-        void loadUnit(Unit::Type type, std::string imageFilename);
+        void initUnitSprites();
 
         /**
-         * Loads the game's textures.
+         * Initializes the Sprite for a Unit type.
          */
-        const Texture loadTexture(const std::string filename) const;
+        void initUnitSprite(Unit::Type type, int txIndex);
+
+        /**
+         * Initializes the Sprites used by tiles.
+         */
+        void initTileSprites();
+
+        /**
+         * Initializes the Sprite for a tile type.
+         */
+        void initTileSprite(int type, int txIndex);
 
         /**
          * Handles keyDown events.

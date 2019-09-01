@@ -18,10 +18,15 @@ namespace Rival {
         tileSprites(tileSprites),
         paletteTexture(paletteTexture) {}
 
-    void TileRenderer::render(std::vector<int>& tiles) {
+    void TileRenderer::render(std::vector<int>& tiles, bool wilderness) {
 
         // Use shader
         glUseProgram(textureShader.programId);
+
+        // Pick which Sprite to use
+        const Sprite& sprite = wilderness
+            ? tileSprites.at(1)
+            : tileSprites.at(0);
 
         int i = 0;
         for (int& tile : tiles) {
@@ -32,7 +37,6 @@ namespace Rival {
             i++;
 
             // Get the Renderable for this Tile
-            const Sprite& sprite = tileSprites.at(tile);
             Renderable renderable(sprite);
 
             // Set the txIndex as appropriate
