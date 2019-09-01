@@ -10,14 +10,18 @@ namespace Rival {
 
         GLuint programId;
 
-        // Vertex shader uniforms
+        // Vertex shader uniform locations
         GLint viewProjMatrixUniformLocation;
 
-        // Vertex shader attributes
+        // Vertex shader attribute indices
+        GLint vertexAttribIndex = 0;
+        GLint texCoordAttribIndex = 1;
+
+        // Vertex shader attribute locations
         GLint vertexAttribLocation;
         GLint texCoordAttribLocation;
 
-        // Fragment shader uniforms
+        // Fragment shader uniform locations
         GLint texUnitUniformLocation;
         GLint paletteTexUnitUniformLocation;
 
