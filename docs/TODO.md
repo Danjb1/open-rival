@@ -2,12 +2,19 @@
 
 ## Improvements
 
- - Render all Tiles in one draw call
- - Don't recreate Tile Renderables every frame
- - Add support for animated tiles
- - Simplify for-loop iteration with index
- - Share view matrix between Renderer classes
- - Render Units at the correct positions
+ - TileRenderer:
+    - Improve variable names
+    - Free resources in destructor
+    - Simplify for-loop iteration with index
+    - Duplication between Renderable and TileRenderer
+    - Duplication between UnitRenderer and TileRenderer (view matrix)
+    - Render to a texture instead of redrawing everything every frame
+    - Add support for animated tiles
+ - Renderable:
+    - Make vertex-related values into constants
+ - UnitRenderer:
+    - Render Units at the correct positions (re-use code from TileRenderer)
+    - Simplify for-loop iteration with index
 
 ## Features
 
@@ -117,3 +124,11 @@
 
  - Decipher scenario format
  - Find campaign map data
+
+### Future
+
+ - Easy military drag-select
+ - Rally points
+ - Configurable Gold multiplier
+ - Multiplayer campaigns
+ - Random map generation
