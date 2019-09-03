@@ -134,9 +134,6 @@ namespace Rival {
                 texCoords.data(),
                 GL_DYNAMIC_DRAW);
 
-            // Use index data
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
-
             // Render
             glDrawElements(
                 GL_TRIANGLE_FAN,

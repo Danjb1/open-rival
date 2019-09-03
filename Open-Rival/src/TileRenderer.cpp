@@ -12,11 +12,46 @@
 
 namespace Rival {
 
+    const int verticesPerTile = 4;
+    const int vertexSize = 2; // x, y
+    const int texCoordSize = 2; // u, v
+    const int indexSize = 6; // 2 triangles
+
     TileRenderer::TileRenderer(
             std::map<int, Sprite>& tileSprites,
             Texture& paletteTexture) :
         tileSprites(tileSprites),
-        paletteTexture(paletteTexture) {}
+        paletteTexture(paletteTexture) {
+
+        // Create vertex array
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        // Create position buffer
+        glGenBuffers(1, &positionVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glVertexAttribPointer(
+            textureShader.vertexAttribIndex,
+            vertexSize,
+            GL_FLOAT,
+            GL_FALSE,
+            vertexSize * sizeof(GLfloat),
+            nullptr);
+
+        // Create tex co-ord buffer
+        glGenBuffers(1, &texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glVertexAttribPointer(
+            textureShader.texCoordAttribIndex,
+            texCoordSize,
+            GL_FLOAT,
+            GL_FALSE,
+            texCoordSize * sizeof(GLfloat),
+            nullptr);
+
+        // Create index buffer
+        glGenBuffers(1, &ibo);
+    }
 
     void TileRenderer::render(
             std::vector<int>& tiles,
@@ -63,19 +98,26 @@ namespace Rival {
         glUniform1i(textureShader.texUnitUniformLocation, 0);
         glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
 
-        int i = 0;
+        // Create buffers to hold all our tile data
+        int numTiles = mapWidth * mapHeight;
+        int numVertices = numTiles * verticesPerTile;
+        int vertexDataSize = numVertices * vertexSize;
+        int texCoordDataSize = numVertices * texCoordSize;
+        int indexDataSize = numTiles * indexSize;
+        std::vector<GLfloat> vertexData;
+        std::vector<GLfloat> texCoords;
+        std::vector<GLuint> indexData;
+        vertexData.reserve(vertexDataSize);
+        texCoords.reserve(texCoordDataSize);
+        indexData.reserve(indexDataSize);
+
+        // Add data to buffers
+        unsigned int i = 0;
         for (int& tile : tiles) {
 
             const int tile = tiles[i];
             int tileX = i % mapWidth;
             int tileY = i / mapWidth;
-            i++;
-
-            // Get the Renderable for this Tile
-            Renderable renderable(sprite);
-
-            // Set the txIndex as appropriate
-            renderable.setTxIndex(tile);
 
             // Define vertex positions
             float width = static_cast<float>(Sprite::tileSpriteWidthPx);
@@ -86,7 +128,7 @@ namespace Rival {
             float y1 = y;
             float x2 = x + width;
             float y2 = y + height;
-            std::vector<GLfloat> vertexData = {
+            std::vector<GLfloat> thisVertexData = {
                 x1, y1,
                 x2, y1,
                 x2, y2,
@@ -94,50 +136,77 @@ namespace Rival {
             };
 
             // Determine texture co-ordinates
-            std::vector<GLfloat> texCoords = renderable.getTexCoords();
+            std::vector<GLfloat> thisTexCoords = sprite.getTexCoords(tile);
 
-            // TODO:
-            // Build a large array of vertices positions, texture co-ordinates
-            // and indices, and move the below code outside the loop using
-            // GL_TRIANGLES
+            // Determine index data
+            unsigned int startIndex = verticesPerTile * i;
+            std::vector<GLuint> thisIndexData = {
+                startIndex,
+                startIndex + 1,
+                startIndex + 2,
+                startIndex + 2,
+                startIndex + 3,
+                startIndex
+            };
 
-            // Bind vertex array
-            glBindVertexArray(renderable.getVao());
+            // Copy this tile's data to the main buffers
+            vertexData.insert(
+                vertexData.end(),
+                thisVertexData.begin(),
+                thisVertexData.end());
+            texCoords.insert(
+                texCoords.end(),
+                thisTexCoords.begin(),
+                thisTexCoords.end());
+            indexData.insert(
+                indexData.end(),
+                thisIndexData.begin(),
+                thisIndexData.end());
 
-            // Enable vertex attributes
-            glEnableVertexAttribArray(textureShader.vertexAttribIndex);
-            glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
-
-            // Send position data
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-            glBufferData(
-                GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                vertexData.data(),
-                GL_DYNAMIC_DRAW);
-
-            // Send tex co-ord data
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-            glBufferData(
-                GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                texCoords.data(),
-                GL_DYNAMIC_DRAW);
-
-            // Send index data
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
-
-            // Render
-            glDrawElements(
-                GL_TRIANGLE_FAN,
-                4,
-                GL_UNSIGNED_INT,
-                nullptr);
-
-            // Disable vertex attributes
-            glDisableVertexAttribArray(textureShader.vertexAttribIndex);
-            glDisableVertexAttribArray(textureShader.texCoordAttribIndex);
+            i++;
         }
+
+        // Bind vertex array
+        glBindVertexArray(vao);
+
+        // Enable vertex attributes
+        glEnableVertexAttribArray(textureShader.vertexAttribIndex);
+        glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
+
+        // Send position data
+        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            vertexDataSize * sizeof(GLfloat),
+            vertexData.data(),
+            GL_DYNAMIC_DRAW);
+
+        // Send tex co-ord data
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            texCoordDataSize * sizeof(GLfloat),
+            texCoords.data(),
+            GL_DYNAMIC_DRAW);
+
+        // Send index data
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBufferData(
+            GL_ELEMENT_ARRAY_BUFFER,
+            indexDataSize * sizeof(GLuint),
+            indexData.data(),
+            GL_STATIC_DRAW);
+
+        // Render
+        glDrawElements(
+            GL_TRIANGLES,
+            indexDataSize,
+            GL_UNSIGNED_INT,
+            nullptr);
+
+        // Disable vertex attributes
+        glDisableVertexAttribArray(textureShader.vertexAttribIndex);
+        glDisableVertexAttribArray(textureShader.texCoordAttribIndex);
 
         // Clean up
         glBindTexture(GL_TEXTURE_2D, 0);
