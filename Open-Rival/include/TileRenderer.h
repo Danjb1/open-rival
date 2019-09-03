@@ -29,6 +29,14 @@ namespace Rival {
 
     private:
 
+        GLuint vao = 0;
+
+        GLuint positionVbo = 0;
+
+        GLuint texCoordVbo = 0;
+
+        GLuint ibo = 0;
+
         const std::map<int, Sprite>& tileSprites;
 
         const Texture& paletteTexture;
