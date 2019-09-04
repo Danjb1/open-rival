@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\BinaryFileReader.cpp" />
     <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\ImageRenderable.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\pch.cpp">
@@ -41,6 +42,7 @@
   <ItemGroup>
     <ClInclude Include="include\BinaryFileReader.h" />
     <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\ImageRenderable.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Renderable.h" />

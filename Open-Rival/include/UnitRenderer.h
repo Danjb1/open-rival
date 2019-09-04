@@ -1,9 +1,11 @@
 #ifndef UNIT_RENDERER_H
 #define UNIT_RENDERER_H
 
+#include <glm/mat4x4.hpp>
 #include <map>
 #include <string>
 
+#include "ImageRenderable.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -22,7 +24,9 @@ namespace Rival {
                 std::map<Unit::Type, Sprite>& unitSprites,
                 Texture& paletteTexture);
 
-        void render(std::map<int, std::unique_ptr<Unit>>& units);
+        void render(
+                glm::mat4 viewProjMatrix,
+                std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
 
@@ -30,9 +34,9 @@ namespace Rival {
 
         const Texture& paletteTexture;
 
-        std::map<int, Renderable> renderables;
+        std::map<int, ImageRenderable> renderables;
 
-        Renderable& getOrCreateRenderable(
+        ImageRenderable& getOrCreateRenderable(
                 const std::unique_ptr<Unit>& unit);
 
         int getUnitRenderPosX(Unit& unit);
