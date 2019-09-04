@@ -7,14 +7,14 @@
     - Free resources in destructor
     - Simplify for-loop iteration with index
     - Duplication between Renderable and TileRenderer
-    - Duplication between UnitRenderer and TileRenderer (view matrix)
+    - Duplication between UnitRenderer and TileRenderer
     - Render to a texture instead of redrawing everything every frame
     - Add support for animated tiles
- - Renderable:
-    - Make vertex-related values into constants
  - UnitRenderer:
+    - Make vertex-related values into constants
     - Render Units at the correct positions (re-use code from TileRenderer)
     - Simplify for-loop iteration with index
+    - Add support for team colours
 
 ## Features
 

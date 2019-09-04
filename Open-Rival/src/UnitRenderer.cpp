@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "UnitRenderer.h"
 
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <map>
 
 #include "Palette.h"
@@ -18,7 +15,7 @@ namespace Rival {
         unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
-    Renderable& UnitRenderer::getOrCreateRenderable(
+    ImageRenderable& UnitRenderer::getOrCreateRenderable(
                 const std::unique_ptr<Unit>& unit) {
 
         int id = unit->getId();
@@ -35,35 +32,12 @@ namespace Rival {
         return renderables.at(id);
     }
 
-    void UnitRenderer::render(std::map<int, std::unique_ptr<Unit>>& units) {
+    void UnitRenderer::render(
+            glm::mat4 viewProjMatrix,
+            std::map<int, std::unique_ptr<Unit>>& units) {
 
         // Use shader
         glUseProgram(textureShader.programId);
-
-        // Determine view matrix
-        // OpenGL uses right handed rule:
-        //  - x points right
-        //  - y points up
-        //  - z points out of the screen
-        glm::mat4 view = glm::lookAt(
-            glm::vec3(0, 0, 1),     // camera position
-            glm::vec3(0, 0, 0),     // look at
-            glm::vec3(0, 1, 0)      // up vector
-        );
-
-        // Determine projection matrix
-        // We want y to point down, so the top and bottom arguments are
-        // flipped
-        float screenWidth = static_cast<float>(Rival::windowWidth);
-        float screenHeight = static_cast<float>(Rival::windowHeight);
-        glm::mat4 projection = glm::ortho(
-            0.0f,           // left
-            screenWidth,    // right
-            screenHeight,   // bottom
-            0.0f);          // top
-
-        // Combine matrices
-        glm::mat4 viewProjMatrix = projection * view;
 
         // Set uniform values
         glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
@@ -81,7 +55,7 @@ namespace Rival {
             }
 
             // Get (or create) the Renderable for this Unit
-            Renderable& renderable = getOrCreateRenderable(unit);
+            ImageRenderable& renderable = getOrCreateRenderable(unit);
 
             // Set the txIndex as appropriate
             renderable.setTxIndex(unit->getFacing());

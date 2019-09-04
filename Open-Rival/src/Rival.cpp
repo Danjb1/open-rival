@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Rival.h"
 
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <map>
 
 #include "Image.h"
@@ -297,13 +300,45 @@ namespace Rival {
     }
 
     void Rival::render() {
+
+        // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Determine view matrix
+        // OpenGL uses right handed rule:
+        //  - x points right
+        //  - y points up
+        //  - z points out of the screen
+        glm::mat4 view = glm::lookAt(
+            glm::vec3(0, 0, 1),     // camera position
+            glm::vec3(0, 0, 0),     // look at
+            glm::vec3(0, 1, 0)      // up vector
+        );
+
+        // Determine projection matrix
+        // We want y to point down, so the top and bottom arguments are
+        // flipped
+        float screenWidth = static_cast<float>(Rival::windowWidth);
+        float screenHeight = static_cast<float>(Rival::windowHeight);
+        glm::mat4 projection = glm::ortho(
+            0.0f,           // left
+            screenWidth,    // right
+            screenHeight,   // bottom
+            0.0f);          // top
+
+        // Combine matrices
+        glm::mat4 viewProjMatrix = projection * view;
+
+        // Render Tiles
         tileRenderer->render(
+                viewProjMatrix,
                 scenario->getTiles(),
                 scenario->getWidth(),
                 scenario->getHeight(),
                 scenario->isWilderness());
-        unitRenderer->render(scenario->getUnits());
+
+        // Render Units
+        unitRenderer->render(viewProjMatrix, scenario->getUnits());
     }
 
     void Rival::exit() {

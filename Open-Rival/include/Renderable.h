@@ -6,13 +6,16 @@
 namespace Rival {
 
     /**
-     * Class containing all the data needed for OpenGL to render an image.
+     * Class that wraps an OpenGL vertex array and associated buffers.
      */
     class Renderable {
 
     public:
 
-        Renderable(const Sprite&);
+        const int vertexDimensions = 2; // x, y
+        const int texCoordDimensions = 2; // u, v
+
+        Renderable();
 
         ~Renderable();
 
@@ -30,17 +33,7 @@ namespace Rival {
 
         GLuint getIbo() const;
 
-        std::vector<GLfloat> getTexCoords() const;
-
-        GLuint getTextureId() const;
-
-        int getTxIndex() const;
-
-        void setTxIndex(int newTxIndex);
-
-    private:
-
-        const Sprite& sprite;
+    protected:
 
         GLuint vao = 0;
 
@@ -49,8 +42,6 @@ namespace Rival {
         GLuint texCoordVbo = 0;
 
         GLuint ibo = 0;
-
-        int txIndex = 0;
 
     };
 
