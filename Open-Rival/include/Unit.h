@@ -1,7 +1,6 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "Renderable.h"
 #include "Sprite.h"
 
 namespace Rival {

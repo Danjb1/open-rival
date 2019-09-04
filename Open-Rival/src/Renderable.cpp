@@ -5,8 +5,7 @@
 
 namespace Rival {
 
-    Renderable::Renderable(const Sprite& sprite) :
-            sprite(sprite) {
+    Renderable::Renderable() {
 
         // Create vertex array
         glGenVertexArrays(1, &vao);
@@ -17,10 +16,10 @@ namespace Rival {
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
             textureShader.vertexAttribIndex,
-            2,
+            vertexDimensions,
             GL_FLOAT,
             GL_FALSE,
-            2 * sizeof(GLfloat),
+            vertexDimensions * sizeof(GLfloat),
             nullptr);
 
         // Create tex co-ord buffer
@@ -28,35 +27,20 @@ namespace Rival {
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
             textureShader.texCoordAttribIndex,
-            2,
+            texCoordDimensions,
             GL_FLOAT,
             GL_FALSE,
-            2 * sizeof(GLfloat),
+            texCoordDimensions * sizeof(GLfloat),
             nullptr);
-
-        // Create IBO once, as this never changes
-        // 4 vertices required to render a quad using GL_TRIANGLE_FAN:
-        //    0------1
-        //    | \    |
-        //    |   \..|
-        //    3----- 2
-        const std::vector<GLuint> indexData = { 0, 1, 2, 3 };
 
         // Create index buffer
         glGenBuffers(1, &ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            4 * sizeof(GLuint),
-            indexData.data(),
-            GL_STATIC_DRAW);
     }
 
     Renderable::~Renderable() {
         glDeleteBuffers(1, &positionVbo);
-        glDeleteBuffers(1, &positionVbo);
-        glDeleteBuffers(1, &ibo);
         glDeleteBuffers(1, &texCoordVbo);
+        glDeleteBuffers(1, &ibo);
         glDeleteVertexArrays(1, &vao);
     }
 
@@ -74,22 +58,6 @@ namespace Rival {
 
     GLuint Renderable::getIbo() const {
         return ibo;
-    }
-
-    std::vector<GLfloat> Renderable::getTexCoords() const {
-        return sprite.getTexCoords(txIndex);
-    }
-
-    GLuint Renderable::getTextureId() const {
-        return sprite.texture.getId();
-    }
-
-    int Renderable::getTxIndex() const {
-        return txIndex;
-    }
-
-    void Renderable::setTxIndex(int newTxIndex) {
-        txIndex = newTxIndex;
     }
 
 }

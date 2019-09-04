@@ -54,10 +54,11 @@ namespace Rival {
     }
 
     void TileRenderer::render(
+            glm::mat4 viewProjMatrix,
             std::vector<int>& tiles,
-        int mapWidth,
-        int mapHeight,
-        bool wilderness) {
+            int mapWidth,
+            int mapHeight,
+            bool wilderness) {
 
         // Pick which Sprite to use
         const Sprite& sprite = wilderness
@@ -72,25 +73,6 @@ namespace Rival {
         glBindTexture(GL_TEXTURE_2D, sprite.texture.getId());
         glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
-
-        // Determine view matrix
-        glm::mat4 view = glm::lookAt(
-            glm::vec3(0, 0, 1),     // camera position
-            glm::vec3(0, 0, 0),     // look at
-            glm::vec3(0, 1, 0)      // up vector
-        );
-
-        // Determine projection matrix
-        float screenWidth = static_cast<float>(Rival::windowWidth);
-        float screenHeight = static_cast<float>(Rival::windowHeight);
-        glm::mat4 projection = glm::ortho(
-            0.0f,           // left
-            screenWidth,    // right
-            screenHeight,   // bottom
-            0.0f);          // top
-
-        // Combine matrices
-        glm::mat4 viewProjMatrix = projection * view;
 
         // Set uniform values
         glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
@@ -120,6 +102,10 @@ namespace Rival {
             int tileY = i / mapWidth;
 
             // Define vertex positions
+            //    0------1
+            //    | \    |
+            //    |   \..|
+            //    3----- 2
             float width = static_cast<float>(Sprite::tileSpriteWidthPx);
             float height = static_cast<float>(Sprite::tileSpriteHeightPx);
             float x = static_cast<float>(getTileRenderPosX(tileX));
@@ -139,6 +125,8 @@ namespace Rival {
             std::vector<GLfloat> thisTexCoords = sprite.getTexCoords(tile);
 
             // Determine index data
+            // First triangle: 0-1-2
+            // Second triangle: 2-3-0
             unsigned int startIndex = verticesPerTile * i;
             std::vector<GLuint> thisIndexData = {
                 startIndex,

@@ -1,6 +1,7 @@
 #ifndef TILE_RENDERER_H
 #define TILE_RENDERER_H
 
+#include <glm/mat4x4.hpp>
 #include <map>
 #include <string>
 
@@ -11,7 +12,7 @@ namespace Rival {
     /**
      * Class responsible for rendering Tiles.
      *
-     * It creates a Renderable for each Tile.
+     * It renders all Tiles in a single draw operation.
      */
     class TileRenderer {
 
@@ -22,6 +23,7 @@ namespace Rival {
                 Texture& paletteTexture);
 
         void render(
+                glm::mat4 viewProjMatrix,
                 std::vector<int>& tiles,
                 int mapWidth,
                 int mapHeight,
