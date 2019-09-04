@@ -88,10 +88,6 @@ namespace Rival {
             // Bind vertex array
             glBindVertexArray(renderable.getVao());
 
-            // Enable vertex attributes
-            glEnableVertexAttribArray(textureShader.vertexAttribIndex);
-            glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
-
             // Use position data
             glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
             glBufferData(
@@ -114,10 +110,6 @@ namespace Rival {
                 4,
                 GL_UNSIGNED_INT,
                 nullptr);
-
-            // Disable vertex attributes
-            glDisableVertexAttribArray(textureShader.vertexAttribIndex);
-            glDisableVertexAttribArray(textureShader.texCoordAttribIndex);
         }
 
         // Clean up

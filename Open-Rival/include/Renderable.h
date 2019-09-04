@@ -12,8 +12,8 @@ namespace Rival {
 
     public:
 
-        const int vertexDimensions = 2; // x, y
-        const int texCoordDimensions = 2; // u, v
+        static const int numVertexDimensions = 2; // x, y
+        static const int numTexCoordDimensions = 2; // u, v
 
         Renderable();
 

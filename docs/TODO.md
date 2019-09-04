@@ -3,10 +3,7 @@
 ## Improvements
 
  - TileRenderer:
-    - Improve variable names
-    - Free resources in destructor
     - Simplify for-loop iteration with index
-    - Duplication between Renderable and TileRenderer
     - Duplication between UnitRenderer and TileRenderer
     - Render to a texture instead of redrawing everything every frame
     - Add support for animated tiles
