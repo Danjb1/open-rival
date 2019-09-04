@@ -16,10 +16,10 @@ namespace Rival {
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
             textureShader.vertexAttribIndex,
-            vertexDimensions,
+            numVertexDimensions,
             GL_FLOAT,
             GL_FALSE,
-            vertexDimensions * sizeof(GLfloat),
+            numVertexDimensions * sizeof(GLfloat),
             nullptr);
 
         // Create tex co-ord buffer
@@ -27,14 +27,18 @@ namespace Rival {
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
             textureShader.texCoordAttribIndex,
-            texCoordDimensions,
+            numTexCoordDimensions,
             GL_FLOAT,
             GL_FALSE,
-            texCoordDimensions * sizeof(GLfloat),
+            numTexCoordDimensions * sizeof(GLfloat),
             nullptr);
 
         // Create index buffer
         glGenBuffers(1, &ibo);
+
+        // Enable vertex attributes
+        glEnableVertexAttribArray(textureShader.vertexAttribIndex);
+        glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
     }
 
     Renderable::~Renderable() {
