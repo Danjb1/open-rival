@@ -13,45 +13,13 @@
 namespace Rival {
 
     const int verticesPerTile = 4;
-    const int vertexSize = 2; // x, y
-    const int texCoordSize = 2; // u, v
-    const int indexSize = 6; // 2 triangles
+    const int indicesPerTile = 6; // 2 triangles
 
     TileRenderer::TileRenderer(
             std::map<int, Sprite>& tileSprites,
             Texture& paletteTexture) :
         tileSprites(tileSprites),
-        paletteTexture(paletteTexture) {
-
-        // Create vertex array
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        // Create position buffer
-        glGenBuffers(1, &positionVbo);
-        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glVertexAttribPointer(
-            textureShader.vertexAttribIndex,
-            vertexSize,
-            GL_FLOAT,
-            GL_FALSE,
-            vertexSize * sizeof(GLfloat),
-            nullptr);
-
-        // Create tex co-ord buffer
-        glGenBuffers(1, &texCoordVbo);
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glVertexAttribPointer(
-            textureShader.texCoordAttribIndex,
-            texCoordSize,
-            GL_FLOAT,
-            GL_FALSE,
-            texCoordSize * sizeof(GLfloat),
-            nullptr);
-
-        // Create index buffer
-        glGenBuffers(1, &ibo);
-    }
+        paletteTexture(paletteTexture) {}
 
     void TileRenderer::render(
             glm::mat4 viewProjMatrix,
@@ -83,9 +51,9 @@ namespace Rival {
         // Create buffers to hold all our tile data
         int numTiles = mapWidth * mapHeight;
         int numVertices = numTiles * verticesPerTile;
-        int vertexDataSize = numVertices * vertexSize;
-        int texCoordDataSize = numVertices * texCoordSize;
-        int indexDataSize = numTiles * indexSize;
+        int vertexDataSize = numVertices * Renderable::numVertexDimensions;
+        int texCoordDataSize = numVertices * Renderable::numTexCoordDimensions;
+        int indexDataSize = numTiles * indicesPerTile;
         std::vector<GLfloat> vertexData;
         std::vector<GLfloat> texCoords;
         std::vector<GLuint> indexData;
@@ -155,14 +123,10 @@ namespace Rival {
         }
 
         // Bind vertex array
-        glBindVertexArray(vao);
-
-        // Enable vertex attributes
-        glEnableVertexAttribArray(textureShader.vertexAttribIndex);
-        glEnableVertexAttribArray(textureShader.texCoordAttribIndex);
+        glBindVertexArray(renderable.getVao());
 
         // Send position data
-        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
         glBufferData(
             GL_ARRAY_BUFFER,
             vertexDataSize * sizeof(GLfloat),
@@ -170,7 +134,7 @@ namespace Rival {
             GL_DYNAMIC_DRAW);
 
         // Send tex co-ord data
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
         glBufferData(
             GL_ARRAY_BUFFER,
             texCoordDataSize * sizeof(GLfloat),
@@ -178,7 +142,7 @@ namespace Rival {
             GL_DYNAMIC_DRAW);
 
         // Send index data
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
         glBufferData(
             GL_ELEMENT_ARRAY_BUFFER,
             indexDataSize * sizeof(GLuint),
@@ -191,10 +155,6 @@ namespace Rival {
             indexDataSize,
             GL_UNSIGNED_INT,
             nullptr);
-
-        // Disable vertex attributes
-        glDisableVertexAttribArray(textureShader.vertexAttribIndex);
-        glDisableVertexAttribArray(textureShader.texCoordAttribIndex);
 
         // Clean up
         glBindTexture(GL_TEXTURE_2D, 0);
