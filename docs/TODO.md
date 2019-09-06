@@ -11,6 +11,7 @@
     - Make vertex-related values into constants
     - Render Units at the correct positions (re-use code from TileRenderer)
     - Simplify for-loop iteration with index
+    - Delete Renderables when a Unit no longer exists
     - Add support for team colours
 
 ## Features
