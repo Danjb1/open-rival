@@ -154,26 +154,81 @@ After all unit types is another byte for "Must Hire".
 
 ## Scenario Goals
 
-Starting at offset 0x8178 (immediately before the footer).
+Starting at offset 0x8178 (immediately before the footer) - generally preceded by 0x34 0xF4.
 
-    # No goals:
-    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 74                                                                         74 74 74 74 74 74
+This section uses a strange numbering system:
 
-    # Build 1 Human Castle:
-    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 74 7F 74 75 AF AF 74 AF AF AF AF 74 40 A2 8D                            74 74 74 74 74 74
+    (0   0x74)   ‭---
+     1   0x75     |
+     2   0x72     |
+     3   0x73   ‭  |
+     4   0x78    ---
+     5   0x79     |
+     6   0x76     |
+     7   0x77     |
+     8   0x7C    ---
+     9   0x7D     |
+    10   0x7A     |
+    11   0x7B     |
+    12   0x80    ---
+    13   0x81     |
+    14   0x7E     |
+    15   0x7F     |
 
-    # Build 1 Human Castle at (11, 4) - radius 4
-    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 75 7F 74 78 AF AF 74 7B 74 74 74 78 74 74 74                            74 74 74 74 74 74
-    
-    # Destroy Player 2 Human Castle
-    75 72 78 7C 84 54 34 F4 75 74 7B 74 74 74 78 74 74 74 75 72 7F 74 72 AF AF 74 AF AF AF AF 74 40 A2 8D                            74 74 74 74 74 74
-    
-    # Touch Human Peasant with ID 1 to (13, 7)
-    75 72 78 7C 84 54 34 F4 72 75 81 74 74 74 77 74 74 74 74 7B 74 74 74 78 74 74 74 75 73 63 74 AF AF 75 74 81 74 74 74 77 74 74 74 74 74 74 74 74 74
-    
-    # Touch Item (Gold) to (13, 7)
-    75 72 78 7C 84 54 34 F4 72 75 81 74 74 74 77 74 74 74 74 7B 74 74 74 78 74 74 74 75 78 AF AF AF 74 AF 74 81 74 74 74 77 74 74 74 74 74 74 74 74 74
-    
+These values seem to come in clusters of 4, where each cluster is ordered "CDAB".
+
+0x74 is represented by a dash, below.
+
+0xAF also seems to have some special meaning.
+
+### No goals (destroy all enemies):
+
+    -- -- -- 75 -- 7B -- -- -- 78 -- -- -- -- -- -- -- -- -- --
+
+### BUILD
+
+                   ??    ??
+    -- -- -- 75 -- TT -- NN AF AF -- AF AF AF AF -- 24 A2 8D -- -- -- -- -- --
+
+ - `TT` is the building type (see appendix)
+
+ - `NN` is the count
+
+### BUILD AT
+
+                   ??    ??          ??          ??
+    -- -- -- 75 RR TT -- NN AF AF -- XX -- -- -- YY -- -- -- -- -- -- -- -- --
+
+ - `RR` is the radius
+
+ - `TT` is the building type (see appendix)
+
+ - `NN` is the count
+
+ - `XX` is the x co-ordinate
+
+ - `YY` is the y co-ordinate
+
+### DESTROY
+
+TODO.
+
+### TOUCH
+
+TODO.
+
+### TOUCH ITEM
+
+TODO.
+
+### GET
+
+TODO.
+
+### ELIMINATE
+
+TODO.
+
 ## Alliances
 
 TODO.
@@ -281,42 +336,48 @@ TODO.
 
 ### Buildings
 
-    Human - Castle
-    Human - Gold Mill
-    Human - Archery Range
-    Human - Armoury
-    Human - Barracks
-    Human - Holy Stables
-    Human - Fire Guild
-    Human - Temple
-    Human - Mage Tower
-    Human - Shipyard
-    Human - Watch Tower
-    Human - Wall
-    Greenskin - Fortress
-    Greenskin - Hoard Keep
-    Greenskin - Fort
-    Greenskin - Blacksmith
-    Greenskin - Battle Quarters
-    Greenskin - Black Nest
-    Greenskin - Weird Workshop
-    Greenskin - Unholy Chapel
-    Greenskin - Altar of Doom
-    Greenskin - Docks
-    Greenskin - Guard Tower
-    Greenskin - Greenskin Wall
-    Elf - Elven Keep
-    Elf - Treasury
-    Elf - Combat Camp
-    Elf - Arsenal
-    Elf - Duel Range
-    Elf - Holy Nest
-    Elf - Miner Guildhall
-    Elf - Abbey Tower
-    Elf - Council of Runes
-    Elf - Harbour
-    Elf - Warning Tower
-    Elf - Tree Wall
+ - Types shown here come from the Scenario Goals section, which uses a strange numbering system.
+
+<!-- End of bullet list -->
+
+    Type    Building
+    ------------------------------------------
+    0x7F    Human - Castle
+    0x84    Human - Gold Mill
+            Human - Archery Range
+            Human - Armoury
+            Human - Barracks
+            Human - Holy Stables
+            Human - Fire Guild
+            Human - Temple
+            Human - Mage Tower
+            Human - Shipyard
+            Human - Watch Tower
+            Human - Wall
+            Greenskin - Fortress
+            Greenskin - Hoard Keep
+            Greenskin - Fort
+            Greenskin - Blacksmith
+            Greenskin - Battle Quarters
+            Greenskin - Black Nest
+            Greenskin - Weird Workshop
+            Greenskin - Unholy Chapel
+            Greenskin - Altar of Doom
+            Greenskin - Docks
+            Greenskin - Guard Tower
+            Greenskin - Greenskin Wall
+            Elf - Elven Keep
+            Elf - Treasury
+            Elf - Combat Camp
+            Elf - Arsenal
+            Elf - Duel Range
+            Elf - Holy Nest
+            Elf - Miner Guildhall
+            Elf - Abbey Tower
+            Elf - Council of Runes
+            Elf - Harbour
+            Elf - Warning Tower
+            Elf - Tree Wall
 
 ### Units
 
