@@ -19,16 +19,7 @@ The following analysis was performed with the help of VBinDiff.
     <=32 bytes          Map name
     1 byte              String terminator (0x28)
     4 bytes             Map height
-    4 bytes             Map width
-    33 bytes            Unknown
-    1 byte              Player 1 Race (0x02 = Human, 0x03 = Greenskin, 0x04 = Elf)
-
-The 33 unknown bytes seem to start with one of the following sequences:
-
-        00 00 00 00 00 00
-    OR: 35 02 00 00 48 02
-
-This seems to vary randomly.
+    5 bytes         00 00 00 00 00 00 or 35 02 00 00 48 02 (seems to change arbitrarily)
 
 ## Building Defaults
 
@@ -249,19 +240,55 @@ The section is formatted as follows:
 
 ## Alliances
 
-TODO.
+Starting at offset 0x815F (almost at the end).
+
+1 byte per player. Values seem arbitrary but players with the same value are allied!
+
+Default:
+
+    75 72 78 7C 84 54 34 F4
+
+Players allied in pairs:
+
+    73 73 80 80 64 64 B4 B4
 
 ## Campaign Texts
 
-TODO.
+Starting at offset 0x817B (immediately before the checksum).
 
-## Resource Info
+Uses character values from *[alphabet.md](/docs/alphabet.md)*
 
-TODO.
+If the first byte is 0x74, then there is no campaign text, and the subsequent values are simply `74 74 74 74 74`.
+
+    73 74 35 32 33 73 74 18 19 16 73 74 1C 1D 1A
+           A  B  C        d  e  f        h  i  j
+
+    Title: ABC
+    Objections: abc
+    Narration: hij
 
 ## AI Building Settings
 
-TODO.
+For each AI strategy (see appendix), the following buildings are listed:
+
+    Gold Mill / Treasury / Hoard Keep
+    Archery Range / Combat Camp / Fort
+    Armoury / Arsenal / Blacksmith
+    Barracks / Duel Range / Battle Quarters
+    Holy Stables / Holy Nest / Black Nest
+    Fire Guild / Miner Guildhall / Weird Workshop
+    Temple / Abbey Tower / Unholy Cathedral
+    Mage Tower / Council of Runes / Altar of Doom
+    Shipyard / Harbour / Docks
+    Watch Tower / Warning Tower / Guard Tower
+    Human Wall / Tree Wall / Greenskin Wall
+
+Each entry contains:
+
+    1 byte          Amount
+    1 byte          Flag
+
+No idea what "Flag" does!
 
 ## AI Troops Settings
 
@@ -269,7 +296,28 @@ TODO.
 
 ## Player Properties
 
-TODO.
+Starting at offset 0x0019 (immediately after the header).
+
+Repeats for each player.
+
+    12 bytes        Unknown (or is this part of the map header?)
+    4 bytes         Starting Gold
+    4 bytes         Starting Wood
+    4 bytes         Starting Food
+    4 bytes         Race (0x02 = Human, 0x03 = Greenskin, 0x04 = Elf)
+    1 byte          Human (0x00) or Computer (0x01)
+    1 byte          AI Type (0x00 = Passive, 0x01 = Offensive, 0x02 = Defensive)
+
+TODO: AI Strategy / AI Performance / AI Harrassment
+
+Starting resources use some kind of special numbering system:
+
+    0x64 = 4000
+    0x67 = 4001
+    0xE8 = 1000
+    0xEA = 1001
+    0xA0 = 100
+    0xA1 = 101
 
 ## Terrain Data
 
