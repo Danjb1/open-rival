@@ -156,39 +156,22 @@ After all unit types is another byte for "Must Hire".
 
 Starting at offset 0x8178 (immediately before the footer) - generally preceded by 0x34 0xF4.
 
-This section uses a strange numbering system:
-
-    (0   0x74)   ‭---
-     1   0x75     |
-     2   0x72     |
-     3   0x73   ‭  |
-     4   0x78    ---
-     5   0x79     |
-     6   0x76     |
-     7   0x77     |
-     8   0x7C    ---
-     9   0x7D     |
-    10   0x7A     |
-    11   0x7B     |
-    12   0x80    ---
-    13   0x81     |
-    14   0x7E     |
-    15   0x7F     |
-
-These values seem to come in clusters of 4, where each cluster is ordered "CDAB".
+This section uses a strange numbering system, described in *goals_numbering.xlsx*.
 
 0x74 is represented by a dash, below.
 
-0xAF also seems to have some special meaning.
+0xAF also seems to have some special meaning, represented by an underscore, below.
 
-### No goals (destroy all enemies):
+The section is formatted as follows:
 
-    -- -- -- 75 -- 7B -- -- -- 78 -- -- -- -- -- -- -- -- -- --
+    1 byte(?)       Number of goals
+    ? bytes         List of goals (each goal type is described below)
+    6 bytes         0x74 0x74 0x74 0x74 0x74 0x74
 
 ### BUILD
 
-                   ??    ??
-    -- -- -- 75 -- TT -- NN AF AF -- AF AF AF AF -- 24 A2 8D -- -- -- -- -- --
+       ??    ??
+    -- TT -- NN __ __ -- __ __ __ __ -- 24 A2 8D
 
  - `TT` is the building type (see appendix)
 
@@ -196,8 +179,8 @@ These values seem to come in clusters of 4, where each cluster is ordered "CDAB"
 
 ### BUILD AT
 
-                   ??    ??          ??          ??
-    -- -- -- 75 RR TT -- NN AF AF -- XX -- -- -- YY -- -- -- -- -- -- -- -- --
+    ?? ??    ??          ??          ??
+    RR TT -- NN __ __ -- XX -- -- -- YY -- -- --
 
  - `RR` is the radius
 
@@ -211,23 +194,51 @@ These values seem to come in clusters of 4, where each cluster is ordered "CDAB"
 
 ### DESTROY
 
-TODO.
+       ??    ??
+    72 TT -- PP __ __ -- __ __ __ __ -- 24 A2 8D
+
+ - `TT` is the building type (see appendix)
+
+ - `PP` is the player number
 
 ### TOUCH
 
-TODO.
+       ??          ??    ??          ??
+    73 TT -- __ __ ID -- XX -- -- -- YY -- -- --
+
+ - `TT` is the unit type (ordering same as in the appendices, but starting from 0x63)
+
+ - `ID` is the Troop ID
+
+ - `XX` is the x co-ordinate
+
+ - `YY` is the y co-ordinate
 
 ### TOUCH ITEM
 
-TODO.
+                ??       ??          ??
+    78 __ __ __ II __ -- XX -- -- -- YY -- -- --
+
+ - `II` is the item type
+
+ - `XX` is the x co-ordinate
+
+ - `YY` is the y co-ordinate
 
 ### GET
 
-TODO.
+       TT       II ID
+    79 63 -- __ 75 75 -- __ __ __ __ -- 24 A2 8D
+
+ - `TT` is the unit type
+
+ - `ID` is the Troop ID
+
+ - `II` is the item type
 
 ### ELIMINATE
 
-TODO.
+    76 __ __ __ __ __ -- __ __ __ __ -- 24 A2 8D
 
 ## Alliances
 
@@ -681,6 +692,63 @@ TODO.
     Human - Defence
     Greenskin - Defence
     Elf - Defence
+
+### Items
+
+    Index   Item
+    ------------------------------------------
+    0       Gold
+    1       Money
+    2       Gold Bonus
+    3       Wood
+    4       Wood Bonus
+    5       Normal Food
+    6       Poisonous Food
+    7       Food Bonus
+    8       Healing Potion
+    9       Healing Bonus
+    10      Mana Potion
+    11      Mana Bonus
+    12      Bomb
+    13      Ring of Protection
+    14      Bracelet of Defender
+    15      Crown of Titans
+    16      Helm of Dragons
+    17      Ring of Power
+    18      Bracelet of Strength
+    19      Gauntlet of Might
+    20      Amulet of Battle
+    21      Crown of Destruction
+    22      Necklace of Dragons
+    23      Ring of Skill
+    24      Celestial Cloak
+    25      Tome of Knowledge
+    26      Magical Efficiency Sphere
+    27      Supreme Magic Shield
+    28      Boots of Windspeed
+    29      Ring of Fury
+    30      Bracelet of Fanaticism
+    31      Ring of Life
+    32      Necklace of Blessing
+    33      Amulet of Life
+    34      Healing Scroll
+    35      Spyral Scroll
+    36      Wave Scroll
+    37      Soul Damnation Scroll
+    38      Frozen Breath Scroll
+    39      Hyena Howl Scroll
+    40      Touch of Chaos Scroll
+    41      Teleport Scroll
+    42      Drain Life Scroll
+    43      Magic Barrier Scroll
+    44      Curse Land Scroll
+    45      Poison Cropland Scroll
+    46      Berserker Scroll
+    47      Blindness Scroll
+    48      Red Key
+    49      Green Key
+    50      Blue Key
+    51      Yellow Key
 
 ### Facings
 
