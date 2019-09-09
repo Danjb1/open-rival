@@ -171,7 +171,7 @@ The section is formatted as follows:
        ??    ??
     -- TT -- NN __ __ -- __ __ __ __ -- 24 A2 8D
 
- - `TT` is the building type (see appendix)
+ - `TT` is the building type (see Appendices)
 
  - `NN` is the count
 
@@ -182,7 +182,7 @@ The section is formatted as follows:
 
  - `RR` is the radius
 
- - `TT` is the building type (see appendix)
+ - `TT` is the building type (see Appendices)
 
  - `NN` is the count
 
@@ -195,7 +195,7 @@ The section is formatted as follows:
        ??    ??
     72 TT -- PP __ __ -- __ __ __ __ -- 24 A2 8D
 
- - `TT` is the building type (see appendix)
+ - `TT` is the building type (see Appendices)
 
  - `PP` is the player number
 
@@ -269,7 +269,7 @@ If the first byte is 0x74, then there is no campaign text, and the subsequent va
 
 ## AI Building Settings
 
-For each AI strategy (see appendix), the following buildings are listed:
+For each AI strategy (see Appendices), the following buildings are listed:
 
     Gold Mill / Treasury / Hoard Keep
     Archery Range / Combat Camp / Fort
@@ -288,11 +288,33 @@ Each entry contains:
     1 byte          Amount
     1 byte          Flag
 
-No idea what "Flag" does!
+No idea what "Flag" does, but it's always 1 or 2. Could be something to do with which Upgrades to buy.
 
 ## AI Troops Settings
 
-TODO.
+For each AI strategy (see Appendices), the following Units are listed:
+
+    Peasant / Yeoman / Serf
+    Bowman / Archer / Rock Thrower
+    Light Cavalry / Druid / Horde Rider
+    Knight / Centaur / Warlord
+    Fire Master / Dwarf Miner / Gnome Boomer
+    Thief / Scout / Rogue
+    Ballista / Bombard / Catapult
+    Chariot of War / Arquebusier / Storm Trooper
+    Wizard / Mage / Priest of Doom
+    Priest / Enchanter / Necromancer
+    Sea Barge / Bark / Landing Craft
+    Battleship / Warship / Troll Galley
+    Pegas Rider / Sky Rider / Warbat
+    Zeppelin / Magic Chopper / Balloon
+
+Each entry contains:
+
+    1 byte          Amount
+    1 byte          X
+
+No idea what "X" does, but it's only non-zero for Fire Masters, Thieves and Zeppelins. Could be something to do with which Upgrades to buy.
 
 ## Player Properties
 
@@ -300,24 +322,15 @@ Starting at offset 0x0019 (immediately after the header).
 
 Repeats for each player.
 
-    12 bytes        Unknown (or is this part of the map header?)
-    4 bytes         Starting Gold
-    4 bytes         Starting Wood
+    12 bytes        Unknown
     4 bytes         Starting Food
-    4 bytes         Race (0x02 = Human, 0x03 = Greenskin, 0x04 = Elf)
+    4 bytes         Starting Wood
+    4 bytes         Starting Gold
+    1 byte          Race (0x02 = Human, 0x03 = Greenskin, 0x04 = Elf)
     1 byte          Human (0x00) or Computer (0x01)
     1 byte          AI Type (0x00 = Passive, 0x01 = Offensive, 0x02 = Defensive)
-
-TODO: AI Strategy / AI Performance / AI Harrassment
-
-Starting resources use some kind of special numbering system:
-
-    0x64 = 4000
-    0x67 = 4001
-    0xE8 = 1000
-    0xEA = 1001
-    0xA0 = 100
-    0xA1 = 101
+    1 byte          AI Performance (see Appendices)
+    1 byte          AI Strategy (see Appendices)
 
 ## Terrain Data
 
@@ -1004,3 +1017,29 @@ Section starts with the number of objects (4 bytes).
     0x05 = Violet
     0x06 = Blue
     0x07 = Black
+
+### AI Strategies
+
+    0x01 = Land Combat
+    0x02 = General
+    0x03 = Sea Wolf
+    0x04 = Wizards
+    0x05 = Airbourne
+    0x06 = Custom 1
+    0x07 = Custom 2
+
+### AI Performance
+
+    No harrassment:
+
+    0x10 = Have mercy
+    0x11 = I am OK
+    0x12 = I will chop you
+    0x13 = Try This!
+
+    With harrassment:
+
+    0x00 = Have mercy
+    0x01 = I am OK
+    0x02 = I will chop you
+    0x03 = Try This!

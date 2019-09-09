@@ -120,13 +120,17 @@
 
 ### File Formats
 
- - Decipher scenario format
  - Find campaign map data
 
-### Future
+### Future Enhancements
 
  - Easy military drag-select
  - Rally points
  - Configurable Gold multiplier
  - Multiplayer campaigns
+ - Stable net play!
  - Random map generation
+ - More endgame stats
+ - Improved pathfinding
+ - Non-suicidal peasants (don't go looking for gold)
+ - Affordable Wall
