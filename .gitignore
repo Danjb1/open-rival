@@ -14,11 +14,13 @@ Debug/
 # User preferences
 *.user
 
-# Raw images
-/image-extractor/images
-/texture-builder/images
+# Game data files
 IMAGES.DAT
+SOUNDS.DAT
 
-# Textures
+# Extracted data files
+/audio-extractor/output
+/image-extractor/images
 /Open-Rival/res/textures
+/texture-builder/images
 /texture-builder/textures

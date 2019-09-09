@@ -18,8 +18,6 @@
 
 ### Installer
 
- - Fully automate image extraction and texture composition
- - Automate sound extraction
  - Script to extract all assets from game directory
 
 ### General

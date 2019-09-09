@@ -19,7 +19,7 @@ The following analysis was performed with the help of VBinDiff.
     <=32 bytes          Map name
     1 byte              String terminator (0x28)
     4 bytes             Map height
-    5 bytes         00 00 00 00 00 00 or 35 02 00 00 48 02 (seems to change arbitrarily)
+    5 bytes             00 00 00 00 00 00 or 35 02 00 00 48 02 (seems to change arbitrarily)
 
 ## Building Defaults
 
