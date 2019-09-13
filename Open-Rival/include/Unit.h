@@ -9,7 +9,7 @@ namespace Rival {
 
     public:
 
-        const enum Type {
+        enum Type {
 
             // Human
             Peasant,
@@ -70,7 +70,7 @@ namespace Rival {
             Snake
         };
 
-        const enum Facing {
+        enum Facing {
             South,
             SouthWest,
             West,

@@ -15,10 +15,10 @@ The following analysis was performed with the help of VBinDiff.
     4 bytes             Unknown (?? 81 00 00) - end of terrain offset?
     4 bytes             Unknown (?? 81 00 00) - footer offset?
     1 byte              Terrain type (0x02 = Meadows, 0x03 = Wilderness)
-    1 byte              Unknown (0x06)
+    1 byte              Map name length
     <=32 bytes          Map name
-    1 byte              String terminator (0x28)
     4 bytes             Map height
+    4 bytes             Map width
     5 bytes             00 00 00 00 00 00 or 35 02 00 00 48 02 (seems to change arbitrarily)
 
 ## Building Defaults
