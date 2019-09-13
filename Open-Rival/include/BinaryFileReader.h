@@ -1,6 +1,7 @@
 #ifndef BINARY_FILE_READER_H
 #define BINARY_FILE_READER_H
 
+#include <cstdint>
 #include <fstream>
 #include <string>
 #include <vector>

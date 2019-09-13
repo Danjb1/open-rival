@@ -30,6 +30,7 @@
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\Scenario.cpp" />
+    <ClCompile Include="src\ScenarioReader.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="include\Renderable.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Scenario.h" />
+    <ClInclude Include="include\ScenarioReader.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\Sprite.h" />
