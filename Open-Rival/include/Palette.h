@@ -1,6 +1,7 @@
 #ifndef PALETTE_H
 #define PALETTE_H
 
+#include <cstdint>
 #include <fstream>
 
 #include "Texture.h"

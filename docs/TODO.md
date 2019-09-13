@@ -13,6 +13,7 @@
     - Simplify for-loop iteration with index
     - Delete Renderables when a Unit no longer exists
     - Add support for team colours
+ - ScenarioReader should use BinaryFileReader
 
 ## Features
 
@@ -132,3 +133,7 @@
  - Improved pathfinding
  - Non-suicidal peasants (don't go looking for gold)
  - Affordable Wall
+ - Map preview / description
+ - Using abilities with a group selected
+ - Rank explanations
+ - Replays
