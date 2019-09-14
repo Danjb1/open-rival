@@ -41,6 +41,13 @@ namespace Rival {
         // 39 bytes: unknown
     };
 
+    struct UpgradeProperties {
+        std::uint32_t amount;
+        std::uint32_t goldCost;
+        std::uint32_t woodCost;
+        std::uint32_t unknown;
+    };
+
     class ScenarioReader {
 
     public:
@@ -52,6 +59,9 @@ namespace Rival {
         const int numBytesShort = 2;
         const int numBytesInt = 4;
 
+        const int numTroops = 42;
+        const int numUpgrades = 112;
+
         size_t pos = 0;
 
         void ScenarioReader::printOffset() const;
@@ -62,6 +72,11 @@ namespace Rival {
                 std::vector<unsigned char>& data);
 
         TroopDefaults parseTroopDefaults(std::vector<unsigned char>& data);
+
+        bool ScenarioReader::doesUpgradeHaveAmount(int i) const;
+
+        UpgradeProperties parseUpgradeProperties(
+                std::vector<unsigned char>& data, bool readAmount);
 
         std::uint8_t readByte(std::vector<unsigned char>& data);
 
@@ -102,6 +117,8 @@ namespace Rival {
         void print(PlayerProperties& props) const;
 
         void print(TroopDefaults& props) const;
+
+        void print(UpgradeProperties& upgrade) const;
 
     };
 
