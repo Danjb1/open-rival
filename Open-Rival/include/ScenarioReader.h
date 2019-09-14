@@ -10,25 +10,35 @@
 namespace Rival {
 
     struct ScenarioHeader {
-        uint32_t unknown1;
-        uint32_t unknown2;
+        std::uint32_t unknown1;
+        std::uint32_t unknown2;
         bool wilderness;
         std::string mapName;
-        uint32_t mapHeight;
-        uint32_t mapWidth;
+        std::uint32_t mapHeight;
+        std::uint32_t mapWidth;
         // 9 bytes: unknown
     };
 
     struct PlayerProperties {
         // 12 bytes: unknown
-        uint32_t startingFood;
-        uint32_t startingWood;
-        uint32_t startingGold;
-        uint8_t race;
+        std::uint32_t startingFood;
+        std::uint32_t startingWood;
+        std::uint32_t startingGold;
+        std::uint8_t race;
         bool ai;
-        uint8_t aiType;
-        uint8_t aiPerformance;
-        uint8_t aiStrategy;
+        std::uint8_t aiType;
+        std::uint8_t aiPerformance;
+        std::uint8_t aiStrategy;
+    };
+
+    struct TroopDefaults {
+        std::uint16_t hitpoints;
+        std::uint16_t magic;
+        std::uint8_t armour;
+        // 2 bytes: unknown
+        std::uint8_t sight;
+        std::uint8_t range;
+        // 39 bytes: unknown
     };
 
     class ScenarioReader {
@@ -39,14 +49,19 @@ namespace Rival {
 
     private:
 
+        const int numBytesShort = 2;
         const int numBytesInt = 4;
 
         size_t pos = 0;
+
+        void ScenarioReader::printOffset() const;
 
         ScenarioHeader parseHeader(std::vector<unsigned char>& data);
 
         PlayerProperties parsePlayerProperties(
                 std::vector<unsigned char>& data);
+
+        TroopDefaults parseTroopDefaults(std::vector<unsigned char>& data);
 
         std::uint8_t readByte(std::vector<unsigned char>& data);
 
@@ -57,6 +72,11 @@ namespace Rival {
 
         bool readBool(
                 std::vector<unsigned char>& data, int offset) const;
+
+        std::uint16_t readShort(std::vector<unsigned char>& data);
+
+        std::uint16_t readShort(
+            std::vector<unsigned char>& data, int offset) const;
 
         std::uint32_t readInt(std::vector<unsigned char>& data);
 
@@ -71,13 +91,17 @@ namespace Rival {
                 int offset,
                 size_t length) const;
 
-        void skip(const size_t n);
+        void skip(std::vector<unsigned char>& data, const size_t n);
 
-        void printNext(std::vector<unsigned char>& data, int n) const;
+        void printSection(std::string title) const;
+
+        void printNext(std::vector<unsigned char>& data, const size_t n) const;
 
         void print(ScenarioHeader& hdr) const;
 
         void print(PlayerProperties& props) const;
+
+        void print(TroopDefaults& props) const;
 
     };
 

@@ -10,6 +10,30 @@ The following analysis was performed with the help of VBinDiff.
 
  - If a scenario cannot be read (or if the LRC is invalid), the editor will display an error: "Invalid scenario file!"
 
+## Section Ordering
+
+    Offset      Section
+    ------------------------------------------
+    0x0000      Header
+    0x0019      Player Properties
+    0x0496      Troop Defaults
+    0x0C7D      Upgrade Properties
+    0x101E      Building Defaults
+    0x142D      Unit Production Costs
+    0x17FC      Weapon Defaults
+    0x1FDE      Available Buildings ("Scenario Properties")
+    0x1FEF      Monster Defaults
+    0x25C0      Hire Troops Restrictions
+    0x35FA      Buildings
+    ???         Terrain Data
+    0x80DD      Units
+    0x814D      Traps
+    0x8178      Scenario Goals
+    0x817B      Campaign Texts
+    ???         AI Building Settings
+    ???         AI Troops Settings
+    ???         Objects
+
 ## Header
 
     4 bytes             Unknown (?? 81 00 00) - end of terrain offset?
@@ -48,8 +72,8 @@ Each unit consists of 47 bytes:
 
     2 bytes         Hitpoints
     2 bytes         Magic points
-    1 byte          (Empty)
-    1 byte          Unknown (0x03)
+    1 byte          Armour
+    2 bytes         Unknown
     1 byte          Sight
     1 byte          Range
     2 bytes         (Empty)
