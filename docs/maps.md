@@ -18,7 +18,7 @@ The following analysis was performed with the help of VBinDiff.
     0x0019      Player Properties
     0x0496      Troop Defaults
     0x0C7D      Upgrade Properties
-    0x101E      Building Defaults
+    0x101E      Building Defaults (offset seems wrong!)
     0x142D      Unit Production Costs
     0x17FC      Weapon Defaults
     0x1FDE      Available Buildings ("Scenario Properties")
@@ -127,10 +127,12 @@ Upgrades are ordered by type (see Appendices).
 
 Each upgrade consists of 16 bytes:
 
-    4 bytes         Amount
+    4 bytes         Amount*
     4 bytes         Gold Cost
     4 bytes         Wood Cost
     4 bytes         Unknown (icon / type?)
+
+Amount is only applicable to the first 48 Upgrades, plus the 3 thief "Swiftness" upgrades (list indices 0-47 and 67-69).
 
 ## Unit Production Costs
 

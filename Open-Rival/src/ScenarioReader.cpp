@@ -56,7 +56,27 @@ namespace Rival {
         printOffset();
         TroopDefaults troop1 = parseTroopDefaults(data);
         print(troop1);
-        TroopDefaults troop2 = parseTroopDefaults(data);
+        for (int i = 1; i < numTroops; i++) {
+            parseTroopDefaults(data);
+        }
+        skip(data, 7);
+
+        // Parse upgrade properties
+        printSection("Parsing upgrade properties");
+        printOffset();
+        UpgradeProperties upgrade1 = parseUpgradeProperties(data, true);
+        print(upgrade1);
+        for (int i = 1; i < numUpgrades; i++) {
+            std::cout << "\n\nUpgrade " << i << '\n';
+            UpgradeProperties upgrade =
+                    parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
+            print(upgrade);
+        }
+
+        // ???
+        printSection("???");
+        printOffset();
+        printNext(data, 128);
     }
 
     void ScenarioReader::printOffset() const {
@@ -121,6 +141,29 @@ namespace Rival {
         skip(data, 39);
 
         return troop;
+    }
+
+    bool ScenarioReader::doesUpgradeHaveAmount(int i) const {
+        // Upgrades 0 - 47 and 67 - 69 do not have an "Amount" field
+        return i <= 47 || (i >= 67 && i <= 69);
+    }
+
+    UpgradeProperties ScenarioReader::parseUpgradeProperties(
+        std::vector<unsigned char>& data, bool readAmount) {
+
+        UpgradeProperties upgrade;
+
+        if (readAmount) {
+            upgrade.amount = readInt(data);
+        } else {
+            upgrade.amount = 0;
+            skip(data, 4);
+        }
+        upgrade.goldCost = readInt(data);
+        upgrade.woodCost = readInt(data);
+        upgrade.unknown = readInt(data);
+
+        return upgrade;
     }
 
     std::uint8_t ScenarioReader::readByte(
@@ -255,6 +298,14 @@ namespace Rival {
             << "Armour:    " << static_cast<int>(troop.armour) << '\n'
             << "Sight:     " << static_cast<int>(troop.sight) << '\n'
             << "Range:     " << static_cast<int>(troop.range) << '\n';
+    }
+
+    void ScenarioReader::print(UpgradeProperties& upgrade) const {
+        std::cout
+            << "Amount:    " << upgrade.amount << '\n'
+            << "Gold Cost: " << upgrade.goldCost << '\n'
+            << "Wood Cost: " << upgrade.woodCost << '\n'
+            << "Unknown:   " << upgrade.unknown << '\n';
     }
 
 }
