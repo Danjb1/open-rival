@@ -27,15 +27,48 @@ namespace Rival {
         is.read(reinterpret_cast<char*>(data.data()), size);
         is.close();
 
-        // Parse file contents
+        // Parse map header
+        printSection("Parsing header");
+        printOffset();
         ScenarioHeader hdr = parseHeader(data);
-        PlayerProperties props1 = parsePlayerProperties(data);
-        PlayerProperties props2 = parsePlayerProperties(data);
-
-        // Print map data
         print(hdr);
+
+        // Parse player properties
+        printSection("Parsing player properties");
+        printOffset();
+        PlayerProperties props1 = parsePlayerProperties(data);
         print(props1);
-        print(props2);
+        PlayerProperties props2 = parsePlayerProperties(data);
+        PlayerProperties props3 = parsePlayerProperties(data);
+        PlayerProperties props4 = parsePlayerProperties(data);
+        PlayerProperties props5 = parsePlayerProperties(data);
+        PlayerProperties props6 = parsePlayerProperties(data);
+        PlayerProperties props7 = parsePlayerProperties(data);
+        PlayerProperties props8 = parsePlayerProperties(data);
+
+        // Unknown
+        printSection("Skipping unknown section");
+        printOffset();
+        skip(data, 909);
+
+        // Parse troop defaults
+        printSection("Parsing troop defaults");
+        printOffset();
+        TroopDefaults troop1 = parseTroopDefaults(data);
+        print(troop1);
+        TroopDefaults troop2 = parseTroopDefaults(data);
+    }
+
+    void ScenarioReader::printOffset() const {
+        // Switch to hex, print the value, and switch back
+        std::cout
+                << "Offset: 0x"
+                << std::setw(4)
+                << std::setfill('0')
+                << std::hex
+                << pos
+                << '\n'
+                << std::dec;
     }
 
     ScenarioHeader ScenarioReader::parseHeader(
@@ -51,7 +84,7 @@ namespace Rival {
         hdr.mapName = readString(data, nameLength);
         hdr.mapHeight = readInt(data);
         hdr.mapWidth = readInt(data);
-        skip(9);
+        skip(data, 9);
 
         return hdr;
     }
@@ -61,7 +94,7 @@ namespace Rival {
 
         PlayerProperties props;
 
-        skip(12);
+        skip(data, 12);
         props.startingFood = readInt(data);
         props.startingWood = readInt(data);
         props.startingGold = readInt(data);
@@ -72,6 +105,22 @@ namespace Rival {
         props.aiStrategy = readByte(data);
 
         return props;
+    }
+
+    TroopDefaults ScenarioReader::parseTroopDefaults(
+        std::vector<unsigned char>& data) {
+
+        TroopDefaults troop;
+
+        troop.hitpoints = readShort(data);
+        troop.magic = readShort(data);
+        troop.armour = readByte(data);
+        skip(data, 2);
+        troop.sight = readByte(data);
+        troop.range = readByte(data);
+        skip(data, 39);
+
+        return troop;
     }
 
     std::uint8_t ScenarioReader::readByte(
@@ -96,6 +145,22 @@ namespace Rival {
             std::vector<unsigned char>& data, int offset) const {
         uint8_t value = data[offset];
         return value == 1;
+    }
+
+    std::uint16_t ScenarioReader::readShort(
+        std::vector<unsigned char>& data) {
+        std::uint16_t value = readShort(data, pos);
+        pos += numBytesShort;
+        return value;
+    }
+
+    uint16_t ScenarioReader::readShort(
+        std::vector<unsigned char>& data, int offset) const {
+        // little endian
+        return std::uint16_t(
+            data[offset + 1] << 8 |
+            data[offset + 0]
+        );
     }
 
     std::uint32_t ScenarioReader::readInt(
@@ -136,16 +201,26 @@ namespace Rival {
         return value;
     }
 
-    void ScenarioReader::skip(const size_t n) {
+    void ScenarioReader::skip(
+            std::vector<unsigned char>& data, const size_t n) {
+        std::cout << "SKIP: ";
+        printNext(data, n);
         pos += n;
     }
 
+    void ScenarioReader::printSection(std::string title) const {
+        std::cout
+                << "\n==================================================\n"
+                << title << '\n'
+                << "==================================================\n\n";
+    }
+
     void ScenarioReader::printNext(
-            std::vector<unsigned char>& data, int n) const {
+            std::vector<unsigned char>& data, const size_t n) const {
 
         // Switch to hex
         std::cout << std::setfill('0') << std::hex;
-        for (int i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) {
             unsigned int value = static_cast<unsigned int>(data[pos + i]);
             std::cout << std::setw(2) << value << " ";
         }
@@ -163,14 +238,23 @@ namespace Rival {
 
     void ScenarioReader::print(PlayerProperties& props) const {
         std::cout
-            << "Starting Gold: " << props.startingGold << '\n'
-            << "Starting Wood: " << props.startingWood << '\n'
-            << "Starting Food: " << props.startingFood << '\n'
-            << "Race: " << static_cast<int>(props.race) << '\n'
-            << "AI: " << props.ai << '\n'
-            << "AI Type: " << static_cast<int>(props.aiType) << '\n'
+            << "Starting Gold:  " << props.startingGold << '\n'
+            << "Starting Wood:  " << props.startingWood << '\n'
+            << "Starting Food:  " << props.startingFood << '\n'
+            << "Race:           " << static_cast<int>(props.race) << '\n'
+            << "AI:             " << props.ai << '\n'
+            << "AI Type:        " << static_cast<int>(props.aiType) << '\n'
             << "AI Performance: " << static_cast<int>(props.aiPerformance) << '\n'
-            << "AI Strategy: " << static_cast<int>(props.aiStrategy) << '\n';
+            << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
+    }
+
+    void ScenarioReader::print(TroopDefaults& troop) const {
+        std::cout
+            << "Hitpoints: " << troop.hitpoints << '\n'
+            << "Magic:     " << troop.magic << '\n'
+            << "Armour:    " << static_cast<int>(troop.armour) << '\n'
+            << "Sight:     " << static_cast<int>(troop.sight) << '\n'
+            << "Range:     " << static_cast<int>(troop.range) << '\n';
     }
 
 }
