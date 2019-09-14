@@ -5,11 +5,16 @@
 #include <iostream>
 
 #include "Rival.h"
+#include "ScenarioReader.h"
 
 /**
  * Entry point for the application.
  */
 int main() {
+
+    Rival::ScenarioReader reader("D://rivalrealms/MAPS/1.sco");
+    //Rival::ScenarioReader reader("D://rivalrealms/MAPS/4PBATT.sco");
+    return 1;
 
     Rival::Rival rival;
 
