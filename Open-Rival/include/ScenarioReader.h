@@ -94,6 +94,7 @@ namespace Rival {
         bool siegeTroop;
         bool raceBonusTroop;
         bool spellcaster;
+        bool healer;
         bool transportShip;
         bool combatShip;
         bool flyingTroop;
@@ -101,7 +102,16 @@ namespace Rival {
         bool mustHire;
     };
 
+    struct TilePlacement {
+        std::uint8_t length;
+    };
+
     struct BuildingPlacement {
+        std::uint8_t type;
+        // 2 bytes: unknown
+        std::uint8_t player;
+        std::uint16_t x;
+        std::uint16_t y;
         std::uint16_t hitpoints;
         std::uint16_t armour;
         // 1 byte: empty
@@ -161,8 +171,10 @@ namespace Rival {
         const int numBytesInt = 4;
 
         const int numTroops = 42;
+        const int numMonsters = 30;
         const int numBuildings = 36;
         const int numBuildingsPlusCropland = numBuildings + 1;
+        const int numWeapons = 96;
         const int numUpgrades = 112;
 
         size_t pos = 0;
@@ -191,6 +203,8 @@ namespace Rival {
 
         HireTroopsRestrictions parseHireTroopsRestrictions(
                 std::vector<unsigned char>& data);
+
+        TilePlacement parseTile(std::vector<unsigned char>& data);
 
         BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
 
