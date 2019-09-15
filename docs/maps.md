@@ -26,12 +26,13 @@ The following analysis was performed with the help of VBinDiff.
     0x25C0      Hire Troops Restrictions
     0x25CF      AI Building Settings
     0x2677      AI Troops Settings
-    ???         Terrain Data & Buildings
+    0x28C3      Terrain Data
     0x80DD      Units
-    ???         Objects
     0x814D      Traps
     0x8178      Scenario Goals
     0x817B      Campaign Texts
+    ???         Buildings
+    ???         Objects
 
 ## Header
 
@@ -347,11 +348,19 @@ Repeats for each player.
 
 ## Terrain Data
 
-Each tile type has its own representation. Variations of each tile are listed below (signifying graphical variants?).
+Tiles are stored row by row using a kind of run-length encoding.
 
-Every tile ends (starts?) with the bytes `FF FF FF FF`.
+A tile that is different to the one that follows it will take the form:
 
-0x00 represented by two dashes, below.
+    FF FF FF FF [tile]
+
+But when multiple consecutive tiles are the same, they will be described as:
+
+    FA NN NN FF FF FF FF [tile]
+
+where `NN NN` is the number of tiles that this describes.
+
+Each tile type has a number of different representations, possibly corresponding to graphical variants. Samples are given below, where 0x00 is represented by two dashes.
 
 ### Grass
 
@@ -359,10 +368,10 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
     -- -- -- -- 02 --
     -- -- -- -- -- --
     -- -- -- -- 05 --
-    -- -- -- -- 04 -- FA 02 --
+    -- -- -- -- 04 --
     -- -- -- -- 01 --
     -- -- -- -- 03 --
-    -- -- -- -- 02 -- FA 03 --
+    -- -- -- -- 02 --
     -- -- -- -- 01 --
     -- -- -- -- 03 --
     -- -- -- -- 01 --
@@ -390,7 +399,7 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
     -- -- 0F -- -- --
     -- -- 0F -- 04 --
     -- -- 0F -- 03 --
-    -- -- 0F -- 04 -- FA 02 --
+    -- -- 0F -- 04 --
     -- -- 0F -- 01 --
     -- -- 07 -- -- --
     -- -- 0F -- 02 --
@@ -405,8 +414,8 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
     -- -- 1E -- 04 --
     -- -- 1E -- 01 --
     -- -- 1E -- -- --
-    -- -- 1E -- 01 -- FA 02 --
-    -- -- 1E -- 02 -- FA 02 --
+    -- -- 1E -- 01 --
+    -- -- 1E -- 02 --
     -- -- 1E -- 01 --
     -- -- 1E -- 04 --
     -- -- 1E -- 01 --
@@ -432,34 +441,34 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
     -- -- 2D -- 04 -- 
     -- -- 2D -- 02 -- 
     -- -- 2D -- 04 -- 
-    -- -- 2D -- 01 -- FA 02 -- 
+    -- -- 2D -- 01 --
     -- -- 2D -- 03 -- 
     -- -- 2D -- 04 -- 
     -- -- 2D -- -- -- 
-    -- -- 2D -- 01 -- FA 02 -- 
-    -- -- 2D -- 02 -- FA 02 -- 
+    -- -- 2D -- 01 --
+    -- -- 2D -- 02 --
     -- -- 2D -- 04 -- 
     -- -- 2D -- -- -- 
     -- -- 2D -- 03 --
 
 ### Dungeon
 
-    -- -- 3C -- 01 -- FA 03 --
+    -- -- 3C -- 01 --
     -- -- 3C -- -- --
     -- -- 3C -- 03 --
     -- -- 3C -- 05 --
     -- -- 3C -- -- --
     -- -- 3C -- 05 --
-    -- -- 3C -- 03 -- FA 02 --
-    -- -- 3C -- 04 -- FA 02 --
-    -- -- 3C -- 01 --
-    -- -- 3C -- -- -- FA 02 --
-    -- -- 3C -- 02 --
-    -- -- 3C -- -- -- FA 02 --
+    -- -- 3C -- 03 --
     -- -- 3C -- 04 --
     -- -- 3C -- 01 --
     -- -- 3C -- -- --
-    -- -- 3C -- 02 -- FA 03 --
+    -- -- 3C -- 02 --
+    -- -- 3C -- -- --
+    -- -- 3C -- 04 --
+    -- -- 3C -- 01 --
+    -- -- 3C -- -- --
+    -- -- 3C -- 02 --
     -- -- 3C -- 01 --
     -- -- 3C -- 03 --
     -- -- 3C -- 0C --
@@ -467,44 +476,44 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
 
 ### Wood
 
-    -- -- -- -- 04 -- FA 02 --
+    -- -- -- -- 04 --
     -- -- -- -- 05 --
     -- -- -- -- -- --
     -- -- -- -- 03 --
     -- -- -- -- -- --
     -- -- -- -- 04 --
-    -- -- -- -- 03 -- FA 03 --
+    -- -- -- -- 03 --
     -- -- -- -- 02 --
-    -- -- -- -- 03 -- FA 02 --
+    -- -- -- -- 03 --
     -- -- -- -- 01 --
     -- -- -- -- 03 --
     -- -- -- -- 04 --
     -- -- -- -- 02 --
-    -- -- -- -- 05 -- FA 03 --
+    -- -- -- -- 05 --
     -- -- -- -- -- --
     -- -- -- -- 05 --
     -- -- -- -- -- --
     -- -- -- -- 01 --
     -- -- -- -- 01 03
-    -- -- -- -- -- 03 FF
+    -- -- -- -- -- 03
 
 ### Gold
 
     01 -- -- 02 -- 01
-    01 -- -- 01 -- 01 FA 02 --
+    01 -- -- 01 -- 01
     01 -- -- 02 -- 01
     01 -- -- -- -- 01
     01 -- -- 02 -- 01
     01 -- -- 03 -- 01
     01 -- -- 02 -- 01
     01 -- -- 01 -- 01
-    01 -- -- 02 -- 01 FA 02 --
+    01 -- -- 02 -- 01
     01 -- -- -- -- 01
-    01 -- -- 02 -- 01 FA 03 --
+    01 -- -- 02 -- 01
     01 -- -- 01 -- 01
     01 -- -- -- -- 01
     01 -- -- 02 -- 01
-    01 -- -- 03 -- 01 FA 02 --
+    01 -- -- 03 -- 01
     01 -- -- 01 -- 01
     01 -- -- 02 -- 01
     01 -- -- 03 -- 01
