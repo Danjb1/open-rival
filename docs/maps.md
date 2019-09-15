@@ -24,15 +24,14 @@ The following analysis was performed with the help of VBinDiff.
     0x1FDE      Available Buildings ("Scenario Properties")
     0x1FEF      Monster Defaults
     0x25C0      Hire Troops Restrictions
-    0x35FA      Buildings
-    ???         Terrain Data
+    0x25CF      AI Building Settings
+    0x2677      AI Troops Settings
+    ???         Terrain Data & Buildings
     0x80DD      Units
+    ???         Objects
     0x814D      Traps
     0x8178      Scenario Goals
     0x817B      Campaign Texts
-    ???         AI Building Settings
-    ???         AI Troops Settings
-    ???         Objects
 
 ## Header
 
@@ -517,7 +516,7 @@ Every tile ends (starts?) with the bytes `FF FF FF FF`.
 
 ## Buildings
 
-Starting at offset 0x35FA:
+Mingled with terrain data?
 
     1 byte          Buildings present (0x03 = False, 0x04 = True)
 
