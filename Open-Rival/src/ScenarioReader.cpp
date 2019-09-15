@@ -54,8 +54,8 @@ namespace Rival {
         // Parse troop defaults
         printSection("Parsing troop defaults");
         printOffset();
-        TroopDefaults troop1 = parseTroopDefaults(data);
-        print(troop1);
+        TroopDefaults troop = parseTroopDefaults(data);
+        print(troop);
         for (int i = 1; i < numTroops; i++) {
             parseTroopDefaults(data);
         }
@@ -64,32 +64,87 @@ namespace Rival {
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
         printOffset();
-        UpgradeProperties upgrade1 = parseUpgradeProperties(data, true);
-        print(upgrade1);
+        UpgradeProperties upgrade = parseUpgradeProperties(data, true);
+        print(upgrade);
         for (int i = 1; i < numUpgrades; i++) {
-            std::cout << "\n\nUpgrade " << i << '\n';
-            UpgradeProperties upgrade =
-                    parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
-            print(upgrade);
+            parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
         }
 
-        // ???
-        printSection("???");
+        // Unknown
+        printSection("Skipping unknown section");
         printOffset();
-        printNext(data, 128);
+        skip(data, 176);
+
+        // Parse unit production costs
+        printSection("Parsing unit production costs");
+        printOffset();
+        UnitProductionCost unitCost = parseUnitProductionCost(data);
+        print(unitCost);
+        for (int i = 1; i < numBuildingsPlusCropland + numTroops; i++) {
+            parseUnitProductionCost(data);
+        }
+        skip(data, 27);
+
+        // Parse weapon defaults
+        printSection("Parsing weapon defaults");
+        printOffset();
+
+        // Parse available buildings
+        printSection("Parsing available buildings");
+        printOffset();
+
+        // Parse monster defaults
+        printSection("Parsing monster defaults");
+        printOffset();
+
+        // Parse hire troops restrictions
+        printSection("Parsing hire troops restrictions");
+        printOffset();
+
+        // Parse buildings
+        printSection("Parsing buildings");
+        printOffset();
+
+        // Parse terrain data
+        printSection("Parsing terrain data");
+        printOffset();
+
+        // Parse units
+        printSection("Parsing units");
+        printOffset();
+
+        // Parse traps
+        printSection("Parsing traps");
+        printOffset();
+
+        // Parse scenario goals
+        printSection("Parsing scenario goals");
+        printOffset();
+
+        // Parse campaign texts
+        printSection("Parsing campaign texts");
+        printOffset();
+
+        // Parse AI building settings
+        printSection("Parsing AI building settings");
+        printOffset();
+
+        // Parse AI troop settings
+        printSection("Parsing AI troop settings");
+        printOffset();
+
+        // Parse objects
+        printSection("Parsing objects");
+        printOffset();
+
+        // Parse footer
+        printSection("Parsing footer");
+        printOffset();
     }
 
-    void ScenarioReader::printOffset() const {
-        // Switch to hex, print the value, and switch back
-        std::cout
-                << "Offset: 0x"
-                << std::setw(4)
-                << std::setfill('0')
-                << std::hex
-                << pos
-                << '\n'
-                << std::dec;
-    }
+    ///////////////////////////////////////////////////////////////////////////
+    // Parsing
+    ///////////////////////////////////////////////////////////////////////////
 
     ScenarioHeader ScenarioReader::parseHeader(
             std::vector<unsigned char>& data) {
@@ -128,7 +183,7 @@ namespace Rival {
     }
 
     TroopDefaults ScenarioReader::parseTroopDefaults(
-        std::vector<unsigned char>& data) {
+            std::vector<unsigned char>& data) {
 
         TroopDefaults troop;
 
@@ -149,7 +204,7 @@ namespace Rival {
     }
 
     UpgradeProperties ScenarioReader::parseUpgradeProperties(
-        std::vector<unsigned char>& data, bool readAmount) {
+            std::vector<unsigned char>& data, bool readAmount) {
 
         UpgradeProperties upgrade;
 
@@ -165,6 +220,151 @@ namespace Rival {
 
         return upgrade;
     }
+
+    UnitProductionCost ScenarioReader::parseUnitProductionCost(
+            std::vector<unsigned char>& data) {
+
+        UnitProductionCost unitCost;
+
+        unitCost.goldCost = readShort(data);
+        unitCost.woodCost = readShort(data);
+        unitCost.constructionTime = readInt(data);
+        unitCost.requiredExpOrIncreasePercent = readInt(data);
+
+        return unitCost;
+    }
+
+    WeaponDefaults ScenarioReader::parseWeaponDefaults(
+            std::vector<unsigned char>& data) {
+
+        WeaponDefaults weapon;
+
+        weapon.moveSpaces = readShort(data);
+        weapon.moveTime = readShort(data);
+        weapon.damage = readShort(data);
+        weapon.penetrate = readShort(data);
+        weapon.accuracy = readShort(data);
+        weapon.effectRange = readByte(data);
+        weapon.attackRange = readByte(data);
+        weapon.manaCost = readShort(data);
+        weapon.reloadTime = readInt(data);
+        weapon.unknown = readShort(data);
+        skip(data, 1);
+
+        return weapon;
+    }
+
+    AvailableBuildings ScenarioReader::parseAvailableBuildings(
+        std::vector<unsigned char>& data) {
+
+        AvailableBuildings bldgs;
+
+        bldgs.cropLand = readBool(data);
+        bldgs.goldAmplifier = readBool(data);
+        bldgs.rangedTroopBuilding = readBool(data);
+        bldgs.siegeTroopBuilding = readBool(data);
+        bldgs.meleeTroopBuilding = readBool(data);
+        bldgs.flyingTroopBuilding = readBool(data);
+        bldgs.engineerTroopBuilding = readBool(data);
+        bldgs.healerTroopBuilding = readBool(data);
+        bldgs.spellcasterTroopBuilding = readBool(data);
+        bldgs.shipyard = readBool(data);
+        bldgs.watchTower = readBool(data);
+        bldgs.wall = readBool(data);
+
+        return bldgs;
+    }
+
+    HireTroopsRestrictions ScenarioReader::parseHireTroopsRestrictions(
+        std::vector<unsigned char>& data) {
+
+        HireTroopsRestrictions restrictions;
+
+        restrictions.worker = readBool(data);
+        restrictions.rangedTroop = readBool(data);
+        restrictions.lightMeleeOrSpellcasterTroop = readBool(data);
+        restrictions.heavyMeleeTroop = readBool(data);
+        restrictions.engineer = readBool(data);
+        restrictions.stealthTroop = readBool(data);
+        restrictions.siegeTroop = readBool(data);
+        restrictions.raceBonusTroop = readBool(data);
+        restrictions.spellcaster = readBool(data);
+        restrictions.transportShip = readBool(data);
+        restrictions.combatShip = readBool(data);
+        restrictions.flyingTroop = readBool(data);
+        restrictions.flyingTransport = readBool(data);
+        restrictions.mustHire = readBool(data);
+
+        return restrictions;
+    }
+
+    BuildingPlacement ScenarioReader::parseBuilding(
+            std::vector<unsigned char>& data) {
+
+        BuildingPlacement bldg;
+
+        bldg.hitpoints = readShort(data);
+        bldg.armour = readShort(data);
+        skip(data, 1);
+        bldg.sight = readByte(data);
+        bldg.range = readByte(data);
+        bldg.upgrade1Enabled = readBool(data);
+        bldg.upgrade2Enabled = readBool(data);
+        bldg.specialColour = readByte(data);
+        bldg.prisoner = readBool(data);
+        bldg.name = readString(data, 12);
+
+        return bldg;
+    }
+
+    UnitPlacement ScenarioReader::parseUnit(std::vector<unsigned char>& data) {
+
+        UnitPlacement unit;
+
+        unit.type = readByte(data);
+        skip(data, 2);
+        unit.facing = readByte(data);
+        skip(data, 1);
+        unit.x = readShort(data);
+        unit.y = readShort(data);
+        unit.player = readByte(data);
+        unit.hitpoints = readShort(data);
+        unit.magic = readByte(data);
+        unit.armour = readShort(data);
+        skip(data, 1);
+        unit.type2 = readByte(data);
+        unit.sight = readByte(data);
+        unit.range = readByte(data);
+        skip(data, 2);
+        unit.specialColour = readByte(data);
+        unit.prisoner = readBool(data);
+        unit.goldCost = readShort(data);
+        unit.woodCost = readShort(data);
+        unit.name = readString(data, 12);
+        skip(data, 13);
+        unit.upgrade1Enabled = readBool(data);
+        unit.upgrade2Enabled = readBool(data);
+        unit.upgrade3Enabled = readBool(data);
+        unit.upgrade4Enabled = readBool(data);
+        unit.fightingArea = readByte(data);
+
+        return unit;
+    }
+
+    TrapPlacement ScenarioReader::parseTrap(std::vector<unsigned char>& data) {
+
+        TrapPlacement trap;
+
+        trap.x = readByte(data);
+        trap.y = readByte(data);
+        trap.player = readByte(data);
+
+        return trap;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Token Extraction
+    ///////////////////////////////////////////////////////////////////////////
 
     std::uint8_t ScenarioReader::readByte(
             std::vector<unsigned char>& data) {
@@ -251,6 +451,22 @@ namespace Rival {
         pos += n;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Printing
+    ///////////////////////////////////////////////////////////////////////////
+
+    void ScenarioReader::printOffset() const {
+        // Switch to hex, print the value, and switch back
+        std::cout
+            << "Offset: 0x"
+            << std::setw(4)
+            << std::setfill('0')
+            << std::hex
+            << pos
+            << '\n'
+            << std::dec;
+    }
+
     void ScenarioReader::printSection(std::string title) const {
         std::cout
                 << "\n==================================================\n"
@@ -306,6 +522,107 @@ namespace Rival {
             << "Gold Cost: " << upgrade.goldCost << '\n'
             << "Wood Cost: " << upgrade.woodCost << '\n'
             << "Unknown:   " << upgrade.unknown << '\n';
+    }
+
+    void ScenarioReader::print(UnitProductionCost& unitCost) const {
+        std::cout
+            << "Gold Cost:         " << unitCost.goldCost << '\n'
+            << "Wood Cost:         " << unitCost.woodCost << '\n'
+            << "Construction Time: " << unitCost.constructionTime << '\n'
+            << "XP or Increase:    " << unitCost.requiredExpOrIncreasePercent << '\n';
+    }
+
+    void ScenarioReader::print(WeaponDefaults& wpn) const {
+        std::cout
+            << "Move Spaces:  " << wpn.moveSpaces << '\n'
+            << "Move Time:    " << wpn.moveSpaces << '\n'
+            << "Damage:       " << wpn.damage << '\n'
+            << "Penetrate:    " << wpn.penetrate << '\n'
+            << "Accuracy:     " << wpn.accuracy << '\n'
+            << "Effect Range: " << static_cast<int>(wpn.effectRange) << '\n'
+            << "Attack Range: " << static_cast<int>(wpn.attackRange) << '\n'
+            << "Mana Cost:    " << wpn.manaCost << '\n'
+            << "Reload Time:  " << wpn.reloadTime << '\n'
+            << "Unknown:      " << wpn.unknown << '\n';
+    }
+
+    void ScenarioReader::print(AvailableBuildings& bldg) const {
+        std::cout
+            << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
+            << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
+            << "Ranged Troop Building:      " << static_cast<int>(bldg.rangedTroopBuilding) << '\n'
+            << "Siege Troop Building:       " << static_cast<int>(bldg.siegeTroopBuilding) << '\n'
+            << "Melee Troop Building:       " << static_cast<int>(bldg.meleeTroopBuilding) << '\n'
+            << "Flying Troop Building:      " << static_cast<int>(bldg.flyingTroopBuilding) << '\n'
+            << "Engineer Troop Building:    " << static_cast<int>(bldg.engineerTroopBuilding) << '\n'
+            << "Healer Troop Building:      " << static_cast<int>(bldg.healerTroopBuilding) << '\n'
+            << "Spellcaster Troop Building: " << static_cast<int>(bldg.spellcasterTroopBuilding) << '\n'
+            << "Shipyard:                   " << static_cast<int>(bldg.shipyard) << '\n'
+            << "Watch Tower:                " << static_cast<int>(bldg.watchTower)  << '\n'
+            << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
+    }
+
+    void ScenarioReader::print(HireTroopsRestrictions& restrictions) const {
+        std::cout
+            << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
+            << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
+            << "Light Melee / Spellcaster: " << static_cast<int>(restrictions.lightMeleeOrSpellcasterTroop) << '\n'
+            << "Heavy Melee Troop:         " << static_cast<int>(restrictions.heavyMeleeTroop) << '\n'
+            << "Engineer:                  " << static_cast<int>(restrictions.engineer) << '\n'
+            << "Stealth Troop:             " << static_cast<int>(restrictions.stealthTroop) << '\n'
+            << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
+            << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
+            << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
+            << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
+            << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
+            << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
+            << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
+            << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
+    }
+
+    void ScenarioReader::print(BuildingPlacement& bldg) const {
+        std::cout
+            << "Hitpoints:      " << bldg.hitpoints << '\n'
+            << "Armour:         " << bldg.armour << '\n'
+            << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
+            << "Range:          " << static_cast<int>(bldg.range) << '\n'
+            << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
+            << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
+            << "Special Colour: " << static_cast<int>(bldg.specialColour) << '\n'
+            << "Prisoner:       " << bldg.prisoner << '\n'
+            << "Name:           " << bldg.name << '\n';
+    }
+
+    void ScenarioReader::print(UnitPlacement& unit) const {
+        std::cout
+            << "Type:           " << static_cast<int>(unit.type) << '\n'
+            << "Facing:         " << static_cast<int>(unit.facing) << '\n'
+            << "X:              " << unit.x << '\n'
+            << "Y:              " << unit.y << '\n'
+            << "Player:         " << static_cast<int>(unit.player) << '\n'
+            << "Hitpoints:      " << unit.hitpoints << '\n'
+            << "Magic:          " << static_cast<int>(unit.magic) << '\n'
+            << "Armour:         " << unit.armour << '\n'
+            << "Type2:          " << static_cast<int>(unit.type2) << '\n'
+            << "Sight:          " << static_cast<int>(unit.sight) << '\n'
+            << "Range:          " << static_cast<int>(unit.range) << '\n'
+            << "Special Colour: " << static_cast<int>(unit.specialColour) << '\n'
+            << "Prisoner:       " << unit.prisoner << '\n'
+            << "Gold Cost:      " << unit.goldCost << '\n'
+            << "Wood Cost:      " << unit.woodCost << '\n'
+            << "Name:           " << unit.name << '\n'
+            << "Upgrade 1:      " << unit.upgrade1Enabled << '\n'
+            << "Upgrade 2:      " << unit.upgrade2Enabled << '\n'
+            << "Upgrade 3:      " << unit.upgrade3Enabled << '\n'
+            << "Upgrade 4:      " << unit.upgrade4Enabled << '\n'
+            << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
+    }
+
+    void ScenarioReader::print(TrapPlacement& trap) const {
+        std::cout
+            << "X:              " << static_cast<int>(trap.x) << '\n'
+            << "Y:              " << static_cast<int>(trap.y) << '\n'
+            << "Player:         " << static_cast<int>(trap.player) << '\n';
     }
 
 }
