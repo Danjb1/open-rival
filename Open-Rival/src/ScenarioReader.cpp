@@ -49,7 +49,7 @@ namespace Rival {
         // Unknown
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 909);
+        skip(data, 909, true);
 
         // Parse troop defaults
         printSection("Parsing troop defaults");
@@ -59,7 +59,7 @@ namespace Rival {
         for (int i = 1; i < numTroops; i++) {
             parseTroopDefaults(data);
         }
-        skip(data, 7);
+        skip(data, 7, true);
 
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
@@ -73,7 +73,7 @@ namespace Rival {
         // Unknown
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 176);
+        skip(data, 176, true);
 
         // Parse unit production costs
         printSection("Parsing unit production costs");
@@ -83,7 +83,7 @@ namespace Rival {
         for (int i = 1; i < numBuildingsPlusCropland + numTroops; i++) {
             parseUnitProductionCost(data);
         }
-        skip(data, 27);
+        skip(data, 27, true);
 
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
@@ -93,14 +93,14 @@ namespace Rival {
         for (int i = 1; i < numWeapons; i++) {
             parseWeaponDefaults(data);
         }
-        skip(data, 2);
+        skip(data, 2, true);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
         AvailableBuildings availableBuildings = parseAvailableBuildings(data);
         print(availableBuildings);
-        skip(data, 5);
+        skip(data, 5, true);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
@@ -110,7 +110,7 @@ namespace Rival {
         for (int i = 1; i < numMonsters; i++) {
             parseTroopDefaults(data);
         }
-        skip(data, 49);
+        skip(data, 49, true);
 
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
@@ -122,36 +122,22 @@ namespace Rival {
         // Parse AI building settings
         printSection("Parsing AI building settings");
         printOffset();
-        skip(data, 168); // for now
+        skip(data, 168, true); // for now
 
         // Parse AI troop settings
         printSection("Parsing AI troop settings");
         printOffset();
-        skip(data, 280); // for now
+        skip(data, 280, true); // for now
 
         // Unknown
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 312);
+        skip(data, 308, true);
 
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
-        printNext(data, 1024);
-        for (int y = 0; y < hdr.mapHeight; y++) {
-            for (int x = 0; x < hdr.mapWidth; x++) {
-                TilePlacement tile = parseTile(data);
-                if (tile.length > 0) {
-                    std::cout << "tile (" << x << ", " << y << ") = ";
-                    printNext(data, tile.length);
-                    pos += tile.length;
-                } else {
-                    std::cout << "tile (" << x << ", " << y << ") not found!\n";
-                    printOffset();
-                    pos += 100;
-                }
-            }
-        }
+        parseTerrain(data, hdr.mapWidth, hdr.mapHeight);
 
         // Parse units
         printSection("Parsing units");
@@ -203,7 +189,7 @@ namespace Rival {
         hdr.mapName = readString(data, nameLength);
         hdr.mapHeight = readInt(data);
         hdr.mapWidth = readInt(data);
-        skip(data, 9);
+        skip(data, 9, false);
 
         return hdr;
     }
@@ -213,7 +199,7 @@ namespace Rival {
 
         PlayerProperties props;
 
-        skip(data, 12);
+        skip(data, 12, false);
         props.startingFood = readInt(data);
         props.startingWood = readInt(data);
         props.startingGold = readInt(data);
@@ -234,10 +220,10 @@ namespace Rival {
         troop.hitpoints = readShort(data);
         troop.magic = readShort(data);
         troop.armour = readByte(data);
-        skip(data, 2);
+        skip(data, 2, false);
         troop.sight = readByte(data);
         troop.range = readByte(data);
-        skip(data, 39);
+        skip(data, 39, false);
 
         return troop;
     }
@@ -256,7 +242,7 @@ namespace Rival {
             upgrade.amount = readInt(data);
         } else {
             upgrade.amount = 0;
-            skip(data, 4);
+            skip(data, 4, false);
         }
         upgrade.goldCost = readInt(data);
         upgrade.woodCost = readInt(data);
@@ -293,7 +279,7 @@ namespace Rival {
         weapon.manaCost = readShort(data);
         weapon.reloadTime = readInt(data);
         weapon.unknown = readShort(data);
-        skip(data, 1);
+        skip(data, 1, false);
 
         return weapon;
     }
@@ -343,23 +329,35 @@ namespace Rival {
         return restrictions;
     }
 
-    TilePlacement ScenarioReader::parseTile(std::vector<unsigned char>& data) {
+    void ScenarioReader::parseTerrain(std::vector<unsigned char>& data,
+            int width, int height) {
 
-        TilePlacement tile;
+        int numTiles = width * height;
+        size_t tileId = 0;
 
-        tile.length = 0;
+        while (tileId < numTiles) {
 
-        // Search the next 100 bytes for the pattern "FF FF FF FF";
-        // this tells us the tile length
-        for (int i = 0; i < 100; i++) {
-            std::uint32_t val = readInt(data, pos + i);
-            if (val == 0xffffffff) {
-                tile.length = i + 4;
-                break;
+            // Determine how many tiles the next tile definition describes,
+            // and skip to the tile definition
+            bool readMultiple = (readByte(data) == 0xfa);
+            std::uint16_t numTiles = 1;
+            if (readMultiple) {
+                numTiles = readShort(data);
+                skip(data, 4, false);
+            } else {
+                skip(data, 3, false);
             }
-        }
 
-        return tile;
+            // Read the tile definition (once!), and copy it to each tile that
+            // it describes
+            for (size_t i = 0; i < numTiles; i++) {
+                std::cout << "tile " << tileId << " = ";
+                printNext(data, 6);
+                tileId++;
+            }
+
+            pos += 6;
+        }
     }
 
     BuildingPlacement ScenarioReader::parseBuilding(
@@ -373,7 +371,7 @@ namespace Rival {
         bldg.y = readShort(data);
         bldg.hitpoints = readShort(data);
         bldg.armour = readShort(data);
-        skip(data, 1);
+        skip(data, 1, false);
         bldg.sight = readByte(data);
         bldg.range = readByte(data);
         bldg.upgrade1Enabled = readBool(data);
@@ -390,26 +388,26 @@ namespace Rival {
         UnitPlacement unit;
 
         unit.type = readByte(data);
-        skip(data, 2);
+        skip(data, 2, false);
         unit.facing = readByte(data);
-        skip(data, 1);
+        skip(data, 1, false);
         unit.x = readShort(data);
         unit.y = readShort(data);
         unit.player = readByte(data);
         unit.hitpoints = readShort(data);
         unit.magic = readByte(data);
         unit.armour = readShort(data);
-        skip(data, 1);
+        skip(data, 1, false);
         unit.type2 = readByte(data);
         unit.sight = readByte(data);
         unit.range = readByte(data);
-        skip(data, 2);
+        skip(data, 2, false);
         unit.specialColour = readByte(data);
         unit.prisoner = readBool(data);
         unit.goldCost = readShort(data);
         unit.woodCost = readShort(data);
         unit.name = readString(data, 12);
-        skip(data, 13);
+        skip(data, 13, false);
         unit.upgrade1Enabled = readBool(data);
         unit.upgrade2Enabled = readBool(data);
         unit.upgrade3Enabled = readBool(data);
@@ -513,9 +511,11 @@ namespace Rival {
     }
 
     void ScenarioReader::skip(
-            std::vector<unsigned char>& data, const size_t n) {
-        std::cout << "SKIP: ";
-        printNext(data, n);
+            std::vector<unsigned char>& data, const size_t n, bool print) {
+        if (print) {
+            std::cout << "SKIP: ";
+            printNext(data, n);
+        }
         pos += n;
     }
 

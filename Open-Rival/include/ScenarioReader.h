@@ -102,10 +102,6 @@ namespace Rival {
         bool mustHire;
     };
 
-    struct TilePlacement {
-        std::uint8_t length;
-    };
-
     struct BuildingPlacement {
         std::uint8_t type;
         // 2 bytes: unknown
@@ -204,7 +200,8 @@ namespace Rival {
         HireTroopsRestrictions parseHireTroopsRestrictions(
                 std::vector<unsigned char>& data);
 
-        TilePlacement parseTile(std::vector<unsigned char>& data);
+        void ScenarioReader::parseTerrain(std::vector<unsigned char>& data,
+                int width, int height);
 
         BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
 
@@ -244,7 +241,7 @@ namespace Rival {
                 int offset,
                 size_t length) const;
 
-        void skip(std::vector<unsigned char>& data, const size_t n);
+        void skip(std::vector<unsigned char>& data, const size_t n, bool print);
 
         ///////////////////////////////////////////////////////////////////////////
         // Printing
