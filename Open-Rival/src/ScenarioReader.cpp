@@ -88,26 +88,70 @@ namespace Rival {
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
         printOffset();
+        WeaponDefaults wpnDefaults = parseWeaponDefaults(data);
+        print(wpnDefaults);
+        for (int i = 1; i < numWeapons; i++) {
+            parseWeaponDefaults(data);
+        }
+        skip(data, 2);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
+        AvailableBuildings availableBuildings = parseAvailableBuildings(data);
+        print(availableBuildings);
+        skip(data, 5);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
         printOffset();
+        TroopDefaults monster = parseTroopDefaults(data);
+        print(monster);
+        for (int i = 1; i < numMonsters; i++) {
+            parseTroopDefaults(data);
+        }
+        skip(data, 49);
 
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
         printOffset();
+        HireTroopsRestrictions restrictions =
+                parseHireTroopsRestrictions(data);
+        print(restrictions);
 
-        // Parse buildings
-        printSection("Parsing buildings");
+        // Parse AI building settings
+        printSection("Parsing AI building settings");
         printOffset();
+        skip(data, 168); // for now
+
+        // Parse AI troop settings
+        printSection("Parsing AI troop settings");
+        printOffset();
+        skip(data, 280); // for now
+
+        // Unknown
+        printSection("Skipping unknown section");
+        printOffset();
+        skip(data, 312);
 
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
+        printNext(data, 1024);
+        for (int y = 0; y < hdr.mapHeight; y++) {
+            for (int x = 0; x < hdr.mapWidth; x++) {
+                TilePlacement tile = parseTile(data);
+                if (tile.length > 0) {
+                    std::cout << "tile (" << x << ", " << y << ") = ";
+                    printNext(data, tile.length);
+                    pos += tile.length;
+                } else {
+                    std::cout << "tile (" << x << ", " << y << ") not found!\n";
+                    printOffset();
+                    pos += 100;
+                }
+            }
+        }
 
         // Parse units
         printSection("Parsing units");
@@ -289,6 +333,7 @@ namespace Rival {
         restrictions.siegeTroop = readBool(data);
         restrictions.raceBonusTroop = readBool(data);
         restrictions.spellcaster = readBool(data);
+        restrictions.healer = readBool(data);
         restrictions.transportShip = readBool(data);
         restrictions.combatShip = readBool(data);
         restrictions.flyingTroop = readBool(data);
@@ -298,11 +343,34 @@ namespace Rival {
         return restrictions;
     }
 
+    TilePlacement ScenarioReader::parseTile(std::vector<unsigned char>& data) {
+
+        TilePlacement tile;
+
+        tile.length = 0;
+
+        // Search the next 100 bytes for the pattern "FF FF FF FF";
+        // this tells us the tile length
+        for (int i = 0; i < 100; i++) {
+            std::uint32_t val = readInt(data, pos + i);
+            if (val == 0xffffffff) {
+                tile.length = i + 4;
+                break;
+            }
+        }
+
+        return tile;
+    }
+
     BuildingPlacement ScenarioReader::parseBuilding(
             std::vector<unsigned char>& data) {
 
         BuildingPlacement bldg;
 
+        bldg.type = readByte(data);
+        bldg.player = readByte(data);
+        bldg.x = readShort(data);
+        bldg.y = readShort(data);
         bldg.hitpoints = readShort(data);
         bldg.armour = readShort(data);
         skip(data, 1);
@@ -573,6 +641,7 @@ namespace Rival {
             << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
             << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
             << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
+            << "Healer:                    " << static_cast<int>(restrictions.healer) << '\n'
             << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
             << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
             << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
@@ -582,6 +651,10 @@ namespace Rival {
 
     void ScenarioReader::print(BuildingPlacement& bldg) const {
         std::cout
+            << "Type:           " << static_cast<int>(bldg.type) << '\n'
+            << "Player:         " << static_cast<int>(bldg.player) << '\n'
+            << "X:              " << bldg.x << '\n'
+            << "Y:              " << bldg.y << '\n'
             << "Hitpoints:      " << bldg.hitpoints << '\n'
             << "Armour:         " << bldg.armour << '\n'
             << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
