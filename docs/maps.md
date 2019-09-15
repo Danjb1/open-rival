@@ -16,9 +16,9 @@ The following analysis was performed with the help of VBinDiff.
     ------------------------------------------
     0x0000      Header
     0x0019      Player Properties
+    0x001E      Building Defaults
     0x0496      Troop Defaults
     0x0C7D      Upgrade Properties
-    0x101E      Building Defaults (offset seems wrong!)
     0x142D      Unit Production Costs
     0x17FC      Weapon Defaults
     0x1FDE      Available Buildings ("Scenario Properties")
@@ -47,7 +47,7 @@ The following analysis was performed with the help of VBinDiff.
 
 ## Building Defaults
 
-Starting at offset 0x101E.
+Starting at offset 0x001E?
 
 Buildings are ordered by type (see Appendices).
 
@@ -84,19 +84,7 @@ Each unit consists of 47 bytes:
 
 Starting at offset 0x1FEF.
 
-Monsters are ordered by type (see Appendices).
-
-Each monster consists of 47 bytes:
-
-    2 bytes         Hitpoints
-    2 bytes         Magic points
-    2 bytes         Armor
-    1 byte          Unknown (0x3E)
-    1 byte          Sight
-    1 byte          Range
-    2 bytes         (Empty)
-    1 byte          Colour (see Appendices)
-    35 bytes        (Empty)
+Monsters are ordered by type (see Appendices). Their format is the same as Troop Defaults.
 
 ## Weapon Defaults
 
@@ -138,7 +126,7 @@ Amount is only applicable to the first 48 Upgrades, plus the 3 thief "Swiftness"
 
 Starting at offset 0x142D.
 
-First buildings are listed, then units, ordered by type (see Appendices).
+First buildings are listed, then units, ordered by type (see Appendices) - and then Cropland!
 
 Each item consists of 12 bytes:
 
