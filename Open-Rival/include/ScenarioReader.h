@@ -5,9 +5,22 @@
 #include <string>
 #include <vector>
 
+#include "Scenario.h"
 #include "Unit.h"
 
 namespace Rival {
+
+    const int numPlayers = 8;
+    const int numTroops = 42;
+    const int numTroopsPerRace = 14;
+    const int numMonsters = 30;
+    const int numBuildings = 36;
+    const int numBuildingsPerRace = 12;
+    const int numBuildingsPlusCropland = numBuildings + 1;
+    const int numProductionCosts = numBuildingsPlusCropland + numTroops;
+    const int numWeapons = 96;
+    const int numUpgrades = 112;
+    const int numAiStrategies = 7;
 
     struct ScenarioHeader {
         std::uint32_t unknown1;
@@ -48,7 +61,7 @@ namespace Rival {
         std::uint32_t unknown;
     };
 
-    struct UnitProductionCost {
+    struct ProductionCost {
         std::uint16_t goldCost;
         std::uint16_t woodCost;
         std::uint32_t constructionTime;
@@ -100,6 +113,25 @@ namespace Rival {
         bool flyingTroop;
         bool flyingTransport;
         bool mustHire;
+    };
+
+    struct AiBuildingSettings {
+        std::uint8_t amount;
+        std::uint8_t flag;
+    };
+
+    struct AiTroopSettings {
+        std::uint8_t amount;
+        std::uint8_t flag;
+    };
+
+    struct AiStrategy {
+        AiBuildingSettings aiBuildingSettings[numBuildingsPerRace];
+        AiTroopSettings aiTroopSettings[numTroopsPerRace];
+    };
+
+    struct TilePlacement {
+        TileType type;
     };
 
     struct BuildingPlacement {
@@ -155,6 +187,51 @@ namespace Rival {
         std::uint8_t player;
     };
 
+    struct ObjectPlacement {
+        std::uint8_t x;
+        std::uint8_t y;
+        std::uint8_t type;
+    };
+
+    struct Goal {
+        std::uint8_t type;
+        std::uint8_t x;
+        std::uint8_t y;
+        std::uint8_t count;
+        std::uint8_t player;
+        std::uint8_t radius;
+        std::uint8_t troopId;
+        std::uint8_t troopOrBuildingType;
+        std::uint8_t itemType;
+    };
+
+    struct CampaignText {
+        std::string title;
+        std::string objectives;
+        std::string narration;
+    };
+
+    struct ScenarioFile {
+        ScenarioHeader hdr;
+        PlayerProperties playerProperties[numPlayers];
+        TroopDefaults troopDefaults[numTroops];
+        TroopDefaults monsterDefaults[numMonsters];
+        UpgradeProperties upgradeProperties[numUpgrades];
+        ProductionCost productionCosts[numProductionCosts];
+        WeaponDefaults weaponDefaults[numWeapons];
+        AvailableBuildings availableBuildings;
+        HireTroopsRestrictions hireTroopsRestrictions;
+        AiStrategy aiStrategies[numAiStrategies];
+        std::vector<TilePlacement> tiles;
+        std::vector<BuildingPlacement> buildings;
+        std::vector<UnitPlacement> units;
+        std::vector<TrapPlacement> traps;
+        std::vector<ObjectPlacement> objects;
+        std::vector<Goal> goals;
+        CampaignText campaignText;
+        std::uint8_t checksum;
+    };
+
     class ScenarioReader {
 
     public:
@@ -166,12 +243,7 @@ namespace Rival {
         const int numBytesShort = 2;
         const int numBytesInt = 4;
 
-        const int numTroops = 42;
-        const int numMonsters = 30;
-        const int numBuildings = 36;
-        const int numBuildingsPlusCropland = numBuildings + 1;
-        const int numWeapons = 96;
-        const int numUpgrades = 112;
+        const int bytesPerTile = 6;
 
         size_t pos = 0;
 
@@ -189,7 +261,7 @@ namespace Rival {
         UpgradeProperties parseUpgradeProperties(
                 std::vector<unsigned char>& data, bool readAmount);
 
-        UnitProductionCost parseUnitProductionCost(
+        ProductionCost parseProductionCost(
                 std::vector<unsigned char>& data);
 
         WeaponDefaults parseWeaponDefaults(std::vector<unsigned char>& data);
@@ -200,8 +272,16 @@ namespace Rival {
         HireTroopsRestrictions parseHireTroopsRestrictions(
                 std::vector<unsigned char>& data);
 
-        void ScenarioReader::parseTerrain(std::vector<unsigned char>& data,
-                int width, int height);
+        std::vector<TilePlacement> ScenarioReader::parseTerrain(
+                std::vector<unsigned char>& data,
+                int width,
+                int height);
+
+        TilePlacement ScenarioReader::parseTile(
+                std::vector<unsigned char>& data);
+
+        std::vector<BuildingPlacement> parseBuildings(
+            std::vector<unsigned char>& data);
 
         BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
 
@@ -216,29 +296,29 @@ namespace Rival {
         std::uint8_t readByte(std::vector<unsigned char>& data);
 
         std::uint8_t readByte(
-                std::vector<unsigned char>& data, int offset) const;
+                std::vector<unsigned char>& data, size_t offset) const;
 
         bool readBool(std::vector<unsigned char>& data);
 
         bool readBool(
-                std::vector<unsigned char>& data, int offset) const;
+                std::vector<unsigned char>& data, size_t offset) const;
 
         std::uint16_t readShort(std::vector<unsigned char>& data);
 
         std::uint16_t readShort(
-            std::vector<unsigned char>& data, int offset) const;
+            std::vector<unsigned char>& data, size_t offset) const;
 
         std::uint32_t readInt(std::vector<unsigned char>& data);
 
         std::uint32_t readInt(
-                std::vector<unsigned char>& data, int offset) const;
+                std::vector<unsigned char>& data, size_t offset) const;
 
         std::string readString(
                 std::vector<unsigned char>& data, size_t length);
 
         std::string readString(
                 std::vector<unsigned char>& data,
-                int offset,
+                size_t offset,
                 size_t length) const;
 
         void skip(std::vector<unsigned char>& data, const size_t n, bool print);
@@ -263,7 +343,7 @@ namespace Rival {
 
         void print(UpgradeProperties& upgrade) const;
 
-        void print(UnitProductionCost& unitCost) const;
+        void print(ProductionCost& unitCost) const;
 
         void print(WeaponDefaults& wpn) const;
 

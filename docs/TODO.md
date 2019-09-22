@@ -13,7 +13,10 @@
     - Simplify for-loop iteration with index
     - Delete Renderables when a Unit no longer exists
     - Add support for team colours
- - ScenarioReader should use BinaryFileReader
+ - ScenarioReader:
+    - Use BinaryFileReader
+    - Parse all available data
+    - Create a Scenario from the final struct
 
 ## Features
 

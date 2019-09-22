@@ -278,7 +278,7 @@ If the first byte is 0x74, then there is no campaign text, and the subsequent va
            A  B  C        d  e  f        h  i  j
 
     Title: ABC
-    Objections: abc
+    Objectives: abc
     Narration: hij
 
 ## AI Building Settings
