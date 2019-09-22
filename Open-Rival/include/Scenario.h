@@ -8,6 +8,17 @@
 
 namespace Rival {
 
+    enum TileType {
+        Grass,
+        Coastline,
+        Water,
+        Mud,
+        Dirt,
+        Dungeon,
+        Gold,
+        Cropland
+    };
+
     class Scenario {
 
     public:

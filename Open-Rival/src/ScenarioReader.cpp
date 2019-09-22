@@ -27,26 +27,23 @@ namespace Rival {
         is.read(reinterpret_cast<char*>(data.data()), size);
         is.close();
 
+        ScenarioFile scenarioFile;
+
         // Parse map header
         printSection("Parsing header");
         printOffset();
-        ScenarioHeader hdr = parseHeader(data);
-        print(hdr);
+        scenarioFile.hdr = parseHeader(data);
+        print(scenarioFile.hdr);
 
         // Parse player properties
         printSection("Parsing player properties");
         printOffset();
-        PlayerProperties props1 = parsePlayerProperties(data);
-        print(props1);
-        PlayerProperties props2 = parsePlayerProperties(data);
-        PlayerProperties props3 = parsePlayerProperties(data);
-        PlayerProperties props4 = parsePlayerProperties(data);
-        PlayerProperties props5 = parsePlayerProperties(data);
-        PlayerProperties props6 = parsePlayerProperties(data);
-        PlayerProperties props7 = parsePlayerProperties(data);
-        PlayerProperties props8 = parsePlayerProperties(data);
+        for (int i = 0; i < 8; i++) {
+            scenarioFile.playerProperties[i] = parsePlayerProperties(data);
+        }
+        print(scenarioFile.playerProperties[0]);
 
-        // Unknown
+        // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
         skip(data, 909, true);
@@ -54,23 +51,22 @@ namespace Rival {
         // Parse troop defaults
         printSection("Parsing troop defaults");
         printOffset();
-        TroopDefaults troop = parseTroopDefaults(data);
-        print(troop);
-        for (int i = 1; i < numTroops; i++) {
-            parseTroopDefaults(data);
+        for (int i = 0; i < numTroops; i++) {
+            scenarioFile.troopDefaults[i] = parseTroopDefaults(data);
         }
+        print(scenarioFile.troopDefaults[0]);
         skip(data, 7, true);
 
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
         printOffset();
-        UpgradeProperties upgrade = parseUpgradeProperties(data, true);
-        print(upgrade);
-        for (int i = 1; i < numUpgrades; i++) {
-            parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
+        for (int i = 0; i < numUpgrades; i++) {
+            scenarioFile.upgradeProperties[i] =
+                    parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
         }
+        print(scenarioFile.upgradeProperties[0]);
 
-        // Unknown
+        // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
         skip(data, 176, true);
@@ -78,38 +74,35 @@ namespace Rival {
         // Parse unit production costs
         printSection("Parsing unit production costs");
         printOffset();
-        UnitProductionCost unitCost = parseUnitProductionCost(data);
-        print(unitCost);
-        for (int i = 1; i < numBuildingsPlusCropland + numTroops; i++) {
-            parseUnitProductionCost(data);
+        for (int i = 0; i < numProductionCosts; i++) {
+            scenarioFile.productionCosts[i] = parseProductionCost(data);
         }
+        print(scenarioFile.productionCosts[0]);
         skip(data, 27, true);
 
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
         printOffset();
-        WeaponDefaults wpnDefaults = parseWeaponDefaults(data);
-        print(wpnDefaults);
-        for (int i = 1; i < numWeapons; i++) {
-            parseWeaponDefaults(data);
+        for (int i = 0; i < numWeapons; i++) {
+            scenarioFile.weaponDefaults[i] = parseWeaponDefaults(data);
         }
+        print(scenarioFile.weaponDefaults[0]);
         skip(data, 2, true);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
-        AvailableBuildings availableBuildings = parseAvailableBuildings(data);
-        print(availableBuildings);
+        scenarioFile.availableBuildings = parseAvailableBuildings(data);
+        print(scenarioFile.availableBuildings);
         skip(data, 5, true);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
         printOffset();
-        TroopDefaults monster = parseTroopDefaults(data);
-        print(monster);
-        for (int i = 1; i < numMonsters; i++) {
-            parseTroopDefaults(data);
+        for (int i = 0; i < numMonsters; i++) {
+            scenarioFile.monsterDefaults[i] = parseTroopDefaults(data);
         }
+        print(scenarioFile.monsterDefaults[0]);
         skip(data, 49, true);
 
         // Parse hire troops restrictions
@@ -129,7 +122,7 @@ namespace Rival {
         printOffset();
         skip(data, 280, true); // for now
 
-        // Unknown
+        // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
         skip(data, 308, true);
@@ -137,11 +130,21 @@ namespace Rival {
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
-        parseTerrain(data, hdr.mapWidth, hdr.mapHeight);
+        scenarioFile.tiles = parseTerrain(
+                data, scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
+        skip(data, 4, true);
+
+        // Parse buildings
+        printSection("Parsing buildings");
+        printOffset();
+        printNext(data, 128);
+        scenarioFile.buildings = parseBuildings(data);
+        print(scenarioFile.buildings[0]);
 
         // Parse units
         printSection("Parsing units");
         printOffset();
+        skip(data, 128, true); // size unknown
 
         // Parse traps
         printSection("Parsing traps");
@@ -167,8 +170,8 @@ namespace Rival {
         printSection("Parsing objects");
         printOffset();
 
-        // Parse footer
-        printSection("Parsing footer");
+        // Parse checksum
+        printSection("Parsing checksum");
         printOffset();
     }
 
@@ -251,17 +254,17 @@ namespace Rival {
         return upgrade;
     }
 
-    UnitProductionCost ScenarioReader::parseUnitProductionCost(
+    ProductionCost ScenarioReader::parseProductionCost(
             std::vector<unsigned char>& data) {
 
-        UnitProductionCost unitCost;
+        ProductionCost cost;
 
-        unitCost.goldCost = readShort(data);
-        unitCost.woodCost = readShort(data);
-        unitCost.constructionTime = readInt(data);
-        unitCost.requiredExpOrIncreasePercent = readInt(data);
+        cost.goldCost = readShort(data);
+        cost.woodCost = readShort(data);
+        cost.constructionTime = readInt(data);
+        cost.requiredExpOrIncreasePercent = readInt(data);
 
-        return unitCost;
+        return cost;
     }
 
     WeaponDefaults ScenarioReader::parseWeaponDefaults(
@@ -329,10 +332,13 @@ namespace Rival {
         return restrictions;
     }
 
-    void ScenarioReader::parseTerrain(std::vector<unsigned char>& data,
-            int width, int height) {
+    std::vector<TilePlacement> ScenarioReader::parseTerrain(
+            std::vector<unsigned char>& data,
+            int width,
+            int height) {
 
-        int numTiles = width * height;
+        unsigned int numTiles = width * height;
+        std::vector<TilePlacement> tiles(numTiles);
         size_t tileId = 0;
 
         while (tileId < numTiles) {
@@ -348,16 +354,101 @@ namespace Rival {
                 skip(data, 3, false);
             }
 
-            // Read the tile definition (once!), and copy it to each tile that
-            // it describes
+            // Read the tile definition
+            TilePlacement tile = parseTile(data);
+
+            // Copy the tile definition to the number of tiles it describes
             for (size_t i = 0; i < numTiles; i++) {
-                std::cout << "tile " << tileId << " = ";
-                printNext(data, 6);
+                tiles.push_back(tile);
                 tileId++;
             }
 
-            pos += 6;
+            pos += bytesPerTile;
         }
+
+        return tiles;
+    }
+
+    TilePlacement ScenarioReader::parseTile(
+            std::vector<unsigned char>& data) {
+
+        TilePlacement tile;
+        std::uint8_t resource = readByte(data, pos);
+
+        if (resource == 0) {
+
+            std::uint8_t type = readByte(data, pos + 2);
+
+            if (type == 0x00) {
+                // Grass
+                tile.type = TileType::Grass;
+
+            } else if (type >= 0x01 && type <= 0x0e) {
+                // Coastline
+                tile.type = TileType::Coastline;
+
+            } else if (type == 0x0f) {
+                // Water
+                tile.type = TileType::Water;
+
+            } else if (type >= 0x10 && type <= 0x1d) {
+                // Mud edge
+                tile.type = TileType::Mud;
+
+            } else if (type == 0x1e) {
+                // Mud
+                tile.type = TileType::Mud;
+
+            } else if (type >= 0x1f && type <= 0x2c) {
+                // Dirt edge
+                tile.type = TileType::Dirt;
+
+            } else if (type == 0x2d) {
+                // Dirt
+                tile.type = TileType::Dirt;
+
+            } else if (type >= 0x2e && type <= 0x3c) {
+                // Dungeon edge
+                tile.type = TileType::Dungeon;
+
+            } else if (type == 0x3d) {
+                // Dungeon
+                tile.type = TileType::Dungeon;
+
+            } else {
+                std::cout << "Unknown tile: ";
+                printNext(data, 6);
+            }
+
+        } else if (resource == 1) {
+            // Gold
+            tile.type = TileType::Gold;
+
+        } else if (resource == 2) {
+            // Cropland
+            tile.type = TileType::Cropland;
+
+        } else {
+            std::cout << "Unknown tile: ";
+            printNext(data, 6);
+        }
+
+        return tile;
+    }
+
+    std::vector<BuildingPlacement> ScenarioReader::parseBuildings(
+        std::vector<unsigned char>& data) {
+
+        std::uint32_t numBuildings = readInt(data);
+        std::vector<BuildingPlacement> buildings;
+        buildings.reserve(numBuildings);
+
+        for (unsigned int i = 0; i < numBuildings; i++) {
+            BuildingPlacement bldg = parseBuilding(data);
+            buildings.push_back(bldg);
+        }
+
+        return buildings;
     }
 
     BuildingPlacement ScenarioReader::parseBuilding(
@@ -440,7 +531,7 @@ namespace Rival {
     }
 
     std::uint8_t ScenarioReader::readByte(
-            std::vector<unsigned char>& data, int offset) const {
+            std::vector<unsigned char>& data, size_t offset) const {
         return std::uint8_t(data[offset + 0]);
     }
 
@@ -451,7 +542,7 @@ namespace Rival {
     }
 
     bool ScenarioReader::readBool(
-            std::vector<unsigned char>& data, int offset) const {
+            std::vector<unsigned char>& data, size_t offset) const {
         uint8_t value = data[offset];
         return value == 1;
     }
@@ -464,7 +555,7 @@ namespace Rival {
     }
 
     uint16_t ScenarioReader::readShort(
-        std::vector<unsigned char>& data, int offset) const {
+        std::vector<unsigned char>& data, size_t offset) const {
         // little endian
         return std::uint16_t(
             data[offset + 1] << 8 |
@@ -480,7 +571,7 @@ namespace Rival {
     }
 
     uint32_t ScenarioReader::readInt(
-            std::vector<unsigned char>& data, int offset) const {
+            std::vector<unsigned char>& data, size_t offset) const {
         // little endian
         return std::uint32_t(
             data[offset + 3] << 24 |
@@ -499,7 +590,7 @@ namespace Rival {
 
     std::string ScenarioReader::readString(
             std::vector<unsigned char>& data,
-            int offset,
+            size_t offset,
             size_t length) const {
 
         std::vector<char> nameChars(length);
@@ -592,12 +683,12 @@ namespace Rival {
             << "Unknown:   " << upgrade.unknown << '\n';
     }
 
-    void ScenarioReader::print(UnitProductionCost& unitCost) const {
+    void ScenarioReader::print(ProductionCost& cost) const {
         std::cout
-            << "Gold Cost:         " << unitCost.goldCost << '\n'
-            << "Wood Cost:         " << unitCost.woodCost << '\n'
-            << "Construction Time: " << unitCost.constructionTime << '\n'
-            << "XP or Increase:    " << unitCost.requiredExpOrIncreasePercent << '\n';
+            << "Gold Cost:         " << cost.goldCost << '\n'
+            << "Wood Cost:         " << cost.woodCost << '\n'
+            << "Construction Time: " << cost.constructionTime << '\n'
+            << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
     }
 
     void ScenarioReader::print(WeaponDefaults& wpn) const {
