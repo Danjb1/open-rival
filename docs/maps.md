@@ -1,5 +1,9 @@
 # Scenario Format
 
+> This information may be outdated.
+>
+> The definitive format can be deduced from the [Scenario Reader](/Open-Rival/src/ScenarioReader.cpp).
+
 The following analysis was performed with the help of VBinDiff.
 
 ## Notes
@@ -614,48 +618,48 @@ Section starts with the number of objects (4 bytes).
 
 ### Buildings
 
- - Types shown here come from the Scenario Goals section, which uses a strange numbering system.
+ - Type2 is what the Scenario Goals section uses, which uses a strange numbering system.
 
 <!-- End of bullet list -->
 
-    Type    Building
+    Type    Type2   Building
     ------------------------------------------
-    0x7F    Human - Castle
-    0x84    Human - Gold Mill
-            Human - Archery Range
-            Human - Armoury
-            Human - Barracks
-            Human - Holy Stables
-            Human - Fire Guild
-            Human - Temple
-            Human - Mage Tower
-            Human - Shipyard
-            Human - Watch Tower
-            Human - Wall
-            Greenskin - Fortress
-            Greenskin - Hoard Keep
-            Greenskin - Fort
-            Greenskin - Blacksmith
-            Greenskin - Battle Quarters
-            Greenskin - Black Nest
-            Greenskin - Weird Workshop
-            Greenskin - Unholy Chapel
-            Greenskin - Altar of Doom
-            Greenskin - Docks
-            Greenskin - Guard Tower
-            Greenskin - Greenskin Wall
-            Elf - Elven Keep
-            Elf - Treasury
-            Elf - Combat Camp
-            Elf - Arsenal
-            Elf - Duel Range
-            Elf - Holy Nest
-            Elf - Miner Guildhall
-            Elf - Abbey Tower
-            Elf - Council of Runes
-            Elf - Harbour
-            Elf - Warning Tower
-            Elf - Tree Wall
+    0x0F    0x7F    Human - Castle
+    0x10    0x84    Human - Gold Mill
+                    Human - Archery Range
+                    Human - Armoury
+                    Human - Barracks
+                    Human - Holy Stables
+                    Human - Fire Guild
+                    Human - Temple
+                    Human - Mage Tower
+                    Human - Shipyard
+                    Human - Watch Tower
+                    Human - Wall
+                    Greenskin - Fortress
+                    Greenskin - Hoard Keep
+                    Greenskin - Fort
+                    Greenskin - Blacksmith
+                    Greenskin - Battle Quarters
+                    Greenskin - Black Nest
+                    Greenskin - Weird Workshop
+                    Greenskin - Unholy Chapel
+                    Greenskin - Altar of Doom
+                    Greenskin - Docks
+                    Greenskin - Guard Tower
+                    Greenskin - Greenskin Wall
+                    Elf - Elven Keep
+                    Elf - Treasury
+                    Elf - Combat Camp
+                    Elf - Arsenal
+                    Elf - Duel Range
+                    Elf - Holy Nest
+                    Elf - Miner Guildhall
+                    Elf - Abbey Tower
+                    Elf - Council of Runes
+                    Elf - Harbour
+                    Elf - Warning Tower
+                    Elf - Tree Wall
 
 ### Units
 

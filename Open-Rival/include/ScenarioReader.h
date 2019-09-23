@@ -247,6 +247,8 @@ namespace Rival {
 
         size_t pos = 0;
 
+        void readFile(const std::string filename);
+
         ///////////////////////////////////////////////////////////////////////////
         // Parsing
         ///////////////////////////////////////////////////////////////////////////
@@ -284,6 +286,9 @@ namespace Rival {
             std::vector<unsigned char>& data);
 
         BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
+
+        std::vector<UnitPlacement> parseUnits(
+            std::vector<unsigned char>& data);
 
         UnitPlacement parseUnit(std::vector<unsigned char>& data);
 
