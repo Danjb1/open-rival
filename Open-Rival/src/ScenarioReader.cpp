@@ -9,6 +9,16 @@ namespace Rival {
 
     ScenarioReader::ScenarioReader(const std::string filename) {
 
+        try {
+            readFile(filename);
+        } catch (const std::exception& e) {
+            std::cerr << e.what();
+            throw std::runtime_error("Failed to read scenario: " + filename);
+        }
+    }
+
+    void ScenarioReader::readFile(const std::string filename) {
+
         // Open the file at the end
         std::ifstream is(filename, std::ios::binary|std::ios::ate);
         if (!is.is_open()) {
@@ -48,6 +58,66 @@ namespace Rival {
         printOffset();
         skip(data, 909, true);
 
+        /*
+        24 -- -- -- -- b0 04 0c -- -- 08 -- -- -- ff --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- 58 02
+        04 -- -- 05 -- -- -- ff -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- 84 03 08 -- -- 06 -- -- --
+        ff -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        84 03 08 -- -- 06 -- -- -- ff -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- 84 03 08 -- -- 06 --
+        -- -- ff -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- 84 03 08 -- -- 06 -- -- -- ff -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- 84 03 08 -- --
+        06 -- -- -- ff -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- 84 03 08 -- -- 06 -- -- -- ff -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- 84 03 08
+        -- -- 06 -- -- -- ff -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- 84 03 08 -- -- 06 -- -- -- ff
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 84
+        03 0c -- -- 08 -- -- -- ff -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- 58 02 -- -- -- 04 -- --
+        -- ff -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- b0 04 0c -- -- 08 -- -- -- ff -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- 58 02 04 -- -- 05
+        -- -- -- ff -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- 84 03 08 -- -- 06 -- -- -- ff -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- 84 03 08 --
+        -- 06 -- -- -- ff -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- 84 03 08 -- -- 06 -- -- -- ff --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- 84 03
+        08 -- -- 06 -- -- -- ff -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- 84 03 08 -- -- 06 -- -- --
+        ff -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        84 03 08 -- -- 06 -- -- -- ff -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- 84 03 08 -- -- 06 --
+        -- -- ff -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- 84 03 08 -- -- 06 -- -- -- ff -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- 84 03 0c -- --
+        08 -- -- -- ff -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- 58 02 -- -- -- 04 -- -- -- ff -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- b0 04 0c
+        -- -- 08 -- -- -- ff -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- 58 02 04 -- -- 05 -- -- -- ff
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 84
+        03 08 -- -- 06 -- -- -- ff -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- 84 03 08 -- -- 06 -- --
+        -- ff -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- 84 03 08 -- -- 06 -- -- -- ff -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- 84 03 08 -- -- 06
+        -- -- -- ff -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- 84 03 08 -- -- 06 -- -- -- ff -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- 84 03 08 --
+        -- 06 -- -- -- ff -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- 84 03 08 -- -- 06 -- -- -- ff --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- 84 03
+        08 -- -- 06 -- -- -- ff -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- 84 03 0c -- -- 08 -- -- --
+        ff -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        58 02 -- -- -- 04 -- -- -- ff -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- 2a -- -- -- --
+        */
+
         // Parse troop defaults
         printSection("Parsing troop defaults");
         printOffset();
@@ -70,6 +140,20 @@ namespace Rival {
         printSection("Skipping unknown section");
         printOffset();
         skip(data, 176, true);
+
+        /*
+        ff ff ff ff d2 -- -- -- -- -- -- -- 34 -- -- --
+        01 19 ff 02 64 ff 03 fa ff 04 0a ff 05 64 ff 06
+        03 ff 07 03 ff 08 32 ff 09 64 ff 0a c8 ff 0b 32
+        ff 0c 64 ff 0d -- 01 0e 03 ff 0f 06 ff 10 09 ff
+        11 0f ff 12 04 ff 13 06 ff 14 08 ff 15 0a ff 16
+        0f ff 17 14 ff 18 01 ff 19 01 ff 1a 01 ff 1b 01
+        ff 1c 01 ff 1d 0f ff 1e 14 ff 1f 1e ff 20 64 ff
+        21 c8 ff 22 01 ff 23 03 3c 24 03 5e 25 03 5f 26
+        03 5d 27 03 10 28 03 22 29 03 34 2a 03 60 2b 03
+        25 2c 03 35 2d 03 27 2e 03 15 2f 03 38 30 03 36
+        31 01 5c 32 01 5c 33 01 5c 34 01 5c 4f -- -- --
+        */
 
         // Parse unit production costs
         printSection("Parsing unit production costs");
@@ -127,6 +211,29 @@ namespace Rival {
         printOffset();
         skip(data, 308, true);
 
+        /*
+        01 -- 01 -- 02 -- -- -- -- -- -- -- -- -- -- --
+        01 -- -- -- -- -- -- -- -- -- -- -- 01 -- 02 --
+        01 -- 03 -- 02 -- 02 -- 02 -- -- -- 01 -- -- --
+        01 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- 04 -- -- -- -- --
+        -- -- -- -- -- -- 03 -- 03 -- 02 -- 04 -- 04 --
+        04 -- -- -- 01 02 01 02 01 02 01 02 01 02 01 02
+        0a-- 0a-- 0a-- 0a-- 0a-- 0a-- 0a-- 04 --
+        04 -- 01 -- 02 -- 02 -- 02 -- 02 -- 02 -- 02 --
+        -- -- -- -- -- -- -- -- -- -- 04 -- 03 -- 01 --
+        01 -- 01 -- 01 -- 01 -- 02 03 02 03 02 02 02 03
+        03 02 03 02 03 02 -- -- 01 01 -- -- -- -- -- --
+        -- -- -- -- 01 -- 01 -- 02 -- -- -- -- -- -- --
+        -- -- -- -- 01 -- -- -- -- -- -- -- -- -- -- --
+        01 -- 02 -- 01 -- 03 -- 02 -- 02 -- 02 -- -- --
+        01 -- -- -- 01 -- -- -- -- -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- 04 --
+        -- -- -- -- -- -- -- -- -- -- 03 -- 03 -- 02 --
+        04 -- 04 -- 04 -- -- -- 01 02 01 02 01 02 01 02
+        01 02 01 02
+        */
+
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
@@ -137,14 +244,23 @@ namespace Rival {
         // Parse buildings
         printSection("Parsing buildings");
         printOffset();
-        printNext(data, 128);
         scenarioFile.buildings = parseBuildings(data);
         print(scenarioFile.buildings[0]);
+        skip(data, 1, true);
 
         // Parse units
         printSection("Parsing units");
         printOffset();
-        skip(data, 128, true); // size unknown
+        printNext(data, 64);
+        scenarioFile.units = parseUnits(data);
+        print(scenarioFile.units[0]);
+        skip(data, 47, true);
+
+        /*
+        -- -- -- -- -- -- -- -- -- -- -- -- 75 72 78 7c
+        84 54 34 f4 72 75 81 74 74 74 77 74 74 74 74 7b
+        74 74 74 78 74 74 74 74 74 74 74 74 74 74 70
+        */
 
         // Parse traps
         printSection("Parsing traps");
@@ -458,11 +574,15 @@ namespace Rival {
 
         bldg.type = readByte(data);
         bldg.player = readByte(data);
+        skip(data, 1, true);
+        skip(data, 1, true);
+        skip(data, 1, true);
         bldg.x = readShort(data);
         bldg.y = readShort(data);
+        skip(data, 1, true);
         bldg.hitpoints = readShort(data);
         bldg.armour = readShort(data);
-        skip(data, 1, false);
+        skip(data, 1, true);
         bldg.sight = readByte(data);
         bldg.range = readByte(data);
         bldg.upgrade1Enabled = readBool(data);
@@ -472,6 +592,21 @@ namespace Rival {
         bldg.name = readString(data, 12);
 
         return bldg;
+    }
+
+    std::vector<UnitPlacement> ScenarioReader::parseUnits(
+        std::vector<unsigned char>& data) {
+
+        std::uint32_t numUnits = readInt(data);
+        std::vector<UnitPlacement> units;
+        units.reserve(numUnits);
+
+        for (unsigned int i = 0; i < numUnits; i++) {
+            UnitPlacement unit = parseUnit(data);
+            units.push_back(unit);
+        }
+
+        return units;
     }
 
     UnitPlacement ScenarioReader::parseUnit(std::vector<unsigned char>& data) {
@@ -638,9 +773,22 @@ namespace Rival {
 
         // Switch to hex
         std::cout << std::setfill('0') << std::hex;
+        int col = 0;
         for (size_t i = 0; i < n; i++) {
-            unsigned int value = static_cast<unsigned int>(data[pos + i]);
-            std::cout << std::setw(2) << value << " ";
+            unsigned int value = static_cast<unsigned int>(data.at(pos + i));
+
+            if (value == 0) {
+                std::cout << "-- ";
+            } else {
+                std::cout << std::setw(2) << value << " ";
+            }
+
+            // Print a new line every 16 bytes
+            col++;
+            if (col == 16) {
+                std::cout << '\n';
+                col = 0;
+            }
         }
         // Switch back to decimal
         std::cout << '\n' << std::dec;
