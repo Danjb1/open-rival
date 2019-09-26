@@ -48,7 +48,7 @@ namespace Rival {
         // Parse player properties
         printSection("Parsing player properties");
         printOffset();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             scenarioFile.playerProperties[i] = parsePlayerProperties(data);
         }
         print(scenarioFile.playerProperties[0]);
@@ -192,34 +192,37 @@ namespace Rival {
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
         printOffset();
-        HireTroopsRestrictions restrictions =
+        scenarioFile.hireTroopsRestrictions =
                 parseHireTroopsRestrictions(data);
-        print(restrictions);
+        print(scenarioFile.hireTroopsRestrictions);
 
         // Parse AI building settings
         printSection("Parsing AI building settings");
         printOffset();
-        skip(data, 168, true); // for now
+        for (int i = 0; i < numBuildingsPerRace; i++) {
+            for (int j = 0; j < numAiStrategies; j++) {
+                scenarioFile.aiStrategies[j].aiBuildingSettings[i] =
+                        parseAiSetting(data);
+            }
+        }
 
         // Parse AI troop settings
         printSection("Parsing AI troop settings");
         printOffset();
-        skip(data, 280, true); // for now
+        for (int i = 0; i < numTroopsPerRace; i++) {
+            for (int j = 0; j < numAiStrategies; j++) {
+                scenarioFile.aiStrategies[j].aiTroopSettings[i] =
+                        parseAiSetting(data);
+            }
+        }
 
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 308, true);
+        skip(data, 392, true);
 
         /*
-        01 -- 01 -- 02 -- -- -- -- -- -- -- -- -- -- --
-        01 -- -- -- -- -- -- -- -- -- -- -- 01 -- 02 --
-        01 -- 03 -- 02 -- 02 -- 02 -- -- -- 01 -- -- --
-        01 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-        -- -- -- -- -- -- -- -- -- -- 04 -- -- -- -- --
-        -- -- -- -- -- -- 03 -- 03 -- 02 -- 04 -- 04 --
-        04 -- -- -- 01 02 01 02 01 02 01 02 01 02 01 02
-        0a-- 0a-- 0a-- 0a-- 0a-- 0a-- 0a-- 04 --
+        0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 04 --
         04 -- 01 -- 02 -- 02 -- 02 -- 02 -- 02 -- 02 --
         -- -- -- -- -- -- -- -- -- -- 04 -- 03 -- 01 --
         01 -- 01 -- 01 -- 01 -- 02 03 02 03 02 02 02 03
@@ -231,7 +234,19 @@ namespace Rival {
         -- -- -- -- -- -- -- -- -- -- -- -- -- -- 04 --
         -- -- -- -- -- -- -- -- -- -- 03 -- 03 -- 02 --
         04 -- 04 -- 04 -- -- -- 01 02 01 02 01 02 01 02
-        01 02 01 02
+        01 02 01 02 0a -- 0a -- 0a -- 0a -- 0a -- 0a --
+        0a -- 04 -- 04 -- 01 -- 02 -- 02 -- 02 -- 02 --
+        02 -- 02 -- -- -- -- -- -- -- -- -- -- -- 04 --
+        03 -- 01 -- 01 -- 01 -- 01 -- 01 -- 02 03 02 03
+        02 02 02 03 03 02 03 02 03 02 -- -- 01 01 -- --
+        -- -- -- -- -- -- -- -- 01 -- 01 -- 02 -- -- --
+        -- -- -- -- -- -- -- -- 01 -- -- -- -- -- -- --
+        -- -- -- -- 01 -- 02 -- 01 -- 03 -- 02 -- 02 --
+        02 -- -- -- 01 -- -- -- 01 -- -- -- -- -- -- --
+        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        -- -- 04 -- -- -- -- -- -- -- -- -- -- -- 03 --
+        03 -- 02 -- 04 -- 04 -- 04 -- -- -- 01 02 01 02
+        01 02 01 02 01 02 01 02
         */
 
         // Parse terrain data
@@ -404,7 +419,7 @@ namespace Rival {
     }
 
     AvailableBuildings ScenarioReader::parseAvailableBuildings(
-        std::vector<unsigned char>& data) {
+            std::vector<unsigned char>& data) {
 
         AvailableBuildings bldgs;
 
@@ -425,7 +440,7 @@ namespace Rival {
     }
 
     HireTroopsRestrictions ScenarioReader::parseHireTroopsRestrictions(
-        std::vector<unsigned char>& data) {
+            std::vector<unsigned char>& data) {
 
         HireTroopsRestrictions restrictions;
 
@@ -446,6 +461,14 @@ namespace Rival {
         restrictions.mustHire = readBool(data);
 
         return restrictions;
+    }
+
+    AiSetting ScenarioReader::parseAiSetting(
+            std::vector<unsigned char>& data) {
+        AiSetting setting;
+        setting.amount = readByte(data);
+        setting.flag = readByte(data);
+        return setting;
     }
 
     std::vector<TilePlacement> ScenarioReader::parseTerrain(
@@ -886,6 +909,12 @@ namespace Rival {
             << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
             << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
             << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
+    }
+
+    void ScenarioReader::print(AiSetting& settings) const {
+        std::cout
+            << "Count: " << static_cast<int>(settings.amount) << '\n'
+            << "Flag:  " << static_cast<int>(settings.flag) << '\n';
     }
 
     void ScenarioReader::print(BuildingPlacement& bldg) const {

@@ -1,6 +1,7 @@
 #ifndef SCENARIO_READER_H
 #define SCENARIO_READER_H
 
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -115,19 +116,14 @@ namespace Rival {
         bool mustHire;
     };
 
-    struct AiBuildingSettings {
-        std::uint8_t amount;
-        std::uint8_t flag;
-    };
-
-    struct AiTroopSettings {
+    struct AiSetting {
         std::uint8_t amount;
         std::uint8_t flag;
     };
 
     struct AiStrategy {
-        AiBuildingSettings aiBuildingSettings[numBuildingsPerRace];
-        AiTroopSettings aiTroopSettings[numTroopsPerRace];
+        std::array<AiSetting, numBuildingsPerRace> aiBuildingSettings;
+        std::array<AiSetting, numTroopsPerRace> aiTroopSettings;
     };
 
     struct TilePlacement {
@@ -213,15 +209,15 @@ namespace Rival {
 
     struct ScenarioFile {
         ScenarioHeader hdr;
-        PlayerProperties playerProperties[numPlayers];
-        TroopDefaults troopDefaults[numTroops];
-        TroopDefaults monsterDefaults[numMonsters];
-        UpgradeProperties upgradeProperties[numUpgrades];
-        ProductionCost productionCosts[numProductionCosts];
-        WeaponDefaults weaponDefaults[numWeapons];
+        std::array<PlayerProperties, numPlayers> playerProperties;
+        std::array<TroopDefaults, numTroops> troopDefaults;
+        std::array<TroopDefaults, numMonsters> monsterDefaults;
+        std::array<UpgradeProperties, numUpgrades> upgradeProperties;
+        std::array<ProductionCost, numProductionCosts> productionCosts;
+        std::array<WeaponDefaults, numWeapons> weaponDefaults;
         AvailableBuildings availableBuildings;
         HireTroopsRestrictions hireTroopsRestrictions;
-        AiStrategy aiStrategies[numAiStrategies];
+        std::array<AiStrategy, numAiStrategies> aiStrategies;
         std::vector<TilePlacement> tiles;
         std::vector<BuildingPlacement> buildings;
         std::vector<UnitPlacement> units;
@@ -230,6 +226,14 @@ namespace Rival {
         std::vector<Goal> goals;
         CampaignText campaignText;
         std::uint8_t checksum;
+
+        ScenarioFile() {
+            // Initialise AI strategies
+            for (int i = 0; i < numAiStrategies; i++) {
+                aiStrategies[i] = AiStrategy();
+            }
+
+        }
     };
 
     class ScenarioReader {
@@ -273,6 +277,8 @@ namespace Rival {
 
         HireTroopsRestrictions parseHireTroopsRestrictions(
                 std::vector<unsigned char>& data);
+
+        AiSetting parseAiSetting(std::vector<unsigned char>& data);
 
         std::vector<TilePlacement> ScenarioReader::parseTerrain(
                 std::vector<unsigned char>& data,
@@ -355,6 +361,8 @@ namespace Rival {
         void print(AvailableBuildings& bldg) const;
 
         void print(HireTroopsRestrictions& restrictions) const;
+
+        void print(AiSetting& setting) const;
 
         void print(BuildingPlacement& bldg) const;
 
