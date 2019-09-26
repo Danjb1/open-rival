@@ -15,7 +15,13 @@
     - Add support for team colours
  - ScenarioReader:
     - Use BinaryFileReader
-    - Parse all available data
+    - Parse Objects
+    - Parse Goals
+    - Parse Campaign Text
+    - Test parsing flying units
+    - Test reading all built-in scenario files
+    - Test reading campaign files / introductory levels
+    - Analyse skipped sections; do they vary? Are they read?
     - Create a Scenario from the final struct
 
 ## Features
@@ -30,6 +36,10 @@
  - Log to file
  - Static code analysis
  - Unit tests
+
+### Editor
+
+ - Create a ScenarioWriter class
 
 ### Image Preparation
 
