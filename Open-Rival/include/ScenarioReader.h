@@ -298,7 +298,14 @@ namespace Rival {
 
         UnitPlacement parseUnit(std::vector<unsigned char>& data);
 
+        std::vector<TrapPlacement> parseTraps(
+                std::vector<unsigned char>& data);
+
         TrapPlacement parseTrap(std::vector<unsigned char>& data);
+
+        std::vector<Goal> parseGoals(std::vector<unsigned char>& data);
+
+        Goal parseGoal(std::vector<unsigned char>& data);
 
         ///////////////////////////////////////////////////////////////////////////
         // Token Extraction
@@ -308,6 +315,11 @@ namespace Rival {
 
         std::uint8_t readByte(
                 std::vector<unsigned char>& data, size_t offset) const;
+
+        std::uint8_t readRivalByte(std::vector<unsigned char>& data);
+
+        std::uint8_t readRivalByte(
+            std::vector<unsigned char>& data, size_t offset) const;
 
         bool readBool(std::vector<unsigned char>& data);
 
