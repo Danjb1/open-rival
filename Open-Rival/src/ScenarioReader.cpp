@@ -266,35 +266,25 @@ namespace Rival {
         // Parse units
         printSection("Parsing units");
         printOffset();
-        printNext(data, 64);
         scenarioFile.units = parseUnits(data);
         print(scenarioFile.units[0]);
-        skip(data, 47, true);
-
-        /*
-        -- -- -- -- -- -- -- -- -- -- -- -- 75 72 78 7c
-        84 54 34 f4 72 75 81 74 74 74 77 74 74 74 74 7b
-        74 74 74 78 74 74 74 74 74 74 74 74 74 74 70
-        */
+        skip(data, 8, true);
 
         // Parse traps
         printSection("Parsing traps");
         printOffset();
+        scenarioFile.traps = parseTraps(data);
+        print(scenarioFile.traps[0]);
+        skip(data, 27, true);
 
         // Parse scenario goals
         printSection("Parsing scenario goals");
         printOffset();
+        scenarioFile.goals = parseGoals(data);
+        skip(data, 6, true);
 
         // Parse campaign texts
         printSection("Parsing campaign texts");
-        printOffset();
-
-        // Parse AI building settings
-        printSection("Parsing AI building settings");
-        printOffset();
-
-        // Parse AI troop settings
-        printSection("Parsing AI troop settings");
         printOffset();
 
         // Parse objects
@@ -304,6 +294,16 @@ namespace Rival {
         // Parse checksum
         printSection("Parsing checksum");
         printOffset();
+        scenarioFile.checksum = readByte(data);
+
+        // Check remaining bytes
+        size_t remainingBytes = data.size() - pos;
+        if (remainingBytes == 0) {
+            std::cout << "Reached end of file\n";
+        } else {
+            std::cout << "Did not reach end of file\n";
+            printNext(data, remainingBytes);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -666,6 +666,21 @@ namespace Rival {
         return unit;
     }
 
+    std::vector<TrapPlacement> ScenarioReader::parseTraps(
+            std::vector<unsigned char>& data) {
+
+        std::uint32_t numTraps = readInt(data);
+        std::vector<TrapPlacement> traps;
+        traps.reserve(numTraps);
+
+        for (unsigned int i = 0; i < numTraps; i++) {
+            TrapPlacement trap = parseTrap(data);
+            traps.push_back(trap);
+        }
+
+        return traps;
+    }
+
     TrapPlacement ScenarioReader::parseTrap(std::vector<unsigned char>& data) {
 
         TrapPlacement trap;
@@ -675,6 +690,36 @@ namespace Rival {
         trap.player = readByte(data);
 
         return trap;
+    }
+
+    std::vector<Goal> ScenarioReader::parseGoals(
+            std::vector<unsigned char>& data) {
+
+        std::uint8_t numGoals = readRivalByte(data);
+        std::cout << "numGoals = " << static_cast<unsigned int>(numGoals) << "\n";
+        skip(data, 3, false);
+        std::vector<Goal> goals;
+        goals.reserve(numGoals);
+
+        for (unsigned int i = 0; i < numGoals; i++) {
+            Goal goal = parseGoal(data);
+            goals.push_back(goal);
+        }
+
+        return goals;
+    }
+
+    Goal ScenarioReader::parseGoal(std::vector<unsigned char>& data) {
+
+        Goal goal;
+
+        std::uint8_t goalType = readByte(data);
+        skip(data, 11, true);
+
+        // TODO: parse goal based on type
+        goal.count = 0;
+
+        return goal;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -691,6 +736,27 @@ namespace Rival {
     std::uint8_t ScenarioReader::readByte(
             std::vector<unsigned char>& data, size_t offset) const {
         return std::uint8_t(data[offset + 0]);
+    }
+
+    std::uint8_t ScenarioReader::readRivalByte(
+            std::vector<unsigned char>& data) {
+        std::uint8_t value = readRivalByte(data, pos);
+        pos += 1;
+        return value;
+    }
+
+    // Special numbering used by goals, etc.
+    std::uint8_t ScenarioReader::readRivalByte(
+            std::vector<unsigned char>& data, size_t offset) const {
+        std::uint8_t val = std::uint8_t(data[offset + 0]);
+
+        // Values in this format are offset by 0x74 or 0x78, depending on
+        // the value of the '2' column in the binary representation
+        if ((val & 0x02) > 0) {
+            return val - 0x78;
+        } else {
+            return val - 0x74;
+        }
     }
 
     bool ScenarioReader::readBool(std::vector<unsigned char>& data) {

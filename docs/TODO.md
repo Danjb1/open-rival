@@ -15,6 +15,7 @@
     - Add support for team colours
  - ScenarioReader:
     - Use BinaryFileReader
+    - Improve error handling
     - Parse Objects
     - Parse Goals
     - Parse Campaign Text
