@@ -1,11 +1,73 @@
 #include "pch.h"
 #include "ScenarioReader.h"
 
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 
 namespace Rival {
+
+    const std::map<std::uint8_t, char> ScenarioReader::alphabet = {
+        { 0x12, 'b' },
+        { 0x13, 'c' },
+        { 0x15, 'a' },
+        { 0x16, 'f' },
+        { 0x17, 'g' },
+        { 0x18, 'd' },
+        { 0x19, 'e' },
+        { 0x1A, 'j' },
+        { 0x1B, 'k' },
+        { 0x1C, 'h' },
+        { 0x1D, 'i' },
+        { 0x1E, 'n' },
+        { 0x1F, 'o' },
+        { 0x20, 'l' },
+        { 0x21, 'm' },
+        { 0x22, 'r' },
+        { 0x23, 's' },
+        { 0x24, 'p' },
+        { 0x26, 'v' },
+        { 0x27, 'w' },
+        { 0x28, 't' },
+        { 0x29, 'u' },
+        { 0x2A, 'z' },
+        { 0x2C, 'x' },
+        { 0x2D, 'y' },
+        { 0x32, 'B' },
+        { 0x33, 'C' },
+        { 0x35, 'A' },
+        { 0x36, 'F' },
+        { 0x37, 'G' },
+        { 0x38, 'D' },
+        { 0x39, 'E' },
+        { 0x3A, 'J' },
+        { 0x3B, 'K' },
+        { 0x3C, 'H' },
+        { 0x3D, 'I' },
+        { 0x3E, 'N' },
+        { 0x3F, 'O' },
+        { 0x40, 'L' },
+        { 0x41, 'M' },
+        { 0x42, 'R' },
+        { 0x43, 'S' },
+        { 0x44, 'P' },
+        { 0x46, 'V' },
+        { 0x47, 'W' },
+        { 0x48, 'T' },
+        { 0x49, 'U' },
+        { 0x4A, 'Z' },
+        { 0x4C, 'X' },
+        { 0x4D, 'Y' },
+        { 0x52, '"' },
+        { 0x54, ' ' },
+        { 0x56, '&' },
+        { 0x60, ',' },
+        { 0x63, '3' },
+        { 0x62, '2' },
+        { 0x81, '\r' },
+        { 0x7A, '\n' }
+    };
 
     ScenarioReader::ScenarioReader(const std::string filename) {
 
@@ -281,10 +343,11 @@ namespace Rival {
         printSection("Parsing scenario goals");
         printOffset();
         scenarioFile.goals = parseGoals(data);
-        skip(data, 6, true);
 
         // Parse campaign texts
         printSection("Parsing campaign texts");
+        scenarioFile.campaignText = parseCampaignText(data);
+        print(scenarioFile.campaignText);
         printOffset();
 
         // Parse objects
@@ -302,7 +365,9 @@ namespace Rival {
             std::cout << "Reached end of file\n";
         } else {
             std::cout << "Did not reach end of file\n";
-            printNext(data, remainingBytes);
+            size_t remainingBytesCapped =
+                    std::min(remainingBytes, static_cast<size_t>(256));
+            printNext(data, remainingBytesCapped);
         }
     }
 
@@ -696,7 +761,6 @@ namespace Rival {
             std::vector<unsigned char>& data) {
 
         std::uint8_t numGoals = readRivalByte(data);
-        std::cout << "numGoals = " << static_cast<unsigned int>(numGoals) << "\n";
         skip(data, 3, false);
         std::vector<Goal> goals;
         goals.reserve(numGoals);
@@ -722,6 +786,26 @@ namespace Rival {
         return goal;
     }
 
+    CampaignText ScenarioReader::parseCampaignText(
+            std::vector<unsigned char>& data) {
+
+        CampaignText text;
+
+        std::uint8_t titleLength = readRivalByte(data);
+        skip(data, 1, true);
+        text.title = readRivalString(data, titleLength);
+
+        std::uint8_t objectivesLength = readRivalByte(data);
+        skip(data, 1, true);
+        text.objectives = readRivalString(data, objectivesLength);
+
+        std::uint8_t narrationLength = readRivalByte(data);
+        skip(data, 1, true);
+        text.narration = readRivalString(data, narrationLength);
+
+        return text;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Token Extraction
     ///////////////////////////////////////////////////////////////////////////
@@ -735,7 +819,7 @@ namespace Rival {
 
     std::uint8_t ScenarioReader::readByte(
             std::vector<unsigned char>& data, size_t offset) const {
-        return std::uint8_t(data[offset + 0]);
+        return std::uint8_t(data[offset]);
     }
 
     std::uint8_t ScenarioReader::readRivalByte(
@@ -748,12 +832,12 @@ namespace Rival {
     // Special numbering used by goals, etc.
     std::uint8_t ScenarioReader::readRivalByte(
             std::vector<unsigned char>& data, size_t offset) const {
-        std::uint8_t val = std::uint8_t(data[offset + 0]);
+        std::uint8_t val = std::uint8_t(data[offset]);
 
-        // Values in this format are offset by 0x74 or 0x78, depending on
+        // Values in this format are offset by 0x74 or 0x70, depending on
         // the value of the '2' column in the binary representation
         if ((val & 0x02) > 0) {
-            return val - 0x78;
+            return val - 0x70;
         } else {
             return val - 0x74;
         }
@@ -817,12 +901,55 @@ namespace Rival {
             size_t offset,
             size_t length) const {
 
-        std::vector<char> nameChars(length);
+        std::vector<char> chars(length);
         for (size_t i = 0; i < length; i++) {
-            nameChars[i] = data[offset + i];
+            chars[i] = data[offset + i];
         }
-        std::string value(nameChars.data(), length);
+        std::string value(chars.data(), length);
         return value;
+    }
+
+    std::string ScenarioReader::readRivalString(
+            std::vector<unsigned char>& data, size_t length) {
+        std::string value = readRivalString(data, pos, length);
+        pos += length;
+        return value;
+    }
+
+    std::string ScenarioReader::readRivalString(
+            std::vector<unsigned char>& data,
+            size_t offset,
+            size_t length) const {
+
+        std::vector<char> chars(length);
+        for (size_t i = 0; i < length; i++) {
+            std::uint8_t c = data[offset + i];
+            chars[i] = getRivalChar(c);
+        }
+        std::string value(chars.data(), length);
+        return value;
+    }
+
+    char ScenarioReader::getRivalChar(std::uint8_t c) const {
+
+        if (c == 0x2B || c == 0x31) {
+            // Special value to signify red text
+            return 0x02;
+        }
+        if (c == 0x31) {
+            // Special value to signify the end of red text
+            return 0x03;
+        }
+
+        auto it = alphabet.find(c);
+
+        if (it != alphabet.end()) {
+            // Entry found
+            return it->second;
+        }
+
+        // Unknown character
+        return '?';
     }
 
     void ScenarioReader::skip(
@@ -1030,6 +1157,13 @@ namespace Rival {
             << "X:              " << static_cast<int>(trap.x) << '\n'
             << "Y:              " << static_cast<int>(trap.y) << '\n'
             << "Player:         " << static_cast<int>(trap.player) << '\n';
+    }
+
+    void ScenarioReader::print(CampaignText& text) const {
+        std::cout
+            << "Title:      " << text.title << '\n'
+            << "Objectives: " << text.objectives << '\n'
+            << "Narration:  " << text.narration << '\n';
     }
 
 }

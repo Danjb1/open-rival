@@ -244,10 +244,12 @@ namespace Rival {
 
     private:
 
-        const int numBytesShort = 2;
-        const int numBytesInt = 4;
+        static const std::map<std::uint8_t, char> alphabet;
 
-        const int bytesPerTile = 6;
+        static const int numBytesShort = 2;
+        static const int numBytesInt = 4;
+
+        static const int bytesPerTile = 6;
 
         size_t pos = 0;
 
@@ -256,6 +258,8 @@ namespace Rival {
         ///////////////////////////////////////////////////////////////////////////
         // Parsing
         ///////////////////////////////////////////////////////////////////////////
+
+        ScenarioHeader parseHeader(std::vector<unsigned char>& data);
 
         PlayerProperties parsePlayerProperties(
                 std::vector<unsigned char>& data);
@@ -307,6 +311,8 @@ namespace Rival {
 
         Goal parseGoal(std::vector<unsigned char>& data);
 
+        CampaignText parseCampaignText(std::vector<unsigned char>& data);
+
         ///////////////////////////////////////////////////////////////////////////
         // Token Extraction
         ///////////////////////////////////////////////////////////////////////////
@@ -344,6 +350,16 @@ namespace Rival {
                 size_t offset,
                 size_t length) const;
 
+        std::string readRivalString(
+                std::vector<unsigned char>& data, size_t length);
+
+        std::string readRivalString(
+                std::vector<unsigned char>& data,
+                size_t offset,
+                size_t length) const;
+
+        char getRivalChar(std::uint8_t c) const;
+
         void skip(std::vector<unsigned char>& data, const size_t n, bool print);
 
         ///////////////////////////////////////////////////////////////////////////
@@ -351,8 +367,6 @@ namespace Rival {
         ///////////////////////////////////////////////////////////////////////////
 
         void ScenarioReader::printOffset() const;
-
-        ScenarioHeader parseHeader(std::vector<unsigned char>& data);
 
         void printSection(std::string title) const;
 
@@ -381,6 +395,8 @@ namespace Rival {
         void print(UnitPlacement& unit) const;
 
         void print(TrapPlacement& trap) const;
+
+        void print(CampaignText& text) const;
 
     };
 
