@@ -17,8 +17,7 @@
     - Use BinaryFileReader
     - Improve error handling
     - Parse Objects
-    - Parse Goals
-    - Parse Campaign Text
+    - Finishg parsing Goals
     - Test parsing flying units
     - Test reading all built-in scenario files
     - Test reading campaign files / introductory levels
