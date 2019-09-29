@@ -346,7 +346,26 @@ namespace Rival {
         if (scenarioFile.units.size() > 0) {
             print(scenarioFile.units[0]);
         }
-        skip(data, 8, true);
+
+        // Parse chests
+        printSection("Parsing chests");
+        printOffset();
+        scenarioFile.chests = parseChests(data);
+        std::cout << "Found "
+            << scenarioFile.chests.size() << " chest(s)\n";
+        if (scenarioFile.chests.size() > 0) {
+            //print(scenarioFile.chests[0]);
+        }
+
+        // Parse info points
+        printSection("Parsing info points");
+        printOffset();
+        scenarioFile.infoPoints = parseInfoPoints(data);
+        std::cout << "Found "
+            << scenarioFile.infoPoints.size() << " info point(s)\n";
+        if (scenarioFile.infoPoints.size() > 0) {
+            //print(scenarioFile.infoPoints[0]);
+        }
 
         // Parse traps
         printSection("Parsing traps");
@@ -357,6 +376,9 @@ namespace Rival {
         if (scenarioFile.traps.size() > 0) {
             print(scenarioFile.traps[0]);
         }
+
+        // TODO: Fails for "4PBATT.sco" as we hit EOF
+        //  -> SKIP: 75 72 78 7c 84 54 34 f4 74 74 74 74 74 74 74 74 4c [EOF]
         skip(data, 27, true);
 
         // Parse scenario goals
@@ -749,26 +771,26 @@ namespace Rival {
         UnitPlacement unit;
 
         unit.type = readByte(data);
-        skip(data, 2, false);
+        skip(data, 2, true);
         unit.facing = readByte(data);
-        skip(data, 1, false);
+        skip(data, 1, true);
         unit.x = readShort(data);
         unit.y = readShort(data);
         unit.player = readByte(data);
         unit.hitpoints = readShort(data);
         unit.magic = readByte(data);
         unit.armour = readShort(data);
-        skip(data, 1, false);
+        skip(data, 1, true);
         unit.type2 = readByte(data);
         unit.sight = readByte(data);
         unit.range = readByte(data);
-        skip(data, 2, false);
+        skip(data, 2, true);
         unit.specialColour = readByte(data);
         unit.prisoner = readBool(data);
         unit.goldCost = readShort(data);
         unit.woodCost = readShort(data);
         unit.name = readString(data, 12);
-        skip(data, 13, false);
+        skip(data, 13, true);
         unit.upgrade1Enabled = readBool(data);
         unit.upgrade2Enabled = readBool(data);
         unit.upgrade3Enabled = readBool(data);
@@ -776,6 +798,63 @@ namespace Rival {
         unit.fightingArea = readByte(data);
 
         return unit;
+    }
+
+    std::vector<ChestPlacement> ScenarioReader::parseChests(
+            std::vector<unsigned char>& data) {
+
+        std::uint32_t numChests = readInt(data);
+        std::vector<ChestPlacement> chests;
+        chests.reserve(numChests);
+
+        for (unsigned int i = 0; i < numChests; i++) {
+            ChestPlacement chest = parseChest(data);
+            chests.push_back(chest);
+        }
+
+        return chests;
+    }
+
+    ChestPlacement ScenarioReader::parseChest(
+            std::vector<unsigned char>& data) {
+
+        ChestPlacement obj;
+
+        obj.type = readInt(data);
+        obj.variant = readInt(data);
+        obj.x = readByte(data);
+        obj.y = readByte(data);
+        skip(data, 10, true); // items
+
+        return obj;
+    }
+
+    std::vector<InfoPointPlacement> ScenarioReader::parseInfoPoints(
+            std::vector<unsigned char>& data) {
+
+        std::uint32_t numInfoPoints = readInt(data);
+        std::vector<InfoPointPlacement> infoPoints;
+        infoPoints.reserve(numInfoPoints);
+
+        for (unsigned int i = 0; i < numInfoPoints; i++) {
+            InfoPointPlacement infoPoint = parseInfoPoint(data);
+            infoPoints.push_back(infoPoint);
+        }
+
+        return infoPoints;
+    }
+
+    InfoPointPlacement ScenarioReader::parseInfoPoint(
+            std::vector<unsigned char>& data) {
+
+        InfoPointPlacement infoPoint;
+
+        infoPoint.x = readByte(data);
+        infoPoint.y = readByte(data);
+        std::uint16_t messageLength = readShort(data);
+        infoPoint.message = readString(data, messageLength);
+
+        return infoPoint;
     }
 
     std::vector<TrapPlacement> ScenarioReader::parseTraps(
