@@ -316,27 +316,47 @@ namespace Rival {
         printOffset();
         scenarioFile.tiles = parseTerrain(
                 data, scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
-        skip(data, 4, true);
+
+        // Parse trees
+        printSection("Parsing trees");
+        printOffset();
+        scenarioFile.trees = parseTrees(data);
+        std::cout << "Found "
+            << scenarioFile.trees.size() << " tree(s)\n";
+        if (scenarioFile.trees.size() > 0) {
+            print(scenarioFile.trees[0]);
+        }
 
         // Parse buildings
         printSection("Parsing buildings");
         printOffset();
         scenarioFile.buildings = parseBuildings(data);
-        print(scenarioFile.buildings[0]);
-        skip(data, 1, true);
+        std::cout << "Found "
+                << scenarioFile.buildings.size() << " building(s)\n";
+        if (scenarioFile.buildings.size() > 0) {
+            print(scenarioFile.buildings[0]);
+        }
 
         // Parse units
         printSection("Parsing units");
         printOffset();
         scenarioFile.units = parseUnits(data);
-        print(scenarioFile.units[0]);
+        std::cout << "Found "
+                << scenarioFile.units.size() << " unit(s)\n";
+        if (scenarioFile.units.size() > 0) {
+            print(scenarioFile.units[0]);
+        }
         skip(data, 8, true);
 
         // Parse traps
         printSection("Parsing traps");
         printOffset();
         scenarioFile.traps = parseTraps(data);
-        print(scenarioFile.traps[0]);
+        std::cout << "Found "
+                << scenarioFile.traps.size() << " trap(s)\n";
+        if (scenarioFile.traps.size() > 0) {
+            print(scenarioFile.traps[0]);
+        }
         skip(data, 27, true);
 
         // Parse scenario goals
@@ -348,10 +368,6 @@ namespace Rival {
         printSection("Parsing campaign texts");
         scenarioFile.campaignText = parseCampaignText(data);
         print(scenarioFile.campaignText);
-        printOffset();
-
-        // Parse objects
-        printSection("Parsing objects");
         printOffset();
 
         // Parse checksum
@@ -380,8 +396,7 @@ namespace Rival {
 
         ScenarioHeader hdr;
 
-        hdr.unknown1 = readInt(data);
-        hdr.unknown2 = readInt(data);
+        skip(data, 8, true);
         std::uint8_t terrainType = readByte(data);
         hdr.wilderness = (terrainType == 0x03);
         std::uint8_t nameLength = readByte(data);
@@ -398,7 +413,9 @@ namespace Rival {
 
         PlayerProperties props;
 
-        skip(data, 12, false);
+        props.hasStartLocation = (readInt(data) == 1);
+        props.startLocX = readInt(data);
+        props.startLocY = readInt(data);
         props.startingFood = readInt(data);
         props.startingWood = readInt(data);
         props.startingGold = readInt(data);
@@ -640,6 +657,35 @@ namespace Rival {
         return tile;
     }
 
+    std::vector<TreePlacement> ScenarioReader::parseTrees(
+            std::vector<unsigned char>& data) {
+
+        std::uint32_t numTrees = readInt(data);
+        std::vector<TreePlacement> trees;
+        trees.reserve(numTrees);
+
+        for (unsigned int i = 0; i < numTrees; i++) {
+            TreePlacement tree = parseTree(data);
+            trees.push_back(tree);
+        }
+
+        return trees;
+    }
+
+    TreePlacement ScenarioReader::parseTree(
+            std::vector<unsigned char>& data) {
+
+        TreePlacement obj;
+
+        obj.type = readByte(data);
+        skip(data, 1, true);
+        obj.variant = readByte(data);
+        obj.x = readInt(data);
+        obj.y = readInt(data);
+
+        return obj;
+    }
+
     std::vector<BuildingPlacement> ScenarioReader::parseBuildings(
         std::vector<unsigned char>& data) {
 
@@ -670,7 +716,7 @@ namespace Rival {
         skip(data, 1, true);
         bldg.hitpoints = readShort(data);
         bldg.armour = readShort(data);
-        skip(data, 1, true);
+        skip(data, 1, false);
         bldg.sight = readByte(data);
         bldg.range = readByte(data);
         bldg.upgrade1Enabled = readBool(data);
@@ -678,6 +724,7 @@ namespace Rival {
         bldg.specialColour = readByte(data);
         bldg.prisoner = readBool(data);
         bldg.name = readString(data, 12);
+        skip(data, 1, false);
 
         return bldg;
     }
@@ -792,16 +839,22 @@ namespace Rival {
         CampaignText text;
 
         std::uint8_t titleLength = readRivalByte(data);
-        skip(data, 1, true);
-        text.title = readRivalString(data, titleLength);
+        if (titleLength > 0) {
+            skip(data, 1, true);
+            text.title = readRivalString(data, titleLength);
+        }
 
         std::uint8_t objectivesLength = readRivalByte(data);
-        skip(data, 1, true);
-        text.objectives = readRivalString(data, objectivesLength);
+        if (objectivesLength > 0) {
+            skip(data, 1, true);
+            text.objectives = readRivalString(data, objectivesLength);
+        }
 
         std::uint8_t narrationLength = readRivalByte(data);
-        skip(data, 1, true);
-        text.narration = readRivalString(data, narrationLength);
+        if (narrationLength > 0) {
+            skip(data, 1, true);
+            text.narration = readRivalString(data, narrationLength);
+        }
 
         return text;
     }
@@ -1012,13 +1065,19 @@ namespace Rival {
 
     void ScenarioReader::print(ScenarioHeader& hdr) const {
         std::cout
-            << "Unknown1: " << hdr.unknown1 << '\n'
-            << "Unknown2: " << hdr.unknown2 << '\n'
             << "Map Name: " << hdr.mapName << '\n'
             << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
     }
 
     void ScenarioReader::print(PlayerProperties& props) const {
+        if (props.hasStartLocation) {
+            std::cout
+                << "Start Location: "
+                << props.startLocX
+                << ", "
+                << props.startLocY
+                << '\n';
+        }
         std::cout
             << "Starting Gold:  " << props.startingGold << '\n'
             << "Starting Wood:  " << props.startingWood << '\n'
@@ -1108,6 +1167,14 @@ namespace Rival {
         std::cout
             << "Count: " << static_cast<int>(settings.amount) << '\n'
             << "Flag:  " << static_cast<int>(settings.flag) << '\n';
+    }
+
+    void ScenarioReader::print(TreePlacement& tree) const {
+        std::cout
+            << "Type:    " << static_cast<int>(tree.type) << '\n'
+            << "Variant: " << static_cast<int>(tree.variant) << '\n'
+            << "X:       " << tree.x << '\n'
+            << "Y:       " << tree.y << '\n';
     }
 
     void ScenarioReader::print(BuildingPlacement& bldg) const {
