@@ -16,8 +16,6 @@
  - ScenarioReader:
     - Use BinaryFileReader
     - Improve error handling
-    - Parse Hard / Soft Mountains
-    - Parse Ornamental Objects
     - Parse Info Points
     - Parse Chests / Hidden Bags
     - Finish parsing Goals

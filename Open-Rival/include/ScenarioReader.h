@@ -188,8 +188,9 @@ namespace Rival {
         std::uint8_t player;
     };
 
-    struct TreePlacement {
+    struct ObjectPlacement {
         std::uint8_t type;
+        // 1 byte: empty
         std::uint8_t variant;
         std::uint32_t x;
         std::uint32_t y;
@@ -228,7 +229,7 @@ namespace Rival {
         std::vector<BuildingPlacement> buildings;
         std::vector<UnitPlacement> units;
         std::vector<TrapPlacement> traps;
-        std::vector<TreePlacement> trees;
+        std::vector<ObjectPlacement> objects;
         std::vector<Goal> goals;
         CampaignText campaignText;
         std::uint8_t checksum;
@@ -298,10 +299,10 @@ namespace Rival {
         TilePlacement ScenarioReader::parseTile(
                 std::vector<unsigned char>& data);
 
-        std::vector<TreePlacement> parseTrees(
+        std::vector<ObjectPlacement> parseObjects(
                 std::vector<unsigned char>& data);
 
-        TreePlacement parseTree(std::vector<unsigned char>& data);
+        ObjectPlacement parseObject(std::vector<unsigned char>& data);
 
         std::vector<BuildingPlacement> parseBuildings(
                 std::vector<unsigned char>& data);
@@ -401,7 +402,7 @@ namespace Rival {
 
         void print(AiSetting& setting) const;
 
-        void print(TreePlacement& tree) const;
+        void print(ObjectPlacement& obj) const;
 
         void print(BuildingPlacement& bldg) const;
 
