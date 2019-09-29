@@ -31,12 +31,12 @@ The following analysis was performed with the help of VBinDiff.
     0x25CF      AI Building Settings
     0x2677      AI Troops Settings
     0x28C3      Terrain Data
+    ???         Trees
+    ???         Buildings
     0x80DD      Units
     0x814D      Traps
     0x8178      Scenario Goals
     0x817B      Campaign Texts
-    ???         Buildings
-    ???         Objects
 
 ## Header
 
@@ -54,6 +54,8 @@ The following analysis was performed with the help of VBinDiff.
 Starting at offset 0x001E?
 
 Buildings are ordered by type (see Appendices).
+
+Palisade is also listed as a building!
 
 Each building consists of 25 bytes:
 
@@ -594,13 +596,13 @@ Starting at offset 0x814D.
     1 byte          Y
     1 byte          Player (00 = P1, 01 = P2, etc.)
 
-## Objects
+## Trees
 
 Starting almost immediately after terrain data.
 
-Section starts with the number of objects (4 bytes).
+Section starts with the number of trees (4 bytes).
 
-### Trees
+Each tree takes the form:
 
     03 00 VV XX 00 00 00 YY 00 00 00
 
@@ -660,6 +662,9 @@ Section starts with the number of objects (4 bytes).
                     Elf - Harbour
                     Elf - Warning Tower
                     Elf - Tree Wall
+    0xAB            Palisade
+    0xAC            Grate
+    0xAD            Door
 
 ### Units
 

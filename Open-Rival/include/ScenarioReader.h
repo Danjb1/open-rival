@@ -24,8 +24,7 @@ namespace Rival {
     const int numAiStrategies = 7;
 
     struct ScenarioHeader {
-        std::uint32_t unknown1;
-        std::uint32_t unknown2;
+        // 8 bytes: unknown
         bool wilderness;
         std::string mapName;
         std::uint32_t mapHeight;
@@ -34,7 +33,9 @@ namespace Rival {
     };
 
     struct PlayerProperties {
-        // 12 bytes: unknown
+        bool hasStartLocation;
+        std::uint32_t startLocX;
+        std::uint32_t startLocY;
         std::uint32_t startingFood;
         std::uint32_t startingWood;
         std::uint32_t startingGold;
@@ -132,10 +133,13 @@ namespace Rival {
 
     struct BuildingPlacement {
         std::uint8_t type;
-        // 2 bytes: unknown
         std::uint8_t player;
+        // 1 byte: unknown (0x00 - 0x0f for Palisade)
+        // 1 byte: empty
+        // 1 byte: unknown (0x01 for Green Door, 0x02 for Blue Door, 0x03 for Yellow Door, 0x04 for Buildings)
         std::uint16_t x;
         std::uint16_t y;
+        // 1 byte: unknown (0x08 for Palisade / Grate / Door)
         std::uint16_t hitpoints;
         std::uint16_t armour;
         // 1 byte: empty
@@ -146,6 +150,7 @@ namespace Rival {
         std::uint8_t specialColour;
         bool prisoner;
         std::string name;
+        // 1 byte: empty
     };
 
     struct UnitPlacement {
@@ -183,10 +188,11 @@ namespace Rival {
         std::uint8_t player;
     };
 
-    struct ObjectPlacement {
-        std::uint8_t x;
-        std::uint8_t y;
+    struct TreePlacement {
         std::uint8_t type;
+        std::uint8_t variant;
+        std::uint32_t x;
+        std::uint32_t y;
     };
 
     struct Goal {
@@ -222,7 +228,7 @@ namespace Rival {
         std::vector<BuildingPlacement> buildings;
         std::vector<UnitPlacement> units;
         std::vector<TrapPlacement> traps;
-        std::vector<ObjectPlacement> objects;
+        std::vector<TreePlacement> trees;
         std::vector<Goal> goals;
         CampaignText campaignText;
         std::uint8_t checksum;
@@ -255,9 +261,9 @@ namespace Rival {
 
         void readFile(const std::string filename);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
         // Parsing
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         ScenarioHeader parseHeader(std::vector<unsigned char>& data);
 
@@ -292,13 +298,18 @@ namespace Rival {
         TilePlacement ScenarioReader::parseTile(
                 std::vector<unsigned char>& data);
 
+        std::vector<TreePlacement> parseTrees(
+                std::vector<unsigned char>& data);
+
+        TreePlacement parseTree(std::vector<unsigned char>& data);
+
         std::vector<BuildingPlacement> parseBuildings(
-            std::vector<unsigned char>& data);
+                std::vector<unsigned char>& data);
 
         BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
 
         std::vector<UnitPlacement> parseUnits(
-            std::vector<unsigned char>& data);
+                std::vector<unsigned char>& data);
 
         UnitPlacement parseUnit(std::vector<unsigned char>& data);
 
@@ -313,9 +324,9 @@ namespace Rival {
 
         CampaignText parseCampaignText(std::vector<unsigned char>& data);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
         // Token Extraction
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         std::uint8_t readByte(std::vector<unsigned char>& data);
 
@@ -362,9 +373,9 @@ namespace Rival {
 
         void skip(std::vector<unsigned char>& data, const size_t n, bool print);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
         // Printing
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         void ScenarioReader::printOffset() const;
 
@@ -389,6 +400,8 @@ namespace Rival {
         void print(HireTroopsRestrictions& restrictions) const;
 
         void print(AiSetting& setting) const;
+
+        void print(TreePlacement& tree) const;
 
         void print(BuildingPlacement& bldg) const;
 
