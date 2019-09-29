@@ -16,11 +16,10 @@
  - ScenarioReader:
     - Use BinaryFileReader
     - Improve error handling
-    - Parse Info Points
-    - Parse Chests / Hidden Bags
+    - Parse Hidden Bags?
     - Finish parsing Goals
-    - Test parsing flying units
-    - Test reading all built-in scenario files (fails for 4PBATT.sco - probably due to Objects)
+    - Finish parsing Chests (contents)
+    - Test reading all built-in scenario files (fails for 4PBATT.sco after parsing Traps)
     - Test reading campaign files / introductory levels
     - Analyse skipped sections; do they vary? Are they read?
     - Create a Scenario from the final struct
