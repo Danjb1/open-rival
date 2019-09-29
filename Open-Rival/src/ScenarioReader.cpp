@@ -317,14 +317,14 @@ namespace Rival {
         scenarioFile.tiles = parseTerrain(
                 data, scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
 
-        // Parse trees
-        printSection("Parsing trees");
+        // Parse objects
+        printSection("Parsing objects");
         printOffset();
-        scenarioFile.trees = parseTrees(data);
+        scenarioFile.objects = parseObjects(data);
         std::cout << "Found "
-            << scenarioFile.trees.size() << " tree(s)\n";
-        if (scenarioFile.trees.size() > 0) {
-            print(scenarioFile.trees[0]);
+            << scenarioFile.objects.size() << " object(s)\n";
+        if (scenarioFile.objects.size() > 0) {
+            print(scenarioFile.objects[0]);
         }
 
         // Parse buildings
@@ -657,28 +657,28 @@ namespace Rival {
         return tile;
     }
 
-    std::vector<TreePlacement> ScenarioReader::parseTrees(
+    std::vector<ObjectPlacement> ScenarioReader::parseObjects(
             std::vector<unsigned char>& data) {
 
-        std::uint32_t numTrees = readInt(data);
-        std::vector<TreePlacement> trees;
-        trees.reserve(numTrees);
+        std::uint32_t numObjects = readInt(data);
+        std::vector<ObjectPlacement> objects;
+        objects.reserve(numObjects);
 
-        for (unsigned int i = 0; i < numTrees; i++) {
-            TreePlacement tree = parseTree(data);
-            trees.push_back(tree);
+        for (unsigned int i = 0; i < numObjects; i++) {
+            ObjectPlacement obj = parseObject(data);
+            objects.push_back(obj);
         }
 
-        return trees;
+        return objects;
     }
 
-    TreePlacement ScenarioReader::parseTree(
+    ObjectPlacement ScenarioReader::parseObject(
             std::vector<unsigned char>& data) {
 
-        TreePlacement obj;
+        ObjectPlacement obj;
 
         obj.type = readByte(data);
-        skip(data, 1, true);
+        skip(data, 1, false);
         obj.variant = readByte(data);
         obj.x = readInt(data);
         obj.y = readInt(data);
@@ -1169,12 +1169,12 @@ namespace Rival {
             << "Flag:  " << static_cast<int>(settings.flag) << '\n';
     }
 
-    void ScenarioReader::print(TreePlacement& tree) const {
+    void ScenarioReader::print(ObjectPlacement& obj) const {
         std::cout
-            << "Type:    " << static_cast<int>(tree.type) << '\n'
-            << "Variant: " << static_cast<int>(tree.variant) << '\n'
-            << "X:       " << tree.x << '\n'
-            << "Y:       " << tree.y << '\n';
+            << "Type:    " << static_cast<int>(obj.type) << '\n'
+            << "Variant: " << static_cast<int>(obj.variant) << '\n'
+            << "X:       " << obj.x << '\n'
+            << "Y:       " << obj.y << '\n';
     }
 
     void ScenarioReader::print(BuildingPlacement& bldg) const {

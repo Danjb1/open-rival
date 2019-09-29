@@ -596,15 +596,17 @@ Starting at offset 0x814D.
     1 byte          Y
     1 byte          Player (00 = P1, 01 = P2, etc.)
 
-## Trees
+## Objects
 
 Starting almost immediately after terrain data.
 
-Section starts with the number of trees (4 bytes).
+Section starts with the number of objects (4 bytes).
 
-Each tree takes the form:
+Each object takes the form:
 
-    03 00 VV XX 00 00 00 YY 00 00 00
+    TT 00 VV XX 00 00 00 YY 00 00 00
+
+ - `TT` represents the object type (see Appendices)
 
  - `VV` represents the graphical variant (?)
 
@@ -617,6 +619,15 @@ Each tree takes the form:
     1 byte              LRC
 
 ## Appendices
+
+### Objects
+
+    Type        Object
+    ------------------------------------------
+    0x03        Tree
+    0x05        Soft Mountain
+    0x06        Hard Mountain
+    0xAF        Ornamental Object
 
 ### Buildings
 
