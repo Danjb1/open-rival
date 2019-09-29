@@ -182,6 +182,19 @@ namespace Rival {
         std::uint8_t fightingArea;
     };
 
+    struct ChestPlacement {
+        std::uint32_t type;
+        std::uint32_t variant;
+        std::uint8_t x;
+        std::uint8_t y;
+    };
+
+    struct InfoPointPlacement {
+        std::uint8_t x;
+        std::uint8_t y;
+        std::string message;
+    };
+
     struct TrapPlacement {
         std::uint8_t x;
         std::uint8_t y;
@@ -226,10 +239,12 @@ namespace Rival {
         HireTroopsRestrictions hireTroopsRestrictions;
         std::array<AiStrategy, numAiStrategies> aiStrategies;
         std::vector<TilePlacement> tiles;
+        std::vector<ObjectPlacement> objects;
         std::vector<BuildingPlacement> buildings;
         std::vector<UnitPlacement> units;
+        std::vector<ChestPlacement> chests;
+        std::vector<InfoPointPlacement> infoPoints;
         std::vector<TrapPlacement> traps;
-        std::vector<ObjectPlacement> objects;
         std::vector<Goal> goals;
         CampaignText campaignText;
         std::uint8_t checksum;
@@ -313,6 +328,18 @@ namespace Rival {
                 std::vector<unsigned char>& data);
 
         UnitPlacement parseUnit(std::vector<unsigned char>& data);
+
+        std::vector<ChestPlacement> parseChests(
+                std::vector<unsigned char>& data);
+
+        ChestPlacement parseChest(
+                std::vector<unsigned char>& data);
+
+        std::vector<InfoPointPlacement> parseInfoPoints(
+                std::vector<unsigned char>& data);
+
+        InfoPointPlacement parseInfoPoint(
+                std::vector<unsigned char>& data);
 
         std::vector<TrapPlacement> parseTraps(
                 std::vector<unsigned char>& data);
