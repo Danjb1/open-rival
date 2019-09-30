@@ -376,10 +376,12 @@ namespace Rival {
         if (scenarioFile.traps.size() > 0) {
             print(scenarioFile.traps[0]);
         }
+        skip(data, 8, true);
 
-        // TODO: Fails for "4PBATT.sco" as we hit EOF
-        //  -> SKIP: 75 72 78 7c 84 54 34 f4 74 74 74 74 74 74 74 74 4c [EOF]
-        skip(data, 27, true);
+        // Parse goal locations
+        printSection("Parsing goal locations");
+        printOffset();
+        scenarioFile.goalLocations = parseGoalLocations(data);
 
         // Parse scenario goals
         printSection("Parsing scenario goals");
@@ -872,7 +874,8 @@ namespace Rival {
         return traps;
     }
 
-    TrapPlacement ScenarioReader::parseTrap(std::vector<unsigned char>& data) {
+    TrapPlacement ScenarioReader::parseTrap(
+            std::vector<unsigned char>& data) {
 
         TrapPlacement trap;
 
@@ -881,6 +884,35 @@ namespace Rival {
         trap.player = readByte(data);
 
         return trap;
+    }
+
+    std::vector<GoalLocation> ScenarioReader::parseGoalLocations(
+            std::vector<unsigned char>& data) {
+
+        std::uint8_t numGoals = readRivalByte(data);
+        std::vector<GoalLocation> goals;
+        goals.reserve(numGoals);
+
+        for (unsigned int i = 0; i < numGoals; i++) {
+            GoalLocation goal = parseGoalLocation(data);
+            goals.push_back(goal);
+        }
+
+        return goals;
+    }
+
+    GoalLocation ScenarioReader::parseGoalLocation(
+            std::vector<unsigned char>& data) {
+
+        GoalLocation goal;
+
+        goal.type = readRivalByte(data);
+        goal.x = readRivalByte(data);
+        skip(data, 3, false);
+        goal.y = readRivalByte(data);
+        skip(data, 3, false);
+
+        return goal;
     }
 
     std::vector<Goal> ScenarioReader::parseGoals(
