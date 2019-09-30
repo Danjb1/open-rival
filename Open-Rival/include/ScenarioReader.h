@@ -209,6 +209,14 @@ namespace Rival {
         std::uint32_t y;
     };
 
+    struct GoalLocation {
+        std::uint8_t type;
+        std::uint8_t x;
+        // 3 bytes: empty
+        std::uint8_t y;
+        // 3 bytes: empty
+    };
+
     struct Goal {
         std::uint8_t type;
         std::uint8_t x;
@@ -245,6 +253,7 @@ namespace Rival {
         std::vector<ChestPlacement> chests;
         std::vector<InfoPointPlacement> infoPoints;
         std::vector<TrapPlacement> traps;
+        std::vector<GoalLocation> goalLocations;
         std::vector<Goal> goals;
         CampaignText campaignText;
         std::uint8_t checksum;
@@ -345,6 +354,11 @@ namespace Rival {
                 std::vector<unsigned char>& data);
 
         TrapPlacement parseTrap(std::vector<unsigned char>& data);
+
+        std::vector<GoalLocation> parseGoalLocations(
+                std::vector<unsigned char>& data);
+
+        GoalLocation parseGoalLocation(std::vector<unsigned char>& data);
 
         std::vector<Goal> parseGoals(std::vector<unsigned char>& data);
 
