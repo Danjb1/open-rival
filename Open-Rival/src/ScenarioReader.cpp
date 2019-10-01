@@ -382,6 +382,11 @@ namespace Rival {
         printSection("Parsing goal locations");
         printOffset();
         scenarioFile.goalLocations = parseGoalLocations(data);
+        std::cout << "Found "
+            << scenarioFile.goalLocations.size() << " goal location(s)\n";
+        if (scenarioFile.goalLocations.size() > 0) {
+            print(scenarioFile.goalLocations[0]);
+        }
 
         // Parse scenario goals
         printSection("Parsing scenario goals");
@@ -390,6 +395,7 @@ namespace Rival {
 
         // Parse campaign texts
         printSection("Parsing campaign texts");
+        printOffset();
         scenarioFile.campaignText = parseCampaignText(data);
         print(scenarioFile.campaignText);
         printOffset();
@@ -889,11 +895,11 @@ namespace Rival {
     std::vector<GoalLocation> ScenarioReader::parseGoalLocations(
             std::vector<unsigned char>& data) {
 
-        std::uint8_t numGoals = readRivalByte(data);
+        std::uint8_t numGoalLocations = readRivalByte(data);
         std::vector<GoalLocation> goals;
-        goals.reserve(numGoals);
+        goals.reserve(numGoalLocations);
 
-        for (unsigned int i = 0; i < numGoals; i++) {
+        for (unsigned int i = 0; i < numGoalLocations; i++) {
             GoalLocation goal = parseGoalLocation(data);
             goals.push_back(goal);
         }
@@ -919,7 +925,11 @@ namespace Rival {
             std::vector<unsigned char>& data) {
 
         std::uint8_t numGoals = readRivalByte(data);
-        skip(data, 3, false);
+
+        if (numGoals > 0) {
+            skip(data, 3, false);
+        }
+
         std::vector<Goal> goals;
         goals.reserve(numGoals);
 
@@ -950,22 +960,16 @@ namespace Rival {
         CampaignText text;
 
         std::uint8_t titleLength = readRivalByte(data);
-        if (titleLength > 0) {
-            skip(data, 1, true);
-            text.title = readRivalString(data, titleLength);
-        }
+        skip(data, 1, false);
+        text.title = readRivalString(data, titleLength);
 
         std::uint8_t objectivesLength = readRivalByte(data);
-        if (objectivesLength > 0) {
-            skip(data, 1, true);
-            text.objectives = readRivalString(data, objectivesLength);
-        }
+        skip(data, 1, false);
+        text.objectives = readRivalString(data, objectivesLength);
 
         std::uint8_t narrationLength = readRivalByte(data);
-        if (narrationLength > 0) {
-            skip(data, 1, true);
-            text.narration = readRivalString(data, narrationLength);
-        }
+        skip(data, 1, false);
+        text.narration = readRivalString(data, narrationLength);
 
         return text;
     }
@@ -998,9 +1002,19 @@ namespace Rival {
             std::vector<unsigned char>& data, size_t offset) const {
         std::uint8_t val = std::uint8_t(data[offset]);
 
-        // Values below 0x74 need to be increased
-        if (val < 0x74) {
+        // Values are stored in tiers, each using a different offset
+        while (val < 0x70) {
             val += 0x40;
+        }
+
+        // Values above 0x91 should also have an offset applied
+        // TODO: Fails for 224 (stored as 0x94)
+        if (val > 0x91) {
+            std::uint8_t decrementor = val;
+            while (decrementor > 0x70) {
+                val += 0x40;
+                decrementor -= 0x40;
+            }
         }
 
         // Values in this format are offset by 0x74 or 0x70, depending on
@@ -1340,6 +1354,13 @@ namespace Rival {
             << "X:              " << static_cast<int>(trap.x) << '\n'
             << "Y:              " << static_cast<int>(trap.y) << '\n'
             << "Player:         " << static_cast<int>(trap.player) << '\n';
+    }
+
+    void ScenarioReader::print(GoalLocation& goalLoc) const {
+        std::cout
+            << "Type: " << static_cast<int>(goalLoc.type) << '\n'
+            << "X:    " << static_cast<int>(goalLoc.x) << '\n'
+            << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
     }
 
     void ScenarioReader::print(CampaignText& text) const {
