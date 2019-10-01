@@ -998,6 +998,11 @@ namespace Rival {
             std::vector<unsigned char>& data, size_t offset) const {
         std::uint8_t val = std::uint8_t(data[offset]);
 
+        // Values below 0x74 need to be increased
+        if (val < 0x74) {
+            val += 0x40;
+        }
+
         // Values in this format are offset by 0x74 or 0x70, depending on
         // the value of the '2' column in the binary representation
         if ((val & 0x02) > 0) {

@@ -18,7 +18,9 @@
     - Improve error handling
     - Finish parsing Goals
     - Finish parsing Chests (contents)
+    - Include missing alphabet entries (e.g. '!)
     - Test reading all built-in scenario files
+        - Test Campaign Texts of different lengths (51 works - how about 50 / 52?)
     - Test reading campaign files / introductory levels
     - Analyse skipped sections; do they vary? Are they read?
     - Create a Scenario from the final struct
