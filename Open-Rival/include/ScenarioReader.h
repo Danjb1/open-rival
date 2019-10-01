@@ -451,6 +451,8 @@ namespace Rival {
 
         void print(TrapPlacement& trap) const;
 
+        void print(GoalLocation& trap) const;
+
         void print(CampaignText& text) const;
 
     };
