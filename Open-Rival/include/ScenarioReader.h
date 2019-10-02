@@ -380,6 +380,13 @@ namespace Rival {
         std::uint8_t readRivalByte(
             std::vector<unsigned char>& data, size_t offset) const;
 
+        std::uint8_t fixRivalByte(std::uint8_t val) const;
+
+        std::uint16_t readRivalShort(std::vector<unsigned char>& data);
+
+        std::uint16_t readRivalShort(
+                std::vector<unsigned char>& data, size_t offset) const;
+
         bool readBool(std::vector<unsigned char>& data);
 
         bool readBool(

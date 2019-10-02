@@ -16,12 +16,9 @@
  - ScenarioReader:
     - Use BinaryFileReader
     - Improve error handling
-    - readRivalByte() only works for 0-224
-        - Needs documenting!
-        - Campaign text length is actually a "rival short" (2 bytes; 255 is stored as 74 75)
     - Finish parsing Goals
     - Finish parsing Chests (contents)
-    - Include missing alphabet entries (e.g. '!)
+    - Include missing alphabet entries (e.g. '!{})
     - Test reading all built-in scenario files
     - Test reading campaign files / introductory levels
     - Analyse skipped sections; do they vary? Are they read?
