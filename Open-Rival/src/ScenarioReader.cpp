@@ -410,10 +410,11 @@ namespace Rival {
         if (remainingBytes == 0) {
             std::cout << "Reached end of file\n";
         } else {
-            std::cout << "Did not reach end of file\n";
+            std::cout << "Found unexpected bytes:\n";
             size_t remainingBytesCapped =
-                    std::min(remainingBytes, static_cast<size_t>(256));
+                std::min(remainingBytes, static_cast<size_t>(256));
             printNext(data, remainingBytesCapped);
+            throw std::runtime_error("Did not reach end of file");
         }
     }
 
@@ -959,16 +960,13 @@ namespace Rival {
 
         CampaignText text;
 
-        std::uint8_t titleLength = readRivalByte(data);
-        skip(data, 1, false);
+        std::uint16_t titleLength = readRivalShort(data);
         text.title = readRivalString(data, titleLength);
 
-        std::uint8_t objectivesLength = readRivalByte(data);
-        skip(data, 1, false);
+        std::uint16_t objectivesLength = readRivalShort(data);
         text.objectives = readRivalString(data, objectivesLength);
 
-        std::uint8_t narrationLength = readRivalByte(data);
-        skip(data, 1, false);
+        std::uint16_t narrationLength = readRivalShort(data);
         text.narration = readRivalString(data, narrationLength);
 
         return text;
@@ -1001,29 +999,64 @@ namespace Rival {
     std::uint8_t ScenarioReader::readRivalByte(
             std::vector<unsigned char>& data, size_t offset) const {
         std::uint8_t val = std::uint8_t(data[offset]);
+        return fixRivalByte(val);
+    }
 
-        // Values are stored in tiers, each using a different offset
-        while (val < 0x70) {
-            val += 0x40;
-        }
+    /**
+     * Converts "rival bytes" back to their original values.
+     *
+     * The game stores some numbers in this rather peculiar format.
+     *
+     * Firstly, some offset is applied to the numbers before they are stored.
+     * This offset varies for different "tiers" of numbers.
+     *
+     * Confusingly, a further offset is also applied to every other pair of numbers.
+     */
+    std::uint8_t ScenarioReader::fixRivalByte(std::uint8_t val) const {
 
-        // Values above 0x91 should also have an offset applied
-        // TODO: Fails for 224 (stored as 0x94)
-        if (val > 0x91) {
-            std::uint8_t decrementor = val;
-            while (decrementor > 0x70) {
-                val += 0x40;
-                decrementor -= 0x40;
-            }
-        }
-
-        // Values in this format are offset by 0x74 or 0x70, depending on
-        // the value of the '2' column in the binary representation
-        if ((val & 0x02) > 0) {
-            return val - 0x70;
+        // Apply tiered offset
+        if (val < 0x12) {
+            val += 0x8C;
+        } else if (val < 0x32) {
+            val += 0x4C;
+        } else if (val < 0x52) {
+            val -= 0x14;
+        } else if (val < 0x72) {
+            val -= 0x34;
+        } else if (val < 0x92) {
+            val -= 0x74;
+        } else if (val < 0xB2) {
+            val += 0x4C;
+        } else if (val < 0xD2) {
+            val += 0x0C;
+        } else if (val < 0xF2) {
+            val -= 0x34;
         } else {
-            return val - 0x74;
+            val -= 0x74;
         }
+
+        // Apply a further offset to every other pair of values
+        if ((val & 0x02) > 0) {
+            val += 0x04;
+        }
+
+        return val;
+    }
+
+    std::uint16_t ScenarioReader::readRivalShort(
+            std::vector<unsigned char>& data) {
+        std::uint16_t value = readRivalShort(data, pos);
+        pos += numBytesShort;
+        return value;
+    }
+
+    uint16_t ScenarioReader::readRivalShort(
+            std::vector<unsigned char>& data, size_t offset) const {
+        // read 2 rival bytes, and combine them like a normal short
+        return std::uint16_t(
+            fixRivalByte(data[offset + 1]) << 8 |
+            fixRivalByte(data[offset + 0])
+        );
     }
 
     bool ScenarioReader::readBool(std::vector<unsigned char>& data) {
