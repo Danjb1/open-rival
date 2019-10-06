@@ -63,8 +63,10 @@ namespace Rival {
         { 0x54, ' ' },
         { 0x56, '&' },
         { 0x60, ',' },
-        { 0x63, '3' },
+        { 0x61, '-' },
         { 0x62, '2' },
+        { 0x63, '3' },
+        { 0x71, '=' },
         { 0x81, '\r' },
         { 0x7A, '\n' }
     };
@@ -104,13 +106,13 @@ namespace Rival {
         is.close();
     }
 
-    ScenarioFile ScenarioReader::readScenario() {
+    ScenarioData ScenarioReader::readScenario() {
         pos = 0;
-        ScenarioFile scenarioFile = parseScenario(true);
-        return scenarioFile;
+        ScenarioData scenarioData = parseScenario(true);
+        return scenarioData;
     }
 
-    ScenarioFile ScenarioReader::readCampaignScenario(int levelIndex) {
+    ScenarioData ScenarioReader::readCampaignScenario(int levelIndex) {
         pos = 0;
         std::uint8_t numLevels = readByte();
 
@@ -125,31 +127,31 @@ namespace Rival {
 
         // Parse the scenario
         pos = offset;
-        ScenarioFile scenarioFile = parseScenario(false);
-        return scenarioFile;
+        ScenarioData scenarioData = parseScenario(false);
+        return scenarioData;
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Parsing
     ///////////////////////////////////////////////////////////////////////////
 
-    ScenarioFile ScenarioReader::parseScenario(bool expectEof) {
+    ScenarioData ScenarioReader::parseScenario(bool expectEof) {
 
-        ScenarioFile scenarioFile;
+        ScenarioData scenarioData;
 
         // Parse map header
         printSection("Parsing header");
         printOffset();
-        scenarioFile.hdr = parseHeader();
-        print(scenarioFile.hdr);
+        scenarioData.hdr = parseHeader();
+        print(scenarioData.hdr);
 
         // Parse player properties
         printSection("Parsing player properties");
         printOffset();
         for (int i = 0; i < numPlayers; i++) {
-            scenarioFile.playerProperties[i] = parsePlayerProperties();
+            scenarioData.playerProperties[i] = parsePlayerProperties();
         }
-        print(scenarioFile.playerProperties[0]);
+        print(scenarioData.playerProperties[0]);
 
         // UNKNOWN
         printSection("Skipping unknown section");
@@ -220,19 +222,19 @@ namespace Rival {
         printSection("Parsing troop defaults");
         printOffset();
         for (int i = 0; i < numTroops; i++) {
-            scenarioFile.troopDefaults[i] = parseTroopDefaults();
+            scenarioData.troopDefaults[i] = parseTroopDefaults();
         }
-        print(scenarioFile.troopDefaults[0]);
+        print(scenarioData.troopDefaults[0]);
         skip(7, true);
 
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
         printOffset();
         for (int i = 0; i < numUpgrades; i++) {
-            scenarioFile.upgradeProperties[i] =
+            scenarioData.upgradeProperties[i] =
                     parseUpgradeProperties(doesUpgradeHaveAmount(i));
         }
-        print(scenarioFile.upgradeProperties[0]);
+        print(scenarioData.upgradeProperties[0]);
 
         // UNKNOWN
         printSection("Skipping unknown section");
@@ -257,49 +259,49 @@ namespace Rival {
         printSection("Parsing unit production costs");
         printOffset();
         for (int i = 0; i < numProductionCosts; i++) {
-            scenarioFile.productionCosts[i] = parseProductionCost();
+            scenarioData.productionCosts[i] = parseProductionCost();
         }
-        print(scenarioFile.productionCosts[0]);
+        print(scenarioData.productionCosts[0]);
         skip(27, true);
 
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
         printOffset();
         for (int i = 0; i < numWeapons; i++) {
-            scenarioFile.weaponDefaults[i] = parseWeaponDefaults();
+            scenarioData.weaponDefaults[i] = parseWeaponDefaults();
         }
-        print(scenarioFile.weaponDefaults[0]);
+        print(scenarioData.weaponDefaults[0]);
         skip(2, true);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
-        scenarioFile.availableBuildings = parseAvailableBuildings();
-        print(scenarioFile.availableBuildings);
+        scenarioData.availableBuildings = parseAvailableBuildings();
+        print(scenarioData.availableBuildings);
         skip(5, true);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
         printOffset();
         for (int i = 0; i < numMonsters; i++) {
-            scenarioFile.monsterDefaults[i] = parseTroopDefaults();
+            scenarioData.monsterDefaults[i] = parseTroopDefaults();
         }
-        print(scenarioFile.monsterDefaults[0]);
+        print(scenarioData.monsterDefaults[0]);
         skip(49, true);
 
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
         printOffset();
-        scenarioFile.hireTroopsRestrictions =
+        scenarioData.hireTroopsRestrictions =
                 parseHireTroopsRestrictions();
-        print(scenarioFile.hireTroopsRestrictions);
+        print(scenarioData.hireTroopsRestrictions);
 
         // Parse AI building settings
         printSection("Parsing AI building settings");
         printOffset();
         for (int i = 0; i < numBuildingsPerRace; i++) {
             for (int j = 0; j < numAiStrategies; j++) {
-                scenarioFile.aiStrategies[j].aiBuildingSettings[i] =
+                scenarioData.aiStrategies[j].aiBuildingSettings[i] =
                         parseAiSetting();
             }
         }
@@ -309,7 +311,7 @@ namespace Rival {
         printOffset();
         for (int i = 0; i < numTroopsPerRace; i++) {
             for (int j = 0; j < numAiStrategies; j++) {
-                scenarioFile.aiStrategies[j].aiTroopSettings[i] =
+                scenarioData.aiStrategies[j].aiTroopSettings[i] =
                         parseAiSetting();
             }
         }
@@ -350,96 +352,96 @@ namespace Rival {
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
-        scenarioFile.tiles = parseTerrain(
-                scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
+        scenarioData.tiles = parseTiles(
+                scenarioData.hdr.mapWidth, scenarioData.hdr.mapHeight);
 
         // Parse objects
         printSection("Parsing objects");
         printOffset();
-        scenarioFile.objects = parseObjects();
+        scenarioData.objects = parseObjects();
         std::cout << "Found "
-            << scenarioFile.objects.size() << " object(s)\n";
-        if (scenarioFile.objects.size() > 0) {
-            print(scenarioFile.objects[0]);
+            << scenarioData.objects.size() << " object(s)\n";
+        if (scenarioData.objects.size() > 0) {
+            print(scenarioData.objects[0]);
         }
 
         // Parse buildings
         printSection("Parsing buildings");
         printOffset();
-        scenarioFile.buildings = parseBuildings();
+        scenarioData.buildings = parseBuildings();
         std::cout << "Found "
-                << scenarioFile.buildings.size() << " building(s)\n";
-        if (scenarioFile.buildings.size() > 0) {
-            print(scenarioFile.buildings[0]);
+                << scenarioData.buildings.size() << " building(s)\n";
+        if (scenarioData.buildings.size() > 0) {
+            print(scenarioData.buildings[0]);
         }
 
         // Parse units
         printSection("Parsing units");
         printOffset();
-        scenarioFile.units = parseUnits();
+        scenarioData.units = parseUnits();
         std::cout << "Found "
-                << scenarioFile.units.size() << " unit(s)\n";
-        if (scenarioFile.units.size() > 0) {
-            print(scenarioFile.units[0]);
+                << scenarioData.units.size() << " unit(s)\n";
+        if (scenarioData.units.size() > 0) {
+            print(scenarioData.units[0]);
         }
 
         // Parse chests
         printSection("Parsing chests");
         printOffset();
-        scenarioFile.chests = parseChests();
+        scenarioData.chests = parseChests();
         std::cout << "Found "
-            << scenarioFile.chests.size() << " chest(s)\n";
-        if (scenarioFile.chests.size() > 0) {
-            //print(scenarioFile.chests[0]);
+            << scenarioData.chests.size() << " chest(s)\n";
+        if (scenarioData.chests.size() > 0) {
+            //print(scenarioData.chests[0]);
         }
 
         // Parse info points
         printSection("Parsing info points");
         printOffset();
-        scenarioFile.infoPoints = parseInfoPoints();
+        scenarioData.infoPoints = parseInfoPoints();
         std::cout << "Found "
-            << scenarioFile.infoPoints.size() << " info point(s)\n";
-        if (scenarioFile.infoPoints.size() > 0) {
-            //print(scenarioFile.infoPoints[0]);
+            << scenarioData.infoPoints.size() << " info point(s)\n";
+        if (scenarioData.infoPoints.size() > 0) {
+            //print(scenarioData.infoPoints[0]);
         }
 
         // Parse traps
         printSection("Parsing traps");
         printOffset();
-        scenarioFile.traps = parseTraps();
+        scenarioData.traps = parseTraps();
         std::cout << "Found "
-                << scenarioFile.traps.size() << " trap(s)\n";
-        if (scenarioFile.traps.size() > 0) {
-            print(scenarioFile.traps[0]);
+                << scenarioData.traps.size() << " trap(s)\n";
+        if (scenarioData.traps.size() > 0) {
+            print(scenarioData.traps[0]);
         }
         skip(8, true);
 
         // Parse goal locations
         printSection("Parsing goal locations");
         printOffset();
-        scenarioFile.goalLocations = parseGoalLocations();
+        scenarioData.goalLocations = parseGoalLocations();
         std::cout << "Found "
-            << scenarioFile.goalLocations.size() << " goal location(s)\n";
-        if (scenarioFile.goalLocations.size() > 0) {
-            print(scenarioFile.goalLocations[0]);
+            << scenarioData.goalLocations.size() << " goal location(s)\n";
+        if (scenarioData.goalLocations.size() > 0) {
+            print(scenarioData.goalLocations[0]);
         }
 
         // Parse scenario goals
         printSection("Parsing scenario goals");
         printOffset();
-        scenarioFile.goals = parseGoals();
+        scenarioData.goals = parseGoals();
 
         // Parse campaign texts
         printSection("Parsing campaign texts");
         printOffset();
-        scenarioFile.campaignText = parseCampaignText();
-        print(scenarioFile.campaignText);
+        scenarioData.campaignText = parseCampaignText();
+        print(scenarioData.campaignText);
         printOffset();
 
         // Parse checksum
         printSection("Parsing checksum");
         printOffset();
-        scenarioFile.checksum = readByte();
+        scenarioData.checksum = readByte();
 
         // Check remaining bytes
         if (expectEof) {
@@ -455,7 +457,7 @@ namespace Rival {
             }
         }
 
-        return scenarioFile;
+        return scenarioData;
     }
 
     ScenarioHeader ScenarioReader::parseHeader() {
@@ -612,11 +614,12 @@ namespace Rival {
         return setting;
     }
 
-    std::vector<TilePlacement> ScenarioReader::parseTerrain(
+    std::vector<TilePlacement> ScenarioReader::parseTiles(
             int width, int height) {
 
         unsigned int numTiles = width * height;
-        std::vector<TilePlacement> tiles(numTiles);
+        std::vector<TilePlacement> tiles;
+        tiles.reserve(numTiles);
         size_t tileId = 0;
 
         while (tileId < numTiles) {
@@ -650,65 +653,9 @@ namespace Rival {
     TilePlacement ScenarioReader::parseTile() {
 
         TilePlacement tile;
-        std::uint8_t resource = readByte(pos);
 
-        if (resource == 0) {
-
-            std::uint8_t type = readByte(pos + 2);
-
-            if (type == 0x00) {
-                // Grass
-                tile.type = TileType::Grass;
-
-            } else if (type >= 0x01 && type <= 0x0e) {
-                // Coastline
-                tile.type = TileType::Coastline;
-
-            } else if (type == 0x0f) {
-                // Water
-                tile.type = TileType::Water;
-
-            } else if (type >= 0x10 && type <= 0x1d) {
-                // Mud edge
-                tile.type = TileType::Mud;
-
-            } else if (type == 0x1e) {
-                // Mud
-                tile.type = TileType::Mud;
-
-            } else if (type >= 0x1f && type <= 0x2c) {
-                // Dirt edge
-                tile.type = TileType::Dirt;
-
-            } else if (type == 0x2d) {
-                // Dirt
-                tile.type = TileType::Dirt;
-
-            } else if (type >= 0x2e && type <= 0x3c) {
-                // Dungeon edge
-                tile.type = TileType::Dungeon;
-
-            } else if (type == 0x3d) {
-                // Dungeon
-                tile.type = TileType::Dungeon;
-
-            } else {
-                std::cout << "Unknown tile: ";
-                printNext(6);
-            }
-
-        } else if (resource == 1) {
-            // Gold
-            tile.type = TileType::Gold;
-
-        } else if (resource == 2) {
-            // Cropland
-            tile.type = TileType::Cropland;
-
-        } else {
-            std::cout << "Unknown tile: ";
-            printNext(6);
-        }
+        tile.resource = readByte(pos);
+        tile.type = readByte(pos + 2);
 
         return tile;
     }
@@ -1156,6 +1103,10 @@ namespace Rival {
             // Entry found
             return it->second;
         }
+
+        std::cout << "Found unknown character: "
+                << static_cast<int>(c)
+                << "\n";
 
         // Unknown character
         return '?';

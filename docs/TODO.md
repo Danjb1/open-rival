@@ -6,6 +6,7 @@
     - Simplify for-loop iteration with index
     - Duplication between UnitRenderer and TileRenderer
     - Render to a texture instead of redrawing everything every frame
+    - Get the correct txIndex based on the tile type
     - Add support for animated tiles
  - UnitRenderer:
     - Make vertex-related values into constants
@@ -20,7 +21,8 @@
     - Finish parsing Chests (contents)
     - Include missing alphabet entries (e.g. '!{})
     - Analyse skipped sections; do they vary? Are they read?
-    - Create a Scenario from the final struct
+ - ScenarioBuilder / Scenario:
+    - Tiles need to hold more information than just TileType (sprite ID, gold amount, etc.)
 
 ## Features
 

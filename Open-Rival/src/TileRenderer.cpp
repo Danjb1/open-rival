@@ -65,7 +65,7 @@ namespace Rival {
         unsigned int i = 0;
         for (int& tile : tiles) {
 
-            const int tile = tiles[i];
+            const int txIndex = tiles[i];
             int tileX = i % mapWidth;
             int tileY = i / mapWidth;
 
@@ -90,7 +90,7 @@ namespace Rival {
             };
 
             // Determine texture co-ordinates
-            std::vector<GLfloat> thisTexCoords = sprite.getTexCoords(tile);
+            std::vector<GLfloat> thisTexCoords = sprite.getTexCoords(txIndex);
 
             // Determine index data
             // First triangle: 0-1-2
