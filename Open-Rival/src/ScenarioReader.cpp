@@ -112,10 +112,19 @@ namespace Rival {
 
     ScenarioFile ScenarioReader::readCampaignScenario(int levelIndex) {
         pos = 0;
-
         std::uint8_t numLevels = readByte();
-        skip(40, true);
 
+        // Skip entries for all scenarios before this one
+        for (int i = 0; i < levelIndex; i++) {
+            skip(8, false);
+        }
+
+        // Read this scenario's offset and size
+        std::uint32_t offset = readInt();
+        std::uint32_t size = readInt();
+
+        // Parse the scenario
+        pos = offset;
         ScenarioFile scenarioFile = parseScenario(false);
         return scenarioFile;
     }
