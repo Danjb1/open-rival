@@ -23,6 +23,7 @@ namespace Rival {
 
     public:
 
+        // Creates a blank Scenario
         Scenario(const int width, const int height, bool wilderness);
 
         int getWidth() const;

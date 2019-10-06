@@ -8,6 +8,9 @@
 
 #include "Image.h"
 #include "Palette.h"
+#include "ScenarioBuilder.h"
+#include "ScenarioData.h"
+#include "ScenarioReader.h"
 #include "Shaders.h"
 
 namespace Rival {
@@ -35,13 +38,11 @@ namespace Rival {
         paletteTexture = std::make_unique<Texture>(
                 createPaletteTexture());
 
-        // Create the Scene
-        scenario = std::make_unique<Scenario>(64, 40, false);
-
-        // Add Units
-        scenario->addUnit(std::make_unique<Unit>(Unit::Type::LightCavalry, 0, 0));
-        scenario->addUnit(std::make_unique<Unit>(Unit::Type::Knight, 1, 1));
-        scenario->addUnit(std::make_unique<Unit>(Unit::Type::Peasant, 4, 2));
+        // Load some scenario
+        ScenarioReader reader("D://rivalrealms/MAPS/2.sco");
+        ScenarioData scenarioData = reader.readScenario();
+        ScenarioBuilder scenarioBuilder(scenarioData);
+        scenario = scenarioBuilder.build();
 
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
@@ -179,7 +180,7 @@ namespace Rival {
         int nextIndex = txIndexUnits;
 
         // Human
-        initUnitSprite(Unit::Type::Ballista, nextIndex);
+        initUnitSprite(Unit::Type::Ballista, nextIndex++);
         initUnitSprite(Unit::Type::Battleship, nextIndex++);
         initUnitSprite(Unit::Type::Bowman, nextIndex++);
         initUnitSprite(Unit::Type::ChariotOfWar, nextIndex++);
