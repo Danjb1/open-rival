@@ -69,6 +69,10 @@ namespace Rival {
         { 0x7A, '\n' }
     };
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Entry points
+    ///////////////////////////////////////////////////////////////////////////
+
     ScenarioReader::ScenarioReader(const std::string filename) {
 
         try {
@@ -100,11 +104,27 @@ namespace Rival {
         is.close();
     }
 
+    ScenarioFile ScenarioReader::readScenario() {
+        pos = 0;
+        ScenarioFile scenarioFile = parseScenario(true);
+        return scenarioFile;
+    }
+
+    ScenarioFile ScenarioReader::readCampaignScenario(int levelIndex) {
+        pos = 0;
+
+        std::uint8_t numLevels = readByte();
+        skip(40, true);
+
+        ScenarioFile scenarioFile = parseScenario(false);
+        return scenarioFile;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Parsing
     ///////////////////////////////////////////////////////////////////////////
 
-    ScenarioFile ScenarioReader::readScenario() {
+    ScenarioFile ScenarioReader::parseScenario(bool expectEof) {
 
         ScenarioFile scenarioFile;
 
@@ -413,15 +433,17 @@ namespace Rival {
         scenarioFile.checksum = readByte();
 
         // Check remaining bytes
-        size_t remainingBytes = data.size() - pos;
-        if (remainingBytes == 0) {
-            std::cout << "Reached end of file\n";
-        } else {
-            std::cout << "Found unexpected bytes:\n";
-            size_t remainingBytesCapped =
-                std::min(remainingBytes, static_cast<size_t>(256));
-            printNext(remainingBytesCapped);
-            throw std::runtime_error("Did not reach end of file");
+        if (expectEof) {
+            size_t remainingBytes = data.size() - pos;
+            if (remainingBytes == 0) {
+                std::cout << "Reached end of file\n";
+            } else {
+                std::cout << "Found unexpected bytes:\n";
+                size_t remainingBytesCapped =
+                    std::min(remainingBytes, static_cast<size_t>(256));
+                printNext(remainingBytesCapped);
+                throw std::runtime_error("Did not reach end of file");
+            }
         }
 
         return scenarioFile;
