@@ -12,14 +12,15 @@
  */
 int main() {
 
-    //Rival::ScenarioReader reader("D://rivalrealms/MAPS/INTRO.CMP");
-    Rival::ScenarioReader reader("D://rivalrealms/MAPS/2.sco");
+    Rival::ScenarioReader reader("D://rivalrealms/MAPS/INTRO.CMP");
+    reader.readCampaignScenario(0);
+    //Rival::ScenarioReader reader("D://rivalrealms/MAPS/2.sco");
     //Rival::ScenarioReader reader("D://rivalrealms/MAPS/4PBATT.sco");
     //Rival::ScenarioReader reader("D://rivalrealms/MAPS/ISLANDS.sco");
     //Rival::ScenarioReader reader("D://rivalrealms/MAPS/MAZE.sco");
     //Rival::ScenarioReader reader("D://rivalrealms/MAPS/Fight_with_Krogan.sco");
     //Rival::ScenarioReader reader("D://rivalrealms/MAPS/WILDLIFE.sco");
-    reader.readScenario();
+    //reader.readScenario();
     return 1;
 
     Rival::Rival rival;

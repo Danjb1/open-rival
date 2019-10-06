@@ -275,6 +275,8 @@ namespace Rival {
 
         ScenarioFile readScenario();
 
+        ScenarioFile readCampaignScenario(int levelIndex);
+
     private:
 
         static const std::map<std::uint8_t, char> alphabet;
@@ -292,6 +294,8 @@ namespace Rival {
         ///////////////////////////////////////////////////////////////////////
         // Parsing
         ///////////////////////////////////////////////////////////////////////
+
+        ScenarioFile parseScenario(bool expectEof);
 
         ScenarioHeader parseHeader();
 
