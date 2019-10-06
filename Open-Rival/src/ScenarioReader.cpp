@@ -72,17 +72,17 @@ namespace Rival {
     ScenarioReader::ScenarioReader(const std::string filename) {
 
         try {
-            readFile(filename);
+            readFileContents(filename);
         } catch (const std::exception& e) {
             std::cerr << e.what();
             throw std::runtime_error("Failed to read scenario: " + filename);
         }
     }
 
-    void ScenarioReader::readFile(const std::string filename) {
+    void ScenarioReader::readFileContents(const std::string filename) {
 
         // Open the file at the end
-        std::ifstream is(filename, std::ios::binary|std::ios::ate);
+        std::ifstream is(filename, std::ios::binary | std::ios::ate);
         if (!is.is_open()) {
             throw std::runtime_error("Failed to open scenario: " + filename);
         }
@@ -92,33 +92,40 @@ namespace Rival {
         if (size == -1) {
             throw std::runtime_error("Failed to retrieve file size");
         }
-        std::vector<unsigned char> data(static_cast<size_t>(size));
+        data = std::vector<unsigned char>(static_cast<size_t>(size));
 
         // Read the entire file to memory
         is.seekg(0, std::ios::beg);
         is.read(reinterpret_cast<char*>(data.data()), size);
         is.close();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Parsing
+    ///////////////////////////////////////////////////////////////////////////
+
+    ScenarioFile ScenarioReader::readScenario() {
 
         ScenarioFile scenarioFile;
 
         // Parse map header
         printSection("Parsing header");
         printOffset();
-        scenarioFile.hdr = parseHeader(data);
+        scenarioFile.hdr = parseHeader();
         print(scenarioFile.hdr);
 
         // Parse player properties
         printSection("Parsing player properties");
         printOffset();
         for (int i = 0; i < numPlayers; i++) {
-            scenarioFile.playerProperties[i] = parsePlayerProperties(data);
+            scenarioFile.playerProperties[i] = parsePlayerProperties();
         }
         print(scenarioFile.playerProperties[0]);
 
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 909, true);
+        skip(909, true);
 
         /*
         24 -- -- -- -- b0 04 0c -- -- 08 -- -- -- ff --
@@ -184,24 +191,24 @@ namespace Rival {
         printSection("Parsing troop defaults");
         printOffset();
         for (int i = 0; i < numTroops; i++) {
-            scenarioFile.troopDefaults[i] = parseTroopDefaults(data);
+            scenarioFile.troopDefaults[i] = parseTroopDefaults();
         }
         print(scenarioFile.troopDefaults[0]);
-        skip(data, 7, true);
+        skip(7, true);
 
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
         printOffset();
         for (int i = 0; i < numUpgrades; i++) {
             scenarioFile.upgradeProperties[i] =
-                    parseUpgradeProperties(data, doesUpgradeHaveAmount(i));
+                    parseUpgradeProperties(doesUpgradeHaveAmount(i));
         }
         print(scenarioFile.upgradeProperties[0]);
 
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 176, true);
+        skip(176, true);
 
         /*
         ff ff ff ff d2 -- -- -- -- -- -- -- 34 -- -- --
@@ -221,41 +228,41 @@ namespace Rival {
         printSection("Parsing unit production costs");
         printOffset();
         for (int i = 0; i < numProductionCosts; i++) {
-            scenarioFile.productionCosts[i] = parseProductionCost(data);
+            scenarioFile.productionCosts[i] = parseProductionCost();
         }
         print(scenarioFile.productionCosts[0]);
-        skip(data, 27, true);
+        skip(27, true);
 
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
         printOffset();
         for (int i = 0; i < numWeapons; i++) {
-            scenarioFile.weaponDefaults[i] = parseWeaponDefaults(data);
+            scenarioFile.weaponDefaults[i] = parseWeaponDefaults();
         }
         print(scenarioFile.weaponDefaults[0]);
-        skip(data, 2, true);
+        skip(2, true);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
-        scenarioFile.availableBuildings = parseAvailableBuildings(data);
+        scenarioFile.availableBuildings = parseAvailableBuildings();
         print(scenarioFile.availableBuildings);
-        skip(data, 5, true);
+        skip(5, true);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
         printOffset();
         for (int i = 0; i < numMonsters; i++) {
-            scenarioFile.monsterDefaults[i] = parseTroopDefaults(data);
+            scenarioFile.monsterDefaults[i] = parseTroopDefaults();
         }
         print(scenarioFile.monsterDefaults[0]);
-        skip(data, 49, true);
+        skip(49, true);
 
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
         printOffset();
         scenarioFile.hireTroopsRestrictions =
-                parseHireTroopsRestrictions(data);
+                parseHireTroopsRestrictions();
         print(scenarioFile.hireTroopsRestrictions);
 
         // Parse AI building settings
@@ -264,7 +271,7 @@ namespace Rival {
         for (int i = 0; i < numBuildingsPerRace; i++) {
             for (int j = 0; j < numAiStrategies; j++) {
                 scenarioFile.aiStrategies[j].aiBuildingSettings[i] =
-                        parseAiSetting(data);
+                        parseAiSetting();
             }
         }
 
@@ -274,14 +281,14 @@ namespace Rival {
         for (int i = 0; i < numTroopsPerRace; i++) {
             for (int j = 0; j < numAiStrategies; j++) {
                 scenarioFile.aiStrategies[j].aiTroopSettings[i] =
-                        parseAiSetting(data);
+                        parseAiSetting();
             }
         }
 
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(data, 392, true);
+        skip(392, true);
 
         /*
         0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 04 --
@@ -315,12 +322,12 @@ namespace Rival {
         printSection("Parsing terrain data");
         printOffset();
         scenarioFile.tiles = parseTerrain(
-                data, scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
+                scenarioFile.hdr.mapWidth, scenarioFile.hdr.mapHeight);
 
         // Parse objects
         printSection("Parsing objects");
         printOffset();
-        scenarioFile.objects = parseObjects(data);
+        scenarioFile.objects = parseObjects();
         std::cout << "Found "
             << scenarioFile.objects.size() << " object(s)\n";
         if (scenarioFile.objects.size() > 0) {
@@ -330,7 +337,7 @@ namespace Rival {
         // Parse buildings
         printSection("Parsing buildings");
         printOffset();
-        scenarioFile.buildings = parseBuildings(data);
+        scenarioFile.buildings = parseBuildings();
         std::cout << "Found "
                 << scenarioFile.buildings.size() << " building(s)\n";
         if (scenarioFile.buildings.size() > 0) {
@@ -340,7 +347,7 @@ namespace Rival {
         // Parse units
         printSection("Parsing units");
         printOffset();
-        scenarioFile.units = parseUnits(data);
+        scenarioFile.units = parseUnits();
         std::cout << "Found "
                 << scenarioFile.units.size() << " unit(s)\n";
         if (scenarioFile.units.size() > 0) {
@@ -350,7 +357,7 @@ namespace Rival {
         // Parse chests
         printSection("Parsing chests");
         printOffset();
-        scenarioFile.chests = parseChests(data);
+        scenarioFile.chests = parseChests();
         std::cout << "Found "
             << scenarioFile.chests.size() << " chest(s)\n";
         if (scenarioFile.chests.size() > 0) {
@@ -360,7 +367,7 @@ namespace Rival {
         // Parse info points
         printSection("Parsing info points");
         printOffset();
-        scenarioFile.infoPoints = parseInfoPoints(data);
+        scenarioFile.infoPoints = parseInfoPoints();
         std::cout << "Found "
             << scenarioFile.infoPoints.size() << " info point(s)\n";
         if (scenarioFile.infoPoints.size() > 0) {
@@ -370,18 +377,18 @@ namespace Rival {
         // Parse traps
         printSection("Parsing traps");
         printOffset();
-        scenarioFile.traps = parseTraps(data);
+        scenarioFile.traps = parseTraps();
         std::cout << "Found "
                 << scenarioFile.traps.size() << " trap(s)\n";
         if (scenarioFile.traps.size() > 0) {
             print(scenarioFile.traps[0]);
         }
-        skip(data, 8, true);
+        skip(8, true);
 
         // Parse goal locations
         printSection("Parsing goal locations");
         printOffset();
-        scenarioFile.goalLocations = parseGoalLocations(data);
+        scenarioFile.goalLocations = parseGoalLocations();
         std::cout << "Found "
             << scenarioFile.goalLocations.size() << " goal location(s)\n";
         if (scenarioFile.goalLocations.size() > 0) {
@@ -391,19 +398,19 @@ namespace Rival {
         // Parse scenario goals
         printSection("Parsing scenario goals");
         printOffset();
-        scenarioFile.goals = parseGoals(data);
+        scenarioFile.goals = parseGoals();
 
         // Parse campaign texts
         printSection("Parsing campaign texts");
         printOffset();
-        scenarioFile.campaignText = parseCampaignText(data);
+        scenarioFile.campaignText = parseCampaignText();
         print(scenarioFile.campaignText);
         printOffset();
 
         // Parse checksum
         printSection("Parsing checksum");
         printOffset();
-        scenarioFile.checksum = readByte(data);
+        scenarioFile.checksum = readByte();
 
         // Check remaining bytes
         size_t remainingBytes = data.size() - pos;
@@ -413,64 +420,59 @@ namespace Rival {
             std::cout << "Found unexpected bytes:\n";
             size_t remainingBytesCapped =
                 std::min(remainingBytes, static_cast<size_t>(256));
-            printNext(data, remainingBytesCapped);
+            printNext(remainingBytesCapped);
             throw std::runtime_error("Did not reach end of file");
         }
+
+        return scenarioFile;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parsing
-    ///////////////////////////////////////////////////////////////////////////
-
-    ScenarioHeader ScenarioReader::parseHeader(
-            std::vector<unsigned char>& data) {
+    ScenarioHeader ScenarioReader::parseHeader() {
 
         ScenarioHeader hdr;
 
-        skip(data, 8, true);
-        std::uint8_t terrainType = readByte(data);
+        skip(8, true);
+        std::uint8_t terrainType = readByte();
         hdr.wilderness = (terrainType == 0x03);
-        std::uint8_t nameLength = readByte(data);
-        hdr.mapName = readString(data, nameLength);
-        hdr.mapHeight = readInt(data);
-        hdr.mapWidth = readInt(data);
-        skip(data, 9, false);
+        std::uint8_t nameLength = readByte();
+        hdr.mapName = readString(nameLength);
+        hdr.mapHeight = readInt();
+        hdr.mapWidth = readInt();
+        skip(9, false);
 
         return hdr;
     }
 
-    PlayerProperties ScenarioReader::parsePlayerProperties(
-            std::vector<unsigned char>& data) {
+    PlayerProperties ScenarioReader::parsePlayerProperties() {
 
         PlayerProperties props;
 
-        props.hasStartLocation = (readInt(data) == 1);
-        props.startLocX = readInt(data);
-        props.startLocY = readInt(data);
-        props.startingFood = readInt(data);
-        props.startingWood = readInt(data);
-        props.startingGold = readInt(data);
-        props.race = readByte(data);
-        props.ai = readBool(data);
-        props.aiType = readByte(data);
-        props.aiPerformance = readByte(data);
-        props.aiStrategy = readByte(data);
+        props.hasStartLocation = (readInt() == 1);
+        props.startLocX = readInt();
+        props.startLocY = readInt();
+        props.startingFood = readInt();
+        props.startingWood = readInt();
+        props.startingGold = readInt();
+        props.race = readByte();
+        props.ai = readBool();
+        props.aiType = readByte();
+        props.aiPerformance = readByte();
+        props.aiStrategy = readByte();
 
         return props;
     }
 
-    TroopDefaults ScenarioReader::parseTroopDefaults(
-            std::vector<unsigned char>& data) {
+    TroopDefaults ScenarioReader::parseTroopDefaults() {
 
         TroopDefaults troop;
 
-        troop.hitpoints = readShort(data);
-        troop.magic = readShort(data);
-        troop.armour = readByte(data);
-        skip(data, 2, false);
-        troop.sight = readByte(data);
-        troop.range = readByte(data);
-        skip(data, 39, false);
+        troop.hitpoints = readShort();
+        troop.magic = readShort();
+        troop.armour = readByte();
+        skip(2, false);
+        troop.sight = readByte();
+        troop.range = readByte();
+        skip(39, false);
 
         return troop;
     }
@@ -481,113 +483,106 @@ namespace Rival {
     }
 
     UpgradeProperties ScenarioReader::parseUpgradeProperties(
-            std::vector<unsigned char>& data, bool readAmount) {
+            bool readAmount) {
 
         UpgradeProperties upgrade;
 
         if (readAmount) {
-            upgrade.amount = readInt(data);
+            upgrade.amount = readInt();
         } else {
             upgrade.amount = 0;
-            skip(data, 4, false);
+            skip(4, false);
         }
-        upgrade.goldCost = readInt(data);
-        upgrade.woodCost = readInt(data);
-        upgrade.unknown = readInt(data);
+        upgrade.goldCost = readInt();
+        upgrade.woodCost = readInt();
+        upgrade.unknown = readInt();
 
         return upgrade;
     }
 
-    ProductionCost ScenarioReader::parseProductionCost(
-            std::vector<unsigned char>& data) {
+    ProductionCost ScenarioReader::parseProductionCost() {
 
         ProductionCost cost;
 
-        cost.goldCost = readShort(data);
-        cost.woodCost = readShort(data);
-        cost.constructionTime = readInt(data);
-        cost.requiredExpOrIncreasePercent = readInt(data);
+        cost.goldCost = readShort();
+        cost.woodCost = readShort();
+        cost.constructionTime = readInt();
+        cost.requiredExpOrIncreasePercent = readInt();
 
         return cost;
     }
 
-    WeaponDefaults ScenarioReader::parseWeaponDefaults(
-            std::vector<unsigned char>& data) {
+    WeaponDefaults ScenarioReader::parseWeaponDefaults() {
 
         WeaponDefaults weapon;
 
-        weapon.moveSpaces = readShort(data);
-        weapon.moveTime = readShort(data);
-        weapon.damage = readShort(data);
-        weapon.penetrate = readShort(data);
-        weapon.accuracy = readShort(data);
-        weapon.effectRange = readByte(data);
-        weapon.attackRange = readByte(data);
-        weapon.manaCost = readShort(data);
-        weapon.reloadTime = readInt(data);
-        weapon.unknown = readShort(data);
-        skip(data, 1, false);
+        weapon.moveSpaces = readShort();
+        weapon.moveTime = readShort();
+        weapon.damage = readShort();
+        weapon.penetrate = readShort();
+        weapon.accuracy = readShort();
+        weapon.effectRange = readByte();
+        weapon.attackRange = readByte();
+        weapon.manaCost = readShort();
+        weapon.reloadTime = readInt();
+        weapon.unknown = readShort();
+        skip(1, false);
 
         return weapon;
     }
 
-    AvailableBuildings ScenarioReader::parseAvailableBuildings(
-            std::vector<unsigned char>& data) {
+    AvailableBuildings ScenarioReader::parseAvailableBuildings() {
 
         AvailableBuildings bldgs;
 
-        bldgs.cropLand = readBool(data);
-        bldgs.goldAmplifier = readBool(data);
-        bldgs.rangedTroopBuilding = readBool(data);
-        bldgs.siegeTroopBuilding = readBool(data);
-        bldgs.meleeTroopBuilding = readBool(data);
-        bldgs.flyingTroopBuilding = readBool(data);
-        bldgs.engineerTroopBuilding = readBool(data);
-        bldgs.healerTroopBuilding = readBool(data);
-        bldgs.spellcasterTroopBuilding = readBool(data);
-        bldgs.shipyard = readBool(data);
-        bldgs.watchTower = readBool(data);
-        bldgs.wall = readBool(data);
+        bldgs.cropLand = readBool();
+        bldgs.goldAmplifier = readBool();
+        bldgs.rangedTroopBuilding = readBool();
+        bldgs.siegeTroopBuilding = readBool();
+        bldgs.meleeTroopBuilding = readBool();
+        bldgs.flyingTroopBuilding = readBool();
+        bldgs.engineerTroopBuilding = readBool();
+        bldgs.healerTroopBuilding = readBool();
+        bldgs.spellcasterTroopBuilding = readBool();
+        bldgs.shipyard = readBool();
+        bldgs.watchTower = readBool();
+        bldgs.wall = readBool();
 
         return bldgs;
     }
 
-    HireTroopsRestrictions ScenarioReader::parseHireTroopsRestrictions(
-            std::vector<unsigned char>& data) {
+    HireTroopsRestrictions ScenarioReader::parseHireTroopsRestrictions() {
 
         HireTroopsRestrictions restrictions;
 
-        restrictions.worker = readBool(data);
-        restrictions.rangedTroop = readBool(data);
-        restrictions.lightMeleeOrSpellcasterTroop = readBool(data);
-        restrictions.heavyMeleeTroop = readBool(data);
-        restrictions.engineer = readBool(data);
-        restrictions.stealthTroop = readBool(data);
-        restrictions.siegeTroop = readBool(data);
-        restrictions.raceBonusTroop = readBool(data);
-        restrictions.spellcaster = readBool(data);
-        restrictions.healer = readBool(data);
-        restrictions.transportShip = readBool(data);
-        restrictions.combatShip = readBool(data);
-        restrictions.flyingTroop = readBool(data);
-        restrictions.flyingTransport = readBool(data);
-        restrictions.mustHire = readBool(data);
+        restrictions.worker = readBool();
+        restrictions.rangedTroop = readBool();
+        restrictions.lightMeleeOrSpellcasterTroop = readBool();
+        restrictions.heavyMeleeTroop = readBool();
+        restrictions.engineer = readBool();
+        restrictions.stealthTroop = readBool();
+        restrictions.siegeTroop = readBool();
+        restrictions.raceBonusTroop = readBool();
+        restrictions.spellcaster = readBool();
+        restrictions.healer = readBool();
+        restrictions.transportShip = readBool();
+        restrictions.combatShip = readBool();
+        restrictions.flyingTroop = readBool();
+        restrictions.flyingTransport = readBool();
+        restrictions.mustHire = readBool();
 
         return restrictions;
     }
 
-    AiSetting ScenarioReader::parseAiSetting(
-            std::vector<unsigned char>& data) {
+    AiSetting ScenarioReader::parseAiSetting() {
         AiSetting setting;
-        setting.amount = readByte(data);
-        setting.flag = readByte(data);
+        setting.amount = readByte();
+        setting.flag = readByte();
         return setting;
     }
 
     std::vector<TilePlacement> ScenarioReader::parseTerrain(
-            std::vector<unsigned char>& data,
-            int width,
-            int height) {
+            int width, int height) {
 
         unsigned int numTiles = width * height;
         std::vector<TilePlacement> tiles(numTiles);
@@ -597,17 +592,17 @@ namespace Rival {
 
             // Determine how many tiles the next tile definition describes,
             // and skip to the tile definition
-            bool readMultiple = (readByte(data) == 0xfa);
+            bool readMultiple = (readByte() == 0xfa);
             std::uint16_t numTiles = 1;
             if (readMultiple) {
-                numTiles = readShort(data);
-                skip(data, 4, false);
+                numTiles = readShort();
+                skip(4, false);
             } else {
-                skip(data, 3, false);
+                skip(3, false);
             }
 
             // Read the tile definition
-            TilePlacement tile = parseTile(data);
+            TilePlacement tile = parseTile();
 
             // Copy the tile definition to the number of tiles it describes
             for (size_t i = 0; i < numTiles; i++) {
@@ -621,15 +616,14 @@ namespace Rival {
         return tiles;
     }
 
-    TilePlacement ScenarioReader::parseTile(
-            std::vector<unsigned char>& data) {
+    TilePlacement ScenarioReader::parseTile() {
 
         TilePlacement tile;
-        std::uint8_t resource = readByte(data, pos);
+        std::uint8_t resource = readByte(pos);
 
         if (resource == 0) {
 
-            std::uint8_t type = readByte(data, pos + 2);
+            std::uint8_t type = readByte(pos + 2);
 
             if (type == 0x00) {
                 // Grass
@@ -669,7 +663,7 @@ namespace Rival {
 
             } else {
                 std::cout << "Unknown tile: ";
-                printNext(data, 6);
+                printNext(6);
             }
 
         } else if (resource == 1) {
@@ -682,272 +676,258 @@ namespace Rival {
 
         } else {
             std::cout << "Unknown tile: ";
-            printNext(data, 6);
+            printNext(6);
         }
 
         return tile;
     }
 
-    std::vector<ObjectPlacement> ScenarioReader::parseObjects(
-            std::vector<unsigned char>& data) {
+    std::vector<ObjectPlacement> ScenarioReader::parseObjects() {
 
-        std::uint32_t numObjects = readInt(data);
+        std::uint32_t numObjects = readInt();
         std::vector<ObjectPlacement> objects;
         objects.reserve(numObjects);
 
         for (unsigned int i = 0; i < numObjects; i++) {
-            ObjectPlacement obj = parseObject(data);
+            ObjectPlacement obj = parseObject();
             objects.push_back(obj);
         }
 
         return objects;
     }
 
-    ObjectPlacement ScenarioReader::parseObject(
-            std::vector<unsigned char>& data) {
+    ObjectPlacement ScenarioReader::parseObject() {
 
         ObjectPlacement obj;
 
-        obj.type = readByte(data);
-        skip(data, 1, false);
-        obj.variant = readByte(data);
-        obj.x = readInt(data);
-        obj.y = readInt(data);
+        obj.type = readByte();
+        skip(1, false);
+        obj.variant = readByte();
+        obj.x = readInt();
+        obj.y = readInt();
 
         return obj;
     }
 
-    std::vector<BuildingPlacement> ScenarioReader::parseBuildings(
-        std::vector<unsigned char>& data) {
+    std::vector<BuildingPlacement> ScenarioReader::parseBuildings() {
 
-        std::uint32_t numBuildings = readInt(data);
+        std::uint32_t numBuildings = readInt();
         std::vector<BuildingPlacement> buildings;
         buildings.reserve(numBuildings);
 
         for (unsigned int i = 0; i < numBuildings; i++) {
-            BuildingPlacement bldg = parseBuilding(data);
+            BuildingPlacement bldg = parseBuilding();
             buildings.push_back(bldg);
         }
 
         return buildings;
     }
 
-    BuildingPlacement ScenarioReader::parseBuilding(
-            std::vector<unsigned char>& data) {
+    BuildingPlacement ScenarioReader::parseBuilding() {
 
         BuildingPlacement bldg;
 
-        bldg.type = readByte(data);
-        bldg.player = readByte(data);
-        skip(data, 1, true);
-        skip(data, 1, true);
-        skip(data, 1, true);
-        bldg.x = readShort(data);
-        bldg.y = readShort(data);
-        skip(data, 1, true);
-        bldg.hitpoints = readShort(data);
-        bldg.armour = readShort(data);
-        skip(data, 1, false);
-        bldg.sight = readByte(data);
-        bldg.range = readByte(data);
-        bldg.upgrade1Enabled = readBool(data);
-        bldg.upgrade2Enabled = readBool(data);
-        bldg.specialColour = readByte(data);
-        bldg.prisoner = readBool(data);
-        bldg.name = readString(data, 12);
-        skip(data, 1, false);
+        bldg.type = readByte();
+        bldg.player = readByte();
+        skip(1, true);
+        skip(1, true);
+        skip(1, true);
+        bldg.x = readShort();
+        bldg.y = readShort();
+        skip(1, true);
+        bldg.hitpoints = readShort();
+        bldg.armour = readShort();
+        skip(1, false);
+        bldg.sight = readByte();
+        bldg.range = readByte();
+        bldg.upgrade1Enabled = readBool();
+        bldg.upgrade2Enabled = readBool();
+        bldg.specialColour = readByte();
+        bldg.prisoner = readBool();
+        bldg.name = readString(12);
+        skip(1, false);
 
         return bldg;
     }
 
-    std::vector<UnitPlacement> ScenarioReader::parseUnits(
-        std::vector<unsigned char>& data) {
+    std::vector<UnitPlacement> ScenarioReader::parseUnits() {
 
-        std::uint32_t numUnits = readInt(data);
+        std::uint32_t numUnits = readInt();
         std::vector<UnitPlacement> units;
         units.reserve(numUnits);
 
         for (unsigned int i = 0; i < numUnits; i++) {
-            UnitPlacement unit = parseUnit(data);
+            UnitPlacement unit = parseUnit();
             units.push_back(unit);
         }
 
         return units;
     }
 
-    UnitPlacement ScenarioReader::parseUnit(std::vector<unsigned char>& data) {
+    UnitPlacement ScenarioReader::parseUnit() {
 
         UnitPlacement unit;
 
-        unit.type = readByte(data);
-        skip(data, 2, true);
-        unit.facing = readByte(data);
-        skip(data, 1, true);
-        unit.x = readShort(data);
-        unit.y = readShort(data);
-        unit.player = readByte(data);
-        unit.hitpoints = readShort(data);
-        unit.magic = readByte(data);
-        unit.armour = readShort(data);
-        skip(data, 1, true);
-        unit.type2 = readByte(data);
-        unit.sight = readByte(data);
-        unit.range = readByte(data);
-        skip(data, 2, true);
-        unit.specialColour = readByte(data);
-        unit.prisoner = readBool(data);
-        unit.goldCost = readShort(data);
-        unit.woodCost = readShort(data);
-        unit.name = readString(data, 12);
-        skip(data, 13, true);
-        unit.upgrade1Enabled = readBool(data);
-        unit.upgrade2Enabled = readBool(data);
-        unit.upgrade3Enabled = readBool(data);
-        unit.upgrade4Enabled = readBool(data);
-        unit.fightingArea = readByte(data);
+        unit.type = readByte();
+        skip(2, true);
+        unit.facing = readByte();
+        skip(1, true);
+        unit.x = readShort();
+        unit.y = readShort();
+        unit.player = readByte();
+        unit.hitpoints = readShort();
+        unit.magic = readByte();
+        unit.armour = readShort();
+        skip(1, true);
+        unit.type2 = readByte();
+        unit.sight = readByte();
+        unit.range = readByte();
+        skip(2, true);
+        unit.specialColour = readByte();
+        unit.prisoner = readBool();
+        unit.goldCost = readShort();
+        unit.woodCost = readShort();
+        unit.name = readString(12);
+        skip(13, true);
+        unit.upgrade1Enabled = readBool();
+        unit.upgrade2Enabled = readBool();
+        unit.upgrade3Enabled = readBool();
+        unit.upgrade4Enabled = readBool();
+        unit.fightingArea = readByte();
 
         return unit;
     }
 
-    std::vector<ChestPlacement> ScenarioReader::parseChests(
-            std::vector<unsigned char>& data) {
+    std::vector<ChestPlacement> ScenarioReader::parseChests() {
 
-        std::uint32_t numChests = readInt(data);
+        std::uint32_t numChests = readInt();
         std::vector<ChestPlacement> chests;
         chests.reserve(numChests);
 
         for (unsigned int i = 0; i < numChests; i++) {
-            ChestPlacement chest = parseChest(data);
+            ChestPlacement chest = parseChest();
             chests.push_back(chest);
         }
 
         return chests;
     }
 
-    ChestPlacement ScenarioReader::parseChest(
-            std::vector<unsigned char>& data) {
+    ChestPlacement ScenarioReader::parseChest() {
 
         ChestPlacement obj;
 
-        obj.type = readInt(data);
-        obj.variant = readInt(data);
-        obj.x = readByte(data);
-        obj.y = readByte(data);
-        skip(data, 10, true); // items
+        obj.type = readInt();
+        obj.variant = readInt();
+        obj.x = readByte();
+        obj.y = readByte();
+        skip(10, true); // items
 
         return obj;
     }
 
-    std::vector<InfoPointPlacement> ScenarioReader::parseInfoPoints(
-            std::vector<unsigned char>& data) {
+    std::vector<InfoPointPlacement> ScenarioReader::parseInfoPoints() {
 
-        std::uint32_t numInfoPoints = readInt(data);
+        std::uint32_t numInfoPoints = readInt();
         std::vector<InfoPointPlacement> infoPoints;
         infoPoints.reserve(numInfoPoints);
 
         for (unsigned int i = 0; i < numInfoPoints; i++) {
-            InfoPointPlacement infoPoint = parseInfoPoint(data);
+            InfoPointPlacement infoPoint = parseInfoPoint();
             infoPoints.push_back(infoPoint);
         }
 
         return infoPoints;
     }
 
-    InfoPointPlacement ScenarioReader::parseInfoPoint(
-            std::vector<unsigned char>& data) {
+    InfoPointPlacement ScenarioReader::parseInfoPoint() {
 
         InfoPointPlacement infoPoint;
 
-        infoPoint.x = readByte(data);
-        infoPoint.y = readByte(data);
-        std::uint16_t messageLength = readShort(data);
-        infoPoint.message = readString(data, messageLength);
+        infoPoint.x = readByte();
+        infoPoint.y = readByte();
+        std::uint16_t messageLength = readShort();
+        infoPoint.message = readString(messageLength);
 
         return infoPoint;
     }
 
-    std::vector<TrapPlacement> ScenarioReader::parseTraps(
-            std::vector<unsigned char>& data) {
+    std::vector<TrapPlacement> ScenarioReader::parseTraps() {
 
-        std::uint32_t numTraps = readInt(data);
+        std::uint32_t numTraps = readInt();
         std::vector<TrapPlacement> traps;
         traps.reserve(numTraps);
 
         for (unsigned int i = 0; i < numTraps; i++) {
-            TrapPlacement trap = parseTrap(data);
+            TrapPlacement trap = parseTrap();
             traps.push_back(trap);
         }
 
         return traps;
     }
 
-    TrapPlacement ScenarioReader::parseTrap(
-            std::vector<unsigned char>& data) {
+    TrapPlacement ScenarioReader::parseTrap() {
 
         TrapPlacement trap;
 
-        trap.x = readByte(data);
-        trap.y = readByte(data);
-        trap.player = readByte(data);
+        trap.x = readByte();
+        trap.y = readByte();
+        trap.player = readByte();
 
         return trap;
     }
 
-    std::vector<GoalLocation> ScenarioReader::parseGoalLocations(
-            std::vector<unsigned char>& data) {
+    std::vector<GoalLocation> ScenarioReader::parseGoalLocations() {
 
-        std::uint8_t numGoalLocations = readRivalByte(data);
+        std::uint8_t numGoalLocations = readRivalByte();
         std::vector<GoalLocation> goals;
         goals.reserve(numGoalLocations);
 
         for (unsigned int i = 0; i < numGoalLocations; i++) {
-            GoalLocation goal = parseGoalLocation(data);
+            GoalLocation goal = parseGoalLocation();
             goals.push_back(goal);
         }
 
         return goals;
     }
 
-    GoalLocation ScenarioReader::parseGoalLocation(
-            std::vector<unsigned char>& data) {
+    GoalLocation ScenarioReader::parseGoalLocation() {
 
         GoalLocation goal;
 
-        goal.type = readRivalByte(data);
-        goal.x = readRivalByte(data);
-        skip(data, 3, false);
-        goal.y = readRivalByte(data);
-        skip(data, 3, false);
+        goal.type = readRivalByte();
+        goal.x = readRivalByte();
+        skip(3, false);
+        goal.y = readRivalByte();
+        skip(3, false);
 
         return goal;
     }
 
-    std::vector<Goal> ScenarioReader::parseGoals(
-            std::vector<unsigned char>& data) {
+    std::vector<Goal> ScenarioReader::parseGoals() {
 
-        std::uint8_t numGoals = readRivalByte(data);
+        std::uint8_t numGoals = readRivalByte();
 
         if (numGoals > 0) {
-            skip(data, 3, false);
+            skip(3, false);
         }
 
         std::vector<Goal> goals;
         goals.reserve(numGoals);
 
         for (unsigned int i = 0; i < numGoals; i++) {
-            Goal goal = parseGoal(data);
+            Goal goal = parseGoal();
             goals.push_back(goal);
         }
 
         return goals;
     }
 
-    Goal ScenarioReader::parseGoal(std::vector<unsigned char>& data) {
+    Goal ScenarioReader::parseGoal() {
 
         Goal goal;
 
-        std::uint8_t goalType = readByte(data);
-        skip(data, 11, true);
+        std::uint8_t goalType = readByte();
+        skip(11, true);
 
         // TODO: parse goal based on type
         goal.count = 0;
@@ -955,19 +935,18 @@ namespace Rival {
         return goal;
     }
 
-    CampaignText ScenarioReader::parseCampaignText(
-            std::vector<unsigned char>& data) {
+    CampaignText ScenarioReader::parseCampaignText() {
 
         CampaignText text;
 
-        std::uint16_t titleLength = readRivalShort(data);
-        text.title = readRivalString(data, titleLength);
+        std::uint16_t titleLength = readRivalShort();
+        text.title = readRivalString(titleLength);
 
-        std::uint16_t objectivesLength = readRivalShort(data);
-        text.objectives = readRivalString(data, objectivesLength);
+        std::uint16_t objectivesLength = readRivalShort();
+        text.objectives = readRivalString(objectivesLength);
 
-        std::uint16_t narrationLength = readRivalShort(data);
-        text.narration = readRivalString(data, narrationLength);
+        std::uint16_t narrationLength = readRivalShort();
+        text.narration = readRivalString(narrationLength);
 
         return text;
     }
@@ -976,28 +955,24 @@ namespace Rival {
     // Token Extraction
     ///////////////////////////////////////////////////////////////////////////
 
-    std::uint8_t ScenarioReader::readByte(
-            std::vector<unsigned char>& data) {
-        std::uint8_t value = readByte(data, pos);
+    std::uint8_t ScenarioReader::readByte() {
+        std::uint8_t value = readByte(pos);
         pos += 1;
         return value;
     }
 
-    std::uint8_t ScenarioReader::readByte(
-            std::vector<unsigned char>& data, size_t offset) const {
+    std::uint8_t ScenarioReader::readByte(size_t offset) const {
         return std::uint8_t(data[offset]);
     }
 
-    std::uint8_t ScenarioReader::readRivalByte(
-            std::vector<unsigned char>& data) {
-        std::uint8_t value = readRivalByte(data, pos);
+    std::uint8_t ScenarioReader::readRivalByte() {
+        std::uint8_t value = readRivalByte(pos);
         pos += 1;
         return value;
     }
 
     // Special numbering used by goals, etc.
-    std::uint8_t ScenarioReader::readRivalByte(
-            std::vector<unsigned char>& data, size_t offset) const {
+    std::uint8_t ScenarioReader::readRivalByte(size_t offset) const {
         std::uint8_t val = std::uint8_t(data[offset]);
         return fixRivalByte(val);
     }
@@ -1043,15 +1018,13 @@ namespace Rival {
         return val;
     }
 
-    std::uint16_t ScenarioReader::readRivalShort(
-            std::vector<unsigned char>& data) {
-        std::uint16_t value = readRivalShort(data, pos);
+    std::uint16_t ScenarioReader::readRivalShort() {
+        std::uint16_t value = readRivalShort(pos);
         pos += numBytesShort;
         return value;
     }
 
-    uint16_t ScenarioReader::readRivalShort(
-            std::vector<unsigned char>& data, size_t offset) const {
+    uint16_t ScenarioReader::readRivalShort(size_t offset) const {
         // read 2 rival bytes, and combine them like a normal short
         return std::uint16_t(
             fixRivalByte(data[offset + 1]) << 8 |
@@ -1059,27 +1032,24 @@ namespace Rival {
         );
     }
 
-    bool ScenarioReader::readBool(std::vector<unsigned char>& data) {
-        bool value = readBool(data, pos);
+    bool ScenarioReader::readBool() {
+        bool value = readBool(pos);
         pos += 1;
         return value;
     }
 
-    bool ScenarioReader::readBool(
-            std::vector<unsigned char>& data, size_t offset) const {
+    bool ScenarioReader::readBool(size_t offset) const {
         uint8_t value = data[offset];
         return value == 1;
     }
 
-    std::uint16_t ScenarioReader::readShort(
-        std::vector<unsigned char>& data) {
-        std::uint16_t value = readShort(data, pos);
+    std::uint16_t ScenarioReader::readShort() {
+        std::uint16_t value = readShort(pos);
         pos += numBytesShort;
         return value;
     }
 
-    uint16_t ScenarioReader::readShort(
-        std::vector<unsigned char>& data, size_t offset) const {
+    uint16_t ScenarioReader::readShort(size_t offset) const {
         // little endian
         return std::uint16_t(
             data[offset + 1] << 8 |
@@ -1087,15 +1057,13 @@ namespace Rival {
         );
     }
 
-    std::uint32_t ScenarioReader::readInt(
-             std::vector<unsigned char>& data) {
-        std::uint32_t value = readInt(data, pos);
+    std::uint32_t ScenarioReader::readInt() {
+        std::uint32_t value = readInt(pos);
         pos += numBytesInt;
         return value;
     }
 
-    uint32_t ScenarioReader::readInt(
-            std::vector<unsigned char>& data, size_t offset) const {
+    uint32_t ScenarioReader::readInt(size_t offset) const {
         // little endian
         return std::uint32_t(
             data[offset + 3] << 24 |
@@ -1105,17 +1073,14 @@ namespace Rival {
         );
     }
 
-    std::string ScenarioReader::readString(
-            std::vector<unsigned char>& data, size_t length) {
-        std::string value = readString(data, pos, length);
+    std::string ScenarioReader::readString(size_t length) {
+        std::string value = readString(pos, length);
         pos += length;
         return value;
     }
 
     std::string ScenarioReader::readString(
-            std::vector<unsigned char>& data,
-            size_t offset,
-            size_t length) const {
+            size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
         for (size_t i = 0; i < length; i++) {
@@ -1125,17 +1090,14 @@ namespace Rival {
         return value;
     }
 
-    std::string ScenarioReader::readRivalString(
-            std::vector<unsigned char>& data, size_t length) {
-        std::string value = readRivalString(data, pos, length);
+    std::string ScenarioReader::readRivalString(size_t length) {
+        std::string value = readRivalString(pos, length);
         pos += length;
         return value;
     }
 
     std::string ScenarioReader::readRivalString(
-            std::vector<unsigned char>& data,
-            size_t offset,
-            size_t length) const {
+            size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
         for (size_t i = 0; i < length; i++) {
@@ -1168,11 +1130,10 @@ namespace Rival {
         return '?';
     }
 
-    void ScenarioReader::skip(
-            std::vector<unsigned char>& data, const size_t n, bool print) {
+    void ScenarioReader::skip(const size_t n, bool print) {
         if (print) {
             std::cout << "SKIP: ";
-            printNext(data, n);
+            printNext(n);
         }
         pos += n;
     }
@@ -1200,8 +1161,7 @@ namespace Rival {
                 << "==================================================\n\n";
     }
 
-    void ScenarioReader::printNext(
-            std::vector<unsigned char>& data, const size_t n) const {
+    void ScenarioReader::printNext(const size_t n) const {
 
         // Switch to hex
         std::cout << std::setfill('0') << std::hex;
