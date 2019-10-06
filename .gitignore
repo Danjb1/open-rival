@@ -17,6 +17,9 @@ Debug/
 # Game data files
 IMAGES.DAT
 SOUNDS.DAT
+*.CMP
+*.SCO
+SORR.BLD
 
 # Extracted data files
 /audio-extractor/output

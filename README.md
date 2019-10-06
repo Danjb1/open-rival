@@ -16,6 +16,10 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 > Utility to extract the original game's audio.
 
+### [campaign-extractor](/campaign-extractor)
+
+> Utility to extract individual scenarios from campaign files.
+
 ### [image-extractor](/image-extractor)
 
 > Utility to extract the original game's images.
