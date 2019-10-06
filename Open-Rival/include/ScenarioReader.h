@@ -273,6 +273,8 @@ namespace Rival {
 
         ScenarioReader(const std::string filename);
 
+        ScenarioFile readScenario();
+
     private:
 
         static const std::map<std::uint8_t, char> alphabet;
@@ -282,145 +284,115 @@ namespace Rival {
 
         static const int bytesPerTile = 6;
 
+        std::vector<unsigned char> data;
         size_t pos = 0;
 
-        void readFile(const std::string filename);
+        void ScenarioReader::readFileContents(const std::string filename);
 
         ///////////////////////////////////////////////////////////////////////
         // Parsing
         ///////////////////////////////////////////////////////////////////////
 
-        ScenarioHeader parseHeader(std::vector<unsigned char>& data);
+        ScenarioHeader parseHeader();
 
-        PlayerProperties parsePlayerProperties(
-                std::vector<unsigned char>& data);
+        PlayerProperties parsePlayerProperties();
 
-        TroopDefaults parseTroopDefaults(std::vector<unsigned char>& data);
+        TroopDefaults parseTroopDefaults();
 
         bool ScenarioReader::doesUpgradeHaveAmount(int i) const;
 
-        UpgradeProperties parseUpgradeProperties(
-                std::vector<unsigned char>& data, bool readAmount);
+        UpgradeProperties parseUpgradeProperties(bool readAmount);
 
-        ProductionCost parseProductionCost(
-                std::vector<unsigned char>& data);
+        ProductionCost parseProductionCost();
 
-        WeaponDefaults parseWeaponDefaults(std::vector<unsigned char>& data);
+        WeaponDefaults parseWeaponDefaults();
 
-        AvailableBuildings parseAvailableBuildings(
-                std::vector<unsigned char>& data);
+        AvailableBuildings parseAvailableBuildings();
 
-        HireTroopsRestrictions parseHireTroopsRestrictions(
-                std::vector<unsigned char>& data);
+        HireTroopsRestrictions parseHireTroopsRestrictions();
 
-        AiSetting parseAiSetting(std::vector<unsigned char>& data);
+        AiSetting parseAiSetting();
 
         std::vector<TilePlacement> ScenarioReader::parseTerrain(
-                std::vector<unsigned char>& data,
-                int width,
-                int height);
+                int width, int height);
 
-        TilePlacement ScenarioReader::parseTile(
-                std::vector<unsigned char>& data);
+        TilePlacement ScenarioReader::parseTile();
 
-        std::vector<ObjectPlacement> parseObjects(
-                std::vector<unsigned char>& data);
+        std::vector<ObjectPlacement> parseObjects();
 
-        ObjectPlacement parseObject(std::vector<unsigned char>& data);
+        ObjectPlacement parseObject();
 
-        std::vector<BuildingPlacement> parseBuildings(
-                std::vector<unsigned char>& data);
+        std::vector<BuildingPlacement> parseBuildings();
 
-        BuildingPlacement parseBuilding(std::vector<unsigned char>& data);
+        BuildingPlacement parseBuilding();
 
-        std::vector<UnitPlacement> parseUnits(
-                std::vector<unsigned char>& data);
+        std::vector<UnitPlacement> parseUnits();
 
-        UnitPlacement parseUnit(std::vector<unsigned char>& data);
+        UnitPlacement parseUnit();
 
-        std::vector<ChestPlacement> parseChests(
-                std::vector<unsigned char>& data);
+        std::vector<ChestPlacement> parseChests();
 
-        ChestPlacement parseChest(
-                std::vector<unsigned char>& data);
+        ChestPlacement parseChest();
 
-        std::vector<InfoPointPlacement> parseInfoPoints(
-                std::vector<unsigned char>& data);
+        std::vector<InfoPointPlacement> parseInfoPoints();
 
-        InfoPointPlacement parseInfoPoint(
-                std::vector<unsigned char>& data);
+        InfoPointPlacement parseInfoPoint();
 
-        std::vector<TrapPlacement> parseTraps(
-                std::vector<unsigned char>& data);
+        std::vector<TrapPlacement> parseTraps();
 
-        TrapPlacement parseTrap(std::vector<unsigned char>& data);
+        TrapPlacement parseTrap();
 
-        std::vector<GoalLocation> parseGoalLocations(
-                std::vector<unsigned char>& data);
+        std::vector<GoalLocation> parseGoalLocations();
 
-        GoalLocation parseGoalLocation(std::vector<unsigned char>& data);
+        GoalLocation parseGoalLocation();
 
-        std::vector<Goal> parseGoals(std::vector<unsigned char>& data);
+        std::vector<Goal> parseGoals();
 
-        Goal parseGoal(std::vector<unsigned char>& data);
+        Goal parseGoal();
 
-        CampaignText parseCampaignText(std::vector<unsigned char>& data);
+        CampaignText parseCampaignText();
 
         ///////////////////////////////////////////////////////////////////////
         // Token Extraction
         ///////////////////////////////////////////////////////////////////////
 
-        std::uint8_t readByte(std::vector<unsigned char>& data);
+        std::uint8_t readByte();
 
-        std::uint8_t readByte(
-                std::vector<unsigned char>& data, size_t offset) const;
+        std::uint8_t readByte(size_t offset) const;
 
-        std::uint8_t readRivalByte(std::vector<unsigned char>& data);
+        std::uint8_t readRivalByte();
 
-        std::uint8_t readRivalByte(
-            std::vector<unsigned char>& data, size_t offset) const;
+        std::uint8_t readRivalByte(size_t offset) const;
 
         std::uint8_t fixRivalByte(std::uint8_t val) const;
 
-        std::uint16_t readRivalShort(std::vector<unsigned char>& data);
+        std::uint16_t readRivalShort();
 
-        std::uint16_t readRivalShort(
-                std::vector<unsigned char>& data, size_t offset) const;
+        std::uint16_t readRivalShort(size_t offset) const;
 
-        bool readBool(std::vector<unsigned char>& data);
+        bool readBool();
 
-        bool readBool(
-                std::vector<unsigned char>& data, size_t offset) const;
+        bool readBool(size_t offset) const;
 
-        std::uint16_t readShort(std::vector<unsigned char>& data);
+        std::uint16_t readShort();
 
-        std::uint16_t readShort(
-            std::vector<unsigned char>& data, size_t offset) const;
+        std::uint16_t readShort(size_t offset) const;
 
-        std::uint32_t readInt(std::vector<unsigned char>& data);
+        std::uint32_t readInt();
 
-        std::uint32_t readInt(
-                std::vector<unsigned char>& data, size_t offset) const;
+        std::uint32_t readInt(size_t offset) const;
 
-        std::string readString(
-                std::vector<unsigned char>& data, size_t length);
+        std::string readString(size_t length);
 
-        std::string readString(
-                std::vector<unsigned char>& data,
-                size_t offset,
-                size_t length) const;
+        std::string readString(size_t offset, size_t length) const;
 
-        std::string readRivalString(
-                std::vector<unsigned char>& data, size_t length);
+        std::string readRivalString(size_t length);
 
-        std::string readRivalString(
-                std::vector<unsigned char>& data,
-                size_t offset,
-                size_t length) const;
+        std::string readRivalString(size_t offset, size_t length) const;
 
         char getRivalChar(std::uint8_t c) const;
 
-        void skip(std::vector<unsigned char>& data, const size_t n, bool print);
+        void skip(const size_t n, bool print);
 
         ///////////////////////////////////////////////////////////////////////
         // Printing
@@ -430,7 +402,7 @@ namespace Rival {
 
         void printSection(std::string title) const;
 
-        void printNext(std::vector<unsigned char>& data, const size_t n) const;
+        void printNext(const size_t n) const;
 
         void print(ScenarioHeader& hdr) const;
 
