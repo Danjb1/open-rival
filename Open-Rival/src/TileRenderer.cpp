@@ -23,7 +23,7 @@ namespace Rival {
 
     void TileRenderer::render(
             glm::mat4 viewProjMatrix,
-            std::vector<int>& tiles,
+            std::vector<Tile>& tiles,
             int mapWidth,
             int mapHeight,
             bool wilderness) {
@@ -63,9 +63,9 @@ namespace Rival {
 
         // Add data to buffers
         unsigned int i = 0;
-        for (int& tile : tiles) {
+        for (Tile& tile : tiles) {
 
-            const int txIndex = tiles[i];
+            const int txIndex = tiles[i].txIndex;
             int tileX = i % mapWidth;
             int tileY = i / mapWidth;
 

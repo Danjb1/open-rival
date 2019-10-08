@@ -36,6 +36,7 @@
     <ClCompile Include="src\ShaderUtils.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
     <ClCompile Include="src\Unit.cpp" />
     <ClCompile Include="src\UnitRenderer.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\TileRenderer.h" />
     <ClInclude Include="include\Unit.h" />
     <ClInclude Include="include\UnitRenderer.h" />

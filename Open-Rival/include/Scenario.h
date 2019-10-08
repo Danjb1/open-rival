@@ -4,20 +4,10 @@
 #include <map>
 #include <vector>
 
+#include "Tile.h"
 #include "Unit.h"
 
 namespace Rival {
-
-    enum TileType {
-        Grass,
-        Coastline,
-        Water,
-        Mud,
-        Dirt,
-        Dungeon,
-        Gold,
-        Cropland
-    };
 
     class Scenario {
 
@@ -30,9 +20,9 @@ namespace Rival {
 
         int getHeight() const;
 
-        std::vector<int>& getTiles();
+        std::vector<Tile>& getTiles();
 
-        int getTile(const int x, const int y) const;
+        Tile getTile(const int x, const int y) const;
 
         bool isWilderness() const;
 
@@ -45,7 +35,7 @@ namespace Rival {
         const int width;
         const int height;
         bool wilderness;
-        std::vector<int> tiles;
+        std::vector<Tile> tiles;
 
         int nextId;
         std::map<int, std::unique_ptr<Unit>> units;

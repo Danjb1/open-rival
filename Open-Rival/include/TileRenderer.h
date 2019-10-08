@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Renderable.h"
+#include "Tile.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -25,7 +26,7 @@ namespace Rival {
 
         void render(
                 glm::mat4 viewProjMatrix,
-                std::vector<int>& tiles,
+                std::vector<Tile>& tiles,
                 int mapWidth,
                 int mapHeight,
                 bool wilderness);
