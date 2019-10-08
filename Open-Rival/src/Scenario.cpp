@@ -7,7 +7,8 @@ namespace Rival {
             width(width),
             height(height),
             wilderness(wilderness),
-            tiles(std::vector<int>(width * height, 0)) {}
+            tiles(std::vector<Tile>(
+                    width * height, Tile(TileType::Grass, 0, 0))) {}
 
     int Scenario::getWidth() const {
         return width;
@@ -17,11 +18,11 @@ namespace Rival {
         return height;
     }
 
-    std::vector<int>& Scenario::getTiles() {
+    std::vector<Tile>& Scenario::getTiles() {
         return tiles;
     }
 
-    int Scenario::getTile(const int x, const int y) const {
+    Tile Scenario::getTile(const int x, const int y) const {
         return tiles[y * width + x];
     }
 

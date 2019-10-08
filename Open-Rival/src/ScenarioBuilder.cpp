@@ -16,9 +16,10 @@ namespace Rival {
                 data.hdr.wilderness);
 
         // Initialise Tiles
-        std::vector<int>& tiles = scenario->getTiles();
+        std::vector<Tile>& tiles = scenario->getTiles();
         for (std::size_t i = 0; i != data.tiles.size(); i++) {
-            tiles[i] = getTileType(data.tiles[i]);
+            // TODO: determine txIndex
+            tiles[i] = Tile(getTileType(data.tiles[i]), 0, 0);
         }
 
         // Add Units
