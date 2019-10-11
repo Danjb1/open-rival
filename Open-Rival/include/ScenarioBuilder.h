@@ -24,6 +24,8 @@ namespace Rival {
 
         TileType getTileType(TilePlacement tile);
 
+        std::uint8_t getTileTxIndex(TileType type);
+
     };
 
 }
