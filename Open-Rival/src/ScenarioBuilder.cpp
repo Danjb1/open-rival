@@ -18,8 +18,9 @@ namespace Rival {
         // Initialise Tiles
         std::vector<Tile>& tiles = scenario->getTiles();
         for (std::size_t i = 0; i != data.tiles.size(); i++) {
-            // TODO: determine txIndex
-            tiles[i] = Tile(getTileType(data.tiles[i]), 0, 0);
+            TileType type = getTileType(data.tiles[i]);
+            std::uint8_t txIndex = getTileTxIndex(type);
+            tiles[i] = Tile(type, txIndex, 0);
         }
 
         // Add Units
@@ -91,6 +92,27 @@ namespace Rival {
 
         throw std::runtime_error("Unknown tile resource: "
             + tile.resource);
+    }
+
+    std::uint8_t ScenarioBuilder::getTileTxIndex(TileType type) {
+        if (type == TileType::Coastline) {
+            return 27;
+        } else if (type == TileType::Cropland) {
+            return 200;
+        } else if (type == TileType::Dirt) {
+            return 124;
+        } else if (type == TileType::Dungeon) {
+            return 168;
+        } else if (type == TileType::Gold) {
+            return 178;
+        } else if (type == TileType::Grass) {
+            return 0;
+        } else if (type == TileType::Mud) {
+            return 84;
+        } else if (type == TileType::Water) {
+            return 45;
+        }
+        throw std::runtime_error("Unknown tile type: " + type);
     }
 
 }
