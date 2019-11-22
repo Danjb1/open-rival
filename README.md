@@ -32,6 +32,10 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 I have tried to track down the copyright holders, even the original developers, without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
 
+## Discord
+
+TODO
+
 ## Links
 
  - [Intro and CD Soundtrack](https://www.youtube.com/watch?v=N7JFz1GapOE&list=PL6389EE9ABE2B104B)
