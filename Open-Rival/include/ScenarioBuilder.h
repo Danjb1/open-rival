@@ -22,9 +22,7 @@ namespace Rival {
 
         ScenarioData data;
 
-        TileType getTileType(TilePlacement tile);
-
-        std::uint8_t getTileTxIndex(TileType type);
+        Tile buildTile(TilePlacement& tile) const;
 
     };
 
