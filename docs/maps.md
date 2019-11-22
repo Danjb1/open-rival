@@ -366,7 +366,14 @@ But when multiple consecutive tiles are the same, they will be described as:
 
 where `NN NN` is the number of tiles that this describes.
 
-Each tile type has a number of different representations, possibly corresponding to graphical variants. Samples are given below, where 0x00 is represented by two dashes.
+Each tile type has a number of different representations, corresponding to graphical variants. Samples are given below, where 0x00 is represented by two dashes.
+
+The very last byte of each tile has a special meaning:
+
+    00 = normal tile
+    01 = resource
+    02 = coastline
+    03 = map edge
 
 ### Grass
 
@@ -479,29 +486,6 @@ Each tile type has a number of different representations, possibly corresponding
     -- -- 3C -- 03 --
     -- -- 3C -- 0C --
     -- -- 3C -- 04 -- 
-
-### Wood
-
-    -- -- -- -- 04 --
-    -- -- -- -- 05 --
-    -- -- -- -- -- --
-    -- -- -- -- 03 --
-    -- -- -- -- -- --
-    -- -- -- -- 04 --
-    -- -- -- -- 03 --
-    -- -- -- -- 02 --
-    -- -- -- -- 03 --
-    -- -- -- -- 01 --
-    -- -- -- -- 03 --
-    -- -- -- -- 04 --
-    -- -- -- -- 02 --
-    -- -- -- -- 05 --
-    -- -- -- -- -- --
-    -- -- -- -- 05 --
-    -- -- -- -- -- --
-    -- -- -- -- 01 --
-    -- -- -- -- 01 03
-    -- -- -- -- -- 03
 
 ### Gold
 

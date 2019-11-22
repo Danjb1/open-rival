@@ -18,9 +18,7 @@ namespace Rival {
         // Initialise Tiles
         std::vector<Tile>& tiles = scenario->getTiles();
         for (std::size_t i = 0; i != data.tiles.size(); i++) {
-            TileType type = getTileType(data.tiles[i]);
-            std::uint8_t txIndex = getTileTxIndex(type);
-            tiles[i] = Tile(type, txIndex, 0);
+            tiles[i] = buildTile(data.tiles[i]);
         }
 
         // Add Units
@@ -35,45 +33,123 @@ namespace Rival {
         return scenario;
     }
 
-    TileType ScenarioBuilder::getTileType(TilePlacement tile) {
+    std::uint8_t getCoastlineTxIndex(TilePlacement& tile) {
+        if (tile.type == 0x01) {
+            return 14;
+        } else if (tile.type == 0x02) {
+            return 16;
+        } else if (tile.type == 0x03) {
+            return 18;
+        } else if (tile.type == 0x04) {
+            return 21;
+        } else if (tile.type == 0x05) {
+            return 23;
+        } else if (tile.type == 0x06) {
+            return 24;
+        } else if (tile.type == 0x07) {
+            return 27;
+        } else if (tile.type == 0x08) {
+            return 29;
+        } else if (tile.type == 0x09) {
+            return 31;
+        } else if (tile.type == 0x0a) {
+            return 34;
+        } else if (tile.type == 0x0b) {
+            return 35;
+        } else if (tile.type == 0x0c) {
+            return 37;
+        } else if (tile.type == 0x0d) {
+            return 40;
+        } else if (tile.type == 0x0e) {
+            return 42;
+        }
+        return 0;
+    }
+
+    std::uint8_t getDungeonEdgeTxIndex(TilePlacement& tile) {
+        if (tile.type == 0x2e) {
+            return 120 + 14;
+        } else if (tile.type == 0x2f) {
+            return 120 + 16;
+        } else if (tile.type == 0x30) {
+            return 120 + 18;
+        } else if (tile.type == 0x31) {
+            return 120 + 21;
+        } else if (tile.type == 0x32) {
+            return 120 + 23;
+        } else if (tile.type == 0x33) {
+            return 120 + 24;
+        } else if (tile.type == 0x34) {
+            return 120 + 27;
+        } else if (tile.type == 0x35) {
+            return 120 + 29;
+        } else if (tile.type == 0x36) {
+            return 120 + 31;
+        } else if (tile.type == 0x37) {
+            return 120 + 34;
+        } else if (tile.type == 0x38) {
+            return 120 + 35;
+        } else if (tile.type == 0x39) {
+            return 120 + 37;
+        } else if (tile.type == 0x3a) {
+            return 120 + 40;
+        } else if (tile.type == 0x3b) {
+            return 120 + 42;
+        }
+        return 0;
+    }
+
+    Tile ScenarioBuilder::buildTile(TilePlacement& tile) const {
+
+        TileType type;
+        std::uint8_t txIndex;
 
         if (tile.resource == 0) {
 
             if (tile.type == 0x00) {
                 // Grass
-                return TileType::Grass;
+                type = TileType::Grass;
+                txIndex = 0 + tile.variant;
 
             } else if (tile.type >= 0x01 && tile.type <= 0x0e) {
                 // Coastline
-                return TileType::Coastline;
+                type = TileType::Coastline;
+                txIndex = getCoastlineTxIndex(tile) + tile.variant;
 
             } else if (tile.type == 0x0f) {
                 // Water
-                return TileType::Water;
+                type = TileType::Water;
+                txIndex = 45 + tile.variant;
 
             } else if (tile.type >= 0x10 && tile.type <= 0x1d) {
                 // Mud edge
-                return TileType::Mud;
+                type = TileType::Mud;
+                txIndex = 84 + tile.variant;
 
             } else if (tile.type == 0x1e) {
                 // Mud
-                return TileType::Mud;
+                type = TileType::Mud;
+                txIndex = 84 + tile.variant;
 
             } else if (tile.type >= 0x1f && tile.type <= 0x2c) {
                 // Dirt edge
-                return TileType::Dirt;
+                type = TileType::Dirt;
+                txIndex = 124 + tile.variant;
 
             } else if (tile.type == 0x2d) {
                 // Dirt
-                return TileType::Dirt;
+                type = TileType::Dirt;
+                txIndex = 124 + tile.variant;
 
-            } else if (tile.type >= 0x2e && tile.type <= 0x3c) {
+            } else if (tile.type >= 0x2e && tile.type <= 0x3b) {
                 // Dungeon edge
-                return TileType::Dungeon;
+                type = TileType::Dungeon;
+                txIndex = getDungeonEdgeTxIndex(tile) + tile.variant;
 
-            } else if (tile.type == 0x3d) {
+            } else if (tile.type == 0x3c) {
                 // Dungeon
-                return TileType::Dungeon;
+                type = TileType::Dungeon;
+                txIndex = 164 + tile.variant;
 
             } else {
                 throw std::runtime_error("Unknown tile type: "
@@ -82,37 +158,20 @@ namespace Rival {
 
         } else if (tile.resource == 1) {
             // Gold
-            return TileType::Gold;
+            type = TileType::Gold;
+            txIndex = 178;
 
         } else if (tile.resource == 2) {
             // Cropland
-            return TileType::Cropland;
+            type = TileType::Cropland;
+            txIndex = 200;
 
+        } else {
+            throw std::runtime_error("Unknown tile resource: "
+                + tile.resource);
         }
 
-        throw std::runtime_error("Unknown tile resource: "
-            + tile.resource);
-    }
-
-    std::uint8_t ScenarioBuilder::getTileTxIndex(TileType type) {
-        if (type == TileType::Coastline) {
-            return 27;
-        } else if (type == TileType::Cropland) {
-            return 200;
-        } else if (type == TileType::Dirt) {
-            return 124;
-        } else if (type == TileType::Dungeon) {
-            return 168;
-        } else if (type == TileType::Gold) {
-            return 178;
-        } else if (type == TileType::Grass) {
-            return 0;
-        } else if (type == TileType::Mud) {
-            return 84;
-        } else if (type == TileType::Water) {
-            return 45;
-        }
-        throw std::runtime_error("Unknown tile type: " + type);
+        return Tile(type, txIndex, 0);
     }
 
 }

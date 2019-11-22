@@ -150,3 +150,7 @@
  - Using abilities with a group selected
  - Rank explanations
  - Replays
+ - Multilanguage support
+ - ARM version (for Raspberry Pi)
+ - Support for larger screen resolutions
+ - Support for bigger maps

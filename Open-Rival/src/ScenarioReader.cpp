@@ -656,6 +656,7 @@ namespace Rival {
 
         tile.resource = readByte(pos);
         tile.type = readByte(pos + 2);
+        tile.variant = readByte(pos + 4);
 
         return tile;
     }

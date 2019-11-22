@@ -129,6 +129,7 @@ namespace Rival {
     struct TilePlacement {
         std::uint8_t type;
         std::uint8_t resource;
+        std::uint8_t variant;
     };
 
     struct BuildingPlacement {
