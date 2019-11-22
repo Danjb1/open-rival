@@ -373,7 +373,7 @@ The very last byte of each tile has a special meaning:
     00 = normal tile
     01 = resource
     02 = coastline
-    03 = map edge
+    03 = map edge / dirt
 
 ### Grass
 
