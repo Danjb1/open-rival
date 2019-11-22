@@ -21,7 +21,7 @@
     - Include missing alphabet entries (e.g. '!{})
     - Analyse skipped sections; do they vary? Are they read?
  - ScenarioBuilder:
-    - Respect tile variants
+    - Respect Gold tile variants
     - Determine the correct unit type
 
 ## Features
