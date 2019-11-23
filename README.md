@@ -32,14 +32,14 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 I have tried to track down the copyright holders, even the original developers, without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
 
-## Discord
-
-TODO
-
 ## Links
+
+ - [Discord Server](https://discord.gg/R7E4KWT)
 
  - [Intro and CD Soundtrack](https://www.youtube.com/watch?v=N7JFz1GapOE&list=PL6389EE9ABE2B104B)
 
  - [MIDI Soundtrack](https://www.youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
+
+ - [Multiplayer Gameplay & Set-up Guide](https://www.youtube.com/watch?v=KzTm1MCKrLI)
 
  - [Let's Play](https://www.youtube.com/watch?v=bSefVvZnxKs)
