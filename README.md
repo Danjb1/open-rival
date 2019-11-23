@@ -4,7 +4,7 @@
 
 ![Title](http://danjb.com/images/rival_realms/title.jpg)
 
-The original game can still be run on Windows 10, however there is a game-breaking bug where units no longer recover health when resting. Multiplayer games are also very difficult, if not impossible, to get working. A remake could fix these issues, add support for higher resolutions, and much more.
+The original game can still be run on Windows 10, however there is a game-breaking bug where units no longer recover health when resting. Multiplayer games are also tricky to set-up and often unstable. A remake could fix these issues, add support for higher resolutions, and much more.
 
 ## Projects
 
