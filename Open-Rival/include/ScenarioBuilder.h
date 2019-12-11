@@ -24,6 +24,8 @@ namespace Rival {
 
         Tile buildTile(TilePlacement& tile) const;
 
+        Unit::Type getUnitType(std::uint8_t unitType) const;
+
     };
 
 }
