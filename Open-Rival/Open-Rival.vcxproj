@@ -28,6 +28,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Renderable.cpp" />
+    <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\Scenario.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Renderable.h" />
+    <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Scenario.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />

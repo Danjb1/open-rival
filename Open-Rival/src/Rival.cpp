@@ -39,7 +39,7 @@ namespace Rival {
                 createPaletteTexture());
 
         // Load some scenario
-        ScenarioReader reader("D://rivalrealms/MAPS/2.sco");
+        ScenarioReader reader(mapsDir + "example.sco");
         ScenarioData scenarioData = reader.readScenario();
         ScenarioBuilder scenarioBuilder(scenarioData);
         scenario = scenarioBuilder.build();

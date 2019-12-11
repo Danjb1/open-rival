@@ -7,12 +7,14 @@
     - Duplication between UnitRenderer and TileRenderer
     - Render to a texture instead of redrawing everything every frame
     - Add support for animated tiles
+
  - UnitRenderer:
     - Make vertex-related values into constants
-    - Render Units at the correct positions (re-use code from TileRenderer)
+    - Unit vertex positions need to account for unit offset within texture
     - Simplify for-loop iteration with index
     - Delete Renderables when a Unit no longer exists
     - Add support for team colours
+
  - ScenarioReader:
     - Use BinaryFileReader
     - Improve error handling
@@ -20,9 +22,9 @@
     - Finish parsing Chests (contents)
     - Include missing alphabet entries (e.g. '!{})
     - Analyse skipped sections; do they vary? Are they read?
+
  - ScenarioBuilder:
     - Respect Gold tile variants
-    - Determine the correct unit type
 
 ## Features
 
@@ -152,5 +154,6 @@
  - Replays
  - Multilanguage support
  - ARM version (for Raspberry Pi)
+ - Windows XP support
  - Support for larger screen resolutions
  - Support for bigger maps

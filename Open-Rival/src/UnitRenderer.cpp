@@ -4,6 +4,7 @@
 #include <map>
 
 #include "Palette.h"
+#include "RenderUtils.h"
 #include "Rival.h"
 #include "Shaders.h"
 
@@ -63,12 +64,12 @@ namespace Rival {
             // Define vertex positions
             float width = static_cast<float>(Sprite::unitWidthPx);
             float height = static_cast<float>(Sprite::unitHeightPx);
-            float x = static_cast<float>(getUnitRenderPosX(*unit.get()));
-            float y = static_cast<float>(getUnitRenderPosY(*unit.get()));
-            float x1 = x;
-            float y1 = y;
-            float x2 = x + width;
-            float y2 = y + height;
+            float x1 = static_cast<float>(
+                    RenderUtils::getRenderPosX(unit->getX()));
+            float y1 = static_cast<float>(
+                    RenderUtils::getRenderPosY(unit->getX(), unit->getY()));
+            float x2 = x1 + width;
+            float y2 = y1 + height;
             std::vector<GLfloat> vertexData = {
                 x1, y1,
                 x2, y1,
@@ -115,14 +116,6 @@ namespace Rival {
         // Clean up
         glBindTexture(GL_TEXTURE_2D, 0);
         glUseProgram(0);
-    }
-
-    int UnitRenderer::getUnitRenderPosX(Unit& unit) {
-        return unit.getX() * 64;
-    }
-
-    int UnitRenderer::getUnitRenderPosY(Unit& unit) {
-        return unit.getY() * 64;
     }
 
 }
