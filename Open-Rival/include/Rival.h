@@ -36,7 +36,9 @@ namespace Rival {
 
         const char* windowTitle = "Rival Realms";
 
+        const std::string mapsDir = "res\\maps\\";
         const std::string txDir = "res\\textures\\";
+
         const int numTextures = 94;
         const int txIndexUnits = 0;
         const int txIndexTiles = 50;

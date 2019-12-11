@@ -7,6 +7,7 @@
 #include <map>
 
 #include "Palette.h"
+#include "RenderUtils.h"
 #include "Rival.h"
 #include "Shaders.h"
 
@@ -76,12 +77,10 @@ namespace Rival {
             //    3----- 2
             float width = static_cast<float>(Sprite::tileSpriteWidthPx);
             float height = static_cast<float>(Sprite::tileSpriteHeightPx);
-            float x = static_cast<float>(getTileRenderPosX(tileX));
-            float y = static_cast<float>(getTileRenderPosY(tileX, tileY));
-            float x1 = x;
-            float y1 = y;
-            float x2 = x + width;
-            float y2 = y + height;
+            float x1 = static_cast<float>(RenderUtils::getRenderPosX(tileX));
+            float y1 = static_cast<float>(RenderUtils::getRenderPosY(tileX, tileY));
+            float x2 = x1 + width;
+            float y2 = y1 + height;
             std::vector<GLfloat> thisVertexData = {
                 x1, y1,
                 x2, y1,
@@ -159,20 +158,6 @@ namespace Rival {
         // Clean up
         glBindTexture(GL_TEXTURE_2D, 0);
         glUseProgram(0);
-    }
-
-    int TileRenderer::getTileRenderPosX(int x) {
-        // Tiles co-ordinates are consistent in the x direction
-        return x * (Sprite::tileWidthPx / 2);
-    }
-
-    int TileRenderer::getTileRenderPosY(int x, int y) {
-        // Tiles co-ordinates zigzag up and down in the y direction
-        int renderPos = y * Sprite::tileHeightPx;
-        if (x % 2 == 1) {
-            renderPos += Sprite::tileHeightPx / 2;
-        }
-        return renderPos;
     }
 
 }
