@@ -2,6 +2,8 @@
 
 ## Improvements
 
+ - Sort code into subfolders
+
  - TileRenderer:
     - Simplify for-loop iteration with index
     - Duplication between UnitRenderer and TileRenderer
