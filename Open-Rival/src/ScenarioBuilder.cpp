@@ -2,6 +2,7 @@
 #include "ScenarioBuilder.h"
 
 #include <iterator>
+#include <stdexcept>
 
 namespace Rival {
 

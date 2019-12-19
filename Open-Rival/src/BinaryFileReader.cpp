@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "BinaryFileReader.h"
 
+#include <stdexcept>
+
 namespace Rival {
 
     BinaryFileReader::BinaryFileReader(const std::string filename) :
