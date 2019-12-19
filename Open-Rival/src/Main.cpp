@@ -3,6 +3,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <iostream>
+#include <stdexcept>
 
 #include "Rival.h"
 #include "ScenarioReader.h"
