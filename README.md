@@ -4,7 +4,7 @@
 
 ![Title](http://danjb.com/images/rival_realms/title.jpg)
 
-The original game can still be run on Windows 10, however there is a game-breaking bug where units no longer recover health when resting. Multiplayer games are also tricky to set-up and often unstable. A remake could fix these issues, add support for higher resolutions, and much more.
+With some difficulty, the [original game](https://www.old-games.com/download/5514/rival-realms) can still be run on Windows 10, however it is buggy and unstable. A remake could fix these issues, add support for higher resolutions, and [much more](https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md#future-enhancements).
 
 ## Projects
 
@@ -12,21 +12,25 @@ The original game can still be run on Windows 10, however there is a game-breaki
 
 > Rival Realms remake.
 
+### [setup](/setup)
+
+> Installer for Open-Rival.
+
 ### [audio-extractor](/audio-extractor)
 
-> Utility to extract the original game's audio.
+> Standalone utility to extract the original game's audio.
 
 ### [campaign-extractor](/campaign-extractor)
 
-> Utility to extract individual scenarios from campaign files.
+> Standalone utility to extract individual scenarios from campaign files.
 
 ### [image-extractor](/image-extractor)
 
-> Utility to extract the original game's images.
+> Standalone utility to extract the original game's images.
 
 ### [texture-builder](/texture-builder)
 
-> Utility to combine images into textures.
+> Standalone utility to combine images into textures.
 
 ## Legal Stuff
 
