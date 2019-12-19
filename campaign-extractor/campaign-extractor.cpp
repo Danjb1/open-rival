@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 
 uint32_t readInt(std::vector<unsigned char>& data, size_t offset) {

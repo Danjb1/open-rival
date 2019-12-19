@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Shaders.h"
 
+#include <stdexcept>
+
 #include "ShaderUtils.h"
 
 namespace Rival {
