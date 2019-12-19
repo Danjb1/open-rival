@@ -6,7 +6,7 @@ Many of these files need to be built and/or copied to this folder, and currently
 
 ## Steps
 
-1) Build the solution
+1) Build the solution in "Release" mode
 
 1) Copy **Open-Rival.exe** to `dist`
 
@@ -14,12 +14,14 @@ Many of these files need to be built and/or copied to this folder, and currently
 
 1) Copy **glew32.dll** and **SDL2.dll** to `dist`
 
-1) Copy `res/maps` and `res/shaders` to `dist/res`
+1) Copy `Open-Rival/res/maps` and `Open-Rival/res/shaders` to `dist/res`
 
-1) Copy `texture-builder/definitions` to `dist/setup`
+1) Copy `setup/definitions` to `dist/setup`
 
 1) Ensure the version is correct in `readme.txt`
 
+1) Ensure the `dist/docs/changelog.txt` is up to date.
+
 1) Tag the repo with the latest version
 
-1) Zip it up!
+1) Package it up as **open-rival_vX.X.X_x86.zip**

@@ -1,0 +1,10 @@
+================================================================================
+Changelog
+================================================================================
+
+v0.1.0 (Initial release)
+ - Loads and renders a sample level (terrain and units)
+ - image-extractor utility
+ - texture-builder utility
+ - campaign-extractor utility
+ - audio-extractor utility
