@@ -120,6 +120,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;$(IncludePath)</IncludePath>
