@@ -5,9 +5,15 @@
  * @author Danjb - Tweaks and formatting changes.
  */
 
+#include "pch.h"
+#include "image-extractor.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <windows.h>
+
+#include "setup-utils.h"
 
 // Largest image in "IMAGES.DAT" is 128 x 128
 const int IMAGE_WIDTH = 128;
@@ -63,11 +69,6 @@ uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT];
 // Team colours to use when rendering
 uint8_t team_color[6] = { 160, 161, 162, 163, 164, 165 };
 
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-
-#include <windows.h>
-
 /**
  * Makes a section of memory executable.
  */
@@ -75,16 +76,6 @@ BOOL make_executable(void* data, uint32_t size) {
     DWORD old;
     return VirtualProtect(data, size, PAGE_EXECUTE_READWRITE, &old);
 }
-
-/**
- * Attempts to create the given directory.
- */
-bool create_directory(const char* filename) {
-    return CreateDirectoryA(filename, NULL) ||
-        ERROR_ALREADY_EXISTS == GetLastError();
-}
-
-#endif ////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef _MSC_VER
@@ -107,11 +98,10 @@ void call_code(void* code) {
 /**
  * Reads a file to memory.
  */
-void* read_file(const char* filename, uint32_t* size) {
+void* read_file(std::wstring filename, uint32_t* size) {
 
-    FILE* fp = fopen(filename, "rb");
+    FILE* fp = _wfopen(filename.c_str(), L"rb");
     if (!fp) {
-        perror(filename);
         return NULL;
     }
 
@@ -299,61 +289,26 @@ uint8_t* find_end(uint8_t* start, uint8_t* end, int* read_from_esi) {
 }
 
 /**
- * Rounds a number up to the nearest power of 2.
- *
- * See:
- * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
- */
-int nextPowerOf2(int v) {
-
-    v--;
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    v++;
-
-    return v;
-}
-
-/**
  * Entry point for the application.
  */
-int main(int argc, char *argv[]) {
+void extractImages(std::wstring inputFile, std::string outputDir) {
 
     // Read the file
     uint32_t size;
-    uint8_t* data = (uint8_t*) read_file("IMAGES.DAT", &size);
+    uint8_t* data = (uint8_t*) read_file(inputFile, &size);
     if (!data) {
-        printf("Error reading IMAGES.DAT");
-        return 1;
+        throw std::runtime_error("Unable to open IMAGES.DAT\n");
     }
 
     // Make the code contained within "IMAGES.DAT" executable
     if (!make_executable(data, size)) {
-        printf("Error making memory executable");
         free(data);
-        return 2;
+        throw std::runtime_error("Failed to make memory executable\n");
     }
 
     int i = 0;
     uint8_t* start = data + HEADER_SIZE;
     uint8_t* end = data + size;
-
-    // Allow a specific image to be extracted
-    if (argc == 2) {
-        long image_address = strtol(argv[1], NULL, 16);
-        printf("%08X\n", image_address);
-        start = data + image_address;
-        end = start + 1;
-    }
-
-    // Create the "images" directory
-    if (!create_directory("images")) {
-        printf("Could not create \"images\" directory\n");
-        return 3;
-    }
 
     // Extract the images!
     for (uint8_t* code = start; code < end; ++i) {
@@ -395,11 +350,12 @@ int main(int argc, char *argv[]) {
         // Round image dimensions to nearest power of 2
         w = h = nextPowerOf2(w);
 
-        printf("images/img_%04d_%08X.tga: %dx%d\n", i, code - data, w, h);
-
         // Save the rendered image to disk
         char filename[32];
-        snprintf(filename, sizeof(filename), "images/img_%04d_%08X.tga", i, code - data);
+        snprintf(filename,
+                sizeof(filename),
+                "%s\\img_%04d_%08X.tga",
+                outputDir.c_str(), i, code - data);
         write_image(filename, w, h);
 
         // Jump to the next image
@@ -407,5 +363,4 @@ int main(int argc, char *argv[]) {
     }
 
     free(data);
-    return 0;
 }

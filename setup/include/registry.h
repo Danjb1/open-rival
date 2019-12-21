@@ -62,4 +62,4 @@ namespace Registry {
 
 }
 
-#endif //REGISTRY_H
+#endif // REGISTRY_H

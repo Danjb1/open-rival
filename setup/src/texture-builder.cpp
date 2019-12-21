@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "setup-utils.h"
+
 namespace fs = std::filesystem;
 
 const int MAX_TEXTURE_SIZE = 2048;
@@ -50,21 +52,6 @@ const uint32_t PALETTE[PALETTE_SIZE] = {
     0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
     0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffff00
 };
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-
-#include <windows.h>
-
-/**
- * Attempts to create the given directory.
- */
-bool create_directory(const char* filename) {
-    return CreateDirectoryA(filename, NULL) ||
-        ERROR_ALREADY_EXISTS == GetLastError();
-}
-
-#endif ////////////////////////////////////////////////////////////////////////
 
 class Image {
 
@@ -227,25 +214,6 @@ void copyImage(
     }
 }
 
-/**
- * Rounds a number up to the nearest power of 2.
- *
- * See:
- * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
- */
-int nextPowerOf2(int v) {
-
-    v--;
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    v++;
-
-    return v;
-}
-
 void createTexture(fs::path path) {
     std::ifstream file(path);
     std::string line;
@@ -339,7 +307,7 @@ void createTexture(fs::path path) {
     writeImage("./textures/" + path.filename().replace_extension(".tga").string(), texture);
 }
 
-int main() {
+int buildTextures() {
 
     // Create the "textures" directory
     if (!create_directory("textures")) {
@@ -360,4 +328,6 @@ int main() {
             std::cout << "Skipping file: " << path.filename() << "\n";
         }
     }
+
+    return 0;
 }
