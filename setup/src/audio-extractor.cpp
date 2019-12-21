@@ -1,43 +1,24 @@
 #include "pch.h"
+#include "audio-extractor.h"
 
 #include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-
-#include <windows.h>
-
-/**
- * Attempts to create the given directory.
- */
-bool create_directory(const char* filename) {
-    return CreateDirectoryA(filename, NULL) ||
-        ERROR_ALREADY_EXISTS == GetLastError();
-}
-
-#endif ////////////////////////////////////////////////////////////////////////
+#include <stdexcept>
+#include <string>
 
 /**
  * Reads "SOUNDS.dat" from the current directory,
  * and extracts the audio files therein to an "output" directory.
  */
-int main() {
+void extractAudio(std::wstring inputFile, std::string outputDir) {
 
     // Open the data file
-    std::ifstream input("SOUNDS.dat", std::ios::binary);
+    std::ifstream input(inputFile, std::ios::binary);
     if (!input.is_open()) {
-        std::cerr << "Unable to open file\n";
-        return -1;
-    }
-
-    // Create the "output" directory
-    if (!create_directory("output")) {
-        std::cerr << "Could not create \"output\" directory\n";
-        return -1;
+        throw std::runtime_error("Unable to open SOUNDS.dat\n");
     }
 
     // Find and extract all audio files
@@ -52,8 +33,6 @@ int main() {
             continue;
         }
 
-        std::cout << "Found RIFF header!\n";
-
         // Read file length
         uint32_t length;
         input.read(reinterpret_cast<char*>(&length), sizeof length);
@@ -64,9 +43,8 @@ int main() {
         // Determine the position of the start of this file
         std::streampos offset = input.tellg();
         if (offset == -1) {
-            std::cerr << "Failed to retrieve offset in file\n";
             input.close();
-            return 1;
+            throw std::runtime_error("Failed to retrieve offset in file\n");
         }
         offset -= 8;
 
@@ -97,12 +75,6 @@ int main() {
             }
         }
 
-        // We have found our Audio file!
-        std::cout << "File " << numFiles << "\n";
-        std::cout << "File offset is: " << offset << "\n";
-        std::cout << "File length is: " << length << "\n";
-        std::cout << "File extension is: " << ext << "\n" << std::flush;
-
         // Read the whole file
         input.seekg(offset);
         char* data = new char[length];
@@ -110,11 +82,18 @@ int main() {
 
         // Write the data to a new file
         std::ostringstream filename;
-        filename << "output/" << std::setw(3) << std::setfill('0') << numFiles << ext;
+        filename << outputDir
+                << "\\"
+                << std::setw(3)
+                << std::setfill('0')
+                << numFiles
+                << ext;
         std::ofstream output(filename.str(), std::ios::binary);
         if (!output.is_open()) {
-            std::cerr << "Failed to open file for writing\n";
-            return -1;
+            throw std::runtime_error(
+                    "Failed to open file for writing:\n"
+                    + filename.str()
+                    + "\n");
         }
         output.write(&data[0], length);
         output.close();
