@@ -10,7 +10,7 @@ Many of these files need to be built and/or copied to this folder, and currently
 
 1) Copy **Open-Rival.exe** to `dist`
 
-1) Copy the other executables to `dist/setup`
+1) Copy **setup.exe** to `dist`
 
 1) Copy **glew32.dll** and **SDL2.dll** to `dist`
 

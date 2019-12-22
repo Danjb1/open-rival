@@ -12,4 +12,6 @@ This program will attempt to:
 
 Build using Visual Studio.
 
-Requires a `res` directory to be created above this one.
+Requires a `res` directory to be present, as well as `setup/definitions`.
+
+If successful, creates `setup/images`, `res/sound, `res/textures` and `res/video`.
