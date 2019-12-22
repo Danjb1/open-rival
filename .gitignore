@@ -27,8 +27,10 @@ SORR.BLD
 /Open-Rival/res/sound
 /Open-Rival/res/textures
 /Open-Rival/res/video
-/res
-/setup/images
+/setup/res/sound
+/setup/res/textures
+/setup/res/video
+/setup/setup/images
 /texture-builder/images
 /texture-builder/textures
 

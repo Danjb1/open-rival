@@ -30,10 +30,6 @@
 
 ## Features
 
-### Installer
-
- - Script to extract all assets from game directory
-
 ### General
 
  - Set window icon
