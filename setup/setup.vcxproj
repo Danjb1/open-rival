@@ -161,6 +161,7 @@
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\registry.h" />
     <ClInclude Include="include\setup-utils.h" />
+    <ClInclude Include="include\texture-builder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\audio-extractor.cpp" />

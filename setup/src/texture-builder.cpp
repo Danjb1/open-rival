@@ -214,7 +214,11 @@ void copyImage(
     }
 }
 
-void createTexture(fs::path path) {
+void createTexture(
+        fs::path path,
+        std::string imageDir,
+        std::string outputDir) {
+
     std::ifstream file(path);
     std::string line;
 
@@ -229,7 +233,7 @@ void createTexture(fs::path path) {
     // Load all sprites from the definition file
     while (std::getline(file, line)) {
 
-        Image sprite = loadImage("images/" + line);
+        Image sprite = loadImage(imageDir + "\\" + line);
 
         // Set the sprite size based on the first sprite
         if (spriteWidth < 0) {
@@ -304,30 +308,20 @@ void createTexture(fs::path path) {
     }
 
     // Save the final texture
-    writeImage("./textures/" + path.filename().replace_extension(".tga").string(), texture);
+    writeImage(
+            outputDir + "\\" + path.filename().replace_extension(".tga").string(),
+            texture);
 }
 
-int buildTextures() {
-
-    // Create the "textures" directory
-    if (!create_directory("textures")) {
-        std::cout << "Could not create \"textures\" directory\n";
-        return 3;
-    }
+void buildTextures(
+        std::string definitionsDir,
+        std::string imageDir,
+        std::string outputDir) {
 
     std::vector<std::string> filenames;
 
-    const std::string path = "./definitions";
-    for (const fs::directory_entry& entry : fs::directory_iterator(path)) {
+    for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir)) {
         const fs::path path = entry.path();
-        try {
-            std::cout << "Processing: " << path.filename() << "\n";
-            createTexture(path);
-        } catch (const std::runtime_error& e) {
-            std::cout << e.what() << "\n";
-            std::cout << "Skipping file: " << path.filename() << "\n";
-        }
+        createTexture(path, imageDir, outputDir);
     }
-
-    return 0;
 }
