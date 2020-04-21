@@ -3,14 +3,14 @@
 
 namespace Rival {
 
-    Sprite::Sprite(const Texture& texture, const int width, const int height) :
+    Sprite::Sprite(const Texture& texture, int width, int height) :
         texture(texture),
         width(width),
         height(height),
         xSize(texture.getWidth() / width),
         ySize(texture.getHeight() / height) {}
 
-    const std::vector<GLfloat> Sprite::getTexCoords(const int index) const {
+    const std::vector<GLfloat> Sprite::getTexCoords(int index) const {
 
         const int x = index % xSize;
         const int y = index / xSize;

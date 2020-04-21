@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "Camera.h"
+#include "Framebuffer.h"
 #include "Scenario.h"
 #include "Sprite.h"
 #include "Texture.h"
@@ -36,21 +38,31 @@ namespace Rival {
 
         const char* windowTitle = "Rival Realms";
 
+        // Directories
         const std::string mapsDir = "res\\maps\\";
         const std::string txDir = "res\\textures\\";
 
+        // Textures
         const int numTextures = 94;
         const int txIndexUnits = 0;
         const int txIndexTiles = 50;
-
         std::unique_ptr<std::vector<Texture>> textures =
                 std::make_unique<std::vector<Texture>>();
+        std::unique_ptr<Texture> paletteTexture;
+
+        // Sprites
         std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites =
                 std::make_unique<std::map<Unit::Type, Sprite>>();
         std::unique_ptr<std::map<int, Sprite>> tileSprites =
                 std::make_unique<std::map<int, Sprite>>();
-        std::unique_ptr<Texture> paletteTexture;
+
+        // Camera
+        std::unique_ptr<Camera> camera;
+
+        // Scenario
         std::unique_ptr<Scenario> scenario;
+
+        // Renderers
         std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
 

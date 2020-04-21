@@ -7,10 +7,14 @@
 
 namespace Rival {
 
-    Texture::Texture(const GLuint id, const int width, const int height) :
+    Texture::Texture(const GLuint id, int width, int height) :
         id(id),
         width(width),
         height(height) {}
+
+    //Texture::~Texture() {
+    //    glDeleteTextures(1, &id);
+    //}
 
     const GLuint Texture::getId() const {
         return id;

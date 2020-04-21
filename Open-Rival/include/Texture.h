@@ -10,7 +10,9 @@ namespace Rival {
 
     public:
 
-        Texture(const GLuint id, const int width, const int height);
+        Texture(const GLuint id, int width, int height);
+
+        //~Texture();
 
         const GLuint getId() const;
 

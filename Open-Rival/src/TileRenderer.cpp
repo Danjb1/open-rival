@@ -50,11 +50,10 @@ namespace Rival {
         glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
 
         // Create buffers to hold all our tile data
-        int numTiles = mapWidth * mapHeight;
-        int numVertices = numTiles * verticesPerTile;
+        int numVertices = tiles.size() * verticesPerTile;
         int vertexDataSize = numVertices * Renderable::numVertexDimensions;
         int texCoordDataSize = numVertices * Renderable::numTexCoordDimensions;
-        int indexDataSize = numTiles * indicesPerTile;
+        int indexDataSize = tiles.size() * indicesPerTile;
         std::vector<GLfloat> vertexData;
         std::vector<GLfloat> texCoords;
         std::vector<GLuint> indexData;
@@ -63,10 +62,10 @@ namespace Rival {
         indexData.reserve(indexDataSize);
 
         // Add data to buffers
-        unsigned int i = 0;
-        for (Tile& tile : tiles) {
+        for (size_t i = 0; i < tiles.size(); i++) {
 
-            const int txIndex = tiles[i].txIndex;
+            auto const& tile = tiles[i];
+            const int txIndex = tile.txIndex;
             int tileX = i % mapWidth;
             int tileY = i / mapWidth;
 
@@ -117,8 +116,6 @@ namespace Rival {
                 indexData.end(),
                 thisIndexData.begin(),
                 thisIndexData.end());
-
-            i++;
         }
 
         // Bind vertex array
