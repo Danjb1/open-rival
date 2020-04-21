@@ -8,12 +8,12 @@
 
 namespace Rival {
 
-    Image::Image(const int width, const int height) :
+    Image::Image(int width, int height) :
         width(width),
         height(height),
         data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
 
-    Image::Image(const int width, const int height,
+    Image::Image(int width, int height,
             std::unique_ptr<std::vector<unsigned char>> data) :
         width(width),
         height(height),

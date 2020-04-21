@@ -1,19 +1,24 @@
 # To Do
 
+## WIP
+
+ - Render to our framebuffer, then render that to the screen
+
+ - Ensure rule of 5 is followed (Texture / Framebuffer)
+
 ## Improvements
 
  - Sort code into subfolders
 
  - TileRenderer:
-    - Simplify for-loop iteration with index
     - Duplication between UnitRenderer and TileRenderer
-    - Render to a texture instead of redrawing everything every frame
+    - Only render visible tiles
     - Add support for animated tiles
 
  - UnitRenderer:
     - Make vertex-related values into constants
     - Unit vertex positions need to account for unit offset within texture
-    - Simplify for-loop iteration with index
+    - Only render visible units
     - Delete Renderables when a Unit no longer exists
     - Add support for team colours
 

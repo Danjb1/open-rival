@@ -28,9 +28,9 @@ namespace Rival {
 
         const Texture& texture;
 
-        Sprite(const Texture&, const int width, const int height);
+        Sprite(const Texture&, int width, int height);
 
-        const std::vector<GLfloat> getTexCoords(const int index) const;
+        const std::vector<GLfloat> getTexCoords(int index) const;
 
     private:
 

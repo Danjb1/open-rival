@@ -20,9 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BinaryFileReader.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\ImageRenderable.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -45,8 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BinaryFileReader.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\ImageRenderable.h" />
+    <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Renderable.h" />

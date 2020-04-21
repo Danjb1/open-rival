@@ -83,7 +83,7 @@ namespace Rival {
 
         Unit(const Type type, int x, int y);
 
-        void addedToScene(const int newId);
+        void addedToScene(int newId);
 
         const Type getType() const;
 
