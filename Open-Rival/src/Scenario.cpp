@@ -3,7 +3,7 @@
 
 namespace Rival {
 
-    Scenario::Scenario(const int width, const int height, bool wilderness) :
+    Scenario::Scenario(int width, int height, bool wilderness) :
             width(width),
             height(height),
             wilderness(wilderness),
@@ -22,7 +22,7 @@ namespace Rival {
         return tiles;
     }
 
-    Tile Scenario::getTile(const int x, const int y) const {
+    Tile Scenario::getTile(int x, int y) const {
         return tiles[y * width + x];
     }
 

@@ -7,7 +7,7 @@
 
 namespace Rival {
 
-    Window::Window(const int width, const int height, const char* title) :
+    Window::Window(int width, int height, const char* title) :
         width(width), height(height), title(title) {
 
         windowRef = SDL_CreateWindow(title,

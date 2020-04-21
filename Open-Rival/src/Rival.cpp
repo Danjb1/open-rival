@@ -16,6 +16,9 @@
 
 namespace Rival {
 
+    static const double aspectRatio =
+            static_cast<double>(Rival::windowWidth) / Rival::windowHeight;
+
     void Rival::initialize() {
 
         // Initialize SDL
@@ -45,6 +48,16 @@ namespace Rival {
         ScenarioBuilder scenarioBuilder(scenarioData);
         scenario = scenarioBuilder.build();
 
+        // Create the Camera
+        const float cameraWidth = 20;
+        camera = std::make_unique<Camera>(
+                0.0f, 0.0f, cameraWidth, aspectRatio, *scenario.get());
+
+        // Create our framebuffer
+        Framebuffer::generate(
+                static_cast<int>(camera->getWidth()),
+                static_cast<int>(camera->getHeight()));
+
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
                 *unitSprites.get(),
@@ -52,12 +65,14 @@ namespace Rival {
 
         // Create the TileRenderer
         tileRenderer = std::make_unique<TileRenderer>(
-            *tileSprites.get(),
-            *paletteTexture.get());
+                *tileSprites.get(),
+                *paletteTexture.get());
     }
 
     void Rival::initSDL() const {
 
+        // This must be called before SDL_Init since we're not using SDL_main
+        // as an entry point
         SDL_SetMainReady();
 
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {

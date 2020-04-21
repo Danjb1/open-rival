@@ -11,7 +11,7 @@ namespace Rival {
 
     public:
 
-        Window(const int width, const int height, const char* title);
+        Window(int width, int height, const char* title);
 
         ~Window();
 

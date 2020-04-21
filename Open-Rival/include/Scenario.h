@@ -14,7 +14,7 @@ namespace Rival {
     public:
 
         // Creates a blank Scenario
-        Scenario(const int width, const int height, bool wilderness);
+        Scenario(int width, int height, bool wilderness);
 
         int getWidth() const;
 
@@ -22,7 +22,7 @@ namespace Rival {
 
         std::vector<Tile>& getTiles();
 
-        Tile getTile(const int x, const int y) const;
+        Tile getTile(int x, int y) const;
 
         bool isWilderness() const;
 
