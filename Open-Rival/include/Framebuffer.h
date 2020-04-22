@@ -11,8 +11,6 @@ namespace Rival {
 
         Framebuffer(const GLuint id, int width, int height);
 
-        //~Framebuffer();
-
         const GLuint id;
 
         const int width;

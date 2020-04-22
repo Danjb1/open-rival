@@ -4,34 +4,28 @@
 
  - Render to our framebuffer, then render that to the screen
 
- - Ensure rule of 5 is followed (Texture / Framebuffer)
-
-## Improvements
+## Tech Debt
 
  - Sort code into subfolders
 
  - TileRenderer:
     - Duplication between UnitRenderer and TileRenderer
     - Only render visible tiles
-    - Add support for animated tiles
 
  - UnitRenderer:
-    - Make vertex-related values into constants
     - Unit vertex positions need to account for unit offset within texture
     - Only render visible units
     - Delete Renderables when a Unit no longer exists
-    - Add support for team colours
+        - If a Unit is erased from memory, our renderable map will have a null key!
 
  - ScenarioReader:
     - Use BinaryFileReader
     - Improve error handling
-    - Finish parsing Goals
-    - Finish parsing Chests (contents)
-    - Include missing alphabet entries (e.g. '!{})
     - Analyse skipped sections; do they vary? Are they read?
 
- - ScenarioBuilder:
-    - Respect Gold tile variants
+ - Destroy Textures / Framebuffer on exit
+        glDeleteTextures(1, &id);
+        glDeleteFramebuffers(1, &id);
 
 ## Features
 
@@ -50,6 +44,13 @@
 
  - Extract menu / interface images
  - Extract fonts
+
+### Scenario Loading
+
+ - Finish parsing Goals
+ - Finish parsing Chests (contents)
+ - Include missing alphabet entries (e.g. '!{})
+ - Respect Gold tile variants
 
 ### Engine
 
@@ -110,11 +111,13 @@
     - Zooming
  - Shader used for mouse picking
  - Render Interface
- - Render Tiles ([zig-zag approach](/docs/MECHANICS.md))
+ - Add support for animated tiles
  - Render Buildings
  - Render Obstacles
  - Render Units
     - Different animations
+    - Add support for team colours
+ - Use depth buffer
  - Fog of war
  - High resolution support (!)
 

@@ -63,9 +63,14 @@ namespace Rival {
                 *unitSprites.get(),
                 *paletteTexture.get());
 
+        // Pick which tile Spritesheet to use based on the map type
+        const Spritesheet& tileSpritesheet = scenario->isWilderness()
+                ? tileSprites->at(1)
+                : tileSprites->at(0);
+
         // Create the TileRenderer
         tileRenderer = std::make_unique<TileRenderer>(
-                *tileSprites.get(),
+                tileSpritesheet,
                 *paletteTexture.get());
     }
 
@@ -259,8 +264,8 @@ namespace Rival {
             std::forward_as_tuple(type),
             std::forward_as_tuple(
                     textures->at(txIndex),
-                    Sprite::unitWidthPx,
-                    Sprite::unitHeightPx));
+                    Spritesheet::unitWidthPx,
+                    Spritesheet::unitHeightPx));
     }
 
     void Rival::initTileSprites() {
@@ -275,8 +280,8 @@ namespace Rival {
             std::forward_as_tuple(type),
             std::forward_as_tuple(
                 textures->at(txIndex),
-                Sprite::tileSpriteWidthPx,
-                Sprite::tileSpriteHeightPx));
+                Spritesheet::tileSpriteWidthPx,
+                Spritesheet::tileSpriteHeightPx));
     }
 
     void Rival::start() {
@@ -321,6 +326,9 @@ namespace Rival {
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Use shader
+        glUseProgram(textureShader.programId);
+
         // Determine view matrix
         // OpenGL uses right handed rule:
         //  - x points right
@@ -346,13 +354,18 @@ namespace Rival {
         // Combine matrices
         glm::mat4 viewProjMatrix = projection * view;
 
+        // Set uniform values
+        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
+                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniform1i(textureShader.texUnitUniformLocation, 0);
+        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
+
         // Render Tiles
         tileRenderer->render(
                 viewProjMatrix,
                 scenario->getTiles(),
                 scenario->getWidth(),
-                scenario->getHeight(),
-                scenario->isWilderness());
+                scenario->getHeight());
 
         // Render Units
         unitRenderer->render(viewProjMatrix, scenario->getUnits());

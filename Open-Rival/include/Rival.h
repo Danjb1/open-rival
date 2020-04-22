@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "Scenario.h"
-#include "Sprite.h"
+#include "Spritesheet.h"
 #include "Texture.h"
 #include "TileRenderer.h"
 #include "UnitRenderer.h"
@@ -51,10 +51,10 @@ namespace Rival {
         std::unique_ptr<Texture> paletteTexture;
 
         // Sprites
-        std::unique_ptr<std::map<Unit::Type, Sprite>> unitSprites =
-                std::make_unique<std::map<Unit::Type, Sprite>>();
-        std::unique_ptr<std::map<int, Sprite>> tileSprites =
-                std::make_unique<std::map<int, Sprite>>();
+        std::unique_ptr<std::map<Unit::Type, Spritesheet>> unitSprites =
+                std::make_unique<std::map<Unit::Type, Spritesheet>>();
+        std::unique_ptr<std::map<int, Spritesheet>> tileSprites =
+                std::make_unique<std::map<int, Spritesheet>>();
 
         // Camera
         std::unique_ptr<Camera> camera;

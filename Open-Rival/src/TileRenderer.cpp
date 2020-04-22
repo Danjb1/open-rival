@@ -10,56 +10,36 @@
 #include "RenderUtils.h"
 #include "Rival.h"
 #include "Shaders.h"
+#include "SpriteRenderable.h"
 
 namespace Rival {
 
-    const int verticesPerTile = 4;
-    const int indicesPerTile = 6; // 2 triangles
-
     TileRenderer::TileRenderer(
-            std::map<int, Sprite>& tileSprites,
-            Texture& paletteTexture) :
-        tileSprites(tileSprites),
-        paletteTexture(paletteTexture) {}
+            const Spritesheet& spritesheet,
+            const Texture& paletteTexture) :
+        paletteTexture(paletteTexture),
+        renderable{ spritesheet, maxTilesToRender } {}
 
     void TileRenderer::render(
             glm::mat4 viewProjMatrix,
             std::vector<Tile>& tiles,
             int mapWidth,
-            int mapHeight,
-            bool wilderness) {
-
-        // Pick which Sprite to use
-        const Sprite& sprite = wilderness
-            ? tileSprites.at(1)
-            : tileSprites.at(0);
-
-        // Use shader
-        glUseProgram(textureShader.programId);
+            int mapHeight) {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-        glBindTexture(GL_TEXTURE_2D, sprite.texture.getId());
+        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
         glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
-        // Set uniform values
-        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
-            1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(textureShader.texUnitUniformLocation, 0);
-        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
-
         // Create buffers to hold all our tile data
-        int numVertices = tiles.size() * verticesPerTile;
-        int vertexDataSize = numVertices * Renderable::numVertexDimensions;
-        int texCoordDataSize = numVertices * Renderable::numTexCoordDimensions;
-        int indexDataSize = tiles.size() * indicesPerTile;
-        std::vector<GLfloat> vertexData;
+        int numVertices = tiles.size() * SpriteRenderable::numVerticesPerSprite;
+        int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
+        int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
+        std::vector<GLfloat> positions;
         std::vector<GLfloat> texCoords;
-        std::vector<GLuint> indexData;
-        vertexData.reserve(vertexDataSize);
+        positions.reserve(positionDataSize);
         texCoords.reserve(texCoordDataSize);
-        indexData.reserve(indexDataSize);
 
         // Add data to buffers
         for (size_t i = 0; i < tiles.size(); i++) {
@@ -74,8 +54,8 @@ namespace Rival {
             //    | \    |
             //    |   \..|
             //    3----- 2
-            float width = static_cast<float>(Sprite::tileSpriteWidthPx);
-            float height = static_cast<float>(Sprite::tileSpriteHeightPx);
+            float width = static_cast<float>(Spritesheet::tileSpriteWidthPx);
+            float height = static_cast<float>(Spritesheet::tileSpriteHeightPx);
             float x1 = static_cast<float>(RenderUtils::getRenderPosX(tileX));
             float y1 = static_cast<float>(RenderUtils::getRenderPosY(tileX, tileY));
             float x2 = x1 + width;
@@ -88,73 +68,53 @@ namespace Rival {
             };
 
             // Determine texture co-ordinates
-            std::vector<GLfloat> thisTexCoords = sprite.getTexCoords(txIndex);
-
-            // Determine index data
-            // First triangle: 0-1-2
-            // Second triangle: 2-3-0
-            unsigned int startIndex = verticesPerTile * i;
-            std::vector<GLuint> thisIndexData = {
-                startIndex,
-                startIndex + 1,
-                startIndex + 2,
-                startIndex + 2,
-                startIndex + 3,
-                startIndex
-            };
+            std::vector<GLfloat> thisTexCoords =
+                    renderable.spritesheet.getTexCoords(txIndex);
 
             // Copy this tile's data to the main buffers
-            vertexData.insert(
-                vertexData.end(),
-                thisVertexData.begin(),
-                thisVertexData.end());
+            positions.insert(
+                    positions.end(),
+                    thisVertexData.begin(),
+                    thisVertexData.end());
             texCoords.insert(
-                texCoords.end(),
-                thisTexCoords.begin(),
-                thisTexCoords.end());
-            indexData.insert(
-                indexData.end(),
-                thisIndexData.begin(),
-                thisIndexData.end());
+                    texCoords.end(),
+                    thisTexCoords.begin(),
+                    thisTexCoords.end());
         }
 
         // Bind vertex array
         glBindVertexArray(renderable.getVao());
 
-        // Send position data
+        // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            vertexDataSize * sizeof(GLfloat),
-            vertexData.data(),
-            GL_DYNAMIC_DRAW);
+        int positionBufferSize = tiles.size()
+                * SpriteRenderable::numVertexDimensions
+                * renderable.getIndicesPerSprite()
+                * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                positionBufferSize,
+                positions.data());
 
-        // Send tex co-ord data
+        // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            texCoordDataSize * sizeof(GLfloat),
-            texCoords.data(),
-            GL_DYNAMIC_DRAW);
-
-        // Send index data
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderable.getIbo());
-        glBufferData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            indexDataSize * sizeof(GLuint),
-            indexData.data(),
-            GL_STATIC_DRAW);
+        int texCoordBufferSize = tiles.size()
+                * SpriteRenderable::numTexCoordDimensions
+                * renderable.getIndicesPerSprite()
+                * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                texCoordBufferSize,
+                texCoords.data());
 
         // Render
         glDrawElements(
-            GL_TRIANGLES,
-            indexDataSize,
-            GL_UNSIGNED_INT,
-            nullptr);
-
-        // Clean up
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glUseProgram(0);
+                renderable.getDrawMode(),
+                tiles.size() * renderable.getIndicesPerSprite(),
+                GL_UNSIGNED_INT,
+                nullptr);
     }
 
 }

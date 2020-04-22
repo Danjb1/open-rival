@@ -5,7 +5,8 @@
 #include <map>
 #include <string>
 
-#include "Renderable.h"
+#include "Spritesheet.h"
+#include "SpriteRenderable.h"
 #include "Tile.h"
 #include "Unit.h"
 
@@ -20,28 +21,24 @@ namespace Rival {
 
     public:
 
+        // This is the max map size in the original game
+        static const int maxTilesToRender = 210 * 134;
+
         TileRenderer(
-                std::map<int, Sprite>& tileSprites,
-                Texture& paletteTexture);
+                const Spritesheet& spritesheet,
+                const Texture& paletteTexture);
 
         void render(
                 glm::mat4 viewProjMatrix,
                 std::vector<Tile>& tiles,
                 int mapWidth,
-                int mapHeight,
-                bool wilderness);
+                int mapHeight);
 
     private:
 
-        Renderable renderable;
-
-        const std::map<int, Sprite>& tileSprites;
+        SpriteRenderable renderable;
 
         const Texture& paletteTexture;
-
-        int getTileRenderPosX(int x);
-
-        int getTileRenderPosY(int x, int y);
 
     };
 
