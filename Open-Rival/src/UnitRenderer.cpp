@@ -11,23 +11,22 @@
 namespace Rival {
 
     UnitRenderer::UnitRenderer(
-            std::map<Unit::Type, Sprite>& unitSprites,
+            std::map<Unit::Type, Spritesheet>& unitSprites,
             Texture& paletteTexture) :
         unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
-    ImageRenderable& UnitRenderer::getOrCreateRenderable(
-                const std::unique_ptr<Unit>& unit) {
+        SpriteRenderable& UnitRenderer::getOrCreateRenderable(Unit& unit) {
 
-        int id = unit->getId();
+        int id = unit.getId();
 
         if (renderables.find(id) == renderables.end()) {
             // No Renderable exists for this Unit; create one
-            const Unit::Type type = unit->getType();
-            const Sprite& sprite = unitSprites.at(type);
+            const Unit::Type type = unit.getType();
+            const Spritesheet& sprite = unitSprites.at(type);
             renderables.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id),
-                    std::forward_as_tuple(sprite));
+                    std::forward_as_tuple(sprite, 1));
         }
 
         return renderables.at(id);
@@ -36,9 +35,6 @@ namespace Rival {
     void UnitRenderer::render(
             glm::mat4 viewProjMatrix,
             std::map<int, std::unique_ptr<Unit>>& units) {
-
-        // Use shader
-        glUseProgram(textureShader.programId);
 
         // Set uniform values
         glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
@@ -55,67 +51,81 @@ namespace Rival {
                 continue;
             }
 
-            // Get (or create) the Renderable for this Unit
-            ImageRenderable& renderable = getOrCreateRenderable(unit);
+            renderUnit(*unit.get());
+        }
+    }
 
-            // Set the txIndex as appropriate
-            renderable.setTxIndex(unit->getFacing());
+    void UnitRenderer::renderUnit(Unit& unit) {
 
-            // Define vertex positions
-            float width = static_cast<float>(Sprite::unitWidthPx);
-            float height = static_cast<float>(Sprite::unitHeightPx);
-            float x1 = static_cast<float>(
-                    RenderUtils::getRenderPosX(unit->getX()));
-            float y1 = static_cast<float>(
-                    RenderUtils::getRenderPosY(unit->getX(), unit->getY()));
-            float x2 = x1 + width;
-            float y2 = y1 + height;
-            std::vector<GLfloat> vertexData = {
-                x1, y1,
-                x2, y1,
-                x2, y2,
-                x1, y2
-            };
+        // Get (or create) the Renderable for this Unit
+        SpriteRenderable& renderable = getOrCreateRenderable(unit);
 
-            // Determine texture co-ordinates
-            std::vector<GLfloat> texCoords = renderable.getTexCoords();
+        // Determine the frame of the texture to be rendered
+        int txIndex = getTxIndex(unit);
 
-            // Use textures
-            glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-            glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-            glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
-            glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+        // Define vertex positions
+        float width = static_cast<float>(Spritesheet::unitWidthPx);
+        float height = static_cast<float>(Spritesheet::unitHeightPx);
+        float x1 = static_cast<float>(
+            RenderUtils::getRenderPosX(unit.getX()));
+        float y1 = static_cast<float>(
+            RenderUtils::getRenderPosY(unit.getX(), unit.getY()));
+        float x2 = x1 + width;
+        float y2 = y1 + height;
+        std::vector<GLfloat> vertexData = {
+            x1, y1,
+            x2, y1,
+            x2, y2,
+            x1, y2
+        };
 
-            // Bind vertex array
-            glBindVertexArray(renderable.getVao());
+        // Determine texture co-ordinates
+        std::vector<GLfloat> texCoords =
+                renderable.spritesheet.getTexCoords(txIndex);
 
-            // Use position data
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-            glBufferData(
+        // Use textures
+        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
+        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+        // Bind vertex array
+        glBindVertexArray(renderable.getVao());
+
+        // Upload position data
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
+        int positionBufferSize =
+                SpriteRenderable::numVertexDimensions
+                * renderable.getIndicesPerSprite()
+                * sizeof(GLfloat);
+        glBufferSubData(
                 GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                vertexData.data(),
-                GL_DYNAMIC_DRAW);
+                0,
+                positionBufferSize,
+                vertexData.data());
 
-            // Use tex co-ord data
-            glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-            glBufferData(
+        // Upload tex co-ord data
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
+        int texCoordBufferSize =
+                SpriteRenderable::numTexCoordDimensions
+                * renderable.getIndicesPerSprite()
+                * sizeof(GLfloat);
+        glBufferSubData(
                 GL_ARRAY_BUFFER,
-                2 * 4 * sizeof(GLfloat),
-                texCoords.data(),
-                GL_DYNAMIC_DRAW);
+                0,
+                texCoordBufferSize,
+                texCoords.data());
 
-            // Render
-            glDrawElements(
-                GL_TRIANGLE_FAN,
-                4,
+        // Render
+        glDrawElements(
+                renderable.getDrawMode(),
+                renderable.getIndicesPerSprite(),
                 GL_UNSIGNED_INT,
                 nullptr);
-        }
+    }
 
-        // Clean up
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glUseProgram(0);
+    int UnitRenderer::getTxIndex(Unit& unit) const {
+        return unit.getFacing();
     }
 
 }

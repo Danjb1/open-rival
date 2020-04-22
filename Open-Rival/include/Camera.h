@@ -9,10 +9,13 @@ namespace Rival {
 
     private:
 
+        // The centre point of the camera
         float x;
         float y;
+
         float width;
         float height;
+
         Scenario& scenario;
 
     public:

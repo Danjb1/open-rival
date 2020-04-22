@@ -1,7 +1,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "Sprite.h"
+#include "Spritesheet.h"
 
 namespace Rival {
 

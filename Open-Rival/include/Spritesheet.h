@@ -1,5 +1,5 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef SPRITESHEET_H
+#define SPRITESHEET_H
 
 #include <gl/glew.h>
 #include <iostream>
@@ -10,9 +10,10 @@
 namespace Rival {
 
     /**
-     * Class that defines how a texture should be divided into smaller images.
+     * Wrapper around a texture that defines how it divides into individual
+     * images.
      */
-    class Sprite {
+    class Spritesheet {
 
     public:
 
@@ -28,7 +29,7 @@ namespace Rival {
 
         const Texture& texture;
 
-        Sprite(const Texture&, int width, int height);
+        Spritesheet(const Texture&, int width, int height);
 
         const std::vector<GLfloat> getTexCoords(int index) const;
 
@@ -50,4 +51,4 @@ namespace Rival {
 
 }
 
-#endif // SPRITE_H
+#endif // SPRITESHEET_H
