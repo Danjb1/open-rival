@@ -5,7 +5,8 @@
 #include <map>
 #include <string>
 
-#include "ImageRenderable.h"
+#include "Spritesheet.h"
+#include "SpriteRenderable.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -21,7 +22,7 @@ namespace Rival {
     public:
 
         UnitRenderer(
-                std::map<Unit::Type, Sprite>& unitSprites,
+                std::map<Unit::Type, Spritesheet>& unitSprites,
                 Texture& paletteTexture);
 
         void render(
@@ -30,14 +31,17 @@ namespace Rival {
 
     private:
 
-        const std::map<Unit::Type, Sprite>& unitSprites;
+        const std::map<Unit::Type, Spritesheet>& unitSprites;
 
         const Texture& paletteTexture;
 
-        std::map<int, ImageRenderable> renderables;
+        std::map<int, SpriteRenderable> renderables;
 
-        ImageRenderable& getOrCreateRenderable(
-                const std::unique_ptr<Unit>& unit);
+        SpriteRenderable& getOrCreateRenderable(Unit& unit);
+
+        void renderUnit(Unit& unit);
+
+        int getTxIndex(Unit& unit) const;
 
     };
 

@@ -10,10 +10,6 @@ namespace Rival {
         width(width),
         height(height) {}
 
-    //Framebuffer::~Framebuffer() {
-    //    glDeleteFramebuffers(1, &id);
-    //}
-
     const Framebuffer Framebuffer::generate(int width, int height) {
 
         GLuint id = 0;
@@ -26,7 +22,7 @@ namespace Rival {
         glBindTexture(GL_TEXTURE_2D, renderedTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
                 width, height,
-                0, GL_RED, GL_UNSIGNED_BYTE, 0);
+                0, GL_RED, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -36,7 +32,7 @@ namespace Rival {
 
         // Set the list of draw buffers
         GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-        glDrawBuffers(1, drawBuffers); // "1" is the size of DrawBuffers
+        glDrawBuffers(1, drawBuffers);
 
         // Revert the state back to normal
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

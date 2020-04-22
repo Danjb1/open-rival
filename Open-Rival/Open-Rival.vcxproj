@@ -23,14 +23,12 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\Image.cpp" />
-    <ClCompile Include="src\ImageRenderable.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Rival.cpp" />
     <ClCompile Include="src\Scenario.cpp" />
@@ -38,7 +36,8 @@
     <ClCompile Include="src\ScenarioReader.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
-    <ClCompile Include="src\Sprite.cpp" />
+    <ClCompile Include="src\Spritesheet.cpp" />
+    <ClCompile Include="src\SpriteRenderable.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
@@ -51,11 +50,9 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\Image.h" />
-    <ClInclude Include="include\ImageRenderable.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
-    <ClInclude Include="include\Renderable.h" />
     <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Scenario.h" />
@@ -64,7 +61,8 @@
     <ClInclude Include="include\ScenarioReader.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
-    <ClInclude Include="include\Sprite.h" />
+    <ClInclude Include="include\Spritesheet.h" />
+    <ClInclude Include="include\SpriteRenderable.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\TileRenderer.h" />
