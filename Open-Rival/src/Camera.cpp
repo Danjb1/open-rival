@@ -12,7 +12,7 @@ namespace Rival {
             double aspectRatio,
             Scenario& scenario) :
         width(width),
-        height(static_cast<float>(aspectRatio / width)),
+        height(static_cast<float>(width / aspectRatio)),
         scenario(scenario) {
 
         setPos(x, y);
@@ -42,6 +42,22 @@ namespace Rival {
 
     float Camera::getHeight() const {
         return height;
+    }
+
+    float Camera::getLeft() const {
+        return x - width / 2;
+    }
+
+    float Camera::getTop() const {
+        return y - height / 2;
+    }
+
+    float Camera::getRight() const {
+        return x + width / 2;
+    }
+
+    float Camera::getBottom() const {
+        return y + height / 2;
     }
 
 }

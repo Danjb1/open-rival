@@ -33,14 +33,8 @@ namespace Rival {
     }
 
     void UnitRenderer::render(
-            glm::mat4 viewProjMatrix,
+            Camera& camera,
             std::map<int, std::unique_ptr<Unit>>& units) {
-
-        // Set uniform values
-        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
-            1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(textureShader.texUnitUniformLocation, 0);
-        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
 
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;

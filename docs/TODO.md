@@ -4,6 +4,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Use the camera to produce the view matrix
+
+ - Only render visible Units
+
  - Render to our framebuffer, then render that to the screen
 
 <!----------------------------------------------------------------------------->
@@ -12,11 +16,9 @@
 
  - TileRenderer:
     - Duplication between UnitRenderer and TileRenderer
-    - Only render visible tiles
 
  - UnitRenderer:
     - Unit vertex positions need to account for unit offset within texture
-    - Only render visible units
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
 
