@@ -4,9 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Change projection matrix to use camera bounds
-
- - Don't position tiles based on pixels; use world units
+ - As the camera pans right / down, the visible game area shrinks
 
  - Only render visible Units
 

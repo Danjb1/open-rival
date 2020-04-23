@@ -17,16 +17,6 @@ namespace Rival {
 
     public:
 
-        // Size of a single Tile image, in pixels
-        static const int tileSpriteWidthPx = 64;
-        static const int tileSpriteHeightPx = 64;
-        static const int tileWidthPx = 64;
-        static const int tileHeightPx = 32;
-
-        // Size of a single Unit image, in pixels
-        static const int unitWidthPx = 128;
-        static const int unitHeightPx = 128;
-
         const Texture& texture;
 
         Spritesheet(const Texture&, int width, int height);

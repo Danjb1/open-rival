@@ -8,14 +8,14 @@ namespace Rival {
 
         int getRenderPosX(int x) {
             // Tile co-ordinates are consistent in the x direction
-            return x * (Spritesheet::tileWidthPx / 2);
+            return x * (tileSpriteWidthPx / 2);
         }
 
         int getRenderPosY(int x, int y) {
             // Tile co-ordinates zigzag up and down in the y direction
-            int renderPos = y * Spritesheet::tileHeightPx;
+            int renderPos = (y * tileSpriteHeightPx / 2);
             if (x % 2 == 1) {
-                renderPos += Spritesheet::tileHeightPx / 2;
+                renderPos += (tileSpriteHeightPx / 4);
             }
             return renderPos;
         }
