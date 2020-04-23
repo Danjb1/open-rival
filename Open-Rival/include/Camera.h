@@ -9,10 +9,11 @@ namespace Rival {
 
     private:
 
-        // The centre point of the camera
+        // The point at the centre of the camera, in world units
         float x;
         float y;
 
+        // The size of the visible region, in world units
         float width;
         float height;
 
