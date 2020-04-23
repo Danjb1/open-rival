@@ -21,7 +21,7 @@ namespace Rival {
         renderable{ spritesheet, maxTilesToRender } {}
 
     void TileRenderer::render(
-            glm::mat4 viewProjMatrix,
+            Camera& camera,
             std::vector<Tile>& tiles,
             int mapWidth,
             int mapHeight) {
