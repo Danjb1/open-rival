@@ -48,6 +48,8 @@ namespace Rival {
 
         float getBottom() const;
 
+        bool contains(float px, float py) const;
+
     };
 
 }

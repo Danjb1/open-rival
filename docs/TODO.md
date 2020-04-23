@@ -4,9 +4,9 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Only render visible Units
-
  - Render to our framebuffer, then render that to the screen
+
+ - Unit vertex positions need to account for unit offset within texture
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt
@@ -16,7 +16,6 @@
     - Duplication between UnitRenderer and TileRenderer
 
  - UnitRenderer:
-    - Unit vertex positions need to account for unit offset within texture
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
 

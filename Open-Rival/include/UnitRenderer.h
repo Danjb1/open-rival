@@ -42,6 +42,8 @@ namespace Rival {
 
         void renderUnit(Unit& unit);
 
+        bool isUnitVisible(Unit& unit, Camera& camera);
+
         int getTxIndex(Unit& unit) const;
 
     };
