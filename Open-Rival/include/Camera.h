@@ -30,6 +30,8 @@ namespace Rival {
 
         void setPos(float x, float y);
 
+        void translate(float dx, float dy);
+
         float getX() const;
 
         float getY() const;

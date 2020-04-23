@@ -4,7 +4,9 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Use the camera to produce the view matrix
+ - Change projection matrix to use camera bounds
+
+ - Don't position tiles based on pixels; use world units
 
  - Only render visible Units
 

@@ -335,9 +335,9 @@ namespace Rival {
         //  - y points up
         //  - z points out of the screen
         glm::mat4 view = glm::lookAt(
-            glm::vec3(0, 0, 1),     // camera position
-            glm::vec3(0, 0, 0),     // look at
-            glm::vec3(0, 1, 0)      // up vector
+            glm::vec3(camera->getX(), camera->getY(), 1),     // camera position
+            glm::vec3(camera->getX(), camera->getY(), 0),     // look at
+            glm::vec3(0, 1, 0)                                // up vector
         );
 
         // Determine projection matrix
@@ -390,19 +390,19 @@ namespace Rival {
     void Rival::keyDown(const SDL_Keycode keyCode) const {
         switch (keyCode) {
         case SDLK_UP:
-            std::cout << "UP\n";
+            camera->translate(0.0f, -1.0f);
             break;
 
         case SDLK_DOWN:
-            std::cout << "DOWN\n";
+            camera->translate(0.0f, 1.0f);
             break;
 
         case SDLK_LEFT:
-            std::cout << "LEFT\n";
+            camera->translate(-1.0f, 0.0f);
             break;
 
         case SDLK_RIGHT:
-            std::cout << "RIGHT\n";
+            camera->translate(1.0f, 0.0f);
             break;
 
         default:
