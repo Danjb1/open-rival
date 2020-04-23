@@ -4,8 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - As the camera pans right / down, the visible game area shrinks
-
  - Only render visible Units
 
  - Render to our framebuffer, then render that to the screen
@@ -113,10 +111,10 @@
 
 ### Rendering
 
- - Camera class
-    - Zooming
+ - Zooming
  - Shader used for mouse picking
  - Render Interface
+ - Render map border
  - Add support for animated tiles
  - Render Buildings
  - Render Obstacles

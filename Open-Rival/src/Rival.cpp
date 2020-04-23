@@ -49,15 +49,13 @@ namespace Rival {
         ScenarioBuilder scenarioBuilder(scenarioData);
         scenario = scenarioBuilder.build();
 
+        // Create our framebuffer
+        Framebuffer::generate(windowWidth, windowHeight);
+
         // Create the Camera
-        const float cameraWidth = 20;
+        const float cameraWidth = RenderUtils::pxToCamera_X(windowWidth);
         camera = std::make_unique<Camera>(
                 0.0f, 0.0f, cameraWidth, aspectRatio, *scenario.get());
-
-        // Create our framebuffer
-        Framebuffer::generate(
-                static_cast<int>(camera->getWidth()),
-                static_cast<int>(camera->getHeight()));
 
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
@@ -347,15 +345,11 @@ namespace Rival {
         // co-ordinates to pixels, too.
         float screenWidth = static_cast<float>(Rival::windowWidth);
         float screenHeight = static_cast<float>(Rival::windowHeight);
-        float left = camera->getLeft() * RenderUtils::tileSpriteWidthPx;
-        float top = camera->getTop() * RenderUtils::tileSpriteHeightPx;
+        float left = RenderUtils::cameraToPx_X(camera->getLeft());
+        float top = RenderUtils::cameraToPx_Y(camera->getTop());
         float right = left + screenWidth;
         float bottom = top + screenHeight;
-        glm::mat4 projection = glm::ortho(
-            left,
-            right,
-            bottom,
-            top);
+        glm::mat4 projection = glm::ortho(left, right, bottom, top);
 
         // Combine matrices
         glm::mat4 viewProjMatrix = projection * view;

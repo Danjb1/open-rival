@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <map>
 
+#include "MathUtils.h"
 #include "Palette.h"
 #include "RenderUtils.h"
 #include "Rival.h"
@@ -26,13 +27,37 @@ namespace Rival {
             int mapWidth,
             int mapHeight) {
 
-        // Find the first visible tiles
-        int minX = static_cast<int>(camera.getLeft());
-        int minY = static_cast<int>(camera.getTop());
+        // Find the first visible tiles.
+        // We subtract 1 because tiles whose co-ordinates lie just outside the
+        // camera bounds may be partially visible.
+        int minX = static_cast<int>(camera.getLeft()) - 1;
+        int minY = static_cast<int>(camera.getTop()) - 1;
+
+        // Keep within bounds
+        if (minX < 0) {
+            minX = 0;
+        }
+        if (minY < 0) {
+            minY = 0;
+        }
+
+        // Determine the number of tiles to draw.
+        // We add 2 to account for tiles being partially visible either side of
+        // the camera bounds.
+        int numTilesX = static_cast<int>(ceil(camera.getWidth())) + 2;
+        int numTilesY = static_cast<int>(ceil(camera.getHeight())) + 2;
 
         // Find the last visible tiles
-        int maxX = minX + static_cast<int>(camera.getWidth());
-        int maxY = minY + static_cast<int>(camera.getHeight());
+        int maxX = minX + numTilesX;
+        int maxY = minY + numTilesY;
+
+        // Keep within bounds
+        if (maxX > mapWidth) {
+            maxX = mapWidth;
+        }
+        if (maxY > mapHeight) {
+            maxY = mapHeight;
+        }
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
@@ -63,8 +88,8 @@ namespace Rival {
                 //    3----- 2
                 float width = static_cast<float>(RenderUtils::tileSpriteWidthPx);
                 float height = static_cast<float>(RenderUtils::tileSpriteHeightPx);
-                float x1 = static_cast<float>(RenderUtils::getRenderPosX(tileX));
-                float y1 = static_cast<float>(RenderUtils::getRenderPosY(tileX, tileY));
+                float x1 = static_cast<float>(RenderUtils::tileToPx_X(tileX));
+                float y1 = static_cast<float>(RenderUtils::tileToPx_Y(tileX, tileY));
                 float x2 = x1 + width;
                 float y2 = y1 + height;
                 std::vector<GLfloat> thisVertexData = {
