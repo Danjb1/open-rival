@@ -38,6 +38,14 @@ namespace Rival {
 
         float getHeight() const;
 
+        float getLeft() const;
+
+        float getTop() const;
+
+        float getRight() const;
+
+        float getBottom() const;
+
     };
 
 }

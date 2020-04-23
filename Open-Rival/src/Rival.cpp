@@ -368,7 +368,7 @@ namespace Rival {
                 scenario->getHeight());
 
         // Render Units
-        unitRenderer->render(viewProjMatrix, scenario->getUnits());
+        unitRenderer->render(*camera.get(), scenario->getUnits());
     }
 
     void Rival::exit() {
