@@ -28,8 +28,8 @@ namespace Rival {
             int mapHeight) {
 
         // Find the first visible tiles.
-        // We subtract 1 because tiles whose co-ordinates lie just outside the
-        // camera bounds may be partially visible.
+        // We subtract 1 because we need to start drawing offscreen, to account
+        // for tiles that are partially visible to the camera.
         int minX = static_cast<int>(camera.getLeft()) - 1;
         int minY = static_cast<int>(camera.getTop()) - 1;
 
@@ -42,10 +42,10 @@ namespace Rival {
         }
 
         // Determine the number of tiles to draw.
-        // We add 2 to account for tiles being partially visible either side of
-        // the camera bounds.
-        int numTilesX = static_cast<int>(ceil(camera.getWidth())) + 2;
-        int numTilesY = static_cast<int>(ceil(camera.getHeight())) + 2;
+        // We add 3 to account for partially visible tiles either side of the
+        // screen, and because we started drawing offscreen.
+        int numTilesX = static_cast<int>(ceil(camera.getWidth())) + 3;
+        int numTilesY = static_cast<int>(ceil(camera.getHeight())) + 3;
 
         // Find the last visible tiles
         int maxX = minX + numTilesX;
