@@ -37,16 +37,30 @@ namespace Rival {
             std::map<int, std::unique_ptr<Unit>>& units) {
 
         for (auto const& kv : units) {
-            const std::unique_ptr<Unit>& unit = kv.second;
+            Unit& unit = *(kv.second).get();
 
             // If Unit is deleted, remove the associated Renderable
-            if (unit->isDeleted()) {
-                renderables.erase(unit->getId());
+            if (unit.isDeleted()) {
+                renderables.erase(unit.getId());
                 continue;
             }
 
-            renderUnit(*unit.get());
+            if (isUnitVisible(unit, camera)) {
+                renderUnit(unit);
+            }
         }
+    }
+
+    bool UnitRenderer::isUnitVisible(Unit& unit, Camera& camera) {
+        // Check if any corner of the unit is visible
+        float x1 = static_cast<float>(unit.getX());
+        float y1 = static_cast<float>(unit.getY());
+        float x2 = static_cast<float>(unit.getX() + Unit::width);
+        float y2 = static_cast<float>(unit.getY() + Unit::height);
+        return camera.contains(x1, y1)
+                || camera.contains(x2, y1)
+                || camera.contains(x2, y2)
+                || camera.contains(x1, y2);
     }
 
     void UnitRenderer::renderUnit(Unit& unit) {

@@ -68,4 +68,11 @@ namespace Rival {
         return y + height / 2;
     }
 
+    bool Camera::contains(float px, float py) const {
+        return px > getLeft()
+                && px < getRight()
+                && py > getTop()
+                && py < getBottom();
+    }
+
 }

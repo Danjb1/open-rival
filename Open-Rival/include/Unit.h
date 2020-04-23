@@ -81,6 +81,10 @@ namespace Rival {
             SouthEast
         };
 
+        // Size of a Unit, in world units
+        static const int width = 1;
+        static const int height = 1;
+
         Unit(const Type type, int x, int y);
 
         void addedToScene(int newId);
