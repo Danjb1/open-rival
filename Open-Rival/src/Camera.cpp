@@ -28,6 +28,10 @@ namespace Rival {
         this->y = y;
     }
 
+    void Camera::translate(float dx, float dy) {
+        setPos(x + dx, y + dy);
+    }
+
     float Camera::getX() const {
         return x;
     }
