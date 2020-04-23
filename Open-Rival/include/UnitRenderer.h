@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 
+#include "Camera.h"
 #include "Spritesheet.h"
 #include "SpriteRenderable.h"
 #include "Unit.h"
@@ -26,7 +27,7 @@ namespace Rival {
                 Texture& paletteTexture);
 
         void render(
-                glm::mat4 viewProjMatrix,
+                Camera& camera,
                 std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
