@@ -58,8 +58,8 @@ namespace Rival {
         int txIndex = getTxIndex(unit);
 
         // Define vertex positions
-        float width = static_cast<float>(Spritesheet::unitWidthPx);
-        float height = static_cast<float>(Spritesheet::unitHeightPx);
+        float width = static_cast<float>(RenderUtils::unitWidthPx);
+        float height = static_cast<float>(RenderUtils::unitHeightPx);
         float x1 = static_cast<float>(
             RenderUtils::getRenderPosX(unit.getX()));
         float y1 = static_cast<float>(
