@@ -26,7 +26,7 @@ namespace Rival {
          * to their strange isometric positioning, so we convert our vertices
          * to pixels manually instead.
          */
-        int getRenderPosX(int x);
+        int tileToPx_X(int x);
 
         /**
          * Gets the y-position at which a tile with the given x and y
@@ -35,9 +35,17 @@ namespace Rival {
          * We have to consider both axes here because the y-position is
          * actually dependent on the x-position.
          *
-         * See documentation for getRenderPosX, above.
+         * See documentation for tileToPx_X, above.
          */
-        int getRenderPosY(int x, int y);
+        int tileToPx_Y(int x, int y);
+
+        float cameraToPx_X(float x);
+
+        float cameraToPx_Y(float y);
+
+        float pxToCamera_X(float x);
+
+        float pxToCamera_Y(float y);
 
     }
 }

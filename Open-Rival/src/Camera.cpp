@@ -20,9 +20,13 @@ namespace Rival {
 
     void Camera::setPos(float x, float y) {
 
-        // Keep within bounds
-        x = clampf(x, width / 2, scenario.getWidth() - width / 2);
-        y = clampf(y, height / 2, scenario.getHeight() - height / 2);
+        // Keep within the bounds of the map
+        float minX = width / 2;
+        float minY = height / 2;
+        float maxX = (scenario.getWidth() - 1) - (width / 2);
+        float maxY = (scenario.getHeight() - 1) - (height / 2);
+        x = MathUtils::clampf(x, minX, maxX);
+        y = MathUtils::clampf(y, minY, maxY);
 
         this->x = x;
         this->y = y;
