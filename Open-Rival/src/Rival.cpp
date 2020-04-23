@@ -362,7 +362,7 @@ namespace Rival {
 
         // Render Tiles
         tileRenderer->render(
-                viewProjMatrix,
+                *camera.get(),
                 scenario->getTiles(),
                 scenario->getWidth(),
                 scenario->getHeight());

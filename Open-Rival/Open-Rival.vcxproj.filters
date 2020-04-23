@@ -3,18 +3,23 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Source Files\io">
+      <UniqueIdentifier>{105fb70f-639a-4ff3-8aed-fae9aa5a43b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gl">
+      <UniqueIdentifier>{1dfcefa1-3182-4f78-bdf4-ba7d83115c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{edfef396-add3-4341-a1d5-c1918f4aeaf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{a88f51de-cb90-4207-a922-9387655cb149}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Rival.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ShaderUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
@@ -23,133 +28,136 @@
     <ClCompile Include="src\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shaders.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Palette.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BinaryFileReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UnitRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scenario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TileRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ScenarioReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ScenarioBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MathUtils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\BinaryFileReader.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="src\Framebuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Image.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MathUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Palette.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScenarioBuilder.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScenarioReader.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shaders.cpp">
+      <Filter>Source Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files\gl</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteRenderable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="src\Spritesheet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UnitRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileRenderer.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\pch.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Rival.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ShaderUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Shaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Palette.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BinaryFileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Unit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UnitRenderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Scenario.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TileRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ScenarioReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ScenarioData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ScenarioBuilder.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Tile.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RenderUtils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Unit.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Window.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\MathUtils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\BinaryFileReader.h">
+      <Filter>Source Files\io</Filter>
     </ClInclude>
     <ClInclude Include="include\Framebuffer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Image.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MathUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Palette.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScenarioBuilder.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScenarioData.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScenarioReader.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shaders.h">
+      <Filter>Source Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>Source Files\gl</Filter>
     </ClInclude>
     <ClInclude Include="include\SpriteRenderable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\Spritesheet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitRenderer.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileRenderer.h">
+      <Filter>Source Files\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
