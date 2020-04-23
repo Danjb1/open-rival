@@ -61,8 +61,8 @@ namespace Rival {
                 //    | \    |
                 //    |   \..|
                 //    3----- 2
-                float width = static_cast<float>(Spritesheet::tileSpriteWidthPx);
-                float height = static_cast<float>(Spritesheet::tileSpriteHeightPx);
+                float width = static_cast<float>(RenderUtils::tileSpriteWidthPx);
+                float height = static_cast<float>(RenderUtils::tileSpriteHeightPx);
                 float x1 = static_cast<float>(RenderUtils::getRenderPosX(tileX));
                 float y1 = static_cast<float>(RenderUtils::getRenderPosY(tileX, tileY));
                 float x2 = x1 + width;

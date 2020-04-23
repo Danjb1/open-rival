@@ -9,6 +9,7 @@
 
 #include "Image.h"
 #include "Palette.h"
+#include "RenderUtils.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioData.h"
 #include "ScenarioReader.h"
@@ -264,8 +265,8 @@ namespace Rival {
             std::forward_as_tuple(type),
             std::forward_as_tuple(
                     textures->at(txIndex),
-                    Spritesheet::unitWidthPx,
-                    Spritesheet::unitHeightPx));
+                    RenderUtils::unitWidthPx,
+                    RenderUtils::unitHeightPx));
     }
 
     void Rival::initTileSprites() {
@@ -279,9 +280,9 @@ namespace Rival {
         tileSprites->emplace(std::piecewise_construct,
             std::forward_as_tuple(type),
             std::forward_as_tuple(
-                textures->at(txIndex),
-                Spritesheet::tileSpriteWidthPx,
-                Spritesheet::tileSpriteHeightPx));
+                    textures->at(txIndex),
+                    RenderUtils::tileSpriteWidthPx,
+                    RenderUtils::tileSpriteHeightPx));
     }
 
     void Rival::start() {
@@ -329,8 +330,8 @@ namespace Rival {
         // Use shader
         glUseProgram(textureShader.programId);
 
-        // Determine view matrix
-        // OpenGL uses right handed rule:
+        // Determine view matrix.
+        // OpenGL uses right-handed rule:
         //  - x points right
         //  - y points up
         //  - z points out of the screen
@@ -340,16 +341,21 @@ namespace Rival {
             glm::vec3(0, 1, 0)                                // up vector
         );
 
-        // Determine projection matrix
-        // We want y to point down, so the top and bottom arguments are
-        // flipped
+        // Determine projection matrix.
+        // The camera co-ordinates are in world units (tiles), but the vertices
+        // are positioned using pixels. Therefore we need to convert the camera
+        // co-ordinates to pixels, too.
         float screenWidth = static_cast<float>(Rival::windowWidth);
         float screenHeight = static_cast<float>(Rival::windowHeight);
+        float left = camera->getLeft() * RenderUtils::tileSpriteWidthPx;
+        float top = camera->getTop() * RenderUtils::tileSpriteHeightPx;
+        float right = left + screenWidth;
+        float bottom = top + screenHeight;
         glm::mat4 projection = glm::ortho(
-            0.0f,           // left
-            screenWidth,    // right
-            screenHeight,   // bottom
-            0.0f);          // top
+            left,
+            right,
+            bottom,
+            top);
 
         // Combine matrices
         glm::mat4 viewProjMatrix = projection * view;
@@ -390,19 +396,19 @@ namespace Rival {
     void Rival::keyDown(const SDL_Keycode keyCode) const {
         switch (keyCode) {
         case SDLK_UP:
-            camera->translate(0.0f, -1.0f);
+            camera->translate(0.0f, -0.5f);
             break;
 
         case SDLK_DOWN:
-            camera->translate(0.0f, 1.0f);
+            camera->translate(0.0f, 0.5f);
             break;
 
         case SDLK_LEFT:
-            camera->translate(-1.0f, 0.0f);
+            camera->translate(-0.5f, 0.0f);
             break;
 
         case SDLK_RIGHT:
-            camera->translate(1.0f, 0.0f);
+            camera->translate(0.5f, 0.0f);
             break;
 
         default:
