@@ -21,7 +21,7 @@ namespace Rival {
          */
         void init();
 
-        void render();
+        void render(int viewportWidth, int viewportHeight);
 
     private:
 

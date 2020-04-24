@@ -44,7 +44,9 @@ namespace Rival {
                 width, height,
                 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // Use linear filtering when downscaling so the game looks smooth when
+        // the camera is zoomed out
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         // Set this as our colour attachement #0
         glFramebufferTexture(

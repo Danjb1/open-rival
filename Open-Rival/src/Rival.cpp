@@ -329,21 +329,31 @@ namespace Rival {
 
     void Rival::render() {
 
-        // Clear screen
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Render to our framebuffer
+        // Render to our framebuffer.
+        // Here the viewport specifies the region of the framebuffer texture
+        // that we render onto, in pixels. To achieve pixel-perfect rendering,
+        // this must match the camera size exactly, otherwise stretching will
+        // occur.
         glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
-        glViewport(0, 0, gameFbo->getWidth(), gameFbo->getHeight());
+        int viewportWidth = static_cast<int>(
+                RenderUtils::cameraToPx_X(camera->getWidth()));
+        int viewportHeight = static_cast<int>(
+                RenderUtils::cameraToPx_Y(camera->getHeight()));
+        glViewport(0, 0, viewportWidth, viewportHeight);
         renderGame();
 
-        // Render the framebuffer to the screen
+        // Render the framebuffer to the screen.
+        // Here the viewport specifies the region of the game window that we
+        // render onto, in pixels.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, windowWidth, windowHeight);
         renderFramebuffer();
     }
 
     void Rival::renderGame() {
+
+        // Clear framebuffer
+        glClear(GL_COLOR_BUFFER_BIT);
 
         // Use indexed texture shader
         glUseProgram(indexedTextureShader.programId);
@@ -363,12 +373,10 @@ namespace Rival {
         // The camera co-ordinates are in world units (tiles), but the vertices
         // are positioned using pixels. Therefore we need to convert the camera
         // co-ordinates to pixels, too.
-        float screenWidth = static_cast<float>(Rival::windowWidth);
-        float screenHeight = static_cast<float>(Rival::windowHeight);
         float left = RenderUtils::cameraToPx_X(camera->getLeft());
         float top = RenderUtils::cameraToPx_Y(camera->getTop());
-        float right = left + screenWidth;
-        float bottom = top + screenHeight;
+        float right = RenderUtils::cameraToPx_X(camera->getRight());
+        float bottom = RenderUtils::cameraToPx_X(camera->getBottom());
         glm::mat4 projection = glm::ortho(left, right, bottom, top);
 
         // Combine matrices
@@ -393,6 +401,9 @@ namespace Rival {
 
     void Rival::renderFramebuffer() {
 
+        // Clear screen
+        glClear(GL_COLOR_BUFFER_BIT);
+
         // Use screen shader
         glUseProgram(screenShader.programId);
 
@@ -400,7 +411,7 @@ namespace Rival {
         glUniform1i(screenShader.texUnitUniformLocation, 0);
 
         // Render framebuffer to screen
-        gameFboRenderer->render();
+        gameFboRenderer->render(windowWidth, windowHeight);
     }
 
     void Rival::exit() {

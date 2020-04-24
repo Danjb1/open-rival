@@ -4,6 +4,7 @@
 #include <gl/glew.h>
 #include <vector>
 
+#include "RenderUtils.h"
 #include "Shaders.h"
 
 namespace Rival {
@@ -34,7 +35,7 @@ namespace Rival {
             x1, y2
         };
 
-        // Initialise position buffer
+        // Initialise position buffer - this should never change
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
                 screenShader.vertexAttribIndex,
@@ -49,19 +50,7 @@ namespace Rival {
                 vertexData.data(),
                 GL_STATIC_DRAW);
 
-        // Define tex co-ords to sample the entire texture
-        float tx1 = 0.0f;
-        float ty1 = 0.0f;
-        float tx2 = 1.0f;
-        float ty2 = 1.0f;
-        std::vector<GLfloat> texCoords = {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
-
-        // Initialise tex co-ord buffer
+        // Initialise tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
                 screenShader.texCoordAttribIndex,
@@ -70,11 +59,14 @@ namespace Rival {
                 GL_FALSE,
                 numTexCoordDimensions * sizeof(GLfloat),
                 nullptr);
+        int texCoordBufferSize = numTexCoordDimensions
+                * numIndices
+                * sizeof(GLfloat);
         glBufferData(
                 GL_ARRAY_BUFFER,
-                texCoords.size() * sizeof(GLfloat),
-                texCoords.data(),
-                GL_STATIC_DRAW);
+                texCoordBufferSize,
+                NULL,
+                GL_DYNAMIC_DRAW);
 
         // Initialise index buffer - this should never need to change
         std::vector<GLuint> indexData = { 3, 2, 1, 0 };
@@ -90,7 +82,7 @@ namespace Rival {
         glEnableVertexAttribArray(screenShader.texCoordAttribIndex);
     }
 
-    void FramebufferRenderer::render() {
+    void FramebufferRenderer::render(int viewportWidth, int viewportHeight) {
 
         // Bind vertex array
         glBindVertexArray(vao);
@@ -98,6 +90,30 @@ namespace Rival {
         // Use the framebuffer's texture
         glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, fbo.getTextureId());
+
+        // Define the portion of the texture to be sampled.
+        // To achieve pixel-perfect rendering, this should be the exact same
+        // size as the viewport, so that no stretching occurs.
+        // We can always start from (0, 0) since the camera position has
+        // already been taken into account during the initial rendering.
+        float tx1 = 0.0f;
+        float ty1 = 0.0f;
+        float tx2 = static_cast<float>(viewportWidth) / fbo.getWidth();
+        float ty2 = static_cast<float>(viewportHeight) / fbo.getHeight();
+        std::vector<GLfloat> texCoords = {
+            tx1, ty1,
+            tx2, ty1,
+            tx2, ty2,
+            tx1, ty2
+        };
+
+        // Upload tex co-ord data
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBufferSubData(
+            GL_ARRAY_BUFFER,
+            0,
+            texCoords.size() * sizeof(GLfloat),
+            texCoords.data());
 
         // Render
         glDrawElements(
