@@ -142,6 +142,11 @@ namespace Rival {
         void keyDown(const SDL_Keycode keyCode) const;
 
         /**
+         * Handles mouse wheel events.
+         */
+        void mouseWheelMoved(const SDL_MouseWheelEvent evt) const;
+
+        /**
          * Renders the current frame.
          */
         void render();

@@ -307,6 +307,8 @@ namespace Rival {
                     exiting = true;
                 } else if (e.type == SDL_KEYDOWN) {
                     keyDown(e.key.keysym.sym);
+                } else if (e.type == SDL_MOUSEWHEEL) {
+                    mouseWheelMoved(e.wheel);
                 }
             }
 
@@ -455,6 +457,21 @@ namespace Rival {
 
         default:
             break;
+        }
+    }
+
+    void Rival::mouseWheelMoved(const SDL_MouseWheelEvent evt) const {
+
+        // Determine the normalised scroll amount
+        int dy = evt.y;
+        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED) {
+            dy *= -1;
+        }
+
+        if (dy > 0) {
+            camera->modZoom(Camera::zoomInterval);
+        } else if (dy < 0) {
+            camera->modZoom(-Camera::zoomInterval);
         }
     }
 

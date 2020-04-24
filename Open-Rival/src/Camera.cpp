@@ -5,14 +5,18 @@
 
 namespace Rival {
 
+    const float Camera::zoomInterval = 0.1f;
+    const float Camera::zoomMin = 0.5f;
+    const float Camera::zoomMax = 2.0f;
+
     Camera::Camera(
             float x,
             float y,
             float width,
             double aspectRatio,
             Scenario& scenario) :
-        width(width),
-        height(static_cast<float>(width / aspectRatio)),
+        defaultWidth(width),
+        defaultHeight(static_cast<float>(width / aspectRatio)),
         scenario(scenario) {
 
         setPos(x, y);
@@ -21,6 +25,8 @@ namespace Rival {
     void Camera::setPos(float x, float y) {
 
         // Keep within the bounds of the map
+        float width = getWidth();
+        float height = getHeight();
         float minX = width / 2;
         float minY = height / 2;
         float maxX = (scenario.getWidth() - 1) - (width / 2);
@@ -45,11 +51,11 @@ namespace Rival {
     }
 
     float Camera::getWidth() const {
-        return width / zoom;
+        return defaultWidth / zoom;
     }
 
     float Camera::getHeight() const {
-        return height / zoom;
+        return defaultHeight / zoom;
     }
 
     float Camera::getLeft() const {
@@ -70,6 +76,15 @@ namespace Rival {
 
     float Camera::getZoom() const {
         return zoom;
+    }
+
+    void Camera::modZoom(float zoomInterval) {
+        zoom += zoomInterval;
+        zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
+
+        // We call `setPos` here to perform a bounds check, since the size of
+        // the visible region has now changed
+        setPos(x, y);
     }
 
     bool Camera::contains(float px, float py) const {
