@@ -410,8 +410,13 @@ namespace Rival {
         // Set uniform values
         glUniform1i(screenShader.texUnitUniformLocation, 0);
 
-        // Render framebuffer to screen
-        gameFboRenderer->render(windowWidth, windowHeight);
+        // Render framebuffer to screen.
+        // At a zoom level of 1, this will result in pixel-perfect rendering.
+        // A higher zoom level will result in a smaller sample, which will
+        // then be stretched to fill the viewport.
+        float srcWidth = windowWidth / camera->getZoom();
+        float srcHeight = windowHeight / camera->getZoom();
+        gameFboRenderer->render(srcWidth, srcHeight);
     }
 
     void Rival::exit() {

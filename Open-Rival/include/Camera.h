@@ -13,9 +13,13 @@ namespace Rival {
         float x;
         float y;
 
-        // The size of the visible region, in world units
+        // The size of the visible region, in world units.
+        // This varies based on the zoom level.
         float width;
         float height;
+
+        // Zoom level (render scale)
+        float zoom = 1.0f;
 
         Scenario& scenario;
 
@@ -47,6 +51,8 @@ namespace Rival {
         float getRight() const;
 
         float getBottom() const;
+
+        float getZoom() const;
 
         bool contains(float px, float py) const;
 
