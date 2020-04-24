@@ -1,12 +1,14 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-## WIP
+## Bugs
 <!----------------------------------------------------------------------------->
 
- - Change Camera zoom level with the mouse wheel
+ - Seams appear between tiles at certain zoom levels
 
- - Unit vertex positions need to account for unit offset within texture
+ - Units are not rendered at the camera edges
+
+ - Unit vertex positions don't account for unit offset within texture
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt
@@ -21,6 +23,7 @@
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
+    - Verify that the correct number of tiles are being rendered
 
  - ScenarioReader:
     - Use BinaryFileReader
@@ -108,12 +111,13 @@
 
 ### Input
 
+ - Panning with the mouse at level edges
+ - Camera should zoom towards / away from the mouse position
  - Selecting units (render to a texture with mouse picking shader)
  - Drag-select
 
 ### Rendering
 
- - Zooming
  - Shader used for mouse picking
  - Render Interface
  - Render map border

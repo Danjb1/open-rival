@@ -7,23 +7,11 @@ namespace Rival {
 
     class Camera {
 
-    private:
-
-        // The point at the centre of the camera, in world units
-        float x;
-        float y;
-
-        // The size of the visible region, in world units.
-        // This varies based on the zoom level.
-        float width;
-        float height;
-
-        // Zoom level (render scale)
-        float zoom = 1.0f;
-
-        Scenario& scenario;
-
     public:
+
+        static const float zoomInterval;
+        static const float zoomMin;
+        static const float zoomMax;
 
         Camera(
             float x,
@@ -54,7 +42,26 @@ namespace Rival {
 
         float getZoom() const;
 
+        void modZoom(float zoomInterval);
+
         bool contains(float px, float py) const;
+
+    private:
+
+        // The point at the centre of the camera, in world units
+        float x;
+        float y;
+
+        // The size of the visible region, in world units, at the default zoom
+        // level.
+        // The public-facing getters always take into account the zoom level.
+        float defaultWidth;
+        float defaultHeight;
+
+        // Zoom level (render scale)
+        float zoom = 1.0f;
+
+        Scenario& scenario;
 
     };
 
