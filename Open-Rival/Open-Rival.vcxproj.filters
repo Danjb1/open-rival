@@ -88,6 +88,9 @@
     <ClCompile Include="src\TileRenderer.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="src\FramebufferRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -157,6 +160,9 @@
       <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\TileRenderer.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FramebufferRenderer.h">
       <Filter>Source Files\render</Filter>
     </ClInclude>
   </ItemGroup>

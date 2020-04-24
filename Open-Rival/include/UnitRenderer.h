@@ -1,7 +1,6 @@
 #ifndef UNIT_RENDERER_H
 #define UNIT_RENDERER_H
 
-#include <glm/mat4x4.hpp>
 #include <map>
 #include <string>
 

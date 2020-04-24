@@ -1,13 +1,13 @@
 #ifndef RIVAL_H
 #define RIVAL_H
 
-#include <gl/glew.h>
 #include <SDL.h>
 #include <iostream>
 #include <string>
 
 #include "Camera.h"
 #include "Framebuffer.h"
+#include "FramebufferRenderer.h"
 #include "Scenario.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -42,10 +42,19 @@ namespace Rival {
         const std::string mapsDir = "res\\maps\\";
         const std::string txDir = "res\\textures\\";
 
-        // Textures
-        const int numTextures = 94;
-        const int txIndexUnits = 0;
-        const int txIndexTiles = 50;
+        // Texture constants
+        static const int numTextures = 94;
+        static const int txIndexUnits = 0;
+        static const int txIndexTiles = 50;
+
+        // Framebuffer size, in pixels.
+        // This is our canvas; we can never render more pixels than this.
+        static const int framebufferWidth =
+                RenderUtils::tileWidthPx * RenderUtils::maxTilesX;
+        static const int framebufferHeight =
+            RenderUtils::tileHeightPx * RenderUtils::maxTilesY;
+
+        // Loaded textures
         std::unique_ptr<std::vector<Texture>> textures =
                 std::make_unique<std::vector<Texture>>();
         std::unique_ptr<Texture> paletteTexture;
@@ -59,10 +68,20 @@ namespace Rival {
         // Camera
         std::unique_ptr<Camera> camera;
 
+        /**
+         * Framebuffer to which the visible region of the game is rendered at
+         * a pixel-perfect scale.
+         *
+         * This ensures that there are no seams between tiles, and we can
+         * perform any scaling when we render the framebuffer to the screen.
+         */
+        std::unique_ptr<Framebuffer> gameFbo;
+
         // Scenario
         std::unique_ptr<Scenario> scenario;
 
         // Renderers
+        std::unique_ptr<FramebufferRenderer> gameFboRenderer;
         std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
 
@@ -125,6 +144,8 @@ namespace Rival {
          * Renders the current frame.
          */
         void render();
+        void renderGame();
+        void renderFramebuffer();
 
         /**
          * Updates the game.

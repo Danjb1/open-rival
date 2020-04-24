@@ -22,6 +22,7 @@
     <ClCompile Include="src\BinaryFileReader.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\FramebufferRenderer.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="include\BinaryFileReader.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Framebuffer.h" />
+    <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\Palette.h" />

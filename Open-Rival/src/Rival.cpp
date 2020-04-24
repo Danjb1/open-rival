@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Rival.h"
 
+#include <gl/glew.h>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -50,7 +51,13 @@ namespace Rival {
         scenario = scenarioBuilder.build();
 
         // Create our framebuffer
-        Framebuffer::generate(windowWidth, windowHeight);
+        gameFbo = std::make_unique<Framebuffer>(
+                Framebuffer::generate(framebufferWidth, framebufferHeight));
+
+        // Create the FramebufferRenderer
+        gameFboRenderer = std::make_unique<FramebufferRenderer>(
+                *gameFbo.get());
+        gameFboRenderer->init();
 
         // Create the Camera
         const float cameraWidth = RenderUtils::pxToCamera_X(windowWidth);
@@ -325,8 +332,21 @@ namespace Rival {
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Use shader
-        glUseProgram(textureShader.programId);
+        // Render to our framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
+        glViewport(0, 0, gameFbo->getWidth(), gameFbo->getHeight());
+        renderGame();
+
+        // Render the framebuffer to the screen
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, windowWidth, windowHeight);
+        renderFramebuffer();
+    }
+
+    void Rival::renderGame() {
+
+        // Use indexed texture shader
+        glUseProgram(indexedTextureShader.programId);
 
         // Determine view matrix.
         // OpenGL uses right-handed rule:
@@ -355,10 +375,10 @@ namespace Rival {
         glm::mat4 viewProjMatrix = projection * view;
 
         // Set uniform values
-        glUniformMatrix4fv(textureShader.viewProjMatrixUniformLocation,
+        glUniformMatrix4fv(indexedTextureShader.viewProjMatrixUniformLocation,
                 1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(textureShader.texUnitUniformLocation, 0);
-        glUniform1i(textureShader.paletteTexUnitUniformLocation, 1);
+        glUniform1i(indexedTextureShader.texUnitUniformLocation, 0);
+        glUniform1i(indexedTextureShader.paletteTexUnitUniformLocation, 1);
 
         // Render Tiles
         tileRenderer->render(
@@ -369,6 +389,18 @@ namespace Rival {
 
         // Render Units
         unitRenderer->render(*camera.get(), scenario->getUnits());
+    }
+
+    void Rival::renderFramebuffer() {
+
+        // Use screen shader
+        glUseProgram(screenShader.programId);
+
+        // Set uniform values
+        glUniform1i(screenShader.texUnitUniformLocation, 0);
+
+        // Render framebuffer to screen
+        gameFboRenderer->render();
     }
 
     void Rival::exit() {
