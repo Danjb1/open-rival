@@ -4,7 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Camera zooming
+ - Change Camera zoom level with the mouse wheel
 
  - Unit vertex positions need to account for unit offset within texture
 

@@ -45,27 +45,31 @@ namespace Rival {
     }
 
     float Camera::getWidth() const {
-        return width;
+        return width / zoom;
     }
 
     float Camera::getHeight() const {
-        return height;
+        return height / zoom;
     }
 
     float Camera::getLeft() const {
-        return x - width / 2;
+        return x - getWidth() / 2;
     }
 
     float Camera::getTop() const {
-        return y - height / 2;
+        return y - getHeight() / 2;
     }
 
     float Camera::getRight() const {
-        return x + width / 2;
+        return x + getWidth() / 2;
     }
 
     float Camera::getBottom() const {
-        return y + height / 2;
+        return y + getHeight() / 2;
+    }
+
+    float Camera::getZoom() const {
+        return zoom;
     }
 
     bool Camera::contains(float px, float py) const {
