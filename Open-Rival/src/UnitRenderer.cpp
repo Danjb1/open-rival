@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "UnitRenderer.h"
 
+#include <gl/glew.h>
 #include <map>
+#include <vector>
 
 #include "Palette.h"
 #include "RenderUtils.h"
@@ -16,7 +18,7 @@ namespace Rival {
         unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
-        SpriteRenderable& UnitRenderer::getOrCreateRenderable(Unit& unit) {
+    SpriteRenderable& UnitRenderer::getOrCreateRenderable(Unit& unit) {
 
         int id = unit.getId();
 
@@ -103,9 +105,7 @@ namespace Rival {
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
         int positionBufferSize =
-                SpriteRenderable::numVertexDimensions
-                * renderable.getIndicesPerSprite()
-                * sizeof(GLfloat);
+                vertexData.size() * sizeof(GLfloat);
         glBufferSubData(
                 GL_ARRAY_BUFFER,
                 0,
@@ -115,9 +115,7 @@ namespace Rival {
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
         int texCoordBufferSize =
-                SpriteRenderable::numTexCoordDimensions
-                * renderable.getIndicesPerSprite()
-                * sizeof(GLfloat);
+                texCoords.size() * sizeof(GLfloat);
         glBufferSubData(
                 GL_ARRAY_BUFFER,
                 0,
