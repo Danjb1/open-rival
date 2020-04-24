@@ -7,30 +7,124 @@
 
 namespace Rival {
 
-    TextureShader textureShader;
+    ///////////////////////////////////////////////////////////////////////////
+    // IndexedTextureShader
+    ///////////////////////////////////////////////////////////////////////////
 
-    void initialiseShaders() {
+    IndexedTextureShader indexedTextureShader;
+
+    void IndexedTextureShader::init() {
 
         GLuint programId = createShader(
-                "res\\shaders\\texture.vert",
-                "res\\shaders\\texture.frag");
+                "res\\shaders\\indexedTexture.vert",
+                "res\\shaders\\indexedTexture.frag");
 
-        textureShader = TextureShader();
-        textureShader.programId = programId;
-        textureShader.viewProjMatrixUniformLocation =
-                glGetUniformLocation(programId, "view_proj_matrix");
-        textureShader.vertexAttribLocation =
-                glGetAttribLocation(programId, "in_vertex");
-        textureShader.texCoordAttribLocation =
-                glGetAttribLocation(programId, "in_tex_coord");
-        textureShader.texUnitUniformLocation =
-                glGetUniformLocation(programId, "tex");
-        textureShader.paletteTexUnitUniformLocation =
-                glGetUniformLocation(programId, "palette");
+        indexedTextureShader = IndexedTextureShader();
+        indexedTextureShader.programId = programId;
+        indexedTextureShader.viewProjMatrixUniformLocation =
+            glGetUniformLocation(programId, "view_proj_matrix");
+        indexedTextureShader.vertexAttribLocation =
+            glGetAttribLocation(programId, "in_vertex");
+        indexedTextureShader.texCoordAttribLocation =
+            glGetAttribLocation(programId, "in_tex_coord");
+        indexedTextureShader.texUnitUniformLocation =
+            glGetUniformLocation(programId, "tex");
+        indexedTextureShader.paletteTexUnitUniformLocation =
+            glGetUniformLocation(programId, "palette");
 
-        if (!textureShader.isValid()) {
-            throw std::runtime_error("Failed to create texture shader");
+        if (!indexedTextureShader.isValid()) {
+            throw std::runtime_error("Failed to create IndexedTextureShader");
         }
+    }
+
+    bool IndexedTextureShader::isValid() const {
+
+        if (programId == 0) {
+            printf("Could not generate program ID\n");
+            return false;
+        }
+
+        if (vertexAttribLocation == -1) {
+            printf("Could not locate vertex attribute\n");
+            return false;
+        }
+
+        if (texCoordAttribLocation == -1) {
+            printf("Could not locate tex co-ord attribute\n");
+            return false;
+        }
+
+        if (texUnitUniformLocation == -1) {
+            printf("Could not locate tex unit uniform\n");
+            return false;
+        }
+
+        if (paletteTexUnitUniformLocation == -1) {
+            printf("Could not locate palette tex unit uniform\n");
+            return false;
+        }
+
+        return true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // ScreenShader
+    ///////////////////////////////////////////////////////////////////////////
+
+    ScreenShader screenShader;
+
+    void ScreenShader::init() {
+
+        GLuint programId = createShader(
+                "res\\shaders\\screen.vert",
+                "res\\shaders\\screen.frag");
+
+        screenShader = ScreenShader();
+        screenShader.programId = programId;
+        screenShader.vertexAttribLocation =
+            glGetAttribLocation(programId, "in_vertex");
+        screenShader.texCoordAttribLocation =
+            glGetAttribLocation(programId, "in_tex_coord");
+        screenShader.texUnitUniformLocation =
+            glGetUniformLocation(programId, "tex");
+
+        if (!screenShader.isValid()) {
+            throw std::runtime_error("Failed to create ScreenShader");
+        }
+    }
+
+    bool ScreenShader::isValid() const {
+
+        if (programId == 0) {
+            printf("Could not generate program ID\n");
+            return false;
+        }
+
+        if (vertexAttribLocation == -1) {
+            printf("Could not locate vertex attribute\n");
+            return false;
+        }
+
+        if (texCoordAttribLocation == -1) {
+            printf("Could not locate tex co-ord attribute\n");
+            return false;
+        }
+
+        if (texUnitUniformLocation == -1) {
+            printf("Could not locate tex unit uniform\n");
+            return false;
+        }
+
+        return true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Generic methods
+    ///////////////////////////////////////////////////////////////////////////
+
+    void initialiseShaders() {
+        IndexedTextureShader::init();
+        ScreenShader::init();
     }
 
     GLuint createShader(const char* vertShader, const char* fragShader) {
@@ -96,36 +190,6 @@ namespace Rival {
         }
 
         return programId;
-    }
-
-    bool TextureShader::isValid() const {
-
-        if (programId == 0) {
-            printf("Could not generate program ID\n");
-            return false;
-        }
-
-        if (vertexAttribLocation == -1) {
-            printf("Could not locate vertex attribute\n");
-            return false;
-        }
-
-        if (texCoordAttribLocation == -1) {
-            printf("Could not locate tex co-ord attribute\n");
-            return false;
-        }
-
-        if (texUnitUniformLocation == -1) {
-            printf("Could not locate tex unit uniform\n");
-            return false;
-        }
-
-        if (paletteTexUnitUniformLocation == -1) {
-            printf("Could not locate palette tex unit uniform\n");
-            return false;
-        }
-
-        return true;
     }
 
 }

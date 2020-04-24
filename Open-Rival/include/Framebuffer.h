@@ -9,15 +9,27 @@ namespace Rival {
 
     public:
 
-        Framebuffer(const GLuint id, int width, int height);
+        Framebuffer(GLuint id, GLuint textureId, int width, int height);
 
-        const GLuint id;
+        GLuint getId() const;
 
-        const int width;
+        GLuint getTextureId() const;
 
-        const int height;
+        int getWidth() const;
+
+        int getHeight() const;
 
         static const Framebuffer generate(int width, int height);
+
+    private:
+
+        GLuint id;
+
+        GLuint textureId;
+
+        int width;
+
+        int height;
 
     };
 

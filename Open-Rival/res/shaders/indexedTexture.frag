@@ -5,7 +5,7 @@ uniform sampler2D palette;
 
 in vec2 tex_coord;
 
-out vec4 frag_colour;
+layout(location = 0) out vec4 frag_colour;
 
 void main() {
     vec4 palette_idx = texture(tex, tex_coord);
