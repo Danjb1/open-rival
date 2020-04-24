@@ -5,10 +5,6 @@
 <!----------------------------------------------------------------------------->
 
  - Camera zooming
-    - Render game to framebuffer at pixel-perfect size
-        - Viewport should be the size of the visible region?
-    - Render only part of the framebuffer to the screen
-        - Tex co-ords should depend on the visible region
 
  - Unit vertex positions need to account for unit offset within texture
 
@@ -17,6 +13,8 @@
 <!----------------------------------------------------------------------------->
 
  - Clarify use of unique_ptrs
+
+ - Framebuffer size calculations should use RenderUtils
 
  - Rendering:
     - Duplication between UnitRenderer and TileRenderer
