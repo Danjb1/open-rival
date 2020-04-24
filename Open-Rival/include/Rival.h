@@ -49,10 +49,11 @@ namespace Rival {
 
         // Framebuffer size, in pixels.
         // This is our canvas; we can never render more pixels than this.
+        // We divide by 2 because our tiles overlap (see RenderUtils).
         static const int framebufferWidth =
-                RenderUtils::tileWidthPx * RenderUtils::maxTilesX;
+                RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
         static const int framebufferHeight =
-            RenderUtils::tileHeightPx * RenderUtils::maxTilesY;
+                RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
 
         // Loaded textures
         std::unique_ptr<std::vector<Texture>> textures =
