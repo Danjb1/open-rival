@@ -4,8 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
- - Seams appear between tiles at certain zoom levels
-
  - Units are not rendered at the camera edges
 
  - Unit vertex positions don't account for unit offset within texture
@@ -112,6 +110,7 @@
 ### Input
 
  - Panning with the mouse at level edges
+ - Smooth scrolling with the arrow keys
  - Camera should zoom towards / away from the mouse position
  - Selecting units (render to a texture with mouse picking shader)
  - Drag-select
