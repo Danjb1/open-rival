@@ -82,7 +82,7 @@ namespace Rival {
         glEnableVertexAttribArray(screenShader.texCoordAttribIndex);
     }
 
-    void FramebufferRenderer::render(int viewportWidth, int viewportHeight) {
+    void FramebufferRenderer::render(float srcWidth, float srcHeight) {
 
         // Bind vertex array
         glBindVertexArray(vao);
@@ -92,14 +92,12 @@ namespace Rival {
         glBindTexture(GL_TEXTURE_2D, fbo.getTextureId());
 
         // Define the portion of the texture to be sampled.
-        // To achieve pixel-perfect rendering, this should be the exact same
-        // size as the viewport, so that no stretching occurs.
         // We can always start from (0, 0) since the camera position has
         // already been taken into account during the initial rendering.
         float tx1 = 0.0f;
         float ty1 = 0.0f;
-        float tx2 = static_cast<float>(viewportWidth) / fbo.getWidth();
-        float ty2 = static_cast<float>(viewportHeight) / fbo.getHeight();
+        float tx2 = srcWidth / fbo.getWidth();
+        float ty2 = srcHeight / fbo.getHeight();
         std::vector<GLfloat> texCoords = {
             tx1, ty1,
             tx2, ty1,

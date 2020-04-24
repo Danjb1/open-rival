@@ -21,7 +21,14 @@ namespace Rival {
          */
         void init();
 
-        void render(int viewportWidth, int viewportHeight);
+        /**
+         * Renders a portion of this framebuffer's texture to the screen.
+         *
+         * To achieve pixel-perfect rendering, `srcWidth` and `srcHeight`
+         * should be the exact same size as the viewport, so that no stretching
+         * occurs.
+         */
+        void render(float srcWidth, float srcHeight);
 
     private:
 
