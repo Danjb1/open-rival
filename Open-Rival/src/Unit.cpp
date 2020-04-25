@@ -3,10 +3,17 @@
 
 namespace Rival {
 
-    Unit::Unit(const Type type, int x, int y) :
+    Unit::Unit(
+            Type type,
+            int player,
+            int x,
+            int y,
+            Facing facing) :
         type(type),
+        player(player),
         x(x),
-        y(y) {
+        y(y),
+        facing(facing) {
     }
 
     void Unit::addedToScene(const int newId) {

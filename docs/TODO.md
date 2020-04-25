@@ -33,6 +33,9 @@
         glDeleteTextures(1, &id);
         glDeleteFramebuffers(1, &id);
 
+ - We should be able to create Units abstractly, for the sake of troop libraries
+    - No position / team / colour
+
 <!----------------------------------------------------------------------------->
 ## Features
 <!----------------------------------------------------------------------------->
@@ -41,62 +44,32 @@
 
  - Set window icon
  - Log to file
- - Static code analysis
- - Unit tests
 
-### Editor
-
- - Create a ScenarioWriter class
-
-### Image Preparation
+### Data Loading
 
  - Extract menu / interface images
  - Extract fonts
-
-### Scenario Loading
-
  - Finish parsing Goals
  - Finish parsing Chests (contents)
  - Include missing alphabet entries (e.g. '!{})
  - Respect Gold tile variants
 
-### Engine
+### Game
 
- - Create data structures:
-    - Map
-    - TileType
-    - UnitType
-    - BuildingType
-    - ItemType
-    - GameObject
-        - Unit (Ground / Flying)
-        - Building
-        - Obstacle
-        - Door
-        - Effect
- - Scene organisation / traversal
-    - A single tile might have:
-        - Terrain
-        - Cropland
-        - A ground unit
-        - A flying unit
-        - An effect (such as a corpse animation)
-    - Ability to list all units
-    - Ability to get a unit by ID
-    - Ability to know which tile a given unit occupies
-    - Ability to know which GameObject and flying unit occupies a tile
-    - Ability to know the type of a tile
-    - Ability to deduce the passability of a tile
-    - Ability to list all effects
+ - Store unit / building defaults
+ - Buildings
+ - Mountains
+ - Trees
+ - Scenery
+ - Chests
+ - Info Points
+ - Doors
  - Game loop
-
-### Game Logic
-
  - Use the Command Pattern to manipulate game state?
  - Use the lockstep model for multiplayer?
  - Moving units to adjacent tiles
  - Pathfinding
- - Building
+ - Building placement
  - Training
  - Resting
  - Attacking
@@ -105,6 +78,7 @@
  - Food
  - Items
  - Spells
+ - Effects (e.g. corpses / explosions)
  - Monster AI
  - Player AI
 
@@ -121,58 +95,58 @@
  - Shader used for mouse picking
  - Render Interface
  - Render map border
- - Add support for animated tiles
+ - Water tile animations
+ - Gold tile animations
  - Render Buildings
- - Render Obstacles
+ - Render Scenery
  - Render Units
-    - Different animations
-    - Add support for team colours
+    - Animations
+    - Respect colour
  - Use depth buffer
  - Fog of war
  - High resolution support (!)
 
-### Sound
+### Audio
 
  - Play sounds when selecting units
  - Play sounds when instructing units to move
-
-### Music
-
- - WMA
- - MIDI
+ - Add support for WMA music
+ - Add support for MIDI music
 
 ### Menus
 
  - Main menu
  - Loading screen
- - Custom map menu
+ - Custom Map menu
  - Pause menu
+ - Troop libraries
 
-### File Formats
+### Editor
 
- - Find campaign map data
+ - Create a ScenarioWriter class
 
 ### Future Enhancements
 
- - Easy military drag-select
- - Rally points
- - Configurable Gold multiplier
- - Multiplayer campaigns
- - Stable net play!
- - Random map generation
- - More endgame stats
- - Improved pathfinding
- - Non-suicidal peasants (don't go looking for gold)
- - Affordable Wall
- - Map preview / description
- - Using abilities with a group selected
- - Rank explanations
- - Replays
- - Multilanguage support
- - ARM version (for Raspberry Pi)
- - Windows XP support
- - Support for larger screen resolutions
- - Support for bigger maps
+ - [ ] Easy military drag-select
+ - [ ] Rally points
+ - [ ] Configurable Gold multiplier
+ - [ ] Multiplayer campaigns
+ - [ ] Stable net play!
+ - [ ] Random map generation
+ - [ ] More endgame stats
+ - [ ] Improved pathfinding
+ - [ ] Non-suicidal peasants (don't go looking for gold)
+ - [ ] Affordable Wall
+ - [ ] Map preview / description
+ - [ ] Using abilities with a group selected
+ - [ ] Rank explanations
+ - [ ] Replays
+ - [ ] Multilanguage support
+ - [ ] ARM version (for Raspberry Pi)
+ - [ ] Windows XP support
+ - [ ] Support for larger screen resolutions
+ - [ ] Support for bigger maps
+ - [x] Camera zooming
 
 <!----------------------------------------------------------------------------->
 ## Project
