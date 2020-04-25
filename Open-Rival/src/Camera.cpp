@@ -51,15 +51,11 @@ namespace Rival {
     }
 
     float Camera::getWidth() const {
-        // It is important that we return a whole number, otherwise it is
-        // impossible to create a viewport of the exact same size, which can
-        // result in rounding errors, and visible seams between tiles
-        return ceil(defaultWidth / zoom);
+        return defaultWidth / zoom;
     }
 
     float Camera::getHeight() const {
-        // See notes in `getWidth()`
-        return ceil(defaultHeight / zoom);
+        return defaultHeight / zoom;
     }
 
     float Camera::getLeft() const {

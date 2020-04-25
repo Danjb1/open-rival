@@ -1,6 +1,12 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
+## WIP
+<!----------------------------------------------------------------------------->
+
+ - Mouse picking
+
+<!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
@@ -22,7 +28,6 @@
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
-    - Verify that the correct number of tiles are being rendered
 
  - ScenarioReader:
     - Use BinaryFileReader
@@ -55,6 +60,7 @@
 
 ### Game
 
+ - Game logic should run at a consistent rate, regardless of monitor refresh rate
  - Store unit / building defaults
  - Buildings
  - Mountains
@@ -86,12 +92,10 @@
  - Panning with the mouse at level edges
  - Smooth scrolling with the arrow keys
  - Camera should zoom towards / away from the mouse position
- - Selecting units (render to a texture with mouse picking shader)
  - Drag-select
 
 ### Rendering
 
- - Shader used for mouse picking
  - Render Interface
  - Render map border
  - Water tile animations

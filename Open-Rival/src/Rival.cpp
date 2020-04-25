@@ -301,8 +301,6 @@ namespace Rival {
 
             // Handle events on queue
             while (SDL_PollEvent(&e) != 0) {
-
-                // User requests exiting
                 if (e.type == SDL_QUIT) {
                     exiting = true;
                 } else if (e.type == SDL_KEYDOWN) {
@@ -312,13 +310,57 @@ namespace Rival {
                 }
             }
 
+            // Process the current frame
+            handleMouse();
             update();
             render();
+
+            // Update the window with our newly-rendered game;
+            // this will block execution until the next refresh interval,
+            // due to vsync
             window->swapBuffers();
         }
 
         // Free resources and exit SDL
         exit();
+    }
+
+    void Rival::handleMouse() {
+
+        // Get the mouse position relative to the window, in pixels
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        // Calculate the mouse position relative to the viewport, in pixels.
+        // Since our viewport fills the window, no conversion is really
+        // performed here.
+        int viewportX = 0;
+        int viewportY = 0;
+        int viewportWidth = windowWidth;
+        int viewportHeight = windowHeight;
+        int mouseInViewportX = mouseX - viewportX;
+        int mouseInViewportY = mouseY - viewportY;
+
+        // Calculate mouse position relative to the viewport, in the range 0-1
+        float normalizedMouseX =
+                static_cast<float>(mouseInViewportX) / viewportWidth;
+        float normalizedMouseY =
+                static_cast<float>(mouseInViewportY) / viewportHeight;
+
+        // Calculate the mouse position in world units
+        float mouseWorldX = camera->getLeft()
+                + normalizedMouseX * camera->getWidth();
+        float mouseWorldY = camera->getTop()
+                + normalizedMouseY * camera->getHeight();
+
+        std::cout << mouseWorldX << ", " << mouseWorldY << "\n";
+
+        // PROBLEM:
+        // This assumes that our tiles are square and aligned with the camera's
+        // axes, but they are diamond-shaped and zigzag up and down. We need to
+        // make some adjustments based on the decimal part of the mouse
+        // position to figure out the actual tile.
     }
 
     void Rival::update() {
@@ -333,16 +375,16 @@ namespace Rival {
 
         // Render to our framebuffer.
         // Here the viewport specifies the region of the framebuffer texture
-        // that we render onto, in pixels. To achieve pixel-perfect rendering,
-        // this must match the camera size exactly, otherwise stretching will
-        // occur.
+        // that we render onto, in pixels. We use the camera size here; if the
+        // camera is wider, more pixels are visible, and thus we need a larger
+        // render target.
         glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
         int viewportWidth = static_cast<int>(
                 RenderUtils::worldToPx_X(camera->getWidth()));
         int viewportHeight = static_cast<int>(
                 RenderUtils::worldToPx_Y(camera->getHeight()));
         glViewport(0, 0, viewportWidth, viewportHeight);
-        renderGame();
+        renderGame(viewportWidth, viewportHeight);
 
         // Render the framebuffer to the screen.
         // Here the viewport specifies the region of the game window that we
@@ -352,7 +394,7 @@ namespace Rival {
         renderFramebuffer();
     }
 
-    void Rival::renderGame() {
+    void Rival::renderGame(int viewportWidth, int viewportHeight) {
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT);
@@ -365,20 +407,24 @@ namespace Rival {
         //  - x points right
         //  - y points up
         //  - z points out of the screen
+        // The camera co-ordinates are in world units (tiles), but our vertices
+        // are positioned using pixels. Therefore we need to convert the camera
+        // co-ordinates to pixels, too.
+        float cameraX = RenderUtils::worldToPx_X(camera->getX());
+        float cameraY = RenderUtils::worldToPx_Y(camera->getY());
         glm::mat4 view = glm::lookAt(
-            glm::vec3(camera->getX(), camera->getY(), 1),     // camera position
-            glm::vec3(camera->getX(), camera->getY(), 0),     // look at
-            glm::vec3(0, 1, 0)                                // up vector
+            glm::vec3(cameraX, cameraY, 1),     // camera position
+            glm::vec3(cameraX, cameraY, 0),     // look at
+            glm::vec3(0, 1, 0)                  // up vector
         );
 
         // Determine projection matrix.
-        // The camera co-ordinates are in world units (tiles), but the vertices
-        // are positioned using pixels. Therefore we need to convert the camera
-        // co-ordinates to pixels, too.
-        float left = RenderUtils::worldToPx_X(camera->getLeft());
-        float top = RenderUtils::worldToPx_Y(camera->getTop());
-        float right = RenderUtils::worldToPx_X(camera->getRight());
-        float bottom = RenderUtils::worldToPx_X(camera->getBottom());
+        // This should match the viewport size exactly, in order to achieve
+        // pixel-perfect rendering.
+        float left = -viewportWidth / 2.0f;
+        float top = -viewportHeight / 2.0f;
+        float right = viewportWidth / 2.0f;
+        float bottom = viewportHeight / 2.0f;
         glm::mat4 projection = glm::ortho(left, right, bottom, top);
 
         // Combine matrices
@@ -462,7 +508,7 @@ namespace Rival {
 
     void Rival::mouseWheelMoved(const SDL_MouseWheelEvent evt) const {
 
-        // Determine the normalised scroll amount
+        // Determine the normalized scroll amount
         int dy = evt.y;
         if (evt.direction == SDL_MOUSEWHEEL_FLIPPED) {
             dy *= -1;

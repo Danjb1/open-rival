@@ -52,11 +52,11 @@ namespace Rival {
         int maxY = minY + numTilesY;
 
         // Keep within bounds
-        if (maxX > mapWidth) {
-            maxX = mapWidth;
+        if (maxX >= mapWidth) {
+            maxX = mapWidth - 1;
         }
-        if (maxY > mapHeight) {
-            maxY = mapHeight;
+        if (maxY >= mapHeight) {
+            maxY = mapHeight - 1;
         }
 
         // Use textures
@@ -75,8 +75,8 @@ namespace Rival {
         texCoords.reserve(texCoordDataSize);
 
         // Add data to buffers
-        for (int tileY = minY; tileY < maxY; tileY++) {
-            for (int tileX = minX; tileX < maxX; tileX++) {
+        for (int tileY = minY; tileY <= maxY; tileY++) {
+            for (int tileX = minX; tileX <= maxX; tileX++) {
 
                 auto const& tile = tiles[tileY * mapWidth + tileX];
                 const int txIndex = tile.txIndex;

@@ -150,8 +150,13 @@ namespace Rival {
          * Renders the current frame.
          */
         void render();
-        void renderGame();
+        void renderGame(int viewportWidth, int viewportHeight);
         void renderFramebuffer();
+
+        /**
+         * Handles mouse input.
+         */
+        void handleMouse();
 
         /**
          * Updates the game.
