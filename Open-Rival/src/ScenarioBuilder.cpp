@@ -28,6 +28,7 @@ namespace Rival {
                 getUnitType(unitPlacement.type),
                 unitPlacement.x,
                 unitPlacement.y);
+            unit->setFacing(getFacing(unitPlacement.facing));
             scenario->addUnit(std::move(unit));
         }
 
@@ -239,6 +240,29 @@ namespace Rival {
             return Unit::MagicChopper;
         default:
             throw std::runtime_error("Unknown unit type: " + unitType);
+        }
+    }
+
+    Unit::Facing ScenarioBuilder::getFacing(std::uint8_t facing) const {
+        switch (facing) {
+        case 0:
+            return Unit::Facing::South;
+        case 1:
+            return Unit::Facing::SouthWest;
+        case 2:
+            return Unit::Facing::West;
+        case 3:
+            return Unit::Facing::NorthWest;
+        case 4:
+            return Unit::Facing::North;
+        case 5:
+            return Unit::Facing::NorthEast;
+        case 6:
+            return Unit::Facing::East;
+        case 7:
+            return Unit::Facing::SouthEast;
+        default:
+            throw std::runtime_error("Unknown facing: " + facing);
         }
     }
 
