@@ -45,13 +45,13 @@ namespace Rival {
          */
         int tileToPx_Y(int x, int y);
 
-        float cameraToPx_X(float x);
+        float worldToPx_X(float x);
 
-        float cameraToPx_Y(float y);
+        float worldToPx_Y(float y);
 
-        float pxToCamera_X(float x);
+        float pxToWorld_X(float x);
 
-        float pxToCamera_Y(float y);
+        float pxToWorld_Y(float y);
 
     }
 }
