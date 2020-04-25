@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
+#include "MousePicker.h"
 #include "Scenario.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -92,6 +93,11 @@ namespace Rival {
         std::unique_ptr<Window> window;
 
         /**
+         * Object used to find what's under the mouse.
+         */
+        std::unique_ptr<MousePicker> mousePicker;
+
+        /**
          * The window renderer.
          */
         SDL_Renderer* renderer = nullptr;
@@ -152,11 +158,6 @@ namespace Rival {
         void render();
         void renderGame(int viewportWidth, int viewportHeight);
         void renderFramebuffer();
-
-        /**
-         * Handles mouse input.
-         */
-        void handleMouse();
 
         /**
          * Updates the game.

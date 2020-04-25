@@ -39,3 +39,6 @@ SORR.BLD
 /dist/setup
 /dist/glew32.dll
 /dist/SDL2.dll
+
+# Other
+/misc

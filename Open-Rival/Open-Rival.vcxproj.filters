@@ -91,6 +91,9 @@
     <ClCompile Include="src\FramebufferRenderer.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="src\MousePicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -164,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="include\FramebufferRenderer.h">
       <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MousePicker.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
