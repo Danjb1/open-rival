@@ -61,8 +61,8 @@ namespace Rival {
         std::unique_ptr<Texture> paletteTexture;
 
         // Sprites
-        std::unique_ptr<std::map<Unit::Type, Spritesheet>> unitSprites =
-                std::make_unique<std::map<Unit::Type, Spritesheet>>();
+        std::unique_ptr<std::map<UnitType, Spritesheet>> unitSprites =
+                std::make_unique<std::map<UnitType, Spritesheet>>();
         std::unique_ptr<std::map<int, Spritesheet>> tileSprites =
                 std::make_unique<std::map<int, Spritesheet>>();
 
@@ -124,7 +124,7 @@ namespace Rival {
         /**
          * Initializes the Sprite for a Unit type.
          */
-        void initUnitSprite(Unit::Type type, int txIndex);
+        void initUnitSprite(UnitType type, int txIndex);
 
         /**
          * Initializes the Sprites used by tiles.

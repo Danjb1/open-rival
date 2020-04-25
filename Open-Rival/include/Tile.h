@@ -5,7 +5,7 @@
 
 namespace Rival {
 
-    enum TileType: std::int8_t {
+    enum class TileType: std::int8_t {
         Grass,
         Coastline,
         Water,
@@ -14,6 +14,17 @@ namespace Rival {
         Dungeon,
         Gold,
         Cropland
+    };
+
+    // Tile passability, based on its contents.
+    // This does not take into account flying units.
+    enum class TilePassability {
+        Clear,
+        Unit,
+        Building,
+        Tree,
+        SoftMountain,
+        Blocked
     };
 
     class Tile {

@@ -32,8 +32,8 @@ namespace Rival {
                 const Texture& paletteTexture);
 
         void render(
-                Camera& camera,
-                std::vector<Tile>& tiles,
+                const Camera& camera,
+                const std::vector<Tile>& tiles,
                 int mapWidth,
                 int mapHeight);
 

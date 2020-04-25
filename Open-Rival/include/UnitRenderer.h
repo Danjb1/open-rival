@@ -22,12 +22,12 @@ namespace Rival {
     public:
 
         UnitRenderer(
-                std::map<Unit::Type, Spritesheet>& unitSprites,
+                std::map<UnitType, Spritesheet>& unitSprites,
                 Texture& paletteTexture);
 
         void render(
-                Camera& camera,
-                std::map<int, std::unique_ptr<Unit>>& units);
+                const Camera& camera,
+                const std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
 
@@ -36,19 +36,19 @@ namespace Rival {
         static const int unitOffsetX = -33;
         static const int unitOffsetY = -89;
 
-        const std::map<Unit::Type, Spritesheet>& unitSprites;
+        const std::map<UnitType, Spritesheet>& unitSprites;
 
         const Texture& paletteTexture;
 
         std::map<int, SpriteRenderable> renderables;
 
-        SpriteRenderable& getOrCreateRenderable(Unit& unit);
+        SpriteRenderable& getOrCreateRenderable(const Unit& unit);
 
-        void renderUnit(Unit& unit);
+        void renderUnit(const Unit& unit);
 
-        bool isUnitVisible(Unit& unit, Camera& camera);
+        bool isUnitVisible(const Unit& unit, const Camera& camera);
 
-        int getTxIndex(Unit& unit) const;
+        int getTxIndex(const Unit& unit) const;
 
     };
 
