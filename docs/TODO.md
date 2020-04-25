@@ -4,11 +4,13 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Mouse picking
+ - Mouse picking units
 
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
+
+ - Right / bottom edges of the level are not visible
 
  - maxTilesX and maxTilesY should depend on the window size
     - We risk overflowing the buffer in high resolutions
@@ -22,6 +24,8 @@
  - Clarify use of unique_ptrs
 
  - Framebuffer size calculations should use RenderUtils
+
+ - Viewport should be defined explicitly rather than relying on windowWidth/Height
 
  - Rendering:
     - Duplication between UnitRenderer and TileRenderer
