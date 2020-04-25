@@ -26,9 +26,10 @@ namespace Rival {
         for (UnitPlacement& unitPlacement : data.units) {
             std::unique_ptr<Unit> unit = std::make_unique<Unit>(
                 getUnitType(unitPlacement.type),
+                unitPlacement.player,
                 unitPlacement.x,
-                unitPlacement.y);
-            unit->setFacing(getFacing(unitPlacement.facing));
+                unitPlacement.y,
+                getFacing(unitPlacement.facing));
             scenario->addUnit(std::move(unit));
         }
 
