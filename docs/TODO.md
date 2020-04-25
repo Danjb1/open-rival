@@ -33,8 +33,7 @@
         glDeleteTextures(1, &id);
         glDeleteFramebuffers(1, &id);
 
- - We should be able to create Units abstractly, for the sake of troop libraries
-    - No position / team / colour
+ - Should enums have type specifiers (e.g. TileType is std::int8_t)?
 
 <!----------------------------------------------------------------------------->
 ## Features

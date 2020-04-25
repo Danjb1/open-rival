@@ -207,65 +207,65 @@ namespace Rival {
         int nextIndex = txIndexUnits;
 
         // Human
-        initUnitSprite(Unit::Type::Ballista, nextIndex++);
-        initUnitSprite(Unit::Type::Battleship, nextIndex++);
-        initUnitSprite(Unit::Type::Bowman, nextIndex++);
-        initUnitSprite(Unit::Type::ChariotOfWar, nextIndex++);
-        initUnitSprite(Unit::Type::FireMaster, nextIndex++);
-        initUnitSprite(Unit::Type::Knight, nextIndex++);
-        initUnitSprite(Unit::Type::LightCavalry, nextIndex++);
-        initUnitSprite(Unit::Type::Peasant, nextIndex++);
-        initUnitSprite(Unit::Type::PegasRider, nextIndex++);
-        initUnitSprite(Unit::Type::Priest, nextIndex++);
-        initUnitSprite(Unit::Type::SeaBarge, nextIndex++);
-        initUnitSprite(Unit::Type::Thief, nextIndex++);
-        initUnitSprite(Unit::Type::Wizard, nextIndex++);
-        initUnitSprite(Unit::Type::Zeppelin, nextIndex++);
+        initUnitSprite(UnitType::Ballista, nextIndex++);
+        initUnitSprite(UnitType::Battleship, nextIndex++);
+        initUnitSprite(UnitType::Bowman, nextIndex++);
+        initUnitSprite(UnitType::ChariotOfWar, nextIndex++);
+        initUnitSprite(UnitType::FireMaster, nextIndex++);
+        initUnitSprite(UnitType::Knight, nextIndex++);
+        initUnitSprite(UnitType::LightCavalry, nextIndex++);
+        initUnitSprite(UnitType::Peasant, nextIndex++);
+        initUnitSprite(UnitType::PegasRider, nextIndex++);
+        initUnitSprite(UnitType::Priest, nextIndex++);
+        initUnitSprite(UnitType::SeaBarge, nextIndex++);
+        initUnitSprite(UnitType::Thief, nextIndex++);
+        initUnitSprite(UnitType::Wizard, nextIndex++);
+        initUnitSprite(UnitType::Zeppelin, nextIndex++);
 
         // Greenskin
-        initUnitSprite(Unit::Type::Balloon, nextIndex++);
-        initUnitSprite(Unit::Type::Catapult, nextIndex++);
-        initUnitSprite(Unit::Type::GnomeBoomer, nextIndex++);
-        initUnitSprite(Unit::Type::HordeRider, nextIndex++);
-        initUnitSprite(Unit::Type::LandingCraft, nextIndex++);
-        initUnitSprite(Unit::Type::Necromancer, nextIndex++);
-        initUnitSprite(Unit::Type::PriestOfDoom, nextIndex++);
-        initUnitSprite(Unit::Type::RockThrower, nextIndex++);
-        initUnitSprite(Unit::Type::Rogue, nextIndex++);
-        initUnitSprite(Unit::Type::Serf, nextIndex++);
-        initUnitSprite(Unit::Type::StormTrooper, nextIndex++);
-        initUnitSprite(Unit::Type::TrollGalley, nextIndex++);
-        initUnitSprite(Unit::Type::Warbat, nextIndex++);
-        initUnitSprite(Unit::Type::Warlord, nextIndex++);
+        initUnitSprite(UnitType::Balloon, nextIndex++);
+        initUnitSprite(UnitType::Catapult, nextIndex++);
+        initUnitSprite(UnitType::GnomeBoomer, nextIndex++);
+        initUnitSprite(UnitType::HordeRider, nextIndex++);
+        initUnitSprite(UnitType::LandingCraft, nextIndex++);
+        initUnitSprite(UnitType::Necromancer, nextIndex++);
+        initUnitSprite(UnitType::PriestOfDoom, nextIndex++);
+        initUnitSprite(UnitType::RockThrower, nextIndex++);
+        initUnitSprite(UnitType::Rogue, nextIndex++);
+        initUnitSprite(UnitType::Serf, nextIndex++);
+        initUnitSprite(UnitType::StormTrooper, nextIndex++);
+        initUnitSprite(UnitType::TrollGalley, nextIndex++);
+        initUnitSprite(UnitType::Warbat, nextIndex++);
+        initUnitSprite(UnitType::Warlord, nextIndex++);
 
         // Elf
-        initUnitSprite(Unit::Type::Archer, nextIndex++);
-        initUnitSprite(Unit::Type::Arquebusier, nextIndex++);
-        initUnitSprite(Unit::Type::Bark, nextIndex++);
-        initUnitSprite(Unit::Type::Bombard, nextIndex++);
-        initUnitSprite(Unit::Type::Centaur, nextIndex++);
-        initUnitSprite(Unit::Type::Druid, nextIndex++);
-        initUnitSprite(Unit::Type::DwarfMiner, nextIndex++);
-        initUnitSprite(Unit::Type::Enchanter, nextIndex++);
-        initUnitSprite(Unit::Type::Mage, nextIndex++);
-        initUnitSprite(Unit::Type::MagicChopper, nextIndex++);
-        initUnitSprite(Unit::Type::Scout, nextIndex++);
-        initUnitSprite(Unit::Type::SkyRider, nextIndex++);
-        initUnitSprite(Unit::Type::Warship, nextIndex++);
-        initUnitSprite(Unit::Type::Yeoman, nextIndex++);
+        initUnitSprite(UnitType::Archer, nextIndex++);
+        initUnitSprite(UnitType::Arquebusier, nextIndex++);
+        initUnitSprite(UnitType::Bark, nextIndex++);
+        initUnitSprite(UnitType::Bombard, nextIndex++);
+        initUnitSprite(UnitType::Centaur, nextIndex++);
+        initUnitSprite(UnitType::Druid, nextIndex++);
+        initUnitSprite(UnitType::DwarfMiner, nextIndex++);
+        initUnitSprite(UnitType::Enchanter, nextIndex++);
+        initUnitSprite(UnitType::Mage, nextIndex++);
+        initUnitSprite(UnitType::MagicChopper, nextIndex++);
+        initUnitSprite(UnitType::Scout, nextIndex++);
+        initUnitSprite(UnitType::SkyRider, nextIndex++);
+        initUnitSprite(UnitType::Warship, nextIndex++);
+        initUnitSprite(UnitType::Yeoman, nextIndex++);
 
         // Monsters
-        initUnitSprite(Unit::Type::Devil, nextIndex++);
-        initUnitSprite(Unit::Type::Dragon, nextIndex++);
-        initUnitSprite(Unit::Type::Golem, nextIndex++);
-        initUnitSprite(Unit::Type::Gryphon, nextIndex++);
-        initUnitSprite(Unit::Type::Hydra, nextIndex++);
-        initUnitSprite(Unit::Type::SeaMonster, nextIndex++);
-        initUnitSprite(Unit::Type::Skeleton, nextIndex++);
-        initUnitSprite(Unit::Type::Snake, nextIndex++);
+        initUnitSprite(UnitType::Devil, nextIndex++);
+        initUnitSprite(UnitType::Dragon, nextIndex++);
+        initUnitSprite(UnitType::Golem, nextIndex++);
+        initUnitSprite(UnitType::Gryphon, nextIndex++);
+        initUnitSprite(UnitType::Hydra, nextIndex++);
+        initUnitSprite(UnitType::SeaMonster, nextIndex++);
+        initUnitSprite(UnitType::Skeleton, nextIndex++);
+        initUnitSprite(UnitType::Snake, nextIndex++);
     }
 
-    void Rival::initUnitSprite(Unit::Type type, int txIndex) {
+    void Rival::initUnitSprite(UnitType type, int txIndex) {
         unitSprites->emplace(std::piecewise_construct,
             std::forward_as_tuple(type),
             std::forward_as_tuple(

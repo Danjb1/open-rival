@@ -13,18 +13,18 @@
 namespace Rival {
 
     UnitRenderer::UnitRenderer(
-            std::map<Unit::Type, Spritesheet>& unitSprites,
+            std::map<UnitType, Spritesheet>& unitSprites,
             Texture& paletteTexture) :
         unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
-    SpriteRenderable& UnitRenderer::getOrCreateRenderable(Unit& unit) {
+    SpriteRenderable& UnitRenderer::getOrCreateRenderable(const Unit& unit) {
 
         int id = unit.getId();
 
         if (renderables.find(id) == renderables.end()) {
             // No Renderable exists for this Unit; create one
-            const Unit::Type type = unit.getType();
+            const UnitType type = unit.getType();
             const Spritesheet& sprite = unitSprites.at(type);
             renderables.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id),
@@ -35,11 +35,11 @@ namespace Rival {
     }
 
     void UnitRenderer::render(
-            Camera& camera,
-            std::map<int, std::unique_ptr<Unit>>& units) {
+            const Camera& camera,
+            const std::map<int, std::unique_ptr<Unit>>& units) {
 
         for (auto const& kv : units) {
-            Unit& unit = *(kv.second).get();
+            const Unit& unit = *(kv.second).get();
 
             // If Unit is deleted, remove the associated Renderable
             if (unit.isDeleted()) {
@@ -53,7 +53,7 @@ namespace Rival {
         }
     }
 
-    bool UnitRenderer::isUnitVisible(Unit& unit, Camera& camera) {
+    bool UnitRenderer::isUnitVisible(const Unit& unit, const Camera& camera) {
         // Check if any corner of the unit is visible
         float x1 = static_cast<float>(unit.getX());
         float y1 = static_cast<float>(unit.getY());
@@ -65,7 +65,7 @@ namespace Rival {
                 || camera.contains(x1, y2);
     }
 
-    void UnitRenderer::renderUnit(Unit& unit) {
+    void UnitRenderer::renderUnit(const Unit& unit) {
 
         // Get (or create) the Renderable for this Unit
         SpriteRenderable& renderable = getOrCreateRenderable(unit);
@@ -132,8 +132,8 @@ namespace Rival {
                 nullptr);
     }
 
-    int UnitRenderer::getTxIndex(Unit& unit) const {
-        return unit.getFacing();
+    int UnitRenderer::getTxIndex(const Unit& unit) const {
+        return static_cast<int>(unit.getFacing());
     }
 
 }

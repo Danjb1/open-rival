@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <stdexcept>
+#include <vector>
 
 namespace Rival {
 
@@ -17,20 +18,23 @@ namespace Rival {
                 data.hdr.wilderness);
 
         // Initialise Tiles
-        std::vector<Tile>& tiles = scenario->getTiles();
-        for (std::size_t i = 0; i != data.tiles.size(); i++) {
-            tiles[i] = buildTile(data.tiles[i]);
+        int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
+        std::vector<Tile> tiles;
+        tiles.reserve(numTiles);
+        for (int i = 0; i < numTiles; i++) {
+            tiles.push_back(buildTile(data.tiles[i]));
         }
+        scenario->tilesLoaded(tiles);
 
         // Initialise Units
         for (UnitPlacement& unitPlacement : data.units) {
             std::unique_ptr<Unit> unit = std::make_unique<Unit>(
-                getUnitType(unitPlacement.type),
-                unitPlacement.player,
-                unitPlacement.x,
-                unitPlacement.y,
-                getFacing(unitPlacement.facing));
-            scenario->addUnit(std::move(unit));
+                    getUnitType(unitPlacement.type));
+            scenario->addUnit(std::move(unit),
+                    unitPlacement.player,
+                    unitPlacement.x,
+                    unitPlacement.y,
+                    getFacing(unitPlacement.facing));
         }
 
         return scenario;
@@ -153,115 +157,115 @@ namespace Rival {
         return Tile(type, txIndex, 0);
     }
 
-    Unit::Type ScenarioBuilder::getUnitType(std::uint8_t unitType) const {
+    UnitType ScenarioBuilder::getUnitType(std::uint8_t unitType) const {
         switch (unitType) {
         case 0x33:
-            return Unit::Peasant;
+            return UnitType::Peasant;
         case 0x34:
-            return Unit::Bowman;
+            return UnitType::Bowman;
         case 0x35:
-            return Unit::LightCavalry;
+            return UnitType::LightCavalry;
         case 0x36:
-            return Unit::Knight;
+            return UnitType::Knight;
         case 0x37:
-            return Unit::FireMaster;
+            return UnitType::FireMaster;
         case 0x38:
-            return Unit::Thief;
+            return UnitType::Thief;
         case 0x39:
-            return Unit::Ballista;
+            return UnitType::Ballista;
         case 0x3A:
-            return Unit::ChariotOfWar;
+            return UnitType::ChariotOfWar;
         case 0x3B:
-            return Unit::Wizard;
+            return UnitType::Wizard;
         case 0x3C:
-            return Unit::Priest;
+            return UnitType::Priest;
         case 0x3D:
-            return Unit::SeaBarge;
+            return UnitType::SeaBarge;
         case 0x3E:
-            return Unit::Battleship;
+            return UnitType::Battleship;
         case 0x3F:
-            return Unit::PegasRider;
+            return UnitType::PegasRider;
         case 0x40:
-            return Unit::Zeppelin;
+            return UnitType::Zeppelin;
         case 0x41:
-            return Unit::Serf;
+            return UnitType::Serf;
         case 0x42:
-            return Unit::RockThrower;
+            return UnitType::RockThrower;
         case 0x43:
-            return Unit::HordeRider;
+            return UnitType::HordeRider;
         case 0x44:
-            return Unit::Warlord;
+            return UnitType::Warlord;
         case 0x45:
-            return Unit::GnomeBoomer;
+            return UnitType::GnomeBoomer;
         case 0x46:
-            return Unit::Rogue;
+            return UnitType::Rogue;
         case 0x47:
-            return Unit::Catapult;
+            return UnitType::Catapult;
         case 0x48:
-            return Unit::StormTrooper;
+            return UnitType::StormTrooper;
         case 0x49:
-            return Unit::PriestOfDoom;
+            return UnitType::PriestOfDoom;
         case 0x4A:
-            return Unit::Necromancer;
+            return UnitType::Necromancer;
         case 0x4B:
-            return Unit::LandingCraft;
+            return UnitType::LandingCraft;
         case 0x4C:
-            return Unit::TrollGalley;
+            return UnitType::TrollGalley;
         case 0x4D:
-            return Unit::Warbat;
+            return UnitType::Warbat;
         case 0x4E:
-            return Unit::Balloon;
+            return UnitType::Balloon;
         case 0x4F:
-            return Unit::Yeoman;
+            return UnitType::Yeoman;
         case 0x50:
-            return Unit::Archer;
+            return UnitType::Archer;
         case 0x51:
-            return Unit::Druid;
+            return UnitType::Druid;
         case 0x52:
-            return Unit::Centaur;
+            return UnitType::Centaur;
         case 0x53:
-            return Unit::DwarfMiner;
+            return UnitType::DwarfMiner;
         case 0x54:
-            return Unit::Scout;
+            return UnitType::Scout;
         case 0x55:
-            return Unit::Bombard;
+            return UnitType::Bombard;
         case 0x56:
-            return Unit::Arquebusier;
+            return UnitType::Arquebusier;
         case 0x57:
-            return Unit::Mage;
+            return UnitType::Mage;
         case 0x58:
-            return Unit::Enchanter;
+            return UnitType::Enchanter;
         case 0x59:
-            return Unit::Bark;
+            return UnitType::Bark;
         case 0x60:
-            return Unit::Warship;
+            return UnitType::Warship;
         case 0x5B:
-            return Unit::SkyRider;
+            return UnitType::SkyRider;
         case 0x5C:
-            return Unit::MagicChopper;
+            return UnitType::MagicChopper;
         default:
             throw std::runtime_error("Unknown unit type: " + unitType);
         }
     }
 
-    Unit::Facing ScenarioBuilder::getFacing(std::uint8_t facing) const {
+    Facing ScenarioBuilder::getFacing(std::uint8_t facing) const {
         switch (facing) {
         case 0:
-            return Unit::Facing::South;
+            return Facing::South;
         case 1:
-            return Unit::Facing::SouthWest;
+            return Facing::SouthWest;
         case 2:
-            return Unit::Facing::West;
+            return Facing::West;
         case 3:
-            return Unit::Facing::NorthWest;
+            return Facing::NorthWest;
         case 4:
-            return Unit::Facing::North;
+            return Facing::North;
         case 5:
-            return Unit::Facing::NorthEast;
+            return Facing::NorthEast;
         case 6:
-            return Unit::Facing::East;
+            return Facing::East;
         case 7:
-            return Unit::Facing::SouthEast;
+            return Facing::SouthEast;
         default:
             throw std::runtime_error("Unknown facing: " + facing);
         }

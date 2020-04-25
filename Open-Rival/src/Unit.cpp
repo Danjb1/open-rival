@@ -3,28 +3,23 @@
 
 namespace Rival {
 
-    Unit::Unit(
-            Type type,
-            int player,
-            int x,
-            int y,
-            Facing facing) :
-        type(type),
-        player(player),
-        x(x),
-        y(y),
-        facing(facing) {
+    Unit::Unit(UnitType type) :
+        type(type) {}
+
+    void Unit::addedToWorld(
+            int id, int player, int x, int y, Facing facing) {
+        this->id = id;
+        this->player = player;
+        this->x = x;
+        this->y = y;
+        this->facing = facing;
     }
 
-    void Unit::addedToScene(const int newId) {
-        id = newId;
-    }
-
-    const Unit::Type Unit::getType() const {
+    const UnitType Unit::getType() const {
         return type;
     }
 
-    const Unit::Facing Unit::getFacing() const {
+    const Facing Unit::getFacing() const {
         return facing;
     }
 
@@ -42,7 +37,7 @@ namespace Rival {
         facing = newFacing;
     }
 
-    const bool Unit::isDeleted() {
+    const bool Unit::isDeleted() const {
         return deleted;
     }
 
@@ -50,7 +45,7 @@ namespace Rival {
         deleted = true;
     }
 
-    const int Unit::getId() {
+    const int Unit::getId() const {
         return id;
     }
 

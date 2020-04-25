@@ -6,6 +6,7 @@
 
 #include "Scenario.h"
 #include "ScenarioData.h"
+#include "Tile.h"
 
 namespace Rival {
 
@@ -24,9 +25,9 @@ namespace Rival {
 
         Tile buildTile(TilePlacement& tile) const;
 
-        Unit::Type getUnitType(std::uint8_t unitType) const;
+        UnitType getUnitType(std::uint8_t unitType) const;
 
-        Unit::Facing getFacing(std::uint8_t facing) const;
+        Facing getFacing(std::uint8_t facing) const;
 
     };
 

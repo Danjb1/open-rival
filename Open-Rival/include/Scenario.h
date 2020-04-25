@@ -20,13 +20,21 @@ namespace Rival {
 
         int getHeight() const;
 
-        std::vector<Tile>& getTiles();
+        const std::vector<Tile>& getTiles();
+
+        // Sets all tiles at once
+        void tilesLoaded(std::vector<Tile> tiles);
 
         Tile getTile(int x, int y) const;
 
         bool isWilderness() const;
 
-        void addUnit(std::unique_ptr<Unit> unit);
+        void addUnit(
+                std::unique_ptr<Unit> unit,
+                int player,
+                int x,
+                int y,
+                Facing facing);
 
         std::map<int, std::unique_ptr<Unit>>& getUnits();
 
@@ -36,9 +44,12 @@ namespace Rival {
         const int height;
         bool wilderness;
         std::vector<Tile> tiles;
+        std::vector<TilePassability> tilePassability;
 
         int nextId;
         std::map<int, std::unique_ptr<Unit>> units;
+
+        void setPassability(int x, int y, TilePassability passability);
 
     };
 
