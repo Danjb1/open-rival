@@ -26,26 +26,30 @@ namespace Rival {
             return renderPos;
         }
 
-        float cameraToPx_X(float x) {
-            // Same as tileToPx_X, above, but using floats, since the camera
-            // can be "between" tiles
+        float worldToPx_X(float x) {
+            // Same as tileToPx_X, above, but using floats.
+            // This is especially important for the camera, since it can be
+            // "between" tiles.
             return x * (tileSpriteWidthPx / 2);
         }
 
-        float cameraToPx_Y(float y) {
-            // Same as tileToPx_Y, above, but without the zigzagging; we
-            // don't want the camera to move up and down when scrolling left
-            // and right!
+        float worldToPx_Y(float y) {
+            // Same as tileToPx_Y, above, but using floats, and without the
+            // zigzagging.
+            // This is especially important for the camera, since we don't
+            // want it to move up and down when scrolling left and right!
+            // More generally, this should be used to calculate distances
+            // rather than actual positions.
             return y * (tileSpriteHeightPx / 2);
         }
 
-        float pxToCamera_X(float x) {
-            // This is the reverse of cameraToPx_X
+        float pxToWorld_X(float x) {
+            // This is the reverse of worldToPx_X
             return 2 * (x / tileSpriteWidthPx);
         }
 
-        float pxToCamera_Y(float y) {
-            // This is the reverse of cameraToPx_Y
+        float pxToWorld_Y(float y) {
+            // This is the reverse of worldToPx_Y
             return 2 * (y / tileSpriteHeightPx);
         }
 

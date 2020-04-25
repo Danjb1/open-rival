@@ -31,6 +31,11 @@ namespace Rival {
 
     private:
 
+        // Offset applied to align a unit sprite correctly within a tile,
+        // in pixels
+        static const int unitOffsetX = -33;
+        static const int unitOffsetY = -89;
+
         const std::map<Unit::Type, Spritesheet>& unitSprites;
 
         const Texture& paletteTexture;
