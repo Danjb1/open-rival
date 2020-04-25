@@ -7,8 +7,14 @@ namespace Rival {
             width(width),
             height(height),
             wilderness(wilderness),
+
+            // Default to Grass everywhere
             tiles(std::vector<Tile>(
-                    width * height, Tile(TileType::Grass, 0, 0))) {}
+                    width * height, Tile(TileType::Grass, 0, 0))
+            ),
+            tilePassability(std::vector<TilePassability>(
+                    width * height, TilePassability::Clear)
+            ) {}
 
     int Scenario::getWidth() const {
         return width;
@@ -18,8 +24,12 @@ namespace Rival {
         return height;
     }
 
-    std::vector<Tile>& Scenario::getTiles() {
+    const std::vector<Tile>& Scenario::getTiles() {
         return tiles;
+    }
+
+    void Scenario::tilesLoaded(std::vector<Tile> tiles) {
+        this->tiles = tiles;
     }
 
     Tile Scenario::getTile(int x, int y) const {
@@ -30,10 +40,26 @@ namespace Rival {
         return wilderness;
     }
 
-    void Scenario::addUnit(std::unique_ptr<Unit> unit) {
+    void Scenario::addUnit(
+            std::unique_ptr<Unit> unit,
+            int player,
+            int x,
+            int y,
+            Facing facing) {
+
+        // Add the Unit to the world
         units[nextId] = std::move(unit);
-        units[nextId]->addedToScene(nextId);
+        units[nextId]->addedToWorld(nextId, player, x, y, facing);
+
+        // Increase the ID for the next one
         nextId++;
+
+        // Change the passability
+        setPassability(x, y, TilePassability::Unit);
+    }
+
+    void Scenario::setPassability(int x, int y, TilePassability passability) {
+        tilePassability[y * width + x] = passability;
     }
 
     std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() {
