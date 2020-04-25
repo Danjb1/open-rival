@@ -26,6 +26,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
+    <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -53,6 +54,7 @@
     <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\MathUtils.h" />
+    <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\RenderUtils.h" />

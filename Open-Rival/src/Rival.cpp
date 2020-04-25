@@ -64,6 +64,12 @@ namespace Rival {
         camera = std::make_unique<Camera>(
                 0.0f, 0.0f, cameraWidth, aspectRatio, *scenario.get());
 
+        // Create the MousePicker
+        mousePicker = std::make_unique<MousePicker>(
+                *camera.get(),
+                scenario->getWidth(),
+                scenario->getHeight());
+
         // Create the UnitRenderer
         unitRenderer = std::make_unique<UnitRenderer>(
                 *unitSprites.get(),
@@ -311,7 +317,6 @@ namespace Rival {
             }
 
             // Process the current frame
-            handleMouse();
             update();
             render();
 
@@ -325,45 +330,11 @@ namespace Rival {
         exit();
     }
 
-    void Rival::handleMouse() {
-
-        // Get the mouse position relative to the window, in pixels
-        int mouseX;
-        int mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
-        // Calculate the mouse position relative to the viewport, in pixels.
-        // Since our viewport fills the window, no conversion is really
-        // performed here.
-        int viewportX = 0;
-        int viewportY = 0;
-        int viewportWidth = windowWidth;
-        int viewportHeight = windowHeight;
-        int mouseInViewportX = mouseX - viewportX;
-        int mouseInViewportY = mouseY - viewportY;
-
-        // Calculate mouse position relative to the viewport, in the range 0-1
-        float normalizedMouseX =
-                static_cast<float>(mouseInViewportX) / viewportWidth;
-        float normalizedMouseY =
-                static_cast<float>(mouseInViewportY) / viewportHeight;
-
-        // Calculate the mouse position in world units
-        float mouseWorldX = camera->getLeft()
-                + normalizedMouseX * camera->getWidth();
-        float mouseWorldY = camera->getTop()
-                + normalizedMouseY * camera->getHeight();
-
-        std::cout << mouseWorldX << ", " << mouseWorldY << "\n";
-
-        // PROBLEM:
-        // This assumes that our tiles are square and aligned with the camera's
-        // axes, but they are diamond-shaped and zigzag up and down. We need to
-        // make some adjustments based on the decimal part of the mouse
-        // position to figure out the actual tile.
-    }
-
     void Rival::update() {
+
+        mousePicker->handleMouse();
+        std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
+
         std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
