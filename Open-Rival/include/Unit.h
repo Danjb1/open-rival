@@ -85,7 +85,11 @@ namespace Rival {
         static const int width = 1;
         static const int height = 1;
 
-        Unit(const Type type, int x, int y);
+        Unit(Type type,
+                int player,
+                int x,
+                int y,
+                Facing facing);
 
         void addedToScene(int newId);
 
@@ -113,9 +117,11 @@ namespace Rival {
 
         int id = -1;
 
+        bool deleted = false;
+
         Type type;
 
-        bool deleted = false;
+        int player;
 
         /**
          * x co-ordinate of the Tile the Unit is occupying.
