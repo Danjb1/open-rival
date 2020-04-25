@@ -60,7 +60,7 @@ namespace Rival {
         gameFboRenderer->init();
 
         // Create the Camera
-        const float cameraWidth = RenderUtils::pxToCamera_X(windowWidth);
+        const float cameraWidth = RenderUtils::pxToWorld_X(windowWidth);
         camera = std::make_unique<Camera>(
                 0.0f, 0.0f, cameraWidth, aspectRatio, *scenario.get());
 
@@ -338,9 +338,9 @@ namespace Rival {
         // occur.
         glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
         int viewportWidth = static_cast<int>(
-                RenderUtils::cameraToPx_X(camera->getWidth()));
+                RenderUtils::worldToPx_X(camera->getWidth()));
         int viewportHeight = static_cast<int>(
-                RenderUtils::cameraToPx_Y(camera->getHeight()));
+                RenderUtils::worldToPx_Y(camera->getHeight()));
         glViewport(0, 0, viewportWidth, viewportHeight);
         renderGame();
 
@@ -375,10 +375,10 @@ namespace Rival {
         // The camera co-ordinates are in world units (tiles), but the vertices
         // are positioned using pixels. Therefore we need to convert the camera
         // co-ordinates to pixels, too.
-        float left = RenderUtils::cameraToPx_X(camera->getLeft());
-        float top = RenderUtils::cameraToPx_Y(camera->getTop());
-        float right = RenderUtils::cameraToPx_X(camera->getRight());
-        float bottom = RenderUtils::cameraToPx_X(camera->getBottom());
+        float left = RenderUtils::worldToPx_X(camera->getLeft());
+        float top = RenderUtils::worldToPx_Y(camera->getTop());
+        float right = RenderUtils::worldToPx_X(camera->getRight());
+        float bottom = RenderUtils::worldToPx_X(camera->getBottom());
         glm::mat4 projection = glm::ortho(left, right, bottom, top);
 
         // Combine matrices

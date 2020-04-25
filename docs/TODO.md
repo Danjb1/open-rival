@@ -4,9 +4,10 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
- - Units are not rendered at the camera edges
+ - maxTilesX and maxTilesY should depend on the window size
+    - We risk overflowing the buffer in high resolutions
 
- - Unit vertex positions don't account for unit offset within texture
+ - The game will crash if a level is smaller than the number of visible tiles
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt

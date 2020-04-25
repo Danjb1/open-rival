@@ -77,9 +77,11 @@ namespace Rival {
         float width = static_cast<float>(RenderUtils::unitWidthPx);
         float height = static_cast<float>(RenderUtils::unitHeightPx);
         float x1 = static_cast<float>(
-            RenderUtils::tileToPx_X(unit.getX()));
+                RenderUtils::tileToPx_X(unit.getX()));
         float y1 = static_cast<float>(
-            RenderUtils::tileToPx_Y(unit.getX(), unit.getY()));
+                RenderUtils::tileToPx_Y(unit.getX(), unit.getY()));
+        x1 += static_cast<float>(unitOffsetX);
+        y1 += static_cast<float>(unitOffsetY);
         float x2 = x1 + width;
         float y2 = y1 + height;
         std::vector<GLfloat> vertexData = {
