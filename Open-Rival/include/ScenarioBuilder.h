@@ -26,6 +26,8 @@ namespace Rival {
 
         Unit::Type getUnitType(std::uint8_t unitType) const;
 
+        Unit::Facing getFacing(std::uint8_t facing) const;
+
     };
 
 }
