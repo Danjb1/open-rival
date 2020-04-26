@@ -10,8 +10,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
- - Right / bottom edges of the level are not visible
-
  - maxTilesX and maxTilesY should depend on the window size
     - We risk overflowing the buffer in high resolutions
 
@@ -20,6 +18,8 @@
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+ - Camera should point at the centre of a tile - not the top-left corner
 
  - Clarify use of unique_ptrs
 
