@@ -10,6 +10,7 @@
 
 #include "Image.h"
 #include "Palette.h"
+#include "Race.h"
 #include "RenderUtils.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioData.h"
@@ -38,6 +39,7 @@ namespace Rival {
         // Load resources
         loadTextures();
         initUnitSprites();
+        initMapBorderSpritesheet();
         initTileSprites();
 
         // Initialize Palette Texture
@@ -70,11 +72,6 @@ namespace Rival {
                 scenario->getWidth(),
                 scenario->getHeight());
 
-        // Create the UnitRenderer
-        unitRenderer = std::make_unique<UnitRenderer>(
-                *unitSprites.get(),
-                *paletteTexture.get());
-
         // Pick which tile Spritesheet to use based on the map type
         const Spritesheet& tileSpritesheet = scenario->isWilderness()
                 ? tileSprites->at(1)
@@ -83,6 +80,16 @@ namespace Rival {
         // Create the TileRenderer
         tileRenderer = std::make_unique<TileRenderer>(
                 tileSpritesheet,
+                *paletteTexture.get());
+
+        // Create the MapBorderRenderer
+        mapBorderRenderer = std::make_unique<MapBorderRenderer>(
+                *mapBorderSpritesheet.get(),
+                *paletteTexture.get());
+
+        // Create the UnitRenderer
+        unitRenderer = std::make_unique<UnitRenderer>(
+                *unitSprites.get(),
                 *paletteTexture.get());
     }
 
@@ -206,6 +213,10 @@ namespace Rival {
         textures->push_back(Texture::loadTexture(txDir + "tiles_meadow.tga"));
         textures->push_back(Texture::loadTexture(txDir + "tiles_wilderness.tga"));
         textures->push_back(Texture::loadTexture(txDir + "tiles_fog.tga"));
+
+        // UI
+        textures->push_back(Texture::loadTexture(txDir + "ui_cursor_select.tga"));
+        textures->push_back(Texture::loadTexture(txDir + "ui_map_border.tga"));
     }
 
     void Rival::initUnitSprites() {
@@ -278,6 +289,13 @@ namespace Rival {
                     textures->at(txIndex),
                     RenderUtils::unitWidthPx,
                     RenderUtils::unitHeightPx));
+    }
+
+    void Rival::initMapBorderSpritesheet() {
+        mapBorderSpritesheet = std::make_unique<Spritesheet>(
+                textures->at(txIndexUi + 1),
+                RenderUtils::tileSpriteWidthPx,
+                RenderUtils::tileSpriteHeightPx);
     }
 
     void Rival::initTileSprites() {
@@ -411,6 +429,16 @@ namespace Rival {
         tileRenderer->render(
                 *camera.get(),
                 scenario->getTiles(),
+                scenario->getWidth(),
+                scenario->getHeight());
+
+        // Hardcode this, for now
+        Race race = Race::Human;
+
+        // Render Map Borders
+        mapBorderRenderer->render(
+                race,
+                *camera.get(),
                 scenario->getWidth(),
                 scenario->getHeight());
 

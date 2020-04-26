@@ -8,10 +8,8 @@
 
 #include "MathUtils.h"
 #include "Palette.h"
-#include "RenderUtils.h"
 #include "Rival.h"
 #include "Shaders.h"
-#include "SpriteRenderable.h"
 
 namespace Rival {
 

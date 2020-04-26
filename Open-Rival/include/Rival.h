@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
+#include "MapBorderRenderer.h"
 #include "MousePicker.h"
 #include "Scenario.h"
 #include "Spritesheet.h"
@@ -44,9 +45,10 @@ namespace Rival {
         const std::string txDir = "res\\textures\\";
 
         // Texture constants
-        static const int numTextures = 94;
+        static const int numTextures = 96;
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
+        static const int txIndexUi = 53;
 
         // Framebuffer size, in pixels.
         // This is our canvas; we can never render more pixels than this.
@@ -66,6 +68,7 @@ namespace Rival {
                 std::make_unique<std::map<UnitType, Spritesheet>>();
         std::unique_ptr<std::map<int, Spritesheet>> tileSprites =
                 std::make_unique<std::map<int, Spritesheet>>();
+        std::unique_ptr<Spritesheet> mapBorderSpritesheet;
 
         // Camera
         std::unique_ptr<Camera> camera;
@@ -85,6 +88,7 @@ namespace Rival {
         // Renderers
         std::unique_ptr<FramebufferRenderer> gameFboRenderer;
         std::unique_ptr<TileRenderer> tileRenderer;
+        std::unique_ptr<MapBorderRenderer> mapBorderRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
 
         /**
@@ -123,24 +127,29 @@ namespace Rival {
         void loadTextures();
 
         /**
-         * Initializes the Sprites used by Units.
+         * Initializes the Spritesheets used by Units.
          */
         void initUnitSprites();
 
         /**
-         * Initializes the Sprite for a Unit type.
+         * Initializes the Spritesheet for a Unit type.
          */
         void initUnitSprite(UnitType type, int txIndex);
 
         /**
-         * Initializes the Sprites used by tiles.
+         * Initializes the Spritesheets used by tiles.
          */
         void initTileSprites();
 
         /**
-         * Initializes the Sprite for a tile type.
+         * Initializes the Spritesheet for a tile type.
          */
         void initTileSprite(int type, int txIndex);
+
+        /**
+         * Initializes the Spritesheet for the map borders.
+         */
+        void initMapBorderSpritesheet();
 
         /**
          * Handles keyDown events.

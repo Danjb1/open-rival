@@ -94,6 +94,9 @@
     <ClCompile Include="src\MousePicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MapBorderRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -169,6 +172,12 @@
       <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\MousePicker.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MapBorderRenderer.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Race.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
