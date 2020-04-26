@@ -1,15 +1,15 @@
 #ifndef TILE_RENDERER_H
 #define TILE_RENDERER_H
 
-#include <string>
+#include <gl/glew.h>
 #include <vector>
 
 #include "Camera.h"
 #include "RenderUtils.h"
 #include "Spritesheet.h"
 #include "SpriteRenderable.h"
+#include "Texture.h"
 #include "Tile.h"
-#include "Unit.h"
 
 namespace Rival {
 
@@ -22,7 +22,7 @@ namespace Rival {
 
     public:
 
-        // The maximum number of tiles we can render at once.
+        // The maximum number of tiles we can render.
         // This is the max map size in the original game.
         static const int maxTilesToRender =
                 RenderUtils::maxTilesX * RenderUtils::maxTilesY;

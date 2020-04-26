@@ -25,6 +25,7 @@
     <ClCompile Include="src\FramebufferRenderer.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MapBorderRenderer.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\Palette.cpp" />
@@ -53,10 +54,12 @@
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\Race.h" />
     <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Rival.h" />
     <ClInclude Include="include\Scenario.h" />

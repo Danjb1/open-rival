@@ -6,6 +6,16 @@
 
  - Mouse picking units
 
+ - Render map borders
+    - Bottom border has the wrong offset
+    - Some borders extend too far (should stop before the corners)
+    - Corners:
+        txIndex:
+        4 - top-left
+        5 - top-right
+        6 - bottom-right
+        7 - bottom-left
+
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
@@ -27,11 +37,14 @@
 
  - Viewport should be defined explicitly rather than relying on windowWidth/Height
 
+ - Extract texture / image initialisation code out of Rival
+
  - Rendering:
-    - Duplication between UnitRenderer and TileRenderer
+    - Duplication between Renderers
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
+    - Only render map borders visible to the camera
 
  - ScenarioReader:
     - Use BinaryFileReader
@@ -101,7 +114,6 @@
 ### Rendering
 
  - Render Interface
- - Render map border
  - Water tile animations
  - Gold tile animations
  - Render Buildings
@@ -109,6 +121,7 @@
  - Render Units
     - Animations
     - Respect colour
+    - Sort by z-order!
  - Use depth buffer
  - Fog of war
  - High resolution support (!)
