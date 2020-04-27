@@ -53,7 +53,7 @@ namespace Rival {
         uint8_t imageDescriptor = reader.readByte();
 
         // Color palette
-        reader.skip(paletteBytes);
+        reader.skip(Palette::paletteBytes);
 
         // Pixel data
         std::unique_ptr<std::vector<unsigned char>> data =

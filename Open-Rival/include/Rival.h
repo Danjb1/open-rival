@@ -3,16 +3,14 @@
 
 #include <SDL.h>
 #include <iostream>
-#include <string>
 
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
 #include "MousePicker.h"
+#include "Resources.h"
 #include "Scenario.h"
-#include "Spritesheet.h"
-#include "Texture.h"
 #include "TileRenderer.h"
 #include "UnitRenderer.h"
 #include "Window.h"
@@ -40,16 +38,6 @@ namespace Rival {
 
         const char* windowTitle = "Rival Realms";
 
-        // Directories
-        const std::string mapsDir = "res\\maps\\";
-        const std::string txDir = "res\\textures\\";
-
-        // Texture constants
-        static const int numTextures = 96;
-        static const int txIndexUnits = 0;
-        static const int txIndexTiles = 50;
-        static const int txIndexUi = 53;
-
         // Framebuffer size, in pixels.
         // This is our canvas; we can never render more pixels than this.
         // We divide by 2 because our tiles overlap (see RenderUtils).
@@ -58,17 +46,8 @@ namespace Rival {
         static const int framebufferHeight =
                 RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
 
-        // Loaded textures
-        std::unique_ptr<std::vector<Texture>> textures =
-                std::make_unique<std::vector<Texture>>();
-        std::unique_ptr<Texture> paletteTexture;
-
-        // Sprites
-        std::unique_ptr<std::map<UnitType, Spritesheet>> unitSprites =
-                std::make_unique<std::map<UnitType, Spritesheet>>();
-        std::unique_ptr<std::map<int, Spritesheet>> tileSprites =
-                std::make_unique<std::map<int, Spritesheet>>();
-        std::unique_ptr<Spritesheet> mapBorderSpritesheet;
+        // Resources
+        std::unique_ptr<Resources> res;
 
         // Camera
         std::unique_ptr<Camera> camera;
@@ -121,17 +100,6 @@ namespace Rival {
          * Initializes OpenGL.
          */
         void initGL();
-
-        /**
-         * Loads the game's Textures.
-         */
-        void loadTextures();
-
-        void initUnitSprites();
-        void initUnitSprite(UnitType type, int txIndex);
-        void initTileSprites();
-        void initTileSprite(int type, int txIndex);
-        void initMapBorderSpritesheet();
 
         /**
          * Handles keyDown events.

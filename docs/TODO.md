@@ -6,6 +6,10 @@
 
  - Mouse picking units
 
+ - Resources refactor
+    - Follow rule of 5
+    - Pass Resources around instead of individual textures / spritesheets?
+
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
@@ -26,8 +30,6 @@
  - Framebuffer size calculations should use RenderUtils
 
  - Viewport should be defined explicitly rather than relying on windowWidth/Height
-
- - Extract texture / image initialisation code out of Rival
 
  - Rendering:
     - Duplication between Renderers
