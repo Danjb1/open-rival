@@ -95,6 +95,7 @@ namespace Rival {
          * Window used to display the game.
          */
         std::unique_ptr<Window> window;
+        bool vsyncEnabled = true;
 
         /**
          * Object used to find what's under the mouse.
@@ -126,29 +127,10 @@ namespace Rival {
          */
         void loadTextures();
 
-        /**
-         * Initializes the Spritesheets used by Units.
-         */
         void initUnitSprites();
-
-        /**
-         * Initializes the Spritesheet for a Unit type.
-         */
         void initUnitSprite(UnitType type, int txIndex);
-
-        /**
-         * Initializes the Spritesheets used by tiles.
-         */
         void initTileSprites();
-
-        /**
-         * Initializes the Spritesheet for a tile type.
-         */
         void initTileSprite(int type, int txIndex);
-
-        /**
-         * Initializes the Spritesheet for the map borders.
-         */
         void initMapBorderSpritesheet();
 
         /**

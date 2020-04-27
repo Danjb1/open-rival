@@ -180,5 +180,8 @@
     <ClInclude Include="include\Race.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\TimerUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
