@@ -16,6 +16,7 @@
 #include "ScenarioData.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
+#include "TimerUtils.h"
 
 namespace Rival {
 
@@ -131,9 +132,10 @@ namespace Rival {
 
     void Rival::initGL() {
 
-        // Enable vsync
+        // Try to enable vsync
         if (SDL_GL_SetSwapInterval(1) < 0) {
             printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
+            vsyncEnabled = false;
         }
 
         // Set clear color
@@ -325,29 +327,56 @@ namespace Rival {
         // Event handler
         SDL_Event e;
 
-        // Run our game loop until the application is exited
         bool exiting = false;
+        Uint32 nextUpdateDue = SDL_GetTicks();
+
+        // Game loop
         while (!exiting) {
+            Uint32 frameStartTime = SDL_GetTicks();
 
-            // Handle events on queue
-            while (SDL_PollEvent(&e) != 0) {
-                if (e.type == SDL_QUIT) {
-                    exiting = true;
-                } else if (e.type == SDL_KEYDOWN) {
-                    keyDown(e.key.keysym.sym);
-                } else if (e.type == SDL_MOUSEWHEEL) {
-                    mouseWheelMoved(e.wheel);
+            // Is the next update due?
+            if (vsyncEnabled || nextUpdateDue <= frameStartTime) {
+
+                // Handle events on the queue
+                while (SDL_PollEvent(&e) != 0) {
+                    if (e.type == SDL_QUIT) {
+                        exiting = true;
+                    } else if (e.type == SDL_KEYDOWN) {
+                        keyDown(e.key.keysym.sym);
+                    } else if (e.type == SDL_MOUSEWHEEL) {
+                        mouseWheelMoved(e.wheel);
+                    }
                 }
+
+                // Update the game logic, as many times as necessary to keep it
+                // in-sync with the refresh rate.
+                //
+                // For example:
+                //  - For a 30Hz monitor, this will run twice per render.
+                //  - For a 60Hz monitor, this will run once per render.
+                //  - For a 120Hz monitor, this will run every other render.
+                //
+                // If vsync is disabled, this should run once per render.
+                while (nextUpdateDue <= frameStartTime) {
+                    update();
+                    nextUpdateDue += TimerUtils::timeStepMs;
+                }
+
+                // Render the game, once per iteration.
+                // With vsync enabled, this matches the screen's refresh rate.
+                // Otherwise, this matches our target FPS.
+                render();
+
+                // Update the window with our newly-rendered game.
+                // If vsync is enabled, this will block execution until the
+                // next swap interval.
+                window->swapBuffers();
+
+            } else {
+                // Next update is not yet due.
+                // Sleep for the shortest possible time, so as not to risk overshooting!
+                SDL_Delay(1);
             }
-
-            // Process the current frame
-            update();
-            render();
-
-            // Update the window with our newly-rendered game;
-            // this will block execution until the next refresh interval,
-            // due to vsync
-            window->swapBuffers();
         }
 
         // Free resources and exit SDL
