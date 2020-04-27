@@ -17,46 +17,41 @@ namespace Rival {
 
     public:
 
-        // The maximum number of border segments we can render.
-        // Each border segment spans 2 tiles horizontally, or 1 tile
-        // vertically.
+        // The maximum number of border segments we can render
         static const int maxSegmentsToRender =
-                (RenderUtils::maxTilesX / 2)    // top edge
-                + (RenderUtils::maxTilesX / 2)  // bottom edge
-                + RenderUtils::maxTilesY        // left edge
-                + RenderUtils::maxTilesY;       // right edge
+                (2 * RenderUtils::maxTilesX)
+                + (2 * RenderUtils::maxTilesY);
 
         MapBorderRenderer(
+                Race race,
+                int mapWidth,
+                int mapHeight,
                 const Spritesheet& spritesheet,
                 const Texture& paletteTexture);
 
-        void render(
-                const Race race,
-                const Camera& camera,
-                int mapWidth,
-                int mapHeight);
-
         void MapBorderRenderer::createLeftEdge(
-                int& renderedSegments,
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapHeight);
 
         void MapBorderRenderer::createTopEdge(
-                int& renderedSegments,
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth);
 
         void MapBorderRenderer::createRightEdge(
-                int& renderedSegments,
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth,
                 int mapHeight);
 
         void MapBorderRenderer::createBottomEdge(
-                int& renderedSegments,
+                std::vector<GLfloat>& positions,
+                std::vector<GLfloat>& texCoords,
+                int mapWidth,
+                int mapHeight);
+
+        void MapBorderRenderer::createCorners(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth,
@@ -66,14 +61,18 @@ namespace Rival {
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int txIndex,
-                int tileX,
-                int tileY);
+                float tileX,
+                float tileY);
+
+        void render();
 
     private:
 
         SpriteRenderable renderable;
 
         const Texture& paletteTexture;
+
+        int numSegments = 0;
 
     };
 
