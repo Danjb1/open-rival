@@ -82,8 +82,14 @@ namespace Rival {
                 tileSpritesheet,
                 *paletteTexture.get());
 
+        // Hardcode this, for now
+        Race race = Race::Human;
+
         // Create the MapBorderRenderer
         mapBorderRenderer = std::make_unique<MapBorderRenderer>(
+                race,
+                scenario->getWidth(),
+                scenario->getHeight(),
                 *mapBorderSpritesheet.get(),
                 *paletteTexture.get());
 
@@ -432,15 +438,8 @@ namespace Rival {
                 scenario->getWidth(),
                 scenario->getHeight());
 
-        // Hardcode this, for now
-        Race race = Race::Human;
-
         // Render Map Borders
-        mapBorderRenderer->render(
-                race,
-                *camera.get(),
-                scenario->getWidth(),
-                scenario->getHeight());
+        mapBorderRenderer->render();
 
         // Render Units
         unitRenderer->render(*camera.get(), scenario->getUnits());

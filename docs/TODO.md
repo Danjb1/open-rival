@@ -6,16 +6,6 @@
 
  - Mouse picking units
 
- - Render map borders
-    - Bottom border has the wrong offset
-    - Some borders extend too far (should stop before the corners)
-    - Corners:
-        txIndex:
-        4 - top-left
-        5 - top-right
-        6 - bottom-right
-        7 - bottom-left
-
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
@@ -44,7 +34,6 @@
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
-    - Only render map borders visible to the camera
 
  - ScenarioReader:
     - Use BinaryFileReader
