@@ -73,6 +73,7 @@
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\TileRenderer.h" />
+    <ClInclude Include="include\TimerUtils.h" />
     <ClInclude Include="include\Unit.h" />
     <ClInclude Include="include\UnitRenderer.h" />
     <ClInclude Include="include\Window.h" />
