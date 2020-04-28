@@ -52,18 +52,17 @@ namespace Rival {
                 Framebuffer::generate(framebufferWidth, framebufferHeight));
 
         // Create the FramebufferRenderer
-        gameFboRenderer = std::make_unique<FramebufferRenderer>(
-                *gameFbo.get());
+        gameFboRenderer = std::make_unique<FramebufferRenderer>(*gameFbo);
         gameFboRenderer->init();
 
         // Create the Camera
         const float cameraWidth = RenderUtils::pxToWorld_X(windowWidth);
         camera = std::make_unique<Camera>(
-                0.0f, 0.0f, cameraWidth, aspectRatio, *scenario.get());
+                0.0f, 0.0f, cameraWidth, aspectRatio, *scenario);
 
         // Create the MousePicker
         mousePicker = std::make_unique<MousePicker>(
-                *camera.get(),
+                *camera,
                 scenario->getWidth(),
                 scenario->getHeight());
 
@@ -289,7 +288,7 @@ namespace Rival {
 
         // Render Tiles
         tileRenderer->render(
-                *camera.get(),
+                *camera,
                 scenario->getTiles(),
                 scenario->getWidth(),
                 scenario->getHeight());
@@ -298,7 +297,7 @@ namespace Rival {
         mapBorderRenderer->render();
 
         // Render Units
-        unitRenderer->render(*camera.get(), scenario->getUnits());
+        unitRenderer->render(*camera, scenario->getUnits());
     }
 
     void Rival::renderFramebuffer() {

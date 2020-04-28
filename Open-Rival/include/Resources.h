@@ -23,11 +23,17 @@ namespace Rival {
         Resources();
         ~Resources();
 
+        // Prevent moving or copying (rule of 5)
+        Resources(const Resources& other) = delete;
+        Resources(Resources&& other) = delete;
+        Resources& operator=(const Resources& other) = delete;
+        Resources& operator=(Resources&& other) = delete;
+
         // Retrieval
-        Texture& getPalette();
-        Spritesheet& getTileSpritesheet(int index);
-        std::map<UnitType, Spritesheet>& getUnitSpritesheets();
-        Spritesheet& getMapBorderSpritesheet();
+        Texture& getPalette() const;
+        Spritesheet& getTileSpritesheet(int index) const;
+        std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
+        Spritesheet& getMapBorderSpritesheet() const;
 
     private:
 
@@ -38,15 +44,12 @@ namespace Rival {
         static const int txIndexUi = 53;
 
         // Loaded textures
-        std::unique_ptr<std::vector<Texture>> textures =
-            std::make_unique<std::vector<Texture>>();
+        std::unique_ptr<std::vector<Texture>> textures;
         std::unique_ptr<Texture> paletteTexture;
 
         // Spritesheets
-        std::unique_ptr<std::map<UnitType, Spritesheet>> unitSpritesheets =
-            std::make_unique<std::map<UnitType, Spritesheet>>();
-        std::unique_ptr<std::map<int, Spritesheet>> tileSpritesheets =
-            std::make_unique<std::map<int, Spritesheet>>();
+        std::unique_ptr<std::map<UnitType, Spritesheet>> unitSpritesheets;
+        std::unique_ptr<std::map<int, Spritesheet>> tileSpritesheets;
         std::unique_ptr<Spritesheet> mapBorderSpritesheet;
 
         // Initialisation
@@ -55,11 +58,9 @@ namespace Rival {
         void initUnitSpritesheets();
         void initTileSpritesheets();
         void initUiSpritesheets();
-        void initUnitSpritesheet(UnitType type, int txIndex);
-        void initTileSpritesheet(int type, int txIndex);
 
     };
 
 }
 
-#endif // TIMER_UTILS_H
+#endif // RESOURCES_H

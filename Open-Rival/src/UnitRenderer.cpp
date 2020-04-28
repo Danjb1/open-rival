@@ -39,7 +39,7 @@ namespace Rival {
             const std::map<int, std::unique_ptr<Unit>>& units) {
 
         for (auto const& kv : units) {
-            const Unit& unit = *(kv.second).get();
+            const Unit& unit = *kv.second;
 
             // If Unit is deleted, remove the associated Renderable
             if (unit.isDeleted()) {

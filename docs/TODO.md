@@ -7,7 +7,6 @@
  - Mouse picking units
 
  - Resources refactor
-    - Follow rule of 5
     - Pass Resources around instead of individual textures / spritesheets?
 
 <!----------------------------------------------------------------------------->
