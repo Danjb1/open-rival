@@ -10,9 +10,9 @@ namespace Rival {
     ScenarioBuilder::ScenarioBuilder(ScenarioData data) :
         data(data) {}
 
-    std::unique_ptr<Scenario> ScenarioBuilder::build() {
+    std::shared_ptr<Scenario> ScenarioBuilder::build() {
 
-        std::unique_ptr<Scenario> scenario = std::make_unique<Scenario>(
+        std::shared_ptr<Scenario> scenario = std::make_shared<Scenario>(
                 data.hdr.mapWidth,
                 data.hdr.mapHeight,
                 data.hdr.wilderness);
