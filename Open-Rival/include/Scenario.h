@@ -2,8 +2,8 @@
 #define SCENARIO_H
 
 #include <map>
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "Tile.h"
 #include "Unit.h"

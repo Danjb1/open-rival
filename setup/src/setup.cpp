@@ -2,11 +2,11 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+#include <cstring>
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include <windows.h>
-#include <cstring>
 
 #include "audio-extractor.h"
 #include "image-extractor.h"
@@ -19,7 +19,8 @@ namespace fs = std::filesystem;
 void copyVideos(std::wstring videoDir, std::string outputDir) {
     for (const fs::directory_entry& entry : fs::directory_iterator(videoDir)) {
         const fs::path path = entry.path();
-        std::filesystem::copy(path, outputDir + "\\" + path.filename().string(), std::filesystem::copy_options::update_existing );
+        std::filesystem::copy(path, outputDir + "\\" + path.filename().string(),
+                               std::filesystem::copy_options::update_existing );
     }
 }
 
@@ -35,12 +36,12 @@ int main( int argc, char* argv[] ) {
 
     std::wstring gameDir;
     bool findDirectoryFromRegistry = true;
-    for ( int count{ 1 }; count < argc; ++count ) {
+    for ( int count = 1; count < argc; ++count ) {
         if ( "-h" == argv[count] ) {
             std::cout << "-d {directory}: loads all files from {directory}" << '\n';
             return 0;
         }
-        if ( 0 == strcmp( "-d", argv[count] ) and count + 1 <= argc ) {
+        if ( 0 == strcmp( "-d", argv[count] ) && count + 1 <= argc ) {
             std::string tmpStr( argv[count + 1] );
             gameDir = std::wstring( tmpStr.begin(), tmpStr.end() );
             findDirectoryFromRegistry = false;

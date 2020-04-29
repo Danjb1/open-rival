@@ -8,11 +8,11 @@
 #include "pch.h"
 #include "image-extractor.h"
 
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <windows.h>
-#include <stdexcept>
 
 #include "setup-utils.h"
 
