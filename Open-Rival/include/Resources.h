@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Palette.h"
 #include "Spritesheet.h"
