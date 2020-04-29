@@ -1,6 +1,8 @@
 #ifndef MOUSE_PICKER_H
 #define MOUSE_PICKER_H
 
+#include <memory>
+
 #include "Camera.h"
 
 namespace Rival {
@@ -9,7 +11,7 @@ namespace Rival {
 
     public:
 
-        MousePicker(Camera& camera, int mapWidth, int mapHeight);
+        MousePicker(Camera& camera, std::shared_ptr<Scenario> scenario);
 
         void handleMouse();
 
@@ -17,6 +19,7 @@ namespace Rival {
 
         int getTileY() const;
 
+        int getEntity() const;
     private:
 
         Camera& camera;
@@ -29,6 +32,9 @@ namespace Rival {
 
         int tileY;
 
+        int entity;
+
+        std::shared_ptr<Scenario> scenario;
     };
 
 }
