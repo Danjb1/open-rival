@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <iostream>
+#include <memory>
 
 #include "Camera.h"
 #include "Framebuffer.h"

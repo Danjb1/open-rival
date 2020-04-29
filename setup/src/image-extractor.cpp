@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <windows.h>
+#include <stdexcept>
 
 #include "setup-utils.h"
 
@@ -351,7 +352,7 @@ void extractImages(std::wstring inputFile, std::string outputDir) {
         w = h = nextPowerOf2(w);
 
         // Save the rendered image to disk
-        char filename[32];
+        char filename[64]; //Temporary fix
         snprintf(filename,
                 sizeof(filename),
                 "%s\\img_%04d_%08X.tga",

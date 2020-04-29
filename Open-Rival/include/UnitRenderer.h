@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 #include "Camera.h"
 #include "Spritesheet.h"
