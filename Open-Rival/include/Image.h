@@ -2,9 +2,9 @@
 #define IMAGE_H
 
 #include <fstream>
-#include <memory>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace Rival {
 
