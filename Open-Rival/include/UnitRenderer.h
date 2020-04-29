@@ -2,8 +2,8 @@
 #define UNIT_RENDERER_H
 
 #include <map>
-#include <memory>
 #include <string>
+#include <memory>
 
 #include "Camera.h"
 #include "Spritesheet.h"
