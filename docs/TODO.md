@@ -18,6 +18,12 @@
 
  - The game will crash if a level is smaller than the number of visible tiles
 
+ - When zoomed enough, we can see blue dotted lines, probably an artefact from
+rendering to offscreen buffer
+
+ - exctractImages() method in setup/src/image-extractor.cpp assumes at most 63
+character filename (including path)
+
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->

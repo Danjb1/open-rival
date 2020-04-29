@@ -2,6 +2,7 @@
 #define SCENARIO_H
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "Tile.h"

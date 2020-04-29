@@ -2,6 +2,7 @@
 #define UNIT_RENDERER_H
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include "Camera.h"
