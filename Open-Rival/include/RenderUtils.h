@@ -45,6 +45,24 @@ namespace Rival {
          */
         int tileToPx_Y(int x, int y);
 
+        /**
+         * Gets the x-position of a rendered tile, taking into account the
+         * given zoom level.
+         *
+         * This is not useful during rendering since the zoom is only applied
+         * AFTER rendering to the framebuffer, but it is useful for mouse
+         * picking when we need to know the rendered position of an object.
+         */
+        int tileToScaledPx_X(int x, float zoomLevel);
+
+        /**
+         * Gets the y-position of a rendered tile, taking into account the
+         * given zoom level.
+         *
+         * See documentation for tileToScaledPx_X, above.
+         */
+        int tileToScaledPx_Y(int x, int y, float zoomLevel);
+
         float worldToPx_X(float x);
 
         float worldToPx_Y(float y);

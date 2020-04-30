@@ -38,6 +38,13 @@ character filename (including path)
 
  - Viewport should be defined explicitly rather than relying on windowWidth/Height
 
+ - Mouse picking:
+    - We could use [this strategy](https://www.kamremake.com/devblog/unit-picking/),
+        and use the render result from the previous frame!
+    - This would be much simpler, and possibly faster, BUT would involve an extra
+        rendering step
+    - The current solution can be optimised by only considering on-screen units
+
  - Rendering:
     - Duplication between Renderers
     - Delete Renderables when a Unit no longer exists
