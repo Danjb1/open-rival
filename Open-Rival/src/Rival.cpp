@@ -209,7 +209,7 @@ namespace Rival {
     void Rival::update() {
 
         mousePicker->handleMouse();
-        std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
+        //std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
 
         std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
