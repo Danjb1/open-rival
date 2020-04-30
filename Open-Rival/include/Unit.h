@@ -109,6 +109,7 @@ namespace Rival {
 
         int getY() const;
 
+        /// \todo getPos(), with std::atomic<std::pair<int, int>> pos instead of int x, int y would prevent race conditions
     private:
 
         int id = -1;
