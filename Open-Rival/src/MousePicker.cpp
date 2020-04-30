@@ -122,21 +122,26 @@ namespace Rival {
         tileX = MathUtils::clampi(tileX, 0, mapWidth - 1);
         tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
 
-        if ( scenario ) {
+        // Reset selected entity
+        entity = -1;
+
+        // Check for Units under the mouse
+        if (scenario) {
             auto& units = scenario->getUnits();
             bool foundEntity = false;
-            for ( auto it = units.begin(); it != units.end(); ++it ) {
-                if ( it->second->getX() == tileX && it->second->getY() == tileY ) {
-                    entity = it->second->getId();
+            for (auto it = units.begin(); it != units.end(); ++it) {
+                const Unit& unit = *it->second;
+                if (isMouseInUnit(unit, tileX, tileY)) {
+                    entity = unit.getId();
                     std::cout << "Entity " << entity << " is under cursor.\n";
-                    foundEntity = true;
                     break;
                 }
             }
-            if ( !foundEntity ) {
-                entity = -1;
-            }
         }
+    }
+
+    bool MousePicker::isMouseInUnit(const Unit& unit, int tileX, int tileY) {
+        return unit.getX() == tileX && unit.getY() == tileY;
     }
 
     int MousePicker::getTileX() const {
