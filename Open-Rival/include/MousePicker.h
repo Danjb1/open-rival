@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Camera.h"
+#include "RenderUtils.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -24,6 +25,16 @@ namespace Rival {
 
     private:
 
+        // Offset of a Unit's hitbox, measured from the top-left corner of the
+        // tile it's in, in px
+        static const int unitHitboxOffsetX = 20;
+        static const int unitHitboxOffsetY = 25;
+
+        // Size of a Unit's hitbox
+        static const int unitHitboxWidth = RenderUtils::tileWidthPx
+                - (2 * unitHitboxOffsetX);
+        static const int unitHitboxHeight = 40;
+
         Camera& camera;
 
         int mapWidth;
@@ -38,7 +49,8 @@ namespace Rival {
 
         std::shared_ptr<Scenario> scenario;
 
-        bool isMouseInUnit(const Unit& unit, int tileX, int tileY);
+        bool isMouseInUnit(
+                const Unit& unit, int mouseInViewportX, int mouseInViewportY);
 
     };
 

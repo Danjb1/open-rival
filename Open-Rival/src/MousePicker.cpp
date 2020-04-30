@@ -131,7 +131,7 @@ namespace Rival {
             bool foundEntity = false;
             for (auto it = units.begin(); it != units.end(); ++it) {
                 const Unit& unit = *it->second;
-                if (isMouseInUnit(unit, tileX, tileY)) {
+                if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
                     entity = unit.getId();
                     std::cout << "Entity " << entity << " is under cursor.\n";
                     break;
@@ -140,8 +140,52 @@ namespace Rival {
         }
     }
 
-    bool MousePicker::isMouseInUnit(const Unit& unit, int tileX, int tileY) {
-        return unit.getX() == tileX && unit.getY() == tileY;
+    bool MousePicker::isMouseInUnit(
+            const Unit& unit, int mouseInViewportX, int mouseInViewportY) {
+
+        /*
+         * Given the tile co-ordinate of a Unit, we need to figure out the
+         * position of that unit's hitbox.
+         *
+         * We work in pixels here because it we are concerned with the rendered
+         * position of the unit.
+         *
+         * At a pixel-perfect scale, the bottom-left corner of the hitbox will
+         * always be a fixed offset from the top-left of the tile, as all units
+         * are positioned the same way relative to the tile they're in.
+         * However, the height does vary for different units.
+         *
+         * We also have to consider the camera zoom level, since the hitbox
+         * will appear bigger when we are more zoomed in.
+         */
+
+        // Find the position of the top-left corner of the unit's tile, in px
+        float tileX_px = static_cast<float>(
+                RenderUtils::tileToPx_X(unit.getX()));
+        float tileY_px = static_cast<float>(
+                RenderUtils::tileToPx_Y(unit.getX(), unit.getY()));
+
+        // Adjust based on the camera position
+        // (as the camera pans right, tiles are rendered further to the left!)
+        tileX_px -= RenderUtils::worldToPx_X(camera.getLeft());
+        tileY_px -= RenderUtils::worldToPx_Y(camera.getTop());
+
+        // TODO: Adjust based on the camera zoom
+
+        // Find the bottom-left corner of the unit hitbox
+        float unitX1 = tileX_px + unitHitboxOffsetX;
+        float unitX2 = unitX1 + unitHitboxWidth;
+        float unitY2 = tileY_px + unitHitboxOffsetY;
+        // TMP: For now we use a fixed height
+        float unitY1 = unitY2 - unitHitboxHeight;
+
+        std::cout << unitX1 << " < " << mouseInViewportX << " < " << unitX2 << "\n";
+
+        // Finally, see if the mouse is inside the hitbox
+        return mouseInViewportX >= unitX1
+                && mouseInViewportY >= unitY1
+                && mouseInViewportX < unitX2
+                && mouseInViewportY < unitY2;
     }
 
     int MousePicker::getTileX() const {
