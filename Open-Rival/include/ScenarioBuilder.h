@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <fstream>
+#include <memory>
 
 #include "Scenario.h"
 #include "ScenarioData.h"

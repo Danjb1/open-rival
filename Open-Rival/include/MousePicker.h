@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Camera.h"
+#include "Unit.h"
 
 namespace Rival {
 
@@ -20,6 +21,7 @@ namespace Rival {
         int getTileY() const;
 
         int getEntity() const;
+
     private:
 
         Camera& camera;
@@ -35,6 +37,9 @@ namespace Rival {
         int entity;
 
         std::shared_ptr<Scenario> scenario;
+
+        bool isMouseInUnit(const Unit& unit, int tileX, int tileY);
+
     };
 
 }
