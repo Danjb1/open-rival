@@ -61,10 +61,7 @@ namespace Rival {
                 0.0f, 0.0f, cameraWidth, aspectRatio, *scenario);
 
         // Create the MousePicker
-        mousePicker = std::make_unique<MousePicker>(
-                *camera,
-                scenario->getWidth(),
-                scenario->getHeight());
+        mousePicker = std::make_unique<MousePicker>(*camera, scenario);
 
         // Pick which tile Spritesheet to use based on the map type
         const Spritesheet& tileSpritesheet = scenario->isWilderness()

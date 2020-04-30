@@ -10,11 +10,12 @@ namespace Rival {
 
     MousePicker::MousePicker(
             Camera& camera,
-            int mapWidth,
-            int mapHeight) :
+            std::shared_ptr<Scenario> scenario) :
         camera(camera),
-        mapWidth(mapWidth),
-        mapHeight(mapHeight) {}
+        scenario(scenario),
+        mapWidth(scenario->getWidth()),
+        mapHeight(scenario->getHeight()),
+        entity(-1) {}
 
     void MousePicker::handleMouse() {
 
@@ -120,6 +121,22 @@ namespace Rival {
         // but we should limit them to the level bounds
         tileX = MathUtils::clampi(tileX, 0, mapWidth - 1);
         tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
+
+        if ( scenario ) {
+            auto& units = scenario->getUnits();
+            bool foundEntity = false;
+            for ( auto it = units.begin(); it != units.end(); ++it ) {
+                if ( it->second->getX() == tileX && it->second->getY() == tileY ) {
+                    entity = it->second->getId();
+                    std::cout << "Entity " << entity << " is under cursor.\n";
+                    foundEntity = true;
+                    break;
+                }
+            }
+            if ( !foundEntity ) {
+                entity = -1;
+            }
+        }
     }
 
     int MousePicker::getTileX() const {
@@ -130,4 +147,7 @@ namespace Rival {
         return tileY;
     }
 
+    int MousePicker::getEntity() const {
+        return entity;
+    }
 }

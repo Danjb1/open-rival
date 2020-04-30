@@ -63,7 +63,7 @@ namespace Rival {
         std::unique_ptr<Framebuffer> gameFbo;
 
         // Scenario
-        std::unique_ptr<Scenario> scenario;
+        std::shared_ptr<Scenario> scenario;
 
         // Renderers
         std::unique_ptr<FramebufferRenderer> gameFboRenderer;

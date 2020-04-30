@@ -14,7 +14,8 @@ namespace Rival {
             ),
             tilePassability(std::vector<TilePassability>(
                     width * height, TilePassability::Clear)
-            ) {}
+            ),
+            nextId(0) {}
 
     int Scenario::getWidth() const {
         return width;

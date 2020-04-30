@@ -17,7 +17,7 @@ namespace Rival {
 
         ScenarioBuilder(ScenarioData data);
 
-        std::unique_ptr<Scenario> build();
+        std::shared_ptr<Scenario> build();
 
     private:
 
