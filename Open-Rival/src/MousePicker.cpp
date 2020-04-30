@@ -144,42 +144,37 @@ namespace Rival {
             const Unit& unit, int mouseInViewportX, int mouseInViewportY) {
 
         /*
-         * Given the tile co-ordinate of a Unit, we need to figure out the
-         * position of that unit's hitbox.
-         *
-         * We work in pixels here because it we are concerned with the rendered
-         * position of the unit.
-         *
-         * At a pixel-perfect scale, the bottom-left corner of the hitbox will
-         * always be a fixed offset from the top-left of the tile, as all units
-         * are positioned the same way relative to the tile they're in.
-         * However, the height does vary for different units.
-         *
-         * We also have to consider the camera zoom level, since the hitbox
-         * will appear bigger when we are more zoomed in.
+         * Units are always rendered at a fixed pixel offset from the tile they
+         * occupy. Thus, if we can figure out the rendered position of this
+         * tile, we can figure out the rendered position of the unit.
          */
 
-        // Find the position of the top-left corner of the unit's tile, in px
-        float tileX_px = static_cast<float>(
-                RenderUtils::tileToPx_X(unit.getX()));
-        float tileY_px = static_cast<float>(
-                RenderUtils::tileToPx_Y(unit.getX(), unit.getY()));
+        // Find the rendered position of the top-left corner of the unit's
+        // tile. This is measured in scaled px, which takes into account the
+        // zoom level used during rendering.
+        //
+        // IMPORTANT: This means that any subsequent operations affecting this
+        // position must use the same units, that is, we have to always take
+        // the zoom level into account!
+        float zoom = camera.getZoom();
+        float tileX_px = static_cast<float>(RenderUtils::tileToScaledPx_X(
+                unit.getX(), zoom));
+        float tileY_px = static_cast<float>(RenderUtils::tileToScaledPx_Y(
+                unit.getX(), unit.getY(), zoom));
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)
-        tileX_px -= RenderUtils::worldToPx_X(camera.getLeft());
-        tileY_px -= RenderUtils::worldToPx_Y(camera.getTop());
-
-        // TODO: Adjust based on the camera zoom
+        tileX_px -= RenderUtils::worldToPx_X(camera.getLeft()) * zoom;
+        tileY_px -= RenderUtils::worldToPx_Y(camera.getTop()) * zoom;
 
         // Find the bottom-left corner of the unit hitbox
-        float unitX1 = tileX_px + unitHitboxOffsetX;
-        float unitX2 = unitX1 + unitHitboxWidth;
-        float unitY2 = tileY_px + unitHitboxOffsetY;
-        // TMP: For now we use a fixed height
-        float unitY1 = unitY2 - unitHitboxHeight;
+        float unitX1 = tileX_px + (unitHitboxOffsetX * zoom);
+        float unitY2 = tileY_px + (unitHitboxOffsetY * zoom);
 
-        std::cout << unitX1 << " < " << mouseInViewportX << " < " << unitX2 << "\n";
+        // Now find the opposite corner based on the hitbox size
+        // TMP: For now we use a fixed height for all units
+        float unitX2 = unitX1 + (unitHitboxWidth * zoom);
+        float unitY1 = unitY2 - (unitHitboxHeight * zoom);
 
         // Finally, see if the mouse is inside the hitbox
         return mouseInViewportX >= unitX1

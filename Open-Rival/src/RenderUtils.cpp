@@ -26,6 +26,22 @@ namespace Rival {
             return renderPos;
         }
 
+        int tileToScaledPx_X(int x, float zoomLevel) {
+            // Same as tileToPx_X, above, but with a zoom level applied
+            float scaledTileWidth = tileSpriteWidthPx * zoomLevel;
+            return x * (scaledTileWidth / 2);
+        }
+
+        int tileToScaledPx_Y(int x, int y, float zoomLevel) {
+            // Same as tileToPx_Y, above, but with a zoom level applied
+            float scaledTileHeight = tileSpriteHeightPx * zoomLevel;
+            int renderPos = y * (scaledTileHeight / 2);
+            if (x % 2 == 1) {
+                renderPos += (scaledTileHeight / 4);
+            }
+            return renderPos;
+        }
+
         float worldToPx_X(float x) {
             // Same as tileToPx_X, above, but using floats.
             // This is especially important for the camera, since it can be
