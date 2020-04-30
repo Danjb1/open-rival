@@ -4,7 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Mouse picking units
+ - Mouse picking units by their hitbox
 
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
@@ -27,6 +27,8 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+ - Image filenames can be truncated due to limited size of char array
 
  - Camera should point at the centre of a tile - not the top-left corner
 
