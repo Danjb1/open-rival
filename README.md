@@ -32,6 +32,10 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 > Standalone utility to combine images into textures.
 
+## Development
+
+To get started with development, see [this guide](docs/development.md).
+
 ## Legal Stuff
 
 I have tried to track down the copyright holders, even the original developers, without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
