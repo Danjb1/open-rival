@@ -131,7 +131,7 @@ namespace Rival {
             bool foundEntity = false;
             for (auto it = units.begin(); it != units.end(); ++it) {
                 const Unit& unit = *it->second;
-                if (isMouseInUnit(unit, tileX, tileY)) {
+                if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
                     entity = unit.getId();
                     std::cout << "Entity " << entity << " is under cursor.\n";
                     break;
@@ -140,8 +140,47 @@ namespace Rival {
         }
     }
 
-    bool MousePicker::isMouseInUnit(const Unit& unit, int tileX, int tileY) {
-        return unit.getX() == tileX && unit.getY() == tileY;
+    bool MousePicker::isMouseInUnit(
+            const Unit& unit, int mouseInViewportX, int mouseInViewportY) {
+
+        /*
+         * Units are always rendered at a fixed pixel offset from the tile they
+         * occupy. Thus, if we can figure out the rendered position of this
+         * tile, we can figure out the rendered position of the unit.
+         */
+
+        // Find the rendered position of the top-left corner of the unit's
+        // tile. This is measured in scaled px, which takes into account the
+        // zoom level used during rendering.
+        //
+        // IMPORTANT: This means that any subsequent operations affecting this
+        // position must use the same units, that is, we have to always take
+        // the zoom level into account!
+        float zoom = camera.getZoom();
+        float tileX_px = static_cast<float>(RenderUtils::tileToScaledPx_X(
+                unit.getX(), zoom));
+        float tileY_px = static_cast<float>(RenderUtils::tileToScaledPx_Y(
+                unit.getX(), unit.getY(), zoom));
+
+        // Adjust based on the camera position
+        // (as the camera pans right, tiles are rendered further to the left!)
+        tileX_px -= RenderUtils::worldToPx_X(camera.getLeft()) * zoom;
+        tileY_px -= RenderUtils::worldToPx_Y(camera.getTop()) * zoom;
+
+        // Find the bottom-left corner of the unit hitbox
+        float unitX1 = tileX_px + (unitHitboxOffsetX * zoom);
+        float unitY2 = tileY_px + (unitHitboxOffsetY * zoom);
+
+        // Now find the opposite corner based on the hitbox size
+        // TMP: For now we use a fixed height for all units
+        float unitX2 = unitX1 + (unitHitboxWidth * zoom);
+        float unitY1 = unitY2 - (unitHitboxHeight * zoom);
+
+        // Finally, see if the mouse is inside the hitbox
+        return mouseInViewportX >= unitX1
+                && mouseInViewportY >= unitY1
+                && mouseInViewportX < unitX2
+                && mouseInViewportY < unitY2;
     }
 
     int MousePicker::getTileX() const {

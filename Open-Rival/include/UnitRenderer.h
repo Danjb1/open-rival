@@ -22,6 +22,11 @@ namespace Rival {
 
     public:
 
+        // Offset applied to align a unit sprite correctly within a tile,
+        // in pixels
+        static const int unitOffsetX = -33;
+        static const int unitOffsetY = -89;
+
         UnitRenderer(
                 std::map<UnitType, Spritesheet>& unitSprites,
                 Texture& paletteTexture);
@@ -31,11 +36,6 @@ namespace Rival {
                 const std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
-
-        // Offset applied to align a unit sprite correctly within a tile,
-        // in pixels
-        static const int unitOffsetX = -33;
-        static const int unitOffsetY = -89;
 
         const std::map<UnitType, Spritesheet>& unitSprites;
 
