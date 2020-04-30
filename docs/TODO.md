@@ -41,6 +41,9 @@ character filename (including path)
  - Mouse picking:
     - We could use [this strategy](https://www.kamremake.com/devblog/unit-picking/),
         and use the render result from the previous frame!
+    - This would be much simpler, and possibly faster, BUT would involve an extra
+        rendering step
+    - The current solution can be optimised by only considering on-screen units
 
  - Rendering:
     - Duplication between Renderers
