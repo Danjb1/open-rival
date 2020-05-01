@@ -133,7 +133,9 @@ namespace Rival {
                 const Unit& unit = *it->second;
                 if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
                     entity = unit.getId();
-                    std::cout << "Entity " << entity << " is under cursor.\n";
+                    std::cout << "Entity " << entity << " of type unit ("
+                              << static_cast<int>(unit.getType())
+                              << ") is under cursor.\n";
                     break;
                 }
             }
