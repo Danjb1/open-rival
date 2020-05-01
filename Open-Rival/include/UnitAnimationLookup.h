@@ -104,15 +104,30 @@ namespace Rival {
         // This definitely needs a recheck
         { {UnitType::Bowman, UnitAnimationType::Standing}, { 0, 0 } },
         { {UnitType::Bowman, UnitAnimationType::Moving}, { 8, 15 } },
-        { {UnitType::Bowman, UnitAnimationType::Attacking}, { 73, 79 } },
+        { {UnitType::Bowman, UnitAnimationType::Attacking}, { 72, 80 } },
 
         { {UnitType::LightCavalry, UnitAnimationType::Standing}, { 0, 0 } },
+
         { {UnitType::Knight, UnitAnimationType::Standing}, { 0, 0 } },
+        { {UnitType::Knight, UnitAnimationType::Moving}, { 8, 15 } },
+        { {UnitType::Knight, UnitAnimationType::Attacking}, { 72, 79 } },
+
         { {UnitType::FireMaster, UnitAnimationType::Standing}, { 0, 0 } },
+        { {UnitType::FireMaster, UnitAnimationType::Moving}, { 8, 13 } },
+        { {UnitType::FireMaster, UnitAnimationType::Attacking}, { 55, 58 } },
+
         { {UnitType::Thief, UnitAnimationType::Standing}, { 0, 0 } },
+
         { {UnitType::Ballista, UnitAnimationType::Standing}, { 0, 0 } },
+        { {UnitType::Ballista, UnitAnimationType::Moving}, { 0, 2 } },
+        { {UnitType::Ballista, UnitAnimationType::Attacking}, { 24, 25 } },
+
         { {UnitType::ChariotOfWar, UnitAnimationType::Standing}, { 0, 0 } },
+
         { {UnitType::Wizard, UnitAnimationType::Standing}, { 0, 0 } },
+        { {UnitType::Wizard, UnitAnimationType::Moving}, { 8, 13 } },
+        { {UnitType::Wizard, UnitAnimationType::Attacking}, { 56, 58 } },
+
         { {UnitType::Priest, UnitAnimationType::Standing}, { 0, 0 } },
         { {UnitType::SeaBarge, UnitAnimationType::Standing}, { 0, 0 } },
         { {UnitType::Battleship, UnitAnimationType::Standing}, { 0, 0 } },

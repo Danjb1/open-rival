@@ -260,6 +260,42 @@ namespace Rival {
                 } else {
                     unit->setAnimation( UnitAnimationType::Attacking );
                 }
+            } else if ( UnitType::Ballista == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                }
+            } else if ( UnitType::FireMaster == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                }
+            } else if ( UnitType::Knight == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                }
+            } else if ( UnitType::Wizard == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                }
             }
         }
     }
