@@ -4,6 +4,7 @@
 #include "Spritesheet.h"
 #include "UnitAnimation.h"
 #include "UnitAnimationLookup.h"
+#include "UnitTypes.h"
 
 namespace Rival {
 
@@ -23,7 +24,7 @@ namespace Rival {
 
         const UnitType getType() const;
 
-        void setAnimation( UnitAnimationType unitAnimationType );
+        void setAnimation(UnitAnimationType unitAnimationType);
 
         void rotateLeft();
 
@@ -53,7 +54,6 @@ namespace Rival {
 
         int player;
 
-        /// \todo getPos(), with std::atomic<std::pair<int, int>> pos instead of int x, int y would prevent race conditions
         /**
          * x co-ordinate of the Tile the Unit is occupying.
          */

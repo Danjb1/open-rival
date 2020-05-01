@@ -16,13 +16,13 @@ namespace Rival {
     }
 
     void UnitAnimation::rotateLeft() {
-        int newFacing = ( static_cast<int>( facing ) - 1 ) % 8;
-        setFacing( static_cast<Facing>( newFacing ) );
+        int newFacing = (static_cast<int>(facing) - 1) % 8;
+        setFacing(static_cast<Facing>(newFacing));
     }
 
     void UnitAnimation::rotateRight() {
-        int newFacing = ( static_cast<int>( facing ) + 1 ) % 8;
-        setFacing( static_cast<Facing>( newFacing ) );
+        int newFacing = (static_cast<int>(facing) + 1) % 8;
+        setFacing(static_cast<Facing>(newFacing));
     }
 
     void UnitAnimation::setAnimation(UnitAnimationType unitAnimationType ) {
@@ -37,15 +37,15 @@ namespace Rival {
     }
 
     void UnitAnimation::updateSpriteSheetEntry() {
-        auto lookupIt = unitAnimationLookup.find( unitAnimationPair );
-        if ( unitAnimationLookup.end() == lookupIt ) {
-            throw std::logic_error( "Can't find SpritesheetEntry" );
+        auto lookupIt = unitAnimationLookup.find(unitAnimationPair);
+        if (unitAnimationLookup.end() == lookupIt) {
+            throw std::logic_error("Can't find SpritesheetEntry");
         }
         spritesheetEntry = lookupIt->second;
     }
 
     void UnitAnimation::tick() {
         auto spritesheetSpan = spritesheetEntry.second - spritesheetEntry.first + 1;
-        animationStep = ( animationStep + 1 ) % ( spritesheetSpan );
+        animationStep = (animationStep + 1) % (spritesheetSpan);
     }
 }
