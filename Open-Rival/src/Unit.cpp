@@ -13,7 +13,7 @@ namespace Rival {
         this->player = player;
         this->x = x;
         this->y = y;
-        animation.setFacing( facing );
+        animation.setFacing(facing);
     }
 
     int Unit::getCurrentSpriteIndex() const {
@@ -28,7 +28,7 @@ namespace Rival {
         animation.setAnimation(unitAnimationType);
         std::cout << "Setting animation for unit " << id
                   << " of type " << static_cast<int>(type)
-                  << ": " << static_cast<int>( unitAnimationType ) << '\n';
+                  << ": " << static_cast<int>(unitAnimationType) << '\n';
     }
 
     void Unit::rotateLeft() {

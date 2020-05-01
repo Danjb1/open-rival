@@ -3,70 +3,11 @@
 
 #include <map>
 
+#include "UnitTypes.h"
+
 namespace Rival {
 
-    enum class UnitType : int {
-
-        // Human
-        Peasant,
-        Bowman,
-        LightCavalry,
-        Knight,
-        FireMaster,
-        Thief,
-        Ballista,
-        ChariotOfWar,
-        Wizard,
-        Priest,
-        SeaBarge,
-        Battleship,
-        PegasRider,
-        Zeppelin,
-
-        // Greenskin
-        Serf,
-        RockThrower,
-        HordeRider,
-        Warlord,
-        GnomeBoomer,
-        Rogue,
-        Catapult,
-        StormTrooper,
-        PriestOfDoom,
-        Necromancer,
-        LandingCraft,
-        TrollGalley,
-        Warbat,
-        Balloon,
-
-        // Elf
-        Yeoman,
-        Archer,
-        Druid,
-        Centaur,
-        DwarfMiner,
-        Scout,
-        Bombard,
-        Arquebusier,
-        Mage,
-        Enchanter,
-        Bark,
-        Warship,
-        SkyRider,
-        MagicChopper,
-
-        // Monsters
-        Devil,
-        Dragon,
-        Golem,
-        Gryphon,
-        Hydra,
-        SeaMonster,
-        Skeleton,
-        Snake
-    };
-
-    enum class Facing : int {
+    enum class Facing {
         South,
         SouthWest,
         West,
@@ -77,12 +18,12 @@ namespace Rival {
         SouthEast
     };
 
-    enum class UnitAnimationType : int {
+    enum class UnitAnimationType {
         Standing,
         HoldingBag,
-        Moving, // eg. walking empty handed for human peasant
-        Moving2, // eg. walking with bag for human peasant
-        Attacking, // Same as mining for human peasant
+        Moving,
+        MovingWithBag,
+        Attacking,
         Dying
     };
 
@@ -97,7 +38,7 @@ namespace Rival {
         { {UnitType::Peasant, UnitAnimationType::Standing}, { 0, 0 } },
         { {UnitType::Peasant, UnitAnimationType::HoldingBag}, { 8, 8 } },
         { {UnitType::Peasant, UnitAnimationType::Moving}, { 16, 21 } },
-        { {UnitType::Peasant, UnitAnimationType::Moving2}, { 64, 69 } },
+        { {UnitType::Peasant, UnitAnimationType::MovingWithBag}, { 64, 69 } },
         { {UnitType::Peasant, UnitAnimationType::Attacking}, { 112, 118 } },
         { {UnitType::Peasant, UnitAnimationType::Dying}, { 16, 21 } },
 

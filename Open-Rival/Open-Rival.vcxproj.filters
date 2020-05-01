@@ -198,5 +198,8 @@
     <ClInclude Include="include\UnitAnimationLookup.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\UnitTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
