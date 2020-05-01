@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "Rival.h"
 
+// Delete <cstdlib>,<chrono> and <thread> if random number generation is no longer necessary
+#include <cstdlib>
+#include <chrono>
+#include <thread>
+
 #include <gl/glew.h>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -209,12 +214,53 @@ namespace Rival {
     void Rival::update() {
 
         mousePicker->handleMouse();
+
         //std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
 
         std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
             //unit->rotateRight();
+            unit->tick();
+
+            // Test for animation subsystem
+            static const double randMax = RAND_MAX;
+            auto randGen = [&]() {
+                double r = static_cast<double>( rand() );
+                return r / randMax;
+            };
+            auto r = randGen();
+            if ( UnitType::Peasant == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 6.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 6.0 ) {
+                    unit->setAnimation( UnitAnimationType::HoldingBag );
+                } else if ( r <= 3.0 / 6.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else if ( r <= 4.0 / 6.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving2 );
+                } else if ( r <= 5.0 / 6.0 ) {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                } else {
+                    // Currently we can't automatically generate dying animation
+                    //   because that animation type does not provide all
+                    //   8 directions in our tga files.
+                    // We need to modify eg. unit_human_peasant.def
+                    //   to repeat 4-direction animations in all
+                    //   8 directions
+                    //unit->setAnimation( UnitAnimationType::Dying );
+                }
+            } else if ( UnitType::Bowman == unit->getType() && r > 0.999 ) {
+                auto r = randGen();
+                if ( r <= 1.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Standing );
+                } else if ( r <= 2.0 / 3.0 ) {
+                    unit->setAnimation( UnitAnimationType::Moving );
+                } else {
+                    unit->setAnimation( UnitAnimationType::Attacking );
+                }
+            }
         }
     }
 

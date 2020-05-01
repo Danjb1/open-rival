@@ -46,6 +46,7 @@
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
     <ClCompile Include="src\Unit.cpp" />
+    <ClCompile Include="src\UnitAnimation.cpp" />
     <ClCompile Include="src\UnitRenderer.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -77,6 +78,8 @@
     <ClInclude Include="include\TileRenderer.h" />
     <ClInclude Include="include\TimerUtils.h" />
     <ClInclude Include="include\Unit.h" />
+    <ClInclude Include="include\UnitAnimation.h" />
+    <ClInclude Include="include\UnitAnimationLookup.h" />
     <ClInclude Include="include\UnitRenderer.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
@@ -84,7 +87,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{AE6B3FDA-A900-4013-82C7-110DA7895525}</ProjectGuid>
     <RootNamespace>OpenRival</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -96,7 +99,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

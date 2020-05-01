@@ -133,7 +133,7 @@ namespace Rival {
     }
 
     int UnitRenderer::getTxIndex(const Unit& unit) const {
-        return static_cast<int>(unit.getFacing());
+        return unit.getCurrentSpriteIndex();
     }
 
 }

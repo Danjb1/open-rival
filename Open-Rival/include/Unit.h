@@ -2,80 +2,10 @@
 #define UNIT_H
 
 #include "Spritesheet.h"
+#include "UnitAnimation.h"
+#include "UnitAnimationLookup.h"
 
 namespace Rival {
-
-    enum class UnitType {
-
-        // Human
-        Peasant,
-        Bowman,
-        LightCavalry,
-        Knight,
-        FireMaster,
-        Thief,
-        Ballista,
-        ChariotOfWar,
-        Wizard,
-        Priest,
-        SeaBarge,
-        Battleship,
-        PegasRider,
-        Zeppelin,
-
-        // Greenskin
-        Serf,
-        RockThrower,
-        HordeRider,
-        Warlord,
-        GnomeBoomer,
-        Rogue,
-        Catapult,
-        StormTrooper,
-        PriestOfDoom,
-        Necromancer,
-        LandingCraft,
-        TrollGalley,
-        Warbat,
-        Balloon,
-
-        // Elf
-        Yeoman,
-        Archer,
-        Druid,
-        Centaur,
-        DwarfMiner,
-        Scout,
-        Bombard,
-        Arquebusier,
-        Mage,
-        Enchanter,
-        Bark,
-        Warship,
-        SkyRider,
-        MagicChopper,
-
-        // Monsters
-        Devil,
-        Dragon,
-        Golem,
-        Gryphon,
-        Hydra,
-        SeaMonster,
-        Skeleton,
-        Snake
-    };
-
-    enum class Facing {
-        South,
-        SouthWest,
-        West,
-        NorthWest,
-        North,
-        NorthEast,
-        East,
-        SouthEast
-    };
 
     class Unit {
 
@@ -89,11 +19,11 @@ namespace Rival {
 
         void addedToWorld(int id, int player, int x, int y, Facing facing);
 
+        int getCurrentSpriteIndex() const;
+
         const UnitType getType() const;
 
-        const Facing getFacing() const;
-
-        void setFacing(Facing newFacing);
+        void setAnimation( UnitAnimationType unitAnimationType );
 
         void rotateLeft();
 
@@ -109,7 +39,8 @@ namespace Rival {
 
         int getY() const;
 
-        /// \todo getPos(), with std::atomic<std::pair<int, int>> pos instead of int x, int y would prevent race conditions
+        void tick();
+
     private:
 
         int id = -1;
@@ -118,8 +49,11 @@ namespace Rival {
 
         UnitType type;
 
+        UnitAnimation animation;
+
         int player;
 
+        /// \todo getPos(), with std::atomic<std::pair<int, int>> pos instead of int x, int y would prevent race conditions
         /**
          * x co-ordinate of the Tile the Unit is occupying.
          */
@@ -129,8 +63,6 @@ namespace Rival {
          * y co-ordinate of the Tile the Unit is occupying.
          */
         int y;
-
-        Facing facing = Facing::South;
 
     };
 
