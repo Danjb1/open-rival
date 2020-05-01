@@ -81,6 +81,7 @@
     <ClInclude Include="include\UnitAnimation.h" />
     <ClInclude Include="include\UnitAnimationLookup.h" />
     <ClInclude Include="include\UnitRenderer.h" />
+    <ClInclude Include="include\UnitTypes.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

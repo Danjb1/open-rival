@@ -226,22 +226,22 @@ namespace Rival {
             // Test for animation subsystem
             static const double randMax = RAND_MAX;
             auto randGen = [&]() {
-                double r = static_cast<double>( rand() );
+                double r = static_cast<double>(rand());
                 return r / randMax;
             };
             auto r = randGen();
-            if ( UnitType::Peasant == unit->getType() && r > 0.999 ) {
+            if (UnitType::Peasant == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 6.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 6.0 ) {
-                    unit->setAnimation( UnitAnimationType::HoldingBag );
-                } else if ( r <= 3.0 / 6.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
-                } else if ( r <= 4.0 / 6.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving2 );
-                } else if ( r <= 5.0 / 6.0 ) {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                if (r <= 1.0 / 6.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 6.0) {
+                    unit->setAnimation(UnitAnimationType::HoldingBag);
+                } else if (r <= 3.0 / 6.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
+                } else if (r <= 4.0 / 6.0) {
+                    unit->setAnimation(UnitAnimationType::MovingWithBag);
+                } else if (r <= 5.0 / 6.0) {
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 } else {
                     // Currently we can't automatically generate dying animation
                     //   because that animation type does not provide all
@@ -251,50 +251,50 @@ namespace Rival {
                     //   8 directions
                     //unit->setAnimation( UnitAnimationType::Dying );
                 }
-            } else if ( UnitType::Bowman == unit->getType() && r > 0.999 ) {
+            } else if (UnitType::Bowman == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
+                if (r <= 1.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
                 } else {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 }
-            } else if ( UnitType::Ballista == unit->getType() && r > 0.999 ) {
+            } else if (UnitType::Ballista == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
+                if (r <= 1.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
                 } else {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 }
-            } else if ( UnitType::FireMaster == unit->getType() && r > 0.999 ) {
+            } else if (UnitType::FireMaster == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
+                if (r <= 1.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
                 } else {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 }
-            } else if ( UnitType::Knight == unit->getType() && r > 0.999 ) {
+            } else if (UnitType::Knight == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
+                if (r <= 1.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
                 } else {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 }
-            } else if ( UnitType::Wizard == unit->getType() && r > 0.999 ) {
+            } else if (UnitType::Wizard == unit->getType() && r > 0.999) {
                 auto r = randGen();
-                if ( r <= 1.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Standing );
-                } else if ( r <= 2.0 / 3.0 ) {
-                    unit->setAnimation( UnitAnimationType::Moving );
+                if (r <= 1.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Standing);
+                } else if (r <= 2.0 / 3.0) {
+                    unit->setAnimation(UnitAnimationType::Moving);
                 } else {
-                    unit->setAnimation( UnitAnimationType::Attacking );
+                    unit->setAnimation(UnitAnimationType::Attacking);
                 }
             }
         }
