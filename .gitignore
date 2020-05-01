@@ -6,6 +6,7 @@ Thumbs.db
 
 # Build results
 Debug/
+Release/
 
 # Libraries
 /Open-Rival/libs/

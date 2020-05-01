@@ -100,6 +100,9 @@
     <ClCompile Include="src\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\UnitAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -187,6 +190,15 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\Resources.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitAnimation.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitAnimationLookup.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitTypes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
