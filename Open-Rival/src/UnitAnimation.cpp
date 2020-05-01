@@ -6,7 +6,8 @@
 namespace Rival {
 
 	UnitAnimation::UnitAnimation(UnitType unitType) : 
-        unitAnimationPair(std::make_pair(unitType, UnitAnimationType::Standing)) {
+        unitAnimationPair(std::make_pair(unitType, UnitAnimationType::Standing)),
+        facing(Facing::South) {
         updateSpriteSheetEntry();
     }
 
