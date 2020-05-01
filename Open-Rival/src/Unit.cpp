@@ -4,7 +4,8 @@
 namespace Rival {
 
     Unit::Unit(UnitType type) :
-        type(type) {}
+        type(type),
+        animation(type) {}
 
     void Unit::addedToWorld(
             int id, int player, int x, int y, Facing facing) {
@@ -12,29 +13,30 @@ namespace Rival {
         this->player = player;
         this->x = x;
         this->y = y;
-        this->facing = facing;
+        animation.setFacing(facing);
+    }
+
+    int Unit::getCurrentSpriteIndex() const {
+        return animation.getCurrentSpriteIndex();
     }
 
     const UnitType Unit::getType() const {
         return type;
     }
 
-    const Facing Unit::getFacing() const {
-        return facing;
+    void Unit::setAnimation(UnitAnimationType unitAnimationType) {
+        animation.setAnimation(unitAnimationType);
+        std::cout << "Setting animation for unit " << id
+                  << " of type " << static_cast<int>(type)
+                  << ": " << static_cast<int>(unitAnimationType) << '\n';
     }
 
     void Unit::rotateLeft() {
-        int newFacing = (static_cast<int>(facing) - 1) % 8;
-        setFacing(static_cast<Facing>(newFacing));
+        animation.rotateLeft();
     }
 
     void Unit::rotateRight() {
-        int newFacing = (static_cast<int>(facing) + 1) % 8;
-        setFacing(static_cast<Facing>(newFacing));
-    }
-
-    void Unit::setFacing(Facing newFacing) {
-        facing = newFacing;
+        animation.rotateRight();
     }
 
     const bool Unit::isDeleted() const {
@@ -57,4 +59,7 @@ namespace Rival {
         return y;
     }
 
+    void Unit::tick() {
+        animation.tick();
+    }
 }
