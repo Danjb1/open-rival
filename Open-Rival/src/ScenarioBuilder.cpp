@@ -21,7 +21,7 @@ namespace Rival {
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
         std::vector<Tile> tiles;
         tiles.reserve(numTiles);
-        for (int i = 0; i < numTiles; i++) {
+        for (int i = 0; i < numTiles; ++i) {
             tiles.push_back(buildTile(data.tiles[i]));
         }
         scenario->tilesLoaded(tiles);
