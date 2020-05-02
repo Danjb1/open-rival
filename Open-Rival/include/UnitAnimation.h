@@ -28,7 +28,7 @@ namespace Rival {
 
         int animationStep;
 
-        Facing facing = Facing::South;
+        Facing facing;
 
         SpritesheetEntry spritesheetEntry;
 
