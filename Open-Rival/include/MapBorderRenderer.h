@@ -61,14 +61,14 @@ namespace Rival {
 
         void render();
 
+    private:
+
+        const Texture& paletteTexture;
+
         // The maximum number of border segments we can render
         int maxSegmentsToRender;
 
-    private:
-
         SpriteRenderable renderable;
-
-        const Texture& paletteTexture;
 
         int numSegments = 0;
 

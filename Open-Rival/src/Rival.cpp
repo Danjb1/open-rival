@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+// Delete <iostream> if std::cout is no longer utilised for quick-debugging
 #include <iostream>
 
 #include <gl/glew.h>
