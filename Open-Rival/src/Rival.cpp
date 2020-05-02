@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+// Delete <iostream> if std::cout is no longer utilised for quick-debugging
+#include <iostream>
 
 #include <gl/glew.h>
 #include <glm/vec3.hpp>
@@ -212,6 +214,7 @@ namespace Rival {
     }
 
     void Rival::update() {
+        //std::cout << "scenario -> " << scenario->getWidth() << ", " << scenario->getHeight() << std::endl;
 
         mousePicker->handleMouse();
 

@@ -17,11 +17,6 @@ namespace Rival {
 
     public:
 
-        // The maximum number of border segments we can render
-        static const int maxSegmentsToRender =
-                (2 * RenderUtils::maxTilesX)
-                + (2 * RenderUtils::maxTilesY);
-
         MapBorderRenderer(
                 Race race,
                 int mapWidth,
@@ -29,29 +24,29 @@ namespace Rival {
                 const Spritesheet& spritesheet,
                 const Texture& paletteTexture);
 
-        void MapBorderRenderer::createLeftEdge(
+        void createLeftEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapHeight);
 
-        void MapBorderRenderer::createTopEdge(
+        void createTopEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth);
 
-        void MapBorderRenderer::createRightEdge(
+        void createRightEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth,
                 int mapHeight);
 
-        void MapBorderRenderer::createBottomEdge(
+        void createBottomEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth,
                 int mapHeight);
 
-        void MapBorderRenderer::createCorners(
+        void createCorners(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
                 int mapWidth,
@@ -68,9 +63,12 @@ namespace Rival {
 
     private:
 
-        SpriteRenderable renderable;
-
         const Texture& paletteTexture;
+
+        // The maximum number of border segments we can render
+        int maxSegmentsToRender;
+
+        SpriteRenderable renderable;
 
         int numSegments = 0;
 

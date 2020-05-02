@@ -118,7 +118,7 @@ namespace Rival {
         std::uint8_t numLevels = readByte();
 
         // Skip entries for all scenarios before this one
-        for (int i = 0; i < levelIndex; i++) {
+        for (int i = 0; i < levelIndex; ++i) {
             skip(8, false);
         }
 
@@ -149,7 +149,7 @@ namespace Rival {
         // Parse player properties
         printSection("Parsing player properties");
         printOffset();
-        for (int i = 0; i < numPlayers; i++) {
+        for (int i = 0; i < numPlayers; ++i) {
             scenarioData.playerProperties[i] = parsePlayerProperties();
         }
         print(scenarioData.playerProperties[0]);
@@ -222,7 +222,7 @@ namespace Rival {
         // Parse troop defaults
         printSection("Parsing troop defaults");
         printOffset();
-        for (int i = 0; i < numTroops; i++) {
+        for (int i = 0; i < numTroops; ++i) {
             scenarioData.troopDefaults[i] = parseTroopDefaults();
         }
         print(scenarioData.troopDefaults[0]);
@@ -231,7 +231,7 @@ namespace Rival {
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
         printOffset();
-        for (int i = 0; i < numUpgrades; i++) {
+        for (int i = 0; i < numUpgrades; ++i) {
             scenarioData.upgradeProperties[i] =
                     parseUpgradeProperties(doesUpgradeHaveAmount(i));
         }
@@ -259,7 +259,7 @@ namespace Rival {
         // Parse unit production costs
         printSection("Parsing unit production costs");
         printOffset();
-        for (int i = 0; i < numProductionCosts; i++) {
+        for (int i = 0; i < numProductionCosts; ++i) {
             scenarioData.productionCosts[i] = parseProductionCost();
         }
         print(scenarioData.productionCosts[0]);
@@ -268,7 +268,7 @@ namespace Rival {
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
         printOffset();
-        for (int i = 0; i < numWeapons; i++) {
+        for (int i = 0; i < numWeapons; ++i) {
             scenarioData.weaponDefaults[i] = parseWeaponDefaults();
         }
         print(scenarioData.weaponDefaults[0]);
@@ -284,7 +284,7 @@ namespace Rival {
         // Parse monster defaults
         printSection("Parsing monster defaults");
         printOffset();
-        for (int i = 0; i < numMonsters; i++) {
+        for (int i = 0; i < numMonsters; ++i) {
             scenarioData.monsterDefaults[i] = parseTroopDefaults();
         }
         print(scenarioData.monsterDefaults[0]);
@@ -300,8 +300,8 @@ namespace Rival {
         // Parse AI building settings
         printSection("Parsing AI building settings");
         printOffset();
-        for (int i = 0; i < numBuildingsPerRace; i++) {
-            for (int j = 0; j < numAiStrategies; j++) {
+        for (int i = 0; i < numBuildingsPerRace; ++i) {
+            for (int j = 0; j < numAiStrategies; ++j) {
                 scenarioData.aiStrategies[j].aiBuildingSettings[i] =
                         parseAiSetting();
             }
@@ -310,8 +310,8 @@ namespace Rival {
         // Parse AI troop settings
         printSection("Parsing AI troop settings");
         printOffset();
-        for (int i = 0; i < numTroopsPerRace; i++) {
-            for (int j = 0; j < numAiStrategies; j++) {
+        for (int i = 0; i < numTroopsPerRace; ++i) {
+            for (int j = 0; j < numAiStrategies; ++j) {
                 scenarioData.aiStrategies[j].aiTroopSettings[i] =
                         parseAiSetting();
             }
@@ -640,7 +640,7 @@ namespace Rival {
             TilePlacement tile = parseTile();
 
             // Copy the tile definition to the number of tiles it describes
-            for (size_t i = 0; i < numTiles; i++) {
+            for (size_t i = 0; i < numTiles; ++i) {
                 tiles.push_back(tile);
                 tileId++;
             }
@@ -668,7 +668,7 @@ namespace Rival {
         std::vector<ObjectPlacement> objects;
         objects.reserve(numObjects);
 
-        for (unsigned int i = 0; i < numObjects; i++) {
+        for (unsigned int i = 0; i < numObjects; ++i) {
             ObjectPlacement obj = parseObject();
             objects.push_back(obj);
         }
@@ -695,7 +695,7 @@ namespace Rival {
         std::vector<BuildingPlacement> buildings;
         buildings.reserve(numBuildings);
 
-        for (unsigned int i = 0; i < numBuildings; i++) {
+        for (unsigned int i = 0; i < numBuildings; ++i) {
             BuildingPlacement bldg = parseBuilding();
             buildings.push_back(bldg);
         }
@@ -736,7 +736,7 @@ namespace Rival {
         std::vector<UnitPlacement> units;
         units.reserve(numUnits);
 
-        for (unsigned int i = 0; i < numUnits; i++) {
+        for (unsigned int i = 0; i < numUnits; ++i) {
             UnitPlacement unit = parseUnit();
             units.push_back(unit);
         }
@@ -784,7 +784,7 @@ namespace Rival {
         std::vector<ChestPlacement> chests;
         chests.reserve(numChests);
 
-        for (unsigned int i = 0; i < numChests; i++) {
+        for (unsigned int i = 0; i < numChests; ++i) {
             ChestPlacement chest = parseChest();
             chests.push_back(chest);
         }
@@ -811,7 +811,7 @@ namespace Rival {
         std::vector<InfoPointPlacement> infoPoints;
         infoPoints.reserve(numInfoPoints);
 
-        for (unsigned int i = 0; i < numInfoPoints; i++) {
+        for (unsigned int i = 0; i < numInfoPoints; ++i) {
             InfoPointPlacement infoPoint = parseInfoPoint();
             infoPoints.push_back(infoPoint);
         }
@@ -837,7 +837,7 @@ namespace Rival {
         std::vector<TrapPlacement> traps;
         traps.reserve(numTraps);
 
-        for (unsigned int i = 0; i < numTraps; i++) {
+        for (unsigned int i = 0; i < numTraps; ++i) {
             TrapPlacement trap = parseTrap();
             traps.push_back(trap);
         }
@@ -862,7 +862,7 @@ namespace Rival {
         std::vector<GoalLocation> goals;
         goals.reserve(numGoalLocations);
 
-        for (unsigned int i = 0; i < numGoalLocations; i++) {
+        for (unsigned int i = 0; i < numGoalLocations; ++i) {
             GoalLocation goal = parseGoalLocation();
             goals.push_back(goal);
         }
@@ -894,7 +894,7 @@ namespace Rival {
         std::vector<Goal> goals;
         goals.reserve(numGoals);
 
-        for (unsigned int i = 0; i < numGoals; i++) {
+        for (unsigned int i = 0; i < numGoals; ++i) {
             Goal goal = parseGoal();
             goals.push_back(goal);
         }
@@ -1063,7 +1063,7 @@ namespace Rival {
             size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
-        for (size_t i = 0; i < length; i++) {
+        for (size_t i = 0; i < length; ++i) {
             chars[i] = data[offset + i];
         }
         std::string value(chars.data(), length);
@@ -1080,7 +1080,7 @@ namespace Rival {
             size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
-        for (size_t i = 0; i < length; i++) {
+        for (size_t i = 0; i < length; ++i) {
             std::uint8_t c = data[offset + i];
             chars[i] = getRivalChar(c);
         }
@@ -1150,7 +1150,7 @@ namespace Rival {
         // Switch to hex
         std::cout << std::setfill('0') << std::hex;
         int col = 0;
-        for (size_t i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; ++i) {
             unsigned int value = static_cast<unsigned int>(data.at(pos + i));
 
             if (value == 0) {
