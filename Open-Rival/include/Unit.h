@@ -18,7 +18,7 @@ namespace Rival {
 
         Unit(UnitType type);
 
-        void addedToWorld(int id, int player, int x, int y, Facing facing);
+        void addedToWorld(int newId, int newPlayer, int newX, int newY, Facing newFacing);
 
         int getCurrentSpriteIndex() const;
 
@@ -44,9 +44,9 @@ namespace Rival {
 
     private:
 
-        int id = -1;
+        int id;
 
-        bool deleted = false;
+        bool deleted;
 
         UnitType type;
 

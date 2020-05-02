@@ -33,7 +33,7 @@ namespace Rival {
         std::vector<unsigned char> data;
         size_t pos = 0;
 
-        void ScenarioReader::readFileContents(const std::string filename);
+        void readFileContents(const std::string filename);
 
         ///////////////////////////////////////////////////////////////////////
         // Parsing
@@ -47,7 +47,7 @@ namespace Rival {
 
         TroopDefaults parseTroopDefaults();
 
-        bool ScenarioReader::doesUpgradeHaveAmount(int i) const;
+        bool doesUpgradeHaveAmount(int i) const;
 
         UpgradeProperties parseUpgradeProperties(bool readAmount);
 
@@ -61,10 +61,10 @@ namespace Rival {
 
         AiSetting parseAiSetting();
 
-        std::vector<TilePlacement> ScenarioReader::parseTiles(
+        std::vector<TilePlacement> parseTiles(
                 int width, int height);
 
-        TilePlacement ScenarioReader::parseTile();
+        TilePlacement parseTile();
 
         std::vector<ObjectPlacement> parseObjects();
 
@@ -146,7 +146,7 @@ namespace Rival {
         // Printing
         ///////////////////////////////////////////////////////////////////////
 
-        void ScenarioReader::printOffset() const;
+        void printOffset() const;
 
         void printSection(std::string title) const;
 
