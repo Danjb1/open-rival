@@ -18,6 +18,7 @@ namespace Rival {
             const Spritesheet& spritesheet,
             const Texture& paletteTexture) :
         paletteTexture(paletteTexture),
+        maxSegmentsToRender(2 * (mapWidth+mapHeight) - 4),
         renderable{ spritesheet, maxSegmentsToRender } {
 
         // The map border never changes, so we set the buffers here and never
@@ -82,7 +83,7 @@ namespace Rival {
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
             int mapHeight) {
-        for (int tileY = 1; tileY < mapHeight; tileY++) {
+        for (int tileY = 1; tileY < mapHeight; ++tileY) {
             addDataToBuffers(positions, texCoords, 3,
                     0,
                     static_cast<float>(tileY));
@@ -94,7 +95,7 @@ namespace Rival {
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
             int mapWidth) {
-        for (int tileX = 1; tileX < mapWidth - 1; tileX++) {
+        for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
             addDataToBuffers(positions, texCoords, 0,
                     static_cast<float>(tileX),
                     0);
@@ -107,7 +108,7 @@ namespace Rival {
             std::vector<GLfloat>& texCoords,
             int mapWidth,
             int mapHeight) {
-        for (int tileY = 1; tileY < mapHeight; tileY++) {
+        for (int tileY = 1; tileY < mapHeight; ++tileY) {
             addDataToBuffers(positions, texCoords, 1,
                     mapWidth - 1.0f,
                     static_cast<float>(tileY));
@@ -120,7 +121,7 @@ namespace Rival {
             std::vector<GLfloat>& texCoords,
             int mapWidth,
             int mapHeight) {
-        for (int tileX = 1; tileX < mapWidth - 1; tileX++) {
+        for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
             addDataToBuffers(positions, texCoords, 2,
                     static_cast<float>(tileX),
                     mapHeight - 0.5f);
