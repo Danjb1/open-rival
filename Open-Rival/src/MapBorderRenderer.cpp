@@ -18,7 +18,7 @@ namespace Rival {
             const Spritesheet& spritesheet,
             const Texture& paletteTexture) :
         paletteTexture(paletteTexture),
-        maxSegmentsToRender(2 * (mapWidth+mapHeight) - 4),
+        maxSegmentsToRender(2 * (mapWidth + mapHeight) - 4),
         renderable{ spritesheet, maxSegmentsToRender } {
 
         // The map border never changes, so we set the buffers here and never
