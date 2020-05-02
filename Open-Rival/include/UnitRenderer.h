@@ -31,6 +31,8 @@ namespace Rival {
                 std::map<UnitType, Spritesheet>& unitSprites,
                 Texture& paletteTexture);
 
+        UnitRenderer& operator=(const UnitRenderer&) = delete;
+
         void render(
                 const Camera& camera,
                 const std::map<int, std::unique_ptr<Unit>>& units);

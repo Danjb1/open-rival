@@ -4,16 +4,18 @@
 namespace Rival {
 
     Unit::Unit(UnitType type) :
+        deleted(false),
+        id(-1),
         type(type),
         animation(type) {}
 
     void Unit::addedToWorld(
-            int id, int player, int x, int y, Facing facing) {
-        this->id = id;
-        this->player = player;
-        this->x = x;
-        this->y = y;
-        animation.setFacing(facing);
+            int newId, int newPlayer, int newX, int newY, Facing newFacing) {
+        id = newId;
+        player = newPlayer;
+        x = newX;
+        y = newY;
+        animation.setFacing(newFacing);
     }
 
     int Unit::getCurrentSpriteIndex() const {
