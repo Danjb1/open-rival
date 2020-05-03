@@ -13,14 +13,14 @@
 namespace Rival {
 
     BuildingRenderer::BuildingRenderer(
-        std::map<BuildingType, Spritesheet>& buildingSprites,
-        Texture& paletteTexture):
+            const std::map<BuildingType, Spritesheet>& buildingSprites,
+            const Texture& paletteTexture):
         buildingSprites(buildingSprites),
         paletteTexture(paletteTexture) {
     }
 
     SpriteRenderable& BuildingRenderer::getOrCreateRenderable(const Building& building) {
-        
+
         int id = building.getId();
 
         if (renderables.find(id) == renderables.end()) {

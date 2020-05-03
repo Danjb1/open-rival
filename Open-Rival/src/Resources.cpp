@@ -8,28 +8,26 @@ namespace Rival {
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::txDir = "res\\textures\\";
 
-    Resources::Resources() {
-        loadTextures();
-        initPaletteTexture();
-        initBuildingSpritesheets();
-        initUnitSpritesheets();
-        initUiSpritesheets();
-        initTileSpritesheets();
-    }
+    Resources::Resources() :
+            textures(loadTextures()),
+            paletteTexture(initPaletteTexture()),
+            unitSpritesheets(initUnitSpritesheets()),
+            buildingSpritesheets(initBuildingSpritesheets()),
+            tileSpritesheets(initTileSpritesheets()),
+            mapBorderSpritesheet(initMapBorderSpritesheet()) {}
 
     Resources::~Resources() {
         // Delete Textures
-        for (Texture& texture : *textures) {
+        for (const Texture& texture : textures) {
             const GLuint texId = texture.getId();
             glDeleteTextures(1, &texId);
         }
-        textures->clear();
     }
 
-    void Resources::loadTextures() {
+    std::vector<Texture> Resources::loadTextures() {
 
-        textures = std::make_unique<std::vector<Texture>>();
-        textures->reserve(numTextures);
+        std::vector<Texture> textures;
+        textures.reserve(numTextures);
 
         std::vector<std::string> textureNames = {
             // Units - Human
@@ -106,26 +104,27 @@ namespace Rival {
         };
 
         for (auto const& textureName : textureNames) {
-            textures->push_back(Texture::loadTexture(txDir + textureName));
+            textures.push_back(Texture::loadTexture(txDir + textureName));
         }
+
+        return textures;
     }
 
-    void Resources::initPaletteTexture() {
-        paletteTexture = std::make_unique<Texture>(
-                Palette::createPaletteTexture());
+    Texture Resources::initPaletteTexture() {
+        return Palette::createPaletteTexture();
     }
 
-    void Resources::initBuildingSpritesheets() {
-        buildingSpritesheets = std::make_unique<std::map<BuildingType, Spritesheet>>();
+    std::map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets() {
+
+        std::map<BuildingType, Spritesheet> buildingSpritesheets;
         int nextIndex = txIndexBuildings;
 
         auto createSpritesheets = [&](int first, int last) {
-            std::cout << "nextIndex = " << nextIndex << std::endl;
             for (auto it{ first }; it <= last; ++it) {
-                buildingSpritesheets->emplace(std::piecewise_construct,
+                buildingSpritesheets.emplace(std::piecewise_construct,
                     std::forward_as_tuple(static_cast<BuildingType>(it)),
                     std::forward_as_tuple(
-                        textures->at(nextIndex),
+                        textures.at(nextIndex),
                         RenderUtils::buildingWidthPx,
                         RenderUtils::buildingHeightPx));
             }
@@ -136,66 +135,75 @@ namespace Rival {
         createSpritesheets(firstGreenskinBuildingType, lastGreenskinBuildingType);
         ++nextIndex;
         createSpritesheets(firstHumanBuildingType, lastHumanBuildingType);
+
+        return buildingSpritesheets;
     }
 
-    void Resources::initUnitSpritesheets() {
-        unitSpritesheets = std::make_unique<std::map<UnitType, Spritesheet>>();
+    std::map<UnitType, Spritesheet> Resources::initUnitSpritesheets() {
+
+        std::map<UnitType, Spritesheet> unitSpritesheets;
         int nextIndex = txIndexUnits;
 
         for (auto it{ firstUnitType }; it <= lastUnitType; ++it) {
-            unitSpritesheets->emplace(std::piecewise_construct,
+            unitSpritesheets.emplace(std::piecewise_construct,
                 std::forward_as_tuple(static_cast<UnitType>(it)),
                 std::forward_as_tuple(
-                    textures->at(nextIndex),
+                    textures.at(nextIndex),
                     RenderUtils::unitWidthPx,
                     RenderUtils::unitHeightPx));
             nextIndex++;
         }
+
+        return unitSpritesheets;
     }
 
-    void Resources::initUiSpritesheets() {
-        mapBorderSpritesheet = std::make_unique<Spritesheet>(
-                textures->at(txIndexUi + 1),
-                RenderUtils::tileSpriteWidthPx,
-                RenderUtils::tileSpriteHeightPx);
-    }
+    std::map<int, Spritesheet> Resources::initTileSpritesheets() {
 
-    void Resources::initTileSpritesheets() {
-        tileSpritesheets = std::make_unique<std::map<int, Spritesheet>>();
+        std::map<int, Spritesheet> tileSpritesheets;
         int nextIndex = txIndexTiles;
 
         // 0 = Meadow
         // 1 = Wilderness
         // 2 = Fog
         for (int i = 0; i < 3; i++) {
-            tileSpritesheets->emplace(std::piecewise_construct,
+            tileSpritesheets.emplace(std::piecewise_construct,
                 std::forward_as_tuple(i),
                 std::forward_as_tuple(
-                    textures->at(nextIndex),
+                    textures.at(nextIndex),
                     RenderUtils::tileSpriteWidthPx,
                     RenderUtils::tileSpriteHeightPx));
             nextIndex++;
         }
+
+        return tileSpritesheets;
     }
 
-    Spritesheet& Resources::getTileSpritesheet(int index) const {
-        return tileSpritesheets->at(index);
+    Spritesheet Resources::initMapBorderSpritesheet() {
+        Spritesheet mapBorderSpritesheet(
+                textures.at(txIndexUi + 1),
+                RenderUtils::tileSpriteWidthPx,
+                RenderUtils::tileSpriteHeightPx);
+        return mapBorderSpritesheet;
     }
 
-    std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {
-        return *unitSpritesheets;
+    const Spritesheet& Resources::getTileSpritesheet(int index) const {
+        return tileSpritesheets.at(index);
     }
 
-    std::map<BuildingType, Spritesheet>& Resources::getBuildingSpritesheets() const {
-        return *buildingSpritesheets;
+    const std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {
+        return unitSpritesheets;
     }
 
-    Spritesheet& Resources::getMapBorderSpritesheet() const {
-        return *mapBorderSpritesheet;
+    const std::map<BuildingType, Spritesheet>& Resources::getBuildingSpritesheets() const {
+        return buildingSpritesheets;
     }
 
-    Texture& Resources::getPalette() const {
-        return *paletteTexture;
+    const Spritesheet& Resources::getMapBorderSpritesheet() const {
+        return mapBorderSpritesheet;
+    }
+
+    const Texture& Resources::getPalette() const {
+        return paletteTexture;
     }
 
 }
