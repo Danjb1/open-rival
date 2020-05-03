@@ -15,7 +15,7 @@ namespace Rival {
 
     public:
 
-        static const int numVertexDimensions = 2; // x, y
+        static const int numVertexDimensions = 3; // x, y, z
         static const int numTexCoordDimensions = 2; // u, v
         static const int numVerticesPerSprite = 4;
 

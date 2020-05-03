@@ -56,7 +56,8 @@ namespace Rival {
 
         // Create our framebuffer
         gameFbo = std::make_unique<Framebuffer>(
-                Framebuffer::generate(framebufferWidth, framebufferHeight));
+                Framebuffer::generate(
+                        framebufferWidth, framebufferHeight, true));
 
         // Create the FramebufferRenderer
         gameFboRenderer = std::make_unique<FramebufferRenderer>(*gameFbo);
@@ -151,6 +152,8 @@ namespace Rival {
         glEnable(GL_TEXTURE_2D);
 
         // Enable alpha blending
+        // See also:
+        // https://www.khronos.org/opengl/wiki/Transparency_Sorting#Alpha_test
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -341,7 +344,11 @@ namespace Rival {
     void Rival::renderGame(int viewportWidth, int viewportHeight) {
 
         // Clear framebuffer
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Enable depth testing so we can rely on z co-ordinates for sprite
+        // ordering
+        glEnable(GL_DEPTH_TEST);
 
         // Use indexed texture shader
         glUseProgram(indexedTextureShader.programId);
@@ -357,8 +364,8 @@ namespace Rival {
         float cameraX = RenderUtils::worldToPx_X(camera->getX());
         float cameraY = RenderUtils::worldToPx_Y(camera->getY());
         glm::mat4 view = glm::lookAt(
-            glm::vec3(cameraX, cameraY, 1),     // camera position
-            glm::vec3(cameraX, cameraY, 0),     // look at
+            glm::vec3(cameraX, cameraY, 0),     // camera position
+            glm::vec3(cameraX, cameraY, -1),    // look at
             glm::vec3(0, 1, 0)                  // up vector
         );
 
@@ -369,7 +376,9 @@ namespace Rival {
         float top = -viewportHeight / 2.0f;
         float right = viewportWidth / 2.0f;
         float bottom = viewportHeight / 2.0f;
-        glm::mat4 projection = glm::ortho(left, right, bottom, top);
+        float near = 1.0f;
+        float far = 1024.0f;
+        glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
 
         // Combine matrices
         glm::mat4 viewProjMatrix = projection * view;
@@ -401,6 +410,10 @@ namespace Rival {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Disable depth testing since we are rendering a single texture to the
+        // entire screen
+        glDisable(GL_DEPTH_TEST);
 
         // Use screen shader
         glUseProgram(screenShader.programId);
