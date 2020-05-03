@@ -16,6 +16,10 @@ namespace Rival {
         static const int unitWidthPx = 128;
         static const int unitHeightPx = 128;
 
+        // Size of a single Building image, in pixels
+        static const int buildingWidthPx = 128;
+        static const int buildingHeightPx = 128;
+
         // Render limits.
         // These define the maximum number of tiles that can ever be rendered
         // at one time, and, by extension, the limits of our camera.

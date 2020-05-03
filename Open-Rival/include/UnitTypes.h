@@ -6,52 +6,52 @@ namespace Rival {
     enum class UnitType {
 
         // Human
-        Peasant,
-        Bowman,
-        LightCavalry,
-        Knight,
-        FireMaster,
-        Thief,
         Ballista,
+        Battleship,
+        Bowman,
         ChariotOfWar,
-        Wizard,
+        FireMaster,
+        Knight,
+        LightCavalry,
+        Peasant,
+        PegasRider,
         Priest,
         SeaBarge,
-        Battleship,
-        PegasRider,
+        Thief,
+        Wizard,
         Zeppelin,
 
         // Greenskin
-        Serf,
-        RockThrower,
-        HordeRider,
-        Warlord,
-        GnomeBoomer,
-        Rogue,
+        Balloon,
         Catapult,
-        StormTrooper,
-        PriestOfDoom,
-        Necromancer,
+        GnomeBoomer,
+        HordeRider,
         LandingCraft,
+        Necromancer,
+        PriestOfDoom,
+        RockThrower,
+        Rogue,
+        Serf,
+        StormTrooper,
         TrollGalley,
         Warbat,
-        Balloon,
+        Warlord,
 
         // Elf
-        Yeoman,
         Archer,
-        Druid,
-        Centaur,
-        DwarfMiner,
-        Scout,
-        Bombard,
         Arquebusier,
-        Mage,
-        Enchanter,
         Bark,
-        Warship,
-        SkyRider,
+        Bombard,
+        Centaur,
+        Druid,
+        DwarfMiner,
+        Enchanter,
+        Mage,
         MagicChopper,
+        Scout,
+        SkyRider,
+        Warship,
+        Yeoman,
 
         // Monsters
         Devil,
@@ -64,6 +64,9 @@ namespace Rival {
         Snake
 
     };
+
+    const auto firstUnitType{ static_cast<int>(UnitType::Ballista) };
+    const auto lastUnitType{ static_cast<int>(UnitType::Snake) };
 
 }
 

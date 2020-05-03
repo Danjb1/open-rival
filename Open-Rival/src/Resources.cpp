@@ -11,6 +11,7 @@ namespace Rival {
     Resources::Resources() {
         loadTextures();
         initPaletteTexture();
+        initBuildingSpritesheets();
         initUnitSpritesheets();
         initUiSpritesheets();
         initTileSpritesheets();
@@ -96,7 +97,12 @@ namespace Rival {
 
             // UI
             "ui_cursor_select.tga",
-            "ui_map_border.tga"
+            "ui_map_border.tga",
+
+            // Buildings
+            "buildings_elf.tga",
+            "buildings_greenskin.tga",
+            "buildings_human.tga"
         };
 
         for (auto const& textureName : textureNames) {
@@ -109,74 +115,36 @@ namespace Rival {
                 Palette::createPaletteTexture());
     }
 
-    void Resources::initUnitSpritesheets() {
+    void Resources::initBuildingSpritesheets() {
+        buildingSpritesheets = std::make_unique<std::map<BuildingType, Spritesheet>>();
+        int nextIndex = txIndexBuildings;
 
+        auto createSpreadsheets = [&](int first, int last) {
+            std::cout << "nextIndex = " << nextIndex << std::endl;
+            for (auto it{ first }; it <= last; ++it) {
+                buildingSpritesheets->emplace(std::piecewise_construct,
+                    std::forward_as_tuple(static_cast<BuildingType>(it)),
+                    std::forward_as_tuple(
+                        textures->at(nextIndex),
+                        RenderUtils::buildingWidthPx,
+                        RenderUtils::buildingHeightPx));
+            }
+        };
+
+        createSpreadsheets(firstElfBuildingType, lastElfBuildingType);
+        ++nextIndex;
+        createSpreadsheets(firstGreenskinBuildingType, lastGreenskinBuildingType);
+        ++nextIndex;
+        createSpreadsheets(firstHumanBuildingType, lastHumanBuildingType);
+    }
+
+    void Resources::initUnitSpritesheets() {
         unitSpritesheets = std::make_unique<std::map<UnitType, Spritesheet>>();
         int nextIndex = txIndexUnits;
 
-        std::vector<UnitType> unitTypes = {
-            // Human
-            UnitType::Ballista,
-            UnitType::Battleship,
-            UnitType::Bowman,
-            UnitType::ChariotOfWar,
-            UnitType::FireMaster,
-            UnitType::Knight,
-            UnitType::LightCavalry,
-            UnitType::Peasant,
-            UnitType::PegasRider,
-            UnitType::Priest,
-            UnitType::SeaBarge,
-            UnitType::Thief,
-            UnitType::Wizard,
-            UnitType::Zeppelin,
-
-            // Greenskin
-            UnitType::Balloon,
-            UnitType::Catapult,
-            UnitType::GnomeBoomer,
-            UnitType::HordeRider,
-            UnitType::LandingCraft,
-            UnitType::Necromancer,
-            UnitType::PriestOfDoom,
-            UnitType::RockThrower,
-            UnitType::Rogue,
-            UnitType::Serf,
-            UnitType::StormTrooper,
-            UnitType::TrollGalley,
-            UnitType::Warbat,
-            UnitType::Warlord,
-
-            // Elf
-            UnitType::Archer,
-            UnitType::Arquebusier,
-            UnitType::Bark,
-            UnitType::Bombard,
-            UnitType::Centaur,
-            UnitType::Druid,
-            UnitType::DwarfMiner,
-            UnitType::Enchanter,
-            UnitType::Mage,
-            UnitType::MagicChopper,
-            UnitType::Scout,
-            UnitType::SkyRider,
-            UnitType::Warship,
-            UnitType::Yeoman,
-
-            // Monsters
-            UnitType::Devil,
-            UnitType::Dragon,
-            UnitType::Golem,
-            UnitType::Gryphon,
-            UnitType::Hydra,
-            UnitType::SeaMonster,
-            UnitType::Skeleton,
-            UnitType::Snake,
-        };
-
-        for (auto const& unitType : unitTypes) {
+        for (auto it{ firstUnitType }; it != lastUnitType; ++it) {
             unitSpritesheets->emplace(std::piecewise_construct,
-                std::forward_as_tuple(unitType),
+                std::forward_as_tuple(static_cast<UnitType>(it)),
                 std::forward_as_tuple(
                     textures->at(nextIndex),
                     RenderUtils::unitWidthPx,
@@ -216,6 +184,10 @@ namespace Rival {
 
     std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {
         return *unitSpritesheets;
+    }
+
+    std::map<BuildingType, Spritesheet>& Resources::getBuildingSpritesheets() const {
+        return *buildingSpritesheets;
     }
 
     Spritesheet& Resources::getMapBorderSpritesheet() const {

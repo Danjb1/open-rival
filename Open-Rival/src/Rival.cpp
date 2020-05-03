@@ -95,6 +95,11 @@ namespace Rival {
         unitRenderer = std::make_unique<UnitRenderer>(
                 res->getUnitSpritesheets(),
                 res->getPalette());
+
+        // Create the BuildingRenderer
+        buildingRenderer = std::make_unique<BuildingRenderer>(
+                res->getBuildingSpritesheets(),
+                res->getPalette());
     }
 
     void Rival::initSDL() const {
@@ -219,6 +224,13 @@ namespace Rival {
         mousePicker->handleMouse();
 
         //std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
+
+        /// \todo Inspect the reason why sprites do not render correctly when this part is omitted
+        std::map<int, std::unique_ptr<Building>>& buildings = scenario->getBuildings();
+        for (auto const& kv : buildings) {
+            const std::unique_ptr<Building>& building = kv.second;
+            building->tick();
+        }
 
         std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
@@ -380,6 +392,9 @@ namespace Rival {
 
         // Render Units
         unitRenderer->render(*camera, scenario->getUnits());
+
+        // Render Units
+        buildingRenderer->render(*camera, scenario->getBuildings());
     }
 
     void Rival::renderFramebuffer() {
