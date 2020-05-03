@@ -142,7 +142,7 @@ namespace Rival {
         unitSpritesheets = std::make_unique<std::map<UnitType, Spritesheet>>();
         int nextIndex = txIndexUnits;
 
-        for (auto it{ firstUnitType }; it != lastUnitType; ++it) {
+        for (auto it{ firstUnitType }; it <= lastUnitType; ++it) {
             unitSpritesheets->emplace(std::piecewise_construct,
                 std::forward_as_tuple(static_cast<UnitType>(it)),
                 std::forward_as_tuple(
