@@ -13,8 +13,8 @@
 namespace Rival {
 
     UnitRenderer::UnitRenderer(
-            std::map<UnitType, Spritesheet>& unitSprites,
-            Texture& paletteTexture) :
+            const std::map<UnitType, Spritesheet>& unitSprites,
+            const Texture& paletteTexture) :
         unitSprites(unitSprites),
         paletteTexture(paletteTexture) {}
 
