@@ -708,16 +708,16 @@ namespace Rival {
         BuildingPlacement bldg;
 
         bldg.type = readByte();
-        bldg.player = readByte();
         skip(1, true);
+        bldg.wallVariant = readByte();
         skip(1, true);
         skip(1, true);
         bldg.x = readShort();
         bldg.y = readShort();
-        skip(1, true);
+        bldg.player = readByte();
         bldg.hitpoints = readShort();
         bldg.armour = readShort();
-        skip(1, false);
+        skip(1, true);
         bldg.sight = readByte();
         bldg.range = readByte();
         bldg.upgrade1Enabled = readBool();
@@ -725,7 +725,20 @@ namespace Rival {
         bldg.specialColour = readByte();
         bldg.prisoner = readBool();
         bldg.name = readString(12);
-        skip(1, false);
+        skip(1, true);
+
+        std::cout << "Building "
+            << " type: " << unsigned(bldg.type)
+            << " player: " << unsigned(bldg.player)
+            << " x: " << unsigned(bldg.x)
+            << " y: " << unsigned(bldg.y)
+            << " hp: " << unsigned(bldg.hitpoints)
+            << " armour: " << unsigned(bldg.armour)
+            << " sight: " << unsigned(bldg.sight)
+            << " range: " << unsigned(bldg.range)
+            << " specialColour: " << unsigned(bldg.specialColour)
+            << " prisoner: " << unsigned(bldg.prisoner)
+            << std::endl;
 
         return bldg;
     }
