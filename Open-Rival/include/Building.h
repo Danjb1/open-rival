@@ -8,7 +8,7 @@ namespace Rival {
 
     class Building {
 
-        public:
+    public:
 
         // Size of a Building, in world units
         static const int width = 4;
@@ -40,7 +40,7 @@ namespace Rival {
 
         void tick();
 
-        private:
+    private:
 
         int id;
 
@@ -55,12 +55,12 @@ namespace Rival {
         int player;
 
         /**
-         * x co-ordinate of the Tile the Unit is occupying.
+         * x co-ordinate of the Tile the Building is occupying.
          */
         int x;
 
         /**
-         * y co-ordinate of the Tile the Unit is occupying.
+         * y co-ordinate of the Tile the Building is occupying.
          */
         int y;
 

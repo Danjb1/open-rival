@@ -137,10 +137,6 @@ namespace Rival {
         // 1 byte: unknown (0x00 - 0x0f for Palisade)
         //     Always 0 in buildings example
         std::uint8_t wallVariant;
-        // ^1 byte: empty
-        //     Something wall related. In buildings example, this goes 4-3-8, probably referring to different wall types, but I could not find what this is.
-        // An implementation that makes sense was committed.
-
         // 1 byte: unknown (0x01 for Green Door, 0x02 for Blue Door, 0x03 for Yellow Door, 0x04 for Buildings)
         //     Always 0 in buildings example
         // 1 byte: unknown (0x08 for Palisade / Grate / Door)

@@ -6,18 +6,18 @@ namespace Rival {
     enum class BuildingType {
 
         // Elf
-        ElvenKeep,      // HP: 1200, Armor: 12, Sight: 8, Range: 0
-        Treasury,       // HP: 600, Armor: 4, Sight: 5, Range: 0
-        CombatCamp,     // HP: 900, Armor: 8, Sight: 6, Range: 0
-        Arsenal,        // HP: 900, Armor: 8, Sight: 6, Range: 0
-        DuelRange,      // HP: 900, Armor: 8, Sight: 6, Range: 0
-        HolyNest,       // HP: 900, Armor: 8, Sight: 6, Range: 0
-        MinerGuildhall, // HP: 900, Armor: 8, Sight: 6, Range: 0
-        AbbeyTower,     // HP: 900, Armor: 8, Sight: 6, Range: 0
-        CouncilOfRunes, // HP: 900, Armor: 8, Sight: 6, Range: 0
-        Harbour,        // HP: 900, Armor: 8, Sight: 6, Range: 0
-        WarningTower,   // HP: 900, Armor: 12, Sight: 8, Range: 0
-        TreeWall,       // HP: 600, Armor: 0, Sight: 4, Range: 0
+        ElvenKeep,
+        Treasury,
+        CombatCamp,
+        Arsenal,
+        DuelRange,
+        HolyNest,
+        MinerGuildhall,
+        AbbeyTower,
+        CouncilOfRunes,
+        Harbour,
+        WarningTower,
+        TreeWall,
 
         // Greenskin
         Fortress,
