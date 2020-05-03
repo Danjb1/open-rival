@@ -26,6 +26,8 @@ namespace Rival {
 
         Tile buildTile(TilePlacement& tile) const;
 
+        BuildingType getBuildingType(std::uint8_t buildingType) const;
+
         UnitType getUnitType(std::uint8_t unitType) const;
 
         Facing getFacing(std::uint8_t facing) const;

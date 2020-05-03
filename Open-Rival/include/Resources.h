@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "Building.h"
 #include "Palette.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -34,6 +35,7 @@ namespace Rival {
         Texture& getPalette() const;
         Spritesheet& getTileSpritesheet(int index) const;
         std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
+        std::map<BuildingType, Spritesheet>& getBuildingSpritesheets() const;
         Spritesheet& getMapBorderSpritesheet() const;
 
     private:
@@ -43,6 +45,7 @@ namespace Rival {
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
         static const int txIndexUi = 53;
+        static const int txIndexBuildings = 55;
 
         // Loaded textures
         std::unique_ptr<std::vector<Texture>> textures;
@@ -50,12 +53,14 @@ namespace Rival {
 
         // Spritesheets
         std::unique_ptr<std::map<UnitType, Spritesheet>> unitSpritesheets;
+        std::unique_ptr<std::map<BuildingType, Spritesheet>> buildingSpritesheets;
         std::unique_ptr<std::map<int, Spritesheet>> tileSpritesheets;
         std::unique_ptr<Spritesheet> mapBorderSpritesheet;
 
         // Initialisation
         void loadTextures();
         void initPaletteTexture();
+        void initBuildingSpritesheets();
         void initUnitSpritesheets();
         void initTileSpritesheets();
         void initUiSpritesheets();
