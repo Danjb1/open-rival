@@ -22,6 +22,8 @@ character filename (including path)
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
 
+ - Remove unnecessary unique_ptrs
+
  - Image filenames can be truncated due to limited size of char array
 
  - Camera should point at the centre of a tile - not the top-left corner
@@ -121,8 +123,7 @@ character filename (including path)
  - Render Units
     - Animations
     - Respect colour
-    - Sort by z-order!
- - Use depth buffer
+ - Use appropriate z-positions for entities
  - Fog of war
  - High resolution support (!)
 
