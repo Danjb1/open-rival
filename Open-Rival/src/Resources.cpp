@@ -119,7 +119,7 @@ namespace Rival {
         buildingSpritesheets = std::make_unique<std::map<BuildingType, Spritesheet>>();
         int nextIndex = txIndexBuildings;
 
-        auto createSpreadsheets = [&](int first, int last) {
+        auto createSpritesheets = [&](int first, int last) {
             std::cout << "nextIndex = " << nextIndex << std::endl;
             for (auto it{ first }; it <= last; ++it) {
                 buildingSpritesheets->emplace(std::piecewise_construct,
@@ -131,11 +131,11 @@ namespace Rival {
             }
         };
 
-        createSpreadsheets(firstElfBuildingType, lastElfBuildingType);
+        createSpritesheets(firstElfBuildingType, lastElfBuildingType);
         ++nextIndex;
-        createSpreadsheets(firstGreenskinBuildingType, lastGreenskinBuildingType);
+        createSpritesheets(firstGreenskinBuildingType, lastGreenskinBuildingType);
         ++nextIndex;
-        createSpreadsheets(firstHumanBuildingType, lastHumanBuildingType);
+        createSpritesheets(firstHumanBuildingType, lastHumanBuildingType);
     }
 
     void Resources::initUnitSpritesheets() {

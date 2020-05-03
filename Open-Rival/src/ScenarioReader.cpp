@@ -727,19 +727,6 @@ namespace Rival {
         bldg.name = readString(12);
         skip(1, true);
 
-        std::cout << "Building "
-            << " type: " << unsigned(bldg.type)
-            << " player: " << unsigned(bldg.player)
-            << " x: " << unsigned(bldg.x)
-            << " y: " << unsigned(bldg.y)
-            << " hp: " << unsigned(bldg.hitpoints)
-            << " armour: " << unsigned(bldg.armour)
-            << " sight: " << unsigned(bldg.sight)
-            << " range: " << unsigned(bldg.range)
-            << " specialColour: " << unsigned(bldg.specialColour)
-            << " prisoner: " << unsigned(bldg.prisoner)
-            << std::endl;
-
         return bldg;
     }
 

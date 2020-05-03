@@ -24,7 +24,7 @@ namespace Rival {
         int id = building.getId();
 
         if (renderables.find(id) == renderables.end()) {
-            // No Renderable exists for this Unit; create one
+            // No Renderable exists for this Building; create one
             const BuildingType type = building.getType();
             const Spritesheet& sprite = buildingSprites.at(type);
             renderables.emplace(std::piecewise_construct,
@@ -77,8 +77,8 @@ namespace Rival {
         int txIndex = getTxIndex(building);
 
         // Define vertex positions
-        float width = static_cast<float>(RenderUtils::unitWidthPx);
-        float height = static_cast<float>(RenderUtils::unitHeightPx);
+        float width = static_cast<float>(RenderUtils::buildingWidthPx);
+        float height = static_cast<float>(RenderUtils::buildingHeightPx);
         float x1 = static_cast<float>(
             RenderUtils::tileToPx_X(building.getX()));
         float y1 = static_cast<float>(

@@ -15,7 +15,6 @@ namespace Rival {
             tilePassability(std::vector<TilePassability>(
                     width * height, TilePassability::Clear)
             ),
-            nextBuildingId(0),
             nextId(0) {}
 
     int Scenario::getWidth() const {
@@ -50,16 +49,16 @@ namespace Rival {
             uint8_t wallVariant) {
 
         // Add the Unit to the world
-        buildings[nextBuildingId] = std::move(building);
-        buildings[nextBuildingId]->addedToWorld(
-                nextBuildingId,
+        buildings[nextId] = std::move(building);
+        buildings[nextId]->addedToWorld(
+                nextId,
                 player,
                 x,
                 y,
                 static_cast<WallVariant>(wallVariant));
 
         // Increase the ID for the next one
-        nextBuildingId++;
+        nextId++;
 
         // Change the passability
         setPassability(x, y, TilePassability::Building);

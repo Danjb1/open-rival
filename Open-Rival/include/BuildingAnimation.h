@@ -7,7 +7,7 @@ namespace Rival {
 
     class BuildingAnimation {
 
-        public:
+    public:
         BuildingAnimation(BuildingType buildingType);
 
         int getCurrentSpriteIndex() const;
@@ -16,16 +16,16 @@ namespace Rival {
 
         void tick();
 
-        private:
-
-        void updateSpriteSheetEntry();
+    private:
 
         int animationStep;
 
-        SpritesheetEntry spritesheetEntry;
-
         // Holds buildingType and buildingAnimationType
         BuildingAnimationPair buildingAnimationPair;
+
+        SpritesheetEntry spritesheetEntry;
+
+        void updateSpriteSheetEntry();
 
     };
 }
