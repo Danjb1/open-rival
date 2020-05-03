@@ -7,13 +7,6 @@
 
 namespace Rival {
 
-    // Stub for damage animation
-    enum class BuildingDamageLevel {
-        Light,
-        Medium,
-        High
-    };
-
     // This needs a better naming, please correct
     // We have 16 wall variants. This enum class, when considered as an int,
     //     corresponds to wall sprite offset in SpriteSheet

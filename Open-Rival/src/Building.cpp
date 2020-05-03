@@ -22,9 +22,9 @@ namespace Rival {
 
     int Building::getCurrentSpriteIndex() const {
         auto spriteIndex = animation.getCurrentSpriteIndex();
-        bool isAWall = (type == BuildingType::TreeWall);
-        isAWall = isAWall || (type == BuildingType::GreenskinWall);
-        isAWall = isAWall || (type == BuildingType::Wall);
+        bool isAWall = (type == BuildingType::TreeWall)
+                       || (type == BuildingType::GreenskinWall)
+                       || (type == BuildingType::Wall);
         if (isAWall) {
             spriteIndex += static_cast<int>(wallVariant);
         }

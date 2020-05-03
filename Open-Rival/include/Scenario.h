@@ -57,7 +57,6 @@ namespace Rival {
         std::vector<Tile> tiles;
         std::vector<TilePassability> tilePassability;
 
-        int nextBuildingId;
         int nextId;
         std::map<int, std::unique_ptr<Building>> buildings;
         std::map<int, std::unique_ptr<Unit>> units;
