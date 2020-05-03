@@ -3,8 +3,6 @@
 
 #include "Spritesheet.h"
 #include "UnitAnimation.h"
-#include "UnitAnimationLookup.h"
-#include "UnitTypes.h"
 
 namespace Rival {
 

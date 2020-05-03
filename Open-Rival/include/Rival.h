@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 
+#include "BuildingRenderer.h"
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
@@ -66,6 +67,7 @@ namespace Rival {
         std::shared_ptr<Scenario> scenario;
 
         // Renderers
+        std::unique_ptr<BuildingRenderer> buildingRenderer;
         std::unique_ptr<FramebufferRenderer> gameFboRenderer;
         std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<MapBorderRenderer> mapBorderRenderer;
