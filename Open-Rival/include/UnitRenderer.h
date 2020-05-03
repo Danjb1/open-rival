@@ -28,8 +28,8 @@ namespace Rival {
         static const int unitOffsetY = -89;
 
         UnitRenderer(
-                std::map<UnitType, Spritesheet>& unitSprites,
-                Texture& paletteTexture);
+                const std::map<UnitType, Spritesheet>& unitSprites,
+                const Texture& paletteTexture);
 
         UnitRenderer( const UnitRenderer& ) = delete;
         UnitRenderer& operator=(const UnitRenderer&) = delete;

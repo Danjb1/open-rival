@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "BuildingAnimation.h"
 
 #include <stdexcept>

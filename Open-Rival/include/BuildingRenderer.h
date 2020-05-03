@@ -20,7 +20,7 @@ namespace Rival {
      */
     class BuildingRenderer {
 
-        public:
+    public:
 
         // Offset applied to align a building sprite correctly within a tile,
         // in pixels
@@ -28,8 +28,8 @@ namespace Rival {
         static const int buildingOffsetY = -89;
 
         BuildingRenderer(
-            std::map<BuildingType, Spritesheet>& buildingSprites,
-            Texture& paletteTexture);
+            const std::map<BuildingType, Spritesheet>& buildingSprites,
+            const Texture& paletteTexture);
 
         BuildingRenderer(const BuildingRenderer&) = delete;
         BuildingRenderer& operator=(const BuildingRenderer&) = delete;
@@ -38,7 +38,7 @@ namespace Rival {
             const Camera& camera,
             const std::map<int, std::unique_ptr<Building>>& buildings);
 
-        private:
+    private:
 
         const std::map<BuildingType, Spritesheet>& buildingSprites;
 

@@ -2,7 +2,6 @@
 #define RESOURCES_H
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -32,11 +31,11 @@ namespace Rival {
         Resources& operator=(Resources&& other) = delete;
 
         // Retrieval
-        Texture& getPalette() const;
-        Spritesheet& getTileSpritesheet(int index) const;
-        std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
-        std::map<BuildingType, Spritesheet>& getBuildingSpritesheets() const;
-        Spritesheet& getMapBorderSpritesheet() const;
+        const Texture& getPalette() const;
+        const Spritesheet& getTileSpritesheet(int index) const;
+        const std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
+        const std::map<BuildingType, Spritesheet>& getBuildingSpritesheets() const;
+        const Spritesheet& getMapBorderSpritesheet() const;
 
     private:
 
@@ -48,22 +47,22 @@ namespace Rival {
         static const int txIndexBuildings = 55;
 
         // Loaded textures
-        std::unique_ptr<std::vector<Texture>> textures;
-        std::unique_ptr<Texture> paletteTexture;
+        const std::vector<Texture> textures;
+        const Texture paletteTexture;
 
         // Spritesheets
-        std::unique_ptr<std::map<UnitType, Spritesheet>> unitSpritesheets;
-        std::unique_ptr<std::map<BuildingType, Spritesheet>> buildingSpritesheets;
-        std::unique_ptr<std::map<int, Spritesheet>> tileSpritesheets;
-        std::unique_ptr<Spritesheet> mapBorderSpritesheet;
+        const std::map<UnitType, Spritesheet> unitSpritesheets;
+        const std::map<BuildingType, Spritesheet> buildingSpritesheets;
+        const std::map<int, Spritesheet> tileSpritesheets;
+        const Spritesheet mapBorderSpritesheet;
 
         // Initialisation
-        void loadTextures();
-        void initPaletteTexture();
-        void initBuildingSpritesheets();
-        void initUnitSpritesheets();
-        void initTileSpritesheets();
-        void initUiSpritesheets();
+        std::vector<Texture> loadTextures();
+        Texture initPaletteTexture();
+        std::map<BuildingType, Spritesheet> initBuildingSpritesheets();
+        std::map<UnitType, Spritesheet> initUnitSpritesheets();
+        std::map<int, Spritesheet> initTileSpritesheets();
+        Spritesheet initMapBorderSpritesheet();
 
     };
 

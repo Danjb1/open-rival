@@ -1,15 +1,6 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-## WIP
-<!----------------------------------------------------------------------------->
-
- - Mouse picking units by their hitbox
-
- - Resources refactor
-    - Pass Resources around instead of individual textures / spritesheets?
-
-<!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
@@ -21,18 +12,19 @@
  - When zoomed enough, we can see blue dotted lines, probably an artefact from
 rendering to offscreen buffer
 
- - exctractImages() method in setup/src/image-extractor.cpp assumes at most 63
+ - extractImages() method in setup/src/image-extractor.cpp assumes at most 63
 character filename (including path)
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
+ - Resources refactor
+    - Pass Resources around instead of individual textures / spritesheets?
+
  - Image filenames can be truncated due to limited size of char array
 
  - Camera should point at the centre of a tile - not the top-left corner
-
- - Clarify use of unique_ptrs
 
  - Framebuffer size calculations should use RenderUtils
 
@@ -71,6 +63,7 @@ character filename (including path)
 ### General
 
  - Set window icon
+ - Custom cursors
  - Log to file
 
 ### Data Loading
