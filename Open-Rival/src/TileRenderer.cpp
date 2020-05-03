@@ -90,11 +90,12 @@ namespace Rival {
                 float y1 = static_cast<float>(RenderUtils::tileToPx_Y(tileX, tileY));
                 float x2 = x1 + width;
                 float y2 = y1 + height;
+                float z = -10.0f;
                 std::vector<GLfloat> thisVertexData = {
-                    x1, y1,
-                    x2, y1,
-                    x2, y2,
-                    x1, y2
+                    x1, y1, z,
+                    x2, y1, z,
+                    x2, y2, z,
+                    x1, y2, z
                 };
 
                 // Determine texture co-ordinates

@@ -19,17 +19,21 @@ namespace Rival {
 
         int getHeight() const;
 
-        static const Framebuffer generate(int width, int height);
+        static const Framebuffer generate(
+                int width, int height, bool useDepth);
 
     private:
 
         GLuint id;
 
         GLuint textureId;
+        GLuint depthRenderBufferId;
 
         int width;
 
         int height;
+
+        void addDepthBuffer();
 
     };
 
