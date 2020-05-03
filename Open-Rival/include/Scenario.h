@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 
+#include "Building.h"
 #include "Tile.h"
 #include "Unit.h"
 
@@ -30,6 +31,15 @@ namespace Rival {
 
         bool isWilderness() const;
 
+        void addBuilding(
+            std::unique_ptr<Building> building,
+            int player,
+            int x,
+            int y,
+            uint8_t wallVariant);
+
+        std::map<int, std::unique_ptr<Building>>& getBuildings();
+
         void addUnit(
                 std::unique_ptr<Unit> unit,
                 int player,
@@ -48,6 +58,7 @@ namespace Rival {
         std::vector<TilePassability> tilePassability;
 
         int nextId;
+        std::map<int, std::unique_ptr<Building>> buildings;
         std::map<int, std::unique_ptr<Unit>> units;
 
         void setPassability(int x, int y, TilePassability passability);

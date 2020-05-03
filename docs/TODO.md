@@ -49,6 +49,8 @@ character filename (including path)
     - Duplication between Renderers
     - Delete Renderables when a Unit no longer exists
         - If a Unit is erased from memory, our renderable map will have a null key!
+    - Delete Renderables when a Building no longer exists
+        - If a Building is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
 
  - ScenarioReader:

@@ -41,6 +41,29 @@ namespace Rival {
         return wilderness;
     }
 
+    void Scenario::addBuilding(
+            std::unique_ptr<Building> building,
+            int player,
+            int x,
+            int y,
+            uint8_t wallVariant) {
+
+        // Add the Unit to the world
+        buildings[nextId] = std::move(building);
+        buildings[nextId]->addedToWorld(
+                nextId,
+                player,
+                x,
+                y,
+                static_cast<WallVariant>(wallVariant));
+
+        // Increase the ID for the next one
+        nextId++;
+
+        // Change the passability
+        setPassability(x, y, TilePassability::Building);
+    }
+
     void Scenario::addUnit(
             std::unique_ptr<Unit> unit,
             int player,
@@ -61,6 +84,10 @@ namespace Rival {
 
     void Scenario::setPassability(int x, int y, TilePassability passability) {
         tilePassability[y * width + x] = passability;
+    }
+
+    std::map<int, std::unique_ptr<Building>>& Scenario::getBuildings() {
+        return buildings;
     }
 
     std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() {

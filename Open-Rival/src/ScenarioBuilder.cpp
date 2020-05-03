@@ -37,6 +37,17 @@ namespace Rival {
                     getFacing(unitPlacement.facing));
         }
 
+        // Initialise Buildings
+        for (BuildingPlacement& buildingPlacement : data.buildings) {
+            std::unique_ptr<Building> building = std::make_unique<Building>(
+                getBuildingType(buildingPlacement.type));
+            scenario->addBuilding(std::move(building),
+                    buildingPlacement.player,
+                    buildingPlacement.x,
+                    buildingPlacement.y,
+                    buildingPlacement.wallVariant);
+        }
+
         return scenario;
     }
 
@@ -155,6 +166,86 @@ namespace Rival {
         }
 
         return Tile(type, txIndex, 0);
+    }
+
+    BuildingType ScenarioBuilder::getBuildingType(std::uint8_t buildingType) const {
+        // Found via buildings example
+        switch (buildingType) {
+        case 0x27:
+            return BuildingType::ElvenKeep;
+        case 0x28:
+            return BuildingType::Treasury;
+        case 0x29:
+            return BuildingType::CombatCamp;
+        case 0x2a:
+            return BuildingType::Arsenal;
+        case 0x2b:
+            return BuildingType::DuelRange;
+        case 0x2c:
+            return BuildingType::HolyNest;
+        case 0x2d:
+            return BuildingType::MinerGuildhall;
+        case 0x2e:
+            return BuildingType::AbbeyTower;
+        case 0x2f:
+            return BuildingType::CouncilOfRunes;
+        case 0x30:
+            return BuildingType::Harbour;
+        case 0x31:
+            return BuildingType::WarningTower;
+        case 0x32:
+            return BuildingType::TreeWall;
+        case 0x1b:
+            return BuildingType::Fortress;
+        case 0x1c:
+            return BuildingType::HoardKeep;
+        case 0x1d:
+            return BuildingType::Fort;
+        case 0x1e:
+            return BuildingType::Blacksmith;
+        case 0x1f:
+            return BuildingType::BattleQuarters;
+        case 0x20:
+            return BuildingType::BlackNest;
+        case 0x21:
+            return BuildingType::WeirdWorkshop;
+        case 0x22:
+            return BuildingType::UnholyChapel;
+        case 0x23:
+            return BuildingType::AltarOfDoom;
+        case 0x24:
+            return BuildingType::Docks;
+        case 0x25:
+            return BuildingType::GuardTower;
+        case 0x26:
+            return BuildingType::GreenskinWall;
+        case 0x0f:
+            return BuildingType::Castle;
+        case 0x10:
+            return BuildingType::GoldMill;
+        case 0x11:
+            return BuildingType::ArcheryRange;
+        case 0x12:
+            return BuildingType::Armoury;
+        case 0x13:
+            return BuildingType::Barracks;
+        case 0x14:
+            return BuildingType::HolyStables;
+        case 0x15:
+            return BuildingType::FireGuild;
+        case 0x16:
+            return BuildingType::Temple;
+        case 0x17:
+            return BuildingType::MageTower;
+        case 0x18:
+            return BuildingType::Shipyard;
+        case 0x19:
+            return BuildingType::WatchTower;
+        case 0x1a:
+            return BuildingType::Wall;
+        default:
+            throw std::runtime_error("Unknown building type: " + unsigned(buildingType));
+        }
     }
 
     UnitType ScenarioBuilder::getUnitType(std::uint8_t unitType) const {

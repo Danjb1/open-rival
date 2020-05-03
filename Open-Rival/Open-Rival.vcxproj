@@ -20,6 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BinaryFileReader.cpp" />
+    <ClCompile Include="src\Building.cpp" />
+    <ClCompile Include="src\BuildingAnimation.cpp" />
+    <ClCompile Include="src\BuildingRenderer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
@@ -52,6 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BinaryFileReader.h" />
+    <ClInclude Include="include\Building.h" />
+    <ClInclude Include="include\BuildingAnimation.h" />
+    <ClInclude Include="include\BuildingAnimationLookup.h" />
+    <ClInclude Include="include\BuildingRenderer.h" />
+    <ClInclude Include="include\BuildingTypes.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />

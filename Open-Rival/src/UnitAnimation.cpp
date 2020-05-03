@@ -1,7 +1,6 @@
 #include "UnitAnimation.h"
 
 #include <stdexcept>
-#include <string>
 
 namespace Rival {
 
