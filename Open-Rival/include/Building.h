@@ -2,6 +2,8 @@
 #define BUILDING_H
 
 #include "BuildingAnimation.h"
+#include "BuildingAnimationLookup.h"
+#include "BuildingTypes.h"
 #include "Spritesheet.h"
 
 namespace Rival {
@@ -11,8 +13,8 @@ namespace Rival {
     public:
 
         // Size of a Building, in world units
-        static const int width = 4;
-        static const int height = 4;
+        static const int width = 3;
+        static const int height = 2;
 
         Building(BuildingType type);
 
@@ -55,12 +57,12 @@ namespace Rival {
         int player;
 
         /**
-         * x co-ordinate of the Tile the Building is occupying.
+         * x co-ordinate of the bottom corner of the Building
          */
         int x;
 
         /**
-         * y co-ordinate of the Tile the Building is occupying.
+         * y co-ordinate of the bottom corner of the Building
          */
         int y;
 
