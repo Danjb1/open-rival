@@ -248,71 +248,52 @@ namespace Rival {
                 return r / randMax;
             };
             auto r = randGen();
-            if (UnitType::Peasant == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 6.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 6.0) {
-                    unit->setAnimation(UnitAnimationType::HoldingBag);
-                } else if (r <= 3.0 / 6.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else if (r <= 4.0 / 6.0) {
-                    unit->setAnimation(UnitAnimationType::MovingWithBag);
-                } else if (r <= 5.0 / 6.0) {
-                    unit->setAnimation(UnitAnimationType::Attacking);
-                } else {
-                    // Currently we can't automatically generate dying animation
-                    //   because that animation type does not provide all
-                    //   8 directions in our tga files.
-                    // We need to modify eg. unit_human_peasant.def
-                    //   to repeat 4-direction animations in all
-                    //   8 directions
-                    //unit->setAnimation( UnitAnimationType::Dying );
-                }
-            } else if (UnitType::Bowman == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else {
-                    unit->setAnimation(UnitAnimationType::Attacking);
-                }
-            } else if (UnitType::Ballista == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else {
-                    unit->setAnimation(UnitAnimationType::Attacking);
-                }
-            } else if (UnitType::FireMaster == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else {
-                    unit->setAnimation(UnitAnimationType::Attacking);
-                }
-            } else if (UnitType::Knight == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else {
-                    unit->setAnimation(UnitAnimationType::Attacking);
-                }
-            } else if (UnitType::Wizard == unit->getType() && r > 0.999) {
-                auto r = randGen();
-                if (r <= 1.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Standing);
-                } else if (r <= 2.0 / 3.0) {
-                    unit->setAnimation(UnitAnimationType::Moving);
-                } else {
-                    unit->setAnimation(UnitAnimationType::Attacking);
+            if (r > 0.999) {
+                switch (unit->getType()) {
+                    case UnitType::Peasant:
+                        r = randGen();
+                        if (r <= 1.0 / 6.0) {
+                            unit->setAnimation(UnitAnimationType::Standing);
+                        } else if (r <= 2.0 / 6.0) {
+                            unit->setAnimation(UnitAnimationType::HoldingBag);
+                        } else if (r <= 3.0 / 6.0) {
+                            unit->setAnimation(UnitAnimationType::Moving);
+                        } else if (r <= 4.0 / 6.0) {
+                            unit->setAnimation(UnitAnimationType::MovingWithBag);
+                        } else if (r <= 5.0 / 6.0) {
+                            unit->setAnimation(UnitAnimationType::Attacking);
+                        } else {
+                            // Currently we can't automatically generate dying animation
+                            //   because that animation type does not provide all
+                            //   8 directions in our tga files.
+                            // We need to modify eg. unit_human_peasant.def
+                            //   to repeat 4-direction animations in all
+                            //   8 directions
+                            //unit->setAnimation( UnitAnimationType::Dying );
+                        }
+                        break;
+                    case UnitType::Bowman:
+                    case UnitType::Ballista:
+                    case UnitType::FireMaster:
+                    case UnitType::Knight:
+                    case UnitType::Wizard:
+                        r = randGen();
+                        if (r <= 1.0 / 3.0) {
+                            unit->setAnimation(UnitAnimationType::Standing);
+                        } else if (r <= 2.0 / 3.0) {
+                            unit->setAnimation(UnitAnimationType::Moving);
+                        } else {
+                            unit->setAnimation(UnitAnimationType::Attacking);
+                        }
+                        // Proof of concept for rational animation ticks
+                        r = randGen();
+                        if (r <= 0.33) {
+                            unit->setSpeedCoefficient(1, 2);
+                        } else if (r <= 0.67) {
+                            unit->setSpeedCoefficient(1, 1);
+                        } else {
+                            unit->setSpeedCoefficient(2, 1);
+                        }
                 }
             }
         }

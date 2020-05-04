@@ -9,8 +9,9 @@ namespace Rival {
         static const int timeStepMs = 1000 / 60;
 
         using MillisecondsType = std::chrono::milliseconds;
-        using MillisecondsRep = decltype(MillisecondsType());
         using TimeType = decltype(std::chrono::system_clock::now());
+
+        static MillisecondsType tickPeriod(1000 / 60);
 
         static const auto gameStartTime(
             std::chrono::duration_cast<MillisecondsType>(
@@ -22,8 +23,6 @@ namespace Rival {
 
         // Return the time passed since t
         MillisecondsType getTimeSince(MillisecondsType t);
-
-        MillisecondsRep toMS(uint32_t t);
 
     }
 }
