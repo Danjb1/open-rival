@@ -20,10 +20,6 @@ namespace Rival {
             return gameStartTime - t;
         }
 
-        MillisecondsRep toMS(uint32_t t) {
-            return MillisecondsType(t);
-        }
-
     }
 
 }
