@@ -19,6 +19,8 @@ namespace Rival {
 
         void setAnimation(UnitAnimationType unitAnimationType);
 
+        void setSpeedCoefficient(int numerator, int denominator);
+
         void setFacing(Facing newFacing);
 
         void tick();
@@ -29,7 +31,11 @@ namespace Rival {
 
         int animationStep;
 
-        TimerUtils::MillisecondsType lastAnimationUpdate;
+        int animationTick;
+
+        int speedCoefficientNumerator;
+
+        int speedCoefficientDenominator;
 
         Facing facing;
 

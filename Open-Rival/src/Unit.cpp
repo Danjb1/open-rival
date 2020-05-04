@@ -4,10 +4,12 @@
 namespace Rival {
 
     Unit::Unit(UnitType type) :
-        deleted(false),
-        id(-1),
-        type(type),
-        animation(type) {}
+            deleted(false),
+            id(-1),
+            type(type),
+            animation(type) {
+        setSpeedCoefficient(1, 1);
+    }
 
     void Unit::addedToWorld(
             int newId, int newPlayer, int newX, int newY, Facing newFacing) {
@@ -31,6 +33,16 @@ namespace Rival {
         std::cout << "Setting animation for unit " << id
                   << " of type " << static_cast<int>(type)
                   << ": " << static_cast<int>(unitAnimationType) << '\n';
+    }
+
+    void Unit::setSpeedCoefficient(int numerator, int denominator) {
+        speedCoefficientNumerator = numerator;
+        speedCoefficientDenominator = denominator;
+        animation.setSpeedCoefficient(numerator, denominator);
+    }
+
+    void Unit::setSpeedCoefficient(int numerator) {
+        setSpeedCoefficient(numerator, 1);
     }
 
     void Unit::rotateLeft() {
