@@ -470,11 +470,22 @@ namespace Rival {
             dy *= -1;
         }
 
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        const float mouseXwu(RenderUtils::pxToWorld_X(mouseX));
+        const float mouseYwu(RenderUtils::pxToWorld_Y(mouseY));
+        const float midXwu(RenderUtils::pxToWorld_X(0.5 * windowWidth));
+        const float midYwu(RenderUtils::pxToWorld_Y(0.5 * windowHeight));
+        const float vecXwu(mouseXwu - midXwu);
+        const float vecYwu(mouseYwu - midYwu);
+
         if (dy > 0) {
             camera->modZoom(Camera::zoomInterval);
         } else if (dy < 0) {
             camera->modZoom(-Camera::zoomInterval);
         }
+        camera->translate(0.25 * vecXwu, 0.25 * vecYwu);
     }
 
 }

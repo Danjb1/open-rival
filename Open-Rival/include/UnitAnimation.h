@@ -1,6 +1,7 @@
 #ifndef UNIT_ANIMATION_H
 #define UNIT_ANIMATION_H
 
+#include "TimerUtils.h"
 #include "UnitAnimationLookup.h"
 
 namespace Rival {
@@ -28,9 +29,11 @@ namespace Rival {
 
         int animationStep;
 
+        TimerUtils::MillisecondsType lastAnimationUpdate;
+
         Facing facing;
 
-        SpritesheetEntry spritesheetEntry;
+        UnitSpritesheetEntry spritesheetEntry;
 
         // Holds unitType and unitAnimationType
         UnitAnimationPair unitAnimationPair;
