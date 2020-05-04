@@ -8,7 +8,7 @@ namespace Rival {
 
         static const int timeStepMs = 1000 / 60;
 
-        typedef std::chrono::milliseconds MillisecondsType;
+        using MillisecondsType = std::chrono::milliseconds;
         using MillisecondsRep = decltype(MillisecondsType());
         using TimeType = decltype(std::chrono::system_clock::now());
 
