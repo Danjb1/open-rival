@@ -5,9 +5,13 @@
 
 namespace Rival {
 
+    using TimerUtils::getCurrentTime;
+    using TimerUtils::getTimeSince;
+
     UnitAnimation::UnitAnimation(UnitType unitType) :
         unitAnimationPair(std::make_pair(unitType, UnitAnimationType::Standing)),
-        facing(Facing::South) {
+        facing(Facing::South),
+        lastAnimationUpdate(getCurrentTime()) {
         updateSpriteSheetEntry();
     }
 
@@ -28,12 +32,13 @@ namespace Rival {
     void UnitAnimation::setAnimation(UnitAnimationType unitAnimationType ) {
         unitAnimationPair.second = unitAnimationType;
         updateSpriteSheetEntry();
+        lastAnimationUpdate = getCurrentTime();
     }
 
     int UnitAnimation::getCurrentSpriteIndex() const {
-        auto spritesheetSpan = spritesheetEntry.second - spritesheetEntry.first + 1;
+        auto spritesheetSpan = std::get<1>(spritesheetEntry) - std::get<0>(spritesheetEntry) + 1;
         auto directionOffset = static_cast<int>(facing) - static_cast<int>(Facing::South);
-        return spritesheetEntry.first + spritesheetSpan * directionOffset + animationStep;
+        return std::get<0>(spritesheetEntry) + spritesheetSpan * directionOffset + animationStep;
     }
 
     void UnitAnimation::updateSpriteSheetEntry() {
@@ -45,7 +50,14 @@ namespace Rival {
     }
 
     void UnitAnimation::tick() {
-        auto spritesheetSpan = spritesheetEntry.second - spritesheetEntry.first + 1;
-        animationStep = (animationStep + 1) % (spritesheetSpan);
+        auto spritesheetSpan = std::get<1>(spritesheetEntry) - std::get<0>(spritesheetEntry) + 1;
+        if (1 == spritesheetSpan) {
+            return;
+        }
+
+        while (getCurrentTime() > lastAnimationUpdate + std::get<2>(spritesheetEntry)) {
+            animationStep = (animationStep + 1) % (spritesheetSpan);
+            lastAnimationUpdate += std::get<2>(spritesheetEntry);
+        }
     }
 }

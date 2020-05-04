@@ -26,6 +26,8 @@ namespace Rival {
 
         int getCurrentSpriteIndex() const;
 
+        WallVariant getWallVariant() const;
+
         const BuildingType getType() const;
 
         void setAnimation(BuildingAnimationType buildingAnimationType);
