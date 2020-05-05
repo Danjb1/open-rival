@@ -32,6 +32,10 @@ namespace Rival {
         return spriteIndex;
     }
 
+    WallVariant Building::getWallVariant() const {
+        return wallVariant;
+    }
+
     const BuildingType Building::getType() const {
         return type;
     }

@@ -26,6 +26,10 @@ namespace Rival {
 
         void setAnimation(UnitAnimationType unitAnimationType);
 
+        void setSpeedCoefficient(int numerator, int denominator);
+
+        void setSpeedCoefficient(int numerator);
+
         void rotateLeft();
 
         void rotateRight();
@@ -51,6 +55,10 @@ namespace Rival {
         UnitType type;
 
         UnitAnimation animation;
+
+        int speedCoefficientNumerator;
+
+        int speedCoefficientDenominator;
 
         int player;
 
