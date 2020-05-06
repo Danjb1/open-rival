@@ -80,8 +80,8 @@ BOOL make_executable(void* data, uint32_t size) {
  * Attempts to create the given directory.
  */
 bool create_directory(const char* filename) {
-    return CreateDirectoryA(filename, NULL) ||
-        ERROR_ALREADY_EXISTS == GetLastError();
+    return CreateDirectoryA(filename, NULL)
+            || ERROR_ALREADY_EXISTS == GetLastError();
 }
 
 #endif ////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ int main(int argc, char *argv[]) {
         printf("images/img_%04d_%08X.tga: %dx%d\n", i, code - data, w, h);
 
         // Save the rendered image to disk
-        char filename[32];
+        char filename[256];
         snprintf(filename, sizeof(filename), "images/img_%04d_%08X.tga", i, code - data);
         write_image(filename, w, h);
 
