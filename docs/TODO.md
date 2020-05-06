@@ -70,7 +70,8 @@ character filename (including path)
 
 ### Data Loading
 
- - Extract menu / interface images
+ - Pack interface images into textures
+ - Add interface extraction to setup application
  - Extract fonts
  - Finish parsing Goals
  - Finish parsing Chests (contents)
@@ -173,5 +174,7 @@ character filename (including path)
 ## Project
 <!----------------------------------------------------------------------------->
 
+ - Remove assets from git history
+ - Add a license
  - Static code analysis
  - Unit tests

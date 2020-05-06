@@ -352,7 +352,7 @@ void extractImages(std::wstring inputFile, std::string outputDir) {
         w = h = nextPowerOf2(w);
 
         // Save the rendered image to disk
-        char filename[64]; //Temporary fix
+        char filename[256];
         snprintf(filename,
                 sizeof(filename),
                 "%s\\img_%04d_%08X.tga",

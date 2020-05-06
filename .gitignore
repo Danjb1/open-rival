@@ -25,6 +25,7 @@ SORR.BLD
 # Extracted data files
 /audio-extractor/output
 /image-extractor/images
+/interface-extractor/images
 /Open-Rival/res/sound
 /Open-Rival/res/textures
 /Open-Rival/res/video
