@@ -386,7 +386,7 @@ void extractImage(
     //   img_00A46D78 precedes img_00002131).
     //   N.B. Sorting by created date does the trick!
     char filename[256];
-    snprintf(filename, sizeof(filename), "images/img_%08X.tga", initialOffset);
+    snprintf(filename, sizeof(filename), "images/img_ui_%08X.tga", initialOffset);
     write_image(pixels, filename, w, h, palette);
 
     // Skip some bytes
