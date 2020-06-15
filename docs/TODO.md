@@ -19,6 +19,8 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
+ - Consider auto-formatting code
+
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
 
