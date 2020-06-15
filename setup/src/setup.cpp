@@ -107,7 +107,7 @@ int main( int argc, char* argv[] ) {
     // Build textures
     try {
         std::wcout << "Building textures\n";
-        buildTextures("setup\\definitions", "setup\\images", "res\\textures");
+        buildTextures("setup\\definitions\\game", "setup\\images", "res\\textures");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to build textures: " << e.what() << "\n";
         return -1;

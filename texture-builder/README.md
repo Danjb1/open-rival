@@ -6,9 +6,13 @@ A utility program for building textures from individual indexed TGA sprites.
 
 Build using Visual Studio.
 
-## Run
+## Setup
 
-The `definitions` folder should contain a file for each desired texture, listing sprites to be combined. The sprites are taken from the `images` folder.
+This application requires a list of definition files, specifying which sprites to combine. These can be found within the `setup` project.
+
+The source sprites should be placed in an `images` folder.
+
+## Run
 
 Run the executable, and the textures will be saved to a `textures` directory.
 
