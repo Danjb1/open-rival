@@ -247,12 +247,10 @@ int nextPowerOf2(int v) {
     return v;
 }
 
-void createTexture(fs::path path) {
+std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) {
+
     std::ifstream file(path);
     std::string line;
-
-    int x = 0;
-    int y = 0;
 
     int spriteWidth = -1;
     int spriteHeight = -1;
@@ -264,32 +262,57 @@ void createTexture(fs::path path) {
 
         Image sprite = loadImage("images/" + line);
 
-        // Set the sprite size based on the first sprite
-        if (spriteWidth < 0) {
-            spriteWidth = sprite.getWidth();
-            spriteHeight = sprite.getHeight();
-        }
-
-        // Check dimensions against the expected sprite size
-        if (sprite.getWidth() > spriteWidth
-                || sprite.getHeight() > spriteHeight) {
-            // Sprite too large
-            throw std::runtime_error("Sprite is too large to fit!");
-
-        } else if (sprite.getWidth() < spriteWidth
-                || sprite.getHeight() < spriteHeight) {
-            // Sprite too small
-            Image resizedSprite = Image(spriteWidth, spriteHeight);
-            const int dstX = (spriteWidth - sprite.getWidth()) / 2;
-            const int dstY = (spriteHeight - sprite.getHeight()) / 2;
-            copyImage(sprite, resizedSprite, dstX, dstY);
-            sprites.push_back(resizedSprite);
-
-        } else {
-            // Sprite is ok!
+        if (atlasMode) {
             sprites.push_back(sprite);
+        } else {
+
+            // Set the sprite size based on the first sprite
+            if (spriteWidth < 0) {
+                spriteWidth = sprite.getWidth();
+                spriteHeight = sprite.getHeight();
+            }
+
+            // Check dimensions against the expected sprite size
+            if (sprite.getWidth() > spriteWidth
+                || sprite.getHeight() > spriteHeight) {
+                // Sprite too large
+                throw std::runtime_error("Sprite is too large to fit!");
+
+            } else if (sprite.getWidth() < spriteWidth
+                || sprite.getHeight() < spriteHeight) {
+                // Sprite too small
+                Image resizedSprite = Image(spriteWidth, spriteHeight);
+                const int dstX = (spriteWidth - sprite.getWidth()) / 2;
+                const int dstY = (spriteHeight - sprite.getHeight()) / 2;
+                copyImage(sprite, resizedSprite, dstX, dstY);
+                sprites.push_back(resizedSprite);
+
+            } else {
+                // Sprite is ok!
+                sprites.push_back(sprite);
+            }
+
         }
     }
+
+    return sprites;
+}
+
+void createTextureAtlas(std::vector<Image> sprites) {
+
+    // TODO: determine optimal image placement within texture atlas
+    // TODO: copy images into texture
+    // TODO: output texture
+    // TODO: output atlas definition
+
+    std::cout << "Creating texture atlas...\n";
+}
+
+void createSpritesheetTexture(fs::path definitionFilename, std::vector<Image> sprites) {
+
+    // For a spritesheet, all images are the same size
+    int spriteWidth = sprites[0].getWidth();
+    int spriteHeight = sprites[0].getHeight();
 
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
@@ -324,6 +347,9 @@ void createTexture(fs::path path) {
     // Create an empty texture
     Image texture = Image(txWidth, txHeight);
 
+    int x = 0;
+    int y = 0;
+
     // Draw the sprites to the texture
     for (Image sprite : sprites) {
         copyImage(sprite, texture, x, y);
@@ -337,25 +363,66 @@ void createTexture(fs::path path) {
     }
 
     // Save the final texture
-    writeImage("./textures/" + path.filename().replace_extension(".tga").string(), texture);
+    writeImage("./textures/" + definitionFilename.replace_extension(".tga").string(), texture);
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    // Expected:
+    // texture-builder.exe [--atlas] DEFINITIONS_DIR
+
+    // Check arg count
+    if (argc < 2) {
+        std::cout << "No directory name provided\n";
+        return -1;
+    } else if (argc > 3) {
+        std::cout << "Too many arguments\n";
+        return -1;
+    }
+
+    // Read parameters
+    bool atlasMode = false;
+    std::string definitionsDir;
+    if (argc == 3) {
+        std::string atlasModeParam = "--atlas";
+        if (atlasModeParam.compare(argv[1]) == 0) {
+            atlasMode = true;
+            definitionsDir = argv[2];
+        } else {
+            std::cout << "Unrecognised parameter\n";
+            return -1;
+        }
+    } else {
+        definitionsDir = argv[1];
+    }
 
     // Create the "textures" directory
     if (!create_directory("textures")) {
         std::cout << "Could not create \"textures\" directory\n";
-        return 3;
+        return -1;
     }
 
     std::vector<std::string> filenames;
 
-    const std::string path = "./definitions";
-    for (const fs::directory_entry& entry : fs::directory_iterator(path)) {
+    // Process each definition file in the given directory
+    for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir)) {
         const fs::path path = entry.path();
         try {
             std::cout << "Processing: " << path.filename() << "\n";
-            createTexture(path);
+
+            // Read sprites
+            std::vector<Image> sprites = readSpritesFromDefinitionFile(
+                    path, atlasMode);
+
+            // TODO: determine the palette based on the first source image
+
+            // Create texture
+            if (atlasMode) {
+                createTextureAtlas(sprites);
+            } else {
+                createSpritesheetTexture(path.filename(), sprites);
+            }
+
         } catch (const std::runtime_error& e) {
             std::cout << e.what() << "\n";
             std::cout << "Skipping file: " << path.filename() << "\n";
