@@ -19,7 +19,7 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
- - Consider auto-formatting code
+ - Auto-format code (VS Code Cleanup? CodeMaid? Clang?)
 
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?

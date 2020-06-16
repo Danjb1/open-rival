@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -71,13 +72,15 @@ class Image {
 
 private:
 
+    std::string filename;
     int width;
     int height;
     std::shared_ptr<unsigned char> data;
 
 public:
 
-    Image(const int width, const int height) {
+    Image(std::string filename, int width, int height) {
+        this->filename = filename;
         this->width = width;
         this->height = height;
 
@@ -85,10 +88,15 @@ public:
         std::fill_n(data.get(), width * height, 0xff);
     }
 
-    Image(const int width, const int height, const std::shared_ptr<unsigned char> data) {
+    Image(std::string filename, int width, int height, const std::shared_ptr<unsigned char> data) {
+        this->filename = filename;
         this->width = width;
         this->height = height;
         this->data = data;
+    }
+
+    std::string getFilename() const {
+        return filename;
     }
 
     int getWidth() const {
@@ -105,6 +113,23 @@ public:
 
 };
 
+class Rect {
+
+public:
+
+    int x;
+    int y;
+    int width;
+    int height;
+
+    Rect(int x, int y, int width, int height) :
+        x(x),
+        y(y),
+        width(width),
+        height(height) {}
+
+};
+
 /**
  * Loads an image from a file.
  *
@@ -113,7 +138,7 @@ public:
  */
 Image loadImage(const std::string filename) {
 
-    std::ifstream ifs(filename, std::ios::binary | std::ios::in);
+    std::ifstream ifs("images/" + filename, std::ios::binary | std::ios::in);
     if (!ifs) {
         throw std::runtime_error("Failed to load image: " + filename);
     }
@@ -129,7 +154,7 @@ Image loadImage(const std::string filename) {
     ifs.seekg(1042);
     ifs.read((char*) data.get(), width * height);
 
-    return Image(width, height, data);
+    return Image(filename, width, height, data);
 }
 
 /**
@@ -260,7 +285,7 @@ std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) 
     // Load all sprites from the definition file
     while (std::getline(file, line)) {
 
-        Image sprite = loadImage("images/" + line);
+        Image sprite = loadImage(line);
 
         if (atlasMode) {
             sprites.push_back(sprite);
@@ -281,7 +306,7 @@ std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) 
             } else if (sprite.getWidth() < spriteWidth
                 || sprite.getHeight() < spriteHeight) {
                 // Sprite too small
-                Image resizedSprite = Image(spriteWidth, spriteHeight);
+                Image resizedSprite = Image(line, spriteWidth, spriteHeight);
                 const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                 const int dstY = (spriteHeight - sprite.getHeight()) / 2;
                 copyImage(sprite, resizedSprite, dstX, dstY);
@@ -298,14 +323,120 @@ std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) 
     return sprites;
 }
 
-void createTextureAtlas(std::vector<Image> sprites) {
+bool compareImages(Image& img1, Image& img2) {
+    // returns true if img1 comes before img2
+    int img1Area = img1.getWidth() * img1.getHeight();
+    int img2Area = img2.getWidth() * img2.getHeight();
+    return img1Area > img2Area;
+}
 
-    // TODO: determine optimal image placement within texture atlas
+void createTextureAtlas(std::vector<Image> images) {
+
+    std::map<std::string, Rect> imagePlacements;
+
+    std::vector<Rect> emptyRects;
+    int texWidth = 0;
+    int texHeight = 0;
+
+    // Sort images (largest area first)
+    std::sort(images.begin(), images.end(), compareImages);
+
+    // Find a suitable placement for each image
+    for (const auto& img : images) {
+
+        // Find the smallest rectangle that will fit this image
+        // TODO: empties need to be sorted by area
+        int rectIndex = -1;
+        for (size_t i = 0; i < emptyRects.size(); i++) {
+            auto const& rect = emptyRects[i];
+            if (rect.width >= img.getWidth()
+                    && rect.height >= img.getHeight()) {
+                rectIndex = i;
+            }
+        }
+
+        // No free space - need to expand our texture!
+        if (rectIndex == -1) {
+
+            // Expand downwards
+            int prevHeight = texHeight;
+            texHeight += img.getHeight();
+            emptyRects.push_back(Rect(
+                    0,
+                    prevHeight,
+                    img.getWidth(),
+                    img.getHeight()));
+
+            // Our target Rect is the one we just created
+            rectIndex = emptyRects.size() - 1;
+
+            // Expand outwards if necessary
+            if (texWidth < img.getWidth()) {
+                int prevWidth = texWidth;
+                texWidth = img.getWidth();
+
+                if (prevHeight > 0) {
+                    // This creates an empty space to the right
+                    emptyRects.push_back(Rect(
+                            prevWidth,
+                            0,
+                            texWidth - prevWidth,
+                            prevHeight));
+                }
+            } else if (img.getWidth() < texWidth) {
+                // Our image does not fill the whole width, so there is an
+                // empty space to the right of it
+                emptyRects.push_back(Rect(
+                        img.getWidth(),
+                        prevHeight,
+                        texWidth - img.getWidth(),
+                        texHeight));
+            }
+        }
+
+        // Make a copy of our target rectangle
+        Rect dest = emptyRects[rectIndex];
+
+        // Remove this rectangle from the list of empties
+        emptyRects.erase(emptyRects.begin() + rectIndex);
+
+        // Trim the destination Rect to precisely fit our image
+        Rect trimmedDest = Rect(
+                dest.x,
+                dest.y,
+                img.getWidth(),
+                img.getHeight());
+
+        // Map this image to its final Rectangle.
+        // We use the image filename as the key, but we could use anything, as
+        // long as we use the same key to refer to the image when we need it.
+        imagePlacements.insert(std::make_pair(img.getFilename(), trimmedDest));
+
+        // Split the leftover space from the destination Rect into new empties
+        if (dest.width > img.getWidth()) {
+            // Empty space to the right
+            emptyRects.push_back(Rect(
+                    dest.x + img.getWidth(),
+                    dest.y,
+                    dest.width - img.getWidth(),
+                    img.getHeight()));
+        }
+        if (dest.height > img.getHeight()) {
+            // Empty space below
+            emptyRects.push_back(Rect(
+                    dest.x,
+                    dest.y + img.getHeight(),
+                    dest.width,
+                    dest.height - img.getHeight()));
+        }
+    }
+
+    std::cout << "stored " << imagePlacements.size() << " images\n";
+
     // TODO: copy images into texture
     // TODO: output texture
     // TODO: output atlas definition
-
-    std::cout << "Creating texture atlas...\n";
+    // TODO: add a 1px border around each image
 }
 
 void createSpritesheetTexture(fs::path definitionFilename, std::vector<Image> sprites) {
@@ -345,7 +476,7 @@ void createSpritesheetTexture(fs::path definitionFilename, std::vector<Image> sp
     }
 
     // Create an empty texture
-    Image texture = Image(txWidth, txHeight);
+    Image texture = Image("", txWidth, txHeight);
 
     int x = 0;
     int y = 0;
