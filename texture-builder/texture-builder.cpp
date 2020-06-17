@@ -323,15 +323,23 @@ std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) 
     return sprites;
 }
 
-bool compareImages(Image& img1, Image& img2) {
+bool compareImagesLargestFirst(Image& img1, Image& img2) {
     // returns true if img1 comes before img2
     int img1Area = img1.getWidth() * img1.getHeight();
     int img2Area = img2.getWidth() * img2.getHeight();
     return img1Area > img2Area;
 }
 
-void createTextureAtlas(std::vector<Image> images) {
+bool compareRectsSmallestFirst(Rect& rect1, Rect& rect2) {
+    // returns true if img1 comes before img2
+    int rect1Area = rect1.width * rect1.height;
+    int rect2Area = rect2.width * rect2.height;
+    return rect1Area < rect2Area;
+}
 
+void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) {
+
+    std::map<std::string, Image> imagesByKey;
     std::map<std::string, Rect> imagePlacements;
 
     std::vector<Rect> emptyRects;
@@ -339,19 +347,25 @@ void createTextureAtlas(std::vector<Image> images) {
     int texHeight = 0;
 
     // Sort images (largest area first)
-    std::sort(images.begin(), images.end(), compareImages);
+    std::sort(images.begin(), images.end(), compareImagesLargestFirst);
 
     // Find a suitable placement for each image
     for (const auto& img : images) {
 
+        // Store this image by its key for later retrieval
+        imagesByKey.insert(std::make_pair(img.getFilename(), img));
+
+        // Sort empty Rects (smallest first)
+        std::sort(emptyRects.begin(), emptyRects.end(), compareRectsSmallestFirst);
+
         // Find the smallest rectangle that will fit this image
-        // TODO: empties need to be sorted by area
         int rectIndex = -1;
         for (size_t i = 0; i < emptyRects.size(); i++) {
             auto const& rect = emptyRects[i];
             if (rect.width >= img.getWidth()
                     && rect.height >= img.getHeight()) {
                 rectIndex = i;
+                break;
             }
         }
 
@@ -390,7 +404,7 @@ void createTextureAtlas(std::vector<Image> images) {
                         img.getWidth(),
                         prevHeight,
                         texWidth - img.getWidth(),
-                        texHeight));
+                        texHeight - prevHeight));
             }
         }
 
@@ -407,7 +421,7 @@ void createTextureAtlas(std::vector<Image> images) {
                 img.getWidth(),
                 img.getHeight());
 
-        // Map this image to its final Rectangle.
+        // Map this image to its destination Rectangle
         // We use the image filename as the key, but we could use anything, as
         // long as we use the same key to refer to the image when we need it.
         imagePlacements.insert(std::make_pair(img.getFilename(), trimmedDest));
@@ -431,10 +445,22 @@ void createTextureAtlas(std::vector<Image> images) {
         }
     }
 
-    std::cout << "stored " << imagePlacements.size() << " images\n";
+    // Create the texture
+    std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
+    Image texture("", texWidth, texHeight);
 
-    // TODO: copy images into texture
-    // TODO: output texture
+    // Copy each image onto the texture
+    for (auto const& kv : imagePlacements) {
+        const std::string& key = kv.first;
+        const Rect& target = kv.second;
+        const Image& img = imagesByKey.at(key);
+        std::cout << "Copying " << img.getFilename() << " to " << target.x << ", " << target.y << "\n";
+        copyImage(img, texture, target.x, target.y);
+    }
+
+    // Save the final texture
+    writeImage("./textures/" + definitionFilename.replace_extension(".tga").string(), texture);
+
     // TODO: output atlas definition
     // TODO: add a 1px border around each image
 }
@@ -549,7 +575,7 @@ int main(int argc, char *argv[]) {
 
             // Create texture
             if (atlasMode) {
-                createTextureAtlas(sprites);
+                createTextureAtlas(path.filename(), sprites);
             } else {
                 createSpritesheetTexture(path.filename(), sprites);
             }
