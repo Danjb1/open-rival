@@ -92,10 +92,10 @@ namespace Rival {
             "tiles_meadow.tga",
             "tiles_wilderness.tga",
             "tiles_fog.tga",
+            "tiles_map_border.tga",
 
-            // UI
-            "ui_cursor_select.tga",
-            "ui_map_border.tga",
+            // Cursors
+            "cursor_select.tga",
 
             // Buildings
             "buildings_elf.tga",
@@ -180,7 +180,7 @@ namespace Rival {
 
     Spritesheet Resources::initMapBorderSpritesheet() {
         Spritesheet mapBorderSpritesheet(
-                textures.at(txIndexUi + 1),
+                textures.at(txIndexTiles + 3),
                 RenderUtils::tileSpriteWidthPx,
                 RenderUtils::tileSpriteHeightPx);
         return mapBorderSpritesheet;

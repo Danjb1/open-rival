@@ -1,6 +1,22 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
+## WIP: Interface
+<!----------------------------------------------------------------------------->
+
+ - Use the palette of the first source image in texture-builder
+
+ - Refactor texture-builder
+
+ - Port texture-builder changes to setup
+
+ - Add Viewport class rather than relying on windowWidth/Height
+
+ - Shrink the viewport to create space for the UI
+
+ - Render the UI
+
+<!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
@@ -31,8 +47,6 @@ character filename (including path)
  - Camera should point at the centre of a tile - not the top-left corner
 
  - Framebuffer size calculations should use RenderUtils
-
- - Viewport should be defined explicitly rather than relying on windowWidth/Height
 
  - Mouse picking:
     - We could use [this strategy](https://www.kamremake.com/devblog/unit-picking/),

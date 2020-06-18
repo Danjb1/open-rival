@@ -43,7 +43,7 @@ namespace Rival {
         static const int numTextures = 96;
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
-        static const int txIndexUi = 53;
+        static const int txIndexCursors = 54;
         static const int txIndexBuildings = 55;
 
         // Loaded textures

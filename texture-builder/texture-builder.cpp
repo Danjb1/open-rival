@@ -10,15 +10,18 @@
 
 namespace fs = std::filesystem;
 
-const int MAX_TEXTURE_SIZE = 2048;
+// A border between images prevents texture bleeding
+const int borderSize = 1; // px
+
+const int maxTextureSize = 2048;
 
 // Number of colours in the palette
-const int PALETTE_SIZE = 256;
+const int paletteSize = 256;
 
 // The game's colour palette.
 // The last colour (index 0xff) is used for transparent areas;
 // this colour is never written by the code in "IMAGES.DAT".
-const uint32_t PALETTE[PALETTE_SIZE] = {
+const uint32_t palette[paletteSize] = {
     0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
     0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
     0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -203,9 +206,9 @@ int writeImage(const std::string filename, const Image& image) {
     fputc(8 | 0 << 5, fp);
 
     // Colour map data
-    for (int i = 0; i < PALETTE_SIZE; ++i) {
+    for (int i = 0; i < paletteSize; ++i) {
 
-        const uint32_t col = PALETTE[i];
+        const uint32_t col = palette[i];
         const uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
         const uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
         const uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
@@ -228,6 +231,35 @@ int writeImage(const std::string filename, const Image& image) {
 
     fclose(fp);
     return 1;
+}
+
+/**
+ * Writes an atlas definition to file.
+ */
+void writeAtlas(const std::string filename,
+    const std::map<std::string, Image>& imagesByKey,
+    const std::map<std::string, Rect>& imagePlacements) {
+
+    // Open the file for writing
+    std::ofstream atlasFile;
+    atlasFile.open(filename);
+    if (!atlasFile.is_open()) {
+        throw std::runtime_error("Failed to open atlas file for writing");
+    }
+
+    // Write each image placement
+    for (auto const& kv : imagePlacements) {
+        const std::string& key = kv.first;
+        const Rect& target = kv.second;
+        const Image& img = imagesByKey.at(key);
+        atlasFile << img.getFilename() << " "
+                << target.x + borderSize << " "
+                << target.y + borderSize << " "
+                << target.width - (2 * borderSize) << " "
+                << target.height - (2 * borderSize) << "\n";
+    }
+
+    atlasFile.close();
 }
 
 /**
@@ -272,7 +304,7 @@ int nextPowerOf2(int v) {
     return v;
 }
 
-std::vector<Image> readSpritesFromDefinitionFile(fs::path path, bool atlasMode) {
+std::vector<Image> readImagesFromDefinitionFile(fs::path path, bool atlasMode) {
 
     std::ifstream file(path);
     std::string line;
@@ -331,7 +363,7 @@ bool compareImagesLargestFirst(Image& img1, Image& img2) {
 }
 
 bool compareRectsSmallestFirst(Rect& rect1, Rect& rect2) {
-    // returns true if img1 comes before img2
+    // returns true if rect1 comes before rect2
     int rect1Area = rect1.width * rect1.height;
     int rect2Area = rect2.width * rect2.height;
     return rect1Area < rect2Area;
@@ -352,6 +384,9 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
     // Find a suitable placement for each image
     for (const auto& img : images) {
 
+        int imageWidth = img.getWidth() + 2 * borderSize;
+        int imageHeight = img.getHeight() + 2 * borderSize;
+
         // Store this image by its key for later retrieval
         imagesByKey.insert(std::make_pair(img.getFilename(), img));
 
@@ -362,8 +397,7 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
         int rectIndex = -1;
         for (size_t i = 0; i < emptyRects.size(); i++) {
             auto const& rect = emptyRects[i];
-            if (rect.width >= img.getWidth()
-                    && rect.height >= img.getHeight()) {
+            if (rect.width >= imageWidth && rect.height >= imageHeight) {
                 rectIndex = i;
                 break;
             }
@@ -374,20 +408,20 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
 
             // Expand downwards
             int prevHeight = texHeight;
-            texHeight += img.getHeight();
+            texHeight += imageHeight;
             emptyRects.push_back(Rect(
                     0,
                     prevHeight,
-                    img.getWidth(),
-                    img.getHeight()));
+                    imageWidth,
+                    imageHeight));
 
             // Our target Rect is the one we just created
             rectIndex = emptyRects.size() - 1;
 
             // Expand outwards if necessary
-            if (texWidth < img.getWidth()) {
+            if (texWidth < imageWidth) {
                 int prevWidth = texWidth;
-                texWidth = img.getWidth();
+                texWidth = imageWidth;
 
                 if (prevHeight > 0) {
                     // This creates an empty space to the right
@@ -397,13 +431,13 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
                             texWidth - prevWidth,
                             prevHeight));
                 }
-            } else if (img.getWidth() < texWidth) {
+            } else if (imageWidth < texWidth) {
                 // Our image does not fill the whole width, so there is an
                 // empty space to the right of it
                 emptyRects.push_back(Rect(
-                        img.getWidth(),
+                        imageWidth,
                         prevHeight,
-                        texWidth - img.getWidth(),
+                        texWidth - imageWidth,
                         texHeight - prevHeight));
             }
         }
@@ -418,8 +452,8 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
         Rect trimmedDest = Rect(
                 dest.x,
                 dest.y,
-                img.getWidth(),
-                img.getHeight());
+                imageWidth,
+                imageHeight);
 
         // Map this image to its destination Rectangle
         // We use the image filename as the key, but we could use anything, as
@@ -427,21 +461,21 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
         imagePlacements.insert(std::make_pair(img.getFilename(), trimmedDest));
 
         // Split the leftover space from the destination Rect into new empties
-        if (dest.width > img.getWidth()) {
+        if (dest.width > imageWidth) {
             // Empty space to the right
             emptyRects.push_back(Rect(
-                    dest.x + img.getWidth(),
+                    dest.x + imageWidth,
                     dest.y,
-                    dest.width - img.getWidth(),
-                    img.getHeight()));
+                    dest.width - imageWidth,
+                    imageHeight));
         }
-        if (dest.height > img.getHeight()) {
+        if (dest.height > imageHeight) {
             // Empty space below
             emptyRects.push_back(Rect(
                     dest.x,
-                    dest.y + img.getHeight(),
+                    dest.y + imageHeight,
                     dest.width,
-                    dest.height - img.getHeight()));
+                    dest.height - imageHeight));
         }
     }
 
@@ -455,14 +489,14 @@ void createTextureAtlas(fs::path definitionFilename, std::vector<Image> images) 
         const Rect& target = kv.second;
         const Image& img = imagesByKey.at(key);
         std::cout << "Copying " << img.getFilename() << " to " << target.x << ", " << target.y << "\n";
-        copyImage(img, texture, target.x, target.y);
+        copyImage(img, texture, target.x + borderSize, target.y + borderSize);
     }
 
     // Save the final texture
     writeImage("./textures/" + definitionFilename.replace_extension(".tga").string(), texture);
 
-    // TODO: output atlas definition
-    // TODO: add a 1px border around each image
+    // Save the atlas definition
+    writeAtlas("./textures/" + definitionFilename.replace_extension(".atlas").string(), imagesByKey, imagePlacements);
 }
 
 void createSpritesheetTexture(fs::path definitionFilename, std::vector<Image> sprites) {
@@ -489,14 +523,14 @@ void createSpritesheetTexture(fs::path definitionFilename, std::vector<Image> sp
         int area = tmpWidth * tmpHeight;
         int wastedSpace = area - dataSize;
 
-        if (txWidth > MAX_TEXTURE_SIZE || wastedSpace < best) {
+        if (txWidth > maxTextureSize || wastedSpace < best) {
             best = wastedSpace;
             txWidth = tmpWidth;
             txHeight = tmpHeight;
         }
     }
 
-    if (txWidth > MAX_TEXTURE_SIZE || txHeight > MAX_TEXTURE_SIZE) {
+    if (txWidth > maxTextureSize || txHeight > maxTextureSize) {
         std::cout << "Optimal size is " << txWidth << " x " << txHeight << "\n";
         throw std::runtime_error("Sprites will not fit!");
     }
@@ -568,16 +602,14 @@ int main(int argc, char *argv[]) {
             std::cout << "Processing: " << path.filename() << "\n";
 
             // Read sprites
-            std::vector<Image> sprites = readSpritesFromDefinitionFile(
+            std::vector<Image> images = readImagesFromDefinitionFile(
                     path, atlasMode);
-
-            // TODO: determine the palette based on the first source image
 
             // Create texture
             if (atlasMode) {
-                createTextureAtlas(path.filename(), sprites);
+                createTextureAtlas(path.filename(), images);
             } else {
-                createSpritesheetTexture(path.filename(), sprites);
+                createSpritesheetTexture(path.filename(), images);
             }
 
         } catch (const std::runtime_error& e) {
