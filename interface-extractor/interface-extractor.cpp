@@ -378,7 +378,7 @@ void extractImage(
         }
     }
 
-    printf("images/img_%08X.tga: %dx%d\n", initialOffset, w, h);
+    printf("images/img_ui_%08X.tga: %dx%d\n", initialOffset, w, h);
 
     // Save the rendered image to disk
     // TODO: These don't get sorted properly by other applications since hex
