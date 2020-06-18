@@ -4,8 +4,6 @@
 ## WIP: Interface
 <!----------------------------------------------------------------------------->
 
- - Use the palette of the first source image in texture-builder
-
  - Refactor texture-builder
 
  - Port texture-builder changes to setup
@@ -73,6 +71,9 @@ character filename (including path)
         glDeleteFramebuffers(1, &id);
 
  - Should enums have type specifiers (e.g. TileType is std::int8_t)?
+
+ - Animations:
+    - After advancing the animation frame, subtract spritesheetAnimRate / speedCoefficient from animationTick, thus preserving the remainder
 
 <!----------------------------------------------------------------------------->
 ## Features
