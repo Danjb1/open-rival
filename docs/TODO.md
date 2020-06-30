@@ -6,8 +6,6 @@
 
  - Refactor texture-builder
 
- - Port texture-builder changes to setup
-
  - Add Viewport class rather than relying on windowWidth/Height
 
  - Shrink the viewport to create space for the UI
@@ -60,6 +58,8 @@ character filename (including path)
     - Delete Renderables when a Building no longer exists
         - If a Building is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
+    - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
+        - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
  - ScenarioReader:
     - Use BinaryFileReader
