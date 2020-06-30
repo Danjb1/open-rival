@@ -6,7 +6,7 @@
 /**
  * Attempts to create the given directory.
  */
-bool create_directory(const char* filename) {
+bool createDirectory(const char* filename) {
     return CreateDirectoryA(filename, NULL)
         || ERROR_ALREADY_EXISTS == GetLastError();
 }
