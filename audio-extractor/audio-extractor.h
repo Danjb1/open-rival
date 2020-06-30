@@ -3,6 +3,10 @@
 
 #include <string>
 
-void extractAudio(std::wstring inputFile, std::string outputDir);
+namespace AudioExtractor {
+
+    void extractAudio(std::wstring inputFile, std::string outputDir);
+
+}
 
 #endif // AUDIO_EXTRACTOR_H

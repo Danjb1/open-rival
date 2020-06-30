@@ -14,7 +14,7 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 ### [setup](/setup)
 
-> Installer for Open-Rival.
+> Installer for Open-Rival, that combines the various utilities listed below.
 
 ### [audio-extractor](/audio-extractor)
 
@@ -27,6 +27,10 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 ### [image-extractor](/image-extractor)
 
 > Standalone utility to extract the original game's images.
+
+### [interface-extractor](/interface-extractor)
+
+> Standalone utility to extract the original game's interface images.
 
 ### [texture-builder](/texture-builder)
 

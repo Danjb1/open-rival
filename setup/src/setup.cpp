@@ -8,11 +8,13 @@
 #include <string>
 #include <windows.h>
 
-#include "audio-extractor.h"
-#include "image-extractor.h"
 #include "registry.h"
 #include "setup-utils.h"
-#include "texture-builder.h"
+
+#include "../../audio-extractor/audio-extractor.h"
+#include "../../image-extractor/image-extractor.h"
+#include "../../interface-extractor/interface-extractor.h"
+#include "../../texture-builder/texture-builder.h"
 
 namespace fs = std::filesystem;
 
@@ -69,45 +71,58 @@ int main( int argc, char* argv[] ) {
 
     // Create the output directories
     std::wcout << "Creating output directories\n";
-    if (!create_directory("setup\\images")) {
-        std::cerr << "Could not create \"images\" directory\n";
-        return -1;
-    }
-    if (!create_directory("res\\sound")) {
-        std::cerr << "Could not create \"sound\" directory\n";
-        return -1;
-    }
-    if (!create_directory("res\\textures")) {
-        std::cerr << "Could not create \"textures\" directory\n";
-        return -1;
-    }
-    if (!create_directory("res\\video")) {
-        std::cerr << "Could not create \"video\" directory\n";
-        return -1;
+    std::vector<std::string> directories = {
+        "setup\\images",
+        "setup\\images\\game",
+        "setup\\images\\ui",
+        "res\\sound",
+        "res\\textures",
+        "res\\video",
+    };
+    for (auto const& dir : directories) {
+        if (!createDirectory(dir.c_str())) {
+            std::cerr << "Could not create directory: " << dir << "\n";
+            return -1;
+        }
     }
 
     // Extract sounds
     try {
         std::wcout << "Extracting audio\n";
-        extractAudio(gameDir + L"\\DATA\\SOUNDS.DAT", "res\\sound");
+        AudioExtractor::extractAudio(gameDir + L"\\DATA\\SOUNDS.DAT", "res\\sound");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to extract sounds: " << e.what() << "\n";
         return -1;
     }
 
-    // Extract images
+    // Extract images (game)
     try {
         std::wcout << "Extracting images\n";
-        extractImages(gameDir + L"\\DATA\\IMAGES.DAT", "setup\\images");
+        ImageExtractor::extractImages(gameDir + L"\\DATA\\IMAGES.DAT", "setup\\images\\game");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to extract images: " << e.what() << "\n";
+        return -1;
+    }
+
+    // Extract images (ui)
+    try {
+        std::wcout << "Extracting UI images\n";
+        InterfaceExtractor::extractUiImages(gameDir + L"\\DATA\\Interfac.DAT", "setup\\images\\ui");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to extract UI images: " << e.what() << "\n";
         return -1;
     }
 
     // Build textures
     try {
         std::wcout << "Building textures\n";
-        buildTextures("setup\\definitions\\game", "setup\\images", "res\\textures");
+
+        // Game
+        TextureBuilder::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
+
+        // UI
+        TextureBuilder::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
+
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to build textures: " << e.what() << "\n";
         return -1;
