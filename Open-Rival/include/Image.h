@@ -11,7 +11,6 @@ namespace Rival {
     class Image {
 
     public:
-
         /**
          * Loads an image from a file.
          *
@@ -32,13 +31,11 @@ namespace Rival {
         std::vector<unsigned char>* getData() const;
 
     private:
-
         int width;
         int height;
         std::unique_ptr<std::vector<unsigned char>> data;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // IMAGE_H
+#endif  // IMAGE_H

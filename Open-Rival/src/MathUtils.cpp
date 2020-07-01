@@ -2,25 +2,25 @@
 #include "MathUtils.h"
 
 namespace Rival {
-    namespace MathUtils {
+namespace MathUtils {
 
-        int clampi(int val, int min, int max) {
-            if (val < min) {
-                return min;
-            } else if (val > max) {
-                return max;
-            }
-            return val;
+    int clampi(int val, int min, int max) {
+        if (val < min) {
+            return min;
+        } else if (val > max) {
+            return max;
         }
-
-        float clampf(float val, float min, float max) {
-            if (val < min) {
-                return min;
-            } else if (val > max) {
-                return max;
-            }
-            return val;
-        }
-
+        return val;
     }
+
+    float clampf(float val, float min, float max) {
+        if (val < min) {
+            return min;
+        } else if (val > max) {
+            return max;
+        }
+        return val;
+    }
+
 }
+}  // namespace Rival::MathUtils

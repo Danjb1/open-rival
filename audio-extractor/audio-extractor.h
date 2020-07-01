@@ -9,4 +9,4 @@ namespace AudioExtractor {
 
 }
 
-#endif // AUDIO_EXTRACTOR_H
+#endif  // AUDIO_EXTRACTOR_H

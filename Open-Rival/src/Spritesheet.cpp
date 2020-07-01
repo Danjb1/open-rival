@@ -3,12 +3,12 @@
 
 namespace Rival {
 
-    Spritesheet::Spritesheet(const Texture& texture, int width, int height) :
-        texture(texture),
-        width(width),
-        height(height),
-        xSize(texture.getWidth() / width),
-        ySize(texture.getHeight() / height) {}
+    Spritesheet::Spritesheet(const Texture& texture, int width, int height)
+        : texture(texture),
+          width(width),
+          height(height),
+          xSize(texture.getWidth() / width),
+          ySize(texture.getHeight() / height) {}
 
     const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const {
 
@@ -32,4 +32,4 @@ namespace Rival {
         };
     }
 
-}
+}  // namespace Rival

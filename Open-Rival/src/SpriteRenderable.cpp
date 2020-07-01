@@ -7,8 +7,8 @@ namespace Rival {
 
     SpriteRenderable::SpriteRenderable(
             const Spritesheet& spritesheet,
-            int maxSprites) :
-        spritesheet(spritesheet) {
+            int maxSprites)
+        : spritesheet(spritesheet) {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -74,14 +74,12 @@ namespace Rival {
 
             unsigned int startIndex = i * numVerticesPerSprite;
 
-            // GL_TRIANGLE_FAN
             if (drawMode == GL_TRIANGLE_FAN) {
                 indexData.push_back(startIndex);
                 indexData.push_back(startIndex + 1);
                 indexData.push_back(startIndex + 2);
                 indexData.push_back(startIndex + 3);
 
-            // GL_TRIANGLES
             } else if (drawMode == GL_TRIANGLES) {
                 indexData.push_back(startIndex);
                 indexData.push_back(startIndex + 1);
@@ -131,4 +129,4 @@ namespace Rival {
         return indicesPerSprite;
     }
 
-}
+}  // namespace Rival

@@ -5,7 +5,7 @@
 
 namespace Rival {
 
-    enum class TileType: std::int8_t {
+    enum class TileType : std::int8_t {
         Grass,
         Coastline,
         Water,
@@ -30,7 +30,6 @@ namespace Rival {
     class Tile {
 
     public:
-
         Tile(const TileType type,
                 const std::uint8_t txIndex,
                 std::uint16_t resourceCount);
@@ -40,11 +39,9 @@ namespace Rival {
         std::uint8_t txIndex;
 
     private:
-
         std::uint16_t resourceCount;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // TILE_H
+#endif  // TILE_H

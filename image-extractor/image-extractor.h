@@ -9,4 +9,4 @@ namespace ImageExtractor {
 
 }
 
-#endif // IMAGE_EXTRACTOR_H
+#endif  // IMAGE_EXTRACTOR_H

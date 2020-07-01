@@ -21,7 +21,6 @@ namespace Rival {
     class UnitRenderer {
 
     public:
-
         // Offset applied to align a unit sprite correctly within a tile,
         // in pixels
         static const int unitOffsetX = -33;
@@ -31,7 +30,7 @@ namespace Rival {
                 const std::map<UnitType, Spritesheet>& unitSprites,
                 const Texture& paletteTexture);
 
-        UnitRenderer( const UnitRenderer& ) = delete;
+        UnitRenderer(const UnitRenderer&) = delete;
         UnitRenderer& operator=(const UnitRenderer&) = delete;
 
         void render(
@@ -39,7 +38,6 @@ namespace Rival {
                 const std::map<int, std::unique_ptr<Unit>>& units);
 
     private:
-
         const std::map<UnitType, Spritesheet>& unitSprites;
 
         const Texture& paletteTexture;
@@ -53,9 +51,8 @@ namespace Rival {
         bool isUnitVisible(const Unit& unit, const Camera& camera);
 
         int getTxIndex(const Unit& unit) const;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // UNIT_RENDERER_H
+#endif  // UNIT_RENDERER_H

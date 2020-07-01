@@ -31,8 +31,6 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
- - Auto-format code (VS Code Cleanup? CodeMaid? Clang?)
-
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
 
@@ -166,6 +164,8 @@ character filename (including path)
 
 ### Future Enhancements
 
+ - [x] 60 FPS
+ - [x] Camera zooming
  - [ ] Easy military drag-select
  - [ ] Rally points
  - [ ] Configurable Gold multiplier
@@ -185,7 +185,6 @@ character filename (including path)
  - [ ] Windows XP support
  - [ ] Support for larger screen resolutions
  - [ ] Support for bigger maps
- - [x] Camera zooming
 
 <!----------------------------------------------------------------------------->
 ## Project

@@ -13,6 +13,6 @@ namespace Rival {
 
     void printShaderLog(const GLuint shader);
 
-}
+}  // namespace Rival
 
-#endif // SHADER_UTILS_H
+#endif  // SHADER_UTILS_H

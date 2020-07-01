@@ -8,16 +8,16 @@
 
 namespace Rival {
 
-    Image::Image(int width, int height) :
-        width(width),
-        height(height),
-        data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
+    Image::Image(int width, int height)
+        : width(width),
+          height(height),
+          data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
 
     Image::Image(int width, int height,
-            std::unique_ptr<std::vector<unsigned char>> data) :
-        width(width),
-        height(height),
-        data(std::move(data)) {}
+            std::unique_ptr<std::vector<unsigned char>> data)
+        : width(width),
+          height(height),
+          data(std::move(data)) {}
 
     int Image::getWidth() const {
         return width;
@@ -63,4 +63,4 @@ namespace Rival {
         return Image(width, height, std::move(data));
     }
 
-};
+};  // namespace Rival

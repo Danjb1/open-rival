@@ -12,7 +12,6 @@ namespace Rival {
     class MousePicker {
 
     public:
-
         MousePicker(Camera& camera, std::shared_ptr<Scenario> scenario);
 
         void handleMouse();
@@ -24,7 +23,6 @@ namespace Rival {
         int getEntity() const;
 
     private:
-
         // Offset of a Unit's hitbox, measured from the top-left corner of the
         // tile it's in, in px
         static const int unitHitboxOffsetX = 20;
@@ -51,9 +49,8 @@ namespace Rival {
 
         bool isMouseInUnit(
                 const Unit& unit, int mouseInViewportX, int mouseInViewportY);
-
     };
 
-}
+}  // namespace Rival
 
-#endif // MOUSE_PICKER_H
+#endif  // MOUSE_PICKER_H

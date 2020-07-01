@@ -22,15 +22,15 @@ namespace Rival {
         indexedTextureShader = IndexedTextureShader();
         indexedTextureShader.programId = programId;
         indexedTextureShader.viewProjMatrixUniformLocation =
-            glGetUniformLocation(programId, "view_proj_matrix");
+                glGetUniformLocation(programId, "view_proj_matrix");
         indexedTextureShader.vertexAttribLocation =
-            glGetAttribLocation(programId, "in_vertex");
+                glGetAttribLocation(programId, "in_vertex");
         indexedTextureShader.texCoordAttribLocation =
-            glGetAttribLocation(programId, "in_tex_coord");
+                glGetAttribLocation(programId, "in_tex_coord");
         indexedTextureShader.texUnitUniformLocation =
-            glGetUniformLocation(programId, "tex");
+                glGetUniformLocation(programId, "tex");
         indexedTextureShader.paletteTexUnitUniformLocation =
-            glGetUniformLocation(programId, "palette");
+                glGetUniformLocation(programId, "palette");
 
         if (!indexedTextureShader.isValid()) {
             throw std::runtime_error("Failed to create IndexedTextureShader");
@@ -82,11 +82,11 @@ namespace Rival {
         screenShader = ScreenShader();
         screenShader.programId = programId;
         screenShader.vertexAttribLocation =
-            glGetAttribLocation(programId, "in_vertex");
+                glGetAttribLocation(programId, "in_vertex");
         screenShader.texCoordAttribLocation =
-            glGetAttribLocation(programId, "in_tex_coord");
+                glGetAttribLocation(programId, "in_tex_coord");
         screenShader.texUnitUniformLocation =
-            glGetUniformLocation(programId, "tex");
+                glGetUniformLocation(programId, "tex");
 
         if (!screenShader.isValid()) {
             throw std::runtime_error("Failed to create ScreenShader");
@@ -192,4 +192,4 @@ namespace Rival {
         return programId;
     }
 
-}
+}  // namespace Rival

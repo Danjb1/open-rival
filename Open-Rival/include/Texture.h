@@ -9,7 +9,6 @@ namespace Rival {
     class Texture {
 
     public:
-
         Texture(const GLuint id, int width, int height);
 
         const GLuint getId() const;
@@ -21,15 +20,13 @@ namespace Rival {
         static const Texture loadTexture(const std::string filename);
 
     private:
-
         const GLuint id;
 
         const int width;
 
         const int height;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // TEXTURE_H
+#endif  // TEXTURE_H

@@ -11,11 +11,9 @@ namespace Rival {
     class BinaryFileReader {
 
     private:
-
         std::ifstream in;
 
     public:
-
         BinaryFileReader(const std::string filename);
 
         void skip(int n);
@@ -25,9 +23,8 @@ namespace Rival {
         std::uint16_t readShort();
 
         void read(std::vector<unsigned char>* buffer);
-
     };
 
-}
+}  // namespace Rival
 
-#endif // BINARY_FILE_READER_H
+#endif  // BINARY_FILE_READER_H
