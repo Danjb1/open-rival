@@ -7,8 +7,8 @@
 
 namespace Rival {
 
-    ScenarioBuilder::ScenarioBuilder(ScenarioData data) :
-        data(data) {}
+    ScenarioBuilder::ScenarioBuilder(ScenarioData data)
+        : data(data) {}
 
     std::shared_ptr<Scenario> ScenarioBuilder::build() {
 
@@ -40,7 +40,7 @@ namespace Rival {
         // Initialise Buildings
         for (BuildingPlacement& buildingPlacement : data.buildings) {
             std::unique_ptr<Building> building = std::make_unique<Building>(
-                getBuildingType(buildingPlacement.type));
+                    getBuildingType(buildingPlacement.type));
             scenario->addBuilding(std::move(building),
                     buildingPlacement.player,
                     buildingPlacement.x,
@@ -147,7 +147,7 @@ namespace Rival {
 
             } else {
                 throw std::runtime_error("Unknown tile type: "
-                    + tile.type);
+                        + tile.type);
             }
 
         } else if (tile.resource == 1) {
@@ -162,7 +162,7 @@ namespace Rival {
 
         } else {
             throw std::runtime_error("Unknown tile resource: "
-                + tile.resource);
+                    + tile.resource);
         }
 
         return Tile(type, txIndex, 0);
@@ -362,4 +362,4 @@ namespace Rival {
         }
     }
 
-}
+}  // namespace Rival

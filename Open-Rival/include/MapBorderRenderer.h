@@ -16,7 +16,6 @@ namespace Rival {
     class MapBorderRenderer {
 
     public:
-
         MapBorderRenderer(
                 Race race,
                 int mapWidth,
@@ -62,7 +61,6 @@ namespace Rival {
         void render();
 
     private:
-
         const Texture& paletteTexture;
 
         // The maximum number of border segments we can render
@@ -71,9 +69,8 @@ namespace Rival {
         SpriteRenderable renderable;
 
         int numSegments = 0;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // MAP_BORDER_RENDERER_H
+#endif  // MAP_BORDER_RENDERER_H

@@ -8,7 +8,6 @@ namespace Rival {
     class Framebuffer {
 
     public:
-
         Framebuffer(GLuint id, GLuint textureId, int width, int height);
 
         GLuint getId() const;
@@ -23,7 +22,6 @@ namespace Rival {
                 int width, int height, bool useDepth);
 
     private:
-
         GLuint id;
 
         GLuint textureId;
@@ -34,9 +32,8 @@ namespace Rival {
         int height;
 
         void addDepthBuffer();
-
     };
 
-}
+}  // namespace Rival
 
-#endif // FRAME_BUFFER_H
+#endif  // FRAME_BUFFER_H

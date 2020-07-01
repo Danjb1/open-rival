@@ -10,11 +10,10 @@
 uint32_t readInt(std::vector<unsigned char>& data, size_t offset) {
     // little endian
     return std::uint32_t(
-        data[offset + 3] << 24 |
-        data[offset + 2] << 16 |
-        data[offset + 1] << 8 |
-        data[offset + 0]
-    );
+            data[offset + 3] << 24
+            | data[offset + 2] << 16
+            | data[offset + 1] << 8
+            | data[offset + 0]);
 }
 
 void extractCampaign(std::string filename) {

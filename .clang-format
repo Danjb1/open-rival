@@ -1,0 +1,42 @@
+﻿# Config generator: https://zed0.co.uk/clang-format-configurator/
+---
+AccessModifierOffset: '-4'
+AlignAfterOpenBracket: DontAlign
+AlignOperands: 'false'
+AlignTrailingComments: 'true'
+AllowAllArgumentsOnNextLine: 'true'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
+AllowShortBlocksOnASingleLine: 'false'
+BreakAfterJavaFieldAnnotations: 'true'
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Attach
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: BeforeColon
+BreakStringLiterals: 'true'
+ColumnLimit: '0'
+CompactNamespaces: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ConstructorInitializerIndentWidth: '4'
+ContinuationIndentWidth: '8'
+Cpp11BracedListStyle: 'false'
+DerivePointerAlignment: 'false'
+FixNamespaceComments: 'true'
+IndentCaseLabels: 'false'
+NamespaceIndentation: All
+IndentWidth: '4'
+KeepEmptyLinesAtTheStartOfBlocks: 'true'
+Language: Cpp
+MaxEmptyLinesToKeep: '1'
+PointerAlignment: Left
+SortIncludes: 'false'
+SpaceAfterCStyleCast: 'true'
+SpaceBeforeCpp11BracedList: 'true'
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: 'true'
+SpaceInEmptyParentheses: 'false'
+SpacesBeforeTrailingComments: '2'
+TabWidth: '4'
+UseTab: Never
+...

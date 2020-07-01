@@ -26,7 +26,6 @@ namespace Rival {
         void tick();
 
     private:
-
         void updateSpriteSheetEntry();
 
         int animationStep;
@@ -43,8 +42,7 @@ namespace Rival {
 
         // Holds unitType and unitAnimationType
         UnitAnimationPair unitAnimationPair;
-
     };
-}
+}  // namespace Rival
 
-#endif // UNIT_ANIMATION_H
+#endif  // UNIT_ANIMATION_H

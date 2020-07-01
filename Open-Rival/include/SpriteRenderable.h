@@ -14,9 +14,8 @@ namespace Rival {
     class SpriteRenderable {
 
     public:
-
-        static const int numVertexDimensions = 3; // x, y, z
-        static const int numTexCoordDimensions = 2; // u, v
+        static const int numVertexDimensions = 3;    // x, y, z
+        static const int numTexCoordDimensions = 2;  // u, v
         static const int numVerticesPerSprite = 4;
 
         const Spritesheet& spritesheet;
@@ -47,7 +46,6 @@ namespace Rival {
         int getIndicesPerSprite() const;
 
     private:
-
         /*
          * 4 indices are required to render a quad using GL_TRIANGLE_FAN:
          *     0------1
@@ -72,9 +70,8 @@ namespace Rival {
         GLenum drawMode;
 
         int indicesPerSprite;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // SPRITE_RENDERABLE_H
+#endif  // SPRITE_RENDERABLE_H

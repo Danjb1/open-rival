@@ -3,19 +3,17 @@
 
 namespace Rival {
 
-    Scenario::Scenario(int width, int height, bool wilderness) :
-            width(width),
-            height(height),
-            wilderness(wilderness),
+    Scenario::Scenario(int width, int height, bool wilderness)
+        : width(width),
+          height(height),
+          wilderness(wilderness),
 
-            // Default to Grass everywhere
-            tiles(std::vector<Tile>(
-                    width * height, Tile(TileType::Grass, 0, 0))
-            ),
-            tilePassability(std::vector<TilePassability>(
-                    width * height, TilePassability::Clear)
-            ),
-            nextId(0) {}
+          // Default to Grass everywhere
+          tiles(std::vector<Tile>(
+                  width * height, Tile(TileType::Grass, 0, 0))),
+          tilePassability(std::vector<TilePassability>(
+                  width * height, TilePassability::Clear)),
+          nextId(0) {}
 
     int Scenario::getWidth() const {
         return width;
@@ -94,4 +92,4 @@ namespace Rival {
         return units;
     }
 
-}
+}  // namespace Rival

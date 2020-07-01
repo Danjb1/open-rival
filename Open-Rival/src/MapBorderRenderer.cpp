@@ -16,10 +16,10 @@ namespace Rival {
             int mapWidth,
             int mapHeight,
             const Spritesheet& spritesheet,
-            const Texture& paletteTexture) :
-        paletteTexture(paletteTexture),
-        maxSegmentsToRender(2 * (mapWidth + mapHeight) - 4),
-        renderable{ spritesheet, maxSegmentsToRender } {
+            const Texture& paletteTexture)
+        : paletteTexture(paletteTexture),
+          maxSegmentsToRender(2 * (mapWidth + mapHeight) - 4),
+          renderable { spritesheet, maxSegmentsToRender } {
 
         // The map border never changes, so we set the buffers here and never
         // touch them again.
@@ -46,26 +46,26 @@ namespace Rival {
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
         glBufferSubData(
-            GL_ARRAY_BUFFER,
-            0,
-            positions.size() * sizeof(GLfloat),
-            positions.data());
+                GL_ARRAY_BUFFER,
+                0,
+                positions.size() * sizeof(GLfloat),
+                positions.data());
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
         glBufferSubData(
-            GL_ARRAY_BUFFER,
-            0,
-            texCoords.size() * sizeof(GLfloat),
-            texCoords.data());
+                GL_ARRAY_BUFFER,
+                0,
+                texCoords.size() * sizeof(GLfloat),
+                texCoords.data());
     }
 
     void MapBorderRenderer::render() {
 
         // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
         // Bind vertex array
@@ -180,4 +180,4 @@ namespace Rival {
                 thisTexCoords.end());
     }
 
-}
+}  // namespace Rival

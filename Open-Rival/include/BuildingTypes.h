@@ -49,13 +49,13 @@ namespace Rival {
 
     };
 
-    const auto firstElfBuildingType{ static_cast<int>(BuildingType::ElvenKeep) };
-    const auto lastElfBuildingType{ static_cast<int>(BuildingType::TreeWall) };
-    const auto firstGreenskinBuildingType{ static_cast<int>(BuildingType::Fortress) };
-    const auto lastGreenskinBuildingType{ static_cast<int>(BuildingType::GreenskinWall) };
-    const auto firstHumanBuildingType{ static_cast<int>(BuildingType::Castle) };
-    const auto lastHumanBuildingType{ static_cast<int>(BuildingType::Wall) };
+    const auto firstElfBuildingType { static_cast<int>(BuildingType::ElvenKeep) };
+    const auto lastElfBuildingType { static_cast<int>(BuildingType::TreeWall) };
+    const auto firstGreenskinBuildingType { static_cast<int>(BuildingType::Fortress) };
+    const auto lastGreenskinBuildingType { static_cast<int>(BuildingType::GreenskinWall) };
+    const auto firstHumanBuildingType { static_cast<int>(BuildingType::Castle) };
+    const auto lastHumanBuildingType { static_cast<int>(BuildingType::Wall) };
 
-}
+}  // namespace Rival
 
-#endif // BUILDING_TYPES_H
+#endif  // BUILDING_TYPES_H

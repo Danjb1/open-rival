@@ -10,7 +10,7 @@ using namespace ImageExtractor;
  */
 bool createDirectory(const char* filename) {
     return CreateDirectoryA(filename, NULL)
-        || ERROR_ALREADY_EXISTS == GetLastError();
+            || ERROR_ALREADY_EXISTS == GetLastError();
 }
 
 int main() {

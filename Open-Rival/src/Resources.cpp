@@ -8,13 +8,13 @@ namespace Rival {
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::txDir = "res\\textures\\";
 
-    Resources::Resources() :
-            textures(loadTextures()),
-            paletteTexture(initPaletteTexture()),
-            unitSpritesheets(initUnitSpritesheets()),
-            buildingSpritesheets(initBuildingSpritesheets()),
-            tileSpritesheets(initTileSpritesheets()),
-            mapBorderSpritesheet(initMapBorderSpritesheet()) {}
+    Resources::Resources()
+        : textures(loadTextures()),
+          paletteTexture(initPaletteTexture()),
+          unitSpritesheets(initUnitSpritesheets()),
+          buildingSpritesheets(initBuildingSpritesheets()),
+          tileSpritesheets(initTileSpritesheets()),
+          mapBorderSpritesheet(initMapBorderSpritesheet()) {}
 
     Resources::~Resources() {
         // Delete Textures
@@ -120,13 +120,13 @@ namespace Rival {
         int nextIndex = txIndexBuildings;
 
         auto createSpritesheets = [&](int first, int last) {
-            for (auto it{ first }; it <= last; ++it) {
+            for (auto it { first }; it <= last; ++it) {
                 buildingSpritesheets.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(static_cast<BuildingType>(it)),
-                    std::forward_as_tuple(
-                        textures.at(nextIndex),
-                        RenderUtils::buildingWidthPx,
-                        RenderUtils::buildingHeightPx));
+                        std::forward_as_tuple(static_cast<BuildingType>(it)),
+                        std::forward_as_tuple(
+                                textures.at(nextIndex),
+                                RenderUtils::buildingWidthPx,
+                                RenderUtils::buildingHeightPx));
             }
         };
 
@@ -144,13 +144,13 @@ namespace Rival {
         std::map<UnitType, Spritesheet> unitSpritesheets;
         int nextIndex = txIndexUnits;
 
-        for (auto it{ firstUnitType }; it <= lastUnitType; ++it) {
+        for (auto it { firstUnitType }; it <= lastUnitType; ++it) {
             unitSpritesheets.emplace(std::piecewise_construct,
-                std::forward_as_tuple(static_cast<UnitType>(it)),
-                std::forward_as_tuple(
-                    textures.at(nextIndex),
-                    RenderUtils::unitWidthPx,
-                    RenderUtils::unitHeightPx));
+                    std::forward_as_tuple(static_cast<UnitType>(it)),
+                    std::forward_as_tuple(
+                            textures.at(nextIndex),
+                            RenderUtils::unitWidthPx,
+                            RenderUtils::unitHeightPx));
             nextIndex++;
         }
 
@@ -167,11 +167,11 @@ namespace Rival {
         // 2 = Fog
         for (int i = 0; i < 3; i++) {
             tileSpritesheets.emplace(std::piecewise_construct,
-                std::forward_as_tuple(i),
-                std::forward_as_tuple(
-                    textures.at(nextIndex),
-                    RenderUtils::tileSpriteWidthPx,
-                    RenderUtils::tileSpriteHeightPx));
+                    std::forward_as_tuple(i),
+                    std::forward_as_tuple(
+                            textures.at(nextIndex),
+                            RenderUtils::tileSpriteWidthPx,
+                            RenderUtils::tileSpriteHeightPx));
             nextIndex++;
         }
 
@@ -206,4 +206,4 @@ namespace Rival {
         return paletteTexture;
     }
 
-}
+}  // namespace Rival

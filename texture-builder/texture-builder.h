@@ -17,7 +17,6 @@ namespace TextureBuilder {
     class Image {
 
     public:
-
         Image(std::string filename, int width, int height);
 
         Image(std::string filename, int width, int height, const std::shared_ptr<unsigned char> data);
@@ -31,12 +30,10 @@ namespace TextureBuilder {
         std::shared_ptr<unsigned char> getData() const;
 
     private:
-
         std::string filename;
         int width;
         int height;
         std::shared_ptr<unsigned char> data;
-
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -46,14 +43,12 @@ namespace TextureBuilder {
     class Rect {
 
     public:
-
         int x;
         int y;
         int width;
         int height;
 
         Rect(int x, int y, int width, int height);
-
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -63,13 +58,11 @@ namespace TextureBuilder {
     class TextureAtlasBuilder {
 
     public:
-
         std::map<std::string, Image> imagesByKey;
         std::map<std::string, Rect> imagePlacements;
         std::vector<Rect> emptyRects;
         int texWidth;
         int texHeight;
-
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -103,6 +96,6 @@ namespace TextureBuilder {
             const std::vector<Image>& sprites,
             const std::vector<uint32_t>& palette);
 
-}
+}  // namespace TextureBuilder
 
-#endif // TEXTURE_BUILDER_H
+#endif  // TEXTURE_BUILDER_H

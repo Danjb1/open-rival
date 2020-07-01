@@ -14,9 +14,9 @@ namespace Rival {
 
     UnitRenderer::UnitRenderer(
             const std::map<UnitType, Spritesheet>& unitSprites,
-            const Texture& paletteTexture) :
-        unitSprites(unitSprites),
-        paletteTexture(paletteTexture) {}
+            const Texture& paletteTexture)
+        : unitSprites(unitSprites),
+          paletteTexture(paletteTexture) {}
 
     SpriteRenderable& UnitRenderer::getOrCreateRenderable(const Unit& unit) {
 
@@ -97,9 +97,9 @@ namespace Rival {
                 renderable.spritesheet.getTexCoords(txIndex);
 
         // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
         // Bind vertex array
@@ -137,4 +137,4 @@ namespace Rival {
         return unit.getCurrentSpriteIndex();
     }
 
-}
+}  // namespace Rival

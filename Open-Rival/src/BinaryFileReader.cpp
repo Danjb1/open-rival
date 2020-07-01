@@ -5,8 +5,8 @@
 
 namespace Rival {
 
-    BinaryFileReader::BinaryFileReader(const std::string filename) :
-        in(std::ifstream(filename, std::ios::binary | std::ios::in)) {
+    BinaryFileReader::BinaryFileReader(const std::string filename)
+        : in(std::ifstream(filename, std::ios::binary | std::ios::in)) {
         if (!in) {
             throw std::runtime_error("Failed to load image!");
         }
@@ -30,4 +30,4 @@ namespace Rival {
         in.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
     }
 
-}
+}  // namespace Rival

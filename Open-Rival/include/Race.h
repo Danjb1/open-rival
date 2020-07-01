@@ -7,4 +7,4 @@ enum class Race {
     Greenskin
 };
 
-#endif // RACE_H
+#endif  // RACE_H
