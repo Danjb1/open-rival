@@ -10,12 +10,12 @@ namespace Rival {
 
     MousePicker::MousePicker(
             Camera& camera,
-            std::shared_ptr<Scenario> scenario) :
-        camera(camera),
-        scenario(scenario),
-        mapWidth(scenario->getWidth()),
-        mapHeight(scenario->getHeight()),
-        entity(-1) {}
+            std::shared_ptr<Scenario> scenario)
+        : camera(camera),
+          scenario(scenario),
+          mapWidth(scenario->getWidth()),
+          mapHeight(scenario->getHeight()),
+          entity(-1) {}
 
     void MousePicker::handleMouse() {
 
@@ -36,15 +36,15 @@ namespace Rival {
 
         // Calculate mouse position relative to the viewport, in the range 0-1
         float normalizedMouseX =
-            static_cast<float>(mouseInViewportX) / viewportWidth;
+                static_cast<float>(mouseInViewportX) / viewportWidth;
         float normalizedMouseY =
-            static_cast<float>(mouseInViewportY) / viewportHeight;
+                static_cast<float>(mouseInViewportY) / viewportHeight;
 
         // Calculate the mouse position in world units
         float mouseWorldX = camera.getLeft()
-            + normalizedMouseX * camera.getWidth();
+                + normalizedMouseX * camera.getWidth();
         float mouseWorldY = camera.getTop()
-            + normalizedMouseY * camera.getHeight();
+                + normalizedMouseY * camera.getHeight();
 
         // Get the naive tile position.
         // This would work if our tiles were regular and aligned with the
@@ -196,4 +196,4 @@ namespace Rival {
     int MousePicker::getEntity() const {
         return entity;
     }
-}
+}  // namespace Rival

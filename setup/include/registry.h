@@ -15,15 +15,12 @@ namespace Registry {
     class RegistryError : public std::runtime_error {
 
     public:
-
         RegistryError(const char* message, LONG errorCode);
 
         LONG errorCode() const noexcept;
 
     private:
-
         LONG m_errorCode;
-
     };
 
     /**
@@ -38,10 +35,9 @@ namespace Registry {
      *   }
      */
     DWORD RegGetDword(
-        HKEY hKey,
-        const std::wstring& subKey,
-        const std::wstring& value
-    );
+            HKEY hKey,
+            const std::wstring& subKey,
+            const std::wstring& value);
 
     /**
      * Gets a string from the registry.
@@ -55,11 +51,10 @@ namespace Registry {
      *   }
      */
     std::wstring RegGetString(
-        HKEY hKey,
-        const std::wstring& subKey,
-        const std::wstring& value
-    );
+            HKEY hKey,
+            const std::wstring& subKey,
+            const std::wstring& value);
 
-}
+}  // namespace Registry
 
-#endif // REGISTRY_H
+#endif  // REGISTRY_H

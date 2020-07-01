@@ -20,6 +20,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-game.
     // The last colour (index 0xff) is used for transparent areas.
+    /* clang-format off */
     const uint32_t PALETTE_GAME[PALETTE_SIZE] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
@@ -202,11 +203,12 @@ namespace InterfaceExtractor {
         0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
         0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffffff,
     };
+/* clang-format on */
 
-    ///////////////////////////////////////////////////////////////////////////////
-    #ifdef WIN32
+///////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 
-    #include <windows.h>
+#include <windows.h>
 
     /**
      * Attempts to create the given directory.
@@ -216,7 +218,7 @@ namespace InterfaceExtractor {
                 || ERROR_ALREADY_EXISTS == GetLastError();
     }
 
-    #endif ////////////////////////////////////////////////////////////////////////
+#endif  ////////////////////////////////////////////////////////////////////////
 
     /**
      * Reads a file to memory.
@@ -230,7 +232,7 @@ namespace InterfaceExtractor {
         }
 
         fseek(fp, 0L, SEEK_END);
-        *size = (uint32_t)ftell(fp);
+        *size = (uint32_t) ftell(fp);
         fseek(fp, 0L, SEEK_SET);
 
         void* data = malloc(*size);
@@ -272,27 +274,27 @@ namespace InterfaceExtractor {
          * http://tfc.duke.free.fr/coding/tga_specs.pdf
          */
 
-        fputc(0x00, fp); // ID Length
-        fputc(0x01, fp); // Color map type
-        fputc(0x01, fp); // Image type (uncompressed, colour-mapped)
+        fputc(0x00, fp);  // ID Length
+        fputc(0x01, fp);  // Color map type
+        fputc(0x01, fp);  // Image type (uncompressed, colour-mapped)
 
         // Color map specification
-        fputc(0, fp); // Index of first entry
+        fputc(0, fp);  // Index of first entry
         fputc(0x00, fp);
         fputc(0x00, fp);  // Number of entries (256)
         fputc(0x01, fp);
-        fputc(32, fp);   // Entry size (32-bit RGBA)
+        fputc(32, fp);  // Entry size (32-bit RGBA)
 
         // Image specification
-        fputc(0x00, fp); // X-origin
+        fputc(0x00, fp);  // X-origin
         fputc(0x00, fp);
-        fputc(0x00, fp); // Y-origin
+        fputc(0x00, fp);  // Y-origin
         fputc(0x00, fp);
-        fputc((uint8_t)w, fp); // Width
+        fputc((uint8_t) w, fp);  // Width
         fputc((uint8_t)(w >> 8), fp);
-        fputc((uint8_t)h, fp); // Height
+        fputc((uint8_t) h, fp);  // Height
         fputc((uint8_t)(h >> 8), fp);
-        fputc(8, fp); // Bits per pixel
+        fputc(8, fp);  // Bits per pixel
 
         // Image descriptor byte
         // (8 = number of alpha bits, bit5: upper-left origin)
@@ -328,9 +330,8 @@ namespace InterfaceExtractor {
     std::uint16_t readShort(const uint8_t* data, int& offset) {
         // little endian
         std::uint16_t value = std::uint16_t(
-            data[offset + 1] << 8 |
-            data[offset + 0]
-        );
+                data[offset + 1] << 8
+                | data[offset + 0]);
         offset += 2;
         return value;
     }
@@ -470,7 +471,7 @@ namespace InterfaceExtractor {
 
         // Read the file
         uint32_t size;
-        uint8_t* data = (uint8_t*)read_file(inputFile, &size);
+        uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
             throw std::runtime_error("Error reading Interfac.dat\n");
         }
@@ -480,4 +481,4 @@ namespace InterfaceExtractor {
         free(data);
     }
 
-}
+}  // namespace InterfaceExtractor

@@ -5,8 +5,8 @@
 
 namespace Rival {
 
-    BuildingAnimation::BuildingAnimation(BuildingType buildingType):
-        buildingAnimationPair(std::make_pair(buildingType, BuildingAnimationType::Constructing)) {
+    BuildingAnimation::BuildingAnimation(BuildingType buildingType)
+        : buildingAnimationPair(std::make_pair(buildingType, BuildingAnimationType::Constructing)) {
         updateSpriteSheetEntry();
     }
 
@@ -31,4 +31,4 @@ namespace Rival {
         auto spritesheetSpan = spritesheetEntry.second - spritesheetEntry.first + 1;
         animationStep = (animationStep + 1) % (spritesheetSpan);
     }
-}
+}  // namespace Rival

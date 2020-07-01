@@ -7,11 +7,11 @@
 namespace Rival {
 
     Framebuffer::Framebuffer(
-            const GLuint id, const GLuint textureId, int width, int height) :
-        id(id),
-        textureId(textureId),
-        width(width),
-        height(height) {}
+            const GLuint id, const GLuint textureId, int width, int height)
+        : id(id),
+          textureId(textureId),
+          width(width),
+          height(height) {}
 
     GLuint Framebuffer::getId() const {
         return id;
@@ -88,4 +88,4 @@ namespace Rival {
                 GL_RENDERBUFFER, depthRenderBufferId);
     }
 
-}
+}  // namespace Rival

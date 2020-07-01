@@ -8,17 +8,16 @@ namespace Rival {
     class Camera {
 
     public:
-
         static const float zoomInterval;
         static const float zoomMin;
         static const float zoomMax;
 
         Camera(
-            float x,
-            float y,
-            float width,
-            double aspectRatio,
-            Scenario& scenario);
+                float x,
+                float y,
+                float width,
+                double aspectRatio,
+                Scenario& scenario);
 
         void setPos(float x, float y);
 
@@ -47,7 +46,6 @@ namespace Rival {
         bool contains(float px, float py) const;
 
     private:
-
         // The point at the centre of the camera, in world units
         float x;
         float y;
@@ -62,9 +60,8 @@ namespace Rival {
         float zoom = 1.0f;
 
         Scenario& scenario;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // CAMERA_H
+#endif  // CAMERA_H

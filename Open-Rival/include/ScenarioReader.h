@@ -14,7 +14,6 @@ namespace Rival {
     class ScenarioReader {
 
     public:
-
         ScenarioReader(const std::string filename);
 
         ScenarioData readScenario();
@@ -22,7 +21,6 @@ namespace Rival {
         ScenarioData readCampaignScenario(int levelIndex);
 
     private:
-
         static const std::map<std::uint8_t, char> alphabet;
 
         static const int numBytesShort = 2;
@@ -181,9 +179,8 @@ namespace Rival {
         void print(GoalLocation& trap) const;
 
         void print(CampaignText& text) const;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // SCENARIO_READER_H
+#endif  // SCENARIO_READER_H

@@ -15,32 +15,30 @@ namespace fs = std::filesystem;
 namespace TextureBuilder {
 
     // A border between images prevents texture bleeding
-    const int borderSize = 1; // px
+    const int borderSize = 1;  // px
 
     const int maxTextureSize = 2048;
 
     // Number of colours in the palette
     const int paletteSize = 256;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    #ifdef WIN32
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 
-    #include <windows.h>
+#include <windows.h>
 
     /**
      * Attempts to create the given directory.
      */
     bool createDirectory(const char* filename) {
-        return CreateDirectoryA(filename, NULL) ||
-            ERROR_ALREADY_EXISTS == GetLastError();
+        return CreateDirectoryA(filename, NULL) || ERROR_ALREADY_EXISTS == GetLastError();
     }
 
-    #endif
+#endif  ///////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Image class
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
     Image::Image(std::string filename, int width, int height) {
         this->filename = filename;
@@ -74,19 +72,19 @@ namespace TextureBuilder {
         return data;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Rect class
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
-    Rect::Rect(int x, int y, int width, int height) :
-            x(x),
-            y(y),
-            width(width),
-            height(height) {}
+    Rect::Rect(int x, int y, int width, int height)
+        : x(x),
+          y(y),
+          width(width),
+          height(height) {}
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // End of classes
-    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Loads an image from a file.
@@ -165,27 +163,27 @@ namespace TextureBuilder {
          * http://tfc.duke.free.fr/coding/tga_specs.pdf
          */
 
-        fputc(0x00, fp); // ID Length
-        fputc(0x01, fp); // Color map type
-        fputc(0x01, fp); // Image type (uncompressed, colour-mapped)
+        fputc(0x00, fp);  // ID Length
+        fputc(0x01, fp);  // Color map type
+        fputc(0x01, fp);  // Image type (uncompressed, colour-mapped)
 
         // Color map specification
-        fputc(0, fp); // Index of first entry
+        fputc(0, fp);  // Index of first entry
         fputc(0x00, fp);
         fputc(0x00, fp);  // Number of entries (256)
         fputc(0x01, fp);
-        fputc(32, fp);   // Entry size (32-bit RGBA)
+        fputc(32, fp);  // Entry size (32-bit RGBA)
 
         // Image specification
-        fputc(0x00, fp); // X-origin
+        fputc(0x00, fp);  // X-origin
         fputc(0x00, fp);
-        fputc(0x00, fp); // Y-origin
+        fputc(0x00, fp);  // Y-origin
         fputc(0x00, fp);
-        fputc((uint8_t) image.getWidth(), fp); // Width
+        fputc((uint8_t) image.getWidth(), fp);  // Width
         fputc((uint8_t)(image.getWidth() >> 8), fp);
-        fputc((uint8_t) image.getHeight(), fp); // Height
+        fputc((uint8_t) image.getHeight(), fp);  // Height
         fputc((uint8_t)(image.getHeight() >> 8), fp);
-        fputc(8, fp); // Bits per pixel
+        fputc(8, fp);  // Bits per pixel
 
         // Image descriptor byte
         // (8 = number of alpha bits, bit5: lower-left origin)
@@ -239,10 +237,10 @@ namespace TextureBuilder {
             const Rect& target = kv.second;
             const Image& img = builder.imagesByKey.at(key);
             atlasFile << img.getFilename() << " "
-                    << target.x + borderSize << " "
-                    << target.y + borderSize << " "
-                    << target.width - (2 * borderSize) << " "
-                    << target.height - (2 * borderSize) << "\n";
+                      << target.x + borderSize << " "
+                      << target.y + borderSize << " "
+                      << target.width - (2 * borderSize) << " "
+                      << target.height - (2 * borderSize) << "\n";
         }
 
         atlasFile.close();
@@ -320,12 +318,12 @@ namespace TextureBuilder {
 
                 // Check dimensions against the expected sprite size
                 if (sprite.getWidth() > spriteWidth
-                    || sprite.getHeight() > spriteHeight) {
+                        || sprite.getHeight() > spriteHeight) {
                     // Sprite too large
                     throw std::runtime_error("Sprite is too large to fit!");
 
                 } else if (sprite.getWidth() < spriteWidth
-                    || sprite.getHeight() < spriteHeight) {
+                        || sprite.getHeight() < spriteHeight) {
                     // Sprite too small
                     Image resizedSprite = Image(line, spriteWidth, spriteHeight);
                     const int dstX = (spriteWidth - sprite.getWidth()) / 2;
@@ -337,7 +335,6 @@ namespace TextureBuilder {
                     // Sprite is ok!
                     sprites.push_back(sprite);
                 }
-
             }
         }
 
@@ -573,7 +570,7 @@ namespace TextureBuilder {
 
                 // Read images
                 std::vector<Image> images = readImagesFromDefinitionFile(
-                    imageDir, path, atlasMode);
+                        imageDir, path, atlasMode);
 
                 // Read palette from the first image
                 std::vector<uint32_t> palette;
@@ -593,4 +590,4 @@ namespace TextureBuilder {
         }
     }
 
-}
+}  // namespace TextureBuilder

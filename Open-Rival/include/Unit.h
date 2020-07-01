@@ -11,7 +11,6 @@ namespace Rival {
     class Unit {
 
     public:
-
         // Size of a Unit, in world units
         static const int width = 1;
         static const int height = 1;
@@ -47,7 +46,6 @@ namespace Rival {
         void tick();
 
     private:
-
         int id;
 
         bool deleted;
@@ -71,9 +69,8 @@ namespace Rival {
          * y co-ordinate of the Tile the Unit is occupying.
          */
         int y;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // UNIT_H
+#endif  // UNIT_H

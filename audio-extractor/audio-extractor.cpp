@@ -84,17 +84,17 @@ namespace AudioExtractor {
             // Write the data to a new file
             std::ostringstream filename;
             filename << outputDir
-                << "\\"
-                << std::setw(3)
-                << std::setfill('0')
-                << numFiles
-                << ext;
+                     << "\\"
+                     << std::setw(3)
+                     << std::setfill('0')
+                     << numFiles
+                     << ext;
             std::ofstream output(filename.str(), std::ios::binary);
             if (!output.is_open()) {
                 throw std::runtime_error(
-                    "Failed to open file for writing:\n"
-                    + filename.str()
-                    + "\n");
+                        "Failed to open file for writing:\n"
+                        + filename.str()
+                        + "\n");
             }
             output.write(&data[0], length);
             output.close();
@@ -110,7 +110,6 @@ namespace AudioExtractor {
         }
 
         input.close();
-
     }
 
-}
+}  // namespace AudioExtractor

@@ -14,9 +14,9 @@ namespace Rival {
 
     BuildingRenderer::BuildingRenderer(
             const std::map<BuildingType, Spritesheet>& buildingSprites,
-            const Texture& paletteTexture):
-        buildingSprites(buildingSprites),
-        paletteTexture(paletteTexture) {
+            const Texture& paletteTexture)
+        : buildingSprites(buildingSprites),
+          paletteTexture(paletteTexture) {
     }
 
     SpriteRenderable& BuildingRenderer::getOrCreateRenderable(const Building& building) {
@@ -28,16 +28,16 @@ namespace Rival {
             const BuildingType type = building.getType();
             const Spritesheet& sprite = buildingSprites.at(type);
             renderables.emplace(std::piecewise_construct,
-                                std::forward_as_tuple(id),
-                                std::forward_as_tuple(sprite, 1));
+                    std::forward_as_tuple(id),
+                    std::forward_as_tuple(sprite, 1));
         }
 
         return renderables.at(id);
     }
 
     void BuildingRenderer::render(
-        const Camera& camera,
-        const std::map<int, std::unique_ptr<Building>>& buildings) {
+            const Camera& camera,
+            const std::map<int, std::unique_ptr<Building>>& buildings) {
 
         for (auto const& kv : buildings) {
             const Building& building = *kv.second;
@@ -52,7 +52,6 @@ namespace Rival {
                 renderBuilding(building);
             }
         }
-
     }
 
     bool BuildingRenderer::isBuildingVisible(const Building& building, const Camera& camera) {
@@ -63,9 +62,9 @@ namespace Rival {
         float y2 = static_cast<float>(building.getY() + Building::height);
 
         return camera.contains(x1, y1)
-            || camera.contains(x2, y1)
-            || camera.contains(x2, y2)
-            || camera.contains(x1, y2);
+                || camera.contains(x2, y1)
+                || camera.contains(x2, y2)
+                || camera.contains(x1, y2);
     }
 
     void BuildingRenderer::renderBuilding(const Building& building) {
@@ -80,9 +79,9 @@ namespace Rival {
         float width = static_cast<float>(RenderUtils::buildingWidthPx);
         float height = static_cast<float>(RenderUtils::buildingHeightPx);
         float x1 = static_cast<float>(
-            RenderUtils::tileToPx_X(building.getX()));
+                RenderUtils::tileToPx_X(building.getX()));
         float y1 = static_cast<float>(
-            RenderUtils::tileToPx_Y(building.getX(), building.getY()));
+                RenderUtils::tileToPx_Y(building.getX(), building.getY()));
         x1 += static_cast<float>(buildingOffsetX);
         y1 += static_cast<float>(buildingOffsetY);
         float x2 = x1 + width;
@@ -97,12 +96,12 @@ namespace Rival {
 
         // Determine texture co-ordinates
         std::vector<GLfloat> texCoords =
-            renderable.spritesheet.getTexCoords(txIndex);
+                renderable.spritesheet.getTexCoords(txIndex);
 
         // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
         // Bind vertex array
@@ -111,33 +110,33 @@ namespace Rival {
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
         int positionBufferSize =
-            vertexData.size() * sizeof(GLfloat);
+                vertexData.size() * sizeof(GLfloat);
         glBufferSubData(
-            GL_ARRAY_BUFFER,
-            0,
-            positionBufferSize,
-            vertexData.data());
+                GL_ARRAY_BUFFER,
+                0,
+                positionBufferSize,
+                vertexData.data());
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
         int texCoordBufferSize =
-            texCoords.size() * sizeof(GLfloat);
+                texCoords.size() * sizeof(GLfloat);
         glBufferSubData(
-            GL_ARRAY_BUFFER,
-            0,
-            texCoordBufferSize,
-            texCoords.data());
+                GL_ARRAY_BUFFER,
+                0,
+                texCoordBufferSize,
+                texCoords.data());
 
         // Render
         glDrawElements(
-            renderable.getDrawMode(),
-            renderable.getIndicesPerSprite(),
-            GL_UNSIGNED_INT,
-            nullptr);
+                renderable.getDrawMode(),
+                renderable.getIndicesPerSprite(),
+                GL_UNSIGNED_INT,
+                nullptr);
     }
 
     int BuildingRenderer::getTxIndex(const Building& building) const {
         return building.getCurrentSpriteIndex();
     }
 
-}
+}  // namespace Rival

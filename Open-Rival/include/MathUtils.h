@@ -2,13 +2,13 @@
 #define MATH_UTILS_H
 
 namespace Rival {
-    namespace MathUtils {
+namespace MathUtils {
 
-        int clampi(int val, int min, int max);
+    int clampi(int val, int min, int max);
 
-        float clampf(float val, float min, float max);
+    float clampf(float val, float min, float max);
 
-    }
 }
+}  // namespace Rival::MathUtils
 
-#endif // MATH_UTILS_H
+#endif  // MATH_UTILS_H

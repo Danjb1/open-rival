@@ -29,6 +29,7 @@ namespace ImageExtractor {
     // The game's colour palette.
     // The last colour (index 0xff) is used for transparent areas;
     // this colour is never written by the code in "IMAGES.DAT".
+    /* clang-format off */
     const uint32_t PALETTE[PALETTE_SIZE] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
@@ -63,6 +64,7 @@ namespace ImageExtractor {
         0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
         0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffff00
     };
+    /* clang-format on */
 
     // Buffer to which the image will be rendered
     uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT];
@@ -70,9 +72,8 @@ namespace ImageExtractor {
     // Team colours to use when rendering
     uint8_t team_color[6] = { 160, 161, 162, 163, 164, 165 };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    #ifdef WIN32
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 
     /**
      * Makes a section of memory executable.
@@ -82,26 +83,27 @@ namespace ImageExtractor {
         return VirtualProtect(data, size, PAGE_EXECUTE_READWRITE, &old);
     }
 
-    #endif
+#endif  //////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////
-    #ifdef _MSC_VER
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+#ifdef _MSC_VER
 
     /**
      * Calls the assembly code at the given memory location.
      */
     void call_code(void* code) {
         __asm {
+            /* clang-format off */
             pushad
             mov esi, offset team_color  // 6-byte array containing the team colors
             mov edi, offset image       // image pointer
             mov edx, IMAGE_WIDTH        // stride
             call[code]
             popad
+            /* clang-format on */
         }
     }
-    #endif ////////////////////////////////////////////////////////////////////////
+#endif  //////////////////////////////////////////////////////////////////////
 
     void* read_file(std::wstring filename, uint32_t* size) {
 
@@ -111,7 +113,7 @@ namespace ImageExtractor {
         }
 
         fseek(fp, 0L, SEEK_END);
-        *size = (uint32_t)ftell(fp);
+        *size = (uint32_t) ftell(fp);
         fseek(fp, 0L, SEEK_SET);
 
         void* data = malloc(*size);
@@ -156,27 +158,27 @@ namespace ImageExtractor {
          * http://tfc.duke.free.fr/coding/tga_specs.pdf
          */
 
-        fputc(0x00, fp); // ID Length
-        fputc(0x01, fp); // Color map type
-        fputc(0x01, fp); // Image type (uncompressed, colour-mapped)
+        fputc(0x00, fp);  // ID Length
+        fputc(0x01, fp);  // Color map type
+        fputc(0x01, fp);  // Image type (uncompressed, colour-mapped)
 
         // Color map specification
-        fputc(0, fp); // Index of first entry
+        fputc(0, fp);  // Index of first entry
         fputc(0x00, fp);
         fputc(0x00, fp);  // Number of entries (256)
         fputc(0x01, fp);
-        fputc(32, fp);   // Entry size (32-bit RGBA)
+        fputc(32, fp);  // Entry size (32-bit RGBA)
 
         // Image specification
-        fputc(0x00, fp); // X-origin
+        fputc(0x00, fp);  // X-origin
         fputc(0x00, fp);
-        fputc(0x00, fp); // Y-origin
+        fputc(0x00, fp);  // Y-origin
         fputc(0x00, fp);
-        fputc((uint8_t)w, fp); // Width
+        fputc((uint8_t) w, fp);  // Width
         fputc((uint8_t)(w >> 8), fp);
-        fputc((uint8_t)h, fp); // Height
+        fputc((uint8_t) h, fp);  // Height
         fputc((uint8_t)(h >> 8), fp);
-        fputc(8, fp); // Bits per pixel
+        fputc(8, fp);  // Bits per pixel
 
         // Image descriptor byte
         // (8 = number of alpha bits, bit5: upper-left origin)
@@ -186,10 +188,10 @@ namespace ImageExtractor {
         for (int i = 0; i < PALETTE_SIZE; ++i) {
 
             const uint32_t col = PALETTE[i];
-            const uint8_t red   = (uint8_t)((col & 0xFF000000) >> 24);
+            const uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
             const uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const uint8_t blue  = (uint8_t)((col & 0x0000FF00) >> 8);
-            const uint8_t alpha = (uint8_t) (col & 0x000000FF);
+            const uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
+            const uint8_t alpha = (uint8_t)(col & 0x000000FF);
 
             fputc(blue, fp);
             fputc(green, fp);
@@ -209,9 +211,9 @@ namespace ImageExtractor {
         return 1;
     }
 
-    #define MODRM_MOD(modrm) (((modrm) >> 6) & 0x3)
-    #define MODRM_REG(modrm) (((modrm) >> 3) & 0x7)
-    #define MODRM_RM(modrm)  (((modrm) >> 0) & 0x7)
+#define MODRM_MOD(modrm) (((modrm) >> 6) & 0x3)
+#define MODRM_REG(modrm) (((modrm) >> 3) & 0x7)
+#define MODRM_RM(modrm) (((modrm) >> 0) & 0x7)
 
     /**
      * Finds the end of the function at the given memory location.
@@ -227,64 +229,53 @@ namespace ImageExtractor {
 
         while (start < end) {
             uint8_t inst = *start++;
-            const int op_size = inst == 0x66; // Operand size prefix
-            if (op_size) inst = *start++;
+            const int op_size = inst == 0x66;  // Operand size prefix
+            if (op_size)
+                inst = *start++;
 
             if ((inst & 0xf0) == 0x40) {
                 // inc/dec r16/r32
-            }
-            else if ((inst & 0xf8) == 0xb0) {
+            } else if ((inst & 0xf8) == 0xb0) {
                 // MOV r8, imm8
-                start++; // imm8
-            }
-            else if ((inst & 0xf8) == 0xb8) {
+                start++;  // imm8
+            } else if ((inst & 0xf8) == 0xb8) {
                 // MOV  r16/r32, imm16/imm32
                 start += op_size ? 2 : 4;
-            }
-            else if (inst == 0x03) {
+            } else if (inst == 0x03) {
                 // ADD     r16/32     r/m16/32
-                start++; // MODR/M
-            }
-            else if (inst == 0x83) {
+                start++;  // MODR/M
+            } else if (inst == 0x83) {
                 // ALUOP r32, imm8
-                start++; // MODR/M
-                start++; // imm8
-            }
-            else if (inst == 0x8a || inst == 0x8b) {
+                start++;  // MODR/M
+                start++;  // imm8
+            } else if (inst == 0x8a || inst == 0x8b) {
                 // MOV     r16/32     r/m16/32
-                const uint8_t modrm = *start++; // MODR/M
+                const uint8_t modrm = *start++;  // MODR/M
                 if (MODRM_MOD(modrm) == 1) {
-                    start++; // disp8
+                    start++;  // disp8
                 }
-                if (MODRM_MOD(modrm) != 0x03/* && MODRM_RM(modrm) == 0x6*/) {
+                if (MODRM_MOD(modrm) != 0x03 /* && MODRM_RM(modrm) == 0x6*/) {
                     *read_from_esi = 1;
                 }
-            }
-            else if (inst == 0x69) {
+            } else if (inst == 0x69) {
                 // IMUL r16/32     r/m16/32 imm16/32
-                start++; // MODR/M
+                start++;  // MODR/M
                 start += op_size ? 2 : 4;
-            }
-            else if (inst == 0x6b) {
+            } else if (inst == 0x6b) {
                 // IMUL r16/32 r/m16/32 imm8
-                start++; // MODR/M
-                start++; // imm8
-            }
-            else if (inst == 0x86) {
+                start++;  // MODR/M
+                start++;  // imm8
+            } else if (inst == 0x86) {
                 // XCHG r8, r/m8
-                start++; // MODR/M
-            }
-            else if (inst == 0xaa) {
+                start++;  // MODR/M
+            } else if (inst == 0xaa) {
                 // stosb
-            }
-            else if (inst == 0xab) {
+            } else if (inst == 0xab) {
                 // stosw/stosd
-            }
-            else if (inst == 0xc3) {
+            } else if (inst == 0xc3) {
                 // ret!
                 break;
-            }
-            else {
+            } else {
                 printf("Unhandled instruction %02X\n", inst);
                 abort();
             }
@@ -320,7 +311,7 @@ namespace ImageExtractor {
 
         // Read the file
         uint32_t size;
-        uint8_t* data = (uint8_t*)read_file(inputFile, &size);
+        uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
             throw std::runtime_error("Unable to open IMAGES.DAT\n");
         }
@@ -351,8 +342,12 @@ namespace ImageExtractor {
             for (int y = 0; y < IMAGE_HEIGHT; ++y) {
                 for (int x = 0; x < IMAGE_WIDTH; ++x) {
                     if (image[x + y * IMAGE_WIDTH] != 0xff) {
-                        if (x > w) w = x + 1;
-                        if (y > h) h = y + 1;
+                        if (x > w) {
+                            w = x + 1;
+                        }
+                        if (y > h) {
+                            h = y + 1;
+                        }
                     }
                 }
             }
@@ -378,9 +373,9 @@ namespace ImageExtractor {
             // Save the rendered image to disk
             char filename[256];
             snprintf(filename,
-                sizeof(filename),
-                "%s\\img_%04d_%08X.tga",
-                outputDir.c_str(), i, code - data);
+                    sizeof(filename),
+                    "%s\\img_%04d_%08X.tga",
+                    outputDir.c_str(), i, code - data);
             write_image(filename, w, h);
 
             // Jump to the next image
@@ -390,4 +385,4 @@ namespace ImageExtractor {
         free(data);
     }
 
-}
+}  // namespace ImageExtractor

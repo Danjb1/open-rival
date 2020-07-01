@@ -14,10 +14,10 @@ namespace Rival {
             float y,
             float width,
             double aspectRatio,
-            Scenario& scenario) :
-        defaultWidth(width),
-        defaultHeight(static_cast<float>(width / aspectRatio)),
-        scenario(scenario) {
+            Scenario& scenario)
+        : defaultWidth(width),
+          defaultHeight(static_cast<float>(width / aspectRatio)),
+          scenario(scenario) {
 
         setPos(x, y);
     }
@@ -104,4 +104,4 @@ namespace Rival {
                 && py < getBottom();
     }
 
-}
+}  // namespace Rival

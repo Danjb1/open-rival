@@ -9,8 +9,8 @@
 
 namespace Rival {
 
-    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo) :
-        fbo(fbo) {}
+    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
+        : fbo(fbo) {}
 
     void FramebufferRenderer::init() {
 
@@ -88,7 +88,7 @@ namespace Rival {
         glBindVertexArray(vao);
 
         // Use the framebuffer's texture
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, fbo.getTextureId());
 
         // Define the portion of the texture to be sampled.
@@ -108,18 +108,17 @@ namespace Rival {
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glBufferSubData(
-            GL_ARRAY_BUFFER,
-            0,
-            texCoords.size() * sizeof(GLfloat),
-            texCoords.data());
+                GL_ARRAY_BUFFER,
+                0,
+                texCoords.size() * sizeof(GLfloat),
+                texCoords.data());
 
         // Render
         glDrawElements(
-            GL_TRIANGLE_FAN,
-            numIndices,
-            GL_UNSIGNED_INT,
-            nullptr);
+                GL_TRIANGLE_FAN,
+                numIndices,
+                GL_UNSIGNED_INT,
+                nullptr);
     }
 
-
-}
+}  // namespace Rival

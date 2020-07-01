@@ -8,10 +8,10 @@ namespace Rival {
     using TimerUtils::getCurrentTime;
     using TimerUtils::getTimeSince;
 
-    UnitAnimation::UnitAnimation(UnitType unitType) :
-        unitAnimationPair(std::make_pair(unitType, UnitAnimationType::Standing)),
-        facing(Facing::South),
-        animationTick(0) {
+    UnitAnimation::UnitAnimation(UnitType unitType)
+        : unitAnimationPair(std::make_pair(unitType, UnitAnimationType::Standing)),
+          facing(Facing::South),
+          animationTick(0) {
         updateSpriteSheetEntry();
     }
 
@@ -29,7 +29,7 @@ namespace Rival {
         setFacing(static_cast<Facing>(newFacing));
     }
 
-    void UnitAnimation::setAnimation(UnitAnimationType unitAnimationType ) {
+    void UnitAnimation::setAnimation(UnitAnimationType unitAnimationType) {
         unitAnimationPair.second = unitAnimationType;
         updateSpriteSheetEntry();
         animationTick = 0;
@@ -73,4 +73,4 @@ namespace Rival {
             animationTick = 0;
         }
     }
-}
+}  // namespace Rival

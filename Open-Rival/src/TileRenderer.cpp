@@ -15,9 +15,9 @@ namespace Rival {
 
     TileRenderer::TileRenderer(
             const Spritesheet& spritesheet,
-            const Texture& paletteTexture) :
-        paletteTexture(paletteTexture),
-        renderable{ spritesheet, maxTilesToRender } {}
+            const Texture& paletteTexture)
+        : paletteTexture(paletteTexture),
+          renderable { spritesheet, maxTilesToRender } {}
 
     void TileRenderer::render(
             const Camera& camera,
@@ -58,9 +58,9 @@ namespace Rival {
         }
 
         // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
         glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1); // Texture unit 1
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
         glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
         // Create buffers to hold all our tile data
@@ -100,7 +100,7 @@ namespace Rival {
 
                 // Determine texture co-ordinates
                 std::vector<GLfloat> thisTexCoords =
-                    renderable.spritesheet.getTexCoords(txIndex);
+                        renderable.spritesheet.getTexCoords(txIndex);
 
                 // Copy this tile's data to the main buffers
                 positions.insert(
@@ -141,4 +141,4 @@ namespace Rival {
                 nullptr);
     }
 
-}
+}  // namespace Rival

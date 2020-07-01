@@ -10,7 +10,6 @@ namespace Rival {
     class Window {
 
     public:
-
         Window(int width, int height, const char* title);
 
         ~Window();
@@ -26,7 +25,6 @@ namespace Rival {
         void swapBuffers() const;
 
     private:
-
         SDL_Window* windowRef;
 
         SDL_GLContext glContext;
@@ -36,9 +34,8 @@ namespace Rival {
         const int height;
 
         const char* title;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // WINDOW_H
+#endif  // WINDOW_H

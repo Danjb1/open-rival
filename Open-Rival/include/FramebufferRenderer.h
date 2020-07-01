@@ -11,7 +11,6 @@ namespace Rival {
     class FramebufferRenderer {
 
     public:
-
         FramebufferRenderer(Framebuffer& fbo);
 
         /**
@@ -31,9 +30,8 @@ namespace Rival {
         void render(float srcWidth, float srcHeight);
 
     private:
-
-        static const int numVertexDimensions = 2;   // x, y
-        static const int numTexCoordDimensions = 2; // u, v
+        static const int numVertexDimensions = 2;    // x, y
+        static const int numTexCoordDimensions = 2;  // u, v
 
         static const int numIndices = 4;
 
@@ -43,9 +41,8 @@ namespace Rival {
         GLuint positionVbo;
         GLuint texCoordVbo;
         GLuint ibo;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // FRAMEBUFFER_RENDERER_H
+#endif  // FRAMEBUFFER_RENDERER_H

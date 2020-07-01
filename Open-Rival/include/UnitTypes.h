@@ -65,9 +65,9 @@ namespace Rival {
 
     };
 
-    const auto firstUnitType{ static_cast<int>(UnitType::Ballista) };
-    const auto lastUnitType{ static_cast<int>(UnitType::Snake) };
+    const auto firstUnitType { static_cast<int>(UnitType::Ballista) };
+    const auto lastUnitType { static_cast<int>(UnitType::Snake) };
 
-}
+}  // namespace Rival
 
-#endif // UNIT_TYPES_H
+#endif  // UNIT_TYPES_H

@@ -9,4 +9,4 @@ namespace InterfaceExtractor {
 
 }
 
-#endif // INTERFACE_EXTRACTOR_H
+#endif  // INTERFACE_EXTRACTOR_H

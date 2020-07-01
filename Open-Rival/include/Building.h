@@ -11,7 +11,6 @@ namespace Rival {
     class Building {
 
     public:
-
         // Size of a Building, in world units
         static const int width = 3;
         static const int height = 2;
@@ -19,10 +18,10 @@ namespace Rival {
         Building(BuildingType type);
 
         void addedToWorld(int newId,
-                          int newPlayer,
-                          int newX,
-                          int newY,
-                          WallVariant newWallVariant);
+                int newPlayer,
+                int newX,
+                int newY,
+                WallVariant newWallVariant);
 
         int getCurrentSpriteIndex() const;
 
@@ -45,7 +44,6 @@ namespace Rival {
         void tick();
 
     private:
-
         int id;
 
         bool deleted;
@@ -67,9 +65,8 @@ namespace Rival {
          * y co-ordinate of the bottom corner of the Building
          */
         int y;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // BUILDING_H
+#endif  // BUILDING_H

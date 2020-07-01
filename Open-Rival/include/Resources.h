@@ -16,7 +16,6 @@ namespace Rival {
     class Resources {
 
     public:
-
         // Directories
         static const std::string mapsDir;
         static const std::string txDir;
@@ -38,7 +37,6 @@ namespace Rival {
         const Spritesheet& getMapBorderSpritesheet() const;
 
     private:
-
         // Texture constants
         static const int numTextures = 96;
         static const int txIndexUnits = 0;
@@ -63,9 +61,8 @@ namespace Rival {
         std::map<UnitType, Spritesheet> initUnitSpritesheets();
         std::map<int, Spritesheet> initTileSpritesheets();
         Spritesheet initMapBorderSpritesheet();
-
     };
 
-}
+}  // namespace Rival
 
-#endif // RESOURCES_H
+#endif  // RESOURCES_H

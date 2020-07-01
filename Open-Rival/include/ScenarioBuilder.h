@@ -15,13 +15,11 @@ namespace Rival {
     class ScenarioBuilder {
 
     public:
-
         ScenarioBuilder(ScenarioData data);
 
         std::shared_ptr<Scenario> build();
 
     private:
-
         ScenarioData data;
 
         Tile buildTile(TilePlacement& tile) const;
@@ -31,9 +29,8 @@ namespace Rival {
         UnitType getUnitType(std::uint8_t unitType) const;
 
         Facing getFacing(std::uint8_t facing) const;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // SCENARIO_BUILDER_H
+#endif  // SCENARIO_BUILDER_H

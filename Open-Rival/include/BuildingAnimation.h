@@ -17,7 +17,6 @@ namespace Rival {
         void tick();
 
     private:
-
         int animationStep;
 
         // Holds buildingType and buildingAnimationType
@@ -26,8 +25,7 @@ namespace Rival {
         SpritesheetEntry spritesheetEntry;
 
         void updateSpriteSheetEntry();
-
     };
-}
+}  // namespace Rival
 
-#endif // BUILDING_ANIMATION_H
+#endif  // BUILDING_ANIMATION_H

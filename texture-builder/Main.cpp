@@ -6,7 +6,7 @@
 
 using namespace TextureBuilder;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 
     // Expected:
     // texture-builder.exe [--atlas] DEFINITIONS_DIR

@@ -269,10 +269,9 @@ namespace Rival {
             for (int i = 0; i < numAiStrategies; i++) {
                 aiStrategies[i] = AiStrategy();
             }
-
         }
     };
 
-}
+}  // namespace Rival
 
-#endif // SCENARIO_DATA_H
+#endif  // SCENARIO_DATA_H

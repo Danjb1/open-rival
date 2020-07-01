@@ -11,7 +11,7 @@ using namespace InterfaceExtractor;
  */
 bool createDirectory(const char* filename) {
     return CreateDirectoryA(filename, NULL)
-        || ERROR_ALREADY_EXISTS == GetLastError();
+            || ERROR_ALREADY_EXISTS == GetLastError();
 }
 
 /**

@@ -14,7 +14,6 @@ namespace Rival {
     class Scenario {
 
     public:
-
         // Creates a blank Scenario
         Scenario(int width, int height, bool wilderness);
 
@@ -32,11 +31,11 @@ namespace Rival {
         bool isWilderness() const;
 
         void addBuilding(
-            std::unique_ptr<Building> building,
-            int player,
-            int x,
-            int y,
-            uint8_t wallVariant);
+                std::unique_ptr<Building> building,
+                int player,
+                int x,
+                int y,
+                uint8_t wallVariant);
 
         std::map<int, std::unique_ptr<Building>>& getBuildings();
 
@@ -50,7 +49,6 @@ namespace Rival {
         std::map<int, std::unique_ptr<Unit>>& getUnits();
 
     private:
-
         const int width;
         const int height;
         bool wilderness;
@@ -62,9 +60,8 @@ namespace Rival {
         std::map<int, std::unique_ptr<Unit>> units;
 
         void setPassability(int x, int y, TilePassability passability);
-
     };
 
-}
+}  // namespace Rival
 
-#endif // SCENARIO_H
+#endif  // SCENARIO_H

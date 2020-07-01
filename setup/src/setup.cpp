@@ -22,7 +22,7 @@ void copyVideos(std::wstring videoDir, std::string outputDir) {
     for (const fs::directory_entry& entry : fs::directory_iterator(videoDir)) {
         const fs::path path = entry.path();
         std::filesystem::copy(path, outputDir + "\\" + path.filename().string(),
-                               std::filesystem::copy_options::update_existing );
+                std::filesystem::copy_options::update_existing);
     }
 }
 
@@ -34,37 +34,37 @@ void copyVideos(std::wstring videoDir, std::string outputDir) {
  *
  * The code is very non-portable.
  */
-int main( int argc, char* argv[] ) {
+int main(int argc, char* argv[]) {
 
     std::wstring gameDir;
     bool findDirectoryFromRegistry = true;
-    for ( int count = 1; count < argc; ++count ) {
-        if ( "-h" == argv[count] ) {
+    for (int count = 1; count < argc; ++count) {
+        if ("-h" == argv[count]) {
             std::cout << "-d {directory}: loads all files from {directory}" << '\n';
             return 0;
         }
-        if ( 0 == strcmp( "-d", argv[count] ) && count + 1 <= argc ) {
-            std::string tmpStr( argv[count + 1] );
-            gameDir = std::wstring( tmpStr.begin(), tmpStr.end() );
+        if (0 == strcmp("-d", argv[count]) && count + 1 <= argc) {
+            std::string tmpStr(argv[count + 1]);
+            gameDir = std::wstring(tmpStr.begin(), tmpStr.end());
             findDirectoryFromRegistry = false;
             std::wcout << "Reading files from directory " << gameDir << '\n';
             ++count;
         }
     }
 
-    if ( findDirectoryFromRegistry ) {
+    if (findDirectoryFromRegistry) {
         std::wcout << "Reading files from registry." << '\n';
         // Read original game directory from registry
         try {
             gameDir = Registry::RegGetString(
-                HKEY_CURRENT_USER,
-                L"Software\\Titus Games\\Rival Realms",
-                L"Game Directory" );
+                    HKEY_CURRENT_USER,
+                    L"Software\\Titus Games\\Rival Realms",
+                    L"Game Directory");
             std::wcout << "Found game at: " << gameDir << "\n";
-        } catch ( const Registry::RegistryError& e ) {
+        } catch (const Registry::RegistryError& e) {
             std::cerr << "Failed to find registry entry:\n"
-                << "HKEY_CURRENT_USER\\Software\\Titus Games\\Rival Realms\n"
-                << "Error code: " << e.errorCode() << "\n";
+                      << "HKEY_CURRENT_USER\\Software\\Titus Games\\Rival Realms\n"
+                      << "Error code: " << e.errorCode() << "\n";
             return -1;
         }
     }

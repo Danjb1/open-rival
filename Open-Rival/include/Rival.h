@@ -22,7 +22,6 @@ namespace Rival {
     class Rival {
 
     public:
-
         static const int windowWidth = 800;
         static const int windowHeight = 600;
 
@@ -37,7 +36,6 @@ namespace Rival {
         void start();
 
     private:
-
         const char* windowTitle = "Rival Realms";
 
         // Framebuffer size, in pixels.
@@ -130,9 +128,8 @@ namespace Rival {
          * Frees media and shuts down SDL.
          */
         void exit();
-
     };
 
-}
+}  // namespace Rival
 
-#endif // RIVAL_H
+#endif  // RIVAL_H

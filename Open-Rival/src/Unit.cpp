@@ -3,11 +3,11 @@
 
 namespace Rival {
 
-    Unit::Unit(UnitType type) :
-            deleted(false),
-            id(-1),
-            type(type),
-            animation(type) {
+    Unit::Unit(UnitType type)
+        : deleted(false),
+          id(-1),
+          type(type),
+          animation(type) {
         setSpeedCoefficient(1, 1);
     }
 
@@ -76,4 +76,4 @@ namespace Rival {
     void Unit::tick() {
         animation.tick();
     }
-}
+}  // namespace Rival

@@ -13,7 +13,6 @@ namespace Rival {
 
     class IndexedTextureShader {
     public:
-
         GLuint programId;
 
         // Vertex shader uniform locations
@@ -45,7 +44,6 @@ namespace Rival {
 
     class ScreenShader {
     public:
-
         GLuint programId;
 
         // Vertex shader attribute indices
@@ -74,6 +72,6 @@ namespace Rival {
 
     GLuint createShader(const char* vertShader, const char* fragShader);
 
-}
+}  // namespace Rival
 
-#endif // SHADERS_H
+#endif  // SHADERS_H

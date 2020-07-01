@@ -21,7 +21,6 @@ namespace Rival {
     class TileRenderer {
 
     public:
-
         // The maximum number of tiles we can render.
         // This is the max map size in the original game.
         static const int maxTilesToRender =
@@ -38,13 +37,11 @@ namespace Rival {
                 int mapHeight);
 
     private:
-
         SpriteRenderable renderable;
 
         const Texture& paletteTexture;
-
     };
 
-}
+}  // namespace Rival
 
-#endif // TILE_RENDERER_H
+#endif  // TILE_RENDERER_H

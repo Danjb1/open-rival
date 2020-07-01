@@ -74,4 +74,4 @@ namespace Rival {
         delete[] infoLog;
     }
 
-}
+}  // namespace Rival
