@@ -57,7 +57,7 @@ namespace RenderUtils {
      * AFTER rendering to the framebuffer, but it is useful for mouse
      * picking when we need to know the rendered position of an object.
      */
-    int tileToScaledPx_X(int x, float zoomLevel);
+    float tileToScaledPx_X(int x, float zoomLevel);
 
     /**
      * Gets the y-position of a rendered tile, taking into account the
@@ -65,7 +65,7 @@ namespace RenderUtils {
      *
      * See documentation for tileToScaledPx_X, above.
      */
-    int tileToScaledPx_Y(int x, int y, float zoomLevel);
+    float tileToScaledPx_Y(int x, int y, float zoomLevel);
 
     float worldToPx_X(float x);
 

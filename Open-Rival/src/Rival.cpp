@@ -118,7 +118,7 @@ namespace Rival {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-            SDL_GL_CONTEXT_PROFILE_CORE);
+                SDL_GL_CONTEXT_PROFILE_CORE);
     }
 
     void Rival::initGLEW() const {
@@ -128,7 +128,7 @@ namespace Rival {
 
         if (glewError != GLEW_OK) {
             std::cerr << "Error initialising GLEW:"
-                    << glewGetErrorString(glewError) << "\n";
+                      << glewGetErrorString(glewError) << "\n";
             throw std::runtime_error("Failed to initialise GLEW");
         }
     }
@@ -222,10 +222,7 @@ namespace Rival {
     }
 
     void Rival::update() {
-        //std::cout << "scenario -> " << scenario->getWidth() << ", " << scenario->getHeight() << std::endl;
-
         mousePicker->handleMouse();
-
         //std::cout << mousePicker->getTileX() << ", " << mousePicker->getTileY() << "\n";
 
         /// \todo Inspect the reason why sprites do not render correctly when this part is omitted
@@ -238,9 +235,9 @@ namespace Rival {
         std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
-            //unit->rotateRight();
             unit->tick();
 
+            /*
             // Test for animation subsystem
             static const double randMax = RAND_MAX;
             auto randGen = [&]() {
@@ -250,52 +247,53 @@ namespace Rival {
             auto r = randGen();
             if (r > 0.999) {
                 switch (unit->getType()) {
-                    case UnitType::Peasant:
-                        r = randGen();
-                        if (r <= 1.0 / 6.0) {
-                            unit->setAnimation(UnitAnimationType::Standing);
-                        } else if (r <= 2.0 / 6.0) {
-                            unit->setAnimation(UnitAnimationType::HoldingBag);
-                        } else if (r <= 3.0 / 6.0) {
-                            unit->setAnimation(UnitAnimationType::Moving);
-                        } else if (r <= 4.0 / 6.0) {
-                            unit->setAnimation(UnitAnimationType::MovingWithBag);
-                        } else if (r <= 5.0 / 6.0) {
-                            unit->setAnimation(UnitAnimationType::Attacking);
-                        } else {
-                            // Currently we can't automatically generate dying animation
-                            //   because that animation type does not provide all
-                            //   8 directions in our tga files.
-                            // We need to modify eg. unit_human_peasant.def
-                            //   to repeat 4-direction animations in all
-                            //   8 directions
-                            //unit->setAnimation( UnitAnimationType::Dying );
-                        }
-                        break;
-                    case UnitType::Bowman:
-                    case UnitType::Ballista:
-                    case UnitType::FireMaster:
-                    case UnitType::Knight:
-                    case UnitType::Wizard:
-                        r = randGen();
-                        if (r <= 1.0 / 3.0) {
-                            unit->setAnimation(UnitAnimationType::Standing);
-                        } else if (r <= 2.0 / 3.0) {
-                            unit->setAnimation(UnitAnimationType::Moving);
-                        } else {
-                            unit->setAnimation(UnitAnimationType::Attacking);
-                        }
-                        // Proof of concept for rational animation ticks
-                        r = randGen();
-                        if (r <= 0.33) {
-                            unit->setSpeedCoefficient(1, 2);
-                        } else if (r <= 0.67) {
-                            unit->setSpeedCoefficient(1, 1);
-                        } else {
-                            unit->setSpeedCoefficient(2, 1);
-                        }
+                case UnitType::Peasant:
+                    r = randGen();
+                    if (r <= 1.0 / 6.0) {
+                        unit->setAnimation(UnitAnimationType::Standing);
+                    } else if (r <= 2.0 / 6.0) {
+                        unit->setAnimation(UnitAnimationType::HoldingBag);
+                    } else if (r <= 3.0 / 6.0) {
+                        unit->setAnimation(UnitAnimationType::Moving);
+                    } else if (r <= 4.0 / 6.0) {
+                        unit->setAnimation(UnitAnimationType::MovingWithBag);
+                    } else if (r <= 5.0 / 6.0) {
+                        unit->setAnimation(UnitAnimationType::Attacking);
+                    } else {
+                        // Currently we can't automatically generate dying animation
+                        //   because that animation type does not provide all
+                        //   8 directions in our tga files.
+                        // We need to modify eg. unit_human_peasant.def
+                        //   to repeat 4-direction animations in all
+                        //   8 directions
+                        //unit->setAnimation( UnitAnimationType::Dying );
+                    }
+                    break;
+                case UnitType::Bowman:
+                case UnitType::Ballista:
+                case UnitType::FireMaster:
+                case UnitType::Knight:
+                case UnitType::Wizard:
+                    r = randGen();
+                    if (r <= 1.0 / 3.0) {
+                        unit->setAnimation(UnitAnimationType::Standing);
+                    } else if (r <= 2.0 / 3.0) {
+                        unit->setAnimation(UnitAnimationType::Moving);
+                    } else {
+                        unit->setAnimation(UnitAnimationType::Attacking);
+                    }
+                    // Proof of concept for rational animation ticks
+                    r = randGen();
+                    if (r <= 0.33) {
+                        unit->setSpeedCoefficient(1, 2);
+                    } else if (r <= 0.67) {
+                        unit->setSpeedCoefficient(1, 1);
+                    } else {
+                        unit->setSpeedCoefficient(2, 1);
+                    }
                 }
             }
+            */
         }
     }
 
@@ -345,9 +343,9 @@ namespace Rival {
         float cameraX = RenderUtils::worldToPx_X(camera->getX());
         float cameraY = RenderUtils::worldToPx_Y(camera->getY());
         glm::mat4 view = glm::lookAt(
-            glm::vec3(cameraX, cameraY, 0),     // camera position
-            glm::vec3(cameraX, cameraY, -1),    // look at
-            glm::vec3(0, 1, 0)                  // up vector
+                glm::vec3(cameraX, cameraY, 0),   // camera position
+                glm::vec3(cameraX, cameraY, -1),  // look at
+                glm::vec3(0, 1, 0)                // up vector
         );
 
         // Determine projection matrix.
@@ -445,28 +443,55 @@ namespace Rival {
 
     void Rival::mouseWheelMoved(const SDL_MouseWheelEvent evt) const {
 
-        // Determine the normalized scroll amount
-        int dy = evt.y;
-        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED) {
-            dy *= -1;
+        int scrollAmount = evt.y;
+        if (scrollAmount == 0) {
+            return;
         }
 
+        // Determine the normalized scroll amount
+        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED) {
+            scrollAmount *= -1;
+        }
+
+        // Zoom
+        if (scrollAmount > 0) {
+            camera->modZoom(Camera::zoomInterval);
+        } else {
+            camera->modZoom(-Camera::zoomInterval);
+        }
+
+        // Get the mouse position relative to the window, in pixels
         int mouseX;
         int mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
-        const float mouseXwu(RenderUtils::pxToWorld_X(mouseX));
-        const float mouseYwu(RenderUtils::pxToWorld_Y(mouseY));
-        const float midXwu(RenderUtils::pxToWorld_X(0.5 * windowWidth));
-        const float midYwu(RenderUtils::pxToWorld_Y(0.5 * windowHeight));
-        const float vecXwu(mouseXwu - midXwu);
-        const float vecYwu(mouseYwu - midYwu);
 
-        if (dy > 0) {
-            camera->modZoom(Camera::zoomInterval);
-        } else if (dy < 0) {
-            camera->modZoom(-Camera::zoomInterval);
+        // Calculate the mouse position relative to the viewport, in pixels
+        int viewportX = 0;
+        int viewportY = 0;
+        int mouseInViewportX = mouseX - viewportX;
+        int mouseInViewportY = mouseY - viewportY;
+
+        // Calculate mouse position relative to the viewport, in the range 0-1
+        int viewportWidth = Rival::windowWidth;
+        int viewportHeight = Rival::windowHeight;
+        float normalizedMouseX =
+                static_cast<float>(mouseInViewportX) / viewportWidth;
+        float normalizedMouseY =
+                static_cast<float>(mouseInViewportY) / viewportHeight;
+
+        // Calculate mouse position relative to the viewport centre, in the
+        // range -1 to 1
+        float relativeMouseX = (2 * normalizedMouseX) - 1;
+        float relativeMouseY = (2 * normalizedMouseY) - 1;
+
+        // Move the camera based on the cursor position.
+        // We move towards the cursor when zooming in, and away from the cursor
+        // when zooming out.
+        if (scrollAmount > 0) {
+            camera->translate(relativeMouseX, relativeMouseY);
+        } else {
+            camera->translate(-relativeMouseX, -relativeMouseY);
         }
-        camera->translate(0.25 * vecXwu, 0.25 * vecYwu);
     }
 
-}
+}  // namespace Rival

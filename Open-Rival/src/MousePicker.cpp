@@ -29,12 +29,12 @@ namespace Rival {
         // performed here.
         int viewportX = 0;
         int viewportY = 0;
-        int viewportWidth = Rival::windowWidth;
-        int viewportHeight = Rival::windowHeight;
         int mouseInViewportX = mouseX - viewportX;
         int mouseInViewportY = mouseY - viewportY;
 
         // Calculate mouse position relative to the viewport, in the range 0-1
+        int viewportWidth = Rival::windowWidth;
+        int viewportHeight = Rival::windowHeight;
         float normalizedMouseX =
                 static_cast<float>(mouseInViewportX) / viewportWidth;
         float normalizedMouseY =
@@ -159,10 +159,9 @@ namespace Rival {
         // position must use the same units, that is, we have to always take
         // the zoom level into account!
         float zoom = camera.getZoom();
-        float tileX_px = static_cast<float>(RenderUtils::tileToScaledPx_X(
-                unit.getX(), zoom));
-        float tileY_px = static_cast<float>(RenderUtils::tileToScaledPx_Y(
-                unit.getX(), unit.getY(), zoom));
+        float tileX_px = RenderUtils::tileToScaledPx_X(unit.getX(), zoom);
+        float tileY_px = RenderUtils::tileToScaledPx_Y(
+                unit.getX(), unit.getY(), zoom);
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)
@@ -196,4 +195,5 @@ namespace Rival {
     int MousePicker::getEntity() const {
         return entity;
     }
+
 }  // namespace Rival

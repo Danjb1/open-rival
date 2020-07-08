@@ -33,12 +33,12 @@ namespace Rival {
         // The last tile index is scenario.getWidth() - 1. However, we add 2
         // to account for the width of the last tile (each tile spans 2
         // columns due to the way they overlap).
-        float rightEdge = scenario.getWidth() + 1;
+        float rightEdge = static_cast<float>(scenario.getWidth() + 1);
         float maxX = rightEdge - (cameraWidth / 2);
 
         // Similarly, we add some value to the bottom edge to account for the
         // height of the last tile
-        float bottomEdge = scenario.getHeight() + 0.5f;
+        float bottomEdge = static_cast<float>(scenario.getHeight() + 0.5f);
         float maxY = bottomEdge - (cameraHeight / 2);
 
         x = MathUtils::clampf(x, minX, maxX);
