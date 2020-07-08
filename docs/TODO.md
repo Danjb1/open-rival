@@ -7,6 +7,7 @@
  - Refactor texture-builder
 
  - Add Viewport class rather than relying on windowWidth/Height
+    - MousePicker should ignore the mouse when outside the viewport
 
  - Shrink the viewport to create space for the UI
 
@@ -30,6 +31,10 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+ - Don't translate the camera when zooming if we were already at max zoom
+
+ - Reduce duplication between MousePicker and zooming logic
 
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
@@ -126,7 +131,6 @@ character filename (including path)
 
  - Panning with the mouse at level edges
  - Smooth scrolling with the arrow keys
- - Camera should zoom towards / away from the mouse position
  - Drag-select
 
 ### Rendering

@@ -30,9 +30,6 @@ namespace Rival {
 
     void Unit::setAnimation(UnitAnimationType unitAnimationType) {
         animation.setAnimation(unitAnimationType);
-        std::cout << "Setting animation for unit " << id
-                  << " of type " << static_cast<int>(type)
-                  << ": " << static_cast<int>(unitAnimationType) << '\n';
     }
 
     void Unit::setSpeedCoefficient(int numerator, int denominator) {
@@ -76,4 +73,5 @@ namespace Rival {
     void Unit::tick() {
         animation.tick();
     }
+
 }  // namespace Rival
