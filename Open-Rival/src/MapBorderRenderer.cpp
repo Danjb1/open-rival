@@ -18,7 +18,12 @@ namespace Rival {
             const Spritesheet& spritesheet,
             const Texture& paletteTexture)
         : paletteTexture(paletteTexture),
-          maxSegmentsToRender(2 * (mapWidth + mapHeight) - 4),
+          // This is calculated as follows:
+          //  - 1 segment per edge tile
+          //  - Minus 4 (since the corners are duplicated by each edge)
+          //  - Plus 2 (some overlap at the bottom corners is actually required
+          //      to prevent gaps in maps with an odd height)
+          maxSegmentsToRender(2 * (mapWidth + mapHeight) - 2),
           renderable { spritesheet, maxSegmentsToRender } {
 
         // The map border never changes, so we set the buffers here and never
