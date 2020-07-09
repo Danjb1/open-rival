@@ -11,6 +11,7 @@
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
 #include "MousePicker.h"
+#include "Rect.h"
 #include "Resources.h"
 #include "Scenario.h"
 #include "TileRenderer.h"
@@ -24,6 +25,8 @@ namespace Rival {
     public:
         static const int windowWidth = 800;
         static const int windowHeight = 600;
+
+        Rival();
 
         /**
          * Initialises the game.
@@ -40,17 +43,18 @@ namespace Rival {
 
         // Framebuffer size, in pixels.
         // This is our canvas; we can never render more pixels than this.
-        // We divide by 2 because our tiles overlap (see RenderUtils).
-        static const int framebufferWidth =
-                RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
-        static const int framebufferHeight =
-                RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
+        static const int framebufferWidth;
+        static const int framebufferHeight;
 
         // Resources
         std::unique_ptr<Resources> res;
 
         // Camera
         std::unique_ptr<Camera> camera;
+
+        // Viewport:
+        // the rectangle on the screen to which the game is rendered (pixels)
+        Rect viewport;
 
         /**
          * Framebuffer to which the visible region of the game is rendered at
@@ -117,7 +121,7 @@ namespace Rival {
          */
         void render();
         void renderGame(int viewportWidth, int viewportHeight);
-        void renderFramebuffer();
+        void renderFramebuffer(int srcWidth, int srcHeight);
 
         /**
          * Updates the game.

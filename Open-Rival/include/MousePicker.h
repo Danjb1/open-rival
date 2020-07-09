@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Camera.h"
+#include "Rect.h"
 #include "RenderUtils.h"
 #include "Unit.h"
 
@@ -12,7 +13,10 @@ namespace Rival {
     class MousePicker {
 
     public:
-        MousePicker(Camera& camera, std::shared_ptr<Scenario> scenario);
+        MousePicker(
+                Camera& camera,
+                Rect& viewport,
+                std::shared_ptr<Scenario> scenario);
 
         void handleMouse();
 
@@ -34,6 +38,8 @@ namespace Rival {
         static const int unitHitboxHeight = 40;
 
         Camera& camera;
+
+        Rect& viewport;
 
         int mapWidth;
 
