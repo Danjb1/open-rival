@@ -28,8 +28,19 @@
 
 namespace Rival {
 
+    // Framebuffer size, in pixels.
+    // We divide by 2 because our tiles overlap (see RenderUtils).
+    const int Rival::framebufferWidth =
+            RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
+    const int Rival::framebufferHeight =
+            RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
+
     static const double aspectRatio =
             static_cast<double>(Rival::windowWidth) / Rival::windowHeight;
+
+    Rival::Rival()
+        // TMP: we create the Viewport with an artibrary size, for testing purposes
+        : viewport(Rect(50, 50, windowWidth - 100, windowHeight - 100)) {}
 
     void Rival::initialize() {
 
@@ -69,7 +80,7 @@ namespace Rival {
                 0.0f, 0.0f, cameraWidth, aspectRatio, *scenario);
 
         // Create the MousePicker
-        mousePicker = std::make_unique<MousePicker>(*camera, scenario);
+        mousePicker = std::make_unique<MousePicker>(*camera, viewport, scenario);
 
         // Pick which tile Spritesheet to use based on the map type
         const Spritesheet& tileSpritesheet = scenario->isWilderness()
@@ -305,19 +316,24 @@ namespace Rival {
         // camera is wider, more pixels are visible, and thus we need a larger
         // render target.
         glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
-        int viewportWidth = static_cast<int>(
+        int canvasWidth = static_cast<int>(
                 RenderUtils::worldToPx_X(camera->getWidth()));
-        int viewportHeight = static_cast<int>(
+        int canvasHeight = static_cast<int>(
                 RenderUtils::worldToPx_Y(camera->getHeight()));
-        glViewport(0, 0, viewportWidth, viewportHeight);
-        renderGame(viewportWidth, viewportHeight);
+        glViewport(0, 0, canvasWidth, canvasHeight);
+        renderGame(canvasWidth, canvasHeight);
 
         // Render the framebuffer to the screen.
         // Here the viewport specifies the region of the game window that we
         // render onto, in pixels.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, windowWidth, windowHeight);
-        renderFramebuffer();
+        glViewport(
+                static_cast<int>(viewport.x),
+                // Adjust for OpenGL origin
+                static_cast<int>(windowHeight - (viewport.y + viewport.height)),
+                static_cast<int>(viewport.width),
+                static_cast<int>(viewport.height));
+        renderFramebuffer(canvasWidth, canvasHeight);
     }
 
     void Rival::renderGame(int viewportWidth, int viewportHeight) {
@@ -385,13 +401,13 @@ namespace Rival {
         buildingRenderer->render(*camera, scenario->getBuildings());
     }
 
-    void Rival::renderFramebuffer() {
+    void Rival::renderFramebuffer(int srcWidth, int srcHeight) {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Disable depth testing since we are rendering a single texture to the
-        // entire screen
+        // Disable depth testing since we are rendering a single texture
+        // directly to the screen
         glDisable(GL_DEPTH_TEST);
 
         // Use screen shader
@@ -404,8 +420,6 @@ namespace Rival {
         // At a zoom level of 1, this will result in pixel-perfect rendering.
         // A higher zoom level will result in a smaller sample, which will
         // then be stretched to fill the viewport.
-        float srcWidth = windowWidth / camera->getZoom();
-        float srcHeight = windowHeight / camera->getZoom();
         gameFboRenderer->render(srcWidth, srcHeight);
     }
 
@@ -443,6 +457,17 @@ namespace Rival {
 
     void Rival::mouseWheelMoved(const SDL_MouseWheelEvent evt) const {
 
+        // Get the mouse position relative to the window, in pixels
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        // Abort if the mouse is outside the viewport
+        if (!viewport.contains(mouseX, mouseY)) {
+            return;
+        }
+
+        // Check if any scrolling took place
         int scrollAmount = evt.y;
         if (scrollAmount == 0) {
             return;
@@ -460,24 +485,15 @@ namespace Rival {
             camera->modZoom(-Camera::zoomInterval);
         }
 
-        // Get the mouse position relative to the window, in pixels
-        int mouseX;
-        int mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
         // Calculate the mouse position relative to the viewport, in pixels
-        int viewportX = 0;
-        int viewportY = 0;
-        int mouseInViewportX = mouseX - viewportX;
-        int mouseInViewportY = mouseY - viewportY;
+        int mouseInViewportX = mouseX - static_cast<int>(viewport.x);
+        int mouseInViewportY = mouseY - static_cast<int>(viewport.y);
 
         // Calculate mouse position relative to the viewport, in the range 0-1
-        int viewportWidth = Rival::windowWidth;
-        int viewportHeight = Rival::windowHeight;
         float normalizedMouseX =
-                static_cast<float>(mouseInViewportX) / viewportWidth;
+                static_cast<float>(mouseInViewportX) / viewport.width;
         float normalizedMouseY =
-                static_cast<float>(mouseInViewportY) / viewportHeight;
+                static_cast<float>(mouseInViewportY) / viewport.height;
 
         // Calculate mouse position relative to the viewport centre, in the
         // range -1 to 1

@@ -6,9 +6,6 @@
 
  - Refactor texture-builder
 
- - Add Viewport class rather than relying on windowWidth/Height
-    - MousePicker should ignore the mouse when outside the viewport
-
  - Shrink the viewport to create space for the UI
 
  - Render the UI
@@ -21,9 +18,6 @@
     - We risk overflowing the buffer in high resolutions
 
  - The game will crash if a level is smaller than the number of visible tiles
-
- - When zoomed enough, we can see blue dotted lines, probably an artefact from
-rendering to offscreen buffer
 
  - extractImages() method in setup/src/image-extractor.cpp assumes at most 63
 character filename (including path)

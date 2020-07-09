@@ -10,8 +10,10 @@ namespace Rival {
 
     MousePicker::MousePicker(
             Camera& camera,
+            Rect& viewport,
             std::shared_ptr<Scenario> scenario)
         : camera(camera),
+          viewport(viewport),
           scenario(scenario),
           mapWidth(scenario->getWidth()),
           mapHeight(scenario->getHeight()),
@@ -19,26 +21,28 @@ namespace Rival {
 
     void MousePicker::handleMouse() {
 
+        // Reset selected entity
+        entity = -1;
+
         // Get the mouse position relative to the window, in pixels
         int mouseX;
         int mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
 
-        // Calculate the mouse position relative to the viewport, in pixels.
-        // Since our viewport fills the window, no conversion is really
-        // performed here.
-        int viewportX = 0;
-        int viewportY = 0;
-        int mouseInViewportX = mouseX - viewportX;
-        int mouseInViewportY = mouseY - viewportY;
+        // Abort if the mouse is outside the viewport
+        if (!viewport.contains(mouseX, mouseY)) {
+            return;
+        }
+
+        // Calculate the mouse position relative to the viewport, in pixels
+        int mouseInViewportX = mouseX - static_cast<int>(viewport.x);
+        int mouseInViewportY = mouseY - static_cast<int>(viewport.y);
 
         // Calculate mouse position relative to the viewport, in the range 0-1
-        int viewportWidth = Rival::windowWidth;
-        int viewportHeight = Rival::windowHeight;
         float normalizedMouseX =
-                static_cast<float>(mouseInViewportX) / viewportWidth;
+                static_cast<float>(mouseInViewportX) / viewport.width;
         float normalizedMouseY =
-                static_cast<float>(mouseInViewportY) / viewportHeight;
+                static_cast<float>(mouseInViewportY) / viewport.height;
 
         // Calculate the mouse position in world units
         float mouseWorldX = camera.getLeft()
@@ -121,9 +125,6 @@ namespace Rival {
         // but we should limit them to the level bounds
         tileX = MathUtils::clampi(tileX, 0, mapWidth - 1);
         tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
-
-        // Reset selected entity
-        entity = -1;
 
         // Check for Units under the mouse
         if (scenario) {

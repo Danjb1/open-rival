@@ -27,7 +27,7 @@ namespace Rival {
          * should be the exact same size as the viewport, so that no stretching
          * occurs.
          */
-        void render(float srcWidth, float srcHeight);
+        void render(int srcWidth, int srcHeight);
 
     private:
         static const int numVertexDimensions = 2;    // x, y

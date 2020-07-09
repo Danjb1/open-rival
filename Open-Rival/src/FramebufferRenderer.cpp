@@ -82,7 +82,7 @@ namespace Rival {
         glEnableVertexAttribArray(screenShader.texCoordAttribIndex);
     }
 
-    void FramebufferRenderer::render(float srcWidth, float srcHeight) {
+    void FramebufferRenderer::render(int srcWidth, int srcHeight) {
 
         // Bind vertex array
         glBindVertexArray(vao);
@@ -96,8 +96,8 @@ namespace Rival {
         // already been taken into account during the initial rendering.
         float tx1 = 0.0f;
         float ty1 = 0.0f;
-        float tx2 = srcWidth / fbo.getWidth();
-        float ty2 = srcHeight / fbo.getHeight();
+        float tx2 = static_cast<float>(srcWidth) / fbo.getWidth();
+        float ty2 = static_cast<float>(srcHeight) / fbo.getHeight();
         std::vector<GLfloat> texCoords = {
             tx1, ty1,
             tx2, ty1,
