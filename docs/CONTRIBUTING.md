@@ -30,4 +30,4 @@ Unless performance is identified as a problem, prefer simplicity and readability
 
 To ensure consistency within the codebase, code should be formatted using the included [`.clang-format`](/.clang-format) file.
 
-> `clang-format.exe` can be downloaded as part of [LLVM](https://releases.llvm.org/download.html). Visual Studio should be configured to use this executable for its formatting, since the ones that ships with the IDE is outdated. There is also a [Format on Save]( https://marketplace.visualstudio.com/items?itemName=mynkow.FormatdocumentonSave) extension available.
+> `clang-format.exe` can be downloaded as part of [LLVM](https://releases.llvm.org/download.html). Visual Studio should be configured to use this executable for its formatting, since the one that ships with the IDE is outdated. There is also a [Format on Save]( https://marketplace.visualstudio.com/items?itemName=mynkow.FormatdocumentonSave) extension available.

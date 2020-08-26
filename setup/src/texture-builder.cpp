@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include "setup-utils.h"
+
 namespace fs = std::filesystem;
 
 namespace TextureBuilder {
@@ -21,20 +23,6 @@ namespace TextureBuilder {
 
     // Number of colours in the palette
     const int paletteSize = 256;
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-
-#include <windows.h>
-
-    /**
-     * Attempts to create the given directory.
-     */
-    bool createDirectory(const char* filename) {
-        return CreateDirectoryA(filename, NULL) || ERROR_ALREADY_EXISTS == GetLastError();
-    }
-
-#endif  ///////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////////////
     // Image class
@@ -267,25 +255,6 @@ namespace TextureBuilder {
                 dstData.get()[dstIndex] = srcData.get()[srcIndex];
             }
         }
-    }
-
-    /**
-     * Rounds a number up to the nearest power of 2.
-     *
-     * See:
-     * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
-     */
-    int nextPowerOf2(int v) {
-
-        v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        v++;
-
-        return v;
     }
 
     std::vector<Image> readImagesFromDefinitionFile(
