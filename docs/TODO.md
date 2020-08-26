@@ -6,8 +6,6 @@
 
  - Refactor texture-builder
 
- - Shrink the viewport to create space for the UI
-
  - Render the UI
 
 <!----------------------------------------------------------------------------->
@@ -124,7 +122,9 @@ character filename (including path)
 ### Input
 
  - Panning with the mouse at level edges
+ - Panning with middle-mouse button (drag)
  - Smooth scrolling with the arrow keys
+ - Scroll speed should depend on the zoom level
  - Drag-select
 
 ### Rendering
@@ -160,10 +160,11 @@ character filename (including path)
 
  - Create a ScenarioWriter class
 
-### Future Enhancements
+### Quality-of-Life Improvements
 
  - [x] 60 FPS
  - [x] Camera zooming
+ - [ ] Improved camera navigation
  - [ ] Easy military drag-select
  - [ ] Rally points
  - [ ] Configurable Gold multiplier
@@ -183,6 +184,7 @@ character filename (including path)
  - [ ] Windows XP support
  - [ ] Support for larger screen resolutions
  - [ ] Support for bigger maps
+ - [ ] Upscale graphics using AI?
 
 <!----------------------------------------------------------------------------->
 ## Project

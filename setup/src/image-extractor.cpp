@@ -8,9 +8,10 @@
 #include "pch.h"
 #include "image-extractor.h"
 
+#include "setup-utils.h"
+
 #include <stdexcept>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <windows.h>
 
@@ -104,34 +105,6 @@ namespace ImageExtractor {
         }
     }
 #endif  //////////////////////////////////////////////////////////////////////
-
-    void* read_file(std::wstring filename, uint32_t* size) {
-
-        FILE* fp = _wfopen(filename.c_str(), L"rb");
-        if (!fp) {
-            return NULL;
-        }
-
-        fseek(fp, 0L, SEEK_END);
-        *size = (uint32_t) ftell(fp);
-        fseek(fp, 0L, SEEK_SET);
-
-        void* data = malloc(*size);
-        if (!data) {
-            fclose(fp);
-            return NULL;
-        }
-
-        fread(data, *size, 1, fp);
-
-        if (ferror(fp)) {
-            free(data);
-            data = NULL;
-        }
-        fclose(fp);
-
-        return data;
-    }
 
     /**
      * Clears our image buffer.

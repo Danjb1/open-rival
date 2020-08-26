@@ -69,8 +69,6 @@ namespace TextureBuilder {
     // End of classes
     ///////////////////////////////////////////////////////////////////////////////
 
-    bool createDirectory(const char* filename);
-
     void buildTextures(
             std::string definitionsDir,
             std::string imageDir,
