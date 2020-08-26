@@ -1,17 +1,12 @@
-#include "image-extractor.h"
+#include "pch.h"
 
 #include <iostream>
 #include <windows.h>
 
-using namespace ImageExtractor;
+#include "image-extractor.h"
+#include "setup-utils.h"
 
-/**
- * Attempts to create the given directory.
- */
-bool createDirectory(const char* filename) {
-    return CreateDirectoryA(filename, NULL)
-            || ERROR_ALREADY_EXISTS == GetLastError();
-}
+using namespace ImageExtractor;
 
 int main() {
 

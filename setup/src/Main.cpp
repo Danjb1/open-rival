@@ -8,13 +8,12 @@
 #include <string>
 #include <windows.h>
 
+#include "audio-extractor.h"
+#include "image-extractor.h"
+#include "interface-extractor.h"
 #include "registry.h"
 #include "setup-utils.h"
-
-#include "../../audio-extractor/audio-extractor.h"
-#include "../../image-extractor/image-extractor.h"
-#include "../../interface-extractor/interface-extractor.h"
-#include "../../texture-builder/texture-builder.h"
+#include "texture-builder.h"
 
 namespace fs = std::filesystem;
 

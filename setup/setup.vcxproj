@@ -158,15 +158,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\audio-extractor.h" />
+    <ClInclude Include="include\image-extractor.h" />
+    <ClInclude Include="include\interface-extractor.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\registry.h" />
     <ClInclude Include="include\setup-utils.h" />
+    <ClInclude Include="include\texture-builder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\audio-extractor\audio-extractor.cpp" />
-    <ClCompile Include="..\image-extractor\image-extractor.cpp" />
-    <ClCompile Include="..\interface-extractor\interface-extractor.cpp" />
-    <ClCompile Include="..\texture-builder\texture-builder.cpp" />
+    <ClCompile Include="src\audio-extractor.cpp" />
+    <ClCompile Include="src\image-extractor.cpp" />
+    <ClCompile Include="src\interface-extractor.cpp" />
+    <ClCompile Include="src\texture-builder.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -175,7 +179,7 @@
     </ClCompile>
     <ClCompile Include="src\registry.cpp" />
     <ClCompile Include="src\setup-utils.cpp" />
-    <ClCompile Include="src\setup.cpp" />
+    <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

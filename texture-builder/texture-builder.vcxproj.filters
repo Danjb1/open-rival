@@ -14,7 +14,10 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="texture-builder.h">
+    <ClInclude Include="..\setup\include\setup-utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\setup\include\texture-builder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -22,7 +25,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="texture-builder.cpp">
+    <ClCompile Include="..\setup\src\setup-utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\setup\src\texture-builder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">

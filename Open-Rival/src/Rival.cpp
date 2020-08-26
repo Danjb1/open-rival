@@ -39,8 +39,7 @@ namespace Rival {
             static_cast<double>(Rival::windowWidth) / Rival::windowHeight;
 
     Rival::Rival()
-        // TMP: we create the Viewport with an artibrary size, for testing purposes
-        : viewport(Rect(50, 50, windowWidth - 100, windowHeight - 100)) {}
+        : viewport(Rect(0, 0, windowWidth, windowHeight - 100)) {}
 
     void Rival::initialize() {
 

@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "interface-extractor.h"
 
+#include "setup-utils.h"
+
 #include <cstdint>
 #include <iostream>
 #include <vector>
@@ -203,54 +205,7 @@ namespace InterfaceExtractor {
         0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
         0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffffff,
     };
-/* clang-format on */
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-
-#include <windows.h>
-
-    /**
-     * Attempts to create the given directory.
-     */
-    bool create_directory(const char* filename) {
-        return CreateDirectoryA(filename, NULL)
-                || ERROR_ALREADY_EXISTS == GetLastError();
-    }
-
-#endif  ////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Reads a file to memory.
-     */
-
-    void* read_file(std::wstring filename, uint32_t* size) {
-
-        FILE* fp = _wfopen(filename.c_str(), L"rb");
-        if (!fp) {
-            return NULL;
-        }
-
-        fseek(fp, 0L, SEEK_END);
-        *size = (uint32_t) ftell(fp);
-        fseek(fp, 0L, SEEK_SET);
-
-        void* data = malloc(*size);
-        if (!data) {
-            fclose(fp);
-            return NULL;
-        }
-
-        fread(data, *size, 1, fp);
-
-        if (ferror(fp)) {
-            free(data);
-            data = NULL;
-        }
-        fclose(fp);
-
-        return data;
-    }
+    /* clang-format on */
 
     /**
      * Writes an image to disk.

@@ -18,15 +18,21 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface-extractor.h">
+    <ClInclude Include="..\setup\include\interface-extractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\setup\include\setup-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="interface-extractor.cpp">
+    <ClCompile Include="..\setup\src\interface-extractor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\setup\src\setup-utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

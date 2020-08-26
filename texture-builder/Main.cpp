@@ -1,8 +1,10 @@
 #include "pch.h"
-#include "texture-builder.h"
 
 #include <filesystem>
 #include <iostream>
+
+#include "setup-utils.h"
+#include "texture-builder.h"
 
 using namespace TextureBuilder;
 
