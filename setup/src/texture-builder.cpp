@@ -25,6 +25,30 @@ namespace TextureBuilder {
     const int paletteSize = 256;
 
     ///////////////////////////////////////////////////////////////////////////
+    // Comparison functions
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Compare function to sort Images by size - largest first.
+     */
+    bool compareImagesLargestFirst(Image& img1, Image& img2) {
+        // returns true if img1 comes before img2
+        int img1Area = img1.getWidth() * img1.getHeight();
+        int img2Area = img2.getWidth() * img2.getHeight();
+        return img1Area > img2Area;
+    }
+
+    /**
+     * Compare function to sort Rects by size - smallest first.
+     */
+    bool compareRectsSmallestFirst(Rect& rect1, Rect& rect2) {
+        // returns true if rect1 comes before rect2
+        int rect1Area = rect1.width * rect1.height;
+        int rect2Area = rect2.width * rect2.height;
+        return rect1Area < rect2Area;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     // Image class
     ///////////////////////////////////////////////////////////////////////////
 
@@ -69,6 +93,157 @@ namespace TextureBuilder {
           y(y),
           width(width),
           height(height) {}
+
+    ///////////////////////////////////////////////////////////////////////////
+    // TextureBuilder class
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Adds an image to the texture being constructed.
+     */
+    void TextureAtlasBuilder::addImage(const Image& img) {
+
+        // Add some padding around the image
+        int imageWidth = img.getWidth() + 2 * borderSize;
+        int imageHeight = img.getHeight() + 2 * borderSize;
+
+        // Store this image by its key for later retrieval
+        imagesByKey.insert(std::make_pair(img.getFilename(), img));
+
+        // Ask the builder for an empty space
+        Rect dest = findOrMakeEmptyRect(imageWidth, imageHeight);
+
+        // Map this image to its destination Rectangle
+        // We use the image filename as the key, but we could use anything, as
+        // long as we use the same key to refer to the image when we need it.
+        imagePlacements.insert(std::make_pair(img.getFilename(), dest));
+    }
+
+    /**
+     * Finds an empty Rect of the desired size.
+     *
+     * If no Rect matches this size exactly, an empty Rect will be subdivided.
+     * If no Rect is big enough, the texture will be expanded.
+     */
+    Rect TextureAtlasBuilder::findOrMakeEmptyRect(
+            const int reqWidth, const int reqHeight) {
+
+        // Find the smallest rectangle that fits our required size
+        std::sort(
+                emptyRects.begin(),
+                emptyRects.end(),
+                compareRectsSmallestFirst);
+        int rectIndex = findRectBiggerThan(
+                emptyRects, reqWidth, reqHeight);
+
+        // No free space - need to expand our texture!
+        if (rectIndex == -1) {
+            rectIndex = expandTextureToFitRect(
+                    reqWidth, reqHeight);
+        }
+
+        // Make a copy of our target rectangle
+        Rect dest = emptyRects[rectIndex];
+
+        // Remove this rectangle from the list of empties
+        emptyRects.erase(emptyRects.begin() + rectIndex);
+
+        // Trim the destination Rect to precisely match our required size
+        Rect trimmedDest = Rect(
+                dest.x,
+                dest.y,
+                reqWidth,
+                reqHeight);
+
+        // Split the leftover space from the destination Rect into new empties
+        if (dest.width > reqWidth) {
+            // Empty space to the right
+            emptyRects.push_back(Rect(
+                    dest.x + reqWidth,
+                    dest.y,
+                    dest.width - reqWidth,
+                    reqHeight));
+        }
+        if (dest.height > reqHeight) {
+            // Empty space below
+            emptyRects.push_back(Rect(
+                    dest.x,
+                    dest.y + reqHeight,
+                    dest.width,
+                    dest.height - reqHeight));
+        }
+
+        // TODO: We could improve this by combining adjacent empty Rectangles
+        // if their dimensions line up.
+
+        return trimmedDest;
+    }
+
+    /**
+     * Finds the smallest Rect greater than the given size.
+     */
+    int TextureAtlasBuilder::findRectBiggerThan(
+            const std::vector<Rect>& rects,
+            const int minWidth,
+            const int minHeight) {
+        int rectIndex = -1;
+        for (size_t i = 0; i < rects.size(); i++) {
+            auto const& rect = rects[i];
+            if (rect.width >= minWidth && rect.height >= minHeight) {
+                rectIndex = i;
+                break;
+            }
+        }
+        return rectIndex;
+    }
+
+    /**
+     * Expands the TextureAtlas being constructed, to fit a Rect of the given
+     * size.
+     *
+     * Returns the index of the newly-created Rect.
+     */
+    int TextureAtlasBuilder::expandTextureToFitRect(
+            const int reqWidth,
+            const int reqHeight) {
+
+        // Expand our texture downwards
+        int prevHeight = texHeight;
+        texHeight += reqHeight;
+        emptyRects.push_back(Rect(
+                0,
+                prevHeight,
+                reqWidth,
+                reqHeight));
+
+        // Our target Rect is the one we just created
+        int rectIndex = emptyRects.size() - 1;
+
+        // Expand outwards if necessary
+        if (texWidth < reqWidth) {
+            int prevWidth = texWidth;
+            texWidth = reqWidth;
+
+            if (prevHeight > 0) {
+                // This creates an empty space to the right
+                emptyRects.push_back(Rect(
+                        prevWidth,
+                        0,
+                        texWidth - prevWidth,
+                        prevHeight));
+            }
+        } else if (reqWidth < texWidth) {
+            // Our image does not fill the whole width, so there is an
+            // empty space to the right of it
+            emptyRects.push_back(Rect(
+                    reqWidth,
+                    prevHeight,
+                    texWidth - reqWidth,
+                    texHeight - prevHeight));
+        }
+
+        return rectIndex;
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // End of classes
@@ -310,20 +485,6 @@ namespace TextureBuilder {
         return sprites;
     }
 
-    bool compareImagesLargestFirst(Image& img1, Image& img2) {
-        // returns true if img1 comes before img2
-        int img1Area = img1.getWidth() * img1.getHeight();
-        int img2Area = img2.getWidth() * img2.getHeight();
-        return img1Area > img2Area;
-    }
-
-    bool compareRectsSmallestFirst(Rect& rect1, Rect& rect2) {
-        // returns true if rect1 comes before rect2
-        int rect1Area = rect1.width * rect1.height;
-        int rect2Area = rect2.width * rect2.height;
-        return rect1Area < rect2Area;
-    }
-
     void createTextureAtlas(
             const std::string& outputDir,
             fs::path definitionFilename,
@@ -337,106 +498,7 @@ namespace TextureBuilder {
 
         // Find a suitable placement for each image
         for (const auto& img : images) {
-
-            int imageWidth = img.getWidth() + 2 * borderSize;
-            int imageHeight = img.getHeight() + 2 * borderSize;
-
-            // Store this image by its key for later retrieval
-            builder.imagesByKey.insert(std::make_pair(img.getFilename(), img));
-
-            // Sort empty Rects (smallest first)
-            std::sort(
-                    builder.emptyRects.begin(),
-                    builder.emptyRects.end(),
-                    compareRectsSmallestFirst);
-
-            // Find the smallest rectangle that will fit this image
-            int rectIndex = -1;
-            for (size_t i = 0; i < builder.emptyRects.size(); i++) {
-                auto const& rect = builder.emptyRects[i];
-                if (rect.width >= imageWidth && rect.height >= imageHeight) {
-                    rectIndex = i;
-                    break;
-                }
-            }
-
-            // No free space - need to expand our texture!
-            if (rectIndex == -1) {
-
-                // Expand downwards
-                int prevHeight = builder.texHeight;
-                builder.texHeight += imageHeight;
-                builder.emptyRects.push_back(Rect(
-                        0,
-                        prevHeight,
-                        imageWidth,
-                        imageHeight));
-
-                // Our target Rect is the one we just created
-                rectIndex = builder.emptyRects.size() - 1;
-
-                // Expand outwards if necessary
-                if (builder.texWidth < imageWidth) {
-                    int prevWidth = builder.texWidth;
-                    builder.texWidth = imageWidth;
-
-                    if (prevHeight > 0) {
-                        // This creates an empty space to the right
-                        builder.emptyRects.push_back(Rect(
-                                prevWidth,
-                                0,
-                                builder.texWidth - prevWidth,
-                                prevHeight));
-                    }
-                } else if (imageWidth < builder.texWidth) {
-                    // Our image does not fill the whole width, so there is an
-                    // empty space to the right of it
-                    builder.emptyRects.push_back(Rect(
-                            imageWidth,
-                            prevHeight,
-                            builder.texWidth - imageWidth,
-                            builder.texHeight - prevHeight));
-                }
-            }
-
-            // Make a copy of our target rectangle
-            Rect dest = builder.emptyRects[rectIndex];
-
-            // Remove this rectangle from the list of empties
-            builder.emptyRects.erase(builder.emptyRects.begin() + rectIndex);
-
-            // Trim the destination Rect to precisely fit our image
-            Rect trimmedDest = Rect(
-                    dest.x,
-                    dest.y,
-                    imageWidth,
-                    imageHeight);
-
-            // Map this image to its destination Rectangle
-            // We use the image filename as the key, but we could use anything, as
-            // long as we use the same key to refer to the image when we need it.
-            builder.imagePlacements.insert(std::make_pair(img.getFilename(), trimmedDest));
-
-            // Split the leftover space from the destination Rect into new empties
-            if (dest.width > imageWidth) {
-                // Empty space to the right
-                builder.emptyRects.push_back(Rect(
-                        dest.x + imageWidth,
-                        dest.y,
-                        dest.width - imageWidth,
-                        imageHeight));
-            }
-            if (dest.height > imageHeight) {
-                // Empty space below
-                builder.emptyRects.push_back(Rect(
-                        dest.x,
-                        dest.y + imageHeight,
-                        dest.width,
-                        dest.height - imageHeight));
-            }
-
-            // TODO: We could improve this by combining adjacent empty Rectangles
-            // if their dimensions line up.
+            builder.addImage(img);
         }
 
         // Create the texture

@@ -16,7 +16,7 @@ namespace Rival {
         MousePicker(
                 Camera& camera,
                 Rect& viewport,
-                std::shared_ptr<Scenario> scenario);
+                Scenario& scenario);
 
         void handleMouse();
 
@@ -51,7 +51,7 @@ namespace Rival {
 
         int entity;
 
-        std::shared_ptr<Scenario> scenario;
+        Scenario& scenario;
 
         bool isMouseInUnit(
                 const Unit& unit, int mouseInViewportX, int mouseInViewportY);

@@ -118,6 +118,9 @@
     <ClCompile Include="src\Rect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -232,6 +235,12 @@
       <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\Rect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Application.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\State.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

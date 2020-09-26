@@ -36,7 +36,7 @@ namespace Rival {{
     // TODO
 
 }}  // namespace Rival
-    '''
+'''
     context = {
         'filename': filename
     }
@@ -55,7 +55,7 @@ namespace Rival {{
 }}  // namespace Rival
 
 #endif  // {filename}_H
-    '''
+'''
     context = {
         'filename': camelCaseToSnakeCase(filename)
     }
