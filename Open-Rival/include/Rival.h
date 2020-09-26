@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 
+#include "Application.h"
 #include "BuildingRenderer.h"
 #include "Camera.h"
 #include "Framebuffer.h"
@@ -12,45 +13,36 @@
 #include "MapBorderRenderer.h"
 #include "MousePicker.h"
 #include "Rect.h"
-#include "Resources.h"
 #include "Scenario.h"
+#include "State.h"
 #include "TileRenderer.h"
 #include "UnitRenderer.h"
 #include "Window.h"
 
 namespace Rival {
 
-    class Rival {
+    class Rival : public State {
 
     public:
-        static const int windowWidth = 800;
-        static const int windowHeight = 600;
+        Rival(Window& window, Scenario& scenario);
 
-        Rival();
-
-        /**
-         * Initialises the game.
-         */
-        void initialize();
-
-        /**
-         * Runs the game.
-         */
-        void start();
+        // Inherited from State
+        void initialize(Application* app);
+        void keyDown(const SDL_Keycode keyCode) override;
+        void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
+        void render() override;
+        void update() override;
 
     private:
-        const char* windowTitle = "Rival Realms";
-
         // Framebuffer size, in pixels.
         // This is our canvas; we can never render more pixels than this.
         static const int framebufferWidth;
         static const int framebufferHeight;
 
-        // Resources
-        std::unique_ptr<Resources> res;
+        Window& window;
 
         // Camera
-        std::unique_ptr<Camera> camera;
+        Camera camera;
 
         // Viewport:
         // the rectangle on the screen to which the game is rendered (pixels)
@@ -66,7 +58,7 @@ namespace Rival {
         std::unique_ptr<Framebuffer> gameFbo;
 
         // Scenario
-        std::shared_ptr<Scenario> scenario;
+        Scenario& scenario;
 
         // Renderers
         std::unique_ptr<BuildingRenderer> buildingRenderer;
@@ -74,12 +66,6 @@ namespace Rival {
         std::unique_ptr<TileRenderer> tileRenderer;
         std::unique_ptr<MapBorderRenderer> mapBorderRenderer;
         std::unique_ptr<UnitRenderer> unitRenderer;
-
-        /**
-         * Window used to display the game.
-         */
-        std::unique_ptr<Window> window;
-        bool vsyncEnabled = true;
 
         /**
          * Object used to find what's under the mouse.
@@ -91,47 +77,8 @@ namespace Rival {
          */
         SDL_Renderer* renderer = nullptr;
 
-        /**
-         * Initializes SDL.
-         */
-        void initSDL() const;
-
-        /**
-         * Initializes GLEW.
-         */
-        void initGLEW() const;
-
-        /**
-         * Initializes OpenGL.
-         */
-        void initGL();
-
-        /**
-         * Handles keyDown events.
-         */
-        void keyDown(const SDL_Keycode keyCode) const;
-
-        /**
-         * Handles mouse wheel events.
-         */
-        void mouseWheelMoved(const SDL_MouseWheelEvent evt) const;
-
-        /**
-         * Renders the current frame.
-         */
-        void render();
         void renderGame(int viewportWidth, int viewportHeight);
         void renderFramebuffer(int srcWidth, int srcHeight);
-
-        /**
-         * Updates the game.
-         */
-        void update();
-
-        /**
-         * Frees media and shuts down SDL.
-         */
-        void exit();
     };
 
 }  // namespace Rival
