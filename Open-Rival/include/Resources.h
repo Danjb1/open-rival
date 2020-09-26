@@ -31,7 +31,7 @@ namespace Rival {
 
         // Retrieval
         const Texture& getPalette() const;
-        const Spritesheet& getTileSpritesheet(int index) const;
+        const Spritesheet& getTileSpritesheet(bool wilderness) const;
         const std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
         const std::map<BuildingType, Spritesheet>& getBuildingSpritesheets() const;
         const Spritesheet& getMapBorderSpritesheet() const;

@@ -9,8 +9,8 @@
 
 #include "Application.h"
 #include "Rival.h"
+#include "Scenario.h"
 #include "ScenarioBuilder.h"
-#include "ScenarioData.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
 #include "Window.h"
@@ -46,12 +46,6 @@ void initGLEW() {
 }
 
 void initGL() {
-
-    // Try to enable vsync
-    if (SDL_GL_SetSwapInterval(1) < 0) {
-        printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
-        //vsyncEnabled = false;
-    }
 
     // Set clear color
     glClearColor(0.5f, 0.5f, 1.f, 1.f);
@@ -95,19 +89,15 @@ int main() {
 
         // Load some scenario
         Rival::ScenarioReader reader(Rival::Resources::mapsDir + "example.sco");
-        Rival::ScenarioData scenarioData = reader.readScenario();
-        Rival::Scenario scenario(
-                scenarioData.hdr.mapWidth,
-                scenarioData.hdr.mapHeight,
-                scenarioData.hdr.wilderness);
-        Rival::ScenarioBuilder scenarioBuilder(scenarioData);
-        scenarioBuilder.build(scenario);
+        Rival::ScenarioBuilder scenarioBuilder(reader.readScenario());
+        std::unique_ptr<Rival::Scenario> scenario = scenarioBuilder.build();
 
         // Create our initial state
-        Rival::Rival rival(app.getWindow(), scenario);
+        std::unique_ptr<Rival::State> initialState =
+                std::make_unique<Rival::Rival>(app, std::move(scenario));
 
         // Run the game!
-        app.start(rival);
+        app.start(std::move(initialState));
 
     } catch (const std::runtime_error& e) {
         std::cerr << "Unhandled error during initialization or gameplay\n";

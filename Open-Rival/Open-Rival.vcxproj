@@ -50,7 +50,6 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
-    <ClCompile Include="src\TimerUtils.cpp" />
     <ClCompile Include="src\Unit.cpp" />
     <ClCompile Include="src\UnitAnimation.cpp" />
     <ClCompile Include="src\UnitRenderer.cpp" />

@@ -162,7 +162,7 @@ namespace Rival {
         float y1 = RenderUtils::worldToPx_Y(tileY);
         float x2 = x1 + width;
         float y2 = y1 + height;
-        float z = -1.0f;
+        float z = RenderUtils::zMapBorder;
         std::vector<GLfloat> thisVertexData = {
             x1, y1, z,
             x2, y1, z,
