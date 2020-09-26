@@ -1,10 +1,27 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-## WIP: Interface
+## WIP
 <!----------------------------------------------------------------------------->
 
- - Refactor texture-builder
+ - Remove unnecessary unique_ptrs
+    - Initialise as much as possible in the ctor
+
+ - State has no reference to Application
+    - Should we save a pointer to the Application in initialize() method?
+
+ - Inheritance - check implementation; do we need a virtual destructor?
+
+ - How can we change states?
+    - Where can the new State be created such that it won't go out of scope?
+    - Application should hold a unique_ptr() to the state
+    - A changeState() method should change ownership (std::move) of a
+        newly-created state to the Application
+
+ - Loading a Scenario should be more straightforward / robust
+    - Right now you could pass anything to ScenarioBuilder.build()
+
+ - Code review!
 
  - Render the UI
 
@@ -30,8 +47,6 @@ character filename (including path)
 
  - Resources refactor
     - Pass Resources around instead of individual textures / spritesheets?
-
- - Remove unnecessary unique_ptrs
 
  - Image filenames can be truncated due to limited size of char array
 

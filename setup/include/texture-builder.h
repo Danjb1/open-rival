@@ -63,6 +63,20 @@ namespace TextureBuilder {
         std::vector<Rect> emptyRects;
         int texWidth;
         int texHeight;
+
+        void addImage(const Image& img);
+
+    private:
+        Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
+
+        int findRectBiggerThan(
+                const std::vector<Rect>& rects,
+                const int minWidth,
+                const int minHeight);
+
+        int expandTextureToFitRect(
+                const int reqWidth,
+                const int reqHeight);
     };
 
     ///////////////////////////////////////////////////////////////////////////////

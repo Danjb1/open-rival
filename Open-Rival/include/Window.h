@@ -24,6 +24,12 @@ namespace Rival {
 
         void swapBuffers() const;
 
+        int getWidth() const;
+
+        int getHeight() const;
+
+        double getAspectRatio() const;
+
     private:
         SDL_Window* windowRef;
 
@@ -32,6 +38,8 @@ namespace Rival {
         const int width;
 
         const int height;
+
+        const double aspectRatio;
 
         const char* title;
     };

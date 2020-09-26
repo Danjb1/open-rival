@@ -10,12 +10,7 @@ namespace Rival {
     ScenarioBuilder::ScenarioBuilder(ScenarioData data)
         : data(data) {}
 
-    std::shared_ptr<Scenario> ScenarioBuilder::build() {
-
-        std::shared_ptr<Scenario> scenario = std::make_shared<Scenario>(
-                data.hdr.mapWidth,
-                data.hdr.mapHeight,
-                data.hdr.wilderness);
+    void ScenarioBuilder::build(Scenario& scenario) {
 
         // Initialise Tiles
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
@@ -24,13 +19,13 @@ namespace Rival {
         for (int i = 0; i < numTiles; ++i) {
             tiles.push_back(buildTile(data.tiles[i]));
         }
-        scenario->tilesLoaded(tiles);
+        scenario.tilesLoaded(tiles);
 
         // Initialise Units
         for (UnitPlacement& unitPlacement : data.units) {
             std::unique_ptr<Unit> unit = std::make_unique<Unit>(
                     getUnitType(unitPlacement.type));
-            scenario->addUnit(std::move(unit),
+            scenario.addUnit(std::move(unit),
                     unitPlacement.player,
                     unitPlacement.x,
                     unitPlacement.y,
@@ -41,14 +36,12 @@ namespace Rival {
         for (BuildingPlacement& buildingPlacement : data.buildings) {
             std::unique_ptr<Building> building = std::make_unique<Building>(
                     getBuildingType(buildingPlacement.type));
-            scenario->addBuilding(std::move(building),
+            scenario.addBuilding(std::move(building),
                     buildingPlacement.player,
                     buildingPlacement.x,
                     buildingPlacement.y,
                     buildingPlacement.wallVariant);
         }
-
-        return scenario;
     }
 
     /**

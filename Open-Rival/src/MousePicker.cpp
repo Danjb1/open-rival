@@ -11,12 +11,12 @@ namespace Rival {
     MousePicker::MousePicker(
             Camera& camera,
             Rect& viewport,
-            std::shared_ptr<Scenario> scenario)
+            Scenario& scenario)
         : camera(camera),
           viewport(viewport),
           scenario(scenario),
-          mapWidth(scenario->getWidth()),
-          mapHeight(scenario->getHeight()),
+          mapWidth(scenario.getWidth()),
+          mapHeight(scenario.getHeight()),
           entity(-1) {}
 
     void MousePicker::handleMouse() {
@@ -127,18 +127,16 @@ namespace Rival {
         tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
 
         // Check for Units under the mouse
-        if (scenario) {
-            auto& units = scenario->getUnits();
-            bool foundEntity = false;
-            for (auto it = units.begin(); it != units.end(); ++it) {
-                const Unit& unit = *it->second;
-                if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
-                    entity = unit.getId();
-                    std::cout << "Entity " << entity << " of type unit ("
-                              << static_cast<int>(unit.getType())
-                              << ") is under cursor.\n";
-                    break;
-                }
+        auto& units = scenario.getUnits();
+        bool foundEntity = false;
+        for (auto it = units.begin(); it != units.end(); ++it) {
+            const Unit& unit = *it->second;
+            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
+                entity = unit.getId();
+                std::cout << "Entity " << entity << " of type unit ("
+                          << static_cast<int>(unit.getType())
+                          << ") is under cursor.\n";
+                break;
             }
         }
     }

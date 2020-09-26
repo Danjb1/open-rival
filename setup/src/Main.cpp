@@ -38,11 +38,11 @@ int main(int argc, char* argv[]) {
     std::wstring gameDir;
     bool findDirectoryFromRegistry = true;
     for (int count = 1; count < argc; ++count) {
-        if ("-h" == argv[count]) {
+        if (argv[count] == "-h") {
             std::cout << "-d {directory}: loads all files from {directory}" << '\n';
             return 0;
         }
-        if (0 == strcmp("-d", argv[count]) && count + 1 <= argc) {
+        if (strcmp("-d", argv[count]) == 0 && count + 1 <= argc) {
             std::string tmpStr(argv[count + 1]);
             gameDir = std::wstring(tmpStr.begin(), tmpStr.end());
             findDirectoryFromRegistry = false;
