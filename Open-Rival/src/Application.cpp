@@ -1,23 +1,28 @@
 #include "pch.h"
 #include "Application.h"
 
+#include <SDL.h>
+
 namespace Rival {
 
     bool vsyncEnabled = true;
 
     Application::Application(Window& window)
         : window(window) {
+
+        // Try to enable vsync
+        if (SDL_GL_SetSwapInterval(1) < 0) {
+            printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
+            vsyncEnabled = false;
+        }
     }
 
-    void Application::start(State& initialState) {
+    void Application::start(std::unique_ptr<State> initialState) {
 
         // Event handler
         SDL_Event e;
 
-        // Initialise the State
-        State& state = initialState;
-        state.initialize(this);
-
+        state = std::move(initialState);
         bool exiting = false;
         Uint32 nextUpdateDue = SDL_GetTicks();
 
@@ -33,9 +38,9 @@ namespace Rival {
                     if (e.type == SDL_QUIT) {
                         exiting = true;
                     } else if (e.type == SDL_KEYDOWN) {
-                        state.keyDown(e.key.keysym.sym);
+                        state->keyDown(e.key.keysym.sym);
                     } else if (e.type == SDL_MOUSEWHEEL) {
-                        state.mouseWheelMoved(e.wheel);
+                        state->mouseWheelMoved(e.wheel);
                     }
                 }
 
@@ -49,14 +54,14 @@ namespace Rival {
                 //
                 // If vsync is disabled, this should run once per render.
                 while (nextUpdateDue <= frameStartTime) {
-                    state.update();
+                    state->update();
                     nextUpdateDue += TimerUtils::timeStepMs;
                 }
 
                 // Render the game, once per iteration.
                 // With vsync enabled, this matches the screen's refresh rate.
                 // Otherwise, this matches our target FPS.
-                state.render();
+                state->render();
 
                 // Update the window with our newly-rendered game.
                 // If vsync is enabled, this will block execution until the

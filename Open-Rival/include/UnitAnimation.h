@@ -11,17 +11,9 @@ namespace Rival {
     public:
         UnitAnimation(UnitType unitType);
 
-        void rotateLeft();
-
-        void rotateRight();
-
         int getCurrentSpriteIndex() const;
 
         void setAnimation(UnitAnimationType unitAnimationType);
-
-        void setSpeedCoefficient(int numerator, int denominator);
-
-        void setFacing(Facing newFacing);
 
         void tick();
 
@@ -30,13 +22,7 @@ namespace Rival {
 
         int animationStep;
 
-        int animationTick;
-
-        int speedCoefficientNumerator;
-
-        int speedCoefficientDenominator;
-
-        Facing facing;
+        int msPassedCurrentAnimFrame;
 
         UnitSpritesheetEntry spritesheetEntry;
 

@@ -84,7 +84,7 @@ namespace Rival {
         y1 += static_cast<float>(unitOffsetY);
         float x2 = x1 + width;
         float y2 = y1 + height;
-        float z = -1.0f;
+        float z = RenderUtils::getEntityZ(unit.getX(), unit.getY());
         std::vector<GLfloat> vertexData = {
             x1, y1, z,
             x2, y1, z,

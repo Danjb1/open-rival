@@ -186,8 +186,10 @@ namespace Rival {
         return mapBorderSpritesheet;
     }
 
-    const Spritesheet& Resources::getTileSpritesheet(int index) const {
-        return tileSpritesheets.at(index);
+    const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {
+        return wilderness
+                ? tileSpritesheets.at(1)
+                : tileSpritesheets.at(0);
     }
 
     const std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {

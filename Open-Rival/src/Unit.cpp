@@ -6,10 +6,7 @@ namespace Rival {
     Unit::Unit(UnitType type)
         : deleted(false),
           id(-1),
-          type(type),
-          animation(type) {
-        setSpeedCoefficient(1, 1);
-    }
+          type(type) {}
 
     void Unit::addedToWorld(
             int newId, int newPlayer, int newX, int newY, Facing newFacing) {
@@ -17,37 +14,25 @@ namespace Rival {
         player = newPlayer;
         x = newX;
         y = newY;
-        animation.setFacing(newFacing);
+        facing = newFacing;
     }
 
     int Unit::getCurrentSpriteIndex() const {
-        return animation.getCurrentSpriteIndex();
+        return 0;  //animation.getCurrentSpriteIndex();
     }
 
     const UnitType Unit::getType() const {
         return type;
     }
 
-    void Unit::setAnimation(UnitAnimationType unitAnimationType) {
-        animation.setAnimation(unitAnimationType);
-    }
-
-    void Unit::setSpeedCoefficient(int numerator, int denominator) {
-        speedCoefficientNumerator = numerator;
-        speedCoefficientDenominator = denominator;
-        animation.setSpeedCoefficient(numerator, denominator);
-    }
-
-    void Unit::setSpeedCoefficient(int numerator) {
-        setSpeedCoefficient(numerator, 1);
-    }
-
     void Unit::rotateLeft() {
-        animation.rotateLeft();
+        int newFacing = (static_cast<int>(facing) - 1) % numFacings;
+        facing = static_cast<Facing>(newFacing);
     }
 
     void Unit::rotateRight() {
-        animation.rotateRight();
+        int newFacing = (static_cast<int>(facing) + 1) % numFacings;
+        facing = static_cast<Facing>(newFacing);
     }
 
     const bool Unit::isDeleted() const {
@@ -71,7 +56,7 @@ namespace Rival {
     }
 
     void Unit::tick() {
-        animation.tick();
+        //animation.tick();
     }
 
 }  // namespace Rival

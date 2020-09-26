@@ -4,22 +4,12 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Remove unnecessary unique_ptrs
-    - Initialise as much as possible in the ctor
+ - Refactor animations
+    - Use a component-based system to keep animations and units loosely coupled
+    - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
+        - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
- - State has no reference to Application
-    - Should we save a pointer to the Application in initialize() method?
-
- - Inheritance - check implementation; do we need a virtual destructor?
-
- - How can we change states?
-    - Where can the new State be created such that it won't go out of scope?
-    - Application should hold a unique_ptr() to the state
-    - A changeState() method should change ownership (std::move) of a
-        newly-created state to the Application
-
- - Loading a Scenario should be more straightforward / robust
-    - Right now you could pass anything to ScenarioBuilder.build()
+ - Inheritance (Rival / State) - check implementation; do we need a virtual destructor?
 
  - Code review!
 
@@ -68,8 +58,6 @@ character filename (including path)
     - Delete Renderables when a Building no longer exists
         - If a Building is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
-    - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
-        - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
  - ScenarioReader:
     - Use BinaryFileReader
@@ -82,8 +70,8 @@ character filename (including path)
 
  - Should enums have type specifiers (e.g. TileType is std::int8_t)?
 
- - Animations:
-    - After advancing the animation frame, subtract spritesheetAnimRate / speedCoefficient from animationTick, thus preserving the remainder
+ - Should constants outside classes be static?
+    - e.g. TimerUtils, RenderUtils, UnitAnimationLookup
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -152,7 +140,6 @@ character filename (including path)
  - Render Units
     - Animations
     - Respect colour
- - Use appropriate z-positions for entities
  - Fog of war
  - High resolution support (!)
 

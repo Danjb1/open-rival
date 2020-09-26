@@ -24,10 +24,9 @@ namespace Rival {
     class Rival : public State {
 
     public:
-        Rival(Window& window, Scenario& scenario);
+        Rival(Application& app, std::unique_ptr<Scenario> scenario);
 
         // Inherited from State
-        void initialize(Application* app);
         void keyDown(const SDL_Keycode keyCode) override;
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
         void render() override;
@@ -39,13 +38,15 @@ namespace Rival {
         static const int framebufferWidth;
         static const int framebufferHeight;
 
+        Application& app;
         Window& window;
+        Resources& res;
 
-        // Camera
+        std::unique_ptr<Scenario> scenario;
+
         Camera camera;
 
-        // Viewport:
-        // the rectangle on the screen to which the game is rendered (pixels)
+        // The rectangle on the screen to which the game is rendered (pixels)
         Rect viewport;
 
         /**
@@ -55,22 +56,19 @@ namespace Rival {
          * This ensures that there are no seams between tiles, and we can
          * perform any scaling when we render the framebuffer to the screen.
          */
-        std::unique_ptr<Framebuffer> gameFbo;
-
-        // Scenario
-        Scenario& scenario;
+        Framebuffer gameFbo;
 
         // Renderers
-        std::unique_ptr<BuildingRenderer> buildingRenderer;
-        std::unique_ptr<FramebufferRenderer> gameFboRenderer;
-        std::unique_ptr<TileRenderer> tileRenderer;
-        std::unique_ptr<MapBorderRenderer> mapBorderRenderer;
-        std::unique_ptr<UnitRenderer> unitRenderer;
+        BuildingRenderer buildingRenderer;
+        FramebufferRenderer gameFboRenderer;
+        TileRenderer tileRenderer;
+        MapBorderRenderer mapBorderRenderer;
+        UnitRenderer unitRenderer;
 
         /**
          * Object used to find what's under the mouse.
          */
-        std::unique_ptr<MousePicker> mousePicker;
+        MousePicker mousePicker;
 
         /**
          * The window renderer.

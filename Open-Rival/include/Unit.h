@@ -8,12 +8,27 @@
 
 namespace Rival {
 
+    enum class Facing {
+        South,
+        SouthWest,
+        West,
+        NorthWest,
+        North,
+        NorthEast,
+        East,
+        SouthEast
+    };
+
     class Unit {
 
     public:
         // Size of a Unit, in world units
         static const int width = 1;
         static const int height = 1;
+
+        static const int numFacings = 8;
+
+        Facing facing;
 
         Unit(UnitType type);
 
@@ -22,12 +37,6 @@ namespace Rival {
         int getCurrentSpriteIndex() const;
 
         const UnitType getType() const;
-
-        void setAnimation(UnitAnimationType unitAnimationType);
-
-        void setSpeedCoefficient(int numerator, int denominator);
-
-        void setSpeedCoefficient(int numerator);
 
         void rotateLeft();
 
@@ -51,12 +60,6 @@ namespace Rival {
         bool deleted;
 
         UnitType type;
-
-        UnitAnimation animation;
-
-        int speedCoefficientNumerator;
-
-        int speedCoefficientDenominator;
 
         int player;
 
