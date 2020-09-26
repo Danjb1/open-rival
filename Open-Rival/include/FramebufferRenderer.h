@@ -14,13 +14,6 @@ namespace Rival {
         FramebufferRenderer(Framebuffer& fbo);
 
         /**
-         * Sets up this renderer to fill the entire viewport when rendering.
-         *
-         * This must be called before any rendering can take place!
-         */
-        void init();
-
-        /**
          * Renders a portion of this framebuffer's texture to the screen.
          *
          * To achieve pixel-perfect rendering, `srcWidth` and `srcHeight`

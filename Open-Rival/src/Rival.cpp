@@ -28,76 +28,57 @@ namespace Rival {
     const int Rival::framebufferHeight =
             RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
 
-    Rival::Rival(Window& window, Scenario& scenario)
-        : window(window),
+    Rival::Rival(Application& app, std::unique_ptr<Scenario> scenarioToMove)
+        : app(app),
+          window(app.getWindow()),
+          res(app.getResources()),
+          scenario(std::move(scenarioToMove)),
+
           viewport(Rect(0, 0,
                   static_cast<float>(window.getWidth()),
                   static_cast<float>(window.getHeight() - 100))),
-          scenario(scenario),
+
           camera(0.0f, 0.0f,
                   RenderUtils::pxToWorld_X(
                           static_cast<float>(window.getWidth())),
                   window.getAspectRatio(),
-                  scenario) {}
+                  *scenario),
 
-    void Rival::initialize(Application* app) {
+          gameFbo(Framebuffer::generate(
+                  framebufferWidth, framebufferHeight, true)),
+          gameFboRenderer(gameFbo),
 
-        // Create our framebuffer
-        gameFbo = std::make_unique<Framebuffer>(
-                Framebuffer::generate(
-                        framebufferWidth, framebufferHeight, true));
+          mousePicker(camera, viewport, *scenario),
 
-        // Create the FramebufferRenderer
-        gameFboRenderer = std::make_unique<FramebufferRenderer>(*gameFbo);
-        gameFboRenderer->init();
+          tileRenderer(res.getTileSpritesheet(
+                               scenario->isWilderness()),
+                  res.getPalette()),
 
-        // Create the MousePicker
-        mousePicker = std::make_unique<MousePicker>(camera, viewport, scenario);
+          // Hardcode the race for now
+          mapBorderRenderer(Race::Human,
+                  scenario->getWidth(),
+                  scenario->getHeight(),
+                  res.getMapBorderSpritesheet(),
+                  res.getPalette()),
 
-        // Pick which tile Spritesheet to use based on the map type
-        Resources& res = app->getResources();
-        const Spritesheet& tileSpritesheet = scenario.isWilderness()
-                ? res.getTileSpritesheet(1)
-                : res.getTileSpritesheet(0);
+          unitRenderer(res.getUnitSpritesheets(),
+                  res.getPalette()),
 
-        // Create the TileRenderer
-        tileRenderer = std::make_unique<TileRenderer>(
-                tileSpritesheet,
-                res.getPalette());
-
-        // Hardcode this, for now
-        Race race = Race::Human;
-
-        // Create the MapBorderRenderer
-        mapBorderRenderer = std::make_unique<MapBorderRenderer>(
-                race,
-                scenario.getWidth(),
-                scenario.getHeight(),
-                res.getMapBorderSpritesheet(),
-                res.getPalette());
-
-        // Create the UnitRenderer
-        unitRenderer = std::make_unique<UnitRenderer>(
-                res.getUnitSpritesheets(),
-                res.getPalette());
-
-        // Create the BuildingRenderer
-        buildingRenderer = std::make_unique<BuildingRenderer>(
-                res.getBuildingSpritesheets(),
-                res.getPalette());
-    }
+          buildingRenderer(res.getBuildingSpritesheets(),
+                  res.getPalette()) {}
 
     void Rival::update() {
-        mousePicker->handleMouse();
+        mousePicker.handleMouse();
 
         // TODO: Is this needed? (sprites don't render properly otherwise?)
-        std::map<int, std::unique_ptr<Building>>& buildings = scenario.getBuildings();
+        std::map<int, std::unique_ptr<Building>>& buildings =
+                scenario->getBuildings();
         for (auto const& kv : buildings) {
             const std::unique_ptr<Building>& building = kv.second;
             building->tick();
         }
 
-        std::map<int, std::unique_ptr<Unit>>& units = scenario.getUnits();
+        std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
         for (auto const& kv : units) {
             const std::unique_ptr<Unit>& unit = kv.second;
             unit->tick();
@@ -111,7 +92,7 @@ namespace Rival {
         // that we render onto, in pixels. We use the camera size here; if the
         // camera is wider, more pixels are visible, and thus we need a larger
         // render target.
-        glBindFramebuffer(GL_FRAMEBUFFER, gameFbo->getId());
+        glBindFramebuffer(GL_FRAMEBUFFER, gameFbo.getId());
         int canvasWidth = static_cast<int>(
                 RenderUtils::worldToPx_X(camera.getWidth()));
         int canvasHeight = static_cast<int>(
@@ -146,19 +127,22 @@ namespace Rival {
         glUseProgram(indexedTextureShader.programId);
 
         // Determine view matrix.
+        //
         // OpenGL uses right-handed rule:
         //  - x points right
         //  - y points up
         //  - z points out of the screen
+        //
         // The camera co-ordinates are in world units (tiles), but our vertices
         // are positioned using pixels. Therefore we need to convert the camera
         // co-ordinates to pixels, too.
         float cameraX = RenderUtils::worldToPx_X(camera.getX());
         float cameraY = RenderUtils::worldToPx_Y(camera.getY());
+        float cameraZ = RenderUtils::zCamera;
         glm::mat4 view = glm::lookAt(
-                glm::vec3(cameraX, cameraY, 0),   // camera position
-                glm::vec3(cameraX, cameraY, -1),  // look at
-                glm::vec3(0, 1, 0)                // up vector
+                glm::vec3(cameraX, cameraY, cameraZ),  // camera position
+                glm::vec3(cameraX, cameraY, 0),        // look at
+                glm::vec3(0, 1, 0)                     // up vector
         );
 
         // Determine projection matrix.
@@ -168,8 +152,8 @@ namespace Rival {
         float top = -viewportHeight / 2.0f;
         float right = viewportWidth / 2.0f;
         float bottom = viewportHeight / 2.0f;
-        float near = 1.0f;
-        float far = 1024.0f;
+        float near = RenderUtils::nearPlane;
+        float far = RenderUtils::farPlane;
         glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
 
         // Combine matrices
@@ -182,20 +166,20 @@ namespace Rival {
         glUniform1i(indexedTextureShader.paletteTexUnitUniformLocation, 1);
 
         // Render Tiles
-        tileRenderer->render(
+        tileRenderer.render(
                 camera,
-                scenario.getTiles(),
-                scenario.getWidth(),
-                scenario.getHeight());
+                scenario->getTiles(),
+                scenario->getWidth(),
+                scenario->getHeight());
 
         // Render Map Borders
-        mapBorderRenderer->render();
+        mapBorderRenderer.render();
 
         // Render Units
-        unitRenderer->render(camera, scenario.getUnits());
+        unitRenderer.render(camera, scenario->getUnits());
 
         // Render Units
-        buildingRenderer->render(camera, scenario.getBuildings());
+        buildingRenderer.render(camera, scenario->getBuildings());
     }
 
     void Rival::renderFramebuffer(int srcWidth, int srcHeight) {
@@ -217,7 +201,7 @@ namespace Rival {
         // At a zoom level of 1, this will result in pixel-perfect rendering.
         // A higher zoom level will result in a smaller sample, which will
         // then be stretched to fill the viewport.
-        gameFboRenderer->render(srcWidth, srcHeight);
+        gameFboRenderer.render(srcWidth, srcHeight);
     }
 
     void Rival::keyDown(const SDL_Keycode keyCode) {

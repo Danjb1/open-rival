@@ -8,17 +8,6 @@
 
 namespace Rival {
 
-    enum class Facing {
-        South,
-        SouthWest,
-        West,
-        NorthWest,
-        North,
-        NorthEast,
-        East,
-        SouthEast
-    };
-
     enum class UnitAnimationType {
         Standing,
         HoldingBag,
@@ -29,13 +18,14 @@ namespace Rival {
     };
 
     using UnitAnimationPair = std::pair<UnitType, UnitAnimationType>;
-    // UnitSpriteSheetEntry holds start index and end index for
-    //   each pair of UnitAnimationType and Facing, together with
-    //   ticks needed between animation steps.
+
+    // { start index, end index, msPerFrame }
     // Providing this data just for Facing::South case is enough
     using UnitSpritesheetEntry = std::tuple<int, int, int>;
+
     using UnitAnimationLookup = std::map<UnitAnimationPair, UnitSpritesheetEntry>;
-    static const UnitAnimationLookup unitAnimationLookup = {
+
+    const UnitAnimationLookup unitAnimationLookup = {
         // Just human peasant is complete, for proof of concept. A recheck maybe.
         { { UnitType::Peasant, UnitAnimationType::Standing }, { 0, 0, 1 } },
         { { UnitType::Peasant, UnitAnimationType::HoldingBag }, { 8, 8, 1 } },

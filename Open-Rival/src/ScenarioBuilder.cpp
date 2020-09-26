@@ -2,6 +2,7 @@
 #include "ScenarioBuilder.h"
 
 #include <iterator>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -10,7 +11,12 @@ namespace Rival {
     ScenarioBuilder::ScenarioBuilder(ScenarioData data)
         : data(data) {}
 
-    void ScenarioBuilder::build(Scenario& scenario) {
+    std::unique_ptr<Scenario> ScenarioBuilder::build() {
+
+        std::unique_ptr<Scenario> scenario = std::make_unique<Scenario>(
+                data.hdr.mapWidth,
+                data.hdr.mapHeight,
+                data.hdr.wilderness);
 
         // Initialise Tiles
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
@@ -19,13 +25,13 @@ namespace Rival {
         for (int i = 0; i < numTiles; ++i) {
             tiles.push_back(buildTile(data.tiles[i]));
         }
-        scenario.tilesLoaded(tiles);
+        scenario->tilesLoaded(tiles);
 
         // Initialise Units
         for (UnitPlacement& unitPlacement : data.units) {
             std::unique_ptr<Unit> unit = std::make_unique<Unit>(
                     getUnitType(unitPlacement.type));
-            scenario.addUnit(std::move(unit),
+            scenario->addUnit(std::move(unit),
                     unitPlacement.player,
                     unitPlacement.x,
                     unitPlacement.y,
@@ -36,12 +42,14 @@ namespace Rival {
         for (BuildingPlacement& buildingPlacement : data.buildings) {
             std::unique_ptr<Building> building = std::make_unique<Building>(
                     getBuildingType(buildingPlacement.type));
-            scenario.addBuilding(std::move(building),
+            scenario->addBuilding(std::move(building),
                     buildingPlacement.player,
                     buildingPlacement.x,
                     buildingPlacement.y,
                     buildingPlacement.wallVariant);
         }
+
+        return scenario;
     }
 
     /**

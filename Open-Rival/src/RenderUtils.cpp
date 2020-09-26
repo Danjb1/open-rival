@@ -69,5 +69,20 @@ namespace RenderUtils {
         return 2 * (y / tileSpriteHeightPx);
     }
 
+    float getEntityZ(int x, int y) {
+        // Depth is controlled by the y-position, so entities further down the
+        // map will be rendered on top
+        float z = RenderUtils::zEntitiesStart + static_cast<float>(y);
+
+        // Tiles in a given row zigzag up and down.
+        // Entities at the bottom of this zigzag should be rendered on top
+        // of others in the same row.
+        if (x % 2 == 1) {
+            z += 0.5f;
+        }
+
+        return z;
+    }
+
 }
 }  // namespace Rival::RenderUtils

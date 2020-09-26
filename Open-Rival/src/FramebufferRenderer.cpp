@@ -10,9 +10,7 @@
 namespace Rival {
 
     FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
-        : fbo(fbo) {}
-
-    void FramebufferRenderer::init() {
+        : fbo(fbo) {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
