@@ -4,14 +4,25 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Fix compiler warnings
+
+ - Code review comments:
+    - State class needs to define a virtual destructor, otherwise the compiler won't know it has to call the derived class' destructor as well
+    - ScenarioReader and ScenarioBuilder can be rewritten as free-standing functions, something like this:
+        auto scenario_desc = readScenario(scenarioPath);
+        auto scenario = buildScenario(scenario_desc);
+      Even better, you can put them inside a common namespace (something like ScenarioUtils and group them.
+    - Why the call to window.use()? Just call it in the constructor. Or rename to `window.init` ?
+    - Application::exit should be moved inside the destructor, so it is automatically called on destruction, or if an exception occurred.
+    - Application::getWindow should return a const Window& if you don't want the calling code to be able to modify Window. Also, make sure to use const modifiers whenever possible.
+
  - Refactor animations
+    - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
     - Use a component-based system to keep animations and units loosely coupled
     - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
         - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
  - Inheritance (Rival / State) - check implementation; do we need a virtual destructor?
-
- - Code review!
 
  - Render the UI
 
