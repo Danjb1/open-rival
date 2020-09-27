@@ -19,6 +19,12 @@ namespace Rival {
         : paletteTexture(paletteTexture),
           renderable { spritesheet, maxTilesToRender } {}
 
+    /**
+     * Renders all tiles visible to the camera.
+     *
+     * Note that while this is very slow in Debug mode, performance is not an
+     * issue in Release mode.
+     */
     void TileRenderer::render(
             const Camera& camera,
             const std::vector<Tile>& tiles,
@@ -73,10 +79,14 @@ namespace Rival {
         texCoords.reserve(texCoordDataSize);
 
         // Add data to buffers
-        for (int tileY = minY; tileY <= maxY; tileY++) {
-            for (int tileX = minX; tileX <= maxX; tileX++) {
+        for (int tileY = minY; tileY <= maxY; ++tileY) {
 
-                auto const& tile = tiles[tileY * mapWidth + tileX];
+            // Calculate the index of the first tile in this row
+            int tileIndex = tileY * mapWidth + minX;
+
+            for (int tileX = minX; tileX <= maxX; ++tileX) {
+
+                auto const& tile = tiles[tileIndex];
                 const int txIndex = tile.txIndex;
 
                 // Define vertex positions
@@ -111,6 +121,8 @@ namespace Rival {
                         texCoords.end(),
                         thisTexCoords.begin(),
                         thisTexCoords.end());
+
+                ++tileIndex;
             }
         }
 

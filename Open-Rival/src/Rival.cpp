@@ -17,7 +17,6 @@
 #include "RenderUtils.h"
 #include "Shaders.h"
 #include "Spritesheet.h"
-#include "TimerUtils.h"
 
 namespace Rival {
 
