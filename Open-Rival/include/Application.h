@@ -21,22 +21,24 @@ namespace Rival {
          */
         void start(std::unique_ptr<State> state);
 
-        /**
-         * Exits the Application cleanly.
-         */
-        void exit();
+        void pollEvents();
 
         Window& getWindow();
         Resources& getResources();
 
     private:
+        /**
+         * Minimum time that we will consider sleeping for.
+         *
+         * If the next frame is due sooner than this then we will just
+         * busy-wait, to reduce the risk of oversleeping.
+         */
+        static const int minSleepTime = 2;
+
+        bool exiting;
         Window& window;
         Resources res;
-
         std::unique_ptr<State> state;
-
-        void initGLEW();
-        void initGL();
     };
 
 }  // namespace Rival

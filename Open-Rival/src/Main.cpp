@@ -71,6 +71,8 @@ void initGL() {
  */
 int main() {
 
+    int exitCode = 0;
+
     try {
 
         // Initialize SDL
@@ -99,11 +101,13 @@ int main() {
         // Run the game!
         app.start(std::move(initialState));
 
-    } catch (const std::runtime_error& e) {
+    } catch (const std::exception& e) {
         std::cerr << "Unhandled error during initialization or gameplay\n";
         std::cerr << e.what() << "\n";
-        return 1;
+        exitCode = 1;
     }
 
-    return 0;
+    SDL_Quit();
+
+    return exitCode;
 }

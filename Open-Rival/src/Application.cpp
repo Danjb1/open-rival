@@ -5,13 +5,14 @@
 
 namespace Rival {
 
-    bool vsyncEnabled = true;
-
     Application::Application(Window& window)
         : window(window) {
 
-        // Try to enable vsync
-        if (SDL_GL_SetSwapInterval(1) < 0) {
+        // Try to enable vsync.
+        // Note that vsync may already be enabled by default!
+        if (SDL_GL_SetSwapInterval(1) == 0) {
+            vsyncEnabled = true;
+        } else {
             printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
             vsyncEnabled = false;
         }
@@ -19,30 +20,24 @@ namespace Rival {
 
     void Application::start(std::unique_ptr<State> initialState) {
 
-        // Event handler
-        SDL_Event e;
-
         state = std::move(initialState);
-        bool exiting = false;
         Uint32 nextUpdateDue = SDL_GetTicks();
 
         // Game loop
         while (!exiting) {
+
+            // Determine when this frame began.
+            // If we are running behind, this will be a long time after
+            // nextUpdateDue, so we will have to update the logic multiple
+            // times to catch up. If we are ahead of schedule, this will be
+            // BEFORE nextUpdateDue, and we will need to wait a little longer.
             Uint32 frameStartTime = SDL_GetTicks();
 
             // Is the next update due?
             if (vsyncEnabled || nextUpdateDue <= frameStartTime) {
 
                 // Handle events on the queue
-                while (SDL_PollEvent(&e) != 0) {
-                    if (e.type == SDL_QUIT) {
-                        exiting = true;
-                    } else if (e.type == SDL_KEYDOWN) {
-                        state->keyDown(e.key.keysym.sym);
-                    } else if (e.type == SDL_MOUSEWHEEL) {
-                        state->mouseWheelMoved(e.wheel);
-                    }
-                }
+                pollEvents();
 
                 // Update the game logic, as many times as necessary to keep it
                 // in-sync with the refresh rate.
@@ -69,19 +64,27 @@ namespace Rival {
                 window.swapBuffers();
 
             } else {
-                // Next update is not yet due.
-                // Sleep for the shortest possible time, so as not to risk
-                // overshooting!
-                SDL_Delay(1);
+                // Next update is not yet due (frameStartTime < nextUpdateDue),
+                // so let's sleep (unless the next update is imminent!)
+                Uint32 sleepTime = nextUpdateDue - frameStartTime;
+                if (sleepTime >= minSleepTime) {
+                    SDL_Delay(sleepTime);
+                }
             }
         }
-
-        // Free resources and exit SDL
-        exit();
     }
 
-    void Application::exit() {
-        SDL_Quit();
+    void Application::pollEvents() {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                exiting = true;
+            } else if (e.type == SDL_KEYDOWN) {
+                state->keyDown(e.key.keysym.sym);
+            } else if (e.type == SDL_MOUSEWHEEL) {
+                state->mouseWheelMoved(e.wheel);
+            }
+        }
     }
 
     Window& Application::getWindow() {
