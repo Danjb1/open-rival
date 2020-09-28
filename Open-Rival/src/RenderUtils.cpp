@@ -84,5 +84,26 @@ namespace RenderUtils {
         return z;
     }
 
+    int getCanvasWidth(float cameraWidth) {
+        int canvasWidth = static_cast<int>(
+                RenderUtils::worldToPx_X(cameraWidth));
+        // Round up to the nearest even number.
+        // This is crucial as this value gets divided by 2 when setting the
+        // projection matrix using `glm::ortho`. For an odd number, floating
+        // point errors could then cause a subtle difference between the
+        // viewport size and the canvas size, which could ultimately lead to
+        // seams between tiles.
+        // For an explanation of this little bitwise trick, see:
+        // https://stackoverflow.com/a/57106819/1624459
+        return canvasWidth + (canvasWidth & 1);
+    }
+
+    int getCanvasHeight(float cameraHeight) {
+        int canvasHeight = static_cast<int>(
+                RenderUtils::worldToPx_Y(cameraHeight));
+        // See comments in `getCanvasWidth`.
+        return canvasHeight + (canvasHeight & 1);
+    }
+
 }
 }  // namespace Rival::RenderUtils

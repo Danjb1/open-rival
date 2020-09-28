@@ -25,8 +25,9 @@ namespace RenderUtils {
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered
     // at one time, and, by extension, the limits of our camera.
-    static const int maxTilesX = 50;
-    static const int maxTilesY = 100;
+    // For now, this is set to the maximum map size in the original game.
+    static const int maxTilesX = 210;
+    static const int maxTilesY = 134;
 
     // Camera z-position.
     // We position our camera such that it looks into the screen.
@@ -101,6 +102,18 @@ namespace RenderUtils {
     float pxToWorld_Y(float y);
 
     float getEntityZ(int x, int y);
+
+    /**
+     * Gets the width of the canvas required to render the area visible to
+     * the given camera at a pixel-perfect scale.
+     */
+    int getCanvasWidth(float cameraWidth);
+
+    /**
+     * Gets the height of the canvas required to render the area visible to
+     * the given camera at a pixel-perfect scale.
+     */
+    int getCanvasHeight(float cameraHeight);
 
 }
 }  // namespace Rival::RenderUtils

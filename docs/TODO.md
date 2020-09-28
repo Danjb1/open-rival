@@ -4,11 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - ScenarioReader and ScenarioBuilder can be rewritten as free-standing functions, e.g.
-        auto scenario_desc = readScenario(scenarioPath);
-        auto scenario = buildScenario(scenario_desc);
-    Even better, put them inside a common namespace (e.g. ScenarioUtils) and group them
-
  - Refactor animations
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
     - Use a component-based system to keep animations and units loosely coupled
@@ -21,26 +16,12 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
- - Visible seams in certain camera positions (zoom in and out in the bottom-right corner), e.g.
-      zoom = 1.799999952f;
-      setPos(98.10455322f, 62.28129578f);
-
-        #include <iomanip>
-        std::cout << std::setprecision(10) << "camera is at " << x << ", " << y << " (" << zoom << ")\n";
-
- - maxTilesX and maxTilesY should depend on the window size
-    - We risk overflowing the buffer in high resolutions
-
- - The game will crash if a level is smaller than the number of visible tiles
-
  - extractImages() method in setup/src/image-extractor.cpp assumes at most 63
 character filename (including path)
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
-
- - Don't translate the camera when zooming if we were already at max zoom
 
  - Reduce duplication between MousePicker and zooming logic
 
@@ -78,6 +59,11 @@ character filename (including path)
         glDeleteFramebuffers(1, &id);
 
  - Should enums have type specifiers (e.g. TileType is std::int8_t)?
+ 
+ - Consider rewriting ScenarioReader and ScenarioBuilder as free-standing functions, e.g.
+        auto scenario_desc = readScenario(scenarioPath);
+        auto scenario = buildScenario(scenario_desc);
+   These could live inside a common namespace (e.g. ScenarioUtils)
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -101,7 +87,6 @@ character filename (including path)
 
 ### Game
 
- - Game logic should run at a consistent rate, regardless of monitor refresh rate
  - Store unit / building defaults
  - Buildings
  - Mountains
@@ -189,7 +174,6 @@ character filename (including path)
  - [ ] Replays
  - [ ] Multilanguage support
  - [ ] ARM version (for Raspberry Pi)
- - [ ] Windows XP support
  - [ ] Support for larger screen resolutions
  - [ ] Support for bigger maps
  - [ ] Upscale graphics using AI?

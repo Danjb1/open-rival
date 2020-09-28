@@ -7,6 +7,7 @@
 #pragma warning(disable : 4127)
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
+#include <algorithm>
 #include <map>
 
 #include "MathUtils.h"
@@ -58,13 +59,13 @@ namespace Rival {
         int maxX = minX + numTilesX;
         int maxY = minY + numTilesY;
 
-        // Keep within bounds
-        if (maxX >= mapWidth) {
-            maxX = mapWidth - 1;
-        }
-        if (maxY >= mapHeight) {
-            maxY = mapHeight - 1;
-        }
+        // Keep within the map bounds
+        maxX = std::min(maxX, mapWidth - 1);
+        maxY = std::min(maxY, mapHeight - 1);
+
+        // Keep within the rendering limits
+        maxX = std::min(maxX, RenderUtils::maxTilesX);
+        maxY = std::min(maxY, RenderUtils::maxTilesY);
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
