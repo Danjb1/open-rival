@@ -22,6 +22,8 @@ namespace Rival {
             const GLuint texId = texture.getId();
             glDeleteTextures(1, &texId);
         }
+        const GLuint texId = paletteTexture.getId();
+        glDeleteTextures(1, &texId);
     }
 
     std::vector<Texture> Resources::loadTextures() {

@@ -46,8 +46,7 @@ namespace Rival {
                   window.getAspectRatio(),
                   *scenario),
 
-          gameFbo(Framebuffer::generate(
-                  framebufferWidth, framebufferHeight, true)),
+          gameFbo(framebufferWidth, framebufferHeight, true),
           gameFboRenderer(gameFbo),
 
           mousePicker(camera, viewport, *scenario),
