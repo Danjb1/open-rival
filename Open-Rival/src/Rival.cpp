@@ -95,10 +95,8 @@ namespace Rival {
         // camera is wider, more pixels are visible, and thus we need a larger
         // render target.
         glBindFramebuffer(GL_FRAMEBUFFER, gameFbo.getId());
-        int canvasWidth = static_cast<int>(
-                RenderUtils::worldToPx_X(camera.getWidth()));
-        int canvasHeight = static_cast<int>(
-                RenderUtils::worldToPx_Y(camera.getHeight()));
+        int canvasWidth = RenderUtils::getCanvasWidth(camera.getWidth());
+        int canvasHeight = RenderUtils::getCanvasHeight(camera.getHeight());
         glViewport(0, 0, canvasWidth, canvasHeight);
         renderGame(canvasWidth, canvasHeight);
 
@@ -148,8 +146,9 @@ namespace Rival {
         );
 
         // Determine projection matrix.
-        // This should match the viewport size exactly, in order to achieve
-        // pixel-perfect rendering.
+        // The projection size must match the viewport size *exactly* in order
+        // to achieve pixel-perfect rendering. Any differences here could
+        // result in seams between tiles.
         float left = -viewportWidth / 2.0f;
         float top = -viewportHeight / 2.0f;
         float right = viewportWidth / 2.0f;
@@ -253,10 +252,18 @@ namespace Rival {
         }
 
         // Zoom
+        float zoomBefore = camera.getZoom();
         if (scrollAmount > 0) {
             camera.modZoom(Camera::zoomInterval);
         } else {
             camera.modZoom(-Camera::zoomInterval);
+        }
+        float zoomAfter = camera.getZoom();
+
+        // If the zoom level hasn't changed, there is no need to translate
+        // the camera
+        if (zoomBefore == zoomAfter) {
+            return;
         }
 
         // Calculate the mouse position relative to the viewport, in pixels

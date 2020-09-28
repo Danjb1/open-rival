@@ -21,8 +21,7 @@ namespace Rival {
     class TileRenderer {
 
     public:
-        // The maximum number of tiles we can render.
-        // This is the max map size in the original game.
+        // The maximum number of tiles we can render at once
         static const int maxTilesToRender =
                 RenderUtils::maxTilesX * RenderUtils::maxTilesY;
 
