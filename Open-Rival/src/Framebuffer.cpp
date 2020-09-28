@@ -6,39 +6,15 @@
 
 namespace Rival {
 
-    Framebuffer::Framebuffer(
-            const GLuint id, const GLuint textureId, int width, int height)
-        : id(id),
-          textureId(textureId),
-          width(width),
-          height(height) {}
-
-    GLuint Framebuffer::getId() const {
-        return id;
-    }
-
-    GLuint Framebuffer::getTextureId() const {
-        return textureId;
-    }
-
-    int Framebuffer::getWidth() const {
-        return width;
-    }
-
-    int Framebuffer::getHeight() const {
-        return height;
-    }
-
-    const Framebuffer Framebuffer::generate(
-            int width, int height, bool useDepth) {
+    Framebuffer::Framebuffer(int w, int h, bool useDepth)
+        : width(w),
+          height(h) {
 
         // Generate framebuffer
-        GLuint id = 0;
         glGenFramebuffers(1, &id);
         glBindFramebuffer(GL_FRAMEBUFFER, id);
 
         // Create a texture to back this framebuffer
-        GLuint textureId = 0;
         glGenTextures(1, &textureId);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
@@ -60,9 +36,8 @@ namespace Rival {
         glDrawBuffers(1, drawBuffers);
 
         // Add the depth buffer, if required
-        Framebuffer framebuffer = Framebuffer(id, textureId, width, height);
         if (useDepth) {
-            framebuffer.addDepthBuffer();
+            addDepthBuffer();
         }
 
         // Check for errors
@@ -74,8 +49,6 @@ namespace Rival {
 
         // Revert the state back to normal
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        return framebuffer;
     }
 
     // See:
@@ -88,6 +61,27 @@ namespace Rival {
                 GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
                 GL_RENDERBUFFER, depthRenderBufferId);
+    }
+
+    Framebuffer::~Framebuffer() {
+        glDeleteTextures(1, &textureId);
+        glDeleteFramebuffers(1, &id);
+    }
+
+    GLuint Framebuffer::getId() const {
+        return id;
+    }
+
+    GLuint Framebuffer::getTextureId() const {
+        return textureId;
+    }
+
+    int Framebuffer::getWidth() const {
+        return width;
+    }
+
+    int Framebuffer::getHeight() const {
+        return height;
     }
 
 }  // namespace Rival

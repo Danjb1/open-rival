@@ -54,10 +54,6 @@ character filename (including path)
     - Improve error handling
     - Analyse skipped sections; do they vary? Are they read?
 
- - Destroy Textures / Framebuffer on exit
-        glDeleteTextures(1, &id);
-        glDeleteFramebuffers(1, &id);
-
  - Should enums have type specifiers (e.g. TileType is std::int8_t)?
  
  - Consider rewriting ScenarioReader and ScenarioBuilder as free-standing functions, e.g.
@@ -183,6 +179,10 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 
  - Remove assets from git history
- - Add a license
- - Static code analysis
- - Unit tests
+
+<!----------------------------------------------------------------------------->
+## Unit Tests
+<!----------------------------------------------------------------------------->
+
+ - Produce list of required tests
+ - Write some tests!
