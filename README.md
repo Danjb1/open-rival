@@ -12,6 +12,10 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 > Rival Realms remake.
 
+### [Open-Rival-test](/Open-Rival-test)
+
+> Unit tests for `Open-Rival`.
+
 ### [setup](/setup)
 
 > Installer for Open-Rival, that combines the various utilities listed below.

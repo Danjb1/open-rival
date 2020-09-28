@@ -8,7 +8,14 @@ namespace Rival {
     class Framebuffer {
 
     public:
-        Framebuffer(GLuint id, GLuint textureId, int width, int height);
+        Framebuffer::Framebuffer(int width, int height, bool useDepth);
+        ~Framebuffer();
+
+        // Prevent moving or copying (rule of 5)
+        Framebuffer(const Framebuffer& other) = delete;
+        Framebuffer(Framebuffer&& other) = delete;
+        Framebuffer& operator=(const Framebuffer& other) = delete;
+        Framebuffer& operator=(Framebuffer&& other) = delete;
 
         GLuint getId() const;
 

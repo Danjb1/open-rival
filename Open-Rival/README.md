@@ -13,3 +13,17 @@
 Build using Visual Studio after installing the above dependencies.
 
 See [this guide](/docs/development.md) for more details.
+
+## Static Code Analysis
+
+### [Cppcheck](http://cppcheck.sourceforge.net/)
+
+This should be run periodically.
+
+#### Quick
+
+    cppcheck --project=Open-Rival.vcxproj "--project-configuration=Release|x64"
+
+#### Full
+
+    cppcheck --project=Open-Rival.vcxproj
