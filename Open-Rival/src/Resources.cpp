@@ -26,8 +26,8 @@ namespace Rival {
 
     std::vector<Texture> Resources::loadTextures() {
 
-        std::vector<Texture> textures;
-        textures.reserve(numTextures);
+        std::vector<Texture> texList;
+        texList.reserve(numTextures);
 
         std::vector<std::string> textureNames = {
             // Units - Human
@@ -104,10 +104,10 @@ namespace Rival {
         };
 
         for (auto const& textureName : textureNames) {
-            textures.push_back(Texture::loadTexture(txDir + textureName));
+            texList.push_back(Texture::loadTexture(txDir + textureName));
         }
 
-        return textures;
+        return texList;
     }
 
     Texture Resources::initPaletteTexture() {
@@ -116,12 +116,12 @@ namespace Rival {
 
     std::map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets() {
 
-        std::map<BuildingType, Spritesheet> buildingSpritesheets;
+        std::map<BuildingType, Spritesheet> spritesheets;
         int nextIndex = txIndexBuildings;
 
         auto createSpritesheets = [&](int first, int last) {
             for (auto it { first }; it <= last; ++it) {
-                buildingSpritesheets.emplace(std::piecewise_construct,
+                spritesheets.emplace(std::piecewise_construct,
                         std::forward_as_tuple(static_cast<BuildingType>(it)),
                         std::forward_as_tuple(
                                 textures.at(nextIndex),
@@ -136,16 +136,16 @@ namespace Rival {
         ++nextIndex;
         createSpritesheets(firstHumanBuildingType, lastHumanBuildingType);
 
-        return buildingSpritesheets;
+        return spritesheets;
     }
 
     std::map<UnitType, Spritesheet> Resources::initUnitSpritesheets() {
 
-        std::map<UnitType, Spritesheet> unitSpritesheets;
+        std::map<UnitType, Spritesheet> spritesheets;
         int nextIndex = txIndexUnits;
 
         for (auto it { firstUnitType }; it <= lastUnitType; ++it) {
-            unitSpritesheets.emplace(std::piecewise_construct,
+            spritesheets.emplace(std::piecewise_construct,
                     std::forward_as_tuple(static_cast<UnitType>(it)),
                     std::forward_as_tuple(
                             textures.at(nextIndex),
@@ -154,19 +154,19 @@ namespace Rival {
             nextIndex++;
         }
 
-        return unitSpritesheets;
+        return spritesheets;
     }
 
     std::map<int, Spritesheet> Resources::initTileSpritesheets() {
 
-        std::map<int, Spritesheet> tileSpritesheets;
+        std::map<int, Spritesheet> spritesheets;
         int nextIndex = txIndexTiles;
 
         // 0 = Meadow
         // 1 = Wilderness
         // 2 = Fog
         for (int i = 0; i < 3; i++) {
-            tileSpritesheets.emplace(std::piecewise_construct,
+            spritesheets.emplace(std::piecewise_construct,
                     std::forward_as_tuple(i),
                     std::forward_as_tuple(
                             textures.at(nextIndex),
@@ -175,15 +175,14 @@ namespace Rival {
             nextIndex++;
         }
 
-        return tileSpritesheets;
+        return spritesheets;
     }
 
     Spritesheet Resources::initMapBorderSpritesheet() {
-        Spritesheet mapBorderSpritesheet(
+        return Spritesheet(
                 textures.at(txIndexTiles + 3),
                 RenderUtils::tileSpriteWidthPx,
                 RenderUtils::tileSpriteHeightPx);
-        return mapBorderSpritesheet;
     }
 
     const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {

@@ -10,66 +10,66 @@
 namespace Rival {
 
     const std::map<std::uint8_t, char> ScenarioReader::alphabet = {
-        { 0x12, 'b' },
-        { 0x13, 'c' },
-        { 0x15, 'a' },
-        { 0x16, 'f' },
-        { 0x17, 'g' },
-        { 0x18, 'd' },
-        { 0x19, 'e' },
-        { 0x1A, 'j' },
-        { 0x1B, 'k' },
-        { 0x1C, 'h' },
-        { 0x1D, 'i' },
-        { 0x1E, 'n' },
-        { 0x1F, 'o' },
-        { 0x20, 'l' },
-        { 0x21, 'm' },
-        { 0x22, 'r' },
-        { 0x23, 's' },
-        { 0x24, 'p' },
-        { 0x26, 'v' },
-        { 0x27, 'w' },
-        { 0x28, 't' },
-        { 0x29, 'u' },
-        { 0x2A, 'z' },
-        { 0x2C, 'x' },
-        { 0x2D, 'y' },
-        { 0x32, 'B' },
-        { 0x33, 'C' },
-        { 0x35, 'A' },
-        { 0x36, 'F' },
-        { 0x37, 'G' },
-        { 0x38, 'D' },
-        { 0x39, 'E' },
-        { 0x3A, 'J' },
-        { 0x3B, 'K' },
-        { 0x3C, 'H' },
-        { 0x3D, 'I' },
-        { 0x3E, 'N' },
-        { 0x3F, 'O' },
-        { 0x40, 'L' },
-        { 0x41, 'M' },
-        { 0x42, 'R' },
-        { 0x43, 'S' },
-        { 0x44, 'P' },
-        { 0x46, 'V' },
-        { 0x47, 'W' },
-        { 0x48, 'T' },
-        { 0x49, 'U' },
-        { 0x4A, 'Z' },
-        { 0x4C, 'X' },
-        { 0x4D, 'Y' },
-        { 0x52, '"' },
-        { 0x54, ' ' },
-        { 0x56, '&' },
-        { 0x60, ',' },
-        { 0x61, '-' },
-        { 0x62, '2' },
-        { 0x63, '3' },
-        { 0x71, '=' },
-        { 0x81, '\r' },
-        { 0x7A, '\n' }
+        { std::uint8_t(0x12), 'b' },
+        { std::uint8_t(0x13), 'c' },
+        { std::uint8_t(0x15), 'a' },
+        { std::uint8_t(0x16), 'f' },
+        { std::uint8_t(0x17), 'g' },
+        { std::uint8_t(0x18), 'd' },
+        { std::uint8_t(0x19), 'e' },
+        { std::uint8_t(0x1A), 'j' },
+        { std::uint8_t(0x1B), 'k' },
+        { std::uint8_t(0x1C), 'h' },
+        { std::uint8_t(0x1D), 'i' },
+        { std::uint8_t(0x1E), 'n' },
+        { std::uint8_t(0x1F), 'o' },
+        { std::uint8_t(0x20), 'l' },
+        { std::uint8_t(0x21), 'm' },
+        { std::uint8_t(0x22), 'r' },
+        { std::uint8_t(0x23), 's' },
+        { std::uint8_t(0x24), 'p' },
+        { std::uint8_t(0x26), 'v' },
+        { std::uint8_t(0x27), 'w' },
+        { std::uint8_t(0x28), 't' },
+        { std::uint8_t(0x29), 'u' },
+        { std::uint8_t(0x2A), 'z' },
+        { std::uint8_t(0x2C), 'x' },
+        { std::uint8_t(0x2D), 'y' },
+        { std::uint8_t(0x32), 'B' },
+        { std::uint8_t(0x33), 'C' },
+        { std::uint8_t(0x35), 'A' },
+        { std::uint8_t(0x36), 'F' },
+        { std::uint8_t(0x37), 'G' },
+        { std::uint8_t(0x38), 'D' },
+        { std::uint8_t(0x39), 'E' },
+        { std::uint8_t(0x3A), 'J' },
+        { std::uint8_t(0x3B), 'K' },
+        { std::uint8_t(0x3C), 'H' },
+        { std::uint8_t(0x3D), 'I' },
+        { std::uint8_t(0x3E), 'N' },
+        { std::uint8_t(0x3F), 'O' },
+        { std::uint8_t(0x40), 'L' },
+        { std::uint8_t(0x41), 'M' },
+        { std::uint8_t(0x42), 'R' },
+        { std::uint8_t(0x43), 'S' },
+        { std::uint8_t(0x44), 'P' },
+        { std::uint8_t(0x46), 'V' },
+        { std::uint8_t(0x47), 'W' },
+        { std::uint8_t(0x48), 'T' },
+        { std::uint8_t(0x49), 'U' },
+        { std::uint8_t(0x4A), 'Z' },
+        { std::uint8_t(0x4C), 'X' },
+        { std::uint8_t(0x4D), 'Y' },
+        { std::uint8_t(0x52), '"' },
+        { std::uint8_t(0x54), ' ' },
+        { std::uint8_t(0x56), '&' },
+        { std::uint8_t(0x60), ',' },
+        { std::uint8_t(0x61), '-' },
+        { std::uint8_t(0x62), '2' },
+        { std::uint8_t(0x63), '3' },
+        { std::uint8_t(0x71), '=' },
+        { std::uint8_t(0x81), '\r' },
+        { std::uint8_t(0x7A), '\n' }
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -115,7 +115,7 @@ namespace Rival {
 
     ScenarioData ScenarioReader::readCampaignScenario(int levelIndex) {
         pos = 0;
-        std::uint8_t numLevels = readByte();
+        /*std::uint8_t numLevels = */ readByte();
 
         // Skip entries for all scenarios before this one
         for (int i = 0; i < levelIndex; ++i) {
@@ -124,7 +124,7 @@ namespace Rival {
 
         // Read this scenario's offset and size
         std::uint32_t offset = readInt();
-        std::uint32_t size = readInt();
+        /*std::uint32_t size =*/readInt();
 
         // Parse the scenario
         pos = offset;
@@ -628,9 +628,9 @@ namespace Rival {
             // Determine how many tiles the next tile definition describes,
             // and skip to the tile definition
             bool readMultiple = (readByte() == 0xfa);
-            std::uint16_t numTiles = 1;
+            std::uint16_t numUpcomingTiles = 1;
             if (readMultiple) {
-                numTiles = readShort();
+                numUpcomingTiles = readShort();
                 skip(4, false);
             } else {
                 skip(3, false);
@@ -640,7 +640,7 @@ namespace Rival {
             TilePlacement tile = parseTile();
 
             // Copy the tile definition to the number of tiles it describes
-            for (size_t i = 0; i < numTiles; ++i) {
+            for (size_t i = 0; i < numUpcomingTiles; ++i) {
                 tiles.push_back(tile);
                 tileId++;
             }
@@ -906,7 +906,7 @@ namespace Rival {
 
         Goal goal;
 
-        std::uint8_t goalType = readByte();
+        /*std::uint8_t goalType = */ readByte();
         skip(11, true);
 
         // TODO: parse goal based on type

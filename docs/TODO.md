@@ -4,17 +4,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Fix compiler warnings
-
- - Code review comments:
-    - State class needs to define a virtual destructor, otherwise the compiler won't know it has to call the derived class' destructor as well
-    - ScenarioReader and ScenarioBuilder can be rewritten as free-standing functions, something like this:
+ - ScenarioReader and ScenarioBuilder can be rewritten as free-standing functions, e.g.
         auto scenario_desc = readScenario(scenarioPath);
         auto scenario = buildScenario(scenario_desc);
-      Even better, you can put them inside a common namespace (something like ScenarioUtils and group them.
-    - Why the call to window.use()? Just call it in the constructor. Or rename to `window.init` ?
-    - Application::exit should be moved inside the destructor, so it is automatically called on destruction, or if an exception occurred.
-    - Application::getWindow should return a const Window& if you don't want the calling code to be able to modify Window. Also, make sure to use const modifiers whenever possible.
+    Even better, put them inside a common namespace (e.g. ScenarioUtils) and group them
 
  - Refactor animations
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
@@ -22,13 +15,18 @@
     - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
         - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
- - Inheritance (Rival / State) - check implementation; do we need a virtual destructor?
-
  - Render the UI
 
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
+
+ - Visible seams in certain camera positions (zoom in and out in the bottom-right corner), e.g.
+      zoom = 1.799999952f;
+      setPos(98.10455322f, 62.28129578f);
+
+        #include <iomanip>
+        std::cout << std::setprecision(10) << "camera is at " << x << ", " << y << " (" << zoom << ")\n";
 
  - maxTilesX and maxTilesY should depend on the window size
     - We risk overflowing the buffer in high resolutions
@@ -80,9 +78,6 @@ character filename (including path)
         glDeleteFramebuffers(1, &id);
 
  - Should enums have type specifiers (e.g. TileType is std::int8_t)?
-
- - Should constants outside classes be static?
-    - e.g. TimerUtils, RenderUtils, UnitAnimationLookup
 
 <!----------------------------------------------------------------------------->
 ## Features

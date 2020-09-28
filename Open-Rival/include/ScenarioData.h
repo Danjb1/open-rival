@@ -14,9 +14,9 @@ namespace Rival {
     const int numTroops = 42;
     const int numTroopsPerRace = 14;
     const int numMonsters = 30;
-    const int numBuildings = 36;
+    const int numBuildingTypes = 36;
     const int numBuildingsPerRace = 12;
-    const int numBuildingsPlusCropland = numBuildings + 1;
+    const int numBuildingsPlusCropland = numBuildingTypes + 1;
     const int numProductionCosts = numBuildingsPlusCropland + numTroops;
     const int numWeapons = 96;
     const int numUpgrades = 112;

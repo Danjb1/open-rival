@@ -128,7 +128,6 @@ namespace Rival {
 
         // Check for Units under the mouse
         auto& units = scenario.getUnits();
-        bool foundEntity = false;
         for (auto it = units.begin(); it != units.end(); ++it) {
             const Unit& unit = *it->second;
             if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {

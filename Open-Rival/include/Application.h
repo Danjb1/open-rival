@@ -23,7 +23,7 @@ namespace Rival {
 
         void pollEvents();
 
-        Window& getWindow();
+        const Window& getWindow() const;
         Resources& getResources();
 
     private:

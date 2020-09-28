@@ -39,7 +39,7 @@ namespace Rival {
         static const int framebufferHeight;
 
         Application& app;
-        Window& window;
+        const Window& window;
         Resources& res;
 
         std::unique_ptr<Scenario> scenario;

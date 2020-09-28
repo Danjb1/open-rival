@@ -11,6 +11,8 @@ namespace Rival {
     class State {
 
     public:
+        virtual ~State() {}
+
         /**
          * Handles keyDown events.
          */
