@@ -15,10 +15,10 @@ namespace Palette {
             int start = i * paletteChannels;
             uint32_t col = palette[i];
             // RGBA
-            data[start] = (col & 0xff000000) >> 24;
-            data[start + 1] = (col & 0x00ff0000) >> 16;
-            data[start + 2] = (col & 0x0000ff00) >> 8;
-            data[start + 3] = col & 0x000000ff;
+            data[start] = static_cast<unsigned char>((col & 0xff000000) >> 24);
+            data[start + 1] = static_cast<unsigned char>((col & 0x00ff0000) >> 16);
+            data[start + 2] = static_cast<unsigned char>((col & 0x0000ff00) >> 8);
+            data[start + 3] = static_cast<unsigned char>(col & 0x000000ff);
         }
 
         GLuint textureId = 0;

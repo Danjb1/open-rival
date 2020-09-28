@@ -20,8 +20,6 @@ namespace Rival {
         Window& operator=(const Window& other) = delete;
         Window& operator=(Window&& other) = delete;
 
-        void use();
-
         void swapBuffers() const;
 
         int getWidth() const;

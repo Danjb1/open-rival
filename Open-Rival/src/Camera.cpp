@@ -22,7 +22,7 @@ namespace Rival {
         setPos(x, y);
     }
 
-    void Camera::setPos(float x, float y) {
+    void Camera::setPos(float newX, float newY) {
 
         // Keep within the bounds of the map
         float cameraWidth = getWidth();
@@ -41,11 +41,8 @@ namespace Rival {
         float bottomEdge = static_cast<float>(scenario.getHeight() + 0.5f);
         float maxY = bottomEdge - (cameraHeight / 2);
 
-        x = MathUtils::clampf(x, minX, maxX);
-        y = MathUtils::clampf(y, minY, maxY);
-
-        this->x = x;
-        this->y = y;
+        x = MathUtils::clampf(newX, minX, maxX);
+        y = MathUtils::clampf(newY, minY, maxY);
     }
 
     void Camera::translate(float dx, float dy) {
@@ -88,8 +85,8 @@ namespace Rival {
         return zoom;
     }
 
-    void Camera::modZoom(float zoomInterval) {
-        zoom += zoomInterval;
+    void Camera::modZoom(float interval) {
+        zoom += interval;
         zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
 
         // We call `setPos` here to perform a bounds check, since the size of

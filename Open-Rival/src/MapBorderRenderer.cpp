@@ -3,7 +3,10 @@
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#pragma warning(push)
+#pragma warning(disable : 4127)
 #include <glm/gtc/matrix_transform.hpp>
+#pragma warning(pop)
 
 #include "MathUtils.h"
 #include "Palette.h"
@@ -39,11 +42,12 @@ namespace Rival {
         texCoords.reserve(texCoordDataSize);
 
         // Add data to buffers
-        createLeftEdge(positions, texCoords, mapHeight);
-        createTopEdge(positions, texCoords, mapWidth);
-        createRightEdge(positions, texCoords, mapWidth, mapHeight);
-        createBottomEdge(positions, texCoords, mapWidth, mapHeight);
-        createCorners(positions, texCoords, mapWidth, mapHeight);
+        int raceOffset = race == Race::Greenskin ? 8 : 0;
+        createLeftEdge(positions, texCoords, raceOffset, mapHeight);
+        createTopEdge(positions, texCoords, raceOffset, mapWidth);
+        createRightEdge(positions, texCoords, raceOffset, mapWidth, mapHeight);
+        createBottomEdge(positions, texCoords, raceOffset, mapWidth, mapHeight);
+        createCorners(positions, texCoords, raceOffset, mapWidth, mapHeight);
 
         // Bind vertex array
         glBindVertexArray(renderable.getVao());
@@ -87,9 +91,10 @@ namespace Rival {
     void MapBorderRenderer::createLeftEdge(
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
+            int raceOffset,
             int mapHeight) {
         for (int tileY = 1; tileY < mapHeight; ++tileY) {
-            addDataToBuffers(positions, texCoords, 3,
+            addDataToBuffers(positions, texCoords, raceOffset + txIndexLeft,
                     0,
                     static_cast<float>(tileY));
             numSegments++;
@@ -99,9 +104,10 @@ namespace Rival {
     void MapBorderRenderer::createTopEdge(
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
+            int raceOffset,
             int mapWidth) {
         for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
-            addDataToBuffers(positions, texCoords, 0,
+            addDataToBuffers(positions, texCoords, raceOffset + txIndexTop,
                     static_cast<float>(tileX),
                     0);
             numSegments++;
@@ -111,10 +117,11 @@ namespace Rival {
     void MapBorderRenderer::createRightEdge(
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
+            int raceOffset,
             int mapWidth,
             int mapHeight) {
         for (int tileY = 1; tileY < mapHeight; ++tileY) {
-            addDataToBuffers(positions, texCoords, 1,
+            addDataToBuffers(positions, texCoords, raceOffset + txIndexRight,
                     mapWidth - 1.0f,
                     static_cast<float>(tileY));
             numSegments++;
@@ -124,10 +131,11 @@ namespace Rival {
     void MapBorderRenderer::createBottomEdge(
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
+            int raceOffset,
             int mapWidth,
             int mapHeight) {
         for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
-            addDataToBuffers(positions, texCoords, 2,
+            addDataToBuffers(positions, texCoords, raceOffset + txIndexBottom,
                     static_cast<float>(tileX),
                     mapHeight - 0.5f);
             numSegments++;
@@ -137,13 +145,18 @@ namespace Rival {
     void MapBorderRenderer::createCorners(
             std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
+            int raceOffset,
             int mapWidth,
             int mapHeight) {
 
-        addDataToBuffers(positions, texCoords, 4, 0, 0);
-        addDataToBuffers(positions, texCoords, 5, mapWidth - 1.0f, 0);
-        addDataToBuffers(positions, texCoords, 6, mapWidth - 1.0f, mapHeight - 0.5f);
-        addDataToBuffers(positions, texCoords, 7, 0, mapHeight - 0.5f);
+        addDataToBuffers(positions, texCoords, raceOffset + txIndexTopLeft,
+                0, 0);
+        addDataToBuffers(positions, texCoords, raceOffset + txIndexTopRight,
+                mapWidth - 1.0f, 0);
+        addDataToBuffers(positions, texCoords, raceOffset + txIndexBottomRight,
+                mapWidth - 1.0f, mapHeight - 0.5f);
+        addDataToBuffers(positions, texCoords, raceOffset + txIndexBottomLeft,
+                0, mapHeight - 0.5f);
 
         numSegments += 4;
     }

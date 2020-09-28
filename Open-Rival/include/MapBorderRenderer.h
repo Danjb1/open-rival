@@ -26,28 +26,33 @@ namespace Rival {
         void createLeftEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
+                int raceOffset,
                 int mapHeight);
 
         void createTopEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
+                int raceOffset,
                 int mapWidth);
 
         void createRightEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
+                int raceOffset,
                 int mapWidth,
                 int mapHeight);
 
         void createBottomEdge(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
+                int raceOffset,
                 int mapWidth,
                 int mapHeight);
 
         void createCorners(
                 std::vector<GLfloat>& positions,
                 std::vector<GLfloat>& texCoords,
+                int raceOffset,
                 int mapWidth,
                 int mapHeight);
 
@@ -61,6 +66,15 @@ namespace Rival {
         void render();
 
     private:
+        static const int txIndexTop = 0;
+        static const int txIndexRight = 1;
+        static const int txIndexBottom = 2;
+        static const int txIndexLeft = 3;
+        static const int txIndexTopLeft = 4;
+        static const int txIndexTopRight = 5;
+        static const int txIndexBottomRight = 6;
+        static const int txIndexBottomLeft = 7;
+
         const Texture& paletteTexture;
 
         // The maximum number of border segments we can render

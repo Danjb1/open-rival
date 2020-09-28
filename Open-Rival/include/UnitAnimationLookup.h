@@ -25,7 +25,7 @@ namespace Rival {
 
     using UnitAnimationLookup = std::map<UnitAnimationPair, UnitSpritesheetEntry>;
 
-    const UnitAnimationLookup unitAnimationLookup = {
+    static const UnitAnimationLookup unitAnimationLookup = {
         // Just human peasant is complete, for proof of concept. A recheck maybe.
         { { UnitType::Peasant, UnitAnimationType::Standing }, { 0, 0, 1 } },
         { { UnitType::Peasant, UnitAnimationType::HoldingBag }, { 8, 8, 1 } },

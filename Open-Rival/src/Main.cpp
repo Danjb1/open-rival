@@ -80,7 +80,6 @@ int main() {
 
         // Create our Window
         Rival::Window window(800, 600, "Rival Realms");
-        window.use();
 
         // Initialize OpenGL
         initGLEW();

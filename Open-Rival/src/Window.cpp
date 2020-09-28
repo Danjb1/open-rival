@@ -24,14 +24,6 @@ namespace Rival {
             std::cerr << "Window could not be created!\n";
             throw std::runtime_error(SDL_GetError());
         }
-    }
-
-    Window::~Window() {
-        SDL_DestroyWindow(windowRef);
-        windowRef = nullptr;
-    }
-
-    void Window::use() {
 
         glContext = SDL_GL_CreateContext(windowRef);
 
@@ -39,6 +31,11 @@ namespace Rival {
             std::cerr << "OpenGL context could not be created!\n";
             throw std::runtime_error(SDL_GetError());
         }
+    }
+
+    Window::~Window() {
+        SDL_DestroyWindow(windowRef);
+        windowRef = nullptr;
     }
 
     void Window::swapBuffers() const {
