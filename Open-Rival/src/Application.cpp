@@ -87,7 +87,7 @@ namespace Rival {
         }
     }
 
-    Window& Application::getWindow() {
+    const Window& Application::getWindow() const {
         return window;
     }
 

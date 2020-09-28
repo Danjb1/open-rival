@@ -11,7 +11,7 @@ namespace Rival {
     Image::Image(int width, int height)
         : width(width),
           height(height),
-          data(std::make_unique<std::vector<unsigned char>>(width * height, 0xff)) {}
+          data(std::make_unique<std::vector<unsigned char>>(width * height, '\xff')) {}
 
     Image::Image(int width, int height,
             std::unique_ptr<std::vector<unsigned char>> data)
@@ -37,20 +37,20 @@ namespace Rival {
         BinaryFileReader reader(filename);
 
         // Color map specification
-        uint8_t idLength = reader.readByte();
-        uint8_t colourMapType = reader.readByte();
-        uint8_t imageType = reader.readByte();
-        uint16_t firstEntryIndex = reader.readShort();
-        uint16_t numEntries = reader.readShort();
-        uint8_t entrySize = reader.readByte();
+        /*uint8_t idLength = */ reader.readByte();
+        /*uint8_t colourMapType = */ reader.readByte();
+        /*uint8_t imageType = */ reader.readByte();
+        /*uint16_t firstEntryIndex = */ reader.readShort();
+        /*uint16_t numEntries = */ reader.readShort();
+        /*uint8_t entrySize = */ reader.readByte();
 
         // Image specification
-        uint16_t xOrigin = reader.readShort();
-        uint16_t yOrigin = reader.readShort();
+        /*uint16_t xOrigin = */ reader.readShort();
+        /*uint16_t yOrigin = */ reader.readShort();
         uint16_t width = reader.readShort();
         uint16_t height = reader.readShort();
-        uint8_t bpp = reader.readByte();
-        uint8_t imageDescriptor = reader.readByte();
+        /*uint8_t bpp = */ reader.readByte();
+        /*uint8_t imageDescriptor = */ reader.readByte();
 
         // Color palette
         reader.skip(Palette::paletteBytes);

@@ -7,49 +7,49 @@ namespace Rival {
 namespace RenderUtils {
 
     // Size of a single Tile image, in pixels
-    const int tileSpriteWidthPx = 64;
-    const int tileSpriteHeightPx = 64;
+    static const int tileSpriteWidthPx = 64;
+    static const int tileSpriteHeightPx = 64;
 
     // Size of a single Tile image, ignoring empty space, in pixels
-    const int tileWidthPx = 64;
-    const int tileHeightPx = 32;
+    static const int tileWidthPx = 64;
+    static const int tileHeightPx = 32;
 
     // Size of a single Unit image, in pixels
-    const int unitWidthPx = 128;
-    const int unitHeightPx = 128;
+    static const int unitWidthPx = 128;
+    static const int unitHeightPx = 128;
 
     // Size of a single Building image, in pixels
-    const int buildingWidthPx = 128;
-    const int buildingHeightPx = 128;
+    static const int buildingWidthPx = 128;
+    static const int buildingHeightPx = 128;
 
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered
     // at one time, and, by extension, the limits of our camera.
-    const int maxTilesX = 50;
-    const int maxTilesY = 100;
+    static const int maxTilesX = 50;
+    static const int maxTilesY = 100;
 
     // Camera z-position.
     // We position our camera such that it looks into the screen.
     // All z co-ordinates should therefore be negative; lower values
     // represent greater depth.
-    const float zCamera = 1.0f;
+    static const float zCamera = 1.0f;
 
     // Camera near plane.
     // This is the minimum distance from the camera that we can render.
-    const float nearPlane = 1.0f;
+    static const float nearPlane = 1.0f;
 
     // Z-positions used in rendering.
     // Lower values are nearer to the camera and will be rendered on top.
-    const float zMapBorder = zCamera - nearPlane;
-    const float zFog = zMapBorder - 1.0f;
-    const float zEntitiesEnd = zFog - 1.0f;
-    const float zEntitiesStart = zEntitiesEnd - maxTilesY;
-    const float zTiles = zEntitiesStart - 1.0f;
+    static const float zMapBorder = zCamera - nearPlane;
+    static const float zFog = zMapBorder - 1.0f;
+    static const float zEntitiesEnd = zFog - 1.0f;
+    static const float zEntitiesStart = zEntitiesEnd - maxTilesY;
+    static const float zTiles = zEntitiesStart - 1.0f;
 
     // Camera far plane.
     // This is the maximum distance from the camera that we can render.
     // We calculate this such that we can handle all required depth values.
-    const float farPlane = nearPlane + abs(zTiles - 1.0f);
+    static const float farPlane = nearPlane + abs(zTiles - 1.0f);
 
     /**
      * Gets the x-position at which a tile with the given x co-ordinate

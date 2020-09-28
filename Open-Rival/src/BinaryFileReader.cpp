@@ -17,7 +17,7 @@ namespace Rival {
     }
 
     std::uint8_t BinaryFileReader::readByte() {
-        return in.get();
+        return static_cast<std::uint8_t>(in.get());
     }
 
     std::uint16_t BinaryFileReader::readShort() {

@@ -27,8 +27,8 @@ namespace Rival {
         return tiles;
     }
 
-    void Scenario::tilesLoaded(std::vector<Tile> tiles) {
-        this->tiles = tiles;
+    void Scenario::tilesLoaded(std::vector<Tile> newTiles) {
+        tiles = newTiles;
     }
 
     Tile Scenario::getTile(int x, int y) const {
