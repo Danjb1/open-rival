@@ -179,6 +179,9 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 
  - Remove assets from git history
+ - Build for Linux
+ - Add script to build from command line
+ - Add script to run tests from command line
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
