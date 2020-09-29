@@ -1,33 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{bf3fc534-9a2f-4517-9368-e49f6e7b9e8b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
+      <UniqueIdentifier>{3de3ffc8-4c47-40e6-9bc2-9c01d69b2624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles">
+      <UniqueIdentifier>{ee5cc03e-a92e-445d-98df-4ef4a7ecf5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles\gl">
+      <UniqueIdentifier>{ffc1714a-dfc8-4266-a1c4-5170e2cce2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Framework">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Test Framework\catch2">
+      <UniqueIdentifier>{5c7dcad4-0a02-4905-971b-78a34a5b513b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Open-Rival-test.cpp">
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Test Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestApplication.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch.cpp">
+    <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Test Doubles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\catch.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\catch2\catch.h">
+      <Filter>Test Framework\catch2</Filter>
     </ClInclude>
-    <ClInclude Include="include\pch.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\SDL.h">
+      <Filter>Test Doubles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl\glew.h">
+      <Filter>Test Doubles\gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

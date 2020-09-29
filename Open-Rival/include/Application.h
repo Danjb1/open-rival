@@ -23,8 +23,11 @@ namespace Rival {
 
         void pollEvents();
 
+        void requestExit();
+
         const Window& getWindow() const;
         Resources& getResources();
+        State& getState();
 
     private:
         /**
