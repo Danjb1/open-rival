@@ -19,13 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Open-Rival-test.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MockSDL.cpp" />
+    <ClCompile Include="src\MockWindow.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\TestApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\catch.h" />
+    <ClInclude Include="include\catch2\catch.h" />
+    <ClInclude Include="include\MockResources.h" />
+    <ClInclude Include="include\MockSDL.h" />
+    <ClInclude Include="include\MockWindow.h" />
     <ClInclude Include="include\pch.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -101,7 +107,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
