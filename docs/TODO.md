@@ -4,10 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Unit tests
-
- - Build for Linux
-
  - Refactor animations
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
     - Use a component-based system to keep animations and units loosely coupled
@@ -183,6 +179,9 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 
  - Remove assets from git history
+ - Build for Linux
+ - Add script to build from command line
+ - Add script to run tests from command line
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
