@@ -1,6 +1,12 @@
 #ifndef SDL_h_
 #define SDL_h_
 
+/*
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!! Stub definitions for unit testing  !!!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
 #include <cstdint>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,6 +19,10 @@ typedef std::int32_t Sint32;
 ///////////////////////////////////////////////////////////////////////////////
 // SDL_video.h
 ///////////////////////////////////////////////////////////////////////////////
+
+typedef struct SDL_Window SDL_Window;
+
+typedef void* SDL_GLContext;
 
 int SDL_GL_SetSwapInterval(int i);
 
@@ -31,23 +41,39 @@ Uint32 SDL_GetTicks(void);
 void SDL_Delay(Uint32 ms);
 
 ///////////////////////////////////////////////////////////////////////////////
-// SDL_events.h
-///////////////////////////////////////////////////////////////////////////////
-
-typedef struct SDL_Event {
-    Uint32 type;
-} SDL_Event;
-
-typedef struct SDL_MouseWheelEvent {
-} SDL_MouseWheelEvent;
-
-int SDL_PollEvent(SDL_Event* event);
-
-///////////////////////////////////////////////////////////////////////////////
 // SDL_keycode.h
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef Sint32 SDL_Keycode;
+
+///////////////////////////////////////////////////////////////////////////////
+// SDL_events.h
+///////////////////////////////////////////////////////////////////////////////
+
+typedef enum {
+    SDL_QUIT = 0x100,
+    SDL_KEYDOWN = 0x300,
+    SDL_MOUSEWHEEL = 0x600,
+} SDL_EventType;
+
+typedef struct SDL_Keysym {
+    SDL_Keycode sym;
+} SDL_Keysym;
+
+typedef struct SDL_MouseWheelEvent {
+} SDL_MouseWheelEvent;
+
+typedef struct SDL_KeyboardEvent {
+    SDL_Keysym keysym;
+} SDL_KeyboardEvent;
+
+typedef union SDL_Event {
+    Uint32 type;
+    SDL_KeyboardEvent key;
+    SDL_MouseWheelEvent wheel;
+} SDL_Event;
+
+int SDL_PollEvent(SDL_Event* event);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Mocking Utils
@@ -55,7 +81,7 @@ typedef Sint32 SDL_Keycode;
 
 namespace MockSDL {
 
-    static int ticks;
+    extern int ticks;
 
 }
 

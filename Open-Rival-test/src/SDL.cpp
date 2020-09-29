@@ -1,5 +1,13 @@
 #include "pch.h"
-#include "MockSDL.h"
+#include "SDL.h"
+
+#include <iostream>
+
+/*
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!! Stub implementation for unit testing !!!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 
 int SDL_GL_SetSwapInterval(int i) {
     return 0;
@@ -19,4 +27,8 @@ void SDL_Delay(Uint32 ms) {
 
 int SDL_PollEvent(SDL_Event* event) {
     return 0;
+}
+
+namespace MockSDL {
+    int ticks = 0;
 }

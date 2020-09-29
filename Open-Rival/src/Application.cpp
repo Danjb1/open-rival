@@ -87,12 +87,20 @@ namespace Rival {
         }
     }
 
+    void Application::requestExit() {
+        exiting = true;
+    }
+
     const Window& Application::getWindow() const {
         return window;
     }
 
     Resources& Application::getResources() {
         return res;
+    }
+
+    State& Application::getState() {
+        return *state;
     }
 
 }  // namespace Rival
