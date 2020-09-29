@@ -4,6 +4,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Unit tests
+
+ - Build for Linux
+
  - Refactor animations
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
     - Use a component-based system to keep animations and units loosely coupled
