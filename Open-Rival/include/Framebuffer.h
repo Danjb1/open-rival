@@ -8,7 +8,7 @@ namespace Rival {
     class Framebuffer {
 
     public:
-        Framebuffer::Framebuffer(int width, int height, bool useDepth);
+        Framebuffer(int width, int height, bool useDepth);
         ~Framebuffer();
 
         // Prevent moving or copying (rule of 5)

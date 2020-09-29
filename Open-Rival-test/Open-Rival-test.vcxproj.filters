@@ -4,52 +4,61 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{bf3fc534-9a2f-4517-9368-e49f6e7b9e8b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework">
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3de3ffc8-4c47-40e6-9bc2-9c01d69b2624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles">
+      <UniqueIdentifier>{ee5cc03e-a92e-445d-98df-4ef4a7ecf5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles\gl">
+      <UniqueIdentifier>{ffc1714a-dfc8-4266-a1c4-5170e2cce2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Framework">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Framework\catch2">
+    <Filter Include="Test Framework\catch2">
       <UniqueIdentifier>{5c7dcad4-0a02-4905-971b-78a34a5b513b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\tests">
-      <UniqueIdentifier>{185d1854-cfb0-460c-8e5a-9a023eb83f61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mocks">
-      <UniqueIdentifier>{ee5cc03e-a92e-445d-98df-4ef4a7ecf5e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pch.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="src\Main.cpp">
-      <Filter>Framework</Filter>
+      <Filter>Test Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\TestApplication.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="src\MockWindow.cpp">
-      <Filter>Mocks</Filter>
+    <ClCompile Include="..\Open-Rival\src\Application.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MockSDL.cpp">
-      <Filter>Mocks</Filter>
+    <ClCompile Include="..\Open-Rival\src\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Test Doubles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\pch.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="include\catch2\catch.h">
-      <Filter>Framework\catch2</Filter>
+      <Filter>Test Framework\catch2</Filter>
     </ClInclude>
-    <ClInclude Include="include\MockResources.h">
-      <Filter>Mocks</Filter>
+    <ClInclude Include="include\SDL.h">
+      <Filter>Test Doubles</Filter>
     </ClInclude>
-    <ClInclude Include="include\MockSDL.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MockWindow.h">
-      <Filter>Mocks</Filter>
+    <ClInclude Include="include\gl\glew.h">
+      <Filter>Test Doubles\gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
