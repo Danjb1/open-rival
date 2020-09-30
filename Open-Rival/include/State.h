@@ -3,6 +3,9 @@
 
 #include <SDL.h>
 
+#include "Resources.h"
+#include "Window.h"
+
 namespace Rival {
 
     // Forward declaration to avoid circular reference
@@ -11,6 +14,8 @@ namespace Rival {
     class State {
 
     public:
+        State(Application& app);
+
         virtual ~State() {}
 
         /**
@@ -35,6 +40,11 @@ namespace Rival {
          * Renders the current frame.
          */
         virtual void render() = 0;
+
+    protected:
+        Application& app;
+        const Window& window;
+        Resources& res;
     };
 
 }  // namespace Rival

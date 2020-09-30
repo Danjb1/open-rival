@@ -52,7 +52,7 @@ namespace Rival {
 
         int getY() const;
 
-        void tick();
+        void update();
 
     private:
         int id;

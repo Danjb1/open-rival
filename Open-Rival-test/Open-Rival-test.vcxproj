@@ -24,15 +24,18 @@
     <ClCompile Include="..\Open-Rival\src\BuildingAnimation.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MousePicker.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Rect.cpp" />
     <ClCompile Include="..\Open-Rival\src\RenderUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\Scenario.cpp" />
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp" />
+    <ClCompile Include="..\Open-Rival\src\State.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
     <ClCompile Include="..\Open-Rival\src\Unit.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -40,6 +43,7 @@
     <ClCompile Include="src\SDL.cpp" />
     <ClCompile Include="src\TestApplication.cpp" />
     <ClCompile Include="src\TestCamera.cpp" />
+    <ClCompile Include="src\TestMousePicker.cpp" />
     <ClCompile Include="src\TestRenderUtils.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />

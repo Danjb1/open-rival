@@ -4,7 +4,6 @@
 #include <SDL.h>
 
 #include "MathUtils.h"
-#include "Rival.h"
 
 namespace Rival {
 
@@ -17,12 +16,12 @@ namespace Rival {
           scenario(scenario),
           mapWidth(scenario.getWidth()),
           mapHeight(scenario.getHeight()),
-          entity(-1) {}
+          entityId(-1) {}
 
     void MousePicker::handleMouse() {
 
         // Reset selected entity
-        entity = -1;
+        entityId = -1;
 
         // Get the mouse position relative to the window, in pixels
         int mouseX;
@@ -50,12 +49,33 @@ namespace Rival {
         float mouseWorldY = camera.getTop()
                 + normalizedMouseY * camera.getHeight();
 
+        // Find the tile under the mouse
+        tile = getTilePos(mouseWorldX, mouseWorldY);
+
+        // Check for Units under the mouse
+        auto& units = scenario.getUnits();
+        for (auto it = units.begin(); it != units.end(); ++it) {
+            const Unit& unit = *it->second;
+            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
+                entityId = unit.getId();
+                std::cout << "Entity " << entityId << " of type unit ("
+                          << static_cast<int>(unit.getType())
+                          << ") is under cursor.\n";
+                break;
+            }
+        }
+    }
+
+    std::pair<int, int> MousePicker::getTilePos(
+            float mouseWorldX,
+            float mouseWorldY) {
+
         // Get the naive tile position.
         // This would work if our tiles were regular and aligned with the
         // camera's axes, but they are diamond shaped and positioned in a
         // zigzag pattern, so we will need to make further adjustments.
-        tileX = static_cast<int>(mouseWorldX);
-        tileY = static_cast<int>(mouseWorldY);
+        int tileX = static_cast<int>(mouseWorldX);
+        int tileY = static_cast<int>(mouseWorldY);
 
         // Get the "remainder" (just the decimal part of the world position).
         // Because of the way the tiles overlap, offsetX now ranges from 0-1,
@@ -126,18 +146,7 @@ namespace Rival {
         tileX = MathUtils::clampi(tileX, 0, mapWidth - 1);
         tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
 
-        // Check for Units under the mouse
-        auto& units = scenario.getUnits();
-        for (auto it = units.begin(); it != units.end(); ++it) {
-            const Unit& unit = *it->second;
-            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
-                entity = unit.getId();
-                std::cout << "Entity " << entity << " of type unit ("
-                          << static_cast<int>(unit.getType())
-                          << ") is under cursor.\n";
-                break;
-            }
-        }
+        return std::pair<int, int>(tileX, tileY);
     }
 
     bool MousePicker::isMouseInUnit(
@@ -183,15 +192,15 @@ namespace Rival {
     }
 
     int MousePicker::getTileX() const {
-        return tileX;
+        return tile.first;
     }
 
     int MousePicker::getTileY() const {
-        return tileY;
+        return tile.second;
     }
 
-    int MousePicker::getEntity() const {
-        return entity;
+    int MousePicker::getEntityId() const {
+        return entityId;
     }
 
 }  // namespace Rival

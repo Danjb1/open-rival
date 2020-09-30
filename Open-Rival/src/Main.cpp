@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 #include "Application.h"
-#include "Rival.h"
+#include "GameState.h"
 #include "Scenario.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
@@ -95,7 +95,7 @@ int main() {
 
         // Create our initial state
         std::unique_ptr<Rival::State> initialState =
-                std::make_unique<Rival::Rival>(app, std::move(scenario));
+                std::make_unique<Rival::GameState>(app, std::move(scenario));
 
         // Run the game!
         app.start(std::move(initialState));

@@ -23,7 +23,7 @@ namespace Rival {
         return height;
     }
 
-    const std::vector<Tile>& Scenario::getTiles() {
+    const std::vector<Tile>& Scenario::getTiles() const {
         return tiles;
     }
 
@@ -84,11 +84,11 @@ namespace Rival {
         tilePassability[y * width + x] = passability;
     }
 
-    std::map<int, std::unique_ptr<Building>>& Scenario::getBuildings() {
+    const std::map<int, std::unique_ptr<Building>>& Scenario::getBuildings() const {
         return buildings;
     }
 
-    std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() {
+    const std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() const {
         return units;
     }
 

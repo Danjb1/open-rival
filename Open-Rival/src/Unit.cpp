@@ -55,7 +55,7 @@ namespace Rival {
         return y;
     }
 
-    void Unit::tick() {
+    void Unit::update() {
         //animation.tick();
     }
 
