@@ -19,10 +19,10 @@ namespace Rival {
           defaultHeight(static_cast<float>(width / aspectRatio)),
           scenario(scenario) {
 
-        setPos(x, y);
+        centreOnPoint(x, y);
     }
 
-    void Camera::setPos(float newX, float newY) {
+    void Camera::centreOnPoint(float newX, float newY) {
 
         // Keep within the bounds of the map
         float cameraWidth = getWidth();
@@ -45,8 +45,14 @@ namespace Rival {
         y = MathUtils::clampf(newY, minY, maxY);
     }
 
+    void Camera::centreOnTile(int tileX, int tileY) {
+        // Each tile spans 2 columns and 1 row, so we travel half this distance
+        // to reach the centre of the tile.
+        centreOnPoint(tileX + 1.0f, tileY + 0.5f);
+    }
+
     void Camera::translate(float dx, float dy) {
-        setPos(x + dx, y + dy);
+        centreOnPoint(x + dx, y + dy);
     }
 
     float Camera::getX() const {
@@ -89,9 +95,9 @@ namespace Rival {
         zoom += interval;
         zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
 
-        // We call `setPos` here to perform a bounds check, since the size of
-        // the visible region has now changed
-        setPos(x, y);
+        // We call `centreOnPoint` here to perform a bounds check, since the
+        // size of the visible region has now changed
+        centreOnPoint(x, y);
     }
 
     bool Camera::contains(float px, float py) const {
