@@ -2,6 +2,7 @@
 #include "catch2/catch.h"
 
 #include "Application.h"
+#include "SDL.h"
 #include "State.h"
 #include "TimerUtils.h"
 
@@ -19,7 +20,7 @@ SCENARIO("logic is run multiple times if we are running behind", "[game-loop]") 
         int updatesRun = 0;
 
         SlowRenderingState(Rival::Application& app)
-            : app(app) {}
+            : Rival::State(app) {}
 
         void keyDown(const SDL_Keycode keyCode) override {}
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override {}
@@ -38,9 +39,6 @@ SCENARIO("logic is run multiple times if we are running behind", "[game-loop]") 
                 app.requestExit();
             }
         }
-
-    private:
-        Rival::Application& app;
     };
 
     GIVEN("An Application that has not yet started") {

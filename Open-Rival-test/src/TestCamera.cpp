@@ -7,8 +7,8 @@ SCENARIO("camera should stay in bounds", "[camera]") {
 
     GIVEN("A camera looking at some point in a scenario") {
         Rival::Scenario scenario(50, 50, false);
-        Rival::Camera camera(25.0f, 25.0f, 20.0f, static_cast<double>(16) / 9,
-                scenario);
+        const double aspectRatio = static_cast<double>(4) / 3;
+        Rival::Camera camera(25.0f, 25.0f, 20.0f, aspectRatio, scenario);
 
         WHEN("moving the camera left") {
             camera.translate(-100.0f, 0.0f);

@@ -2,6 +2,7 @@
 #define MOUSE_PICKER_H
 
 #include <memory>
+#include <utility>
 
 #include "Camera.h"
 #include "Rect.h"
@@ -24,7 +25,7 @@ namespace Rival {
 
         int getTileY() const;
 
-        int getEntity() const;
+        int getEntityId() const;
 
     private:
         // Offset of a Unit's hitbox, measured from the top-left corner of the
@@ -45,13 +46,13 @@ namespace Rival {
 
         int mapHeight;
 
-        int tileX;
+        std::pair<int, int> tile;
 
-        int tileY;
-
-        int entity;
+        int entityId;
 
         Scenario& scenario;
+
+        std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
 
         bool isMouseInUnit(
                 const Unit& unit, int mouseInViewportX, int mouseInViewportY);

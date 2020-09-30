@@ -12,7 +12,6 @@
 
 #include "MathUtils.h"
 #include "Palette.h"
-#include "Rival.h"
 #include "Shaders.h"
 
 namespace Rival {

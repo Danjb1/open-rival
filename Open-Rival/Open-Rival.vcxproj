@@ -27,6 +27,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
+    <ClCompile Include="src\GameRenderer.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
@@ -39,7 +40,7 @@
     <ClCompile Include="src\Rect.cpp" />
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
-    <ClCompile Include="src\Rival.cpp" />
+    <ClCompile Include="src\GameState.cpp" />
     <ClCompile Include="src\Scenario.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
     <ClCompile Include="src\ScenarioReader.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="src\ShaderUtils.cpp" />
     <ClCompile Include="src\Spritesheet.cpp" />
     <ClCompile Include="src\SpriteRenderable.cpp" />
+    <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
@@ -66,6 +68,7 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
+    <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MathUtils.h" />
@@ -76,7 +79,7 @@
     <ClInclude Include="include\Rect.h" />
     <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Resources.h" />
-    <ClInclude Include="include\Rival.h" />
+    <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\Scenario.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
     <ClInclude Include="include\ScenarioData.h" />

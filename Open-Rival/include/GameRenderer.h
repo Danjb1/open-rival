@@ -1,36 +1,30 @@
-#ifndef RIVAL_H
-#define RIVAL_H
+#ifndef GAME_RENDERER_H
+#define GAME_RENDERER_H
 
-#include <SDL.h>
-#include <iostream>
-#include <memory>
-
-#include "Application.h"
 #include "BuildingRenderer.h"
 #include "Camera.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
-#include "MousePicker.h"
 #include "Rect.h"
+#include "Resources.h"
 #include "Scenario.h"
-#include "State.h"
 #include "TileRenderer.h"
 #include "UnitRenderer.h"
 #include "Window.h"
 
 namespace Rival {
 
-    class Rival : public State {
-
+    class GameRenderer {
     public:
-        Rival(Application& app, std::unique_ptr<Scenario> scenario);
+        GameRenderer(
+                const Window& window,
+                const Scenario& scenario,
+                const Camera& camera,
+                const Rect& viewport,
+                const Resources& res);
 
-        // Inherited from State
-        void keyDown(const SDL_Keycode keyCode) override;
-        void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
-        void render() override;
-        void update() override;
+        void render();
 
     private:
         // Framebuffer size, in pixels.
@@ -38,16 +32,11 @@ namespace Rival {
         static const int framebufferWidth;
         static const int framebufferHeight;
 
-        Application& app;
         const Window& window;
-        Resources& res;
-
-        std::unique_ptr<Scenario> scenario;
-
-        Camera camera;
-
-        // The rectangle on the screen to which the game is rendered (pixels)
-        Rect viewport;
+        const Scenario& scenario;
+        const Rect& viewport;
+        const Camera& camera;
+        const Resources& res;
 
         /**
          * Framebuffer to which the visible region of the game is rendered at
@@ -65,20 +54,10 @@ namespace Rival {
         MapBorderRenderer mapBorderRenderer;
         UnitRenderer unitRenderer;
 
-        /**
-         * Object used to find what's under the mouse.
-         */
-        MousePicker mousePicker;
-
-        /**
-         * The window renderer.
-         */
-        SDL_Renderer* renderer = nullptr;
-
         void renderGame(int viewportWidth, int viewportHeight);
         void renderFramebuffer(int srcWidth, int srcHeight);
     };
 
 }  // namespace Rival
 
-#endif  // RIVAL_H
+#endif GAME_RENDERER_H

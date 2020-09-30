@@ -21,7 +21,7 @@ namespace Rival {
 
         int getHeight() const;
 
-        const std::vector<Tile>& getTiles();
+        const std::vector<Tile>& getTiles() const;
 
         // Sets all tiles at once
         void tilesLoaded(std::vector<Tile> tiles);
@@ -37,7 +37,7 @@ namespace Rival {
                 int y,
                 uint8_t wallVariant);
 
-        std::map<int, std::unique_ptr<Building>>& getBuildings();
+        const std::map<int, std::unique_ptr<Building>>& getBuildings() const;
 
         void addUnit(
                 std::unique_ptr<Unit> unit,
@@ -46,7 +46,7 @@ namespace Rival {
                 int y,
                 Facing facing);
 
-        std::map<int, std::unique_ptr<Unit>>& getUnits();
+        const std::map<int, std::unique_ptr<Unit>>& getUnits() const;
 
     private:
         const int width;

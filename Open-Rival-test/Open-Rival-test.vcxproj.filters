@@ -82,6 +82,18 @@
     <ClCompile Include="src\TestRenderUtils.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestMousePicker.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MousePicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Rect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h">

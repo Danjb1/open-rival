@@ -21,6 +21,8 @@ namespace Rival {
     }
 
     int Building::getCurrentSpriteIndex() const {
+        return 0;
+        /*
         auto spriteIndex = animation.getCurrentSpriteIndex();
         bool isAWall = (type == BuildingType::TreeWall)
                 || (type == BuildingType::GreenskinWall)
@@ -30,6 +32,7 @@ namespace Rival {
         }
 
         return spriteIndex;
+        */
     }
 
     WallVariant Building::getWallVariant() const {
@@ -67,8 +70,8 @@ namespace Rival {
         return y;
     }
 
-    void Building::tick() {
-        animation.tick();
+    void Building::update() {
+        //animation.tick();
     }
 
 }  // namespace Rival

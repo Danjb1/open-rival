@@ -7,7 +7,6 @@
 
 #include "Palette.h"
 #include "RenderUtils.h"
-#include "Rival.h"
 #include "Shaders.h"
 
 namespace Rival {
@@ -69,7 +68,7 @@ namespace Rival {
 
     void BuildingRenderer::renderBuilding(const Building& building) {
 
-        // Get (or create) the Renderable for this Unit
+        // Get (or create) the Renderable for this Building
         SpriteRenderable& renderable = getOrCreateRenderable(building);
 
         // Determine the frame of the texture to be rendered

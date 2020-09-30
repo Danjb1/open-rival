@@ -6,11 +6,14 @@
 
  - Unit tests for MousePicker logic
 
- - Refactor animations
-    - Duplication between UnitAnimation and BuildingAnimation
+ - Refactor rendering / animations
+    - Reduce duplication between UnitAnimation and BuildingAnimation
+    - Reduce duplication between UnitRenderer and BuildingRenderer
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
+    - Render the correct sprite index based on type / facing
     - Use a component-based system to keep animations and units loosely coupled
-    - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
+    - Instead of having the UnitRenderer track the presence of all units,
+        have the units register / unregister themselves against the renderer
         - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
  - Render the UI
