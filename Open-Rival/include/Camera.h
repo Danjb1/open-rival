@@ -19,7 +19,9 @@ namespace Rival {
                 double aspectRatio,
                 Scenario& scenario);
 
-        void setPos(float x, float y);
+        void centreOnPoint(float x, float y);
+
+        void centreOnTile(int x, int y);
 
         void translate(float dx, float dy);
 

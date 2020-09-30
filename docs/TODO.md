@@ -4,7 +4,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Unit tests for MousePicker logic
+
  - Refactor animations
+    - Duplication between UnitAnimation and BuildingAnimation
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
     - Use a component-based system to keep animations and units loosely coupled
     - Instead of having the UnitRenderer track the presence of all units, have the units register / unregister themselves against the renderer
@@ -29,8 +32,6 @@ character filename (including path)
     - Pass Resources around instead of individual textures / spritesheets?
 
  - Image filenames can be truncated due to limited size of char array
-
- - Camera should point at the centre of a tile - not the top-left corner
 
  - Framebuffer size calculations should use RenderUtils
 
@@ -182,10 +183,3 @@ character filename (including path)
  - Build for Linux
  - Add script to build from command line
  - Add script to run tests from command line
-
-<!----------------------------------------------------------------------------->
-## Unit Tests
-<!----------------------------------------------------------------------------->
-
- - Produce list of required tests
- - Write some tests!
