@@ -11,7 +11,7 @@ namespace Rival {
     class Building {
 
     public:
-        // Size of a Building, in world units
+        // Size of a Building, in tiles
         static const int width = 3;
         static const int height = 2;
 

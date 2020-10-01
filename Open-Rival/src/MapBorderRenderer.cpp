@@ -171,8 +171,8 @@ namespace Rival {
         // Define vertex positions
         float width = static_cast<float>(RenderUtils::tileSpriteWidthPx);
         float height = static_cast<float>(RenderUtils::tileSpriteHeightPx);
-        float x1 = RenderUtils::worldToPx_X(tileX);
-        float y1 = RenderUtils::worldToPx_Y(tileY);
+        float x1 = RenderUtils::cameraToPx_X(tileX);
+        float y1 = RenderUtils::cameraToPx_Y(tileY);
         float x2 = x1 + width;
         float y2 = y1 + height;
         float z = RenderUtils::zMapBorder;

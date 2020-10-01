@@ -19,7 +19,7 @@ namespace Rival {
                   static_cast<float>(window.getWidth()),
                   static_cast<float>(window.getHeight() - 100))),
           camera(0.0f, 0.0f,
-                  RenderUtils::pxToWorld_X(
+                  RenderUtils::pxToCamera_X(
                           static_cast<float>(window.getWidth())),
                   window.getAspectRatio(),
                   *scenario),

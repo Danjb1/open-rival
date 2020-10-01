@@ -52,7 +52,12 @@ namespace Rival {
 
         Scenario& scenario;
 
+        float getMouseInCameraX(int mouseInViewportX);
+        float getMouseInCameraY(int mouseInViewportX);
+
         std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
+
+        void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
         bool isMouseInUnit(
                 const Unit& unit, int mouseInViewportX, int mouseInViewportY);

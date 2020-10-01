@@ -37,45 +37,39 @@ namespace Rival {
         int mouseInViewportX = mouseX - static_cast<int>(viewport.x);
         int mouseInViewportY = mouseY - static_cast<int>(viewport.y);
 
+        // Calculate the mouse position in camera units
+        float mouseCameraX = getMouseInCameraX(mouseInViewportX);
+        float mouseCameraY = getMouseInCameraY(mouseInViewportY);
+
+        // Figure out what's under the mouse
+        tile = getTilePos(mouseCameraX, mouseCameraY);
+        findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
+    }
+
+    float MousePicker::getMouseInCameraX(int mouseInViewportX) {
         // Calculate mouse position relative to the viewport, in the range 0-1
         float normalizedMouseX =
                 static_cast<float>(mouseInViewportX) / viewport.width;
+        return camera.getLeft() + normalizedMouseX * camera.getWidth();
+    }
+
+    float MousePicker::getMouseInCameraY(int mouseInViewportY) {
+        // Calculate mouse position relative to the viewport, in the range 0-1
         float normalizedMouseY =
                 static_cast<float>(mouseInViewportY) / viewport.height;
-
-        // Calculate the mouse position in world units
-        float mouseWorldX = camera.getLeft()
-                + normalizedMouseX * camera.getWidth();
-        float mouseWorldY = camera.getTop()
-                + normalizedMouseY * camera.getHeight();
-
-        // Find the tile under the mouse
-        tile = getTilePos(mouseWorldX, mouseWorldY);
-
-        // Check for Units under the mouse
-        auto& units = scenario.getUnits();
-        for (auto it = units.begin(); it != units.end(); ++it) {
-            const Unit& unit = *it->second;
-            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
-                entityId = unit.getId();
-                std::cout << "Entity " << entityId << " of type unit ("
-                          << static_cast<int>(unit.getType())
-                          << ") is under cursor.\n";
-                break;
-            }
-        }
+        return camera.getTop() + normalizedMouseY * camera.getHeight();
     }
 
     std::pair<int, int> MousePicker::getTilePos(
-            float mouseWorldX,
-            float mouseWorldY) {
+            float mouseCameraX,
+            float mouseCameraY) {
 
         // Get the naive tile position.
         // This would work if our tiles were regular and aligned with the
         // camera's axes, but they are diamond shaped and positioned in a
         // zigzag pattern, so we will need to make further adjustments.
-        int tileX = static_cast<int>(mouseWorldX);
-        int tileY = static_cast<int>(mouseWorldY);
+        int tileX = static_cast<int>(mouseCameraX);
+        int tileY = static_cast<int>(mouseCameraY);
 
         // Get the "remainder" (just the decimal part of the world position).
         // Because of the way the tiles overlap, offsetX now ranges from 0-1,
@@ -84,8 +78,8 @@ namespace Rival {
         // (tileX + 1). This means we are always considering only the LEFT side
         // of a tile. The meaning of offsetY is more complicated due to the
         // zigzagging tile positioning (keep reading).
-        float offsetX = mouseWorldX - tileX;
-        float offsetY = mouseWorldY - tileY;
+        float offsetX = mouseCameraX - tileX;
+        float offsetY = mouseCameraY - tileY;
 
         // Now that we know our naive tile co-ordinates and the mouse offset
         // within that tile, we can figure out the real tile. Imagine each tile
@@ -149,6 +143,22 @@ namespace Rival {
         return std::pair<int, int>(tileX, tileY);
     }
 
+    void MousePicker::findEntityUnderMouse(
+            int mouseInViewportX,
+            int mouseInViewportY) {
+        auto& units = scenario.getUnits();
+        for (auto it = units.begin(); it != units.end(); ++it) {
+            const Unit& unit = *it->second;
+            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
+                entityId = unit.getId();
+                std::cout << "Entity " << entityId << " of type unit ("
+                          << static_cast<int>(unit.getType())
+                          << ") is under cursor.\n";
+                break;
+            }
+        }
+    }
+
     bool MousePicker::isMouseInUnit(
             const Unit& unit, int mouseInViewportX, int mouseInViewportY) {
 
@@ -172,8 +182,8 @@ namespace Rival {
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)
-        tileX_px -= RenderUtils::worldToPx_X(camera.getLeft()) * zoom;
-        tileY_px -= RenderUtils::worldToPx_Y(camera.getTop()) * zoom;
+        tileX_px -= RenderUtils::cameraToPx_X(camera.getLeft()) * zoom;
+        tileY_px -= RenderUtils::cameraToPx_Y(camera.getTop()) * zoom;
 
         // Find the bottom-left corner of the unit hitbox
         float unitX1 = tileX_px + (unitHitboxOffsetX * zoom);

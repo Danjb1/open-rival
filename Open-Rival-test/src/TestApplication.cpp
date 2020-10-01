@@ -6,7 +6,7 @@
 #include "State.h"
 #include "TimerUtils.h"
 
-SCENARIO("logic is run multiple times if we are running behind", "[game-loop]") {
+SCENARIO("logic is run multiple times if we are running behind", "[application][game-loop]") {
 
     /**
      * A State that takes a long time to render.

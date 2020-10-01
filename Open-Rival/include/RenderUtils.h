@@ -93,14 +93,29 @@ namespace RenderUtils {
      */
     float tileToScaledPx_Y(int x, int y, float zoomLevel);
 
-    float worldToPx_X(float x);
+    /**
+     * Converts from camera units to pixels, in the x-axis.
+     */
+    float cameraToPx_X(float x);
 
-    float worldToPx_Y(float y);
+    /**
+     * Converts from camera units to pixels, in the y-axis.
+     */
+    float cameraToPx_Y(float y);
 
-    float pxToWorld_X(float x);
+    /**
+     * Converts from pixels to camera units in the x-axis.
+     */
+    float pxToCamera_X(float x);
 
-    float pxToWorld_Y(float y);
+    /**
+     * Converts from pixels to camera units in the y-axis.
+     */
+    float pxToCamera_Y(float y);
 
+    /**
+     * Gets the z-position of an entity at the given tile co-ordinates.
+     */
     float getEntityZ(int x, int y);
 
     /**

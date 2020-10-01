@@ -97,11 +97,11 @@ namespace Rival {
         //  - y points up
         //  - z points out of the screen
         //
-        // The camera co-ordinates are in world units (tiles), but our vertices
-        // are positioned using pixels. Therefore we need to convert the camera
+        // The camera co-ordinates are in camera units, but our vertices are
+        // positioned using pixels. Therefore we need to convert the camera
         // co-ordinates to pixels, too.
-        float cameraX = RenderUtils::worldToPx_X(camera.getX());
-        float cameraY = RenderUtils::worldToPx_Y(camera.getY());
+        float cameraX = RenderUtils::cameraToPx_X(camera.getX());
+        float cameraY = RenderUtils::cameraToPx_Y(camera.getY());
         float cameraZ = RenderUtils::zCamera;
         glm::mat4 view = glm::lookAt(
                 glm::vec3(cameraX, cameraY, cameraZ),  // camera position

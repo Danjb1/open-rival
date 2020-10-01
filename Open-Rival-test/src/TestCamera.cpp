@@ -51,12 +51,31 @@ SCENARIO("camera should point at the centre of a tile", "[camera]") {
         Rival::Camera camera(25.0f, 25.0f, 20.0f, static_cast<double>(16) / 9,
                 scenario);
 
-        WHEN("centering the camera on a tile") {
-            camera.centreOnTile(15, 15);
+        WHEN("centering the camera on a tile in an even-numbered column") {
+            camera.centreOnTile(16, 25);
 
             THEN("the camera points at the tile's centre") {
-                REQUIRE(camera.getX() == 16.0f);
-                REQUIRE(camera.getY() == 15.5f);
+                // tileX * tileWidth + halfTileWidth
+                //  16   *    2      +     1
+                REQUIRE(camera.getX() == 33.0f);
+
+                // tileY * tileHeight + halfTileHeight
+                //  25   *     1      +     0.5
+                REQUIRE(camera.getY() == 25.5f);
+            }
+        }
+
+        WHEN("centering the camera on a tile in an odd-numbered column") {
+            camera.centreOnTile(17, 25);
+
+            THEN("the camera points at the tile's centre") {
+                // tileX * tileWidth + halfTileWidth
+                //  17   *    2      +     1
+                REQUIRE(camera.getX() == 35.0f);
+
+                // tileY * tileHeight + halfTileHeight + zigzagOffset
+                //  25   *     1      +     0.5        +     0.5
+                REQUIRE(camera.getY() == 26.0f);
             }
         }
     }
