@@ -9,6 +9,10 @@ namespace Rival {
     const float Camera::zoomMin = 0.5f;
     const float Camera::zoomMax = 2.0f;
 
+    const float Camera::tileWidthCamera = 2.0f;
+    const float Camera::tileHeightCamera = 1.0f;
+    const float Camera::bottomEdgePadding = tileHeightCamera / 2.0f;
+
     Camera::Camera(
             float x,
             float y,
@@ -30,15 +34,13 @@ namespace Rival {
         float minX = cameraWidth / 2;
         float minY = cameraHeight / 2;
 
-        // The last tile index is scenario.getWidth() - 1. However, we add 2
-        // to account for the width of the last tile (each tile spans 2
-        // columns due to the way they overlap).
-        float rightEdge = static_cast<float>(scenario.getWidth() + 1);
+        // Find the furthest point visible to the camera
+        int lastTileIndexX = scenario.getWidth() - 1;
+        int lastTileIndexY = scenario.getHeight() - 1;
+        float rightEdge = lastTileIndexX + tileWidthCamera;
+        float bottomEdge = lastTileIndexY + tileHeightCamera
+                + bottomEdgePadding;
         float maxX = rightEdge - (cameraWidth / 2);
-
-        // Similarly, we add some value to the bottom edge to account for the
-        // height of the last tile
-        float bottomEdge = static_cast<float>(scenario.getHeight() + 0.5f);
         float maxY = bottomEdge - (cameraHeight / 2);
 
         x = MathUtils::clampf(newX, minX, maxX);
@@ -46,9 +48,16 @@ namespace Rival {
     }
 
     void Camera::centreOnTile(int tileX, int tileY) {
-        // Each tile spans 2 columns and 1 row, so we travel half this distance
-        // to reach the centre of the tile.
-        centreOnPoint(tileX + 1.0f, tileY + 0.5f);
+        float offsetY = 0;
+        if (tileX % 2 == 1) {
+            // Tile co-ordinates zigzag up and down within a row
+            offsetY = (tileHeightCamera / 2.0f);
+        }
+
+        centreOnPoint(
+                (tileX * tileWidthCamera) + (tileWidthCamera / 2.0f),
+                (tileY * tileHeightCamera) + (tileHeightCamera / 2.0f)
+                        + offsetY);
     }
 
     void Camera::translate(float dx, float dy) {

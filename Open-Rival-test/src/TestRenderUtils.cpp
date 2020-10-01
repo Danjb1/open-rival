@@ -43,28 +43,28 @@ TEST_CASE("tileToScaledPx_Y calculates the correct tile position based on the zo
     REQUIRE(Rival::RenderUtils::tileToScaledPx_Y(3, 1, 2.0f) == 96);
 }
 
-TEST_CASE("worldToPx_X calculates the correct distance", "[render-utils]") {
-    REQUIRE(Rival::RenderUtils::worldToPx_X(0.5f) == 16);
-    REQUIRE(Rival::RenderUtils::worldToPx_X(1.0f) == 32);
-    REQUIRE(Rival::RenderUtils::worldToPx_X(1.5f) == 48);
+TEST_CASE("cameraToPx_X calculates the correct distance", "[render-utils]") {
+    REQUIRE(Rival::RenderUtils::cameraToPx_X(0.5f) == 16);
+    REQUIRE(Rival::RenderUtils::cameraToPx_X(1.0f) == 32);
+    REQUIRE(Rival::RenderUtils::cameraToPx_X(1.5f) == 48);
 }
 
-TEST_CASE("worldToPx_Y calculates the correct distance", "[render-utils]") {
-    REQUIRE(Rival::RenderUtils::worldToPx_Y(0.5f) == 16);
-    REQUIRE(Rival::RenderUtils::worldToPx_Y(1.0f) == 32);
-    REQUIRE(Rival::RenderUtils::worldToPx_Y(1.5f) == 48);
+TEST_CASE("cameraToPx_Y calculates the correct distance", "[render-utils]") {
+    REQUIRE(Rival::RenderUtils::cameraToPx_Y(0.5f) == 16);
+    REQUIRE(Rival::RenderUtils::cameraToPx_Y(1.0f) == 32);
+    REQUIRE(Rival::RenderUtils::cameraToPx_Y(1.5f) == 48);
 }
 
-TEST_CASE("pxToWorld_X calculates the correct distance", "[render-utils]") {
-    REQUIRE(Rival::RenderUtils::pxToWorld_X(16.0f) == 0.5f);
-    REQUIRE(Rival::RenderUtils::pxToWorld_X(32.0f) == 1.0f);
-    REQUIRE(Rival::RenderUtils::pxToWorld_X(48.0f) == 1.5f);
+TEST_CASE("pxToCamera_X calculates the correct distance", "[render-utils]") {
+    REQUIRE(Rival::RenderUtils::pxToCamera_X(16.0f) == 0.5f);
+    REQUIRE(Rival::RenderUtils::pxToCamera_X(32.0f) == 1.0f);
+    REQUIRE(Rival::RenderUtils::pxToCamera_X(48.0f) == 1.5f);
 }
 
-TEST_CASE("pxToWorld_Y calculates the correct distance", "[render-utils]") {
-    REQUIRE(Rival::RenderUtils::pxToWorld_Y(16.0f) == 0.5f);
-    REQUIRE(Rival::RenderUtils::pxToWorld_Y(32.0f) == 1.0f);
-    REQUIRE(Rival::RenderUtils::pxToWorld_Y(48.0f) == 1.5f);
+TEST_CASE("pxToCamera_Y calculates the correct distance", "[render-utils]") {
+    REQUIRE(Rival::RenderUtils::pxToCamera_Y(16.0f) == 0.5f);
+    REQUIRE(Rival::RenderUtils::pxToCamera_Y(32.0f) == 1.0f);
+    REQUIRE(Rival::RenderUtils::pxToCamera_Y(48.0f) == 1.5f);
 }
 
 TEST_CASE("getEntityZ calculates the correct z-positions", "[render-utils]") {
