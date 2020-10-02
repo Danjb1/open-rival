@@ -3,12 +3,14 @@
 
 #include "Camera.h"
 
+using namespace Rival;
+
 SCENARIO("camera should stay in bounds", "[camera]") {
 
     GIVEN("A camera looking at some point in a scenario") {
-        Rival::Scenario scenario(50, 50, false);
+        Scenario scenario(50, 50, false);
         const double aspectRatio = static_cast<double>(4) / 3;
-        Rival::Camera camera(25.0f, 25.0f, 20.0f, aspectRatio, scenario);
+        Camera camera(25.0f, 25.0f, 20.0f, aspectRatio, scenario);
 
         WHEN("moving the camera left") {
             camera.translate(-100.0f, 0.0f);
@@ -47,8 +49,8 @@ SCENARIO("camera should stay in bounds", "[camera]") {
 SCENARIO("camera should point at the centre of a tile", "[camera]") {
 
     GIVEN("A camera looking at some point in a scenario") {
-        Rival::Scenario scenario(50, 50, false);
-        Rival::Camera camera(25.0f, 25.0f, 20.0f, static_cast<double>(16) / 9,
+        Scenario scenario(50, 50, false);
+        Camera camera(25.0f, 25.0f, 20.0f, static_cast<double>(16) / 9,
                 scenario);
 
         WHEN("centering the camera on a tile in an even-numbered column") {

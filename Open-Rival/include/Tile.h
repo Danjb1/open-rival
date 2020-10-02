@@ -5,7 +5,7 @@
 
 namespace Rival {
 
-    enum class TileType : std::int8_t {
+    enum class TileType : std::uint8_t {
         Grass,
         Coastline,
         Water,

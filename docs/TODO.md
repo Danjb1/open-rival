@@ -4,7 +4,9 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Unit tests for MousePicker logic
+ - Units are not rendered in the left-most column
+
+ - Unit tests for MousePicker, Spritesheet
 
  - Refactor rendering / animations
     - Reduce duplication between UnitAnimation and BuildingAnimation
