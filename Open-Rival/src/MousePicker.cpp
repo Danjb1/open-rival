@@ -64,10 +64,44 @@ namespace Rival {
             float mouseCameraX,
             float mouseCameraY) {
 
+        /*
+         * The goal here is to reverse-engineer the rendering process to figure
+         * out which tile contains the given point.
+         *
+         * Here is a visual representation of what we're dealing with:
+         *
+         *      0            1            2            3            4
+         *      +------------+------------+------------+------------+
+         *      |         #  |  #         |         #  |  #         |
+         *      |      #     |     #      |      #     |     #      |
+         *      |   #        |        #   |   #        |        #   |
+         *      |<-----------A----------->|<-----------C----------->|
+         *      |   #        |        #   |   #        |        #   |
+         *      |      #     |     #      |      #     |     #      |
+         *      |         #  |  #         |         #  |  #         |
+         *      |------------+------------B------------+------------|
+         *      |         #  |  #         |         #  |  #         |
+         *      |      #     |     #      |      #     |     #      |
+         *      |   #        |        #   |   #        |        #   |
+         *      |<-----------+----------->|<-----------+----------->|
+         *
+         * Here, A and C represent even-column tiles, and B represents an
+         * odd-column tile. Notice how B is offset in the y-axis; this is
+         * something we will need to take into account.
+         *
+         * Notice also how each tile is framed in a rectangle, each rectangle
+         * is divided into 4 quadrants, and each of these quadrants includes
+         * a tile boundary. Therefore, even if we know which quadrant the point
+         * is in, we still need to figure out which side of the tile boundary
+         * it lies on.
+         */
+
         // Get the naive tile position.
-        // This would work if our tiles were regular and aligned with the
-        // camera's axes, but they are diamond shaped and positioned in a
-        // zigzag pattern, so we will need to make further adjustments.
+        // If our tiles were arranged in a regular axis-aligned grid then this
+        // would be sufficient, but since they are diamond-shaped and
+        // positioned in a zigzag pattern, we will need to make further
+        // adjustments. However, this is a good starting point as it basically
+        // tells us which quadrant we are in.
         int tileX = static_cast<int>(mouseCameraX);
         int tileY = static_cast<int>(mouseCameraY);
 
@@ -82,12 +116,10 @@ namespace Rival {
         float offsetY = mouseCameraY - tileY;
 
         // Now that we know our naive tile co-ordinates and the mouse offset
-        // within that tile, we can figure out the real tile. Imagine each tile
-        // is divided into four quadrants. Since our tiles are diamonds, each
-        // quadrant then contains a diagonal line; the border between our tile
-        // and one of its neighbours. Based on the quadrant, and which side of
-        // the line we are on, we can figure out what adjustments we need to
-        // make to our naive tile co-ordinates.
+        // within that tile, we can figure out the real tile. Based on the
+        // quadrant, and which side of the tile boundary we are on, we can
+        // figure out what adjustments we need to make to our naive tile
+        // co-ordinates.
         if (tileX % 2 == 0) {
 
             // Even-column tiles are positioned "normally" (no extra y-offset).

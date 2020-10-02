@@ -6,6 +6,8 @@
 #include "State.h"
 #include "TimerUtils.h"
 
+using namespace Rival;
+
 SCENARIO("logic is run multiple times if we are running behind", "[application][game-loop]") {
 
     /**
@@ -14,13 +16,13 @@ SCENARIO("logic is run multiple times if we are running behind", "[application][
      * Exits after 2 frames have passed (we need to simulate a second frame to give
      * the logic a chance to react to the slow rendering).
      */
-    class SlowRenderingState : public Rival::State {
+    class SlowRenderingState : public State {
     public:
         int framesPassed = 0;
         int updatesRun = 0;
 
-        SlowRenderingState(Rival::Application& app)
-            : Rival::State(app) {}
+        SlowRenderingState(Application& app)
+            : State(app) {}
 
         void keyDown(const SDL_Keycode keyCode) override {}
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override {}
@@ -31,7 +33,7 @@ SCENARIO("logic is run multiple times if we are running behind", "[application][
 
         void render() override {
             // Simulate 2 frame-lengths passing
-            MockSDL::ticks += 2 * Rival::TimerUtils::timeStepMs;
+            MockSDL::ticks += 2 * TimerUtils::timeStepMs;
 
             // Exit after the second frame
             framesPassed++;
@@ -42,8 +44,8 @@ SCENARIO("logic is run multiple times if we are running behind", "[application][
     };
 
     GIVEN("An Application that has not yet started") {
-        Rival::Window window(800, 600, "Rival Realms");
-        Rival::Application app(window);
+        Window window(800, 600, "Rival Realms");
+        Application app(window);
 
         WHEN("the game ticks, and the first render takes too long") {
 

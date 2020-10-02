@@ -36,6 +36,13 @@ namespace Rival {
 
         void centreOnTile(int x, int y);
 
+        /**
+         * Moves the camera by some distance, in camera units.
+         *
+         * Translating the camera by (1, 1) is equivalent to moving it by 1 row
+         * and 1 column; each tile actually measures 2 camera units, but the
+         * columns overlap.
+         */
         void translate(float dx, float dy);
 
         float getX() const;
