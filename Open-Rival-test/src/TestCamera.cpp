@@ -57,12 +57,12 @@ SCENARIO("camera should point at the centre of a tile", "[camera]") {
             camera.centreOnTile(16, 25);
 
             THEN("the camera points at the tile's centre") {
-                // tileX * tileWidth + halfTileWidth
-                //  16   *    2      +     1
-                REQUIRE(camera.getX() == 33.0f);
+                // tileX + halfTileWidth
+                //  16   +     1
+                REQUIRE(camera.getX() == 17.0f);
 
-                // tileY * tileHeight + halfTileHeight
-                //  25   *     1      +     0.5
+                // tileY + halfTileHeight
+                //  25   +     0.5
                 REQUIRE(camera.getY() == 25.5f);
             }
         }
@@ -71,12 +71,12 @@ SCENARIO("camera should point at the centre of a tile", "[camera]") {
             camera.centreOnTile(17, 25);
 
             THEN("the camera points at the tile's centre") {
-                // tileX * tileWidth + halfTileWidth
-                //  17   *    2      +     1
-                REQUIRE(camera.getX() == 35.0f);
+                // tileX + halfTileWidth
+                //  17   +     1
+                REQUIRE(camera.getX() == 18.0f);
 
-                // tileY * tileHeight + halfTileHeight + zigzagOffset
-                //  25   *     1      +     0.5        +     0.5
+                // tileY + halfTileHeight + zigzagOffset
+                //  25   +     0.5        +     0.5
                 REQUIRE(camera.getY() == 26.0f);
             }
         }
