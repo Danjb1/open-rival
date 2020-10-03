@@ -55,9 +55,8 @@ namespace Rival {
         }
 
         centreOnPoint(
-                (tileX * tileWidthCamera) + (tileWidthCamera / 2.0f),
-                (tileY * tileHeightCamera) + (tileHeightCamera / 2.0f)
-                        + offsetY);
+                tileX + (tileWidthCamera / 2.0f),
+                tileY + (tileHeightCamera / 2.0f) + offsetY);
     }
 
     void Camera::translate(float dx, float dy) {

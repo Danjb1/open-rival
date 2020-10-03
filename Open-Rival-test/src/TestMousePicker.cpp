@@ -20,9 +20,14 @@ Scenario scenario(50, 50, false);
  * These tests can be a little difficult to understand.
  *
  * The easiest way to debug them may be to reproduce the environment from the
- * test in the real game, and print the mouse position each frame. That way,
- * you can literally see the rendered scene, so it is easy to figure out what
- * the mouse picker *should* be calculating.
+ * test in the real game, and print the mouse position each frame:
+ *
+ *     std::cout << mouseX << ", " << mouseY << " -> " << tile.first << ", " << tile.second << "\n";
+ *
+ * That way, you can literally see the rendered scene, so it is easy to figure
+ * out what the mouse picker *should* be calculating.
+ *
+ * Alternatively, mouse positions can be plotted using `tile_grid.psd`.
  */
 SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picker]") {
 
@@ -53,6 +58,44 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
         }
     }
 
+    GIVEN("the mouse is in the centre of the screen") {
+        MousePicker mousePicker(camera, viewport, scenario);
+        MockSDL::mouseX = viewportWidth / 2;
+        MockSDL::mouseY = viewportHeight / 2;
+
+        AND_GIVEN("the camera is zoomed in at the centre of the map") {
+            camera.centreOnTile(25, 25);
+            camera.modZoom(0.5f);
+            mousePicker.handleMouse();
+
+            WHEN("getting the tile under the mouse") {
+                int tileX = mousePicker.getTileX();
+                int tileY = mousePicker.getTileY();
+
+                THEN("the correct tile co-ordinates are returned") {
+                    REQUIRE(tileX == 25);
+                    REQUIRE(tileY == 25);
+                }
+            }
+        }
+
+        AND_GIVEN("the camera is zoomed out at the centre of the map") {
+            camera.centreOnTile(25, 25);
+            camera.modZoom(-0.5f);
+            mousePicker.handleMouse();
+
+            WHEN("getting the tile under the mouse") {
+                int tileX = mousePicker.getTileX();
+                int tileY = mousePicker.getTileY();
+
+                THEN("the correct tile co-ordinates are returned") {
+                    REQUIRE(tileX == 25);
+                    REQUIRE(tileY == 25);
+                }
+            }
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Even-column tile
     ///////////////////////////////////////////////////////////////////////////
@@ -75,19 +118,6 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
                 REQUIRE(tileY == 2);
             }
         }
-
-        AND_GIVEN("the camera is zoomed in and panned to some location") {
-            camera.translate(5, 5);
-            camera.modZoom(0.1f);
-            mousePicker.handleMouse();
-            int tileX = mousePicker.getTileX();
-            int tileY = mousePicker.getTileY();
-
-            THEN("the correct tile co-ordinates are returned") {
-                REQUIRE(tileX == 7);
-                REQUIRE(tileY == 7);
-            }
-        }
     }
 
     GIVEN("the mouse is in the top-right quadrant of an even-column tile") {
@@ -103,22 +133,6 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
             THEN("the correct tile co-ordinates are returned") {
                 REQUIRE(tileX == 2);
                 REQUIRE(tileY == 2);
-            }
-        }
-
-        AND_GIVEN("the camera is zoomed in and panned to some location") {
-            camera.translate(5, 5);
-            camera.modZoom(0.1f);
-            mousePicker.handleMouse();
-            int tileX = mousePicker.getTileX();
-            int tileY = mousePicker.getTileY();
-
-            THEN("the correct tile co-ordinates are returned") {
-                // After translating by (5, 5), we might expect the resulting
-                // tile to be (7, 7), but we have also zoomed towards the
-                // camera centre, which brings the mouse to (8, 8).
-                REQUIRE(tileX == 8);
-                REQUIRE(tileY == 8);
             }
         }
     }
@@ -138,19 +152,6 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
                 REQUIRE(tileY == 2);
             }
         }
-
-        AND_GIVEN("the camera is zoomed in and panned to some location") {
-            camera.translate(5, 5);
-            camera.modZoom(0.1f);
-            mousePicker.handleMouse();
-            int tileX = mousePicker.getTileX();
-            int tileY = mousePicker.getTileY();
-
-            THEN("the correct tile co-ordinates are returned") {
-                REQUIRE(tileX == 8);
-                REQUIRE(tileY == 8);
-            }
-        }
     }
 
     GIVEN("the mouse is in the bottom-right quadrant of an even-column tile") {
@@ -168,19 +169,6 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
                 REQUIRE(tileY == 2);
             }
         }
-
-        AND_GIVEN("the camera is zoomed in and panned to some location") {
-            camera.translate(5, 5);
-            camera.modZoom(0.1f);
-            mousePicker.handleMouse();
-            int tileX = mousePicker.getTileX();
-            int tileY = mousePicker.getTileY();
-
-            THEN("the correct tile co-ordinates are returned") {
-                REQUIRE(tileX == 8);
-                REQUIRE(tileY == 8);
-            }
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -189,8 +177,11 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
 
     GIVEN("the mouse is in the top-left quadrant of an odd-column tile") {
         MousePicker mousePicker(camera, viewport, scenario);
-        MockSDL::mouseX = 100;
-        MockSDL::mouseY = 100;
+        // Due to the way tiles overlap, the point at
+        //  (tileWidthPx * 1.0f, tileHeightPx * 2.0f)
+        // should be the centre of tile (1, 1).
+        MockSDL::mouseX = static_cast<int>(0.95f * RenderUtils::tileWidthPx);
+        MockSDL::mouseY = static_cast<int>(1.95f * RenderUtils::tileHeightPx);
 
         WHEN("getting the tile under the mouse") {
             mousePicker.handleMouse();
@@ -198,15 +189,16 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
             int tileY = mousePicker.getTileY();
 
             THEN("the correct tile co-ordinates are returned") {
-                // TODO
+                REQUIRE(tileX == 1);
+                REQUIRE(tileY == 1);
             }
         }
     }
 
     GIVEN("the mouse is in the top-right quadrant of an odd-column tile") {
         MousePicker mousePicker(camera, viewport, scenario);
-        MockSDL::mouseX = 100;
-        MockSDL::mouseY = 100;
+        MockSDL::mouseX = static_cast<int>(1.05f * RenderUtils::tileWidthPx);
+        MockSDL::mouseY = static_cast<int>(1.95f * RenderUtils::tileHeightPx);
 
         WHEN("getting the tile under the mouse") {
             mousePicker.handleMouse();
@@ -214,15 +206,16 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
             int tileY = mousePicker.getTileY();
 
             THEN("the correct tile co-ordinates are returned") {
-                // TODO
+                REQUIRE(tileX == 1);
+                REQUIRE(tileY == 1);
             }
         }
     }
 
     GIVEN("the mouse is in the bottom-left quadrant of an odd-column tile") {
         MousePicker mousePicker(camera, viewport, scenario);
-        MockSDL::mouseX = 100;
-        MockSDL::mouseY = 100;
+        MockSDL::mouseX = static_cast<int>(0.95f * RenderUtils::tileWidthPx);
+        MockSDL::mouseY = static_cast<int>(2.05f * RenderUtils::tileHeightPx);
 
         WHEN("getting the tile under the mouse") {
             mousePicker.handleMouse();
@@ -230,15 +223,16 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
             int tileY = mousePicker.getTileY();
 
             THEN("the correct tile co-ordinates are returned") {
-                // TODO
+                REQUIRE(tileX == 1);
+                REQUIRE(tileY == 1);
             }
         }
     }
 
     GIVEN("the mouse is in the bottom-right quadrant of an odd-column tile") {
         MousePicker mousePicker(camera, viewport, scenario);
-        MockSDL::mouseX = 100;
-        MockSDL::mouseY = 100;
+        MockSDL::mouseX = static_cast<int>(1.05f * RenderUtils::tileWidthPx);
+        MockSDL::mouseY = static_cast<int>(2.05f * RenderUtils::tileHeightPx);
 
         WHEN("getting the tile under the mouse") {
             mousePicker.handleMouse();
@@ -246,7 +240,8 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
             int tileY = mousePicker.getTileY();
 
             THEN("the correct tile co-ordinates are returned") {
-                // TODO
+                REQUIRE(tileX == 1);
+                REQUIRE(tileY == 1);
             }
         }
     }
