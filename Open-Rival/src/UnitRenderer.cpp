@@ -53,11 +53,11 @@ namespace Rival {
     }
 
     bool UnitRenderer::isUnitVisible(const Unit& unit, const Camera& camera) {
-        // Check if any corner of the unit is visible
+        // Check all corners of the tile the Unit is occupying
         float x1 = static_cast<float>(unit.getX());
         float y1 = static_cast<float>(unit.getY());
-        float x2 = static_cast<float>(unit.getX() + Unit::width);
-        float y2 = static_cast<float>(unit.getY() + Unit::height);
+        float x2 = static_cast<float>(unit.getX() + Camera::tileWidthCamera);
+        float y2 = static_cast<float>(unit.getY() + Camera::tileHeightCamera);
         return camera.contains(x1, y1)
                 || camera.contains(x2, y1)
                 || camera.contains(x2, y2)

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "catch2/catch.h"
 
+#include <memory>
+
 #include "Camera.h"
 #include "MousePicker.h"
 #include "RenderUtils.h"
@@ -29,7 +31,7 @@ Scenario scenario(50, 50, false);
  *
  * Alternatively, mouse positions can be plotted using `tile_grid.psd`.
  */
-SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picker]") {
+SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picker]") {
 
     // Create a pixel-perfect Camera
     Camera camera(0.0f, 0.0f,
@@ -92,6 +94,24 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
                     REQUIRE(tileX == 25);
                     REQUIRE(tileY == 25);
                 }
+            }
+        }
+    }
+
+    GIVEN("the mouse is at the far corner of the map") {
+        camera.centreOnTile(50, 50);
+        MousePicker mousePicker(camera, viewport, scenario);
+        MockSDL::mouseX = viewportWidth - 1;
+        MockSDL::mouseY = viewportHeight - 1;
+        mousePicker.handleMouse();
+
+        WHEN("getting the tile under the mouse") {
+            int tileX = mousePicker.getTileX();
+            int tileY = mousePicker.getTileY();
+
+            THEN("the correct tile co-ordinates are returned") {
+                REQUIRE(tileX == 49);
+                REQUIRE(tileY == 49);
             }
         }
     }
@@ -247,7 +267,11 @@ SCENARIO("mouse picker should determine the tile under the mouse", "[mouse-picke
     }
 }
 
-SCENARIO("mouse picker should detect units under the mouse", "[mouse-picker]") {
+SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]") {
+
+    // Add a Unit
+    std::unique_ptr<Unit> unit = std::make_unique<Unit>(UnitType::Knight);
+    scenario.addUnit(std::move(unit), 0, 4, 4, Facing::South);
 
     // Create a pixel-perfect Camera
     Camera camera(0.0f, 0.0f,
@@ -255,15 +279,31 @@ SCENARIO("mouse picker should detect units under the mouse", "[mouse-picker]") {
             aspectRatio,
             scenario);
 
-    GIVEN("the mouse is over a unit") {
+    GIVEN("the mouse is not over a unit") {
         MousePicker mousePicker(camera, viewport, scenario);
-        // TODO
+        MockSDL::mouseX = 0;
+        MockSDL::mouseY = 0;
 
         WHEN("getting the entity under the mouse") {
-            // TODO
+            mousePicker.handleMouse();
+            int entityId = mousePicker.getEntityId();
+
+            THEN("the value -1 is returned") {
+                REQUIRE(entityId == -1);
+            }
+        }
+    }
+    GIVEN("the mouse is over a unit") {
+        MousePicker mousePicker(camera, viewport, scenario);
+        MockSDL::mouseX = static_cast<int>(RenderUtils::tileWidthPx * 2.5f);
+        MockSDL::mouseY = static_cast<int>(RenderUtils::tileHeightPx * 4.5f);
+
+        WHEN("getting the entity under the mouse") {
+            mousePicker.handleMouse();
+            int entityId = mousePicker.getEntityId();
 
             THEN("the correct entity ID is returned") {
-                // TODO
+                REQUIRE(entityId == 0);
             }
         }
     }

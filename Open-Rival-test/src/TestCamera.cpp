@@ -5,7 +5,7 @@
 
 using namespace Rival;
 
-SCENARIO("camera should stay in bounds", "[camera]") {
+SCENARIO("Camera should stay in bounds", "[camera]") {
 
     GIVEN("A camera looking at some point in a scenario") {
         Scenario scenario(50, 50, false);
@@ -46,7 +46,7 @@ SCENARIO("camera should stay in bounds", "[camera]") {
     }
 }
 
-SCENARIO("camera should point at the centre of a tile", "[camera]") {
+SCENARIO("Camera should point at the centre of a tile", "[camera]") {
 
     GIVEN("A camera looking at some point in a scenario") {
         Scenario scenario(50, 50, false);
@@ -78,6 +78,57 @@ SCENARIO("camera should point at the centre of a tile", "[camera]") {
                 // tileY + halfTileHeight + zigzagOffset
                 //  25   +     0.5        +     0.5
                 REQUIRE(camera.getY() == 26.0f);
+            }
+        }
+    }
+}
+
+SCENARIO("Camera should be the correct size", "[camera]") {
+
+    GIVEN("A camera looking at some point in a scenario") {
+        Scenario scenario(50, 50, false);
+        Camera camera(25.0f, 25.0f, 20.0f, static_cast<double>(16) / 9,
+                scenario);
+
+        WHEN("getting the camera size") {
+            float cameraWidth = camera.getWidth();
+            float cameraHeight = camera.getHeight();
+
+            THEN("the correct dimensions are returned") {
+                REQUIRE(cameraWidth == 20.0f);
+                REQUIRE(cameraHeight == 11.25f);
+            }
+        }
+
+        AND_GIVEN("The camera is zoomed out") {
+            camera.modZoom(-0.5f);
+
+            WHEN("getting the camera size") {
+                float cameraWidth = camera.getWidth();
+                float cameraHeight = camera.getHeight();
+
+                THEN("the correct dimensions are returned") {
+                    // At a zoom level of 0.5,
+                    // twice as many tiles should be visible
+                    REQUIRE(cameraWidth == 40.0f);
+                    REQUIRE(cameraHeight == 22.5f);
+                }
+            }
+        }
+
+        AND_GIVEN("The camera is zoomed in") {
+            camera.modZoom(0.5f);
+
+            WHEN("getting the camera size") {
+                float cameraWidth = camera.getWidth();
+                float cameraHeight = camera.getHeight();
+
+                THEN("the correct dimensions are returned") {
+                    // At a zoom level of 1.5 (3/2),
+                    // 2/3 of the tiles should be visible
+                    REQUIRE(cameraWidth == Approx(13.3333f));
+                    REQUIRE(cameraHeight == Approx(7.5f));
+                }
             }
         }
     }

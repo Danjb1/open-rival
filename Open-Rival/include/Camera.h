@@ -21,6 +21,10 @@ namespace Rival {
     class Camera {
 
     public:
+        // Size of a tile, in camera co-ordinates
+        static const float tileWidthCamera;
+        static const float tileHeightCamera;
+
         static const float zoomInterval;
         static const float zoomMin;
         static const float zoomMax;
@@ -68,10 +72,6 @@ namespace Rival {
         bool contains(float px, float py) const;
 
     private:
-        // Size of a tile, in camera co-ordinates
-        static const float tileWidthCamera;
-        static const float tileHeightCamera;
-
         // Extra distance the camera is allowed to travel at the bottom of the
         // map. This is necessary because a row of tiles actually spans more
         // than 1 tile height due to their zigzagging y-positioning.

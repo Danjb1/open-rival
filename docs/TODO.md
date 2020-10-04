@@ -4,11 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Units are not rendered in the left-most column
-
- - Unit tests for MousePicker, Spritesheet
-    - Test clicking at map edges
-
  - Refactor rendering / animations
     - Reduce duplication between UnitAnimation and BuildingAnimation
     - Reduce duplication between UnitRenderer and BuildingRenderer

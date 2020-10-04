@@ -8,7 +8,7 @@
 
 using namespace Rival;
 
-SCENARIO("logic is run multiple times if we are running behind", "[application][game-loop]") {
+SCENARIO("Logic is run multiple times if we are running behind", "[application][game-loop]") {
 
     /**
      * A State that takes a long time to render.
@@ -48,7 +48,6 @@ SCENARIO("logic is run multiple times if we are running behind", "[application][
         Application app(window);
 
         WHEN("the game ticks, and the first render takes too long") {
-
             std::unique_ptr<SlowRenderingState> initialState =
                     std::make_unique<SlowRenderingState>(app);
             app.start(std::move(initialState));

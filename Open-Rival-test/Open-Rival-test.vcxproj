@@ -45,6 +45,7 @@
     <ClCompile Include="src\TestCamera.cpp" />
     <ClCompile Include="src\TestMousePicker.cpp" />
     <ClCompile Include="src\TestRenderUtils.cpp" />
+    <ClCompile Include="src\TestSpritesheet.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>

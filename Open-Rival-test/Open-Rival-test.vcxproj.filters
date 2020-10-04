@@ -94,6 +94,9 @@
     <ClCompile Include="..\Open-Rival\src\State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestSpritesheet.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h">
