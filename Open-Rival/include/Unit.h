@@ -22,7 +22,7 @@ namespace Rival {
     class Unit {
 
     public:
-        // Size of a Unit, in world units
+        // Size of a Unit, in camera units
         static const int width = 1;
         static const int height = 1;
 
