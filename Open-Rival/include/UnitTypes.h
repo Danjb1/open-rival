@@ -62,7 +62,6 @@ namespace Rival {
         SeaMonster,
         Skeleton,
         Snake
-
     };
 
     const auto firstUnitType { static_cast<int>(UnitType::Ballista) };

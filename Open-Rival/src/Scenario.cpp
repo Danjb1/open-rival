@@ -71,7 +71,7 @@ namespace Rival {
 
         // Add the Unit to the world
         units[nextId] = std::move(unit);
-        units[nextId]->addedToWorld(nextId, player, x, y, facing);
+        units[nextId]->onSpawn(nextId, player, x, y, facing);
 
         // Increase the ID for the next one
         nextId++;
