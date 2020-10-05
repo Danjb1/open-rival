@@ -23,6 +23,8 @@
     <ClCompile Include="..\Open-Rival\src\Building.cpp" />
     <ClCompile Include="..\Open-Rival\src\BuildingAnimation.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Entity.cpp" />
+    <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MousePicker.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
@@ -43,6 +45,7 @@
     <ClCompile Include="src\SDL.cpp" />
     <ClCompile Include="src\TestApplication.cpp" />
     <ClCompile Include="src\TestCamera.cpp" />
+    <ClCompile Include="src\TestEntity.cpp" />
     <ClCompile Include="src\TestMousePicker.cpp" />
     <ClCompile Include="src\TestRenderUtils.cpp" />
     <ClCompile Include="src\TestSpritesheet.cpp" />

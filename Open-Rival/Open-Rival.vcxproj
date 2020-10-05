@@ -25,6 +25,8 @@
     <ClCompile Include="src\BuildingAnimation.cpp" />
     <ClCompile Include="src\BuildingRenderer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EntityComponent.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
     <ClCompile Include="src\GameRenderer.cpp" />
@@ -66,6 +68,8 @@
     <ClInclude Include="include\BuildingRenderer.h" />
     <ClInclude Include="include\BuildingTypes.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\EntityComponent.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\GameRenderer.h" />

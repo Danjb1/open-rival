@@ -4,6 +4,11 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Entity / Component system
+    - Have Building extend Entity
+    - Store all Entities in GameState
+    - Update all Entities in game loop
+
  - Refactor rendering / animations
     - Reduce duplication between UnitAnimation and BuildingAnimation
     - Reduce duplication between UnitRenderer and BuildingRenderer
@@ -13,6 +18,9 @@
     - Instead of having the UnitRenderer track the presence of all units,
         have the units register / unregister themselves against the renderer
         - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
+
+ - When a Unit is deleted, any references to it will become invalid
+    - We need a way to check if a Unit reference is still valid!
 
  - Render the UI
 

@@ -10,7 +10,7 @@
 | 0604     | 0611   | Obstacles                            |              |              |
 | 0612     | 0619   | Selection cursor                     |              |              |
 | 0620     | 0629   | Bags & chests                        |              |              |
-| 0630     | -      | Unused green bag?                    |              |              |
+| 0630     | -      | Hidden bag                           |              |              |
 | 0631     | 0633   | Troop overlays                       |              |              |
 | 0634     | -      | Treestump                            |              |              |
 | 0635     | 0645   | Scenario goals                       |              |              |

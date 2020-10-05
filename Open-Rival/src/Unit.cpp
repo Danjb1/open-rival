@@ -4,17 +4,22 @@
 namespace Rival {
 
     Unit::Unit(UnitType type)
-        : deleted(false),
-          id(-1),
+        : Entity(1, 1),
           type(type) {}
 
-    void Unit::addedToWorld(
-            int newId, int newPlayer, int newX, int newY, Facing newFacing) {
+    void Unit::onSpawn(int newId, int newX, int newY) {
+        onSpawn(newId, 0, newX, newY, Facing::South);
+    }
+
+    void Unit::onSpawn(
+            int newId,
+            int newPlayer,
+            int newX,
+            int newY,
+            Facing newFacing) {
         id = newId;
-        player = newPlayer;
-        x = newX;
-        y = newY;
         facing = newFacing;
+        Entity::onSpawn(newId, newX, newY);
     }
 
     int Unit::getCurrentSpriteIndex() const {
@@ -33,30 +38,6 @@ namespace Rival {
     void Unit::rotateRight() {
         int newFacing = (static_cast<int>(facing) + 1) % numFacings;
         facing = static_cast<Facing>(newFacing);
-    }
-
-    const bool Unit::isDeleted() const {
-        return deleted;
-    }
-
-    void Unit::markForDeletion() {
-        deleted = true;
-    }
-
-    const int Unit::getId() const {
-        return id;
-    }
-
-    int Unit::getX() const {
-        return x;
-    }
-
-    int Unit::getY() const {
-        return y;
-    }
-
-    void Unit::update() {
-        //animation.tick();
     }
 
 }  // namespace Rival
