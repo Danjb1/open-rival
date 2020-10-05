@@ -4,67 +4,42 @@
 #include "BuildingAnimation.h"
 #include "BuildingAnimationLookup.h"
 #include "BuildingTypes.h"
+#include "Entity.h"
 #include "Spritesheet.h"
 
 namespace Rival {
 
-    class Building {
+    class Building : public Entity {
 
     public:
-        // Size of a Building, in tiles
-        static const int width = 3;
-        static const int height = 2;
-
         Building(BuildingType type);
 
-        void addedToWorld(int newId,
+        // Do not use! Use other `onSpawn` method instead.
+        void onSpawn(int newId, int newX, int newY) override;
+
+        void onSpawn(
+                int newId,
                 int newPlayer,
                 int newX,
-                int newY,
-                WallVariant newWallVariant);
+                int newY);
 
         int getCurrentSpriteIndex() const;
 
-        WallVariant getWallVariant() const;
-
         const BuildingType getType() const;
 
-        void setAnimation(BuildingAnimationType buildingAnimationType);
-
-        const bool isDeleted() const;
-
-        void markForDeletion();
-
-        const int getId() const;
-
-        int getX() const;
-
-        int getY() const;
-
-        void update();
-
     private:
-        int id;
+        static const int numTilesX = 3;
+        static const int numTilesY = 2;
+        static const int numTilesWallX = 1;
+        static const int numTilesWallY = 1;
 
-        bool deleted;
+        static int determineWidth(BuildingType type);
+        static int determineHeight(BuildingType type);
+        static bool isWall(BuildingType type);
 
         BuildingType type;
 
-        WallVariant wallVariant;
-
-        BuildingAnimation animation;
-
         int player;
-
-        /**
-         * x co-ordinate of the bottom corner of the Building
-         */
-        int x;
-
-        /**
-         * y co-ordinate of the bottom corner of the Building
-         */
-        int y;
     };
 
 }  // namespace Rival

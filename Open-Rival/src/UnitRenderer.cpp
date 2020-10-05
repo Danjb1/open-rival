@@ -56,8 +56,8 @@ namespace Rival {
         // Check all corners of the tile the Unit is occupying
         float x1 = static_cast<float>(unit.getX());
         float y1 = static_cast<float>(unit.getY());
-        float x2 = static_cast<float>(unit.getX() + Camera::tileWidthCamera);
-        float y2 = static_cast<float>(unit.getY() + Camera::tileHeightCamera);
+        float x2 = static_cast<float>(unit.getX() + Camera::tileWidth);
+        float y2 = static_cast<float>(unit.getY() + Camera::tileHeight);
         return camera.contains(x1, y1)
                 || camera.contains(x2, y1)
                 || camera.contains(x2, y2)
