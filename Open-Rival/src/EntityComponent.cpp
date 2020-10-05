@@ -4,7 +4,7 @@
 namespace Rival {
 
     EntityComponent::EntityComponent(std::string key)
-        : key(key) {}
+        : _key(key) {}
 
     const bool EntityComponent::isDeleted() const {
         return deleted;
@@ -19,7 +19,7 @@ namespace Rival {
     }
 
     std::string EntityComponent::getKey() {
-        return key;
+        return _key;
     }
 
 }  // namespace Rival

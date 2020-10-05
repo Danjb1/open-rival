@@ -91,7 +91,8 @@ int main() {
         // Load some scenario
         Rival::ScenarioReader reader(Rival::Resources::mapsDir + "example.sco");
         Rival::ScenarioBuilder scenarioBuilder(reader.readScenario());
-        std::unique_ptr<Rival::Scenario> scenario = scenarioBuilder.build();
+        std::unique_ptr<Rival::Scenario> scenario =
+                scenarioBuilder.build(app.getResources());
 
         // Create our initial state
         std::unique_ptr<Rival::State> initialState =

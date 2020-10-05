@@ -39,56 +39,31 @@ namespace Rival {
         return wilderness;
     }
 
-    void Scenario::addBuilding(
-            std::unique_ptr<Building> building,
-            int player,
+    void Scenario::addEntity(
+            std::unique_ptr<Entity> entity,
             int x,
-            int y,
-            uint8_t wallVariant) {
+            int y) {
 
-        // Add the Building to the world
-        buildings[nextId] = std::move(building);
-        buildings[nextId]->onSpawn(
+        // Add the Entity to the world
+        entities[nextId] = std::move(entity);
+        entities[nextId]->onSpawn(
                 nextId,
-                player,
                 x,
                 y);
 
         // Increase the ID for the next one
-        nextId++;
+        ++nextId;
 
         // Change the passability
         setPassability(x, y, TilePassability::Building);
-    }
-
-    void Scenario::addUnit(
-            std::unique_ptr<Unit> unit,
-            int player,
-            int x,
-            int y,
-            Facing facing) {
-
-        // Add the Unit to the world
-        units[nextId] = std::move(unit);
-        units[nextId]->onSpawn(nextId, player, x, y, facing);
-
-        // Increase the ID for the next one
-        nextId++;
-
-        // Change the passability
-        setPassability(x, y, TilePassability::Unit);
     }
 
     void Scenario::setPassability(int x, int y, TilePassability passability) {
         tilePassability[y * width + x] = passability;
     }
 
-    const std::map<int, std::unique_ptr<Building>>& Scenario::getBuildings() const {
-        return buildings;
-    }
-
-    const std::map<int, std::unique_ptr<Unit>>& Scenario::getUnits() const {
-        return units;
+    const std::map<int, std::unique_ptr<Entity>>& Scenario::getEntities() const {
+        return entities;
     }
 
 }  // namespace Rival

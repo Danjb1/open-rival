@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "TimerUtils.h"
+
 namespace Rival {
 
     Application::Application(Window& window)

@@ -56,14 +56,15 @@ namespace Rival {
 
     protected:
         /**
-         * Key used to store and retrive this EntityComponent.
-         */
-        std::string key;
-
-        /**
          * The Entity that owns this EntityComponent.
          */
         Entity* entity;
+
+    private:
+        /**
+         * Key used to store and retrieve this EntityComponent.
+         */
+        std::string _key;
 
         /**
          * Flag set when this EntityComponent is marked for deletion.

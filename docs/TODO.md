@@ -5,24 +5,22 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - Should we have Entity subclasses or use components exclusively?
-        - Better to use components exclusively
-        - Facing should be a component
-        - Player should be a component
-    - Store all Entities in GameState
-    - Update all Entities in game loop
-    - Image / Animation should be a component
+    - Encapsulate unit creation in a UnitFactory
+    - Encapsulate building creation in a BuildingFactory
+    - Buildings need a SpriteComponent
+    - UnitType should be a component
+    - BuildingType should be a component
+    - Facing should be a component
+    - Player should be a component
     - WallVariant should be a component
+    - SpriteComponent should figure out the correct txIndex from the facing and animation!
+    - Set passability correctly when adding an Entitiy to a Scenario
+    - MousePicker should determine hitbox offsets based on entity type
+    - Fix unit tests!
 
- - Refactor rendering / animations
+ - Refactor animations animations
     - Reduce duplication between UnitAnimation and BuildingAnimation
-    - Reduce duplication between UnitRenderer and BuildingRenderer
     - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
-    - Render the correct sprite index based on type / facing
-    - Use a component-based system to keep animations and units loosely coupled
-    - Instead of having the UnitRenderer track the presence of all units,
-        have the units register / unregister themselves against the renderer
-        - Use an interface (e.g. GraphicsContext) so we are not tied to a specific implementation
 
  - When a Unit is deleted, any references to it will become invalid
     - We need a way to check if a Unit reference is still valid!
@@ -42,9 +40,6 @@ character filename (including path)
 
  - Reduce duplication between MousePicker and zooming logic
 
- - Resources refactor
-    - Pass Resources around instead of individual textures / spritesheets?
-
  - Image filenames can be truncated due to limited size of char array
 
  - Framebuffer size calculations should use RenderUtils
@@ -57,11 +52,6 @@ character filename (including path)
     - The current solution can be optimised by only considering on-screen units
 
  - Rendering:
-    - Duplication between Renderers
-    - Delete Renderables when a Unit no longer exists
-        - If a Unit is erased from memory, our renderable map will have a null key!
-    - Delete Renderables when a Building no longer exists
-        - If a Building is erased from memory, our renderable map will have a null key!
     - Why does FramebufferRendering require a different winding order to other renderers?
 
  - ScenarioReader:
@@ -69,7 +59,7 @@ character filename (including path)
     - Improve error handling
     - Analyse skipped sections; do they vary? Are they read?
 
- - Should enums have type specifiers (e.g. TileType is std::int8_t)?
+ - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
  
  - Consider rewriting ScenarioReader and ScenarioBuilder as free-standing functions, e.g.
         auto scenario_desc = readScenario(scenarioPath);

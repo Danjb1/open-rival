@@ -116,43 +116,43 @@ namespace Rival {
         return Palette::createPaletteTexture();
     }
 
-    std::map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets() {
+    std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets() {
 
-        std::map<BuildingType, Spritesheet> spritesheets;
+        std::map<Building::Type, Spritesheet> spritesheets;
         int nextIndex = txIndexBuildings;
 
         auto createSpritesheets = [&](int first, int last) {
-            for (auto it { first }; it <= last; ++it) {
+            for (auto it = first; it <= last; ++it) {
                 spritesheets.emplace(std::piecewise_construct,
-                        std::forward_as_tuple(static_cast<BuildingType>(it)),
+                        std::forward_as_tuple(static_cast<Building::Type>(it)),
                         std::forward_as_tuple(
                                 textures.at(nextIndex),
-                                RenderUtils::buildingWidthPx,
-                                RenderUtils::buildingHeightPx));
+                                RenderUtils::entityWidthPx,
+                                RenderUtils::entityHeightPx));
             }
         };
 
-        createSpritesheets(firstElfBuildingType, lastElfBuildingType);
+        createSpritesheets(Building::firstElfBuildingType, Building::lastElfBuildingType);
         ++nextIndex;
-        createSpritesheets(firstGreenskinBuildingType, lastGreenskinBuildingType);
+        createSpritesheets(Building::firstGreenskinBuildingType, Building::lastGreenskinBuildingType);
         ++nextIndex;
-        createSpritesheets(firstHumanBuildingType, lastHumanBuildingType);
+        createSpritesheets(Building::firstHumanBuildingType, Building::lastHumanBuildingType);
 
         return spritesheets;
     }
 
-    std::map<UnitType, Spritesheet> Resources::initUnitSpritesheets() {
+    std::map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets() {
 
-        std::map<UnitType, Spritesheet> spritesheets;
+        std::map<Unit::Type, Spritesheet> spritesheets;
         int nextIndex = txIndexUnits;
 
-        for (auto it { firstUnitType }; it <= lastUnitType; ++it) {
+        for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it) {
             spritesheets.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(static_cast<UnitType>(it)),
+                    std::forward_as_tuple(static_cast<Unit::Type>(it)),
                     std::forward_as_tuple(
                             textures.at(nextIndex),
-                            RenderUtils::unitWidthPx,
-                            RenderUtils::unitHeightPx));
+                            RenderUtils::entityWidthPx,
+                            RenderUtils::entityHeightPx));
             nextIndex++;
         }
 
@@ -193,12 +193,14 @@ namespace Rival {
                 : tileSpritesheets.at(0);
     }
 
-    const std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {
-        return unitSpritesheets;
+    const Spritesheet& Resources::getUnitSpritesheet(
+            Unit::Type unitType) const {
+        return unitSpritesheets.at(unitType);
     }
 
-    const std::map<BuildingType, Spritesheet>& Resources::getBuildingSpritesheets() const {
-        return buildingSpritesheets;
+    const Spritesheet& Resources::getBuildingSpritesheet(
+            Building::Type buildingType) const {
+        return buildingSpritesheets.at(buildingType);
     }
 
     const Spritesheet& Resources::getMapBorderSpritesheet() const {

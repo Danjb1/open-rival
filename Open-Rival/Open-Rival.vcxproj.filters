@@ -17,6 +17,9 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{a88f51de-cb90-4207-a922-9387655cb149}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\components">
+      <UniqueIdentifier>{928ac342-04b2-49c7-945a-d50446949246}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
@@ -26,9 +29,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenario.cpp">
@@ -79,9 +79,6 @@
     <ClCompile Include="src\Spritesheet.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="src\UnitRenderer.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="src\TileRenderer.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
     <ClCompile Include="src\BuildingAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BuildingRenderer.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,6 +124,15 @@
     <ClCompile Include="src\EntityComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\FacingComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -142,9 +145,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Tile.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Unit.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Window.h">
@@ -192,9 +192,6 @@
     <ClInclude Include="include\Spritesheet.h">
       <Filter>Source Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="include\UnitRenderer.h">
-      <Filter>Source Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="include\TileRenderer.h">
       <Filter>Source Files\render</Filter>
     </ClInclude>
@@ -222,12 +219,6 @@
     <ClInclude Include="include\UnitAnimationLookup.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\UnitTypes.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BuildingTypes.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Building.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -236,9 +227,6 @@
     </ClInclude>
     <ClInclude Include="include\BuildingAnimationLookup.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BuildingRenderer.h">
-      <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\Rect.h">
       <Filter>Source Files</Filter>
@@ -260,6 +248,18 @@
     </ClInclude>
     <ClInclude Include="include\EntityComponent.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FacingComponent.h">
+      <Filter>Source Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Unit.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EntityRenderer.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SpriteComponent.h">
+      <Filter>Source Files\components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

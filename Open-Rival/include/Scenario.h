@@ -5,9 +5,8 @@
 #include <memory>
 #include <vector>
 
-#include "Building.h"
+#include "Entity.h"
 #include "Tile.h"
-#include "Unit.h"
 
 namespace Rival {
 
@@ -30,23 +29,12 @@ namespace Rival {
 
         bool isWilderness() const;
 
-        void addBuilding(
-                std::unique_ptr<Building> building,
-                int player,
+        void addEntity(
+                std::unique_ptr<Entity> unit,
                 int x,
-                int y,
-                uint8_t wallVariant);
+                int y);
 
-        const std::map<int, std::unique_ptr<Building>>& getBuildings() const;
-
-        void addUnit(
-                std::unique_ptr<Unit> unit,
-                int player,
-                int x,
-                int y,
-                Facing facing);
-
-        const std::map<int, std::unique_ptr<Unit>>& getUnits() const;
+        const std::map<int, std::unique_ptr<Entity>>& getEntities() const;
 
     private:
         const int width;
@@ -56,8 +44,7 @@ namespace Rival {
         std::vector<TilePassability> tilePassability;
 
         int nextId;
-        std::map<int, std::unique_ptr<Building>> buildings;
-        std::map<int, std::unique_ptr<Unit>> units;
+        std::map<int, std::unique_ptr<Entity>> entities;
 
         void setPassability(int x, int y, TilePassability passability);
     };

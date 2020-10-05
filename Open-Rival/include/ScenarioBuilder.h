@@ -5,9 +5,13 @@
 #include <fstream>
 #include <memory>
 
+#include "Building.h"
+#include "FacingComponent.h"
+#include "Resources.h"
 #include "Scenario.h"
 #include "ScenarioData.h"
 #include "Tile.h"
+#include "Unit.h"
 
 namespace Rival {
 
@@ -17,16 +21,16 @@ namespace Rival {
     public:
         ScenarioBuilder(ScenarioData data);
 
-        std::unique_ptr<Scenario> build();
+        std::unique_ptr<Scenario> build(const Resources& res);
 
     private:
         ScenarioData data;
 
         Tile buildTile(TilePlacement& tile) const;
 
-        BuildingType getBuildingType(std::uint8_t buildingType) const;
+        Building::Type getBuildingType(std::uint8_t buildingType) const;
 
-        UnitType getUnitType(std::uint8_t unitType) const;
+        Unit::Type getUnitType(std::uint8_t unitType) const;
 
         Facing getFacing(std::uint8_t facing) const;
     };

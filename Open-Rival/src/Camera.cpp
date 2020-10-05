@@ -9,8 +9,8 @@ namespace Rival {
     const float Camera::zoomMin = 0.5f;
     const float Camera::zoomMax = 2.0f;
 
-    const float Camera::tileWidth = 2.0f;
-    const float Camera::tileHeight = 1.0f;
+    const int Camera::tileWidth = 2;
+    const int Camera::tileHeight = 1;
 
     const float Camera::bottomEdgePadding = tileHeight / 2.0f;
 
@@ -38,9 +38,8 @@ namespace Rival {
         // Find the furthest point visible to the camera
         int lastTileIndexX = scenario.getWidth() - 1;
         int lastTileIndexY = scenario.getHeight() - 1;
-        float rightEdge = lastTileIndexX + tileWidth;
-        float bottomEdge = lastTileIndexY + tileHeight
-                + bottomEdgePadding;
+        int rightEdge = lastTileIndexX + tileWidth;
+        float bottomEdge = lastTileIndexY + tileHeight + bottomEdgePadding;
         float maxX = rightEdge - (cameraWidth / 2);
         float maxY = bottomEdge - (cameraHeight / 2);
 
