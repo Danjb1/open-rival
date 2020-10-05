@@ -46,11 +46,7 @@ namespace Rival {
                   res.getMapBorderSpritesheet(),
                   res.getPalette()),
 
-          unitRenderer(res.getUnitSpritesheets(),
-                  res.getPalette()),
-
-          buildingRenderer(res.getBuildingSpritesheets(),
-                  res.getPalette()) {}
+          entityRenderer(res.getPalette()) {}
 
     void GameRenderer::render() {
         // Render to our framebuffer.
@@ -140,11 +136,8 @@ namespace Rival {
         // Render Map Borders
         mapBorderRenderer.render();
 
-        // Render Units
-        unitRenderer.render(camera, scenario.getUnits());
-
-        // Render Units
-        buildingRenderer.render(camera, scenario.getBuildings());
+        // Render Entities
+        entityRenderer.render(camera, scenario.getEntities());
     }
 
     void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) {

@@ -44,11 +44,10 @@ namespace Rival {
      * y fluctuates - so it does not make sense to try to store the absolute
      * position of an Entity as a float.
      */
-    class Entity {
+    class Entity final {
 
     public:
         Entity(int width, int height);
-        virtual ~Entity() {}
 
         /**
          * Attaches an EntityComponent to this Entity.
@@ -87,6 +86,11 @@ namespace Rival {
         const int getId() const;
 
         /**
+         * Gets the type of this Entity.
+         */
+        const EntityType getType() const;
+
+        /**
          * Gets the x co-ordinate of the tile this Entity is occupying.
          */
         int getX() const;
@@ -112,6 +116,7 @@ namespace Rival {
          * Returns nullptr if no matching EntityComponent is found.
          */
         EntityComponent* getComponent(std::string key);
+        const EntityComponent* getComponent(std::string key) const;
 
     protected:
         /**

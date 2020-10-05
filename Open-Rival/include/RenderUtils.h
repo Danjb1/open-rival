@@ -14,13 +14,15 @@ namespace RenderUtils {
     static const int tileWidthPx = 64;
     static const int tileHeightPx = 32;
 
-    // Size of a single Unit image, in pixels
-    static const int unitWidthPx = 128;
-    static const int unitHeightPx = 128;
+    // Size of a single Entity image, in pixels.
+    // This seems to be broadly true for all Entities, but may need revisiting.
+    static const int entityWidthPx = 128;
+    static const int entityHeightPx = 128;
 
-    // Size of a single Building image, in pixels
-    static const int buildingWidthPx = 128;
-    static const int buildingHeightPx = 128;
+    // Offset applied to align a Unit's sprite correctly within a tile,
+    // in pixels
+    static const int unitOffsetX = -33;
+    static const int unitOffsetY = -89;
 
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered

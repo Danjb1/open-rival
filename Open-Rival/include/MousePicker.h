@@ -59,8 +59,10 @@ namespace Rival {
 
         void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
-        bool isMouseInUnit(
-                const Unit& unit, int mouseInViewportX, int mouseInViewportY);
+        bool isMouseInEntity(
+                const Entity& entity,
+                int mouseInViewportX,
+                int mouseInViewportY);
     };
 
 }  // namespace Rival

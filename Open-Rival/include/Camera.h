@@ -22,8 +22,8 @@ namespace Rival {
 
     public:
         // Size of a tile, in camera co-ordinates
-        static const float tileWidth;
-        static const float tileHeight;
+        static const int tileWidth;
+        static const int tileHeight;
 
         // Zoom behaviour
         static const float zoomInterval;

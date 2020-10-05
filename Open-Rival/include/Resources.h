@@ -32,8 +32,8 @@ namespace Rival {
         // Retrieval
         const Texture& getPalette() const;
         const Spritesheet& getTileSpritesheet(bool wilderness) const;
-        const std::map<UnitType, Spritesheet>& getUnitSpritesheets() const;
-        const std::map<BuildingType, Spritesheet>& getBuildingSpritesheets() const;
+        const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
+        const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const;
         const Spritesheet& getMapBorderSpritesheet() const;
 
     private:
@@ -49,16 +49,16 @@ namespace Rival {
         const Texture paletteTexture;
 
         // Spritesheets
-        const std::map<UnitType, Spritesheet> unitSpritesheets;
-        const std::map<BuildingType, Spritesheet> buildingSpritesheets;
+        const std::map<Unit::Type, Spritesheet> unitSpritesheets;
+        const std::map<Building::Type, Spritesheet> buildingSpritesheets;
         const std::map<int, Spritesheet> tileSpritesheets;
         const Spritesheet mapBorderSpritesheet;
 
         // Initialisation
         std::vector<Texture> loadTextures();
         Texture initPaletteTexture();
-        std::map<BuildingType, Spritesheet> initBuildingSpritesheets();
-        std::map<UnitType, Spritesheet> initUnitSpritesheets();
+        std::map<Building::Type, Spritesheet> initBuildingSpritesheets();
+        std::map<Unit::Type, Spritesheet> initUnitSpritesheets();
         std::map<int, Spritesheet> initTileSpritesheets();
         Spritesheet initMapBorderSpritesheet();
     };

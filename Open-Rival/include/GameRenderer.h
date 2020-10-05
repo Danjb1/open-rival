@@ -1,8 +1,8 @@
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 
-#include "BuildingRenderer.h"
 #include "Camera.h"
+#include "EntityRenderer.h"
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
@@ -10,7 +10,6 @@
 #include "Resources.h"
 #include "Scenario.h"
 #include "TileRenderer.h"
-#include "UnitRenderer.h"
 #include "Window.h"
 
 namespace Rival {
@@ -48,11 +47,10 @@ namespace Rival {
         Framebuffer gameFbo;
 
         // Renderers
-        BuildingRenderer buildingRenderer;
+        EntityRenderer entityRenderer;
         FramebufferRenderer gameFboRenderer;
         TileRenderer tileRenderer;
         MapBorderRenderer mapBorderRenderer;
-        UnitRenderer unitRenderer;
 
         void renderGame(int viewportWidth, int viewportHeight);
         void renderFramebuffer(int srcWidth, int srcHeight);

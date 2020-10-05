@@ -2,8 +2,11 @@
 #include "MousePicker.h"
 
 #include <SDL.h>
+#include <iostream>
 
+#include "Entity.h"
 #include "MathUtils.h"
+#include "Unit.h"
 
 namespace Rival {
 
@@ -178,21 +181,23 @@ namespace Rival {
     void MousePicker::findEntityUnderMouse(
             int mouseInViewportX,
             int mouseInViewportY) {
-        auto& units = scenario.getUnits();
-        for (auto it = units.begin(); it != units.end(); ++it) {
-            const Unit& unit = *it->second;
-            if (isMouseInUnit(unit, mouseInViewportX, mouseInViewportY)) {
-                entityId = unit.getId();
+        auto& entities = scenario.getEntities();
+        for (auto it = entities.begin(); it != entities.end(); ++it) {
+            const Entity& entity = *it->second;
+            if (isMouseInEntity(entity, mouseInViewportX, mouseInViewportY)) {
+                entityId = entity.getId();
                 std::cout << "Entity " << entityId << " of type unit ("
-                          << static_cast<int>(unit.getType())
+                          << static_cast<int>(entity.getType())
                           << ") is under cursor.\n";
                 break;
             }
         }
     }
 
-    bool MousePicker::isMouseInUnit(
-            const Unit& unit, int mouseInViewportX, int mouseInViewportY) {
+    bool MousePicker::isMouseInEntity(
+            const Entity& entity,
+            int mouseInViewportX,
+            int mouseInViewportY) {
 
         /*
          * Units are always rendered at a fixed pixel offset from the tile they
@@ -208,9 +213,9 @@ namespace Rival {
         // position must use the same units, that is, we have to always take
         // the zoom level into account!
         float zoom = camera.getZoom();
-        float tileX_px = RenderUtils::tileToScaledPx_X(unit.getX(), zoom);
+        float tileX_px = RenderUtils::tileToScaledPx_X(entity.getX(), zoom);
         float tileY_px = RenderUtils::tileToScaledPx_Y(
-                unit.getX(), unit.getY(), zoom);
+                entity.getX(), entity.getY(), zoom);
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)

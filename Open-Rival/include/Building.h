@@ -1,47 +1,71 @@
 #ifndef BUILDING_H
 #define BUILDING_H
 
-#include "BuildingAnimation.h"
-#include "BuildingAnimationLookup.h"
-#include "BuildingTypes.h"
-#include "Entity.h"
-#include "Spritesheet.h"
-
 namespace Rival {
+namespace Building {
 
-    class Building : public Entity {
+    enum class Type {
 
-    public:
-        Building(BuildingType type);
+        // Elf
+        ElvenKeep,
+        Treasury,
+        CombatCamp,
+        Arsenal,
+        DuelRange,
+        HolyNest,
+        MinerGuildhall,
+        AbbeyTower,
+        CouncilOfRunes,
+        Harbour,
+        WarningTower,
+        TreeWall,
 
-        // Do not use! Use other `onSpawn` method instead.
-        void onSpawn(int newId, int newX, int newY) override;
+        // Greenskin
+        Fortress,
+        HoardKeep,
+        Fort,
+        Blacksmith,
+        BattleQuarters,
+        BlackNest,
+        WeirdWorkshop,
+        UnholyChapel,
+        AltarOfDoom,
+        Docks,
+        GuardTower,
+        GreenskinWall,
 
-        void onSpawn(
-                int newId,
-                int newPlayer,
-                int newX,
-                int newY);
+        // Human
+        Castle,
+        GoldMill,
+        ArcheryRange,
+        Armoury,
+        Barracks,
+        HolyStables,
+        FireGuild,
+        Temple,
+        MageTower,
+        Shipyard,
+        WatchTower,
+        Wall,
 
-        int getCurrentSpriteIndex() const;
-
-        const BuildingType getType() const;
-
-    private:
-        static const int numTilesX = 3;
-        static const int numTilesY = 2;
-        static const int numTilesWallX = 1;
-        static const int numTilesWallY = 1;
-
-        static int determineWidth(BuildingType type);
-        static int determineHeight(BuildingType type);
-        static bool isWall(BuildingType type);
-
-        BuildingType type;
-
-        int player;
     };
 
-}  // namespace Rival
+    const int firstElfBuildingType = static_cast<int>(Type::ElvenKeep);
+    const int lastElfBuildingType = static_cast<int>(Type::TreeWall);
+    const int firstGreenskinBuildingType = static_cast<int>(Type::Fortress);
+    const int lastGreenskinBuildingType = static_cast<int>(Type::GreenskinWall);
+    const int firstHumanBuildingType = static_cast<int>(Type::Castle);
+    const int lastHumanBuildingType = static_cast<int>(Type::Wall);
+
+    static const int defaultWidth = 3;
+    static const int defaultHeight = 2;
+    static const int wallWidth = 1;
+    static const int wallHeight = 1;
+
+    int getWidth(Type type);
+    int getHeight(Type type);
+    bool isWall(Type type);
+
+}}  // namespace Rival::Building
 
 #endif  // BUILDING_H

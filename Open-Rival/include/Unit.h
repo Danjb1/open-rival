@@ -1,61 +1,77 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include <vector>
-
-#include "Entity.h"
-#include "UnitAnimation.h"
-#include "UnitAnimationLookup.h"
-#include "UnitTypes.h"
-
 namespace Rival {
+namespace Unit {
 
-    enum class Facing {
-        South,
-        SouthWest,
-        West,
-        NorthWest,
-        North,
-        NorthEast,
-        East,
-        SouthEast
+    enum class Type {
+
+        // Human
+        Ballista,
+        Battleship,
+        Bowman,
+        ChariotOfWar,
+        FireMaster,
+        Knight,
+        LightCavalry,
+        Peasant,
+        PegasRider,
+        Priest,
+        SeaBarge,
+        Thief,
+        Wizard,
+        Zeppelin,
+
+        // Greenskin
+        Balloon,
+        Catapult,
+        GnomeBoomer,
+        HordeRider,
+        LandingCraft,
+        Necromancer,
+        PriestOfDoom,
+        RockThrower,
+        Rogue,
+        Serf,
+        StormTrooper,
+        TrollGalley,
+        Warbat,
+        Warlord,
+
+        // Elf
+        Archer,
+        Arquebusier,
+        Bark,
+        Bombard,
+        Centaur,
+        Druid,
+        DwarfMiner,
+        Enchanter,
+        Mage,
+        MagicChopper,
+        Scout,
+        SkyRider,
+        Warship,
+        Yeoman,
+
+        // Monsters
+        Devil,
+        Dragon,
+        Golem,
+        Gryphon,
+        Hydra,
+        SeaMonster,
+        Skeleton,
+        Snake
     };
 
-    class Unit : public Entity {
+    static const int firstUnitType = static_cast<int>(Type::Ballista);
+    static const int lastUnitType = static_cast<int>(Type::Snake);
 
-    public:
-        static const int numFacings = 8;
-
-        Facing facing;
-
-        Unit(UnitType type);
-
-        // Do not use! Use other `onSpawn` method instead.
-        void onSpawn(int newId, int newX, int newY) override;
-
-        void onSpawn(
-                int newId,
-                int newPlayer,
-                int newX,
-                int newY,
-                Facing newFacing);
-
-        int getCurrentSpriteIndex() const;
-
-        const UnitType getType() const;
-
-        void rotateLeft();
-
-        void rotateRight();
-
-        void update();
-
-    private:
-        UnitType type;
-
-        int player;
-    };
-
-}  // namespace Rival
+    // Size, in tiles
+    static const int width = 1;
+    static const int height = 1;
+}
+}  // namespace Rival::Unit
 
 #endif  // UNIT_H

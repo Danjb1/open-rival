@@ -1,0 +1,122 @@
+#include "pch.h"
+#include "EntityRenderer.h"
+
+#include <gl/glew.h>
+#include <vector>
+
+#include "Palette.h"
+#include "RenderUtils.h"
+#include "Shaders.h"
+#include "SpriteComponent.h"
+
+namespace Rival {
+
+    EntityRenderer::EntityRenderer(const Texture& paletteTexture)
+        : paletteTexture(paletteTexture) {}
+
+    void EntityRenderer::render(
+            const Camera& camera,
+            const std::map<int, std::unique_ptr<Entity>>& entities) {
+        for (auto const& kv : entities) {
+            Entity& e = *(kv.second);
+            if (isEntityVisible(e, camera)) {
+                renderEntity(e);
+            }
+        }
+    }
+
+    bool EntityRenderer::isEntityVisible(
+            const Entity& entity,
+            const Camera& camera) {
+
+        // Check all corners of the tile the Entity is occupying
+        float x1 = static_cast<float>(entity.getX());
+        float y1 = static_cast<float>(entity.getY());
+        float x2 = static_cast<float>(entity.getX()
+                + entity.getWidth() * Camera::tileWidth);
+        float y2 = static_cast<float>(entity.getY()
+                + entity.getHeight() * Camera::tileHeight);
+
+        return camera.contains(x1, y1)
+                || camera.contains(x2, y1)
+                || camera.contains(x2, y2)
+                || camera.contains(x1, y2);
+    }
+
+    void EntityRenderer::renderEntity(const Entity& entity) {
+
+        // Get this Entity's SpriteComponent
+        const SpriteComponent* spriteComponent =
+                dynamic_cast<const SpriteComponent*>(
+                        entity.getComponent(SpriteComponent::key));
+
+        // Entities without a SpriteComponent cannot be rendered
+        if (spriteComponent == nullptr) {
+            return;
+        }
+
+        // Determine the frame of the texture to be rendered
+        const SpriteRenderable& renderable = spriteComponent->getRenderable();
+        int txIndex = spriteComponent->getTxIndex();
+
+        // Define vertex positions
+        float width = static_cast<float>(RenderUtils::entityWidthPx);
+        float height = static_cast<float>(RenderUtils::entityHeightPx);
+        float x1 = static_cast<float>(
+                RenderUtils::tileToPx_X(entity.getX()));
+        float y1 = static_cast<float>(
+                RenderUtils::tileToPx_Y(entity.getX(), entity.getY()));
+        x1 += static_cast<float>(RenderUtils::unitOffsetX);
+        y1 += static_cast<float>(RenderUtils::unitOffsetY);
+        float x2 = x1 + width;
+        float y2 = y1 + height;
+        float z = RenderUtils::getEntityZ(entity.getX(), entity.getY());
+        std::vector<GLfloat> vertexData = {
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+        };
+
+        // Determine texture co-ordinates
+        std::vector<GLfloat> texCoords =
+                renderable.spritesheet.getTexCoords(txIndex);
+
+        // Use textures
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture entity 0
+        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture entity 1
+        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+        // Bind vertex array
+        glBindVertexArray(renderable.getVao());
+
+        // Upload position data
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
+        int positionBufferSize =
+                vertexData.size() * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                positionBufferSize,
+                vertexData.data());
+
+        // Upload tex co-ord data
+        glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
+        int texCoordBufferSize =
+                texCoords.size() * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                texCoordBufferSize,
+                texCoords.data());
+
+        // Render
+        glDrawElements(
+                renderable.getDrawMode(),
+                renderable.getIndicesPerSprite(),
+                GL_UNSIGNED_INT,
+                nullptr);
+    }
+
+}  // namespace Rival

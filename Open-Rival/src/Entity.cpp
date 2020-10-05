@@ -56,6 +56,10 @@ namespace Rival {
         return id;
     }
 
+    const EntityType Entity::getType() const {
+        return type;
+    }
+
     int Entity::getX() const {
         return x;
     }
@@ -73,6 +77,13 @@ namespace Rival {
     }
 
     EntityComponent* Entity::getComponent(std::string key) {
+        // Casts away the const from the const version of this method.
+        // See: https://stackoverflow.com/a/856839/1624459
+        return const_cast<EntityComponent*>(
+                const_cast<const Entity*>(this)->getComponent(key));
+    }
+
+    const EntityComponent* Entity::getComponent(std::string key) const {
         for (auto& component : components) {
             if (component->isDeleted()) {
                 continue;

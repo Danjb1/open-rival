@@ -27,24 +27,15 @@ namespace Rival {
           gameRenderer(window, *scenario, camera, viewport, res) {}
 
     void GameState::update() {
+        // Respond to mouse input
         mousePicker.handleMouse();
 
-        /*
-        // Update buildings
-        std::map<int, std::unique_ptr<Building>>& buildings =
-                scenario->getBuildings();
-        for (auto const& kv : buildings) {
-            const std::unique_ptr<Building>& building = kv.second;
-            building->update();
+        // Update Entities
+        auto const entities = scenario->getEntities();
+        for (auto const& kv : entities) {
+            const std::unique_ptr<Entity>& e = kv.second;
+            e->update();
         }
-
-        // Update units
-        std::map<int, std::unique_ptr<Unit>>& units = scenario->getUnits();
-        for (auto const& kv : units) {
-            const std::unique_ptr<Unit>& unit = kv.second;
-            unit->update();
-        }
-        */
     }
 
     void GameState::render() {
