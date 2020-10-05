@@ -9,9 +9,10 @@ namespace Rival {
     const float Camera::zoomMin = 0.5f;
     const float Camera::zoomMax = 2.0f;
 
-    const float Camera::tileWidthCamera = 2.0f;
-    const float Camera::tileHeightCamera = 1.0f;
-    const float Camera::bottomEdgePadding = tileHeightCamera / 2.0f;
+    const float Camera::tileWidth = 2.0f;
+    const float Camera::tileHeight = 1.0f;
+
+    const float Camera::bottomEdgePadding = tileHeight / 2.0f;
 
     Camera::Camera(
             float x,
@@ -37,8 +38,8 @@ namespace Rival {
         // Find the furthest point visible to the camera
         int lastTileIndexX = scenario.getWidth() - 1;
         int lastTileIndexY = scenario.getHeight() - 1;
-        float rightEdge = lastTileIndexX + tileWidthCamera;
-        float bottomEdge = lastTileIndexY + tileHeightCamera
+        float rightEdge = lastTileIndexX + tileWidth;
+        float bottomEdge = lastTileIndexY + tileHeight
                 + bottomEdgePadding;
         float maxX = rightEdge - (cameraWidth / 2);
         float maxY = bottomEdge - (cameraHeight / 2);
@@ -51,12 +52,12 @@ namespace Rival {
         float offsetY = 0;
         if (tileX % 2 == 1) {
             // Tile co-ordinates zigzag up and down within a row
-            offsetY = (tileHeightCamera / 2.0f);
+            offsetY = (tileHeight / 2.0f);
         }
 
         centreOnPoint(
-                tileX + (tileWidthCamera / 2.0f),
-                tileY + (tileHeightCamera / 2.0f) + offsetY);
+                tileX + (tileWidth / 2.0f),
+                tileY + (tileHeight / 2.0f) + offsetY);
     }
 
     void Camera::translate(float dx, float dy) {

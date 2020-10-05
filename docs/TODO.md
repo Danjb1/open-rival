@@ -5,9 +5,14 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - Have Building extend Entity
+    - Should we have Entity subclasses or use components exclusively?
+        - Better to use components exclusively
+        - Facing should be a component
+        - Player should be a component
     - Store all Entities in GameState
     - Update all Entities in game loop
+    - Image / Animation should be a component
+    - WallVariant should be a component
 
  - Refactor rendering / animations
     - Reduce duplication between UnitAnimation and BuildingAnimation

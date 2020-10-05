@@ -4,20 +4,35 @@
 namespace Rival {
 
     Building::Building(BuildingType type)
-        : deleted(false),
-          id(-1),
-          type(type),
-          animation(type),
-          wallVariant(WallVariant::A) {
+        : Entity(determineWidth(type), determineHeight(type)),
+          type(type) {}
+
+    int Building::determineWidth(BuildingType type) {
+        return isWall(type) ? numTilesWallX : numTilesX;
     }
 
-    void Building::addedToWorld(
-            int newId, int newPlayer, int newX, int newY, WallVariant newWallVariant) {
+    int Building::determineHeight(BuildingType type) {
+        return isWall(type) ? numTilesWallY : numTilesY;
+    }
+
+    bool Building::isWall(BuildingType type) {
+        return type == BuildingType::Wall
+                || type == BuildingType::TreeWall
+                || type == BuildingType::GreenskinWall;
+    }
+
+    void Building::onSpawn(int newId, int newX, int newY) {
+        onSpawn(newId, 0, newX, newY);
+    }
+
+    void Building::onSpawn(
+            int newId,
+            int newPlayer,
+            int newX,
+            int newY) {
         id = newId;
         player = newPlayer;
-        x = newX;
-        y = newY;
-        wallVariant = newWallVariant;
+        Entity::onSpawn(newId, newX, newY);
     }
 
     int Building::getCurrentSpriteIndex() const {
@@ -35,43 +50,8 @@ namespace Rival {
         */
     }
 
-    WallVariant Building::getWallVariant() const {
-        return wallVariant;
-    }
-
     const BuildingType Building::getType() const {
         return type;
-    }
-
-    void Building::setAnimation(BuildingAnimationType buildingAnimationType) {
-        animation.setAnimation(buildingAnimationType);
-        std::cout << "Setting animation for building " << id
-                  << " of type " << static_cast<int>(type)
-                  << ": " << static_cast<int>(buildingAnimationType) << '\n';
-    }
-
-    const bool Building::isDeleted() const {
-        return deleted;
-    }
-
-    void Building::markForDeletion() {
-        deleted = true;
-    }
-
-    const int Building::getId() const {
-        return id;
-    }
-
-    int Building::getX() const {
-        return x;
-    }
-
-    int Building::getY() const {
-        return y;
-    }
-
-    void Building::update() {
-        //animation.tick();
     }
 
 }  // namespace Rival

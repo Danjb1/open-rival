@@ -46,14 +46,13 @@ namespace Rival {
             int y,
             uint8_t wallVariant) {
 
-        // Add the Unit to the world
+        // Add the Building to the world
         buildings[nextId] = std::move(building);
-        buildings[nextId]->addedToWorld(
+        buildings[nextId]->onSpawn(
                 nextId,
                 player,
                 x,
-                y,
-                static_cast<WallVariant>(wallVariant));
+                y);
 
         // Increase the ID for the next one
         nextId++;

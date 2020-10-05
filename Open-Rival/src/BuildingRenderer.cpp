@@ -54,11 +54,11 @@ namespace Rival {
     }
 
     bool BuildingRenderer::isBuildingVisible(const Building& building, const Camera& camera) {
-        // Check if any corner of the unit is visible
+        // Check all corners of the tiles the Building is occupying
         float x1 = static_cast<float>(building.getX());
         float y1 = static_cast<float>(building.getY());
-        float x2 = static_cast<float>(building.getX() + Building::width);
-        float y2 = static_cast<float>(building.getY() + Building::height);
+        float x2 = static_cast<float>(building.getX() + building.getWidth() * Camera::tileWidth);
+        float y2 = static_cast<float>(building.getY() + building.getHeight() * Camera::tileHeight);
 
         return camera.contains(x1, y1)
                 || camera.contains(x2, y1)

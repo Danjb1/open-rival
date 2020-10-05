@@ -24,17 +24,13 @@ namespace Rival {
     class Unit : public Entity {
 
     public:
-        // Size of a Unit, in camera units
-        static const int width = 1;
-        static const int height = 1;
-
         static const int numFacings = 8;
 
         Facing facing;
 
         Unit(UnitType type);
 
-        // Use other `onSpawn` method instead!
+        // Do not use! Use other `onSpawn` method instead.
         void onSpawn(int newId, int newX, int newY) override;
 
         void onSpawn(

@@ -64,6 +64,14 @@ namespace Rival {
         return y;
     }
 
+    int Entity::getWidth() const {
+        return width;
+    }
+
+    int Entity::getHeight() const {
+        return height;
+    }
+
     EntityComponent* Entity::getComponent(std::string key) {
         for (auto& component : components) {
             if (component->isDeleted()) {

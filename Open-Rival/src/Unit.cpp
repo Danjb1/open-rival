@@ -17,7 +17,7 @@ namespace Rival {
             int newX,
             int newY,
             Facing newFacing) {
-        id = newId;
+        player = newPlayer;
         facing = newFacing;
         Entity::onSpawn(newId, newX, newY);
     }

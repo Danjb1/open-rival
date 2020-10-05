@@ -32,6 +32,17 @@ namespace Rival {
      *
      * Further reading:
      * https://gameprogrammingpatterns.com/component.html
+     *
+     * ---
+     *
+     * Note that while Entities such as units can move between tiles, their
+     * position is always represented as a single tile, and movement between
+     * tiles is handled by a completely separate mechanism.
+     *
+     * The reason for this is that the game world is not a continuous space -
+     * due to the peculiar nature of the isometric tile grid, as x increases,
+     * y fluctuates - so it does not make sense to try to store the absolute
+     * position of an Entity as a float.
      */
     class Entity {
 
@@ -86,6 +97,16 @@ namespace Rival {
         int getY() const;
 
         /**
+         * Gets the number of tiles this Entity occupies in the x-axis.
+         */
+        int getWidth() const;
+
+        /**
+         * Gets the number of tiles this Entity occupies in the y-axis.
+         */
+        int getHeight() const;
+
+        /**
          * Retrieves the first EntityComponent with the given key.
          *
          * Returns nullptr if no matching EntityComponent is found.
@@ -111,19 +132,17 @@ namespace Rival {
         /**
          * x co-ordinate of the tile the Entity is occupying.
          *
-         * It does not make sense to store the absolute position of an Entity
-         * using floats, because the game world is not a continuous space; due
-         * to the peculiar nature of the isometric tile grid, as x increases,
-         * y fluctuates.
-         *
-         * Therefore, we simply store the tile co-ordinates of an Entity, and
-         * for Entities moving between tiles, we keep track of the movement
-         * direction and a notion of progress towards the destination.
+         * In the case of Entities where width > 0 (e.g. buildings), this
+         * refers to the horizontal centre of the Entity.
          */
         int x;
 
         /**
          * y co-ordinate of the tile the Entity is occupying.
+         *
+         * In the case of Entities where height > 0 (e.g. buildings), this
+         * refers to the bottom corner of the Entity, that is, its
+         * bottom-most row.
          */
         int y;
 
