@@ -12,10 +12,6 @@ namespace Rival {
         : EntityComponent(key),
           renderable(spritesheet, 1) {}
 
-    void SpriteComponent::update() {
-        // Nothing to do
-    }
-
     int SpriteComponent::getTxIndex() const {
         // TODO
         return 0;

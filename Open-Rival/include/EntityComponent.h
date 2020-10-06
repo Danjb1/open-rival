@@ -33,7 +33,7 @@ namespace Rival {
         /**
          * Updates this EntityComponent by one frame.
          */
-        virtual void update() = 0;
+        virtual void update() {};
 
         /**
          * Determines if this EntityComponent has been marked for deletion.

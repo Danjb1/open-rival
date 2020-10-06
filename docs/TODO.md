@@ -5,18 +5,12 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - Encapsulate unit creation in a UnitFactory
-    - Encapsulate building creation in a BuildingFactory
     - Buildings need a SpriteComponent
-    - UnitType should be a component
     - BuildingType should be a component
-    - Facing should be a component
-    - Player should be a component
     - WallVariant should be a component
     - SpriteComponent should figure out the correct txIndex from the facing and animation!
     - Set passability correctly when adding an Entitiy to a Scenario
     - MousePicker should determine hitbox offsets based on entity type
-    - Fix unit tests!
 
  - Refactor animations animations
     - Reduce duplication between UnitAnimation and BuildingAnimation

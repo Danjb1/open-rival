@@ -67,9 +67,6 @@
     <ClCompile Include="..\Open-Rival\src\Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\Unit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Open-Rival\src\BuildingAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Building.h"
+#include "EntityFactory.h"
 #include "FacingComponent.h"
 #include "Resources.h"
 #include "Scenario.h"
@@ -21,18 +22,12 @@ namespace Rival {
     public:
         ScenarioBuilder(ScenarioData data);
 
-        std::unique_ptr<Scenario> build(const Resources& res);
+        std::unique_ptr<Scenario> build(const EntityFactory& entityFactory);
 
     private:
         ScenarioData data;
 
         Tile buildTile(TilePlacement& tile) const;
-
-        Building::Type getBuildingType(std::uint8_t buildingType) const;
-
-        Unit::Type getUnitType(std::uint8_t unitType) const;
-
-        Facing getFacing(std::uint8_t facing) const;
     };
 
 }  // namespace Rival

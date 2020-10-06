@@ -39,7 +39,6 @@
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp" />
     <ClCompile Include="..\Open-Rival\src\State.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
-    <ClCompile Include="..\Open-Rival\src\Unit.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\SDL.cpp" />

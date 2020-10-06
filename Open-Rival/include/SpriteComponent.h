@@ -22,9 +22,6 @@ namespace Rival {
 
         SpriteComponent(const Spritesheet& spritesheet);
 
-        // Inherited from EntityComponent
-        void update() override;
-
         const SpriteRenderable& getRenderable() const;
 
         int getTxIndex() const;

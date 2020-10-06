@@ -30,12 +30,16 @@ namespace Rival {
         return Texture(0, 256, 1);
     }
 
-    std::map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets() {
-        return std::map<BuildingType, Spritesheet>();
+    std::map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets() {
+        return std::map<Unit::Type, Spritesheet> {
+            { Unit::Type::Knight, Spritesheet(Texture(0, 0, 0), 64, 64) }
+        };
     }
 
-    std::map<UnitType, Spritesheet> Resources::initUnitSpritesheets() {
-        return std::map<UnitType, Spritesheet>();
+    std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets() {
+        return std::map<Building::Type, Spritesheet> {
+            { Building::Type::Barracks, Spritesheet(Texture(0, 0, 0), 64, 64) }
+        };
     }
 
     std::map<int, Spritesheet> Resources::initTileSpritesheets() {
@@ -52,12 +56,14 @@ namespace Rival {
         return tileSpritesheets.at(0);
     }
 
-    const std::map<UnitType, Spritesheet>& Resources::getUnitSpritesheets() const {
-        return unitSpritesheets;
+    const Spritesheet& Resources::getUnitSpritesheet(
+            Unit::Type unitType) const {
+        return unitSpritesheets.at(Unit::Type::Knight);
     }
 
-    const std::map<BuildingType, Spritesheet>& Resources::getBuildingSpritesheets() const {
-        return buildingSpritesheets;
+    const Spritesheet& Resources::getBuildingSpritesheet(
+            Building::Type buildingType) const {
+        return buildingSpritesheets.at(Building::Type::Barracks);
     }
 
     const Spritesheet& Resources::getMapBorderSpritesheet() const {
