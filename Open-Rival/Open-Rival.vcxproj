@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BinaryFileReader.cpp" />
     <ClCompile Include="src\Building.cpp" />

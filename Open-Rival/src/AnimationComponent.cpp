@@ -11,9 +11,11 @@ namespace Rival {
 
     const std::string AnimationComponent::key = "animation";
 
-    AnimationComponent::AnimationComponent(const Animation animation)
+    AnimationComponent::AnimationComponent(
+            const Animations::Animation animation)
         : EntityComponent(key),
           animation(animation),
+          currentAnimFrame(0),
           msPassedCurrentAnimFrame(0) {}
 
     void AnimationComponent::onEntitySpawned() {
@@ -21,6 +23,7 @@ namespace Rival {
                 entity->getComponent(SpriteComponent::key));
         facingComponent = dynamic_cast<FacingComponent*>(
                 entity->getComponent(FacingComponent::key));
+        setAnimation(animation);
     }
 
     void AnimationComponent::update() {
@@ -39,13 +42,26 @@ namespace Rival {
         }
     }
 
-    void AnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame) {
-        currentAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
-        msPassedCurrentAnimFrame -= msPerAnimFrame;
+    void AnimationComponent::setAnimation(Animations::Animation newAnimation) {
+        animation = newAnimation;
+        msPassedCurrentAnimFrame = 0;
+        setCurrentAnimFrame(0);
+    }
+
+    void AnimationComponent::setCurrentAnimFrame(int newAnimFrame) {
+        currentAnimFrame = newAnimFrame;
+
         if (spriteComponent) {
-            // TODO: Move this to a setter for currentAnimFrame
-            spriteComponent->txIndex = currentAnimFrame;
+            // Update the SpriteComponent, if present.
+            // This is what actually causes the rendered image to change.
+            spriteComponent->txIndex = getCurrentSpriteIndex();
         }
+    }
+
+    void AnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame) {
+        int newAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
+        setCurrentAnimFrame(newAnimFrame);
+        msPassedCurrentAnimFrame -= msPerAnimFrame;
     }
 
     int AnimationComponent::getCurrentSpriteIndex() const {
@@ -59,7 +75,7 @@ namespace Rival {
     }
 
     int AnimationComponent::getMsPerAnimFrame() const {
-        // TODO: This should vary based on the unit's speed
+        // TODO: This should vary based on a Unit's speed
         return animation.msPerFrame;
     }
 
