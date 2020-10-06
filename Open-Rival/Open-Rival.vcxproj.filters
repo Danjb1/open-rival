@@ -94,13 +94,7 @@
     <ClCompile Include="src\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UnitAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Building.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BuildingAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rect.cpp">
@@ -140,6 +134,12 @@
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="src\UnitPropsComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BuildingPropsComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationComponent.cpp">
       <Filter>Source Files\components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -222,19 +222,7 @@
     <ClInclude Include="include\Resources.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\UnitAnimation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UnitAnimationLookup.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Building.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BuildingAnimation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BuildingAnimationLookup.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Rect.h">
@@ -278,6 +266,15 @@
     </ClInclude>
     <ClInclude Include="include\UnitPropsComponent.h">
       <Filter>Source Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BuildingPropsComponent.h">
+      <Filter>Source Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AnimationComponent.h">
+      <Filter>Source Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animations.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

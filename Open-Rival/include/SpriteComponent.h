@@ -20,6 +20,8 @@ namespace Rival {
     public:
         static const std::string key;
 
+        int txIndex;
+
         SpriteComponent(const Spritesheet& spritesheet);
 
         const SpriteRenderable& getRenderable() const;

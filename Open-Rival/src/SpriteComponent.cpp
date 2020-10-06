@@ -10,11 +10,11 @@ namespace Rival {
     SpriteComponent::SpriteComponent(
             const Spritesheet& spritesheet)
         : EntityComponent(key),
+          txIndex(0),
           renderable(spritesheet, 1) {}
 
     int SpriteComponent::getTxIndex() const {
-        // TODO
-        return 0;
+        return txIndex;
     }
 
     const SpriteRenderable& SpriteComponent::getRenderable() const {
