@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EntityFactory.h"
 
+#include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
 #include "SpriteComponent.h"
 #include "UnitPropsComponent.h"
@@ -46,9 +47,18 @@ namespace Rival {
         std::unique_ptr<Entity> building = std::make_unique<Entity>(
                 width, height);
 
+        // Add BuildingPropsComponent
+        building->attach(
+                std::make_unique<BuildingPropsComponent>(buildingType));
+
         // Add OwnerComponent
         building->attach(std::make_unique<OwnerComponent>(
                 buildingPlacement.player));
+
+        // Add SpriteComponent
+        const Spritesheet& spritesheet =
+                res.getBuildingSpritesheet(buildingType);
+        building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
         // TODO: add type: getBuilding::Type(buildingPlacement.type))
         // TODO: set wall variant: buildingPlacement.wallVariant

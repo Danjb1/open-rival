@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="..\Open-Rival\src\Application.cpp" />
     <ClCompile Include="..\Open-Rival\src\Building.cpp" />
-    <ClCompile Include="..\Open-Rival\src\BuildingAnimation.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
     <ClCompile Include="..\Open-Rival\src\Entity.cpp" />
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />

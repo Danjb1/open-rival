@@ -29,13 +29,15 @@ namespace Rival {
             const Entity& entity,
             const Camera& camera) {
 
-        // Check all corners of the tile the Entity is occupying
-        float x1 = static_cast<float>(entity.getX());
-        float y1 = static_cast<float>(entity.getY());
-        float x2 = static_cast<float>(entity.getX()
-                + entity.getWidth() * Camera::tileWidth);
-        float y2 = static_cast<float>(entity.getY()
-                + entity.getHeight() * Camera::tileHeight);
+        // Check all corners of the tile(s) the Entity is occupying.
+        // We have to figure out the positions of the corners based on the
+        // Entity position and size.
+        int width = entity.getWidth() * Camera::tileWidth;
+        int height = entity.getHeight() * Camera::tileHeight;
+        float x1 = static_cast<float>(entity.getX() - width / 2.0f);
+        float y1 = static_cast<float>(entity.getY() - height);
+        float x2 = static_cast<float>(entity.getX() + width / 2.0f);
+        float y2 = static_cast<float>(entity.getY());
 
         return camera.contains(x1, y1)
                 || camera.contains(x2, y1)

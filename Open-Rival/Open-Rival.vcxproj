@@ -22,7 +22,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BinaryFileReader.cpp" />
     <ClCompile Include="src\Building.cpp" />
-    <ClCompile Include="src\BuildingAnimation.cpp" />
+    <ClCompile Include="src\BuildingPropsComponent.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
@@ -56,7 +56,7 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
-    <ClCompile Include="src\UnitAnimation.cpp" />
+    <ClCompile Include="src\AnimationComponent.cpp" />
     <ClCompile Include="src\EntityRenderer.cpp" />
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\UnitPropsComponent.cpp" />
@@ -66,8 +66,7 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\BinaryFileReader.h" />
     <ClInclude Include="include\Building.h" />
-    <ClInclude Include="include\BuildingAnimation.h" />
-    <ClInclude Include="include\BuildingAnimationLookup.h" />
+    <ClInclude Include="include\BuildingPropsComponent.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
@@ -102,8 +101,8 @@
     <ClInclude Include="include\TileRenderer.h" />
     <ClInclude Include="include\TimerUtils.h" />
     <ClInclude Include="include\Unit.h" />
-    <ClInclude Include="include\UnitAnimation.h" />
-    <ClInclude Include="include\UnitAnimationLookup.h" />
+    <ClInclude Include="include\AnimationComponent.h" />
+    <ClInclude Include="include\Animations.h" />
     <ClInclude Include="include\EntityRenderer.h" />
     <ClInclude Include="include\EntityFactory.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />

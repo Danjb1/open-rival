@@ -5,16 +5,10 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - Buildings need a SpriteComponent
-    - BuildingType should be a component
     - WallVariant should be a component
-    - SpriteComponent should figure out the correct txIndex from the facing and animation!
-    - Set passability correctly when adding an Entitiy to a Scenario
+    - Test Animations!
+    - Set passability correctly when adding an Entity to a Scenario
     - MousePicker should determine hitbox offsets based on entity type
-
- - Refactor animations animations
-    - Reduce duplication between UnitAnimation and BuildingAnimation
-    - Remove tuples: https://stackoverflow.com/questions/44650636/when-to-use-tuple-vs-class-c-sharp-7-0
 
  - When a Unit is deleted, any references to it will become invalid
     - We need a way to check if a Unit reference is still valid!
