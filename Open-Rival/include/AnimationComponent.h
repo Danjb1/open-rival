@@ -14,11 +14,13 @@ namespace Rival {
     class AnimationComponent : public EntityComponent {
 
     public:
-        AnimationComponent(const Animation animation);
+        AnimationComponent(const Animations::Animation animation);
 
         // Inherited from EntityComponent
         void onEntitySpawned() override;
         void update() override;
+
+        void setAnimation(Animations::Animation newAnimation);
 
         int getCurrentSpriteIndex() const;
 
@@ -28,11 +30,13 @@ namespace Rival {
         SpriteComponent* spriteComponent;
         FacingComponent* facingComponent;
 
-        Animation animation;
+        Animations::Animation animation;
 
         int currentAnimFrame;
 
         int msPassedCurrentAnimFrame;
+
+        void setCurrentAnimFrame(int newAnimFrame);
 
         void advanceFrame(int numAnimFrames, int msPerAnimFrame);
 

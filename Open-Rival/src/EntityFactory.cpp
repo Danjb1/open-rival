@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "EntityFactory.h"
 
+#include "Animations.h"
+#include "AnimationComponent.h"
 #include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
 #include "SpriteComponent.h"
@@ -33,6 +35,11 @@ namespace Rival {
         const Spritesheet& spritesheet = res.getUnitSpritesheet(unitType);
         unit->attach(std::make_unique<SpriteComponent>(spritesheet));
 
+        // Add AnimationComponent
+        const Animations::Animation anim = Animations::getUnitAnimation(
+                unitType, Animations::UnitAnimationType::Standing);
+        unit->attach(std::make_unique<AnimationComponent>(anim));
+
         return unit;
     }
 
@@ -60,7 +67,11 @@ namespace Rival {
                 res.getBuildingSpritesheet(buildingType);
         building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
-        // TODO: add type: getBuilding::Type(buildingPlacement.type))
+        // Add AnimationComponent
+        const Animations::Animation anim = Animations::getBuildingAnimation(
+                buildingType, Animations::BuildingAnimationType::Built);
+        building->attach(std::make_unique<AnimationComponent>(anim));
+
         // TODO: set wall variant: buildingPlacement.wallVariant
 
         return building;

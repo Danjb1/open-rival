@@ -6,9 +6,13 @@
 
  - Entity / Component system
     - WallVariant should be a component
-    - Test Animations!
     - Set passability correctly when adding an Entity to a Scenario
     - MousePicker should determine hitbox offsets based on entity type
+
+ - Animations
+    - Check all Animation data; some values are incorrect
+    - Wall animFrame should take WallVariant into account
+    - Add unit tests
 
  - When a Unit is deleted, any references to it will become invalid
     - We need a way to check if a Unit reference is still valid!
