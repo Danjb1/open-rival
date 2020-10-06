@@ -270,8 +270,8 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]") {
 
     // Add a Unit
-    std::unique_ptr<Unit> unit = std::make_unique<Unit>(UnitType::Knight);
-    scenario.addUnit(std::move(unit), 0, 4, 4, Facing::South);
+    std::unique_ptr<Entity> unit = std::make_unique<Entity>(1, 1);
+    scenario.addEntity(std::move(unit), 4, 4);
 
     // Create a pixel-perfect Camera
     Camera camera(0.0f, 0.0f,

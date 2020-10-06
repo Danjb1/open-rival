@@ -31,10 +31,10 @@ namespace Rival {
         mousePicker.handleMouse();
 
         // Update Entities
-        auto const entities = scenario->getEntities();
+        auto const& entities = scenario->getEntities();
         for (auto const& kv : entities) {
-            const std::unique_ptr<Entity>& e = kv.second;
-            e->update();
+            Entity& e = *(kv.second);
+            e.update();
         }
     }
 
