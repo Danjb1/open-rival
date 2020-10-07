@@ -148,6 +148,9 @@
     <ClCompile Include="src\WallComponent.cpp">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\PassabilityComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -283,6 +286,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\WallComponent.h">
+      <Filter>Source Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PassabilityComponent.h">
       <Filter>Source Files\components</Filter>
     </ClInclude>
   </ItemGroup>

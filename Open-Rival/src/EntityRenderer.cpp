@@ -17,28 +17,37 @@ namespace Rival {
     void EntityRenderer::render(
             const Camera& camera,
             const std::map<int, std::unique_ptr<Entity>>& entities) {
+        int renderedEntities = 0;
         for (auto const& kv : entities) {
             Entity& e = *(kv.second);
             if (isEntityVisible(e, camera)) {
                 renderEntity(e);
+                renderedEntities++;
             }
         }
+        std::cout << "rendered " << renderedEntities << " entities\n";
     }
 
     bool EntityRenderer::isEntityVisible(
             const Entity& entity,
             const Camera& camera) {
 
-        // Check all corners of the tile(s) the Entity is occupying.
-        // We have to figure out the positions of the corners based on the
-        // Entity position and size.
-        int width = entity.getWidth() * Camera::tileWidth;
-        int height = entity.getHeight() * Camera::tileHeight;
-        float x1 = static_cast<float>(entity.getX() - width / 2.0f);
-        float y1 = static_cast<float>(entity.getY() - height);
-        float x2 = static_cast<float>(entity.getX() + width / 2.0f);
-        float y2 = static_cast<float>(entity.getY());
+        // Find the centre of this Entity's tile, in Camera units
+        float x = static_cast<float>(entity.getX() + Camera::tileWidth / 2.0f);
+        float y = static_cast<float>(entity.getY() + Camera::tileHeight / 2.0f);
 
+        // Add some tolerance in all directions to approximate the area where
+        // the Entity would be rendered. This is quicker and simpler than
+        // trying to calculate the precise rendered position of the Entity,
+        // but it may result in some Entities being rendered offscreen.
+        float width = RenderUtils::pxToCamera_X(RenderUtils::entityWidthPx);
+        float height = RenderUtils::pxToCamera_Y(RenderUtils::entityHeightPx);
+        float x1 = x - width / 2.0f;
+        float y1 = y - height / 2.0f;
+        float x2 = x + width / 2.0f;
+        float y2 = y + height / 2.0f;
+
+        // Check if any corner of this area is visible
         return camera.contains(x1, y1)
                 || camera.contains(x2, y1)
                 || camera.contains(x2, y2)

@@ -3,6 +3,7 @@
 
 #include "BuildingPropsComponent.h"
 #include "Entity.h"
+#include "Scenario.h"
 
 namespace Rival {
 
@@ -12,7 +13,7 @@ namespace Rival {
         : EntityComponent(key),
           variant(variant) {}
 
-    void WallComponent::onEntitySpawned() {
+    void WallComponent::onEntitySpawned(Scenario* scenario) {
 
         int baseTxIndex = 0;
 

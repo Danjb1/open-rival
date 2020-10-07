@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "EntityComponent.h"
+#include "Scenario.h"
 
 namespace Rival {
 
@@ -59,7 +60,8 @@ namespace Rival {
         /**
          * Called when this Entity is added to the game world.
          */
-        virtual void onSpawn(int newId, int newX, int newY);
+        virtual void onSpawn(
+                Scenario* newScenario, int newId, int newX, int newY);
 
         /**
          * Updates this Entity by one frame.
@@ -133,6 +135,11 @@ namespace Rival {
          * The type of Entity this represents.
          */
         EntityType type;
+
+        /**
+         * The Scenario this Entity has been added to.
+         */
+        Scenario* scenario;
 
         /**
          * x co-ordinate of the tile the Entity is occupying.

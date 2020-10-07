@@ -5,8 +5,9 @@
 
 namespace Rival {
 
-    // Forward declaration to avoid circular reference
+    // Forward declarations to avoid circular references
     class Entity;
+    class Scenario;
 
     /**
      * Class used to encapsulate some Entity behaviour.
@@ -28,7 +29,7 @@ namespace Rival {
          * At this point, the Entity is guaranteed to have a valid ID and
          * position, and all initial components will have been attached.
          */
-        virtual void onEntitySpawned() {}
+        virtual void onEntitySpawned(Scenario*) {}
 
         /**
          * Updates this EntityComponent by one frame.

@@ -36,6 +36,8 @@ namespace Rival {
 
         const std::map<int, std::unique_ptr<Entity>>& getEntities() const;
 
+        void setPassability(int x, int y, TilePassability passability);
+
     private:
         const int width;
         const int height;
@@ -45,8 +47,6 @@ namespace Rival {
 
         int nextId;
         std::map<int, std::unique_ptr<Entity>> entities;
-
-        void setPassability(int x, int y, TilePassability passability);
     };
 
 }  // namespace Rival

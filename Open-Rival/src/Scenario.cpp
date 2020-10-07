@@ -47,15 +47,13 @@ namespace Rival {
         // Add the Entity to the world
         entities[nextId] = std::move(entity);
         entities[nextId]->onSpawn(
+                this,
                 nextId,
                 x,
                 y);
 
         // Increase the ID for the next one
         ++nextId;
-
-        // Change the passability
-        setPassability(x, y, TilePassability::Building);
     }
 
     void Scenario::setPassability(int x, int y, TilePassability passability) {

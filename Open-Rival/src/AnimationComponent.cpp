@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "Entity.h"
+#include "Scenario.h"
 #include "TimerUtils.h"
 #include "Unit.h"
 
@@ -18,7 +19,7 @@ namespace Rival {
           currentAnimFrame(0),
           msPassedCurrentAnimFrame(0) {}
 
-    void AnimationComponent::onEntitySpawned() {
+    void AnimationComponent::onEntitySpawned(Scenario*) {
         spriteComponent = dynamic_cast<SpriteComponent*>(
                 entity->getComponent(SpriteComponent::key));
         facingComponent = dynamic_cast<FacingComponent*>(

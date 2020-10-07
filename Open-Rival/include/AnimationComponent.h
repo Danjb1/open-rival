@@ -17,7 +17,7 @@ namespace Rival {
         AnimationComponent(const Animations::Animation animation);
 
         // Inherited from EntityComponent
-        void onEntitySpawned() override;
+        void onEntitySpawned(Scenario* scenario) override;
         void update() override;
 
         void setAnimation(Animations::Animation newAnimation);
