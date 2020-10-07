@@ -38,6 +38,7 @@
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
+    <ClCompile Include="src\PassabilityComponent.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -82,6 +83,7 @@
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
+    <ClInclude Include="include\PassabilityComponent.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Race.h" />
     <ClInclude Include="include\Rect.h" />

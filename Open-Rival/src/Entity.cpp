@@ -14,13 +14,15 @@ namespace Rival {
         components.push_back(std::move(component));
     }
 
-    void Entity::onSpawn(int newId, int newX, int newY) {
+    void Entity::onSpawn(
+            Scenario* newScenario, int newId, int newX, int newY) {
+        scenario = newScenario;
         id = newId;
         x = newX;
         y = newY;
 
         for (const auto& component : components) {
-            component->onEntitySpawned();
+            component->onEntitySpawned(scenario);
         }
     }
 

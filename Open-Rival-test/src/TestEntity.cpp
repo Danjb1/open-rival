@@ -23,7 +23,7 @@ public:
         attached = true;
     }
 
-    void onEntitySpawned() override {
+    void onEntitySpawned(Scenario* scenario) override {
         entitySpawned = true;
     }
 
@@ -63,7 +63,7 @@ SCENARIO("Entities should initialise their components when they spawn", "[entity
         e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is spawned") {
-            e.onSpawn(0, 0, 0);
+            e.onSpawn(nullptr, 0, 0, 0);
 
             THEN("the component receives a callback") {
                 ExampleEntityComponent* component =

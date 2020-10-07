@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - Set passability correctly when adding an Entity to a Scenario
     - MousePicker should determine hitbox offsets based on entity type
 
  - Animations

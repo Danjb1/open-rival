@@ -5,7 +5,9 @@
 #include "AnimationComponent.h"
 #include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
+#include "PassabilityComponent.h"
 #include "SpriteComponent.h"
+#include "Tile.h"
 #include "UnitPropsComponent.h"
 #include "WallComponent.h"
 
@@ -40,6 +42,11 @@ namespace Rival {
         const Animations::Animation anim = Animations::getUnitAnimation(
                 unitType, Animations::UnitAnimationType::Standing);
         unit->attach(std::make_unique<AnimationComponent>(anim));
+
+        // Add Passability
+        // TODO: consider flying units separately
+        unit->attach(std::make_unique<PassabilityComponent>(
+                TilePassability::Unit));
 
         return unit;
     }
@@ -80,6 +87,10 @@ namespace Rival {
                     buildingType, Animations::BuildingAnimationType::Built);
             building->attach(std::make_unique<AnimationComponent>(anim));
         }
+
+        // Add Passability
+        building->attach(std::make_unique<PassabilityComponent>(
+                TilePassability::Building));
 
         return building;
     }
