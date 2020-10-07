@@ -61,6 +61,7 @@
     <ClCompile Include="src\EntityRenderer.cpp" />
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\UnitPropsComponent.cpp" />
+    <ClCompile Include="src\WallComponent.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +108,7 @@
     <ClInclude Include="include\EntityRenderer.h" />
     <ClInclude Include="include\EntityFactory.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />
+    <ClInclude Include="include\WallComponent.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

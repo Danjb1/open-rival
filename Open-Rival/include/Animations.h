@@ -18,27 +18,6 @@ namespace Animations {
         Dying
     };
 
-    // We have 16 wall variants.
-    // The underlying int value corresponds to the wall's texture index.
-    enum class WallVariant {
-        A,
-        B,
-        C,
-        D,
-        E,
-        F,
-        G,
-        H,
-        I,
-        J,
-        K,
-        L,
-        M,
-        N,
-        O,
-        P
-    };
-
     enum class BuildingAnimationType {
         Constructing,
         Built
@@ -166,8 +145,6 @@ namespace Animations {
         { { Building::Type::Harbour, BuildingAnimationType::Built }, { 44, 44, 0 } },
         { { Building::Type::WarningTower, BuildingAnimationType::Constructing }, { 45, 46, 60 } },
         { { Building::Type::WarningTower, BuildingAnimationType::Built }, { 47, 47, 0 } },
-        { { Building::Type::TreeWall, BuildingAnimationType::Constructing }, { 48, 48, 60 } },
-        { { Building::Type::TreeWall, BuildingAnimationType::Built }, { 48, 48, 0 } },
 
         // Greenskin
         { { Building::Type::Fortress, BuildingAnimationType::Constructing }, { 0, 1, 60 } },
@@ -192,8 +169,6 @@ namespace Animations {
         { { Building::Type::Docks, BuildingAnimationType::Built }, { 29, 29, 0 } },
         { { Building::Type::GuardTower, BuildingAnimationType::Constructing }, { 30, 31, 60 } },
         { { Building::Type::GuardTower, BuildingAnimationType::Built }, { 32, 32, 0 } },
-        { { Building::Type::GreenskinWall, BuildingAnimationType::Constructing }, { 33, 33, 60 } },
-        { { Building::Type::GreenskinWall, BuildingAnimationType::Built }, { 33, 33, 0 } },
 
         // Human
         { { Building::Type::Castle, BuildingAnimationType::Constructing }, { 0, 1, 60 } },
@@ -218,8 +193,6 @@ namespace Animations {
         { { Building::Type::Shipyard, BuildingAnimationType::Built }, { 38, 38, 0 } },
         { { Building::Type::WatchTower, BuildingAnimationType::Constructing }, { 39, 40, 60 } },
         { { Building::Type::WatchTower, BuildingAnimationType::Built }, { 41, 41, 0 } },
-        { { Building::Type::Wall, BuildingAnimationType::Constructing }, { 42, 42, 60 } },
-        { { Building::Type::Wall, BuildingAnimationType::Built }, { 42, 42, 0 } }
     };
 
     Animation getUnitAnimation(

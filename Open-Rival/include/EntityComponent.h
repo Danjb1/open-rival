@@ -26,7 +26,7 @@ namespace Rival {
          * Callback for when the owning Entity is spawned.
          *
          * At this point, the Entity is guaranteed to have a valid ID and
-         * position.
+         * position, and all initial components will have been attached.
          */
         virtual void onEntitySpawned() {}
 

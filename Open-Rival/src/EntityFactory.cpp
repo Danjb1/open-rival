@@ -7,6 +7,7 @@
 #include "OwnerComponent.h"
 #include "SpriteComponent.h"
 #include "UnitPropsComponent.h"
+#include "WallComponent.h"
 
 namespace Rival {
 
@@ -67,12 +68,18 @@ namespace Rival {
                 res.getBuildingSpritesheet(buildingType);
         building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
-        // Add AnimationComponent
-        const Animations::Animation anim = Animations::getBuildingAnimation(
-                buildingType, Animations::BuildingAnimationType::Built);
-        building->attach(std::make_unique<AnimationComponent>(anim));
+        if (Building::isWall(buildingType)) {
+            // Add WallComponent
+            WallVariant wallVariant = static_cast<WallVariant>(
+                    buildingPlacement.wallVariant);
+            building->attach(std::make_unique<WallComponent>(wallVariant));
 
-        // TODO: set wall variant: buildingPlacement.wallVariant
+        } else {
+            // Add AnimationComponent
+            const Animations::Animation anim = Animations::getBuildingAnimation(
+                    buildingType, Animations::BuildingAnimationType::Built);
+            building->attach(std::make_unique<AnimationComponent>(anim));
+        }
 
         return building;
     }

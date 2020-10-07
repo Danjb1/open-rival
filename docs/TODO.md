@@ -5,13 +5,11 @@
 <!----------------------------------------------------------------------------->
 
  - Entity / Component system
-    - WallVariant should be a component
     - Set passability correctly when adding an Entity to a Scenario
     - MousePicker should determine hitbox offsets based on entity type
 
  - Animations
     - Check all Animation data; some values are incorrect
-    - Wall animFrame should take WallVariant into account
     - Add unit tests
 
  - When a Unit is deleted, any references to it will become invalid
@@ -81,7 +79,6 @@ character filename (including path)
 ### Game
 
  - Store unit / building defaults
- - Buildings
  - Mountains
  - Trees
  - Scenery
@@ -119,11 +116,8 @@ character filename (including path)
  - Render Interface
  - Water tile animations
  - Gold tile animations
- - Render Buildings
  - Render Scenery
- - Render Units
-    - Animations
-    - Respect colour
+ - Respect unit colour
  - Fog of war
  - High resolution support (!)
 
