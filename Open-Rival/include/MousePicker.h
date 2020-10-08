@@ -11,6 +11,20 @@
 
 namespace Rival {
 
+    /**
+     * Class responsible for determining what is under the mouse.
+     *
+     * Currently this works by reverse-engineering the rendering process and
+     * calculating what was rendered at the mouse's position.
+     *
+     * As an alternative, we could use this strategy:
+     * https://www.kamremake.com/devblog/unit-picking/
+     *
+     * This would be much simpler to understand and maintain, but it would
+     * require everything to be rendered twice (once to a texture, using a
+     * special mouse-picking shader that encodes information about the rendered
+     * game world).
+     */
     class MousePicker {
 
     public:
@@ -52,8 +66,8 @@ namespace Rival {
 
         Scenario& scenario;
 
-        float getMouseInCameraX(int mouseInViewportX);
-        float getMouseInCameraY(int mouseInViewportX);
+        float getMouseInCameraX(float normalizedMouseX);
+        float getMouseInCameraY(float normalizedMouseY);
 
         std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
 

@@ -19,10 +19,10 @@ namespace RenderUtils {
     static const int entityWidthPx = 128;
     static const int entityHeightPx = 128;
 
-    // Offset applied to align a Unit's sprite correctly within a tile,
+    // Offset applied to align an Entity's sprite correctly within a tile,
     // in pixels
-    static const int unitOffsetX = -33;
-    static const int unitOffsetY = -89;
+    static const int entityDrawOffsetX = -33;
+    static const int entityDrawOffsetY = -89;
 
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered

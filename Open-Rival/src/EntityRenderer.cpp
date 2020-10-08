@@ -17,15 +17,12 @@ namespace Rival {
     void EntityRenderer::render(
             const Camera& camera,
             const std::map<int, std::unique_ptr<Entity>>& entities) {
-        int renderedEntities = 0;
         for (auto const& kv : entities) {
             Entity& e = *(kv.second);
             if (isEntityVisible(e, camera)) {
                 renderEntity(e);
-                renderedEntities++;
             }
         }
-        std::cout << "rendered " << renderedEntities << " entities\n";
     }
 
     bool EntityRenderer::isEntityVisible(
@@ -77,8 +74,8 @@ namespace Rival {
                 RenderUtils::tileToPx_X(entity.getX()));
         float y1 = static_cast<float>(
                 RenderUtils::tileToPx_Y(entity.getX(), entity.getY()));
-        x1 += static_cast<float>(RenderUtils::unitOffsetX);
-        y1 += static_cast<float>(RenderUtils::unitOffsetY);
+        x1 += static_cast<float>(RenderUtils::entityDrawOffsetX);
+        y1 += static_cast<float>(RenderUtils::entityDrawOffsetY);
         float x2 = x1 + width;
         float y2 = y1 + height;
         float z = RenderUtils::getEntityZ(entity.getX(), entity.getY());

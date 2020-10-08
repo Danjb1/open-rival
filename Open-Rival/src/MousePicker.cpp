@@ -6,6 +6,7 @@
 
 #include "Entity.h"
 #include "MathUtils.h"
+#include "MouseUtils.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -37,29 +38,30 @@ namespace Rival {
         }
 
         // Calculate the mouse position relative to the viewport, in pixels
-        int mouseInViewportX = mouseX - static_cast<int>(viewport.x);
-        int mouseInViewportY = mouseY - static_cast<int>(viewport.y);
+        int mouseInViewportX = MouseUtils::getMouseInViewportX(mouseX, viewport);
+        int mouseInViewportY = MouseUtils::getMouseInViewportY(mouseY, viewport);
+
+        // Calculate the mouse position relative to the viewport,
+        // in the range 0-1.
+        float normalizedMouseX =
+                MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
+        float normalizedMouseY =
+                MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
 
         // Calculate the mouse position in camera units
-        float mouseCameraX = getMouseInCameraX(mouseInViewportX);
-        float mouseCameraY = getMouseInCameraY(mouseInViewportY);
+        float mouseCameraX = getMouseInCameraX(normalizedMouseX);
+        float mouseCameraY = getMouseInCameraY(normalizedMouseY);
 
         // Figure out what's under the mouse
         tile = getTilePos(mouseCameraX, mouseCameraY);
         findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
     }
 
-    float MousePicker::getMouseInCameraX(int mouseInViewportX) {
-        // Calculate mouse position relative to the viewport, in the range 0-1
-        float normalizedMouseX =
-                static_cast<float>(mouseInViewportX) / viewport.width;
+    float MousePicker::getMouseInCameraX(float normalizedMouseX) {
         return camera.getLeft() + normalizedMouseX * camera.getWidth();
     }
 
-    float MousePicker::getMouseInCameraY(int mouseInViewportY) {
-        // Calculate mouse position relative to the viewport, in the range 0-1
-        float normalizedMouseY =
-                static_cast<float>(mouseInViewportY) / viewport.height;
+    float MousePicker::getMouseInCameraY(float normalizedMouseY) {
         return camera.getTop() + normalizedMouseY * camera.getHeight();
     }
 
@@ -183,6 +185,8 @@ namespace Rival {
             int mouseInViewportY) {
         auto& entities = scenario.getEntities();
         for (auto it = entities.begin(); it != entities.end(); ++it) {
+            // We could optimise this by considering only Entities that were
+            // rendered in the previous frame.
             const Entity& entity = *it->second;
             if (isMouseInEntity(entity, mouseInViewportX, mouseInViewportY)) {
                 entityId = entity.getId();
