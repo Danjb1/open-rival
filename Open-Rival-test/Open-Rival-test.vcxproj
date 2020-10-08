@@ -19,13 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Open-Rival\src\AnimationComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\Application.cpp" />
     <ClCompile Include="..\Open-Rival\src\Building.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
     <ClCompile Include="..\Open-Rival\src\Entity.cpp" />
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
+    <ClCompile Include="..\Open-Rival\src\FacingComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MousePicker.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MouseUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -35,12 +38,18 @@
     <ClCompile Include="..\Open-Rival\src\Rect.cpp" />
     <ClCompile Include="..\Open-Rival\src\RenderUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\Scenario.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Shaders.cpp" />
+    <ClCompile Include="..\Open-Rival\src\ShaderUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\SpriteComponent.cpp" />
+    <ClCompile Include="..\Open-Rival\src\SpriteRenderable.cpp" />
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp" />
     <ClCompile Include="..\Open-Rival\src\State.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
+    <ClCompile Include="src\gl\glew.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\SDL.cpp" />
+    <ClCompile Include="src\TestAnimationComponent.cpp" />
     <ClCompile Include="src\TestApplication.cpp" />
     <ClCompile Include="src\TestCamera.cpp" />
     <ClCompile Include="src\TestEntity.cpp" />

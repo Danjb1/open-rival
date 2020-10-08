@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "Image.h"
+#include "MouseUtils.h"
 #include "Palette.h"
 #include "Race.h"
 #include "RenderUtils.h"
@@ -103,15 +104,11 @@ namespace Rival {
             return;
         }
 
-        // Calculate the mouse position relative to the viewport, in pixels
-        int mouseInViewportX = mouseX - static_cast<int>(viewport.x);
-        int mouseInViewportY = mouseY - static_cast<int>(viewport.y);
-
         // Calculate mouse position relative to the viewport, in the range 0-1
         float normalizedMouseX =
-                static_cast<float>(mouseInViewportX) / viewport.width;
+                MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
         float normalizedMouseY =
-                static_cast<float>(mouseInViewportY) / viewport.height;
+                MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
 
         // Calculate mouse position relative to the viewport centre, in the
         // range -1 to 1

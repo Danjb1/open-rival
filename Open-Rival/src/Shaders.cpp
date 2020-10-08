@@ -135,7 +135,8 @@ namespace Rival {
         GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
         // Read / set vertex source
-        std::string vertexShaderSource = readShaderSource(vertShader);
+        std::string vertexShaderSource =
+                ShaderUtils::readShaderSource(vertShader);
         const char* vertexShaderSource2 = vertexShaderSource.c_str();
         glShaderSource(vertexShader, 1, &vertexShaderSource2, nullptr);
 
@@ -147,7 +148,7 @@ namespace Rival {
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
         if (vShaderCompiled != GL_TRUE) {
             printf("Unable to compile vertex shader %d!\n", vertexShader);
-            printShaderLog(vertexShader);
+            ShaderUtils::printShaderLog(vertexShader);
             return 0;
         }
 
@@ -158,7 +159,8 @@ namespace Rival {
         GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
         // Read / set fragment source
-        std::string fragmentShaderSource = readShaderSource(fragShader);
+        std::string fragmentShaderSource =
+                ShaderUtils::readShaderSource(fragShader);
         const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
         glShaderSource(fragmentShader, 1, &fragmentShaderSource2, nullptr);
 
@@ -170,7 +172,7 @@ namespace Rival {
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
         if (fShaderCompiled != GL_TRUE) {
             printf("Unable to compile fragment shader %d!\n", fragmentShader);
-            printShaderLog(fragmentShader);
+            ShaderUtils::printShaderLog(fragmentShader);
             return 0;
         }
 
@@ -185,7 +187,7 @@ namespace Rival {
         glGetProgramiv(programId, GL_LINK_STATUS, &programSuccess);
         if (programSuccess != GL_TRUE) {
             printf("Error linking program %d!\n", programId);
-            printProgramLog(programId);
+            ShaderUtils::printProgramLog(programId);
             return 0;
         }
 

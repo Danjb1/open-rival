@@ -14,6 +14,8 @@ namespace Rival {
     class AnimationComponent : public EntityComponent {
 
     public:
+        static const std::string key;
+
         AnimationComponent(const Animations::Animation animation);
 
         // Inherited from EntityComponent
@@ -25,8 +27,6 @@ namespace Rival {
         int getCurrentSpriteIndex() const;
 
     private:
-        static const std::string key;
-
         SpriteComponent* spriteComponent;
         FacingComponent* facingComponent;
 

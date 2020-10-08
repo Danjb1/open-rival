@@ -7,10 +7,9 @@
 #include <stdio.h>
 
 #include <SDL.h>
-#include <SDL_opengl.h>
-#include <gl/glu.h>
 
 namespace Rival {
+namespace ShaderUtils {
 
     std::string readShaderSource(const char* filename) {
         std::ifstream t(filename);
@@ -74,4 +73,4 @@ namespace Rival {
         delete[] infoLog;
     }
 
-}  // namespace Rival
+}}  // namespace Rival::ShaderUtils

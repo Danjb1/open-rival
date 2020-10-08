@@ -4,12 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Entity / Component system
-    - MousePicker should determine hitbox offsets based on entity type
-
- - Animations
-    - Check all Animation data; some values are incorrect
-    - Add unit tests
+ - Check all Animation data; some values are incorrect
 
  - When a Unit is deleted, any references to it will become invalid
     - We need a way to check if a Unit reference is still valid!
@@ -27,21 +22,11 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
- - Reduce duplication between MousePicker and zooming logic
-
  - Image filenames can be truncated due to limited size of char array
 
  - Framebuffer size calculations should use RenderUtils
 
- - Mouse picking:
-    - We could use [this strategy](https://www.kamremake.com/devblog/unit-picking/),
-        and use the render result from the previous frame!
-    - This would be much simpler, and possibly faster, BUT would involve an extra
-        rendering step
-    - The current solution can be optimised by only considering on-screen units
-
- - Rendering:
-    - Why does FramebufferRendering require a different winding order to other renderers?
+ - Why does FramebufferRendering require a different winding order to other renderers?
 
  - ScenarioReader:
     - Use BinaryFileReader
@@ -54,6 +39,8 @@ character filename (including path)
         auto scenario_desc = readScenario(scenarioPath);
         auto scenario = buildScenario(scenario_desc);
    These could live inside a common namespace (e.g. ScenarioUtils)
+
+ - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
 
 <!----------------------------------------------------------------------------->
 ## Features
