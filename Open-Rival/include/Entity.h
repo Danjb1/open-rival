@@ -113,12 +113,34 @@ namespace Rival {
         int getHeight() const;
 
         /**
-         * Retrieves the first EntityComponent with the given key.
+         * Retrieves the EntityComponent with the given key.
          *
          * Returns nullptr if no matching EntityComponent is found.
          */
-        EntityComponent* getComponent(std::string key);
-        const EntityComponent* getComponent(std::string key) const;
+        template <class T>
+        T* getComponent(std::string key) {
+            // Casts away the const from the const version of this method.
+            // See: https://stackoverflow.com/a/47369227/1624459
+            return const_cast<T*>(std::as_const(*this).getComponent<T>(key));
+        }
+
+        /**
+         * Retrieves the EntityComponent with the given key.
+         *
+         * Returns nullptr if no matching EntityComponent is found.
+         */
+        template <class T>
+        const T* getComponent(std::string key) const {
+            for (auto& component : components) {
+                if (component->isDeleted()) {
+                    continue;
+                }
+                if (component->getKey() == key) {
+                    return static_cast<T*>(component.get());
+                }
+            }
+            return nullptr;
+        }
 
     protected:
         /**

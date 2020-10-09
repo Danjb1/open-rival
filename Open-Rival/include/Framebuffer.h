@@ -25,9 +25,6 @@ namespace Rival {
 
         int getHeight() const;
 
-        static const Framebuffer generate(
-                int width, int height, bool useDepth);
-
     private:
         GLuint id;
 

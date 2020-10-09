@@ -41,8 +41,7 @@ SCENARIO("Entities can have components attached to them", "[entity]") {
             int updateCount = 0;
             e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
             ExampleEntityComponent* component =
-                    dynamic_cast<ExampleEntityComponent*>(
-                            e.getComponent("example_key"));
+                    e.getComponent<ExampleEntityComponent>("example_key");
 
             THEN("the component is attached to the Entity") {
                 REQUIRE(component != nullptr);
@@ -67,8 +66,7 @@ SCENARIO("Entities should initialise their components when they spawn", "[entity
 
             THEN("the component receives a callback") {
                 ExampleEntityComponent* component =
-                        dynamic_cast<ExampleEntityComponent*>(
-                                e.getComponent("example_key"));
+                        e.getComponent<ExampleEntityComponent>("example_key");
                 REQUIRE(component->entitySpawned);
             }
         }
@@ -87,16 +85,14 @@ SCENARIO("Entities should update their components each frame", "[entity]") {
 
             THEN("the component receives a callback") {
                 ExampleEntityComponent* component =
-                        dynamic_cast<ExampleEntityComponent*>(
-                                e.getComponent("example_key"));
+                        e.getComponent<ExampleEntityComponent>("example_key");
                 REQUIRE(component->updateCount == 1);
             }
         }
 
         AND_GIVEN("A component is deleted") {
             ExampleEntityComponent* component =
-                    dynamic_cast<ExampleEntityComponent*>(
-                            e.getComponent("example_key"));
+                    e.getComponent<ExampleEntityComponent>("example_key");
             component->markForDeletion();
 
             WHEN("the Entity is updated") {
@@ -107,8 +103,8 @@ SCENARIO("Entities should update their components each frame", "[entity]") {
                 }
 
                 AND_THEN("the deleted component is removed from the Entity") {
-                    component = dynamic_cast<ExampleEntityComponent*>(
-                            e.getComponent("example_key"));
+                    component = e.getComponent<ExampleEntityComponent>(
+                            "example_key");
                     REQUIRE(component == nullptr);
                 }
             }
@@ -125,8 +121,7 @@ SCENARIO("Entities can return components by their keys", "[entity]") {
 
         WHEN("retrieving the component by its key") {
             ExampleEntityComponent* component =
-                    dynamic_cast<ExampleEntityComponent*>(
-                            e.getComponent("example_key"));
+                    e.getComponent<ExampleEntityComponent>("example_key");
 
             THEN("the component is returned") {
                 REQUIRE(component != nullptr);
@@ -135,8 +130,7 @@ SCENARIO("Entities can return components by their keys", "[entity]") {
 
         AND_WHEN("trying to retrieve a non-existent component") {
             ExampleEntityComponent* component =
-                    dynamic_cast<ExampleEntityComponent*>(
-                            e.getComponent("no_such_key"));
+                    e.getComponent<ExampleEntityComponent>("no_such_key");
 
             THEN("the a nullptr is returned") {
                 REQUIRE(component == nullptr);
