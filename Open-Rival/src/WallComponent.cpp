@@ -13,22 +13,22 @@ namespace Rival {
         : EntityComponent(key),
           variant(variant) {}
 
-    void WallComponent::onEntitySpawned(Scenario* scenario) {
+    void WallComponent::onEntitySpawned(Scenario*) {
 
         int baseTxIndex = 0;
 
         // Set txIndex based on Wall type
         BuildingPropsComponent* buildingPropsComponent =
-                dynamic_cast<BuildingPropsComponent*>(
-                        entity->getComponent(BuildingPropsComponent::key));
+                entity->getComponent<BuildingPropsComponent>(
+                        BuildingPropsComponent::key);
         if (buildingPropsComponent) {
             baseTxIndex = getBaseTxIndex(
                     buildingPropsComponent->getBuildingType());
         }
 
         // Update txIndex in SpriteComponent
-        spriteComponent = dynamic_cast<SpriteComponent*>(
-                entity->getComponent(SpriteComponent::key));
+        spriteComponent = entity->getComponent<SpriteComponent>(
+                SpriteComponent::key);
         if (spriteComponent) {
             spriteComponent->txIndex = baseTxIndex + static_cast<int>(variant);
         }

@@ -55,8 +55,7 @@ namespace Rival {
 
         // Get this Entity's SpriteComponent
         const SpriteComponent* spriteComponent =
-                dynamic_cast<const SpriteComponent*>(
-                        entity.getComponent(SpriteComponent::key));
+                entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
         // Entities without a SpriteComponent cannot be rendered
         if (spriteComponent == nullptr) {

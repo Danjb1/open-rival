@@ -24,12 +24,9 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
                 Animations::Animation { 3, 3, TimerUtils::timeStepMs }));
 
         SpriteComponent* spriteComponent =
-                dynamic_cast<SpriteComponent*>(
-                        e.getComponent(SpriteComponent::key));
-
+                e.getComponent<SpriteComponent>(SpriteComponent::key);
         AnimationComponent* animComponent =
-                dynamic_cast<AnimationComponent*>(
-                        e.getComponent(AnimationComponent::key));
+                e.getComponent<AnimationComponent>(AnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 0);
 
@@ -64,12 +61,9 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
         e.onSpawn(nullptr, 0, 0, 0);
 
         SpriteComponent* spriteComponent =
-                dynamic_cast<SpriteComponent*>(
-                        e.getComponent(SpriteComponent::key));
-
+                e.getComponent<SpriteComponent>(SpriteComponent::key);
         AnimationComponent* animComponent =
-                dynamic_cast<AnimationComponent*>(
-                        e.getComponent(AnimationComponent::key));
+                e.getComponent<AnimationComponent>(AnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 
@@ -117,12 +111,9 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
         e.onSpawn(nullptr, 0, 0, 0);
 
         SpriteComponent* spriteComponent =
-                dynamic_cast<SpriteComponent*>(
-                        e.getComponent(SpriteComponent::key));
-
+                e.getComponent<SpriteComponent>(SpriteComponent::key);
         AnimationComponent* animComponent =
-                dynamic_cast<AnimationComponent*>(
-                        e.getComponent(AnimationComponent::key));
+                e.getComponent<AnimationComponent>(AnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 

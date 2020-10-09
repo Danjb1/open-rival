@@ -20,10 +20,10 @@ namespace Rival {
           msPassedCurrentAnimFrame(0) {}
 
     void AnimationComponent::onEntitySpawned(Scenario*) {
-        spriteComponent = dynamic_cast<SpriteComponent*>(
-                entity->getComponent(SpriteComponent::key));
-        facingComponent = dynamic_cast<FacingComponent*>(
-                entity->getComponent(FacingComponent::key));
+        spriteComponent = entity->getComponent<SpriteComponent>(
+                SpriteComponent::key);
+        facingComponent = entity->getComponent<FacingComponent>(
+                FacingComponent::key);
         setAnimation(animation);
     }
 

@@ -4,10 +4,13 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Store Components in a map
+
  - Check all Animation data; some values are incorrect
 
  - When a Unit is deleted, any references to it will become invalid
     - We need a way to check if a Unit reference is still valid!
+    - Just store entity IDs instead of references, and retrieve the Entity each frame
 
  - Render the UI
 
@@ -32,15 +35,12 @@ character filename (including path)
     - Use BinaryFileReader
     - Improve error handling
     - Analyse skipped sections; do they vary? Are they read?
-
- - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
- 
- - Consider rewriting ScenarioReader and ScenarioBuilder as free-standing functions, e.g.
+    - Consider rewriting ScenarioReader and ScenarioBuilder as free-standing functions, e.g.
         auto scenario_desc = readScenario(scenarioPath);
         auto scenario = buildScenario(scenario_desc);
-   These could live inside a common namespace (e.g. ScenarioUtils)
+        - These could live inside a common namespace (e.g. ScenarioUtils)
 
- - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
+ - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -159,3 +159,9 @@ character filename (including path)
  - Build for Linux
  - Add script to build from command line
  - Add script to run tests from command line
+ 
+<!----------------------------------------------------------------------------->
+## Unit Tests
+<!----------------------------------------------------------------------------->
+
+ - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?

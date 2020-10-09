@@ -56,7 +56,7 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
                 // The initialState that we created has been moved, so we need
                 // to get a reference to it
                 SlowRenderingState& state =
-                        dynamic_cast<SlowRenderingState&>(app.getState());
+                        static_cast<SlowRenderingState&>(app.getState());
                 REQUIRE(state.framesPassed == 2);
                 REQUIRE(state.updatesRun == 3);
             }
