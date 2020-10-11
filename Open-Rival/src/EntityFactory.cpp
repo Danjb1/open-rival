@@ -175,14 +175,75 @@ namespace Rival {
             return Unit::Type::Enchanter;
         case 0x59:
             return Unit::Type::Bark;
-        case 0x60:
+        case 0x5A:
             return Unit::Type::Warship;
         case 0x5B:
             return Unit::Type::SkyRider;
         case 0x5C:
             return Unit::Type::MagicChopper;
+        case 0x5D:
+            return Unit::Type::SeaMonster;  // Black
+        case 0x5E:
+            return Unit::Type::SeaMonster;  // Blue
+        case 0x5F:
+            return Unit::Type::SeaMonster;  // Green
+        case 0x60:
+            return Unit::Type::Snake;  // Black
+        case 0x61:
+            return Unit::Type::Snake;  // Red
+        case 0x62:
+            return Unit::Type::Snake;  // Green
+        case 0x63:
+            return Unit::Type::Snake;  // Yellow
+        case 0x64:
+            return Unit::Type::Gryphon;  // Black
+        case 0x65:
+            return Unit::Type::Gryphon;  // Yellow
+        case 0x66:
+            return Unit::Type::Gryphon;  // Cyan
+        case 0x67:
+            return Unit::Type::Hydra;  // Black
+        case 0x68:
+            return Unit::Type::Hydra;  // Blue
+        case 0x69:
+            return Unit::Type::Hydra;  // Green
+        case 0x6A:
+            return Unit::Type::Golem;  // Black
+        case 0x6B:
+            return Unit::Type::Golem;  // Blue
+        case 0x6C:
+            return Unit::Type::Golem;  // Cyan
+        case 0x6D:
+            return Unit::Type::Devil;  // Black
+        case 0x6E:
+            return Unit::Type::Devil;  // Red
+        case 0x6F:
+            return Unit::Type::Devil;  // Orange
+        case 0x70:
+            return Unit::Type::Devil;  // Yellow
+        case 0x71:
+            return Unit::Type::Skeleton;  // Black
+        case 0x72:
+            return Unit::Type::Skeleton;  // Red
+        case 0x73:
+            return Unit::Type::Skeleton;  // Cyan
+        case 0x74:
+            return Unit::Type::Skeleton;  // Yellow
+        case 0x75:
+            return Unit::Type::Dragon;  // Black
+        case 0x76:
+            return Unit::Type::Dragon;  // Red
+        case 0x77:
+            return Unit::Type::Dragon;  // Violet
+        case 0x78:
+            return Unit::Type::Dragon;  // Blue
+        case 0x79:
+            return Unit::Type::Dragon;  // Orange
+        case 0x7A:
+            return Unit::Type::Dragon;  // Green
         default:
-            throw std::runtime_error("Unknown unit type: " + unitType);
+            throw std::runtime_error(
+                    "Unknown unit type: " + std::to_string(unitType));
         }
     }
 
@@ -205,7 +266,8 @@ namespace Rival {
         case 7:
             return Facing::SouthEast;
         default:
-            throw std::runtime_error("Unknown facing: " + facing);
+            throw std::runtime_error(
+                    "Unknown facing: " + std::to_string(facing));
         }
     }
 
@@ -285,7 +347,8 @@ namespace Rival {
         case 0x1a:
             return Building::Type::Wall;
         default:
-            throw std::runtime_error("Unknown building type: " + unsigned(buildingType));
+            throw std::runtime_error(
+                    "Unknown building type: " + std::to_string(buildingType));
         }
     }
 

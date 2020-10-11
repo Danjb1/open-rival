@@ -1,9 +1,9 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <map>
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "EntityComponent.h"
 #include "Scenario.h"
@@ -131,13 +131,9 @@ namespace Rival {
          */
         template <class T>
         const T* getComponent(std::string key) const {
-            for (auto& component : components) {
-                if (component->isDeleted()) {
-                    continue;
-                }
-                if (component->getKey() == key) {
-                    return static_cast<T*>(component.get());
-                }
+            if (components.find(key) != components.end()) {
+                const auto& component = components.at(key);
+                return static_cast<T*>(component.get());
             }
             return nullptr;
         }
@@ -193,7 +189,7 @@ namespace Rival {
         /**
          * EntityComponents owned by this Entity.
          */
-        std::vector<std::unique_ptr<EntityComponent>> components;
+        std::map<std::string, std::unique_ptr<EntityComponent>> components;
     };
 
 }  // namespace Rival
