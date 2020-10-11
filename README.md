@@ -42,7 +42,7 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 ## Development
 
-To get started with development, see [this guide](docs/development.md).
+To get started with development, see [this guide](docs/development_quickstart.md).
 
 ## Legal Stuff
 

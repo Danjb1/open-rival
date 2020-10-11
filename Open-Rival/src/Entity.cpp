@@ -11,7 +11,7 @@ namespace Rival {
 
     void Entity::attach(std::unique_ptr<EntityComponent> component) {
         component->onAttach(this);
-        components.push_back(std::move(component));
+        components.insert({ component->getKey(), std::move(component) });
     }
 
     void Entity::onSpawn(
@@ -21,7 +21,8 @@ namespace Rival {
         x = newX;
         y = newY;
 
-        for (const auto& component : components) {
+        for (auto const& kv : components) {
+            const auto& component = kv.second;
             component->onEntitySpawned(scenario);
         }
     }
@@ -29,7 +30,8 @@ namespace Rival {
     void Entity::update() {
 
         // Update our Components
-        for (const auto& component : components) {
+        for (auto const& kv : components) {
+            const auto& component = kv.second;
             if (!component->isDeleted()) {
                 component->update();
             }
@@ -37,7 +39,7 @@ namespace Rival {
 
         // Remove deleted Components
         for (auto it = components.begin(); it != components.end();) {
-            const auto& component = *it;
+            const auto& component = it->second;
             if (component->isDeleted()) {
                 it = components.erase(it);
             } else {
