@@ -30,7 +30,8 @@ namespace Rival {
         spriteComponent = entity->getComponent<SpriteComponent>(
                 SpriteComponent::key);
         if (spriteComponent) {
-            spriteComponent->txIndex = baseTxIndex + static_cast<int>(variant);
+            int newTxIndex = baseTxIndex + static_cast<int>(variant);
+            spriteComponent->setTxIndex(newTxIndex);
         }
     }
 

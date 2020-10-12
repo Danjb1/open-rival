@@ -20,7 +20,7 @@ namespace Rival {
     public:
         static const std::string key;
 
-        int txIndex;
+        bool dirty;
 
         SpriteComponent(const Spritesheet& spritesheet);
 
@@ -28,8 +28,12 @@ namespace Rival {
 
         int getTxIndex() const;
 
+        void setTxIndex(int txIndex);
+
     private:
         const SpriteRenderable renderable;
+
+        int txIndex;
     };
 
 }  // namespace Rival

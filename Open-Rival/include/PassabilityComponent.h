@@ -13,7 +13,6 @@ namespace Rival {
 
         PassabilityComponent(TilePassability passability);
 
-        // Inherited from EntityComponent
         void onEntitySpawned(Scenario* scenario) override;
 
         TilePassability getPassability() const;

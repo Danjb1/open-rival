@@ -55,7 +55,7 @@ namespace Rival {
         if (spriteComponent) {
             // Update the SpriteComponent, if present.
             // This is what actually causes the rendered image to change.
-            spriteComponent->txIndex = getCurrentSpriteIndex();
+            spriteComponent->setTxIndex(getCurrentSpriteIndex());
         }
     }
 

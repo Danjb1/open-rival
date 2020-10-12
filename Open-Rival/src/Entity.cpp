@@ -7,6 +7,7 @@ namespace Rival {
         : width(width),
           height(height),
           deleted(false),
+          moved(true),
           id(-1) {}
 
     void Entity::attach(std::unique_ptr<EntityComponent> component) {
@@ -27,8 +28,11 @@ namespace Rival {
         }
     }
 
-    void Entity::update() {
+    void Entity::earlyUpdate() {
+        moved = false;
+    }
 
+    void Entity::update() {
         // Update our Components
         for (auto const& kv : components) {
             const auto& component = kv.second;

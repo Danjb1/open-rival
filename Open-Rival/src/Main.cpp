@@ -89,7 +89,7 @@ int main() {
         Rival::Application app(window);
 
         // Load some scenario
-        Rival::ScenarioReader reader(Rival::Resources::mapsDir + "example.sco");
+        Rival::ScenarioReader reader(Rival::Resources::mapsDir + "test-all.sco");
         Rival::ScenarioBuilder scenarioBuilder(reader.readScenario());
         std::unique_ptr<Rival::Scenario> scenario =
                 scenarioBuilder.build(app.getResources());

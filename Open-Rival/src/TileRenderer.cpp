@@ -34,6 +34,43 @@ namespace Rival {
             int mapWidth,
             int mapHeight) {
 
+        // Use textures
+        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
+        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
+        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
+        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+        // Bind vertex array
+        glBindVertexArray(renderable.getVao());
+
+        // Update the data on the GPU
+        if (needsUpdate()) {
+            sendDataToGpu(camera, tiles, mapWidth, mapHeight);
+        }
+
+        // Render
+        glDrawElements(
+                renderable.getDrawMode(),
+                tiles.size() * renderable.getIndicesPerSprite(),
+                GL_UNSIGNED_INT,
+                nullptr);
+    }
+
+    bool TileRenderer::needsUpdate() const {
+        // Currently we update the buffers every frame.
+        // Later, we could optimise this by updating only when:
+        //   1) Camera has moved
+        //   2) Zoom level has changed
+        //   3) A tile has changed
+        return true;
+    }
+
+    void TileRenderer::sendDataToGpu(
+            const Camera& camera,
+            const std::vector<Tile>& tiles,
+            int mapWidth,
+            int mapHeight) const {
+
         // Find the first visible tiles.
         // We subtract 1 because we need to start drawing offscreen, to account
         // for tiles that are partially visible to the camera.
@@ -65,12 +102,6 @@ namespace Rival {
         // Keep within the rendering limits
         maxX = std::min(maxX, RenderUtils::maxTilesX);
         maxY = std::min(maxY, RenderUtils::maxTilesY);
-
-        // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
-        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
-        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
 
         // Create buffers to hold all our tile data
         int numVertices = tiles.size() * SpriteRenderable::numVerticesPerSprite;
@@ -129,9 +160,6 @@ namespace Rival {
             }
         }
 
-        // Bind vertex array
-        glBindVertexArray(renderable.getVao());
-
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
         glBufferSubData(
@@ -147,13 +175,6 @@ namespace Rival {
                 0,
                 texCoords.size() * sizeof(GLfloat),
                 texCoords.data());
-
-        // Render
-        glDrawElements(
-                renderable.getDrawMode(),
-                tiles.size() * renderable.getIndicesPerSprite(),
-                GL_UNSIGNED_INT,
-                nullptr);
     }
 
 }  // namespace Rival
