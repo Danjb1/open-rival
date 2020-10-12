@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Entity.h"
+#include "SpriteComponent.h"
 #include "Texture.h"
 
 namespace Rival {
@@ -32,9 +33,19 @@ namespace Rival {
     private:
         const Texture& paletteTexture;
 
-        bool isEntityVisible(const Entity& entity, const Camera& camera);
+        bool isEntityVisible(
+                const Entity& entity,
+                const Camera& camera) const;
 
-        void renderEntity(const Entity& entity);
+        void renderEntity(Entity& entity);
+
+        bool needsUpdate(
+                const Entity& entity,
+                const SpriteComponent* spriteComponent) const;
+
+        void sendDataToGpu(
+                Entity& entity,
+                SpriteComponent* spriteComponent) const;
     };
 
 }  // namespace Rival

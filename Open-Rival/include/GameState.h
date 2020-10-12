@@ -20,10 +20,12 @@ namespace Rival {
     public:
         GameState(Application& app, std::unique_ptr<Scenario> scenario);
 
-        // Inherited from State
         void keyDown(const SDL_Keycode keyCode) override;
+
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
+
         void render() override;
+
         void update() override;
 
         Scenario& getScenario();

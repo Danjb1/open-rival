@@ -1,10 +1,8 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-## WIP
+## Next Up
 <!----------------------------------------------------------------------------->
-
- - Don't send data to the GPU if nothing has changed ("dirty" flag)
 
  - Animation support
     - Check all Animation data; some values are incorrect

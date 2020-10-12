@@ -7,7 +7,6 @@
 #include "Palette.h"
 #include "RenderUtils.h"
 #include "Shaders.h"
-#include "SpriteComponent.h"
 
 namespace Rival {
 
@@ -27,7 +26,7 @@ namespace Rival {
 
     bool EntityRenderer::isEntityVisible(
             const Entity& entity,
-            const Camera& camera) {
+            const Camera& camera) const {
 
         // Find the centre of this Entity's tile, in Camera units
         float x = static_cast<float>(entity.getX() + Camera::tileWidth / 2.0f);
@@ -51,10 +50,10 @@ namespace Rival {
                 || camera.contains(x1, y2);
     }
 
-    void EntityRenderer::renderEntity(const Entity& entity) {
+    void EntityRenderer::renderEntity(Entity& entity) {
 
         // Get this Entity's SpriteComponent
-        const SpriteComponent* spriteComponent =
+        SpriteComponent* spriteComponent =
                 entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
         // Entities without a SpriteComponent cannot be rendered
@@ -62,8 +61,40 @@ namespace Rival {
             return;
         }
 
-        // Determine the frame of the texture to be rendered
+        // Use textures
         const SpriteRenderable& renderable = spriteComponent->getRenderable();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+        // Bind vertex array
+        glBindVertexArray(renderable.getVao());
+
+        // Update the data on the GPU
+        if (needsUpdate(entity, spriteComponent)) {
+            sendDataToGpu(entity, spriteComponent);
+        }
+
+        // Render
+        glDrawElements(
+                renderable.getDrawMode(),
+                renderable.getIndicesPerSprite(),
+                GL_UNSIGNED_INT,
+                nullptr);
+    }
+
+    bool EntityRenderer::needsUpdate(
+            const Entity& entity,
+            const SpriteComponent* spriteComponent) const {
+        return entity.moved || spriteComponent->dirty;
+    }
+
+    void EntityRenderer::sendDataToGpu(
+            Entity& entity,
+            SpriteComponent* spriteComponent) const {
+
+        // Determine the frame of the texture to be rendered
         int txIndex = spriteComponent->getTxIndex();
 
         // Define vertex positions
@@ -86,17 +117,9 @@ namespace Rival {
         };
 
         // Determine texture co-ordinates
+        const SpriteRenderable& renderable = spriteComponent->getRenderable();
         std::vector<GLfloat> texCoords =
                 renderable.spritesheet.getTexCoords(txIndex);
-
-        // Use textures
-        glActiveTexture(GL_TEXTURE0 + 0);  // Texture entity 0
-        glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
-        glActiveTexture(GL_TEXTURE0 + 1);  // Texture entity 1
-        glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
-
-        // Bind vertex array
-        glBindVertexArray(renderable.getVao());
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
@@ -118,12 +141,8 @@ namespace Rival {
                 texCoordBufferSize,
                 texCoords.data());
 
-        // Render
-        glDrawElements(
-                renderable.getDrawMode(),
-                renderable.getIndicesPerSprite(),
-                GL_UNSIGNED_INT,
-                nullptr);
+        // Clear the dirty flag now that the GPU is up to date
+        spriteComponent->dirty = false;
     }
 
 }  // namespace Rival

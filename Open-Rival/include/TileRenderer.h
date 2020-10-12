@@ -39,6 +39,14 @@ namespace Rival {
         SpriteRenderable renderable;
 
         const Texture& paletteTexture;
+
+        bool TileRenderer::needsUpdate() const;
+
+        void sendDataToGpu(
+                const Camera& camera,
+                const std::vector<Tile>& tiles,
+                int mapWidth,
+                int mapHeight) const;
     };
 
 }  // namespace Rival

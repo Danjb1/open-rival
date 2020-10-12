@@ -28,11 +28,18 @@ namespace Rival {
           gameRenderer(window, *scenario, camera, viewport, res) {}
 
     void GameState::update() {
+
+        // Early-update Entities
+        auto const& entities = scenario->getEntities();
+        for (auto const& kv : entities) {
+            Entity& e = *(kv.second);
+            e.earlyUpdate();
+        }
+
         // Respond to mouse input
         mousePicker.handleMouse();
 
         // Update Entities
-        auto const& entities = scenario->getEntities();
         for (auto const& kv : entities) {
             Entity& e = *(kv.second);
             e.update();

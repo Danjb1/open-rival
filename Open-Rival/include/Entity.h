@@ -48,6 +48,14 @@ namespace Rival {
     class Entity final {
 
     public:
+        /**
+         * Flag set if this Entity has moved in the current frame.
+         */
+        bool moved;
+
+        /**
+         * Creates an Entity with the given size.
+         */
         Entity(int width, int height);
 
         /**
@@ -62,6 +70,11 @@ namespace Rival {
          */
         virtual void onSpawn(
                 Scenario* newScenario, int newId, int newX, int newY);
+
+        /**
+         * Called once at the start of each frame.
+         */
+        void earlyUpdate();
 
         /**
          * Updates this Entity by one frame.

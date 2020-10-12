@@ -35,7 +35,6 @@ namespace Rival {
 
         WallComponent(WallVariant variant);
 
-        // Inherited from EntityComponent
         void onEntitySpawned(Scenario* scenario) override;
 
         WallVariant getVariant() const;
