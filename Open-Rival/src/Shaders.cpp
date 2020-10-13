@@ -6,6 +6,7 @@
 #include "ShaderUtils.h"
 
 namespace Rival {
+namespace Shaders {
 
     ///////////////////////////////////////////////////////////////////////////
     // GameWorldShader
@@ -21,15 +22,15 @@ namespace Rival {
 
         gameWorldShader = GameWorldShader();
         gameWorldShader.programId = programId;
-        gameWorldShader.viewProjMatrixUniformLocation =
+        gameWorldShader.viewProjMatrixUniformLoc =
                 glGetUniformLocation(programId, "view_proj_matrix");
-        gameWorldShader.vertexAttribLocation =
+        gameWorldShader.vertexAttribLoc =
                 glGetAttribLocation(programId, "in_vertex");
-        gameWorldShader.texCoordAttribLocation =
+        gameWorldShader.texCoordAttribLoc =
                 glGetAttribLocation(programId, "in_tex_coord");
-        gameWorldShader.texUnitUniformLocation =
+        gameWorldShader.texUnitUniformLoc =
                 glGetUniformLocation(programId, "tex");
-        gameWorldShader.paletteTexUnitUniformLocation =
+        gameWorldShader.paletteTexUnitUniformLoc =
                 glGetUniformLocation(programId, "palette");
 
         if (!gameWorldShader.isValid()) {
@@ -44,22 +45,22 @@ namespace Rival {
             return false;
         }
 
-        if (vertexAttribLocation == -1) {
+        if (vertexAttribLoc == -1) {
             printf("Could not locate vertex attribute\n");
             return false;
         }
 
-        if (texCoordAttribLocation == -1) {
+        if (texCoordAttribLoc == -1) {
             printf("Could not locate tex co-ord attribute\n");
             return false;
         }
 
-        if (texUnitUniformLocation == -1) {
+        if (texUnitUniformLoc == -1) {
             printf("Could not locate tex unit uniform\n");
             return false;
         }
 
-        if (paletteTexUnitUniformLocation == -1) {
+        if (paletteTexUnitUniformLoc == -1) {
             printf("Could not locate palette tex unit uniform\n");
             return false;
         }
@@ -81,11 +82,11 @@ namespace Rival {
 
         screenShader = ScreenShader();
         screenShader.programId = programId;
-        screenShader.vertexAttribLocation =
+        screenShader.vertexAttribLoc =
                 glGetAttribLocation(programId, "in_vertex");
-        screenShader.texCoordAttribLocation =
+        screenShader.texCoordAttribLoc =
                 glGetAttribLocation(programId, "in_tex_coord");
-        screenShader.texUnitUniformLocation =
+        screenShader.texUnitUniformLoc =
                 glGetUniformLocation(programId, "tex");
 
         if (!screenShader.isValid()) {
@@ -100,17 +101,17 @@ namespace Rival {
             return false;
         }
 
-        if (vertexAttribLocation == -1) {
+        if (vertexAttribLoc == -1) {
             printf("Could not locate vertex attribute\n");
             return false;
         }
 
-        if (texCoordAttribLocation == -1) {
+        if (texCoordAttribLoc == -1) {
             printf("Could not locate tex co-ord attribute\n");
             return false;
         }
 
-        if (texUnitUniformLocation == -1) {
+        if (texUnitUniformLoc == -1) {
             printf("Could not locate tex unit uniform\n");
             return false;
         }
@@ -132,13 +133,13 @@ namespace Rival {
 
         menuShader = MenuShader();
         menuShader.programId = programId;
-        menuShader.vertexAttribLocation =
+        menuShader.vertexAttribLoc =
                 glGetAttribLocation(programId, "in_vertex");
-        menuShader.texCoordAttribLocation =
+        menuShader.texCoordAttribLoc =
                 glGetAttribLocation(programId, "in_tex_coord");
-        menuShader.texUnitUniformLocation =
+        menuShader.texUnitUniformLoc =
                 glGetUniformLocation(programId, "tex");
-        menuShader.paletteTexUnitUniformLocation =
+        menuShader.paletteTexUnitUniformLoc =
                 glGetUniformLocation(programId, "palette");
 
         if (!menuShader.isValid()) {
@@ -153,22 +154,22 @@ namespace Rival {
             return false;
         }
 
-        if (vertexAttribLocation == -1) {
+        if (vertexAttribLoc == -1) {
             printf("Could not locate vertex attribute\n");
             return false;
         }
 
-        if (texCoordAttribLocation == -1) {
+        if (texCoordAttribLoc == -1) {
             printf("Could not locate tex co-ord attribute\n");
             return false;
         }
 
-        if (texUnitUniformLocation == -1) {
+        if (texUnitUniformLoc == -1) {
             printf("Could not locate tex unit uniform\n");
             return false;
         }
 
-        if (paletteTexUnitUniformLocation == -1) {
+        if (paletteTexUnitUniformLoc == -1) {
             printf("Could not locate palette tex unit uniform\n");
             return false;
         }
@@ -253,4 +254,4 @@ namespace Rival {
         return programId;
     }
 
-}  // namespace Rival
+}}  // namespace Rival::Shaders
