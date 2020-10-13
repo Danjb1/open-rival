@@ -24,7 +24,7 @@ namespace Rival {
                 const Rect& viewport,
                 const Resources& res);
 
-        void render() const;
+        void render();
 
     private:
         // Framebuffer size, in pixels.
@@ -56,7 +56,7 @@ namespace Rival {
 
         void renderGame(int viewportWidth, int viewportHeight) const;
         void renderFramebuffer(int srcWidth, int srcHeight) const;
-        void renderUi() const;
+        void renderUi();
     };
 
 }  // namespace Rival

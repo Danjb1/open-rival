@@ -13,12 +13,12 @@ namespace Shaders {
     static const GLint texCoordAttribIndex = 1;
 
     ///////////////////////////////////////////////////////////////////////////
-    // GameWorldShader:
+    // IndexedTextureShader:
     // Renders a texture using a view-projection matrix and an accompanying
     // palette texture for colour lookups.
     ///////////////////////////////////////////////////////////////////////////
 
-    class GameWorldShader {
+    class IndexedTextureShader {
     public:
         GLuint programId;
 
@@ -38,7 +38,7 @@ namespace Shaders {
         bool isValid() const;
     };
 
-    extern GameWorldShader gameWorldShader;
+    extern IndexedTextureShader indexedTextureShader;
 
     ///////////////////////////////////////////////////////////////////////////
     // ScreenShader:
@@ -62,31 +62,6 @@ namespace Shaders {
     };
 
     extern ScreenShader screenShader;
-
-    ///////////////////////////////////////////////////////////////////////////
-    // MenuShader:
-    // Renders a texture in normalized device coordinates using an accompanying
-    // palette texture for colour lookups.
-    ///////////////////////////////////////////////////////////////////////////
-
-    class MenuShader {
-    public:
-        GLuint programId;
-
-        // Vertex shader attribute locations
-        GLint vertexAttribLoc;
-        GLint texCoordAttribLoc;
-
-        // Fragment shader uniform locations
-        GLint texUnitUniformLoc;
-        GLint paletteTexUnitUniformLoc;
-
-        static void init();
-
-        bool isValid() const;
-    };
-
-    extern MenuShader menuShader;
 
     ///////////////////////////////////////////////////////////////////////////
     // Generic methods
