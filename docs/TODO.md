@@ -22,15 +22,13 @@
     - Use (and document) a sensible co-ordinate system (currently normalized device coordinates: -1 to 1)
     - Leave space for minimap and stats panel!
     - Currently the UI is too tall and overlaps with the game
-    - AtlasRenderable and SpriteRenderable make references to specific shaders
     - Extract common code from SpriteRenderable and AtlasRenderable
     - Use string constants to access images within a texture atlas
-    - Render the UI directly below the viewport
     - Render Greenskin UI, dependent on race: img_ui_01A07D3D,tga
     - Render inventory overlay at (30, 71)
          - Human: img_ui_019F3D4E.tga
          - Greenskin: img_ui_01A15E63.tga
-         - Ideally, pack UI images into a single Renderable
+         - Ideally, pack UI images into a single Renderable?
 
  - Palette
     - Separate team colours into their own arrays

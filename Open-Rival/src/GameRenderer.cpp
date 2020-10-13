@@ -89,7 +89,7 @@ namespace Rival {
         glEnable(GL_DEPTH_TEST);
 
         // Use game world shader
-        glUseProgram(gameWorldShader.programId);
+        glUseProgram(Shaders::gameWorldShader.programId);
 
         // Determine view matrix.
         //
@@ -126,10 +126,10 @@ namespace Rival {
         glm::mat4 viewProjMatrix = projection * view;
 
         // Set uniform values
-        glUniformMatrix4fv(gameWorldShader.viewProjMatrixUniformLocation,
+        glUniformMatrix4fv(Shaders::gameWorldShader.viewProjMatrixUniformLoc,
                 1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(gameWorldShader.texUnitUniformLocation, 0);
-        glUniform1i(gameWorldShader.paletteTexUnitUniformLocation, 1);
+        glUniform1i(Shaders::gameWorldShader.texUnitUniformLoc, 0);
+        glUniform1i(Shaders::gameWorldShader.paletteTexUnitUniformLoc, 1);
 
         // Render Tiles
         tileRenderer.render(
@@ -155,10 +155,10 @@ namespace Rival {
         glDisable(GL_DEPTH_TEST);
 
         // Use screen shader
-        glUseProgram(screenShader.programId);
+        glUseProgram(Shaders::screenShader.programId);
 
         // Set uniform values
-        glUniform1i(screenShader.texUnitUniformLocation, 0);
+        glUniform1i(Shaders::screenShader.texUnitUniformLoc, 0);
 
         // Render framebuffer to screen.
         // At a zoom level of 1, this will result in pixel-perfect rendering.
@@ -174,11 +174,11 @@ namespace Rival {
         glDisable(GL_DEPTH_TEST);
 
         // Use menu shader
-        glUseProgram(menuShader.programId);
+        glUseProgram(Shaders::menuShader.programId);
 
         // Set uniform values
-        glUniform1i(menuShader.texUnitUniformLocation, 0);
-        glUniform1i(menuShader.paletteTexUnitUniformLocation, 1);
+        glUniform1i(Shaders::menuShader.texUnitUniformLoc, 0);
+        glUniform1i(Shaders::menuShader.paletteTexUnitUniformLoc, 1);
 
         // Render the UI directly below the game world, using screen pixels
         glViewport(0, 0, window.getWidth(), window.getHeight());

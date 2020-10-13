@@ -36,7 +36,7 @@ namespace Rival {
         // Initialise position buffer - this should never change
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
-                screenShader.vertexAttribIndex,
+                Shaders::vertexAttribIndex,
                 numVertexDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -51,7 +51,7 @@ namespace Rival {
         // Initialise tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
-                screenShader.texCoordAttribIndex,
+                Shaders::texCoordAttribIndex,
                 numTexCoordDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -76,8 +76,8 @@ namespace Rival {
                 GL_STATIC_DRAW);
 
         // Enable vertex attributes
-        glEnableVertexAttribArray(screenShader.vertexAttribIndex);
-        glEnableVertexAttribArray(screenShader.texCoordAttribIndex);
+        glEnableVertexAttribArray(Shaders::vertexAttribIndex);
+        glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
     }
 
     void FramebufferRenderer::render(int srcWidth, int srcHeight) const {

@@ -32,7 +32,7 @@ namespace Rival {
         // Initialise position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
-                menuShader.vertexAttribIndex,
+                Shaders::vertexAttribIndex,
                 numVertexDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -55,7 +55,7 @@ namespace Rival {
                 * indicesPerSprite
                 * sizeof(GLfloat);
         glVertexAttribPointer(
-                menuShader.texCoordAttribIndex,
+                Shaders::texCoordAttribIndex,
                 numTexCoordDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -97,8 +97,8 @@ namespace Rival {
                 GL_STATIC_DRAW);
 
         // Enable vertex attributes
-        glEnableVertexAttribArray(menuShader.vertexAttribIndex);
-        glEnableVertexAttribArray(menuShader.texCoordAttribIndex);
+        glEnableVertexAttribArray(Shaders::vertexAttribIndex);
+        glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
     }
 
     GLuint AtlasRenderable::getVao() const {

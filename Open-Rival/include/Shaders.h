@@ -4,6 +4,13 @@
 #include <gl/glew.h>
 
 namespace Rival {
+namespace Shaders {
+
+    // Vertex shader attribute indices.
+    // We keep these common between all shaders so that our VAOs can be
+    // rendered by any shader without requiring reconfiguration.
+    static const GLint vertexAttribIndex = 0;
+    static const GLint texCoordAttribIndex = 1;
 
     ///////////////////////////////////////////////////////////////////////////
     // GameWorldShader:
@@ -16,19 +23,15 @@ namespace Rival {
         GLuint programId;
 
         // Vertex shader uniform locations
-        GLint viewProjMatrixUniformLocation;
-
-        // Vertex shader attribute indices
-        GLint vertexAttribIndex = 0;
-        GLint texCoordAttribIndex = 1;
+        GLint viewProjMatrixUniformLoc;
 
         // Vertex shader attribute locations
-        GLint vertexAttribLocation;
-        GLint texCoordAttribLocation;
+        GLint vertexAttribLoc;
+        GLint texCoordAttribLoc;
 
         // Fragment shader uniform locations
-        GLint texUnitUniformLocation;
-        GLint paletteTexUnitUniformLocation;
+        GLint texUnitUniformLoc;
+        GLint paletteTexUnitUniformLoc;
 
         static void init();
 
@@ -46,16 +49,12 @@ namespace Rival {
     public:
         GLuint programId;
 
-        // Vertex shader attribute indices
-        GLint vertexAttribIndex = 0;
-        GLint texCoordAttribIndex = 1;
-
         // Vertex shader attribute locations
-        GLint vertexAttribLocation;
-        GLint texCoordAttribLocation;
+        GLint vertexAttribLoc;
+        GLint texCoordAttribLoc;
 
         // Fragment shader uniform locations
-        GLint texUnitUniformLocation;
+        GLint texUnitUniformLoc;
 
         static void init();
 
@@ -74,17 +73,13 @@ namespace Rival {
     public:
         GLuint programId;
 
-        // Vertex shader attribute indices
-        GLint vertexAttribIndex = 0;
-        GLint texCoordAttribIndex = 1;
-
         // Vertex shader attribute locations
-        GLint vertexAttribLocation;
-        GLint texCoordAttribLocation;
+        GLint vertexAttribLoc;
+        GLint texCoordAttribLoc;
 
         // Fragment shader uniform locations
-        GLint texUnitUniformLocation;
-        GLint paletteTexUnitUniformLocation;
+        GLint texUnitUniformLoc;
+        GLint paletteTexUnitUniformLoc;
 
         static void init();
 
@@ -101,6 +96,6 @@ namespace Rival {
 
     GLuint createShader(const char* vertShader, const char* fragShader);
 
-}  // namespace Rival
+}}  // namespace Rival::Shaders
 
 #endif  // SHADERS_H
