@@ -64,6 +64,8 @@ namespace TextureBuilder {
         int texWidth;
         int texHeight;
 
+        TextureAtlasBuilder();
+
         void addImage(const Image& img);
 
     private:

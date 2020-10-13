@@ -20,9 +20,14 @@ namespace RenderUtils {
     static const int entityHeightPx = 128;
 
     // Offset applied to align an Entity's sprite correctly within a tile,
-    // in pixels
+    // in pixels.
     static const int entityDrawOffsetX = -33;
     static const int entityDrawOffsetY = -89;
+
+    // Offset at which the inventory overlay is drawn,
+    // from the position of the main UI panel.
+    static const int inventoryOverlayDrawOffsetX = 30;
+    static const int inventoryOverlayDrawOffsetY = 71;
 
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered
@@ -43,7 +48,8 @@ namespace RenderUtils {
 
     // Z-positions used in rendering.
     // Lower values are nearer to the camera and will be rendered on top.
-    static const float zMapBorder = zCamera - nearPlane;
+    static const float zStart = zCamera - nearPlane;
+    static const float zMapBorder = zStart;
     static const float zFog = zMapBorder - 1.0f;
     static const float zEntitiesEnd = zFog - 1.0f;
     static const float zEntitiesStart = zEntitiesEnd - maxTilesY;

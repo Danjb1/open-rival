@@ -95,8 +95,15 @@ namespace TextureBuilder {
           height(height) {}
 
     ///////////////////////////////////////////////////////////////////////////
-    // TextureBuilder class
+    // TextureAtlasBuilder class
     ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Creates an empty TextureAtlasBuilder.
+     */
+    TextureAtlasBuilder::TextureAtlasBuilder()
+        : texWidth(0),
+          texHeight(0) {}
 
     /**
      * Adds an image to the texture being constructed.
@@ -108,7 +115,10 @@ namespace TextureBuilder {
         int imageHeight = img.getHeight() + 2 * borderSize;
 
         // Store this image by its key for later retrieval
-        imagesByKey.insert(std::make_pair(img.getFilename(), img));
+        const std::string& filename = img.getFilename();
+        const std::string key =
+                filename.substr(filename.find_last_of("\\") + 1);
+        imagesByKey.insert(std::make_pair(key, img));
 
         // Ask the builder for an empty space
         Rect dest = findOrMakeEmptyRect(imageWidth, imageHeight);
@@ -116,7 +126,7 @@ namespace TextureBuilder {
         // Map this image to its destination Rectangle
         // We use the image filename as the key, but we could use anything, as
         // long as we use the same key to refer to the image when we need it.
-        imagePlacements.insert(std::make_pair(img.getFilename(), dest));
+        imagePlacements.insert(std::make_pair(key, dest));
     }
 
     /**
@@ -207,34 +217,41 @@ namespace TextureBuilder {
             const int reqWidth,
             const int reqHeight) {
 
-        // Expand our texture downwards
+        // Remember the previous texture size
+        int prevWidth = texWidth;
         int prevHeight = texHeight;
+
+        // Expand our texture downwards
         texHeight += reqHeight;
+
+        // Expand outwards as well if necessary
+        if (texWidth < reqWidth) {
+            texWidth = reqWidth;
+        }
+
+        // We now have space for the desired Rect
         emptyRects.push_back(Rect(
                 0,
                 prevHeight,
                 reqWidth,
                 reqHeight));
 
-        // Our target Rect is the one we just created
+        // The Rect we just created is the one we want to return
         int rectIndex = emptyRects.size() - 1;
 
-        // Expand outwards if necessary
-        if (texWidth < reqWidth) {
-            int prevWidth = texWidth;
-            texWidth = reqWidth;
+        // Expanding outwards creates empty space to the right of any
+        // previously-added Rects
+        if (texWidth > prevWidth && prevHeight > 0) {
+            emptyRects.push_back(Rect(
+                    prevWidth,
+                    0,
+                    texWidth - prevWidth,
+                    prevHeight));
+        }
 
-            if (prevHeight > 0) {
-                // This creates an empty space to the right
-                emptyRects.push_back(Rect(
-                        prevWidth,
-                        0,
-                        texWidth - prevWidth,
-                        prevHeight));
-            }
-        } else if (reqWidth < texWidth) {
-            // Our image does not fill the whole width, so there is an
-            // empty space to the right of it
+        // Our newly-created Rect may also have empty space to the right,
+        // if it does not fill the image width
+        if (reqWidth < texWidth) {
             emptyRects.push_back(Rect(
                     reqWidth,
                     prevHeight,
@@ -399,7 +416,7 @@ namespace TextureBuilder {
             const std::string& key = kv.first;
             const Rect& target = kv.second;
             const Image& img = builder.imagesByKey.at(key);
-            atlasFile << img.getFilename() << " "
+            atlasFile << key << " "
                       << target.x + borderSize << " "
                       << target.y + borderSize << " "
                       << target.width - (2 * borderSize) << " "
@@ -502,8 +519,10 @@ namespace TextureBuilder {
         }
 
         // Create the texture
-        std::cout << "Creating texture of size " << builder.texWidth << ", " << builder.texHeight << "\n";
-        Image texture("", builder.texWidth, builder.texHeight);
+        int texWidth = nextPowerOf2(builder.texWidth);
+        int texHeight = nextPowerOf2(builder.texHeight);
+        std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
+        Image texture("", texWidth, texHeight);
 
         // Copy each image onto the texture
         for (auto const& kv : builder.imagePlacements) {

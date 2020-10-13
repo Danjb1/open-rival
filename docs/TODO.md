@@ -4,6 +4,9 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
+ - Pass Resources to Application constructor
+    - Use fake Resources in tests
+
  - Animation support
     - Check all Animation data; some values are incorrect
     - Flying units should animate on the spot
@@ -16,10 +19,18 @@
     - We can't enforce this, but it should at least be documented!
 
  - Render the UI
-    - Subtract UI height from window size when calculating viewport height
+    - Use (and document) a sensible co-ordinate system (currently normalized device coordinates: -1 to 1)
+    - Leave space for minimap and stats panel!
+    - Currently the UI is too tall and overlaps with the game
+    - AtlasRenderable and SpriteRenderable make references to specific shaders
+    - Extract common code from SpriteRenderable and AtlasRenderable
+    - Use string constants to access images within a texture atlas
     - Render the UI directly below the viewport
-    - For now, just render the main empty background texture and status bar:
-        https://www.mobygames.com/images/shots/l/76098-rival-realms-windows-screenshot-some-boats-of-the-human-race.jpg
+    - Render Greenskin UI, dependent on race: img_ui_01A07D3D,tga
+    - Render inventory overlay at (30, 71)
+         - Human: img_ui_019F3D4E.tga
+         - Greenskin: img_ui_01A15E63.tga
+         - Ideally, pack UI images into a single Renderable
 
  - Palette
     - Separate team colours into their own arrays
@@ -72,6 +83,8 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
+ - runtime_error is *sometimes* initialised with a newline-terminated string
+
  - Image filenames can be truncated due to limited size of char array
 
  - Framebuffer size calculations should use RenderUtils
@@ -88,6 +101,8 @@ character filename (including path)
         - These could live inside a common namespace (e.g. ScenarioUtils)
 
  - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
+
+ - Move constants from header files to CPP files
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -174,6 +189,7 @@ character filename (including path)
 
  - [x] 60 FPS
  - [x] Camera zooming
+ - [ ] UI scaling
  - [ ] Improved camera navigation
  - [ ] Easy military drag-select
  - [ ] Rally points

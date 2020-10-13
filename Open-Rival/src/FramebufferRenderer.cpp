@@ -80,7 +80,7 @@ namespace Rival {
         glEnableVertexAttribArray(screenShader.texCoordAttribIndex);
     }
 
-    void FramebufferRenderer::render(int srcWidth, int srcHeight) {
+    void FramebufferRenderer::render(int srcWidth, int srcHeight) const {
 
         // Bind vertex array
         glBindVertexArray(vao);

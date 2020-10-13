@@ -28,7 +28,7 @@ namespace Rival {
 
         void render(
                 const Camera& camera,
-                const std::map<int, std::unique_ptr<Entity>>&);
+                const std::map<int, std::unique_ptr<Entity>>&) const;
 
     private:
         const Texture& paletteTexture;
@@ -37,7 +37,7 @@ namespace Rival {
                 const Entity& entity,
                 const Camera& camera) const;
 
-        void renderEntity(Entity& entity);
+        void renderEntity(Entity& entity) const;
 
         bool needsUpdate(
                 const Entity& entity,

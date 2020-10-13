@@ -69,7 +69,7 @@ namespace Rival {
                 texCoords.data());
     }
 
-    void MapBorderRenderer::render() {
+    void MapBorderRenderer::render() const {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0

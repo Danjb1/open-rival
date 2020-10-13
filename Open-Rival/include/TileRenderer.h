@@ -33,7 +33,7 @@ namespace Rival {
                 const Camera& camera,
                 const std::vector<Tile>& tiles,
                 int mapWidth,
-                int mapHeight);
+                int mapHeight) const;
 
     private:
         SpriteRenderable renderable;

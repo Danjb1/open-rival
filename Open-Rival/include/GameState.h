@@ -55,6 +55,11 @@ namespace Rival {
          * Object that renders the game.
          */
         GameRenderer gameRenderer;
+
+        /**
+         * Gets the total height of the rendered UI.
+         */
+        int GameState::getUiHeight() const;
     };
 
 }  // namespace Rival

@@ -10,6 +10,7 @@
 #include "Resources.h"
 #include "Scenario.h"
 #include "TileRenderer.h"
+#include "UiRenderer.h"
 #include "Window.h"
 
 namespace Rival {
@@ -23,7 +24,7 @@ namespace Rival {
                 const Rect& viewport,
                 const Resources& res);
 
-        void render();
+        void render() const;
 
     private:
         // Framebuffer size, in pixels.
@@ -51,9 +52,11 @@ namespace Rival {
         FramebufferRenderer gameFboRenderer;
         TileRenderer tileRenderer;
         MapBorderRenderer mapBorderRenderer;
+        UiRenderer uiRenderer;
 
-        void renderGame(int viewportWidth, int viewportHeight);
-        void renderFramebuffer(int srcWidth, int srcHeight);
+        void renderGame(int viewportWidth, int viewportHeight) const;
+        void renderFramebuffer(int srcWidth, int srcHeight) const;
+        void renderUi() const;
     };
 
 }  // namespace Rival

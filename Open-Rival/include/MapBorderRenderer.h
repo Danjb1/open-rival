@@ -63,7 +63,7 @@ namespace Rival {
                 float tileX,
                 float tileY);
 
-        void render();
+        void render() const;
 
     private:
         static const int txIndexTop = 0;

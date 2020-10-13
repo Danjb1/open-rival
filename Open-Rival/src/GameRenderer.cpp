@@ -46,9 +46,11 @@ namespace Rival {
                   res.getMapBorderSpritesheet(),
                   res.getPalette()),
 
-          entityRenderer(res.getPalette()) {}
+          entityRenderer(res.getPalette()),
 
-    void GameRenderer::render() {
+          uiRenderer(res) {}
+
+    void GameRenderer::render() const {
         // Render to our framebuffer.
         // Here the viewport specifies the region of the framebuffer texture
         // that we render onto, in pixels. We use the camera size here; if the
@@ -72,9 +74,12 @@ namespace Rival {
                 static_cast<int>(viewport.width),
                 static_cast<int>(viewport.height));
         renderFramebuffer(canvasWidth, canvasHeight);
+
+        // Render the UI to the screen
+        renderUi();
     }
 
-    void GameRenderer::renderGame(int viewportWidth, int viewportHeight) {
+    void GameRenderer::renderGame(int viewportWidth, int viewportHeight) const {
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -83,8 +88,8 @@ namespace Rival {
         // ordering
         glEnable(GL_DEPTH_TEST);
 
-        // Use indexed texture shader
-        glUseProgram(indexedTextureShader.programId);
+        // Use game world shader
+        glUseProgram(gameWorldShader.programId);
 
         // Determine view matrix.
         //
@@ -121,10 +126,10 @@ namespace Rival {
         glm::mat4 viewProjMatrix = projection * view;
 
         // Set uniform values
-        glUniformMatrix4fv(indexedTextureShader.viewProjMatrixUniformLocation,
+        glUniformMatrix4fv(gameWorldShader.viewProjMatrixUniformLocation,
                 1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(indexedTextureShader.texUnitUniformLocation, 0);
-        glUniform1i(indexedTextureShader.paletteTexUnitUniformLocation, 1);
+        glUniform1i(gameWorldShader.texUnitUniformLocation, 0);
+        glUniform1i(gameWorldShader.paletteTexUnitUniformLocation, 1);
 
         // Render Tiles
         tileRenderer.render(
@@ -140,7 +145,7 @@ namespace Rival {
         entityRenderer.render(camera, scenario.getEntities());
     }
 
-    void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) {
+    void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
@@ -160,6 +165,24 @@ namespace Rival {
         // A higher zoom level will result in a smaller sample, which will
         // then be stretched to fill the viewport.
         gameFboRenderer.render(srcWidth, srcHeight);
+    }
+
+    void GameRenderer::renderUi() const {
+
+        // Disable depth testing since we can trivially manage the rendering
+        // order ourselves
+        glDisable(GL_DEPTH_TEST);
+
+        // Use menu shader
+        glUseProgram(menuShader.programId);
+
+        // Set uniform values
+        glUniform1i(menuShader.texUnitUniformLocation, 0);
+        glUniform1i(menuShader.paletteTexUnitUniformLocation, 1);
+
+        // Render the UI directly below the game world, using screen pixels
+        glViewport(0, 0, window.getWidth(), window.getHeight());
+        uiRenderer.renderUi(static_cast<int>(viewport.height));
     }
 
 }  // namespace Rival

@@ -32,7 +32,7 @@ namespace Rival {
         // Initialise position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
-                indexedTextureShader.vertexAttribIndex,
+                gameWorldShader.vertexAttribIndex,
                 numVertexDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -55,7 +55,7 @@ namespace Rival {
                 * indicesPerSprite
                 * sizeof(GLfloat);
         glVertexAttribPointer(
-                indexedTextureShader.texCoordAttribIndex,
+                gameWorldShader.texCoordAttribIndex,
                 numTexCoordDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -97,8 +97,8 @@ namespace Rival {
                 GL_STATIC_DRAW);
 
         // Enable vertex attributes
-        glEnableVertexAttribArray(indexedTextureShader.vertexAttribIndex);
-        glEnableVertexAttribArray(indexedTextureShader.texCoordAttribIndex);
+        glEnableVertexAttribArray(gameWorldShader.vertexAttribIndex);
+        glEnableVertexAttribArray(gameWorldShader.texCoordAttribIndex);
     }
 
     GLuint SpriteRenderable::getVao() const {

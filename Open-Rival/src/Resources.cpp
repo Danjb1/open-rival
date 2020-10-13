@@ -10,6 +10,7 @@ namespace Rival {
 
     Resources::Resources()
         : textures(loadTextures()),
+          textureAtlases(loadTextureAtlases()),
           paletteTexture(initPaletteTexture()),
           unitSpritesheets(initUnitSpritesheets()),
           buildingSpritesheets(initBuildingSpritesheets()),
@@ -112,6 +113,23 @@ namespace Rival {
         return texList;
     }
 
+    std::vector<TextureAtlas> Resources::loadTextureAtlases() {
+
+        std::vector<TextureAtlas> texAtlasList;
+        texAtlasList.reserve(numTextureAtlases);
+
+        std::vector<std::string> resourceNames = {
+            "game_interface"
+        };
+
+        for (auto const& resourceName : resourceNames) {
+            texAtlasList.push_back(TextureAtlas::loadTextureAtlas(
+                    Resources::txDir + resourceName));
+        }
+
+        return texAtlasList;
+    }
+
     Texture Resources::initPaletteTexture() {
         return Palette::createPaletteTexture();
     }
@@ -209,6 +227,10 @@ namespace Rival {
 
     const Texture& Resources::getPalette() const {
         return paletteTexture;
+    }
+
+    const TextureAtlas& Resources::getUiTextureAtlas() const {
+        return textureAtlases.at(0);
     }
 
 }  // namespace Rival

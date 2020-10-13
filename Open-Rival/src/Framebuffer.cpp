@@ -27,6 +27,10 @@ namespace Rival {
         // the camera is zoomed out
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
+        // Set wrapping mode
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
         // Set this as our colour attachement #0
         glFramebufferTexture(
                 GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);

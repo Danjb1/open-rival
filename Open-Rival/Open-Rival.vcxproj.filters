@@ -154,6 +154,15 @@
     <ClCompile Include="src\MouseUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextureAtlas.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UiRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AtlasRenderable.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -296,6 +305,15 @@
     </ClInclude>
     <ClInclude Include="include\MouseUtils.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureAtlas.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UiRenderer.h">
+      <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AtlasRenderable.h">
+      <Filter>Source Files\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ namespace Rival {
 
     void EntityRenderer::render(
             const Camera& camera,
-            const std::map<int, std::unique_ptr<Entity>>& entities) {
+            const std::map<int, std::unique_ptr<Entity>>& entities) const {
         for (auto const& kv : entities) {
             Entity& e = *(kv.second);
             if (isEntityVisible(e, camera)) {
@@ -50,7 +50,7 @@ namespace Rival {
                 || camera.contains(x1, y2);
     }
 
-    void EntityRenderer::renderEntity(Entity& entity) {
+    void EntityRenderer::renderEntity(Entity& entity) const {
 
         // Get this Entity's SpriteComponent
         SpriteComponent* spriteComponent =
