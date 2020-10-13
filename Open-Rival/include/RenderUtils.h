@@ -1,7 +1,11 @@
 #ifndef RENDER_UTILS_H
 #define RENDER_UTILS_H
 
+#include <glm/mat4x4.hpp>
 #include <cmath>
+
+#include "Camera.h"
+#include "Window.h"
 
 namespace Rival {
 namespace RenderUtils {
@@ -23,6 +27,27 @@ namespace RenderUtils {
     // in pixels.
     static const int entityDrawOffsetX = -33;
     static const int entityDrawOffsetY = -89;
+
+    // Size of the camera used for menus.
+    // This defines the notion of "menu co-ordinates".
+    // We set the height based on the original menu image sizes.
+    // The width must be calculated at runtime based on the aspect ratio.
+    static const int menuHeight = 600;
+
+    /**
+     * Height of the in-game UI, in menu co-ordinates.
+     */
+    static const int uiHeight = 144;
+
+    /**
+     * Width of the minimap, in menu co-ordinates.
+     */
+    static const int minimapWidth = 215;
+
+    /**
+     * Width of the main panel of the UI, in menu co-ordinates.
+     */
+    static const int uiMainPanelWidth = 425;
 
     // Offset at which the inventory overlay is drawn,
     // from the position of the main UI panel.
@@ -138,7 +163,24 @@ namespace RenderUtils {
      */
     int getCanvasHeight(float cameraHeight);
 
-}
-}  // namespace Rival::RenderUtils
+    /**
+     * Gets the width of the camera used for menus.
+     */
+    int getMenuWidth(const double aspectRatio);
+
+    /**
+     * Creates a view-projection matrix for rendering to the game world.
+     */
+    glm::mat4 createGameProjection(
+            const Camera& camera,
+            int viewportWidth,
+            int viewportHeight);
+
+    /**
+     * Creates a view-projection matrix for rendering to a menu.
+     */
+    glm::mat4 createMenuProjection(double aspectRatio);
+
+}}  // namespace Rival::RenderUtils
 
 #endif  // RENDER_UTILS_H

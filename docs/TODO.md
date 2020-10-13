@@ -19,11 +19,15 @@
     - We can't enforce this, but it should at least be documented!
 
  - Render the UI
-    - Use (and document) a sensible co-ordinate system (currently normalized device coordinates: -1 to 1)
-    - Leave space for minimap and stats panel!
-    - Currently the UI is too tall and overlaps with the game
+    - Reduce duplication between addMainPanelToBuffers / addStatsPanelToBuffers
     - Extract common code from SpriteRenderable and AtlasRenderable
     - Use string constants to access images within a texture atlas
+        - Image keys should have sensible names (not dependent on their precise
+           byte location since this could differ between locales)
+    - Render minimap outline
+        - Top: img_ui_019F0F70.tga
+        - Bottom: img_ui_019F1100.tga
+        - Left: img_ui_019F1333.tga
     - Render Greenskin UI, dependent on race: img_ui_01A07D3D,tga
     - Render inventory overlay at (30, 71)
          - Human: img_ui_019F3D4E.tga
@@ -80,6 +84,8 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+ - Inconsistent use of }} vs }\n} for namespaces
 
  - runtime_error is *sometimes* initialised with a newline-terminated string
 

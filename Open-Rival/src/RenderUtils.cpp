@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "RenderUtils.h"
 
+#include <glm/vec3.hpp>
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#include <glm/gtc/matrix_transform.hpp>
+#pragma warning(pop)
 #include "Spritesheet.h"
 
 namespace Rival {
@@ -101,5 +106,75 @@ namespace RenderUtils {
         return canvasHeight + (canvasHeight & 1);
     }
 
-}
-}  // namespace Rival::RenderUtils
+    int getMenuWidth(double aspectRatio) {
+        return static_cast<int>(menuHeight * aspectRatio);
+    }
+
+    glm::mat4 createGameProjection(
+            const Camera& camera,
+            int viewportWidth,
+            int viewportHeight) {
+
+        // Determine view matrix.
+        //
+        // OpenGL uses right-handed rule:
+        //  - x points right
+        //  - y points up
+        //  - z points out of the screen
+        //
+        // The camera co-ordinates are in camera units, but our vertices are
+        // positioned using pixels. Therefore we need to convert the camera
+        // co-ordinates to pixels, too.
+        float cameraX = RenderUtils::cameraToPx_X(camera.getX());
+        float cameraY = RenderUtils::cameraToPx_Y(camera.getY());
+        float cameraZ = RenderUtils::zCamera;
+        glm::mat4 view = glm::lookAt(
+                glm::vec3(cameraX, cameraY, cameraZ),  // camera position
+                glm::vec3(cameraX, cameraY, 0),        // look at
+                glm::vec3(0, 1, 0)                     // up vector
+        );
+
+        // Determine projection matrix.
+        // The projection size must match the viewport size *exactly* in order
+        // to achieve pixel-perfect rendering. Any differences here could
+        // result in seams between tiles.
+        float left = -viewportWidth / 2.0f;
+        float top = -viewportHeight / 2.0f;
+        float right = viewportWidth / 2.0f;
+        float bottom = viewportHeight / 2.0f;
+        float near = RenderUtils::nearPlane;
+        float far = RenderUtils::farPlane;
+        glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
+
+        // Combine matrices
+        return projection * view;
+    }
+
+    glm::mat4 createMenuProjection(double aspectRatio) {
+
+        // Determine view matrix
+        // (camera looking at the centre of the menu)
+        int menuWidth = RenderUtils::getMenuWidth(aspectRatio);
+        float cameraX = menuWidth / 2.0f;
+        float cameraY = menuHeight / 2.0f;
+        float cameraZ = RenderUtils::zCamera;
+        glm::mat4 view = glm::lookAt(
+                glm::vec3(cameraX, cameraY, cameraZ),  // camera position
+                glm::vec3(cameraX, cameraY, 0),        // look at
+                glm::vec3(0, 1, 0)                     // up vector
+        );
+
+        // Determine projection matrix
+        float left = -menuWidth / 2.0f;
+        float top = -menuHeight / 2.0f;
+        float right = menuWidth / 2.0f;
+        float bottom = menuHeight / 2.0f;
+        float near = RenderUtils::nearPlane;
+        float far = RenderUtils::farPlane;
+        glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
+
+        // Combine matrices
+        return projection * view;
+    }
+
+}}  // namespace Rival::RenderUtils

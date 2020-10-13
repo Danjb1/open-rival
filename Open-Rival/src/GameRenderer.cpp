@@ -48,9 +48,9 @@ namespace Rival {
 
           entityRenderer(res.getPalette()),
 
-          uiRenderer(res) {}
+          uiRenderer(res, window) {}
 
-    void GameRenderer::render() const {
+    void GameRenderer::render() {
         // Render to our framebuffer.
         // Here the viewport specifies the region of the framebuffer texture
         // that we render onto, in pixels. We use the camera size here; if the
@@ -88,48 +88,18 @@ namespace Rival {
         // ordering
         glEnable(GL_DEPTH_TEST);
 
-        // Use game world shader
-        glUseProgram(Shaders::gameWorldShader.programId);
+        // Use indexed texture shader
+        glUseProgram(Shaders::indexedTextureShader.programId);
 
-        // Determine view matrix.
-        //
-        // OpenGL uses right-handed rule:
-        //  - x points right
-        //  - y points up
-        //  - z points out of the screen
-        //
-        // The camera co-ordinates are in camera units, but our vertices are
-        // positioned using pixels. Therefore we need to convert the camera
-        // co-ordinates to pixels, too.
-        float cameraX = RenderUtils::cameraToPx_X(camera.getX());
-        float cameraY = RenderUtils::cameraToPx_Y(camera.getY());
-        float cameraZ = RenderUtils::zCamera;
-        glm::mat4 view = glm::lookAt(
-                glm::vec3(cameraX, cameraY, cameraZ),  // camera position
-                glm::vec3(cameraX, cameraY, 0),        // look at
-                glm::vec3(0, 1, 0)                     // up vector
-        );
-
-        // Determine projection matrix.
-        // The projection size must match the viewport size *exactly* in order
-        // to achieve pixel-perfect rendering. Any differences here could
-        // result in seams between tiles.
-        float left = -viewportWidth / 2.0f;
-        float top = -viewportHeight / 2.0f;
-        float right = viewportWidth / 2.0f;
-        float bottom = viewportHeight / 2.0f;
-        float near = RenderUtils::nearPlane;
-        float far = RenderUtils::farPlane;
-        glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
-
-        // Combine matrices
-        glm::mat4 viewProjMatrix = projection * view;
+        // Project to game world
+        glm::mat4 viewProjMatrix = RenderUtils::createGameProjection(
+                camera, viewportWidth, viewportHeight);
 
         // Set uniform values
-        glUniformMatrix4fv(Shaders::gameWorldShader.viewProjMatrixUniformLoc,
+        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc,
                 1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(Shaders::gameWorldShader.texUnitUniformLoc, 0);
-        glUniform1i(Shaders::gameWorldShader.paletteTexUnitUniformLoc, 1);
+        glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
+        glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 
         // Render Tiles
         tileRenderer.render(
@@ -167,22 +137,28 @@ namespace Rival {
         gameFboRenderer.render(srcWidth, srcHeight);
     }
 
-    void GameRenderer::renderUi() const {
+    void GameRenderer::renderUi() {
 
         // Disable depth testing since we can trivially manage the rendering
         // order ourselves
         glDisable(GL_DEPTH_TEST);
 
-        // Use menu shader
-        glUseProgram(Shaders::menuShader.programId);
+        // Use indexed texture shader
+        glUseProgram(Shaders::indexedTextureShader.programId);
+
+        // Project to menu
+        glm::mat4 viewProjMatrix =
+                RenderUtils::createMenuProjection(window.getAspectRatio());
 
         // Set uniform values
-        glUniform1i(Shaders::menuShader.texUnitUniformLoc, 0);
-        glUniform1i(Shaders::menuShader.paletteTexUnitUniformLoc, 1);
+        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc,
+                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
+        glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 
-        // Render the UI directly below the game world, using screen pixels
+        // Render the UI to the screen
         glViewport(0, 0, window.getWidth(), window.getHeight());
-        uiRenderer.renderUi(static_cast<int>(viewport.height));
+        uiRenderer.renderUi();
     }
 
 }  // namespace Rival
