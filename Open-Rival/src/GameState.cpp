@@ -17,8 +17,8 @@ namespace Rival {
         : State(app),
           scenario(std::move(scenarioToMove)),
           viewport(Rect(0, 0,
-                  static_cast<float>(window.getWidth()),
-                  static_cast<float>(window.getHeight() - 100))),
+                  window.getWidth(),
+                  window.getHeight() - getUiHeight())),
           camera(0.0f, 0.0f,
                   RenderUtils::pxToCamera_X(
                           static_cast<float>(window.getWidth())),
@@ -26,6 +26,11 @@ namespace Rival {
                   *scenario),
           mousePicker(camera, viewport, *scenario),
           gameRenderer(window, *scenario, camera, viewport, res) {}
+
+    int GameState::getUiHeight() const {
+        const TextureAtlas& uiTexAtlas = res.getUiTextureAtlas();
+        return uiTexAtlas.getImageHeight("img_ui_019E79C3.tga");
+    }
 
     void GameState::update() {
 

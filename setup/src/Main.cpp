@@ -17,11 +17,92 @@
 
 namespace fs = std::filesystem;
 
+// Configuration
+bool shouldCreateOutputDirectories = true;
+bool shouldExtractSounds = true;
+bool shouldExtractImages = true;
+bool shouldExtractInterface = true;
+bool shouldBuildTextures = true;
+bool shouldCopyVideos = true;
+
+void createOutputDirectories() {
+    std::wcout << "Creating output directories\n";
+    std::vector<std::string> directories = {
+        "setup\\images",
+        "setup\\images\\game",
+        "setup\\images\\ui",
+        "res\\sound",
+        "res\\textures",
+        "res\\video",
+    };
+    for (auto const& dir : directories) {
+        if (!createDirectory(dir.c_str())) {
+            std::cerr << "Could not create directory: " << dir << "\n";
+            throw new std::runtime_error("Failed to create output directories");
+        }
+    }
+}
+
+void extractSounds(std::wstring gameDir) {
+    try {
+        std::wcout << "Extracting audio\n";
+        AudioExtractor::extractAudio(gameDir + L"\\DATA\\SOUNDS.DAT", "res\\sound");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to extract sounds: " << e.what() << "\n";
+        throw new std::runtime_error("Failed to extract sounds");
+    }
+}
+
+void extractImages(std::wstring gameDir) {
+    try {
+        std::wcout << "Extracting images\n";
+        ImageExtractor::extractImages(gameDir + L"\\DATA\\IMAGES.DAT", "setup\\images\\game");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to extract images: " << e.what() << "\n";
+        throw new std::runtime_error("Failed to extract images");
+    }
+}
+
+void extractInterface(std::wstring gameDir) {
+    try {
+        std::wcout << "Extracting UI images\n";
+        InterfaceExtractor::extractUiImages(gameDir + L"\\DATA\\Interfac.DAT", "setup\\images\\ui");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to extract UI images: " << e.what() << "\n";
+        throw new std::runtime_error("Failed to extract interface");
+    }
+}
+
+void buildTextures() {
+    try {
+        std::wcout << "Building textures\n";
+
+        // Game
+        TextureBuilder::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
+
+        // UI
+        TextureBuilder::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
+
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to build textures: " << e.what() << "\n";
+        throw new std::runtime_error("Failed to build textures");
+    }
+}
+
 void copyVideos(std::wstring videoDir, std::string outputDir) {
     for (const fs::directory_entry& entry : fs::directory_iterator(videoDir)) {
         const fs::path path = entry.path();
         std::filesystem::copy(path, outputDir + "\\" + path.filename().string(),
                 std::filesystem::copy_options::update_existing);
+    }
+}
+
+void copyVideos(std::wstring gameDir) {
+    try {
+        copyVideos(gameDir + L"\\MOVIES", "res\\video");
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Failed to copy videos: " << e.what() << "\n";
+        throw new std::runtime_error("Failed to copy videos");
     }
 }
 
@@ -69,69 +150,32 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the output directories
-    std::wcout << "Creating output directories\n";
-    std::vector<std::string> directories = {
-        "setup\\images",
-        "setup\\images\\game",
-        "setup\\images\\ui",
-        "res\\sound",
-        "res\\textures",
-        "res\\video",
-    };
-    for (auto const& dir : directories) {
-        if (!createDirectory(dir.c_str())) {
-            std::cerr << "Could not create directory: " << dir << "\n";
-            return -1;
-        }
+    if (shouldCreateOutputDirectories) {
+        createOutputDirectories();
     }
 
     // Extract sounds
-    try {
-        std::wcout << "Extracting audio\n";
-        AudioExtractor::extractAudio(gameDir + L"\\DATA\\SOUNDS.DAT", "res\\sound");
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to extract sounds: " << e.what() << "\n";
-        return -1;
+    if (shouldExtractSounds) {
+        extractSounds(gameDir);
     }
 
     // Extract images (game)
-    try {
-        std::wcout << "Extracting images\n";
-        ImageExtractor::extractImages(gameDir + L"\\DATA\\IMAGES.DAT", "setup\\images\\game");
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to extract images: " << e.what() << "\n";
-        return -1;
+    if (shouldExtractImages) {
+        extractImages(gameDir);
     }
 
     // Extract images (ui)
-    try {
-        std::wcout << "Extracting UI images\n";
-        InterfaceExtractor::extractUiImages(gameDir + L"\\DATA\\Interfac.DAT", "setup\\images\\ui");
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to extract UI images: " << e.what() << "\n";
-        return -1;
+    if (shouldExtractInterface) {
+        extractInterface(gameDir);
     }
 
     // Build textures
-    try {
-        std::wcout << "Building textures\n";
-
-        // Game
-        TextureBuilder::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
-
-        // UI
-        TextureBuilder::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
-
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to build textures: " << e.what() << "\n";
-        return -1;
+    if (shouldBuildTextures) {
+        buildTextures();
     }
 
     // Copy videos
-    try {
-        copyVideos(gameDir + L"\\MOVIES", "res\\video");
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Failed to copy videos: " << e.what() << "\n";
-        return -1;
+    if (shouldCopyVideos) {
+        copyVideos(gameDir);
     }
 }

@@ -3,6 +3,12 @@
 
 namespace Rival {
 
+    Rect::Rect(int x, int y, int width, int height)
+        : x(static_cast<float>(x)),
+          y(static_cast<float>(y)),
+          width(static_cast<float>(width)),
+          height(static_cast<float>(height)) {}
+
     Rect::Rect(float x, float y, float width, float height)
         : x(x),
           y(y),

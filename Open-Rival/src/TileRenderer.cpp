@@ -32,7 +32,7 @@ namespace Rival {
             const Camera& camera,
             const std::vector<Tile>& tiles,
             int mapWidth,
-            int mapHeight) {
+            int mapHeight) const {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0

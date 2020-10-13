@@ -9,6 +9,7 @@
 #include "Palette.h"
 #include "Spritesheet.h"
 #include "Texture.h"
+#include "TextureAtlas.h"
 #include "Unit.h"
 
 namespace Rival {
@@ -35,14 +36,18 @@ namespace Rival {
         const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
         const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const;
         const Spritesheet& getMapBorderSpritesheet() const;
+        const TextureAtlas& getUiTextureAtlas() const;
 
     private:
         // Texture constants
-        static const int numTextures = 96;
+        static const int numTextures = 58;
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
         static const int txIndexCursors = 54;
         static const int txIndexBuildings = 55;
+
+        // Texture atlas constants
+        static const int numTextureAtlases = 1;
 
         // Loaded textures
         const std::vector<Texture> textures;
@@ -54,8 +59,12 @@ namespace Rival {
         const std::map<int, Spritesheet> tileSpritesheets;
         const Spritesheet mapBorderSpritesheet;
 
+        // Texture Atlases
+        const std::vector<TextureAtlas> textureAtlases;
+
         // Initialisation
         std::vector<Texture> loadTextures();
+        std::vector<TextureAtlas> Resources::loadTextureAtlases();
         Texture initPaletteTexture();
         std::map<Building::Type, Spritesheet> initBuildingSpritesheets();
         std::map<Unit::Type, Spritesheet> initUnitSpritesheets();

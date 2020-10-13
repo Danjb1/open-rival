@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "SpriteRenderable.h"
+#include "AtlasRenderable.h"
 
 #include "Shaders.h"
 
 namespace Rival {
 
-    SpriteRenderable::SpriteRenderable(
-            const Spritesheet& spritesheet,
+    AtlasRenderable::AtlasRenderable(
+            const TextureAtlas& texAtlas,
             int maxSprites)
-        : spritesheet(spritesheet) {
+        : texAtlas(texAtlas) {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -32,7 +32,7 @@ namespace Rival {
         // Initialise position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
-                gameWorldShader.vertexAttribIndex,
+                menuShader.vertexAttribIndex,
                 numVertexDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -55,7 +55,7 @@ namespace Rival {
                 * indicesPerSprite
                 * sizeof(GLfloat);
         glVertexAttribPointer(
-                gameWorldShader.texCoordAttribIndex,
+                menuShader.texCoordAttribIndex,
                 numTexCoordDimensions,
                 GL_FLOAT,
                 GL_FALSE,
@@ -97,35 +97,35 @@ namespace Rival {
                 GL_STATIC_DRAW);
 
         // Enable vertex attributes
-        glEnableVertexAttribArray(gameWorldShader.vertexAttribIndex);
-        glEnableVertexAttribArray(gameWorldShader.texCoordAttribIndex);
+        glEnableVertexAttribArray(menuShader.vertexAttribIndex);
+        glEnableVertexAttribArray(menuShader.texCoordAttribIndex);
     }
 
-    GLuint SpriteRenderable::getVao() const {
+    GLuint AtlasRenderable::getVao() const {
         return vao;
     }
 
-    GLuint SpriteRenderable::getPositionVbo() const {
+    GLuint AtlasRenderable::getPositionVbo() const {
         return positionVbo;
     }
 
-    GLuint SpriteRenderable::getTexCoordVbo() const {
+    GLuint AtlasRenderable::getTexCoordVbo() const {
         return texCoordVbo;
     }
 
-    GLuint SpriteRenderable::getIbo() const {
+    GLuint AtlasRenderable::getIbo() const {
         return ibo;
     }
 
-    GLuint SpriteRenderable::getTextureId() const {
-        return spritesheet.texture.getId();
+    GLuint AtlasRenderable::getTextureId() const {
+        return texAtlas.texture.getId();
     }
 
-    GLenum SpriteRenderable::getDrawMode() const {
+    GLenum AtlasRenderable::getDrawMode() const {
         return drawMode;
     }
 
-    int SpriteRenderable::getIndicesPerSprite() const {
+    int AtlasRenderable::getIndicesPerSprite() const {
         return indicesPerSprite;
     }
 

@@ -8,36 +8,36 @@
 namespace Rival {
 
     ///////////////////////////////////////////////////////////////////////////
-    // IndexedTextureShader
+    // GameWorldShader
     ///////////////////////////////////////////////////////////////////////////
 
-    IndexedTextureShader indexedTextureShader;
+    GameWorldShader gameWorldShader;
 
-    void IndexedTextureShader::init() {
+    void GameWorldShader::init() {
 
         GLuint programId = createShader(
-                "res\\shaders\\indexedTexture.vert",
-                "res\\shaders\\indexedTexture.frag");
+                "res\\shaders\\gameWorld.vert",
+                "res\\shaders\\gameWorld.frag");
 
-        indexedTextureShader = IndexedTextureShader();
-        indexedTextureShader.programId = programId;
-        indexedTextureShader.viewProjMatrixUniformLocation =
+        gameWorldShader = GameWorldShader();
+        gameWorldShader.programId = programId;
+        gameWorldShader.viewProjMatrixUniformLocation =
                 glGetUniformLocation(programId, "view_proj_matrix");
-        indexedTextureShader.vertexAttribLocation =
+        gameWorldShader.vertexAttribLocation =
                 glGetAttribLocation(programId, "in_vertex");
-        indexedTextureShader.texCoordAttribLocation =
+        gameWorldShader.texCoordAttribLocation =
                 glGetAttribLocation(programId, "in_tex_coord");
-        indexedTextureShader.texUnitUniformLocation =
+        gameWorldShader.texUnitUniformLocation =
                 glGetUniformLocation(programId, "tex");
-        indexedTextureShader.paletteTexUnitUniformLocation =
+        gameWorldShader.paletteTexUnitUniformLocation =
                 glGetUniformLocation(programId, "palette");
 
-        if (!indexedTextureShader.isValid()) {
-            throw std::runtime_error("Failed to create IndexedTextureShader");
+        if (!gameWorldShader.isValid()) {
+            throw std::runtime_error("Failed to create GameWorldShader");
         }
     }
 
-    bool IndexedTextureShader::isValid() const {
+    bool GameWorldShader::isValid() const {
 
         if (programId == 0) {
             printf("Could not generate program ID\n");
@@ -119,12 +119,71 @@ namespace Rival {
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    // MenuShader
+    ///////////////////////////////////////////////////////////////////////////
+
+    MenuShader menuShader;
+
+    void MenuShader::init() {
+
+        GLuint programId = createShader(
+                "res\\shaders\\menu.vert",
+                "res\\shaders\\menu.frag");
+
+        menuShader = MenuShader();
+        menuShader.programId = programId;
+        menuShader.vertexAttribLocation =
+                glGetAttribLocation(programId, "in_vertex");
+        menuShader.texCoordAttribLocation =
+                glGetAttribLocation(programId, "in_tex_coord");
+        menuShader.texUnitUniformLocation =
+                glGetUniformLocation(programId, "tex");
+        menuShader.paletteTexUnitUniformLocation =
+                glGetUniformLocation(programId, "palette");
+
+        if (!menuShader.isValid()) {
+            throw std::runtime_error("Failed to create MenuShader");
+        }
+    }
+
+    bool MenuShader::isValid() const {
+
+        if (programId == 0) {
+            printf("Could not generate program ID\n");
+            return false;
+        }
+
+        if (vertexAttribLocation == -1) {
+            printf("Could not locate vertex attribute\n");
+            return false;
+        }
+
+        if (texCoordAttribLocation == -1) {
+            printf("Could not locate tex co-ord attribute\n");
+            return false;
+        }
+
+        if (texUnitUniformLocation == -1) {
+            printf("Could not locate tex unit uniform\n");
+            return false;
+        }
+
+        if (paletteTexUnitUniformLocation == -1) {
+            printf("Could not locate palette tex unit uniform\n");
+            return false;
+        }
+
+        return true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     // Generic methods
     ///////////////////////////////////////////////////////////////////////////
 
     void initialiseShaders() {
-        IndexedTextureShader::init();
+        GameWorldShader::init();
         ScreenShader::init();
+        MenuShader::init();
     }
 
     GLuint createShader(const char* vertShader, const char* fragShader) {

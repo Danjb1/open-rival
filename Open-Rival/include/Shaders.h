@@ -6,12 +6,12 @@
 namespace Rival {
 
     ///////////////////////////////////////////////////////////////////////////
-    // IndexedTextureShader:
-    // Renders a texture using a model-view matrix and an accompanying palette
-    // texture for colour lookups.
+    // GameWorldShader:
+    // Renders a texture using a view-projection matrix and an accompanying
+    // palette texture for colour lookups.
     ///////////////////////////////////////////////////////////////////////////
 
-    class IndexedTextureShader {
+    class GameWorldShader {
     public:
         GLuint programId;
 
@@ -35,7 +35,7 @@ namespace Rival {
         bool isValid() const;
     };
 
-    extern IndexedTextureShader indexedTextureShader;
+    extern GameWorldShader gameWorldShader;
 
     ///////////////////////////////////////////////////////////////////////////
     // ScreenShader:
@@ -63,6 +63,35 @@ namespace Rival {
     };
 
     extern ScreenShader screenShader;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // MenuShader:
+    // Renders a texture in normalized device coordinates using an accompanying
+    // palette texture for colour lookups.
+    ///////////////////////////////////////////////////////////////////////////
+
+    class MenuShader {
+    public:
+        GLuint programId;
+
+        // Vertex shader attribute indices
+        GLint vertexAttribIndex = 0;
+        GLint texCoordAttribIndex = 1;
+
+        // Vertex shader attribute locations
+        GLint vertexAttribLocation;
+        GLint texCoordAttribLocation;
+
+        // Fragment shader uniform locations
+        GLint texUnitUniformLocation;
+        GLint paletteTexUnitUniformLocation;
+
+        static void init();
+
+        bool isValid() const;
+    };
+
+    extern MenuShader menuShader;
 
     ///////////////////////////////////////////////////////////////////////////
     // Generic methods
