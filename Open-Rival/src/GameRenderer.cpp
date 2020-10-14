@@ -48,7 +48,8 @@ namespace Rival {
 
           entityRenderer(res.getPalette()),
 
-          uiRenderer(res, window) {}
+          // Hardcode the race for now
+          uiRenderer(Race::Human, res) {}
 
     void GameRenderer::render() {
         // Render to our framebuffer.

@@ -34,26 +34,6 @@ namespace RenderUtils {
     // The width must be calculated at runtime based on the aspect ratio.
     static const int menuHeight = 600;
 
-    /**
-     * Height of the in-game UI, in menu co-ordinates.
-     */
-    static const int uiHeight = 144;
-
-    /**
-     * Width of the minimap, in menu co-ordinates.
-     */
-    static const int minimapWidth = 215;
-
-    /**
-     * Width of the main panel of the UI, in menu co-ordinates.
-     */
-    static const int uiMainPanelWidth = 425;
-
-    // Offset at which the inventory overlay is drawn,
-    // from the position of the main UI panel.
-    static const int inventoryOverlayDrawOffsetX = 30;
-    static const int inventoryOverlayDrawOffsetY = 71;
-
     // Render limits.
     // These define the maximum number of tiles that can ever be rendered
     // at one time, and, by extension, the limits of our camera.
