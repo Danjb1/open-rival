@@ -48,7 +48,7 @@ void initGLEW() {
 void initGL() {
 
     // Set clear color
-    glClearColor(0.5f, 0.5f, 1.f, 1.f);
+    glClearColor(0.f, 0.f, 0.f, 1.f);
 
     // Enable back-face culling
     glEnable(GL_CULL_FACE);

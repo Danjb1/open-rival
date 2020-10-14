@@ -7,10 +7,28 @@
 
 namespace Rival {
 
-    UiRenderer::UiRenderer(const Resources& res, const Window& window)
+    UiRenderer::UiRenderer(const Race& race, const Resources& res)
         : res(res),
-          window(window),
-          mainUiRenderable(res.getUiTextureAtlas(), maxUiImages) {}
+          numUiImages(0),
+          mainUiRenderable(res.getUiTextureAtlas(), maxUiImages),
+          minimapLeftBorder(GameInterface::minimapLeftBorder,
+                  res.getUiTextureAtlas(),
+                  "img_ui_019F1333.tga"),
+          minimapTopBorder(GameInterface::minimapTopBorder,
+                  res.getUiTextureAtlas(),
+                  "img_ui_019F0F70.tga"),
+          minimapBottomBorder(GameInterface::minimapBottomBorder,
+                  res.getUiTextureAtlas(),
+                  "img_ui_019F1100.tga"),
+          mainPanel(GameInterface::mainPanel,
+                  res.getUiTextureAtlas(),
+                  race == Race::Greenskin ? "img_ui_01A07D3D.tga" : "img_ui_019E79C3.tga"),
+          inventoryOverlay(GameInterface::inventoryOverlay,
+                  res.getUiTextureAtlas(),
+                  race == Race::Greenskin ? "img_ui_01A15E63.tga" : "img_ui_019F3D4E.tga"),
+          statsPanel(GameInterface::statsPanel,
+                  res.getUiTextureAtlas(),
+                  race == Race::Greenskin ? "img_ui_01A1FF08.tga" : "img_ui_019FD2F7.tga") {}
 
     void UiRenderer::renderUi() {
 
@@ -43,8 +61,9 @@ namespace Rival {
 
     void UiRenderer::sendDataToGpu() {
 
-        // For now, we always draw the same number of images
-        numUiImages = maxUiImages;
+        // Determine the number of images to render
+        bool inventoryVisible = isInventoryVisible();
+        numUiImages = inventoryVisible ? maxUiImages - 1 : maxUiImages;
 
         // Create buffers to hold all our vertex data
         int numVertices = numUiImages * AtlasRenderable::numVerticesPerSprite;
@@ -56,8 +75,15 @@ namespace Rival {
         texCoords.reserve(texCoordDataSize);
 
         // Add data to our buffers
-        addMainPanelToBuffers(positions, texCoords);
-        addStatsPanelToBuffers(positions, texCoords);
+        minimapLeftBorder.addToBuffers(positions, texCoords);
+        minimapTopBorder.addToBuffers(positions, texCoords);
+        minimapBottomBorder.addToBuffers(positions, texCoords);
+        mainPanel.addToBuffers(positions, texCoords);
+        if (!inventoryVisible) {
+            // When rendered, this hides the inventory
+            inventoryOverlay.addToBuffers(positions, texCoords);
+        }
+        statsPanel.addToBuffers(positions, texCoords);
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getPositionVbo());
@@ -80,71 +106,9 @@ namespace Rival {
                 texCoords.data());
     }
 
-    void UiRenderer::addMainPanelToBuffers(
-            std::vector<GLfloat>& positions,
-            std::vector<GLfloat>& texCoords) const {
-
-        // Define vertex positions
-        float x1 = RenderUtils::minimapWidth;
-        float y1 = RenderUtils::menuHeight - RenderUtils::uiHeight;
-        float x2 = x1 + RenderUtils::uiMainPanelWidth;
-        float y2 = RenderUtils::menuHeight;
-        float z = 0;
-        std::vector<GLfloat> thisVertexData = {
-            x1, y1, z,
-            x2, y1, z,
-            x2, y2, z,
-            x1, y2, z
-        };
-
-        // Determine texture co-ordinates
-        const TextureAtlas& uiTexAtlas = res.getUiTextureAtlas();
-        std::vector<GLfloat> thisTexCoords =
-                uiTexAtlas.getTexCoords("img_ui_019E79C3.tga");
-
-        // Copy this data into the main buffers
-        positions.insert(
-                positions.end(),
-                thisVertexData.begin(),
-                thisVertexData.end());
-        texCoords.insert(
-                texCoords.end(),
-                thisTexCoords.begin(),
-                thisTexCoords.end());
-    }
-
-    void UiRenderer::addStatsPanelToBuffers(
-            std::vector<GLfloat>& positions,
-            std::vector<GLfloat>& texCoords) const {
-
-        // Define vertex positions
-        float x1 = RenderUtils::minimapWidth + RenderUtils::uiMainPanelWidth;
-        float y1 = RenderUtils::menuHeight - RenderUtils::uiHeight;
-        float x2 = static_cast<float>(
-                RenderUtils::getMenuWidth(window.getAspectRatio()));
-        float y2 = RenderUtils::menuHeight;
-        float z = 0;
-        std::vector<GLfloat> thisVertexData = {
-            x1, y1, z,
-            x2, y1, z,
-            x2, y2, z,
-            x1, y2, z
-        };
-
-        // Determine texture co-ordinates
-        const TextureAtlas& uiTexAtlas = res.getUiTextureAtlas();
-        std::vector<GLfloat> thisTexCoords =
-                uiTexAtlas.getTexCoords("img_ui_019FD2F7.tga");
-
-        // Copy this data into the main buffers
-        positions.insert(
-                positions.end(),
-                thisVertexData.begin(),
-                thisVertexData.end());
-        texCoords.insert(
-                texCoords.end(),
-                thisTexCoords.begin(),
-                thisTexCoords.end());
+    bool UiRenderer::isInventoryVisible() const {
+        // TODO
+        return false;
     }
 
 }  // namespace Rival

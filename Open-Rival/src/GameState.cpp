@@ -4,6 +4,7 @@
 #include <map>
 #include <stdexcept>
 
+#include "GameInterface.h"
 #include "Image.h"
 #include "MouseUtils.h"
 #include "Palette.h"
@@ -18,7 +19,7 @@ namespace Rival {
           scenario(std::move(scenarioToMove)),
           viewport(Rect(0, 0,
                   window.getWidth(),
-                  window.getHeight() - RenderUtils::uiHeight)),
+                  window.getHeight() - GameInterface::uiHeight)),
           camera(0.0f, 0.0f,
                   RenderUtils::pxToCamera_X(
                           static_cast<float>(window.getWidth())),

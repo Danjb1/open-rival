@@ -30,6 +30,7 @@
     <ClCompile Include="src\FacingComponent.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
+    <ClCompile Include="src\GameInterface.cpp" />
     <ClCompile Include="src\GameRenderer.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="include\FacingComponent.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
+    <ClInclude Include="include\GameInterface.h" />
     <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />

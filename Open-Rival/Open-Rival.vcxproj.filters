@@ -20,6 +20,9 @@
     <Filter Include="Source Files\components">
       <UniqueIdentifier>{928ac342-04b2-49c7-945a-d50446949246}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{82c7592d-af44-4683-9e6e-c2da92a73f1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
@@ -162,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="src\AtlasRenderable.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameInterface.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="include\AtlasRenderable.h">
       <Filter>Source Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameInterface.h">
+      <Filter>Source Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

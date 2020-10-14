@@ -19,20 +19,11 @@
     - We can't enforce this, but it should at least be documented!
 
  - Render the UI
-    - Reduce duplication between addMainPanelToBuffers / addStatsPanelToBuffers
+    - Render resource icons
     - Extract common code from SpriteRenderable and AtlasRenderable
     - Use string constants to access images within a texture atlas
         - Image keys should have sensible names (not dependent on their precise
            byte location since this could differ between locales)
-    - Render minimap outline
-        - Top: img_ui_019F0F70.tga
-        - Bottom: img_ui_019F1100.tga
-        - Left: img_ui_019F1333.tga
-    - Render Greenskin UI, dependent on race: img_ui_01A07D3D,tga
-    - Render inventory overlay at (30, 71)
-         - Human: img_ui_019F3D4E.tga
-         - Greenskin: img_ui_01A15E63.tga
-         - Ideally, pack UI images into a single Renderable?
 
  - Palette
     - Separate team colours into their own arrays
