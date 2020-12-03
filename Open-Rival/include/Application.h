@@ -38,7 +38,7 @@ namespace Rival {
          */
         static const int minSleepTime = 2;
 
-        bool exiting;
+        bool exiting { false };
         Window& window;
         Resources res;
         std::unique_ptr<State> state;
