@@ -242,27 +242,27 @@ namespace Rival {
     };
 
     struct ScenarioData {
-        ScenarioHeader hdr;
-        std::array<PlayerProperties, numPlayers> playerProperties;
-        std::array<TroopDefaults, numTroops> troopDefaults;
-        std::array<TroopDefaults, numMonsters> monsterDefaults;
-        std::array<UpgradeProperties, numUpgrades> upgradeProperties;
-        std::array<ProductionCost, numProductionCosts> productionCosts;
-        std::array<WeaponDefaults, numWeapons> weaponDefaults;
-        AvailableBuildings availableBuildings;
-        HireTroopsRestrictions hireTroopsRestrictions;
-        std::array<AiStrategy, numAiStrategies> aiStrategies;
-        std::vector<TilePlacement> tiles;
-        std::vector<ObjectPlacement> objects;
-        std::vector<BuildingPlacement> buildings;
-        std::vector<UnitPlacement> units;
-        std::vector<ChestPlacement> chests;
-        std::vector<InfoPointPlacement> infoPoints;
-        std::vector<TrapPlacement> traps;
-        std::vector<GoalLocation> goalLocations;
-        std::vector<Goal> goals;
-        CampaignText campaignText;
-        std::uint8_t checksum;
+        ScenarioHeader hdr {};
+        std::array<PlayerProperties, numPlayers> playerProperties {};
+        std::array<TroopDefaults, numTroops> troopDefaults {};
+        std::array<TroopDefaults, numMonsters> monsterDefaults {};
+        std::array<UpgradeProperties, numUpgrades> upgradeProperties {};
+        std::array<ProductionCost, numProductionCosts> productionCosts {};
+        std::array<WeaponDefaults, numWeapons> weaponDefaults {};
+        AvailableBuildings availableBuildings {};
+        HireTroopsRestrictions hireTroopsRestrictions {};
+        std::array<AiStrategy, numAiStrategies> aiStrategies {};
+        std::vector<TilePlacement> tiles {};
+        std::vector<ObjectPlacement> objects {};
+        std::vector<BuildingPlacement> buildings {};
+        std::vector<UnitPlacement> units {};
+        std::vector<ChestPlacement> chests {};
+        std::vector<InfoPointPlacement> infoPoints {};
+        std::vector<TrapPlacement> traps {};
+        std::vector<GoalLocation> goalLocations {};
+        std::vector<Goal> goals {};
+        CampaignText campaignText {};
+        std::uint8_t checksum {};
 
         ScenarioData() {
             // Initialise AI strategies

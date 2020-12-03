@@ -4,9 +4,6 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
- - Pass Resources to Application constructor
-    - Use fake Resources in tests
-
  - Central unit type registry: animations, UI image, etc.
 
  - Animation support
@@ -168,7 +165,7 @@ character filename (including path)
  - Play sounds when selecting units
  - Play sounds when instructing units to move
  - Add support for WMA music
- - Add support for MIDI music
+ - Add support for MIDI music (RtMidi17 / CxxMidi)
 
 ### Menus
 
@@ -212,7 +209,6 @@ character filename (including path)
 ## Project
 <!----------------------------------------------------------------------------->
 
- - Remove assets from git history
  - Build for Linux
  - Add script to build from command line
  - Add script to run tests from command line
