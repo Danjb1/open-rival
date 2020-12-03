@@ -4,7 +4,7 @@
 
 ![Title](http://danjb.com/images/rival_realms/title.jpg)
 
-With some difficulty, the [original game](https://www.old-games.com/download/5514/rival-realms) can still be run on Windows 10, however it is buggy and unstable. A remake could fix these issues, add support for higher resolutions, and [much more](https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md#future-enhancements).
+With some difficulty, the [original game](https://www.old-games.com/download/5514/rival-realms) can still be run on Windows 10, however it is buggy and unstable. A remake could fix these issues, add support for higher resolutions, and [much more](https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md#quality-of-life-improvements).
 
 ## Projects
 
@@ -47,6 +47,8 @@ To get started with development, see [this guide](docs/development_quickstart.md
 ## Legal Stuff
 
 I have tried to track down the copyright holders, even the original developers, without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
+
+That said, I have gone to great lengths to keep any proprietary game assets out of this repo. Everything contained herein is entirely fan-made, and all assets are extracted from the original game at installation. The only exception to this is the WMA soundtrack, which cannot be extracted from the game directory.
 
 ## Links
 
