@@ -7,6 +7,8 @@
  - Pass Resources to Application constructor
     - Use fake Resources in tests
 
+ - Central unit type registry: animations, UI image, etc.
+
  - Animation support
     - Check all Animation data; some values are incorrect
     - Flying units should animate on the spot
