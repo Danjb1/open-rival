@@ -24,6 +24,8 @@ Specifically, it looks for the value `Game Directory` under the key:
 
     HKEY_CURRENT_USER\Software\Titus Games\Rival Realms
 
+> A suitable registry file is included with [this download](https://www.old-games.com/download/5514/rival-realms) of the original game, or can be easily created.
+
 Alternatively, a directory can be specified using the `-d` argument, for example:
 
     setup.exe -d "C:\Rival Realms"

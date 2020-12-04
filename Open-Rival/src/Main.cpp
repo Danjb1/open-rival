@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "Application.h"
+#include "AudioUtils.h"
 #include "GameState.h"
 #include "Scenario.h"
 #include "ScenarioBuilder.h"
@@ -16,7 +17,6 @@
 #include "Window.h"
 
 void initSDL() {
-
     // This must be called before SDL_Init since we're not using SDL_main
     // as an entry point
     SDL_SetMainReady();
@@ -34,7 +34,6 @@ void initSDL() {
 }
 
 void initGLEW() {
-
     glewExperimental = GL_TRUE;
     GLenum glewError = glewInit();
 
@@ -46,7 +45,6 @@ void initGLEW() {
 }
 
 void initGL() {
-
     // Set clear color
     glClearColor(0.f, 0.f, 0.f, 1.f);
 
@@ -66,22 +64,31 @@ void initGL() {
     Rival::Shaders::initialiseShaders();
 }
 
+void initAL() {
+    Rival::AudioUtils::initAL();
+}
+
+void exit() {
+    Rival::AudioUtils::destroyAL();
+    SDL_Quit();
+}
+
 /**
  * Entry point for the application.
  */
 int main() {
-
     int exitCode = 0;
 
     try {
 
-        // Initialize SDL
+        // Initialization that does not require an OpenGL context
         initSDL();
+        initAL();
 
         // Create our Window
         Rival::Window window(800, 600, "Rival Realms");
 
-        // Initialize OpenGL
+        // Initialization that requires an OpenGL context
         initGLEW();
         initGL();
 
@@ -107,7 +114,7 @@ int main() {
         exitCode = 1;
     }
 
-    SDL_Quit();
+    exit();
 
     return exitCode;
 }
