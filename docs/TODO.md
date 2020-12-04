@@ -4,6 +4,15 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
+ - Sound
+    - Load WAV files
+    - Add support for playing WAV files
+    - Set audio / listener position
+
+ - Music
+    - Load OGG files
+    - Add support for playing OGG files
+
  - Central unit type registry: animations, UI image, etc.
 
  - Animation support
@@ -183,6 +192,7 @@ character filename (including path)
 
  - [x] 60 FPS
  - [x] Camera zooming
+ - [ ] Positional audio
  - [ ] UI scaling
  - [ ] Improved camera navigation
  - [ ] Easy military drag-select
@@ -200,7 +210,7 @@ character filename (including path)
  - [ ] Rank explanations
  - [ ] Replays
  - [ ] Multilanguage support
- - [ ] ARM version (for Raspberry Pi)
+ - [ ] ARM version (for Raspberry Pi)?
  - [ ] Support for larger screen resolutions
  - [ ] Support for bigger maps
  - [ ] Upscale graphics using AI?

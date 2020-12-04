@@ -23,6 +23,9 @@
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{82c7592d-af44-4683-9e6e-c2da92a73f1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\audio">
+      <UniqueIdentifier>{a073e55d-c857-4903-b6d1-6ac181d1777d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="src\GameInterface.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioUtils.cpp">
+      <Filter>Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +329,9 @@
     </ClInclude>
     <ClInclude Include="include\GameInterface.h">
       <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioUtils.h">
+      <Filter>Source Files\audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
