@@ -175,6 +175,12 @@
     <ClCompile Include="src\AudioUtils.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\AudioSystem.cpp">
+      <Filter>Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WaveFile.cpp">
+      <Filter>Source Files\audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -331,6 +337,12 @@
       <Filter>Source Files\ui</Filter>
     </ClInclude>
     <ClInclude Include="include\AudioUtils.h">
+      <Filter>Source Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioSystem.h">
+      <Filter>Source Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WaveFile.h">
       <Filter>Source Files\audio</Filter>
     </ClInclude>
   </ItemGroup>

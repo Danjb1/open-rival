@@ -6,6 +6,7 @@
 namespace Rival {
 
     const std::string Resources::mapsDir = "res\\maps\\";
+    const std::string Resources::soundDir = "res\\sound\\";
     const std::string Resources::txDir = "res\\textures\\";
 
     Resources::Resources()
@@ -15,7 +16,8 @@ namespace Rival {
           unitSpritesheets(initUnitSpritesheets()),
           buildingSpritesheets(initBuildingSpritesheets()),
           tileSpritesheets(initTileSpritesheets()),
-          mapBorderSpritesheet(initMapBorderSpritesheet()) {}
+          mapBorderSpritesheet(initMapBorderSpritesheet()),
+          sounds(initSounds()) {}
 
     Resources::~Resources() {
         // Delete Textures
@@ -205,6 +207,21 @@ namespace Rival {
                 RenderUtils::tileSpriteHeightPx);
     }
 
+    std::vector<WaveFile> Resources::initSounds() {
+        std::vector<WaveFile> soundsRead;
+        soundsRead.reserve(numSounds);
+
+        for (int i = 0; i < numSounds; ++i) {
+            std::string fileNum = std::to_string(i);
+            std::string filename = std::string(3 - fileNum.length(), '0')
+                    + fileNum
+                    + ".wav";
+            soundsRead.emplace_back(Resources::soundDir + filename);
+        }
+
+        return soundsRead;
+    }
+
     const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {
         return wilderness
                 ? tileSpritesheets.at(1)
@@ -231,6 +248,10 @@ namespace Rival {
 
     const TextureAtlas& Resources::getUiTextureAtlas() const {
         return textureAtlases.at(0);
+    }
+
+    const WaveFile& Resources::getSound(int id) const {
+        return sounds.at(id);
     }
 
 }  // namespace Rival

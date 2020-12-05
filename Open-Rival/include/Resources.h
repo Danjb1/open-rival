@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "TextureAtlas.h"
 #include "Unit.h"
+#include "WaveFile.h"
 
 namespace Rival {
 
@@ -19,6 +20,7 @@ namespace Rival {
     public:
         // Directories
         static const std::string mapsDir;
+        static const std::string soundDir;
         static const std::string txDir;
 
         Resources();
@@ -37,6 +39,7 @@ namespace Rival {
         const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const;
         const Spritesheet& getMapBorderSpritesheet() const;
         const TextureAtlas& getUiTextureAtlas() const;
+        const WaveFile& getSound(int id) const;
 
     private:
         // Texture constants
@@ -48,6 +51,9 @@ namespace Rival {
 
         // Texture atlas constants
         static const int numTextureAtlases = 1;
+
+        // Sound constants
+        static const int numSounds = 369;
 
         // Loaded textures
         const std::vector<Texture> textures;
@@ -62,6 +68,9 @@ namespace Rival {
         // Texture Atlases
         const std::vector<TextureAtlas> textureAtlases;
 
+        // Wave Files
+        const std::vector<WaveFile> sounds;
+
         // Initialisation
         std::vector<Texture> loadTextures();
         std::vector<TextureAtlas> Resources::loadTextureAtlases();
@@ -70,6 +79,7 @@ namespace Rival {
         std::map<Unit::Type, Spritesheet> initUnitSpritesheets();
         std::map<int, Spritesheet> initTileSpritesheets();
         Spritesheet initMapBorderSpritesheet();
+        std::vector<WaveFile> initSounds();
     };
 
 }  // namespace Rival

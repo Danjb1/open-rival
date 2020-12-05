@@ -102,7 +102,7 @@ namespace AudioExtractor {
             // Free memory
             delete[] data;
 
-            numFiles++;
+            ++numFiles;
 
             // Skip over the remaining bytes of the file
             std::streamoff lengthOffset = length;
