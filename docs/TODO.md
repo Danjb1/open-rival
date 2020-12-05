@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
  - Sound
-    - Load WAV files
     - Add support for playing WAV files
     - Set audio / listener position
 
@@ -58,6 +57,7 @@
 
  - Logging mechanism
     - Log important events to file
+    - Replace cout / cerr with logger calls
 
  - Multiplayer
     - Server code should be separated somehow
