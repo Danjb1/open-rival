@@ -10,10 +10,19 @@
     - Yield the thread when playing a sound
     - Set audio / listener position
 
- - Music
+ - Music (WMA / other)
+    - Convert WMA to OGG
     - Load OGG files
     - Add support for playing OGG files:
         https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/
+
+ - Music (MIDI)
+    - Play MIDI files on a separate thread
+
+ - Refactoring
+    - Fix (ignore) SDL warnings
+    - Move sleep functions to a utility file?
+    - Move readFileToByteArray to a utility file?
 
  - Central unit type registry: animations, UI image, etc.
 
@@ -176,8 +185,7 @@ character filename (including path)
 
  - Play sounds when selecting units
  - Play sounds when instructing units to move
- - Add support for WMA music
- - Add support for MIDI music (RtMidi17 / CxxMidi)
+ - Add support for WMA music (or convert to another format)
 
 ### Menus
 

@@ -38,6 +38,10 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
+    <ClCompile Include="src\MidiContainer.cpp" />
+    <ClCompile Include="src\MidiFile.cpp" />
+    <ClCompile Include="src\MidiPlayer.cpp" />
+    <ClCompile Include="src\MidsDecoder.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
@@ -50,6 +54,7 @@
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\RtMidi.cpp" />
     <ClCompile Include="src\Scenario.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
     <ClCompile Include="src\ScenarioReader.cpp" />
@@ -91,6 +96,10 @@
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MathUtils.h" />
+    <ClInclude Include="include\MidiContainer.h" />
+    <ClInclude Include="include\MidiFile.h" />
+    <ClInclude Include="include\MidiPlayer.h" />
+    <ClInclude Include="include\MidsDecoder.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\OwnerComponent.h" />
@@ -102,6 +111,7 @@
     <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
+    <ClInclude Include="include\RtMidi.h" />
     <ClInclude Include="include\Scenario.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
     <ClInclude Include="include\ScenarioData.h" />
@@ -194,9 +204,10 @@
       <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -222,11 +233,12 @@
       <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
