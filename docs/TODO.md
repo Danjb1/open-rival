@@ -5,12 +5,15 @@
 <!----------------------------------------------------------------------------->
 
  - Sound
-    - Add support for playing WAV files
+    - When playing a sound, add it to a queue
+    - Create a separate thread to play sounds from this queue
+    - Yield the thread when playing a sound
     - Set audio / listener position
 
  - Music
     - Load OGG files
-    - Add support for playing OGG files
+    - Add support for playing OGG files:
+        https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/
 
  - Central unit type registry: animations, UI image, etc.
 
