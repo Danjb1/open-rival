@@ -26,6 +26,9 @@
     <Filter Include="Source Files\audio">
       <UniqueIdentifier>{a073e55d-c857-4903-b6d1-6ac181d1777d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\audio\midi">
+      <UniqueIdentifier>{80081f2e-2c13-4cbd-9612-8d94854b1596}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
@@ -180,6 +183,21 @@
     </ClCompile>
     <ClCompile Include="src\WaveFile.cpp">
       <Filter>Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidiContainer.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidiFile.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidiPlayer.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidsDecoder.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RtMidi.cpp">
+      <Filter>Source Files\audio\midi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,6 +362,21 @@
     </ClInclude>
     <ClInclude Include="include\WaveFile.h">
       <Filter>Source Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MidiContainer.h">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MidiFile.h">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MidiPlayer.h">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MidsDecoder.h">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RtMidi.h">
+      <Filter>Source Files\audio\midi</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

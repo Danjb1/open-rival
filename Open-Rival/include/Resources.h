@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Building.h"
+#include "MidiFile.h"
 #include "Palette.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -40,20 +41,23 @@ namespace Rival {
         const Spritesheet& getMapBorderSpritesheet() const;
         const TextureAtlas& getUiTextureAtlas() const;
         const WaveFile& getSound(int id) const;
+        const MidiFile& getMidi(int id) const;
 
     private:
-        // Texture constants
+        // Resource counts
         static const int numTextures = 58;
+        static const int numTextureAtlases = 1;
+        static const int numSounds = 369;
+        static const int numMidis = 13;
+
+        // Texture constants
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
         static const int txIndexCursors = 54;
         static const int txIndexBuildings = 55;
 
-        // Texture atlas constants
-        static const int numTextureAtlases = 1;
-
-        // Sound constants
-        static const int numSounds = 369;
+        // MIDI constants
+        static const int midiStartIndex = 369;
 
         // Loaded textures
         const std::vector<Texture> textures;
@@ -71,6 +75,9 @@ namespace Rival {
         // Wave Files
         const std::vector<WaveFile> sounds;
 
+        // MIDI Files
+        const std::vector<MidiFile> midis;
+
         // Initialisation
         std::vector<Texture> loadTextures();
         std::vector<TextureAtlas> Resources::loadTextureAtlases();
@@ -80,6 +87,7 @@ namespace Rival {
         std::map<int, Spritesheet> initTileSpritesheets();
         Spritesheet initMapBorderSpritesheet();
         std::vector<WaveFile> initSounds();
+        std::vector<MidiFile> initMidis();
     };
 
 }  // namespace Rival

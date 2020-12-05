@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Resources.h"
 
+#include "MidsDecoder.h"
 #include "RenderUtils.h"
 
 namespace Rival {
@@ -17,7 +18,8 @@ namespace Rival {
           buildingSpritesheets(initBuildingSpritesheets()),
           tileSpritesheets(initTileSpritesheets()),
           mapBorderSpritesheet(initMapBorderSpritesheet()),
-          sounds(initSounds()) {}
+          sounds(initSounds()),
+          midis(initMidis()) {}
 
     Resources::~Resources() {
         // Delete Textures
@@ -222,6 +224,36 @@ namespace Rival {
         return soundsRead;
     }
 
+    std::vector<uint8_t> readFileToByteArray(std::string file_path) {
+        std::ifstream in(file_path, std::ios::in | std::ios::binary);
+        std::vector<uint8_t> data((std::istreambuf_iterator<char>(in)),
+                std::istreambuf_iterator<char>());
+        return data;
+    }
+
+    std::vector<MidiFile> Resources::initMidis() {
+        std::vector<MidiFile> midisRead;
+
+        for (int i = 0; i < numMidis; ++i) {
+            midi_container result;
+
+            // Read MIDI file
+            std::vector<uint8_t> const& p_file = readFileToByteArray(
+                    soundDir
+                    + std::to_string(midiStartIndex + i)
+                    + ".mid");
+
+            // Parse MIDI file
+            if (!MidsDecoder::process_mids(p_file, result)) {
+                throw std::runtime_error("Failed to parse MIDI file!\n");
+            }
+
+            midisRead.emplace_back(result);
+        }
+
+        return midisRead;
+    }
+
     const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {
         return wilderness
                 ? tileSpritesheets.at(1)
@@ -252,6 +284,10 @@ namespace Rival {
 
     const WaveFile& Resources::getSound(int id) const {
         return sounds.at(id);
+    }
+
+    const MidiFile& Resources::getMidi(int id) const {
+        return midis.at(id);
     }
 
 }  // namespace Rival
