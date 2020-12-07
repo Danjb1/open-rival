@@ -14,5 +14,9 @@ namespace Animations {
         return buildingAnimationLookup.at({ buildingType, animType });
     }
 
+    Animation getObjectAnimation(std::uint8_t type, std::uint8_t variant) {
+        return objectAnimationLookup.at({ type, variant });
+    }
+
 }
 }  // namespace Rival::Animations

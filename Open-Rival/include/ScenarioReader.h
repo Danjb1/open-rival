@@ -150,35 +150,35 @@ namespace Rival {
 
         void printNext(const size_t n) const;
 
-        void print(ScenarioHeader& hdr) const;
+        void print(const ScenarioHeader& hdr) const;
 
-        void print(PlayerProperties& props) const;
+        void print(const PlayerProperties& props) const;
 
-        void print(TroopDefaults& troop) const;
+        void print(const TroopDefaults& troop) const;
 
-        void print(UpgradeProperties& upgrade) const;
+        void print(const UpgradeProperties& upgrade) const;
 
-        void print(ProductionCost& unitCost) const;
+        void print(const ProductionCost& unitCost) const;
 
-        void print(WeaponDefaults& wpn) const;
+        void print(const WeaponDefaults& wpn) const;
 
-        void print(AvailableBuildings& bldg) const;
+        void print(const AvailableBuildings& bldg) const;
 
-        void print(HireTroopsRestrictions& restrictions) const;
+        void print(const HireTroopsRestrictions& restrictions) const;
 
-        void print(AiSetting& setting) const;
+        void print(const AiSetting& setting) const;
 
-        void print(ObjectPlacement& obj) const;
+        void print(const ObjectPlacement& obj) const;
 
-        void print(BuildingPlacement& bldg) const;
+        void print(const BuildingPlacement& bldg) const;
 
-        void print(UnitPlacement& unit) const;
+        void print(const UnitPlacement& unit) const;
 
-        void print(TrapPlacement& trap) const;
+        void print(const TrapPlacement& trap) const;
 
-        void print(GoalLocation& trap) const;
+        void print(const GoalLocation& trap) const;
 
-        void print(CampaignText& text) const;
+        void print(const CampaignText& text) const;
     };
 
 }  // namespace Rival

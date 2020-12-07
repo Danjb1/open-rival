@@ -98,8 +98,9 @@ int main() {
         // Load some scenario
         Rival::ScenarioReader reader(Rival::Resources::mapsDir + "test-all.sco");
         Rival::ScenarioBuilder scenarioBuilder(reader.readScenario());
+        Rival::EntityFactory entityFactory(app.getResources());
         std::unique_ptr<Rival::Scenario> scenario =
-                scenarioBuilder.build(app.getResources());
+                scenarioBuilder.build(entityFactory);
 
         // Create our initial state
         std::unique_ptr<Rival::State> initialState =

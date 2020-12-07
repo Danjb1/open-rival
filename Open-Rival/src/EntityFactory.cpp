@@ -19,7 +19,7 @@ namespace Rival {
     std::unique_ptr<Entity> EntityFactory::createUnit(
             const UnitPlacement& unitPlacement) const {
 
-        // Create Unit
+        // Create Entity
         std::unique_ptr<Entity> unit = std::make_unique<Entity>(
                 Unit::width, Unit::height);
 
@@ -54,7 +54,7 @@ namespace Rival {
     std::unique_ptr<Entity> EntityFactory::createBuilding(
             const BuildingPlacement& buildingPlacement) const {
 
-        // Create Building
+        // Create Entity
         Building::Type buildingType =
                 getBuildingType(buildingPlacement.type);
         int width = Building::getWidth(buildingType);
@@ -93,6 +93,30 @@ namespace Rival {
                 TilePassability::Building));
 
         return building;
+    }
+
+    std::unique_ptr<Entity> EntityFactory::createObject(
+            const ObjectPlacement& objPlacement, bool wilderness) const {
+
+        // Create Entity
+        std::unique_ptr<Entity> obj = std::make_unique<Entity>(
+                Unit::width, Unit::height);
+
+        // Add SpriteComponent
+        if (objPlacement.type == 0xAF) {
+            const Spritesheet& spritesheet = res.getCommonObjectSpritesheet();
+            obj->attach(std::make_unique<SpriteComponent>(spritesheet));
+        } else {
+            const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
+            obj->attach(std::make_unique<SpriteComponent>(spritesheet));
+        }
+
+        // Add AnimationComponent
+        const Animations::Animation anim = Animations::getObjectAnimation(
+                objPlacement.type, objPlacement.variant);
+        obj->attach(std::make_unique<AnimationComponent>(anim));
+
+        return obj;
     }
 
     Unit::Type EntityFactory::getUnitType(std::uint8_t unitType) const {

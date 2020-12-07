@@ -38,6 +38,8 @@ namespace Rival {
         const Spritesheet& getTileSpritesheet(bool wilderness) const;
         const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
         const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const;
+        const Spritesheet& getCommonObjectSpritesheet() const;
+        const Spritesheet& getObjectSpritesheet(bool wilderness) const;
         const Spritesheet& getMapBorderSpritesheet() const;
         const TextureAtlas& getUiTextureAtlas() const;
         const WaveFile& getSound(int id) const;
@@ -53,8 +55,9 @@ namespace Rival {
         // Texture constants
         static const int txIndexUnits = 0;
         static const int txIndexTiles = 50;
-        static const int txIndexCursors = 54;
-        static const int txIndexBuildings = 55;
+        static const int txIndexObjects = 54;
+        static const int txIndexCursors = 57;
+        static const int txIndexBuildings = 58;
 
         // MIDI constants
         static const int midiStartIndex = 369;
@@ -66,7 +69,8 @@ namespace Rival {
         // Spritesheets
         const std::map<Unit::Type, Spritesheet> unitSpritesheets;
         const std::map<Building::Type, Spritesheet> buildingSpritesheets;
-        const std::map<int, Spritesheet> tileSpritesheets;
+        const std::vector<Spritesheet> tileSpritesheets;
+        const std::vector<Spritesheet> objectSpritesheets;
         const Spritesheet mapBorderSpritesheet;
 
         // Texture Atlases
@@ -84,7 +88,8 @@ namespace Rival {
         Texture initPaletteTexture();
         std::map<Building::Type, Spritesheet> initBuildingSpritesheets();
         std::map<Unit::Type, Spritesheet> initUnitSpritesheets();
-        std::map<int, Spritesheet> initTileSpritesheets();
+        std::vector<Spritesheet> initTileSpritesheets();
+        std::vector<Spritesheet> initObjectSpritesheets();
         Spritesheet initMapBorderSpritesheet();
         std::vector<WaveFile> initSounds();
         std::vector<MidiFile> initMidis();
