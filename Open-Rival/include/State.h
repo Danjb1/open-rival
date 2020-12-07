@@ -19,14 +19,19 @@ namespace Rival {
         virtual ~State() {}
 
         /**
+         * Called when this State becomes active.
+         */
+        virtual void onLoad() {}
+
+        /**
          * Handles keyDown events.
          */
-        virtual void keyDown(const SDL_Keycode keyCode) = 0;
+        virtual void keyDown(const SDL_Keycode) {};
 
         /**
          * Handles mouse wheel events.
          */
-        virtual void mouseWheelMoved(const SDL_MouseWheelEvent evt) = 0;
+        virtual void mouseWheelMoved(const SDL_MouseWheelEvent) {}
 
         /**
          * Updates the logic.

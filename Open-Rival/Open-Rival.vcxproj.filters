@@ -17,9 +17,6 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{a88f51de-cb90-4207-a922-9387655cb149}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\components">
-      <UniqueIdentifier>{928ac342-04b2-49c7-945a-d50446949246}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{82c7592d-af44-4683-9e6e-c2da92a73f1d}</UniqueIdentifier>
     </Filter>
@@ -29,12 +26,15 @@
     <Filter Include="Source Files\audio\midi">
       <UniqueIdentifier>{80081f2e-2c13-4cbd-9612-8d94854b1596}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\application">
+      <UniqueIdentifier>{af078048-f7a6-4f65-bd12-bcede0590492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\entity-components">
+      <UniqueIdentifier>{928ac342-04b2-49c7-945a-d50446949246}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
@@ -109,14 +109,8 @@
     <ClCompile Include="src\Rect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameRenderer.cpp">
       <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\State.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameState.cpp">
       <Filter>Source Files</Filter>
@@ -128,37 +122,37 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FacingComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\EntityRenderer.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\EntityFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OwnerComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\UnitPropsComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\BuildingPropsComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\AnimationComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\WallComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\PassabilityComponent.cpp">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\MouseUtils.cpp">
       <Filter>Source Files\utils</Filter>
@@ -199,6 +193,15 @@
     <ClCompile Include="src\RtMidi.cpp">
       <Filter>Source Files\audio\midi</Filter>
     </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\State.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -211,9 +214,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Tile.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Window.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BinaryFileReader.h">
@@ -285,12 +285,6 @@
     <ClInclude Include="include\Rect.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Application.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\State.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GameRenderer.h">
       <Filter>Source Files\render</Filter>
     </ClInclude>
@@ -304,7 +298,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\FacingComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\Unit.h">
       <Filter>Source Files</Filter>
@@ -313,31 +307,31 @@
       <Filter>Source Files\render</Filter>
     </ClInclude>
     <ClInclude Include="include\SpriteComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\EntityFactory.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\OwnerComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\UnitPropsComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\BuildingPropsComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\AnimationComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\Animations.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\WallComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\PassabilityComponent.h">
-      <Filter>Source Files\components</Filter>
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\MouseUtils.h">
       <Filter>Source Files\utils</Filter>
@@ -377,6 +371,15 @@
     </ClInclude>
     <ClInclude Include="include\RtMidi.h">
       <Filter>Source Files\audio\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Application.h">
+      <Filter>Source Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
+      <Filter>Source Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\State.h">
+      <Filter>Source Files\application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

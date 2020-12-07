@@ -19,6 +19,10 @@ namespace Rival {
                 clean_flags);
     }
 
+    bool MidiFile::isEmpty() const {
+        return events.size() == 0;
+    }
+
     const std::vector<midi_stream_event>& MidiFile::getEvents() const {
         return events;
     }

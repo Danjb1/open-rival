@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "AudioSystem.h"
 #include "Resources.h"
 #include "State.h"
 #include "Window.h"
@@ -25,7 +26,10 @@ namespace Rival {
 
         void requestExit();
 
+        void setState(std::unique_ptr<State> newState);
+
         const Window& getWindow() const;
+        AudioSystem& getAudioSystem();
         Resources& getResources();
         State& getState();
 
@@ -39,9 +43,15 @@ namespace Rival {
         static const int minSleepTime = 2;
 
         bool exiting { false };
+
         Window& window;
+        AudioSystem audioSystem;
         Resources res;
+
         std::unique_ptr<State> state;
+        std::unique_ptr<State> nextState;
+
+        void makeNextStateActive();
     };
 
 }  // namespace Rival
