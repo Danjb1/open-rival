@@ -17,11 +17,11 @@ namespace Rival {
 #define SLEEP(milliseconds) usleep((unsigned long) (milliseconds * 1000.0))
 #endif
 
-    MidiPlayer::MidiPlayer() {
-        chooseMidiPort();
-    }
+    void MidiPlayer::init() {
+        if (midiOut.isPortOpen()) {
+            return;
+        }
 
-    void MidiPlayer::chooseMidiPort() {
         unsigned int nPorts = midiOut.getPortCount();
         if (nPorts == 0) {
             throw std::runtime_error("No MIDI output ports available!");
@@ -38,7 +38,7 @@ namespace Rival {
      * Based on:
      * https://www.midi.org/specifications-old/item/table-2-expanded-messages-list-status-bytes
      */
-    int MidiPlayer::getMessageSize(uint8_t eventId) const {
+    static int getMessageSize(uint8_t eventId) {
         if ((eventId >= 0xC0 && eventId <= 0xDF) || eventId == 0xF3) {
             return 2;
         } else if (eventId >= 0xF4) {
@@ -49,6 +49,11 @@ namespace Rival {
 
     void MidiPlayer::play(MidiFile file) {
         const std::scoped_lock<std::mutex> lock(playingMutex);
+
+        if (!midiOut.isPortOpen()) {
+            throw std::runtime_error("MIDI system not initialized");
+        }
+
         stopped = false;
 
         std::chrono::milliseconds startTime =

@@ -26,11 +26,29 @@
     <Filter Include="Source Files\components">
       <UniqueIdentifier>{ed9d4a26-7d6e-432a-86cd-b5e3e44fab35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\render">
-      <UniqueIdentifier>{fab1988e-128a-4e56-838d-edb86429429c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\gl">
       <UniqueIdentifier>{001e8b76-8d71-477d-927c-3d33e000f2e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gfx">
+      <UniqueIdentifier>{fab1988e-128a-4e56-838d-edb86429429c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\application">
+      <UniqueIdentifier>{6751fdbf-4cb8-4be6-88af-e4f4a676dd60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles\application">
+      <UniqueIdentifier>{9114b492-ebaa-4e76-9285-694bb1a1f17e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles\gfx">
+      <UniqueIdentifier>{7f69a13b-3317-4686-a898-b01d80ed2098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\audio">
+      <UniqueIdentifier>{3113e33f-23e8-4ca4-9ccf-c8f453bfe771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Doubles\audio">
+      <UniqueIdentifier>{5cc09711-1210-4698-9142-85cc695bcf37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\audio\midi">
+      <UniqueIdentifier>{6a060f3e-d1e8-4361-992a-3568455e69c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,26 +58,14 @@
     <ClCompile Include="src\TestApplication.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SDL.cpp">
       <Filter>Test Doubles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources.cpp">
-      <Filter>Test Doubles</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
-      <Filter>Test Doubles</Filter>
-    </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window.cpp">
-      <Filter>Test Doubles</Filter>
     </ClCompile>
     <ClCompile Include="src\TestCamera.cpp">
       <Filter>Tests</Filter>
@@ -94,9 +100,6 @@
     <ClCompile Include="..\Open-Rival\src\Rect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\State.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\TestSpritesheet.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -125,7 +128,7 @@
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\SpriteRenderable.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Shaders.cpp">
       <Filter>Source Files\gl</Filter>
@@ -135,6 +138,36 @@
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\ShaderUtils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Application.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\State.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Test Doubles\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources.cpp">
+      <Filter>Test Doubles\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Test Doubles\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\TextureAtlas.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioSystem.cpp">
+      <Filter>Test Doubles\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MidiFile.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MidiContainer.cpp">
+      <Filter>Source Files\audio\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\RtMidi.cpp">
+      <Filter>Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

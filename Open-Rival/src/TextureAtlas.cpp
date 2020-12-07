@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "BinaryFileReader.h"
-#include "Resources.h"
 
 namespace Rival {
 

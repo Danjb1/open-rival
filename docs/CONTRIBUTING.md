@@ -20,7 +20,7 @@ Development of Open-Rival is driven by certain values which should be generally 
 
 ### Stay Faithful
 
-Apart from the identified ["Future Enhancements"](/docs/TODO.md), all features should aim to mimic the original game as closely as possible.
+Apart from the identified [enhancements](/docs/TODO.md#enhancements), all features should aim to mimic the original game as closely as possible.
 
 ### Simplicity Over Optimisation
 

@@ -80,7 +80,7 @@ namespace Rival {
 
         // Initialisation
         std::vector<Texture> loadTextures();
-        std::vector<TextureAtlas> Resources::loadTextureAtlases();
+        std::vector<TextureAtlas> loadTextureAtlases();
         Texture initPaletteTexture();
         std::map<Building::Type, Spritesheet> initBuildingSpritesheets();
         std::map<Unit::Type, Spritesheet> initUnitSpritesheets();

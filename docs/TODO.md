@@ -204,7 +204,7 @@ character filename (including path)
 
  - Create a ScenarioWriter class
 
-### Quality-of-Life Improvements
+### Enhancements
 
  - [x] 60 FPS
  - [x] Camera zooming
@@ -226,10 +226,10 @@ character filename (including path)
  - [ ] Rank explanations
  - [ ] Replays
  - [ ] Multilanguage support
- - [ ] ARM version (for Raspberry Pi)?
  - [ ] Support for larger screen resolutions
  - [ ] Support for bigger maps
  - [ ] Upscale graphics using AI?
+ - [ ] Cross-platform releases (e.g. Raspberry Pi)
 
 <!----------------------------------------------------------------------------->
 ## Project

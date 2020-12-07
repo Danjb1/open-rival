@@ -1,6 +1,7 @@
 #ifndef AUDIO_SYSTEM_H
 #define AUDIO_SYSTEM_H
 
+#include <condition_variable>
 #include <mutex>
 #include <thread>
 
@@ -33,6 +34,9 @@ namespace Rival {
         std::mutex midiReadyMutex;
 
         void midiThreadLoop();
+
+        void startMidiThread();
+        void killMidiThread();
     };
 
 }  // namespace Rival

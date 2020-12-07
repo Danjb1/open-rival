@@ -4,7 +4,7 @@
 
 ![Title](http://danjb.com/images/rival_realms/title.jpg)
 
-With some difficulty, the [original game](https://www.old-games.com/download/5514/rival-realms) can still be run on Windows 10, however it is buggy and unstable. A remake could fix these issues, add support for higher resolutions, and [much more](https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md#quality-of-life-improvements).
+With some difficulty, the [original game](https://www.old-games.com/download/5514/rival-realms) can still be run on Windows 10, however it is buggy and unstable. A remake could fix these issues, add support for higher resolutions, and [much more](https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md#enhancements).
 
 ## Projects
 
@@ -39,10 +39,6 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 ### [texture-builder](/texture-builder)
 
 > Standalone utility to combine images into textures.
-
-## Development
-
-To get started with development, see [this guide](docs/development_quickstart.md).
 
 ## Legal Stuff
 
