@@ -17,19 +17,21 @@ namespace Rival {
     GameState::GameState(Application& app, std::unique_ptr<Scenario> scenarioToMove)
         : State(app),
           scenario(std::move(scenarioToMove)),
-          viewport(Rect(0, 0,
+          viewport(0, 0,
                   window.getWidth(),
-                  window.getHeight() - GameInterface::uiHeight)),
+                  window.getHeight() - GameInterface::uiHeight),
           camera(0.0f, 0.0f,
                   RenderUtils::pxToCamera_X(
-                          static_cast<float>(window.getWidth())),
-                  window.getAspectRatio(),
+                          static_cast<float>(viewport.width)),
+                  RenderUtils::pxToCamera_Y(
+                          static_cast<float>(viewport.height)),
                   *scenario),
           mousePicker(camera, viewport, *scenario),
           gameRenderer(window, *scenario, camera, viewport, res) {}
 
     void GameState::onLoad() {
-        app.getAudioSystem().playMidi(res.getMidi(0));
+        // TMP: disable music
+        //app.getAudioSystem().playMidi(res.getMidi(0));
     }
 
     void GameState::update() {

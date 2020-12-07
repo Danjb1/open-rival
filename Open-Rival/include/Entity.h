@@ -101,11 +101,6 @@ namespace Rival {
         const int getId() const;
 
         /**
-         * Gets the type of this Entity.
-         */
-        const EntityType getType() const;
-
-        /**
          * Gets the x co-ordinate of the tile this Entity is occupying.
          */
         int getX() const;
@@ -161,11 +156,6 @@ namespace Rival {
          * Flag set when this Entity is marked for deletion.
          */
         bool deleted;
-
-        /**
-         * The type of Entity this represents.
-         */
-        EntityType type;
 
         /**
          * The Scenario this Entity has been added to.

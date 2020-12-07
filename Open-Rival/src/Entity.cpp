@@ -6,6 +6,9 @@ namespace Rival {
     Entity::Entity(int width, int height)
         : width(width),
           height(height),
+          x(-1),
+          y(-1),
+          scenario(nullptr),
           deleted(false),
           moved(true),
           id(-1) {}
@@ -62,10 +65,6 @@ namespace Rival {
 
     const int Entity::getId() const {
         return id;
-    }
-
-    const EntityType Entity::getType() const {
-        return type;
     }
 
     int Entity::getX() const {

@@ -39,14 +39,14 @@ namespace Rival {
         std::unique_ptr<Scenario> scenario;
 
         /**
-         * The camera that defines the area of the game world to render.
-         */
-        Camera camera;
-
-        /**
          * The rectangle on the screen to which the game is rendered (pixels).
          */
         Rect viewport;
+
+        /**
+         * The camera that defines the area of the game world to render.
+         */
+        Camera camera;
 
         /**
          * Object used to find what's under the mouse.

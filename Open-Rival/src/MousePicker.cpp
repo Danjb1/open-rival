@@ -84,7 +84,7 @@ namespace Rival {
          *      |   #        |        #   |   #        |        #   |
          *      |      #     |     #      |      #     |     #      |
          *      |         #  |  #         |         #  |  #         |
-         *      |------------+------------B------------+------------|
+         *      +------------+------------B------------+------------+
          *      |         #  |  #         |         #  |  #         |
          *      |      #     |     #      |      #     |     #      |
          *      |   #        |        #   |   #        |        #   |
@@ -190,9 +190,7 @@ namespace Rival {
             const Entity& entity = *it->second;
             if (isMouseInEntity(entity, mouseInViewportX, mouseInViewportY)) {
                 entityId = entity.getId();
-                std::cout << "Entity " << entityId << " of type unit ("
-                          << static_cast<int>(entity.getType())
-                          << ") is under cursor.\n";
+                std::cout << "Entity " << entityId << " is under cursor\n";
                 break;
             }
         }
@@ -204,18 +202,42 @@ namespace Rival {
             int mouseInViewportY) {
 
         /*
-         * Units are always rendered at a fixed pixel offset from the tile they
-         * occupy. Thus, if we can figure out the rendered position of this
-         * tile, we can figure out the rendered position of the unit.
+         * Entities are always rendered at a fixed pixel offset from the tile
+         * they occupy. Thus, if we can figure out the rendered position of
+         * this tile sprite (A), we can figure out the rendered position of the
+         * entity (B).
+         *
+         *               B=======+
+         *               |       |
+         *      A--------|       |--------+
+         *      |        |       |        |
+         *      |      # |       | #      |
+         *      |   #    |       |    #   |
+         *      |<       +=======+       >|
+         *      |   #                 #   |
+         *      |      #           #      |
+         *      |         #     #         |
+         *      |            #            |
+         *      |                         |
+         *      |                         |
+         *      +-------------------------+
+         *
+         * Note that the rendered tile position that we calculate is the
+         * position BEFORE viewport scaling. If the game is not rendered in a
+         * pixel-perfect manner (i.e. if the camera size, in pixels, does not
+         * match the viewport), then this will not work correctly.
+         *
+         * For now, we assume all entities take up only one tile, so this won't
+         * work properly for buildings.
          */
 
-        // Find the rendered position of the top-left corner of the unit's
+        // Find the rendered position of the top-left corner of the entity's
         // tile. This is measured in scaled px, which takes into account the
         // zoom level used during rendering.
         //
-        // IMPORTANT: This means that any subsequent operations affecting this
-        // position must use the same units, that is, we have to always take
-        // the zoom level into account!
+        // IMPORTANT: Any subsequent operations affecting this position must
+        // use the same units; that is, we have to always take the zoom level
+        // into account!
         float zoom = camera.getZoom();
         float tileX_px = RenderUtils::tileToScaledPx_X(entity.getX(), zoom);
         float tileY_px = RenderUtils::tileToScaledPx_Y(
@@ -226,12 +248,15 @@ namespace Rival {
         tileX_px -= RenderUtils::cameraToPx_X(camera.getLeft()) * zoom;
         tileY_px -= RenderUtils::cameraToPx_Y(camera.getTop()) * zoom;
 
-        // Find the bottom-left corner of the unit hitbox
+        // Find the bottom-left corner of the entity's hitbox. This is the
+        // easiest corner to find, since it is always a fixed offset from the
+        // containing tile, regardless of the height of the entity (except
+        // perhaps for flying units!).
         float unitX1 = tileX_px + (unitHitboxOffsetX * zoom);
         float unitY2 = tileY_px + (unitHitboxOffsetY * zoom);
 
         // Now find the opposite corner based on the hitbox size
-        // TMP: For now we use a fixed height for all units
+        // TMP: For now we use a fixed height for all entities
         float unitX2 = unitX1 + (unitHitboxWidth * zoom);
         float unitY1 = unitY2 - (unitHitboxHeight * zoom);
 
