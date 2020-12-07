@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "AudioSystem.h"
 
-#include <condition_variable>
-
 #include "MidiPlayer.h"
 
 namespace Rival {
@@ -13,6 +11,10 @@ namespace Rival {
     AudioSystem::~AudioSystem() {
         setMidiActive(false);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // MIDI playback
+    ///////////////////////////////////////////////////////////////////////////
 
     void AudioSystem::midiThreadLoop() {
         std::unique_lock<std::mutex> midiReadyLock(midiReadyMutex);
@@ -28,22 +30,29 @@ namespace Rival {
         }
     }
 
+    void AudioSystem::startMidiThread() {
+        midiActive = true;
+        midiPlayer.init();
+        midiThread = std::thread(&AudioSystem::midiThreadLoop, this);
+    }
+
+    void AudioSystem::killMidiThread() {
+        midiActive = false;
+        midiPlayer.stop();
+        midiReadyCondition.notify_one();
+        midiThread.join();
+    }
+
     void AudioSystem::setMidiActive(bool active) {
         if (midiActive == active) {
             // Nothing to do!
             return;
         }
 
-        if (midiActive) {
-            // Kill the MIDI thread
-            midiActive = active;
-            midiPlayer.stop();
-            midiReadyCondition.notify_one();
-            midiThread.join();
+        if (active) {
+            startMidiThread();
         } else {
-            // Start the MIDI thread
-            midiActive = active;
-            midiThread = std::thread(&AudioSystem::midiThreadLoop, this);
+            killMidiThread();
         }
     }
 

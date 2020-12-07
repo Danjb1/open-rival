@@ -11,9 +11,6 @@
     <Filter Include="Source Files\gl">
       <UniqueIdentifier>{1dfcefa1-3182-4f78-bdf4-ba7d83115c37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\render">
-      <UniqueIdentifier>{edfef396-add3-4341-a1d5-c1918f4aeaf1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{a88f51de-cb90-4207-a922-9387655cb149}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,12 @@
     </Filter>
     <Filter Include="Source Files\entity-components">
       <UniqueIdentifier>{928ac342-04b2-49c7-945a-d50446949246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gfx">
+      <UniqueIdentifier>{edfef396-add3-4341-a1d5-c1918f4aeaf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\audio\wav">
+      <UniqueIdentifier>{2b44bf75-993c-4c43-beca-d112c453d73c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,7 +65,7 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Palette.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\ScenarioBuilder.cpp">
       <Filter>Source Files\io</Filter>
@@ -83,25 +86,22 @@
       <Filter>Source Files\gl</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteRenderable.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\Spritesheet.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\TileRenderer.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\FramebufferRenderer.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\MousePicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MapBorderRenderer.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\Building.cpp">
       <Filter>Source Files</Filter>
@@ -110,7 +110,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameRenderer.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\GameState.cpp">
       <Filter>Source Files</Filter>
@@ -125,7 +125,7 @@
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\EntityRenderer.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
@@ -158,13 +158,13 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureAtlas.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\UiRenderer.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\AtlasRenderable.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClCompile>
     <ClCompile Include="src\GameInterface.cpp">
       <Filter>Source Files\ui</Filter>
@@ -173,9 +173,6 @@
       <Filter>Source Files\audio</Filter>
     </ClCompile>
     <ClCompile Include="src\AudioSystem.cpp">
-      <Filter>Source Files\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="src\WaveFile.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
     <ClCompile Include="src\MidiContainer.cpp">
@@ -201,6 +198,12 @@
     </ClCompile>
     <ClCompile Include="src\State.cpp">
       <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WaveFile.cpp">
+      <Filter>Source Files\audio\wav</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +232,7 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\Palette.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\ScenarioBuilder.h">
       <Filter>Source Files\io</Filter>
@@ -253,31 +256,28 @@
       <Filter>Source Files\gl</Filter>
     </ClInclude>
     <ClInclude Include="include\SpriteRenderable.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\Spritesheet.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\TileRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\FramebufferRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\MousePicker.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\MapBorderRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\Race.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\TimerUtils.h">
       <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Resources.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Building.h">
       <Filter>Source Files</Filter>
@@ -286,7 +286,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GameRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\GameState.h">
       <Filter>Source Files</Filter>
@@ -304,7 +304,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\EntityRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\SpriteComponent.h">
       <Filter>Source Files\entity-components</Filter>
@@ -337,13 +337,13 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\TextureAtlas.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\UiRenderer.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\AtlasRenderable.h">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
     <ClInclude Include="include\GameInterface.h">
       <Filter>Source Files\ui</Filter>
@@ -352,9 +352,6 @@
       <Filter>Source Files\audio</Filter>
     </ClInclude>
     <ClInclude Include="include\AudioSystem.h">
-      <Filter>Source Files\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="include\WaveFile.h">
       <Filter>Source Files\audio</Filter>
     </ClInclude>
     <ClInclude Include="include\MidiContainer.h">
@@ -380,6 +377,12 @@
     </ClInclude>
     <ClInclude Include="include\State.h">
       <Filter>Source Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resources.h">
+      <Filter>Source Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WaveFile.h">
+      <Filter>Source Files\audio\wav</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

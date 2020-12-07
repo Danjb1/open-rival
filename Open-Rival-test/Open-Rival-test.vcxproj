@@ -27,6 +27,8 @@
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\FacingComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MidiContainer.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MidiFile.cpp" />
     <ClCompile Include="..\Open-Rival\src\MousePicker.cpp" />
     <ClCompile Include="..\Open-Rival\src\MouseUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
@@ -37,6 +39,7 @@
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Rect.cpp" />
     <ClCompile Include="..\Open-Rival\src\RenderUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\RtMidi.cpp" />
     <ClCompile Include="..\Open-Rival\src\Scenario.cpp" />
     <ClCompile Include="..\Open-Rival\src\Shaders.cpp" />
     <ClCompile Include="..\Open-Rival\src\ShaderUtils.cpp" />
@@ -44,7 +47,9 @@
     <ClCompile Include="..\Open-Rival\src\SpriteRenderable.cpp" />
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp" />
     <ClCompile Include="..\Open-Rival\src\State.cpp" />
+    <ClCompile Include="..\Open-Rival\src\TextureAtlas.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
+    <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\gl\glew.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Resources.cpp" />
@@ -135,9 +140,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include;..\Open-Rival\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,6 +176,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

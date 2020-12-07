@@ -1,4 +1,4 @@
-#pragma warning(disable : 25495 26812)
+#pragma warning(disable : 25495 26439 26812)
 /* clang-format off */
 
 /**********************************************************************/

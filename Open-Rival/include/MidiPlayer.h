@@ -10,11 +10,17 @@ namespace Rival {
 
     class MidiPlayer {
     public:
-        // Throws a RtMidiError if a MIDI system initialization error occurs
-        MidiPlayer();
+        /**
+         * Initializes the MIDI system.
+         *
+         * Throws a RtMidiError if a MIDI system initialization error occurs.
+         */
+        void init();
 
         /**
          * Plays the given MIDI file synchronously from start to finish.
+         *
+         * Throws an exception if the MidiPlayer is not initialized.
          */
         void play(MidiFile midi);
 
@@ -29,11 +35,7 @@ namespace Rival {
     private:
         std::mutex playingMutex;
         RtMidiOut midiOut;
-        bool stopped;
-
-        void chooseMidiPort();
-
-        int MidiPlayer::getMessageSize(uint8_t eventId) const;
+        bool stopped { true };
     };
 
 }  // namespace Rival

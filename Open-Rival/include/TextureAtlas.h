@@ -19,12 +19,12 @@ namespace Rival {
                 Texture texture,
                 std::map<std::string, Rect> imagePlacements);
 
-        const int TextureAtlas::getImageWidth(std::string key) const;
-        const int TextureAtlas::getImageHeight(std::string key) const;
+        const int getImageWidth(std::string key) const;
+        const int getImageHeight(std::string key) const;
 
         const std::vector<GLfloat> getTexCoords(std::string key) const;
 
-        static const TextureAtlas TextureAtlas::loadTextureAtlas(
+        static const TextureAtlas loadTextureAtlas(
                 const std::string filename);
 
     private:
