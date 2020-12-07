@@ -32,16 +32,16 @@ namespace RenderUtils {
 
     float tileToScaledPx_X(int x, float zoomLevel) {
         // Same as tileToPx_X, above, but with a zoom level applied
-        float scaledTileWidth = tileSpriteWidthPx * zoomLevel;
+        float scaledTileWidth = tileWidthPx * zoomLevel;
         return x * (scaledTileWidth / 2);
     }
 
     float tileToScaledPx_Y(int x, int y, float zoomLevel) {
         // Same as tileToPx_Y, above, but with a zoom level applied
-        float scaledTileHeight = tileSpriteHeightPx * zoomLevel;
-        float renderPos = y * (scaledTileHeight / 2);
+        float scaledTileHeight = tileHeightPx * zoomLevel;
+        float renderPos = y * scaledTileHeight;
         if (x % 2 == 1) {
-            renderPos += (scaledTileHeight / 4);
+            renderPos += (scaledTileHeight / 2);
         }
         return renderPos;
     }

@@ -34,7 +34,7 @@ namespace Rival {
                 float x,
                 float y,
                 float width,
-                double aspectRatio,
+                float height,
                 Scenario& scenario);
 
         void centreOnPoint(float x, float y);

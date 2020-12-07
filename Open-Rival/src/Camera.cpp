@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Camera.h"
 
+#include <iostream>
+
 #include "MathUtils.h"
 
 namespace Rival {
@@ -18,10 +20,10 @@ namespace Rival {
             float x,
             float y,
             float width,
-            double aspectRatio,
+            float height,
             Scenario& scenario)
         : defaultWidth(width),
-          defaultHeight(static_cast<float>(width / aspectRatio)),
+          defaultHeight(height),
           scenario(scenario) {
 
         centreOnPoint(x, y);

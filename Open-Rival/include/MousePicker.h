@@ -43,7 +43,7 @@ namespace Rival {
 
     private:
         // Offset of a Unit's hitbox, measured from the top-left corner of the
-        // tile it's in, in px
+        // containing tile to the bottom-left of the hitbox, in px
         static const int unitHitboxOffsetX = 20;
         static const int unitHitboxOffsetY = 25;
 

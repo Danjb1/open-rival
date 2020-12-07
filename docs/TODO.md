@@ -4,8 +4,6 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
- - MousePicker is not working correctly!
-
  - Sound
     - When playing a sound, add it to a queue
     - Create a separate thread to play sounds from this queue
