@@ -17,6 +17,7 @@ namespace Rival {
           unitSpritesheets(initUnitSpritesheets()),
           buildingSpritesheets(initBuildingSpritesheets()),
           tileSpritesheets(initTileSpritesheets()),
+          objectSpritesheets(initObjectSpritesheets()),
           mapBorderSpritesheet(initMapBorderSpritesheet()),
           sounds(initSounds()),
           midis(initMidis()) {}
@@ -101,6 +102,11 @@ namespace Rival {
             "tiles_fog.tga",
             "tiles_map_border.tga",
 
+            // Objects
+            "objects_common.tga",
+            "objects_meadow.tga",
+            "objects_wilderness.tga",
+
             // Cursors
             "cursor_select.tga",
 
@@ -181,22 +187,33 @@ namespace Rival {
         return spritesheets;
     }
 
-    std::map<int, Spritesheet> Resources::initTileSpritesheets() {
-
-        std::map<int, Spritesheet> spritesheets;
-        int nextIndex = txIndexTiles;
+    std::vector<Spritesheet> Resources::initTileSpritesheets() {
+        std::vector<Spritesheet> spritesheets;
 
         // 0 = Meadow
         // 1 = Wilderness
         // 2 = Fog
-        for (int i = 0; i < 3; i++) {
-            spritesheets.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(i),
-                    std::forward_as_tuple(
-                            textures.at(nextIndex),
-                            RenderUtils::tileSpriteWidthPx,
-                            RenderUtils::tileSpriteHeightPx));
-            nextIndex++;
+        for (int i = txIndexTiles; i < txIndexTiles + 3; i++) {
+            spritesheets.emplace_back(
+                    textures.at(i),
+                    RenderUtils::tileSpriteWidthPx,
+                    RenderUtils::tileSpriteHeightPx);
+        }
+
+        return spritesheets;
+    }
+
+    std::vector<Spritesheet> Resources::initObjectSpritesheets() {
+        std::vector<Spritesheet> spritesheets;
+
+        // 0 = Common
+        // 1 = Meadow
+        // 2 = Wilderness
+        for (int i = txIndexObjects; i < txIndexObjects + 3; i++) {
+            spritesheets.emplace_back(
+                    textures.at(i),
+                    RenderUtils::entityWidthPx,
+                    RenderUtils::entityHeightPx);
         }
 
         return spritesheets;
@@ -268,6 +285,16 @@ namespace Rival {
     const Spritesheet& Resources::getBuildingSpritesheet(
             Building::Type buildingType) const {
         return buildingSpritesheets.at(buildingType);
+    }
+
+    const Spritesheet& Resources::getCommonObjectSpritesheet() const {
+        return objectSpritesheets.at(0);
+    }
+
+    const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const {
+        return wilderness
+                ? objectSpritesheets.at(2)
+                : objectSpritesheets.at(1);
     }
 
     const Spritesheet& Resources::getMapBorderSpritesheet() const {

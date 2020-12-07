@@ -1,6 +1,7 @@
 #ifndef ANIMATIONS_H
 #define ANIMATIONS_H
 
+#include <cstdint>
 #include <map>
 
 #include "Building.h"
@@ -31,6 +32,7 @@ namespace Animations {
 
     using UnitAnimationPair = std::pair<Unit::Type, UnitAnimationType>;
     using BuildingAnimationPair = std::pair<Building::Type, BuildingAnimationType>;
+    using ObjectVariantPair = std::pair<std::uint8_t, std::uint8_t>;
 
     /**
      * Unit animation definitions.
@@ -114,14 +116,13 @@ namespace Animations {
         { { Unit::Type::Hydra, UnitAnimationType::Standing }, { 0, 0, 0 } },
         { { Unit::Type::SeaMonster, UnitAnimationType::Standing }, { 0, 0, 0 } },
         { { Unit::Type::Skeleton, UnitAnimationType::Standing }, { 0, 0, 0 } },
-        { { Unit::Type::Snake, UnitAnimationType::Standing }, { 0, 0, 60 } },
+        { { Unit::Type::Snake, UnitAnimationType::Standing }, { 0, 0, 60 } }
     };
 
     /**
      * Building animation definitions.
      */
     static const std::map<BuildingAnimationPair, const Animation> buildingAnimationLookup = {
-
         // Elf
         { { Building::Type::ElvenKeep, BuildingAnimationType::Constructing }, { 0, 1, 60 } },
         { { Building::Type::ElvenKeep, BuildingAnimationType::Built }, { 2, 2, 0 } },
@@ -192,7 +193,40 @@ namespace Animations {
         { { Building::Type::Shipyard, BuildingAnimationType::Constructing }, { 36, 37, 60 } },
         { { Building::Type::Shipyard, BuildingAnimationType::Built }, { 38, 38, 0 } },
         { { Building::Type::WatchTower, BuildingAnimationType::Constructing }, { 39, 40, 60 } },
-        { { Building::Type::WatchTower, BuildingAnimationType::Built }, { 41, 41, 0 } },
+        { { Building::Type::WatchTower, BuildingAnimationType::Built }, { 41, 41, 0 } }
+    };
+
+    /**
+     * Object animation definitions.
+     */
+    static const std::map<ObjectVariantPair, const Animation> objectAnimationLookup = {
+        // Trees
+        { { std::uint8_t(0x03), std::uint8_t(0) }, { 0, 5, 60 } },
+        { { std::uint8_t(0x03), std::uint8_t(1) }, { 6, 11, 60 } },
+        { { std::uint8_t(0x03), std::uint8_t(2) }, { 12, 17, 60 } },
+        { { std::uint8_t(0x03), std::uint8_t(3) }, { 18, 23, 60 } },
+
+        // Soft Mountains
+        { { std::uint8_t(0x05), std::uint8_t(0) }, { 24, 24, 0 } },
+        { { std::uint8_t(0x05), std::uint8_t(1) }, { 25, 25, 0 } },
+        { { std::uint8_t(0x05), std::uint8_t(2) }, { 26, 26, 0 } },
+        { { std::uint8_t(0x05), std::uint8_t(3) }, { 27, 27, 0 } },
+
+        // Hard Mountains
+        { { std::uint8_t(0x06), std::uint8_t(0) }, { 28, 28, 0 } },
+        { { std::uint8_t(0x06), std::uint8_t(1) }, { 29, 29, 0 } },
+        { { std::uint8_t(0x06), std::uint8_t(2) }, { 30, 30, 0 } },
+        { { std::uint8_t(0x06), std::uint8_t(3) }, { 31, 31, 0 } },
+
+        // Ornamental Objects
+        { { std::uint8_t(0xAF), std::uint8_t(0) }, { 6, 6, 0 } },    // Silver pointed rock
+        { { std::uint8_t(0xAF), std::uint8_t(1) }, { 7, 7, 0 } },    // Red bush
+        { { std::uint8_t(0xAF), std::uint8_t(2) }, { 8, 8, 0 } },    // Silver rounded rock
+        { { std::uint8_t(0xAF), std::uint8_t(3) }, { 9, 9, 0 } },    // Dark bush
+        { { std::uint8_t(0xAF), std::uint8_t(4) }, { 10, 10, 0 } },  // Mossy rock
+        { { std::uint8_t(0xAF), std::uint8_t(5) }, { 11, 11, 0 } },  // Dead tree
+        { { std::uint8_t(0xAF), std::uint8_t(6) }, { 12, 12, 0 } },  // Stone pillar
+        { { std::uint8_t(0xAF), std::uint8_t(7) }, { 13, 13, 0 } },  // Beige rock
     };
 
     Animation getUnitAnimation(
@@ -200,6 +234,8 @@ namespace Animations {
 
     Animation getBuildingAnimation(
             Building::Type buildingType, BuildingAnimationType animType);
+
+    Animation getObjectAnimation(std::uint8_t type, std::uint8_t variant);
 
 }}  // namespace Rival::Animations
 

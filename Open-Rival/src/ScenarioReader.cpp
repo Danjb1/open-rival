@@ -137,7 +137,6 @@ namespace Rival {
     ///////////////////////////////////////////////////////////////////////////
 
     ScenarioData ScenarioReader::parseScenario(bool expectEof) {
-
         ScenarioData scenarioData;
 
         // Parse map header
@@ -157,7 +156,7 @@ namespace Rival {
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(909, true);
+        skip(909, false);
 
         /*
         24 -- -- -- -- b0 04 0c -- -- 08 -- -- -- ff --
@@ -226,7 +225,7 @@ namespace Rival {
             scenarioData.troopDefaults[i] = parseTroopDefaults();
         }
         print(scenarioData.troopDefaults[0]);
-        skip(7, true);
+        skip(7, false);
 
         // Parse upgrade properties
         printSection("Parsing upgrade properties");
@@ -240,7 +239,7 @@ namespace Rival {
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(176, true);
+        skip(176, false);
 
         /*
         ff ff ff ff d2 -- -- -- -- -- -- -- 34 -- -- --
@@ -263,7 +262,7 @@ namespace Rival {
             scenarioData.productionCosts[i] = parseProductionCost();
         }
         print(scenarioData.productionCosts[0]);
-        skip(27, true);
+        skip(27, false);
 
         // Parse weapon defaults
         printSection("Parsing weapon defaults");
@@ -272,14 +271,14 @@ namespace Rival {
             scenarioData.weaponDefaults[i] = parseWeaponDefaults();
         }
         print(scenarioData.weaponDefaults[0]);
-        skip(2, true);
+        skip(2, false);
 
         // Parse available buildings
         printSection("Parsing available buildings");
         printOffset();
         scenarioData.availableBuildings = parseAvailableBuildings();
         print(scenarioData.availableBuildings);
-        skip(5, true);
+        skip(5, false);
 
         // Parse monster defaults
         printSection("Parsing monster defaults");
@@ -288,7 +287,7 @@ namespace Rival {
             scenarioData.monsterDefaults[i] = parseTroopDefaults();
         }
         print(scenarioData.monsterDefaults[0]);
-        skip(49, true);
+        skip(49, false);
 
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
@@ -320,7 +319,7 @@ namespace Rival {
         // UNKNOWN
         printSection("Skipping unknown section");
         printOffset();
-        skip(392, true);
+        skip(392, false);
 
         /*
         0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 0a -- 04 --
@@ -415,7 +414,7 @@ namespace Rival {
         if (scenarioData.traps.size() > 0) {
             print(scenarioData.traps[0]);
         }
-        skip(8, true);
+        skip(8, false);
 
         // Parse goal locations
         printSection("Parsing goal locations");
@@ -462,10 +461,9 @@ namespace Rival {
     }
 
     ScenarioHeader ScenarioReader::parseHeader() {
-
         ScenarioHeader hdr;
 
-        skip(8, true);
+        skip(8, false);
         std::uint8_t terrainType = readByte();
         hdr.wilderness = (terrainType == 0x03);
         std::uint8_t nameLength = readByte();
@@ -478,7 +476,6 @@ namespace Rival {
     }
 
     PlayerProperties ScenarioReader::parsePlayerProperties() {
-
         PlayerProperties props;
 
         props.hasStartLocation = (readInt() == 1);
@@ -497,7 +494,6 @@ namespace Rival {
     }
 
     TroopDefaults ScenarioReader::parseTroopDefaults() {
-
         TroopDefaults troop;
 
         troop.hitpoints = readShort();
@@ -535,7 +531,6 @@ namespace Rival {
     }
 
     ProductionCost ScenarioReader::parseProductionCost() {
-
         ProductionCost cost;
 
         cost.goldCost = readShort();
@@ -547,7 +542,6 @@ namespace Rival {
     }
 
     WeaponDefaults ScenarioReader::parseWeaponDefaults() {
-
         WeaponDefaults weapon;
 
         weapon.moveSpaces = readShort();
@@ -566,7 +560,6 @@ namespace Rival {
     }
 
     AvailableBuildings ScenarioReader::parseAvailableBuildings() {
-
         AvailableBuildings bldgs;
 
         bldgs.cropLand = readBool();
@@ -586,7 +579,6 @@ namespace Rival {
     }
 
     HireTroopsRestrictions ScenarioReader::parseHireTroopsRestrictions() {
-
         HireTroopsRestrictions restrictions;
 
         restrictions.worker = readBool();
@@ -652,7 +644,6 @@ namespace Rival {
     }
 
     TilePlacement ScenarioReader::parseTile() {
-
         TilePlacement tile;
 
         tile.resource = readByte(pos);
@@ -663,7 +654,6 @@ namespace Rival {
     }
 
     std::vector<ObjectPlacement> ScenarioReader::parseObjects() {
-
         std::uint32_t numObjects = readInt();
         std::vector<ObjectPlacement> objects;
         objects.reserve(numObjects);
@@ -677,7 +667,6 @@ namespace Rival {
     }
 
     ObjectPlacement ScenarioReader::parseObject() {
-
         ObjectPlacement obj;
 
         obj.type = readByte();
@@ -690,7 +679,6 @@ namespace Rival {
     }
 
     std::vector<BuildingPlacement> ScenarioReader::parseBuildings() {
-
         std::uint32_t numBuildings = readInt();
         std::vector<BuildingPlacement> buildings;
         buildings.reserve(numBuildings);
@@ -704,20 +692,19 @@ namespace Rival {
     }
 
     BuildingPlacement ScenarioReader::parseBuilding() {
-
         BuildingPlacement bldg;
 
         bldg.type = readByte();
-        skip(1, true);
+        skip(1, false);
         bldg.wallVariant = readByte();
-        skip(1, true);
-        skip(1, true);
+        skip(1, false);
+        skip(1, false);
         bldg.x = readShort();
         bldg.y = readShort();
         bldg.player = readByte();
         bldg.hitpoints = readShort();
         bldg.armour = readShort();
-        skip(1, true);
+        skip(1, false);
         bldg.sight = readByte();
         bldg.range = readByte();
         bldg.upgrade1Enabled = readBool();
@@ -725,13 +712,12 @@ namespace Rival {
         bldg.specialColour = readByte();
         bldg.prisoner = readBool();
         bldg.name = readString(12);
-        skip(1, true);
+        skip(1, false);
 
         return bldg;
     }
 
     std::vector<UnitPlacement> ScenarioReader::parseUnits() {
-
         std::uint32_t numUnits = readInt();
         std::vector<UnitPlacement> units;
         units.reserve(numUnits);
@@ -745,30 +731,29 @@ namespace Rival {
     }
 
     UnitPlacement ScenarioReader::parseUnit() {
-
         UnitPlacement unit;
 
         unit.type = readByte();
-        skip(2, true);
+        skip(2, false);
         unit.facing = readByte();
-        skip(1, true);
+        skip(1, false);
         unit.x = readShort();
         unit.y = readShort();
         unit.player = readByte();
         unit.hitpoints = readShort();
         unit.magic = readByte();
         unit.armour = readShort();
-        skip(1, true);
+        skip(1, false);
         unit.type2 = readByte();
         unit.sight = readByte();
         unit.range = readByte();
-        skip(2, true);
+        skip(2, false);
         unit.specialColour = readByte();
         unit.prisoner = readBool();
         unit.goldCost = readShort();
         unit.woodCost = readShort();
         unit.name = readString(12);
-        skip(13, true);
+        skip(13, false);
         unit.upgrade1Enabled = readBool();
         unit.upgrade2Enabled = readBool();
         unit.upgrade3Enabled = readBool();
@@ -779,7 +764,6 @@ namespace Rival {
     }
 
     std::vector<ChestPlacement> ScenarioReader::parseChests() {
-
         std::uint32_t numChests = readInt();
         std::vector<ChestPlacement> chests;
         chests.reserve(numChests);
@@ -793,20 +777,18 @@ namespace Rival {
     }
 
     ChestPlacement ScenarioReader::parseChest() {
-
         ChestPlacement obj;
 
         obj.type = readInt();
         obj.variant = readInt();
         obj.x = readByte();
         obj.y = readByte();
-        skip(10, true);  // items
+        skip(10, false);  // items
 
         return obj;
     }
 
     std::vector<InfoPointPlacement> ScenarioReader::parseInfoPoints() {
-
         std::uint32_t numInfoPoints = readInt();
         std::vector<InfoPointPlacement> infoPoints;
         infoPoints.reserve(numInfoPoints);
@@ -820,7 +802,6 @@ namespace Rival {
     }
 
     InfoPointPlacement ScenarioReader::parseInfoPoint() {
-
         InfoPointPlacement infoPoint;
 
         infoPoint.x = readByte();
@@ -832,7 +813,6 @@ namespace Rival {
     }
 
     std::vector<TrapPlacement> ScenarioReader::parseTraps() {
-
         std::uint32_t numTraps = readInt();
         std::vector<TrapPlacement> traps;
         traps.reserve(numTraps);
@@ -846,7 +826,6 @@ namespace Rival {
     }
 
     TrapPlacement ScenarioReader::parseTrap() {
-
         TrapPlacement trap;
 
         trap.x = readByte();
@@ -857,7 +836,6 @@ namespace Rival {
     }
 
     std::vector<GoalLocation> ScenarioReader::parseGoalLocations() {
-
         std::uint8_t numGoalLocations = readRivalByte();
         std::vector<GoalLocation> goals;
         goals.reserve(numGoalLocations);
@@ -871,7 +849,6 @@ namespace Rival {
     }
 
     GoalLocation ScenarioReader::parseGoalLocation() {
-
         GoalLocation goal;
 
         goal.type = readRivalByte();
@@ -884,7 +861,6 @@ namespace Rival {
     }
 
     std::vector<Goal> ScenarioReader::parseGoals() {
-
         std::uint8_t numGoals = readRivalByte();
 
         if (numGoals > 0) {
@@ -903,11 +879,10 @@ namespace Rival {
     }
 
     Goal ScenarioReader::parseGoal() {
-
         Goal goal;
 
         /*std::uint8_t goalType = */ readByte();
-        skip(11, true);
+        skip(11, false);
 
         // TODO: parse goal based on type
         goal.count = 0;
@@ -916,7 +891,6 @@ namespace Rival {
     }
 
     CampaignText ScenarioReader::parseCampaignText() {
-
         CampaignText text;
 
         std::uint16_t titleLength = readRivalShort();
@@ -1168,13 +1142,13 @@ namespace Rival {
                   << std::dec;
     }
 
-    void ScenarioReader::print(ScenarioHeader& hdr) const {
+    void ScenarioReader::print(const ScenarioHeader& hdr) const {
         std::cout
                 << "Map Name: " << hdr.mapName << '\n'
                 << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
     }
 
-    void ScenarioReader::print(PlayerProperties& props) const {
+    void ScenarioReader::print(const PlayerProperties& props) const {
         if (props.hasStartLocation) {
             std::cout
                     << "Start Location: "
@@ -1194,7 +1168,7 @@ namespace Rival {
                 << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
     }
 
-    void ScenarioReader::print(TroopDefaults& troop) const {
+    void ScenarioReader::print(const TroopDefaults& troop) const {
         std::cout
                 << "Hitpoints: " << troop.hitpoints << '\n'
                 << "Magic:     " << troop.magic << '\n'
@@ -1203,7 +1177,7 @@ namespace Rival {
                 << "Range:     " << static_cast<int>(troop.range) << '\n';
     }
 
-    void ScenarioReader::print(UpgradeProperties& upgrade) const {
+    void ScenarioReader::print(const UpgradeProperties& upgrade) const {
         std::cout
                 << "Amount:    " << upgrade.amount << '\n'
                 << "Gold Cost: " << upgrade.goldCost << '\n'
@@ -1211,7 +1185,7 @@ namespace Rival {
                 << "Unknown:   " << upgrade.unknown << '\n';
     }
 
-    void ScenarioReader::print(ProductionCost& cost) const {
+    void ScenarioReader::print(const ProductionCost& cost) const {
         std::cout
                 << "Gold Cost:         " << cost.goldCost << '\n'
                 << "Wood Cost:         " << cost.woodCost << '\n'
@@ -1219,7 +1193,7 @@ namespace Rival {
                 << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
     }
 
-    void ScenarioReader::print(WeaponDefaults& wpn) const {
+    void ScenarioReader::print(const WeaponDefaults& wpn) const {
         std::cout
                 << "Move Spaces:  " << wpn.moveSpaces << '\n'
                 << "Move Time:    " << wpn.moveSpaces << '\n'
@@ -1233,7 +1207,7 @@ namespace Rival {
                 << "Unknown:      " << wpn.unknown << '\n';
     }
 
-    void ScenarioReader::print(AvailableBuildings& bldg) const {
+    void ScenarioReader::print(const AvailableBuildings& bldg) const {
         std::cout
                 << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
                 << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
@@ -1249,7 +1223,7 @@ namespace Rival {
                 << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
     }
 
-    void ScenarioReader::print(HireTroopsRestrictions& restrictions) const {
+    void ScenarioReader::print(const HireTroopsRestrictions& restrictions) const {
         std::cout
                 << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
                 << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
@@ -1268,13 +1242,13 @@ namespace Rival {
                 << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
     }
 
-    void ScenarioReader::print(AiSetting& settings) const {
+    void ScenarioReader::print(const AiSetting& settings) const {
         std::cout
                 << "Count: " << static_cast<int>(settings.amount) << '\n'
                 << "Flag:  " << static_cast<int>(settings.flag) << '\n';
     }
 
-    void ScenarioReader::print(ObjectPlacement& obj) const {
+    void ScenarioReader::print(const ObjectPlacement& obj) const {
         std::cout
                 << "Type:    " << static_cast<int>(obj.type) << '\n'
                 << "Variant: " << static_cast<int>(obj.variant) << '\n'
@@ -1282,7 +1256,7 @@ namespace Rival {
                 << "Y:       " << obj.y << '\n';
     }
 
-    void ScenarioReader::print(BuildingPlacement& bldg) const {
+    void ScenarioReader::print(const BuildingPlacement& bldg) const {
         std::cout
                 << "Type:           " << static_cast<int>(bldg.type) << '\n'
                 << "Player:         " << static_cast<int>(bldg.player) << '\n'
@@ -1299,7 +1273,7 @@ namespace Rival {
                 << "Name:           " << bldg.name << '\n';
     }
 
-    void ScenarioReader::print(UnitPlacement& unit) const {
+    void ScenarioReader::print(const UnitPlacement& unit) const {
         std::cout
                 << "Type:           " << static_cast<int>(unit.type) << '\n'
                 << "Facing:         " << static_cast<int>(unit.facing) << '\n'
@@ -1324,21 +1298,21 @@ namespace Rival {
                 << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
     }
 
-    void ScenarioReader::print(TrapPlacement& trap) const {
+    void ScenarioReader::print(const TrapPlacement& trap) const {
         std::cout
                 << "X:              " << static_cast<int>(trap.x) << '\n'
                 << "Y:              " << static_cast<int>(trap.y) << '\n'
                 << "Player:         " << static_cast<int>(trap.player) << '\n';
     }
 
-    void ScenarioReader::print(GoalLocation& goalLoc) const {
+    void ScenarioReader::print(const GoalLocation& goalLoc) const {
         std::cout
                 << "Type: " << static_cast<int>(goalLoc.type) << '\n'
                 << "X:    " << static_cast<int>(goalLoc.x) << '\n'
                 << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
     }
 
-    void ScenarioReader::print(CampaignText& text) const {
+    void ScenarioReader::print(const CampaignText& text) const {
         std::cout
                 << "Title:      " << text.title << '\n'
                 << "Objectives: " << text.objectives << '\n'

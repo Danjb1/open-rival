@@ -29,6 +29,12 @@ namespace Rival {
         std::unique_ptr<Entity> createBuilding(
                 const BuildingPlacement& buildingPlacement) const;
 
+        /**
+         * Creates an Object from raw data (e.g. read from a Scenario file).
+         */
+        std::unique_ptr<Entity> EntityFactory::createObject(
+                const ObjectPlacement& objPlacement, bool wilderness) const;
+
     private:
         const Resources& res;
 

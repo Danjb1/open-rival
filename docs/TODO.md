@@ -4,6 +4,8 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
+ - MousePicker is not working correctly!
+
  - Sound
     - When playing a sound, add it to a queue
     - Create a separate thread to play sounds from this queue
@@ -90,6 +92,12 @@ character filename (including path)
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+ - Static objects (e.g. mountains) need not use an AnimationComponent
+
+ - Consolidate "objects_*.tga" spritesheets
+    - Palisade, etc. look the same regardless of map type
+    - Could combine them all into one texture
 
  - Fix (ignore) SDL warnings
 
@@ -178,8 +186,6 @@ character filename (including path)
 ### Rendering
 
  - Render interface
- - Render trees
- - Render mountains
  - Render info points
  - Render chests
  - Respect unit colour

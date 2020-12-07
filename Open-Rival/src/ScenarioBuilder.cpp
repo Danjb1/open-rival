@@ -46,6 +46,17 @@ namespace Rival {
         // Initialise Buildings
         for (BuildingPlacement& buildingPlacement : data.buildings) {
 
+            if (buildingPlacement.type == 0xAB) {
+                // Palisade (not supported yet)
+                continue;
+            } else if (buildingPlacement.type == 0xAC) {
+                // Grate (not supported yet)
+                continue;
+            } else if (buildingPlacement.type == 0xAD) {
+                // Door (not supported yet)
+                continue;
+            }
+
             // Create Building
             std::unique_ptr<Entity> building =
                     entityFactory.createBuilding(buildingPlacement);
@@ -54,6 +65,19 @@ namespace Rival {
             scenario->addEntity(std::move(building),
                     buildingPlacement.x,
                     buildingPlacement.y);
+        }
+
+        // Initialise Objects
+        for (const ObjectPlacement& objPlacement : data.objects) {
+
+            // Create Object
+            std::unique_ptr<Entity> obj = entityFactory.createObject(
+                    objPlacement, data.hdr.wilderness);
+
+            // Add to world
+            scenario->addEntity(std::move(obj),
+                    objPlacement.x,
+                    objPlacement.y);
         }
 
         return scenario;
