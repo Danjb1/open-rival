@@ -18,15 +18,23 @@ namespace Rival {
             printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
             vsyncEnabled = false;
         }
+
+        // Enable MIDI playback
+        audioSystem.setMidiActive(true);
     }
 
     void Application::start(std::unique_ptr<State> initialState) {
+        setState(std::move(initialState));
 
-        state = std::move(initialState);
         Uint32 nextUpdateDue = SDL_GetTicks();
 
         // Game loop
         while (!exiting) {
+
+            // Switch to the next State, if set
+            if (nextState.get()) {
+                makeNextStateActive();
+            }
 
             // Determine when this frame began.
             // If we are running behind, this will be a long time after
@@ -93,8 +101,21 @@ namespace Rival {
         exiting = true;
     }
 
+    void Application::setState(std::unique_ptr<State> newState) {
+        nextState = std::move(newState);
+    }
+
+    void Application::makeNextStateActive() {
+        state = std::move(nextState);
+        state->onLoad();
+    }
+
     const Window& Application::getWindow() const {
         return window;
+    }
+
+    AudioSystem& Application::getAudioSystem() {
+        return audioSystem;
     }
 
     Resources& Application::getResources() {

@@ -17,12 +17,7 @@
         https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/
 
  - Music (MIDI)
-    - Play MIDI files on a separate thread
-
- - Refactoring
-    - Fix (ignore) SDL warnings
-    - Move sleep functions to a utility file?
-    - Move readFileToByteArray to a utility file?
+    - Defer loading MIDI files until needed to speed up initial load time
 
  - Central unit type registry: animations, UI image, etc.
 
@@ -96,6 +91,14 @@ character filename (including path)
 ## Tech Debt
 <!----------------------------------------------------------------------------->
 
+ - Fix (ignore) SDL warnings
+
+ - Use high-precision timers for MIDI playback
+
+ - Move sleep functions to a utility file?
+
+ - Move readFileToByteArray to a utility file?
+
  - Inconsistent use of }} vs }\n} for namespaces
 
  - runtime_error is *sometimes* initialised with a newline-terminated string
@@ -116,6 +119,8 @@ character filename (including path)
         - These could live inside a common namespace (e.g. ScenarioUtils)
 
  - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
+
+ - Should short methods (e.g. getters) be defined in header files?
 
  - Move constants from header files to CPP files
 

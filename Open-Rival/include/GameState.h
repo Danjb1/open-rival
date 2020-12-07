@@ -20,6 +20,8 @@ namespace Rival {
     public:
         GameState(Application& app, std::unique_ptr<Scenario> scenario);
 
+        void onLoad() override;
+
         void keyDown(const SDL_Keycode keyCode) override;
 
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;

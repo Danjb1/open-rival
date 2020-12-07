@@ -28,6 +28,10 @@ namespace Rival {
           mousePicker(camera, viewport, *scenario),
           gameRenderer(window, *scenario, camera, viewport, res) {}
 
+    void GameState::onLoad() {
+        app.getAudioSystem().playMidi(res.getMidi(0));
+    }
+
     void GameState::update() {
 
         // Early-update Entities
