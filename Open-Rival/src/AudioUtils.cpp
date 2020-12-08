@@ -72,52 +72,45 @@ namespace AudioUtils {
                 + std::to_string(waveHeader.bitsPerSample) + " bps");
     }
 
-    void playSound(const WaveFile& waveFile) {
+    void playSound(const SoundSource& source) {
         // Generate buffer
         ALuint buffer;
         alGenBuffers(1, &buffer);
-        checkPlaySoundALError(waveFile);
+        checkPlaySoundALError(source.waveFile);
 
         // Fill buffer
-        ALenum format = getAudioFormat(waveFile.header);
+        ALenum format = getAudioFormat(source.waveFile.header);
         alBufferData(
                 buffer,
                 format,
-                waveFile.soundData.data(),
-                waveFile.soundData.size(),
-                waveFile.header.samplesPerSec);
-        checkPlaySoundALError(waveFile);
+                source.waveFile.soundData.data(),
+                source.waveFile.soundData.size(),
+                source.waveFile.header.samplesPerSec);
+        checkPlaySoundALError(source.waveFile);
 
         // Create sound source
-        ALuint source;
-        alGenSources(1, &source);
-        checkPlaySoundALError(waveFile);
-        alSourcef(source, AL_PITCH, 1);
-        alSourcef(source, AL_GAIN, 1.0f);
-        alSource3f(source, AL_POSITION, 0, 0, 0);
-        alSource3f(source, AL_VELOCITY, 0, 0, 0);
-        alSourcei(source, AL_LOOPING, AL_FALSE);
-        alSourcei(source, AL_BUFFER, buffer);
-        checkPlaySoundALError(waveFile);
+        ALuint sourceId;
+        alGenSources(1, &sourceId);
+        checkPlaySoundALError(source.waveFile);
+        alSourcef(sourceId, AL_PITCH, source.pitch);
+        alSourcef(sourceId, AL_GAIN, source.gain);
+        alSource3f(sourceId, AL_POSITION,
+                source.position[0],
+                source.position[1],
+                source.position[2]);
+        alSourcei(sourceId, AL_SOURCE_RELATIVE,
+                source.positionRelativeToListener ? AL_TRUE : AL_FALSE);
+        alSource3f(sourceId, AL_VELOCITY,
+                source.velocity[0],
+                source.velocity[1],
+                source.velocity[2]);
+        alSourcei(sourceId, AL_LOOPING, source.looping ? AL_TRUE : AL_FALSE);
+        alSourcei(sourceId, AL_BUFFER, buffer);
+        checkPlaySoundALError(source.waveFile);
 
         // Start playing sound
-        alSourcePlay(source);
-        checkPlaySoundALError(waveFile);
-
-        // Play sound until done
-        ALint state = AL_PLAYING;
-        while (state == AL_PLAYING) {
-            alGetSourcei(source, AL_SOURCE_STATE, &state);
-            checkPlaySoundALError(waveFile);
-        }
-
-        // Delete sound source
-        alDeleteSources(1, &source);
-        checkPlaySoundALError(waveFile);
-
-        // Delete buffer
-        alDeleteBuffers(1, &buffer);
-        checkPlaySoundALError(waveFile);
+        alSourcePlay(sourceId);
+        checkPlaySoundALError(source.waveFile);
     }
 
 }}  // namespace Rival::AudioUtils

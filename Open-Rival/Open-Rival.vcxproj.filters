@@ -205,6 +205,12 @@
     <ClCompile Include="src\WaveFile.cpp">
       <Filter>Source Files\audio\wav</Filter>
     </ClCompile>
+    <ClCompile Include="src\SoundSource.cpp">
+      <Filter>Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SleepUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -383,6 +389,12 @@
     </ClInclude>
     <ClInclude Include="include\WaveFile.h">
       <Filter>Source Files\audio\wav</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SoundSource.h">
+      <Filter>Source Files\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SleepUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

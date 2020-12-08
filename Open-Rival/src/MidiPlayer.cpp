@@ -5,17 +5,9 @@
 #include <stdexcept>
 
 #include "RtMidi.h"
+#include "SleepUtils.h"
 
 namespace Rival {
-
-// Platform-dependent sleep routines
-#ifdef _WIN32
-#include <windows.h>
-#define SLEEP(milliseconds) Sleep((DWORD) milliseconds)
-#else  // Unix variants
-#include <unistd.h>
-#define SLEEP(milliseconds) usleep((unsigned long) (milliseconds * 1000.0))
-#endif
 
     void MidiPlayer::init() {
         if (midiOut.isPortOpen()) {
@@ -89,7 +81,7 @@ namespace Rival {
             auto timeElapsed = currentTime - startTime;
             long timeUntilMessage = evt.m_timestamp - timeElapsed.count();
             if (timeUntilMessage > 0) {
-                SLEEP(timeUntilMessage);
+                SleepUtils::sleep(timeUntilMessage);
             }
 
             // Send the message to our MIDI output

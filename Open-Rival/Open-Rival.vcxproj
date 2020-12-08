@@ -60,6 +60,8 @@
     <ClCompile Include="src\ScenarioReader.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
+    <ClCompile Include="src\SleepUtils.cpp" />
+    <ClCompile Include="src\SoundSource.cpp" />
     <ClCompile Include="src\SpriteComponent.cpp" />
     <ClCompile Include="src\Spritesheet.cpp" />
     <ClCompile Include="src\SpriteRenderable.cpp" />
@@ -118,6 +120,8 @@
     <ClInclude Include="include\ScenarioReader.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
+    <ClInclude Include="include\SleepUtils.h" />
+    <ClInclude Include="include\SoundSource.h" />
     <ClInclude Include="include\SpriteComponent.h" />
     <ClInclude Include="include\Spritesheet.h" />
     <ClInclude Include="include\SpriteRenderable.h" />

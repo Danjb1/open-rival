@@ -24,6 +24,8 @@ namespace Rival {
 
         void keyDown(const SDL_Keycode keyCode) override;
 
+        void mouseUp(const SDL_MouseButtonEvent evt) override;
+
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
 
         void render() override;

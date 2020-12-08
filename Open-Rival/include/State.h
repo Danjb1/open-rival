@@ -29,6 +29,11 @@ namespace Rival {
         virtual void keyDown(const SDL_Keycode) {};
 
         /**
+         * Handles mouse events.
+         */
+        virtual void mouseUp(const SDL_MouseButtonEvent) {}
+
+        /**
          * Handles mouse wheel events.
          */
         virtual void mouseWheelMoved(const SDL_MouseWheelEvent) {}

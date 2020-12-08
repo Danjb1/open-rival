@@ -5,10 +5,12 @@
 <!----------------------------------------------------------------------------->
 
  - Sound
-    - When playing a sound, add it to a queue
-    - Create a separate thread to play sounds from this queue
-    - Yield the thread when playing a sound
-    - Set audio / listener position
+    - Initialise 'n' sound sources up-front, and find the next available one
+        when playing a sound
+    - Generate a buffer for each WaveFile up front and store them in a map
+        instead of creating a buffer whenever we play a sound
+    - Delete all sound sources / buffers when exiting
+    - Set listener position based on camera
 
  - Music (WMA / other)
     - Convert WMA to OGG
@@ -18,6 +20,11 @@
 
  - Music (MIDI)
     - Defer loading MIDI files until needed to speed up initial load time
+
+ - Use a config file
+    - Log level
+    - MIDI active
+    - Sound active
 
  - Central unit type registry: animations, UI image, etc.
 
@@ -100,8 +107,6 @@ character filename (including path)
  - Fix (ignore) SDL warnings
 
  - Use high-precision timers for MIDI playback
-
- - Move sleep functions to a utility file?
 
  - Move readFileToByteArray to a utility file?
 

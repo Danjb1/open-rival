@@ -60,6 +60,9 @@ typedef struct SDL_Keysym {
     SDL_Keycode sym;
 } SDL_Keysym;
 
+typedef struct SDL_MouseButtonEvent {
+} SDL_MouseButtonEvent;
+
 typedef struct SDL_MouseWheelEvent {
 } SDL_MouseWheelEvent;
 

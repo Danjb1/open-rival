@@ -1,0 +1,34 @@
+#include "pch.h"
+#include "SleepUtils.h"
+
+namespace Rival {
+namespace SleepUtils {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Windows
+    ///////////////////////////////////////////////////////////////////////////
+
+#ifdef _WIN32
+#include <windows.h>
+
+    void sleep(int ms) {
+        Sleep((DWORD) ms);
+    }
+
+#endif
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Unix
+    ///////////////////////////////////////////////////////////////////////////
+
+#ifdef __linux__
+#include <unistd.h>
+
+    void sleep(int ms) {
+        usleep((unsigned long) (milliseconds * 1000.0));
+    }
+
+#endif
+
+}
+}  // namespace Rival::SleepUtils
