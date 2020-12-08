@@ -3,10 +3,13 @@
 
 #include <condition_variable>
 #include <mutex>
+#include <queue>
 #include <thread>
 
 #include "MidiFile.h"
 #include "MidiPlayer.h"
+#include "SoundSource.h"
+#include "WaveFile.h"
 
 namespace Rival {
 
@@ -21,22 +24,154 @@ namespace Rival {
         AudioSystem& operator=(const AudioSystem& other) = delete;
         AudioSystem& operator=(AudioSystem&& other) = delete;
 
+        ///////////////////////////////////////////////////////////////////////
+        // MIDI playback
+        ///////////////////////////////////////////////////////////////////////
+
+    public:
+        /**
+         * Enables or disables MIDI playback.
+         */
         void setMidiActive(bool active);
 
+        /**
+         * Plays the given MIDI file.
+         * 
+         * Requires that MIDI playback is enabled.
+         */
         void playMidi(MidiFile midi);
 
     private:
+        /**
+         * Flag set when MIDI playback is enabled.
+         */
         bool midiActive;
-        MidiPlayer midiPlayer;
-        MidiFile currentMidiTrack;
-        std::thread midiThread;
-        std::condition_variable midiReadyCondition;
-        std::mutex midiReadyMutex;
 
+        /**
+         * MidiPlayer used to play MIDI files synchronously in a background
+         * thread.
+         */
+        MidiPlayer midiPlayer;
+
+        /**
+         * The MIDI track being played.
+         *
+         * If this is an empty MidiFile, the MIDI thread will wait for
+         * `midiReadyCondition` to be notified.
+         */
+        MidiFile currentMidiTrack;
+
+        /**
+         * Background thread used to play MIDI files.
+         */
+        std::thread midiThread;
+
+        /**
+         * Condition used to wait / notify the MIDI thread.
+         */
+        std::condition_variable midiReadyCondition;
+
+        /**
+         * Mutex used to govern access to the current MIDI track.
+         */
+        std::mutex midiMutex;
+
+        /**
+         * Plays the current MIDI track on a loop, for as long as MIDI playback
+         * is enabled.
+         */
         void midiThreadLoop();
 
-        void startMidiThread();
-        void killMidiThread();
+        /**
+         * Causes the current thread to wait until `midiReadyCondition` is
+         * notified, and the current MIDI track is set to a non-empty file.
+         */
+        void waitForMidi();
+
+        /**
+         * Initializes the MIDI device, and starts the MIDI thread.
+         */
+        void startMidiSystem();
+
+        /**
+         * Cleans up all MIDI resources.
+         */
+        void destroyMidiSystem();
+
+        ///////////////////////////////////////////////////////////////////////
+        // WAV playback
+        ///////////////////////////////////////////////////////////////////////
+
+    public:
+        /**
+         * Enables or disables sound playback.
+         */
+        void setSoundActive(bool active);
+
+        /**
+         * Plays the given sound.
+         * 
+         * Requires that sound playback is enabled.
+         */
+        void playSound(SoundSource source);
+
+    private:
+        /**
+         * Flag set when sound playback is enabled.
+         */
+        bool soundActive;
+
+        /**
+         * Queue of sounds waiting to be played.
+         */
+        std::queue<SoundSource> soundQueue;
+
+        /**
+         * Background thread used to play sound files.
+         */
+        std::thread soundThread;
+
+        /**
+         * Condition used to wait / notify the sound thread.
+         */
+        std::condition_variable soundReadyCondition;
+
+        /**
+         * Mutex used to govern access to the sound queue.
+         */
+        std::mutex soundQueueMutex;
+
+        /**
+         * Plays sounds from the queue, for as long as sound playback is
+         * enabled.
+         */
+        void soundThreadLoop();
+
+        /**
+         * Causes the current thread to wait until `soundReadyCondition` is
+         * notified, and the sound queue is not empty.
+         */
+        void waitForSound();
+
+        /**
+         * Plays the next sound from the queue.
+         */
+        void playNextSound();
+
+        /**
+         * Initializes the sound device, and starts the MIDI thread.
+         */
+        void startSoundSystem();
+
+        /**
+         * Cleans up all sound resources.
+         */
+        void destroySoundSystem();
+
+        /**
+         * Stops all sounds that are playing.
+         */
+        void stopAllSounds();
     };
 
 }  // namespace Rival

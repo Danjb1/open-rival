@@ -24,9 +24,6 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
         SlowRenderingState(Application& app)
             : State(app) {}
 
-        void keyDown(const SDL_Keycode keyCode) override {}
-        void mouseWheelMoved(const SDL_MouseWheelEvent evt) override {}
-
         void update() override {
             updatesRun++;
         }

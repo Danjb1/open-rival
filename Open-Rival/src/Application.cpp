@@ -19,8 +19,9 @@ namespace Rival {
             vsyncEnabled = false;
         }
 
-        // Enable MIDI playback
+        // Set up the audio system
         audioSystem.setMidiActive(true);
+        audioSystem.setSoundActive(true);
     }
 
     void Application::start(std::unique_ptr<State> initialState) {
@@ -91,6 +92,8 @@ namespace Rival {
                 exiting = true;
             } else if (e.type == SDL_KEYDOWN) {
                 state->keyDown(e.key.keysym.sym);
+            } else if (e.type == SDL_MOUSEBUTTONUP) {
+                state->mouseUp(e.button);
             } else if (e.type == SDL_MOUSEWHEEL) {
                 state->mouseWheelMoved(e.wheel);
             }

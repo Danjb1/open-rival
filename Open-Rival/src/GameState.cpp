@@ -80,6 +80,14 @@ namespace Rival {
         }
     }
 
+#include <cstdlib>  // TMP (for rand)
+    void GameState::mouseUp(const SDL_MouseButtonEvent) {
+        // TMP: play a random sound!
+        int soundId = std::rand() % 369;
+        const WaveFile& waveFile = res.getSound(soundId);
+        app.getAudioSystem().playSound(SoundSource(waveFile));
+    }
+
     void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt) {
 
         // Get the mouse position relative to the window, in pixels

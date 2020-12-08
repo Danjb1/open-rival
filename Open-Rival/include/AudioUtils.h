@@ -3,6 +3,7 @@
 
 #include <AL/alc.h>
 
+#include "SoundSource.h"
 #include "WaveFile.h"
 
 namespace Rival {
@@ -12,7 +13,7 @@ namespace AudioUtils {
 
     void destroyAL();
 
-    void playSound(const WaveFile& waveFile);
+    void playSound(const SoundSource& source);
 
 }}  // namespace Rival::AudioUtils
 
