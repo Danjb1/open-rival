@@ -184,7 +184,7 @@ namespace Rival {
             int mouseInViewportX,
             int mouseInViewportY) {
         auto& entities = scenario.getEntities();
-        for (auto it = entities.begin(); it != entities.end(); ++it) {
+        for (auto it = entities.cbegin(); it != entities.cend(); ++it) {
             // We could optimise this by considering only Entities that were
             // rendered in the previous frame.
             const Entity& entity = *it->second;

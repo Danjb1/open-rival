@@ -8,7 +8,6 @@ namespace TimerUtils {
 
     static const int timeStepMs = 1000 / 60;
 
-}
-}  // namespace Rival::TimerUtils
+}}  // namespace Rival::TimerUtils
 
 #endif  // TIMER_UTILS_H

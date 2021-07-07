@@ -101,32 +101,4 @@ namespace Rival {
         glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
     }
 
-    GLuint AtlasRenderable::getVao() const {
-        return vao;
-    }
-
-    GLuint AtlasRenderable::getPositionVbo() const {
-        return positionVbo;
-    }
-
-    GLuint AtlasRenderable::getTexCoordVbo() const {
-        return texCoordVbo;
-    }
-
-    GLuint AtlasRenderable::getIbo() const {
-        return ibo;
-    }
-
-    GLuint AtlasRenderable::getTextureId() const {
-        return texAtlas.texture.getId();
-    }
-
-    GLenum AtlasRenderable::getDrawMode() const {
-        return drawMode;
-    }
-
-    int AtlasRenderable::getIndicesPerSprite() const {
-        return indicesPerSprite;
-    }
-
 }  // namespace Rival

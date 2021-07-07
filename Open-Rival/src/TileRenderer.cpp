@@ -148,13 +148,13 @@ namespace Rival {
 
                 // Copy this tile's data to the main buffers
                 positions.insert(
-                        positions.end(),
-                        thisVertexData.begin(),
-                        thisVertexData.end());
+                        positions.cend(),
+                        thisVertexData.cbegin(),
+                        thisVertexData.cend());
                 texCoords.insert(
-                        texCoords.end(),
-                        thisTexCoords.begin(),
-                        thisTexCoords.end());
+                        texCoords.cend(),
+                        thisTexCoords.cbegin(),
+                        thisTexCoords.cend());
 
                 ++tileIndex;
             }

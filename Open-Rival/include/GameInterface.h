@@ -51,7 +51,6 @@ namespace GameInterface {
         const std::string imageKey;
     };
 
-}
-}  // namespace Rival::GameInterface
+}}  // namespace Rival::GameInterface
 
 #endif  // GAME_INTERFACE_H

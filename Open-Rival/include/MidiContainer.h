@@ -265,7 +265,7 @@ namespace Rival {
         void trim_tempo_map(unsigned long p_index, unsigned long base_timestamp);
 
     public:
-        typedef std::string (*split_callback)(
+        using split_callback = std::string (*)(
                 uint8_t bank_msb, uint8_t bank_lsb, uint8_t instrument);
 
         void split_by_instrument_changes(split_callback cb = NULL);

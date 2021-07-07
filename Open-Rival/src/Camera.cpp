@@ -65,14 +65,6 @@ namespace Rival {
         centreOnPoint(x + dx, y + dy);
     }
 
-    float Camera::getX() const {
-        return x;
-    }
-
-    float Camera::getY() const {
-        return y;
-    }
-
     float Camera::getWidth() const {
         return defaultWidth / zoom;
     }
@@ -95,10 +87,6 @@ namespace Rival {
 
     float Camera::getBottom() const {
         return y + getHeight() / 2;
-    }
-
-    float Camera::getZoom() const {
-        return zoom;
     }
 
     void Camera::modZoom(float interval) {

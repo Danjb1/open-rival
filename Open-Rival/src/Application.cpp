@@ -100,33 +100,9 @@ namespace Rival {
         }
     }
 
-    void Application::requestExit() {
-        exiting = true;
-    }
-
-    void Application::setState(std::unique_ptr<State> newState) {
-        nextState = std::move(newState);
-    }
-
     void Application::makeNextStateActive() {
         state = std::move(nextState);
         state->onLoad();
-    }
-
-    const Window& Application::getWindow() const {
-        return window;
-    }
-
-    AudioSystem& Application::getAudioSystem() {
-        return audioSystem;
-    }
-
-    Resources& Application::getResources() {
-        return res;
-    }
-
-    State& Application::getState() {
-        return *state;
     }
 
 }  // namespace Rival

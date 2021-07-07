@@ -13,7 +13,7 @@ namespace Rival {
 
         BuildingPropsComponent(Building::Type type);
 
-        Building::Type getBuildingType() const;
+        Building::Type getBuildingType() const { return type; }
 
     private:
         Building::Type type;

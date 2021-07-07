@@ -7,7 +7,7 @@
 
 namespace Rival {
 
-    typedef struct WavHeader {
+    struct WavHeader {
         // RIFF Chunk Descriptor
         std::uint8_t riff[4];     // RIFF Header Magic header
         std::uint32_t chunkSize;  // RIFF Chunk Size
@@ -26,7 +26,7 @@ namespace Rival {
         // "data" sub-chunk
         std::uint8_t subchunk2ID[4];  // "data" string
         std::uint32_t subchunk2Size;  // Sampled data length
-    } WavHeader;
+    };
 
     class WaveFile {
 

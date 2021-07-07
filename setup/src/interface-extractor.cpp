@@ -428,7 +428,7 @@ namespace InterfaceExtractor {
         uint32_t size;
         uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
-            throw std::runtime_error("Error reading Interfac.dat\n");
+            throw std::runtime_error("Error reading Interfac.dat");
         }
 
         extractImages(data, outputDir);

@@ -4,7 +4,7 @@
 namespace Rival {
 namespace Unit {
 
-    enum class Type {
+    enum class Type : std::uint8_t {
 
         // Human
         Ballista,
@@ -71,7 +71,7 @@ namespace Unit {
     // Size, in tiles
     static const int width = 1;
     static const int height = 1;
-}
-}  // namespace Rival::Unit
+
+}}  // namespace Rival::Unit
 
 #endif  // UNIT_H

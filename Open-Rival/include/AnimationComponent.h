@@ -27,8 +27,8 @@ namespace Rival {
         int getCurrentSpriteIndex() const;
 
     private:
-        SpriteComponent* spriteComponent;
-        FacingComponent* facingComponent;
+        SpriteComponent* spriteComponent { nullptr };
+        FacingComponent* facingComponent { nullptr };
 
         Animations::Animation animation;
 

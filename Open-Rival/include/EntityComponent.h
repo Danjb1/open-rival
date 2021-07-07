@@ -39,7 +39,7 @@ namespace Rival {
         /**
          * Determines if this EntityComponent has been marked for deletion.
          */
-        const bool isDeleted() const;
+        const bool isDeleted() const { return deleted; }
 
         /**
          * Marks this EntityComponent for deletion.
@@ -48,18 +48,18 @@ namespace Rival {
          * processing, and should be considered non-existent for the purposes
          * of logic and rendering.
          */
-        void markForDeletion();
+        void markForDeletion() { deleted = true; }
 
         /**
          * Gets the key used to store and retrieve this EntityComponent.
          */
-        std::string getKey();
+        std::string getKey() { return _key; }
 
     protected:
         /**
          * The Entity that owns this EntityComponent.
          */
-        Entity* entity;
+        Entity* entity { nullptr };
 
     private:
         /**
@@ -70,7 +70,7 @@ namespace Rival {
         /**
          * Flag set when this EntityComponent is marked for deletion.
          */
-        bool deleted;
+        bool deleted { false };
     };
 
 }  // namespace Rival

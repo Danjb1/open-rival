@@ -24,11 +24,11 @@ namespace Rival {
         Image(int width, int height,
                 std::unique_ptr<std::vector<unsigned char>> data);
 
-        int getWidth() const;
+        int getWidth() const { return width; }
 
-        int getHeight() const;
+        int getHeight() const { return height; }
 
-        std::vector<unsigned char>* getData() const;
+        std::vector<unsigned char>* getData() const { return data.get(); };
 
     private:
         int width;

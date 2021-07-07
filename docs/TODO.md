@@ -249,11 +249,5 @@
 
 ### Refactoring
 
- - Apply lessons from Effective Modern C++
  - Move constants from header files to CPP files
- - Fix (ignore) SDL warnings
- - Inconsistent use of }} vs }\n} for namespaces
- - runtime_error is *sometimes* initialised with a newline-terminated string
- - Should enums have type specifiers (e.g. TileType is std::uint8_t)?
- - Should short methods (e.g. getters) be defined in header files?
  - Move readFileToByteArray to a utility file?
