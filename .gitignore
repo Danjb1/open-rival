@@ -37,6 +37,9 @@ SORR.BLD
 /texture-builder/images
 /texture-builder/textures
 
+# Commercial fonts
+/Open-Rival/res/fonts
+
 # Release folder
 /dist/res
 /dist/setup

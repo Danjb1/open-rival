@@ -205,15 +205,15 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>
@@ -234,7 +234,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.8\include;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -242,8 +242,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.8\lib\x86;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>

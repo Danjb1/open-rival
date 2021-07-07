@@ -2,11 +2,13 @@
 
 ## Dependencies
 
- - [glew](http://glew.sourceforge.net/)
-
- - [SDL2](https://www.libsdl.org/download-2.0.php)
-
- - [SDL_image](https://www.libsdl.org/projects/SDL_image/)
+ - **[glew](http://glew.sourceforge.net/):** For OpenGL functionality
+ - **[SDL2](https://www.libsdl.org/download-2.0.php):** For window creation and input
+ - **[SDL_image](https://www.libsdl.org/projects/SDL_image/)**: For image loading (*currently unused as we use a custom image loading routine*)
+ - **[GLM](https://github.com/g-truc/glm)**: For matrix operations
+ - **[FreeType](https://www.freetype.org/download.html)**: For font rendering
+    - *Requires Visual C++ 2015-2019 Redistributable*
+ - **[Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page) (included with Windows):** For MIDI playback
 
 ## Build
 

@@ -1,6 +1,6 @@
 # Open Rival
 
-**Rival Realms** was a fantastic but little-known real-time strategy game from 1998, developed by Activ Pub and published by Titus Software. Almost all traces of this game have now disappeared from the internet. This project is an attempt to remake it.
+**Rival Realms** is a fantastic but little-known real-time strategy game from 1998, developed by Activ Pub and published by Titus Software. Almost all traces of this game have now disappeared from the internet. This project is an attempt to remake it.
 
 ![Title](http://danjb.com/images/rival_realms/title.jpg)
 
@@ -42,18 +42,17 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 ## Legal Stuff
 
-I have tried to track down the copyright holders, even the original developers, without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
+I have tried to track down the copyright holders without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
 
-That said, I have gone to great lengths to keep any proprietary game assets out of this repo. Everything contained herein is entirely fan-made, and all assets are extracted from the original game at installation. The only exception to this is the WMA soundtrack, which cannot be extracted from the game directory.
+That said, I have gone to great lengths to keep any proprietary game assets out of this repo. Everything contained herein is entirely fan-made, and all assets are extracted from the original game at installation. The only exception to this is the WMA soundtrack, which cannot be extracted from the game directory as it resides on the original CD.
 
 ## Links
 
  - [Discord Server](https://discord.gg/R7E4KWT)
-
- - [Intro and CD Soundtrack](https://www.youtube.com/watch?v=N7JFz1GapOE&list=PL6389EE9ABE2B104B)
-
- - [MIDI Soundtrack](https://www.youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
-
- - [Multiplayer Gameplay & Set-up Guide](https://www.youtube.com/watch?v=KzTm1MCKrLI)
-
- - [Let's Play](https://www.youtube.com/watch?v=bSefVvZnxKs)
+ - [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
+ - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
+ - [2016][Let's Play](https://youtu.be/bSefVvZnxKs)
+ - [2019][Multiplayer Gameplay & Set-up Guide](https://youtu.be/KzTm1MCKrLI)
+ - [2019][Gameplay](https://youtu.be/3VcExo3szcc)
+ - [2020][Gameplay](https://youtu.be/3dcCDnHEAzc)
+ - [2021][Let's Play](https://youtube.com/playlist?list=PLFl3jwQIfR7-yusWQIiqZ-5LarDx-ixdS)
