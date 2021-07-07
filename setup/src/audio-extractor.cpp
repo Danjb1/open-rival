@@ -19,7 +19,7 @@ namespace AudioExtractor {
         // Open the data file
         std::ifstream input(inputFile, std::ios::binary);
         if (!input.is_open()) {
-            throw std::runtime_error("Unable to open SOUNDS.dat\n");
+            throw std::runtime_error("Unable to open SOUNDS.dat");
         }
 
         // Find and extract all audio files
@@ -45,7 +45,7 @@ namespace AudioExtractor {
             std::streampos offset = input.tellg();
             if (offset == -1) {
                 input.close();
-                throw std::runtime_error("Failed to retrieve offset in file\n");
+                throw std::runtime_error("Failed to retrieve offset in file");
             }
             offset -= 8;
 

@@ -26,7 +26,6 @@ namespace MouseUtils {
      */
     float getNormalizedMouseInViewportY(int mouseY, const Rect viewport);
 
-}
-}  // namespace Rival::MouseUtils
+}}  // namespace Rival::MouseUtils
 
 #endif  // MOUSE_UTILS_H

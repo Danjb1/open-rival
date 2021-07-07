@@ -50,9 +50,9 @@ namespace Rival {
          */
         void translate(float dx, float dy);
 
-        float getX() const;
+        float getX() const { return x; }
 
-        float getY() const;
+        float getY() const { return y; }
 
         float getWidth() const;
 
@@ -66,7 +66,7 @@ namespace Rival {
 
         float getBottom() const;
 
-        float getZoom() const;
+        float getZoom() const { return zoom; }
 
         void modZoom(float zoomInterval);
 

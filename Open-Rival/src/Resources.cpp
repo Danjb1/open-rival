@@ -262,7 +262,7 @@ namespace Rival {
 
             // Parse MIDI file
             if (!MidsDecoder::process_mids(p_file, result)) {
-                throw std::runtime_error("Failed to parse MIDI file!\n");
+                throw std::runtime_error("Failed to parse MIDI file!");
             }
 
             midisRead.emplace_back(result);

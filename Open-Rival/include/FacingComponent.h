@@ -5,7 +5,7 @@
 
 namespace Rival {
 
-    enum class Facing {
+    enum class Facing : std::uint8_t {
         South,
         SouthWest,
         West,

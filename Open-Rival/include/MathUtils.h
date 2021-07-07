@@ -8,7 +8,6 @@ namespace MathUtils {
 
     float clampf(float val, float min, float max);
 
-}
-}  // namespace Rival::MathUtils
+}}  // namespace Rival::MathUtils
 
 #endif  // MATH_UTILS_H

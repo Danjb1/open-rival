@@ -42,13 +42,15 @@ namespace Rival {
         // Add the depth buffer, if required
         if (useDepth) {
             addDepthBuffer();
+        } else {
+            depthRenderBufferId = 0;
         }
 
         // Check for errors
         GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE) {
             std::cerr << "Framebuffer status: " << status << "\n";
-            throw std::runtime_error("Failed to create framebuffer\n");
+            throw std::runtime_error("Failed to create framebuffer");
         }
 
         // Revert the state back to normal
@@ -70,22 +72,6 @@ namespace Rival {
     Framebuffer::~Framebuffer() {
         glDeleteTextures(1, &textureId);
         glDeleteFramebuffers(1, &id);
-    }
-
-    GLuint Framebuffer::getId() const {
-        return id;
-    }
-
-    GLuint Framebuffer::getTextureId() const {
-        return textureId;
-    }
-
-    int Framebuffer::getWidth() const {
-        return width;
-    }
-
-    int Framebuffer::getHeight() const {
-        return height;
     }
 
 }  // namespace Rival

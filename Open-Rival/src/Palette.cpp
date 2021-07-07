@@ -35,5 +35,4 @@ namespace Palette {
         return Texture(textureId, paletteSize, 1);
     }
 
-}
-}  // namespace Rival::Palette
+}}  // namespace Rival::Palette

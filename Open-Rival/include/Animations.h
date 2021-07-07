@@ -10,7 +10,7 @@
 namespace Rival {
 namespace Animations {
 
-    enum class UnitAnimationType {
+    enum class UnitAnimationType : std::uint8_t {
         Standing,
         HoldingBag,
         Moving,
@@ -19,7 +19,7 @@ namespace Animations {
         Dying
     };
 
-    enum class BuildingAnimationType {
+    enum class BuildingAnimationType : std::uint8_t {
         Constructing,
         Built
     };

@@ -55,32 +55,4 @@ namespace Rival {
         }
     }
 
-    const bool Entity::isDeleted() const {
-        return deleted;
-    }
-
-    void Entity::markForDeletion() {
-        deleted = true;
-    }
-
-    const int Entity::getId() const {
-        return id;
-    }
-
-    int Entity::getX() const {
-        return x;
-    }
-
-    int Entity::getY() const {
-        return y;
-    }
-
-    int Entity::getWidth() const {
-        return width;
-    }
-
-    int Entity::getHeight() const {
-        return height;
-    }
-
 }  // namespace Rival

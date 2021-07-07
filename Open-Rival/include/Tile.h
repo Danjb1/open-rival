@@ -18,7 +18,7 @@ namespace Rival {
 
     // Tile passability, based on its contents.
     // This does not take into account flying units.
-    enum class TilePassability {
+    enum class TilePassability : std::uint8_t {
         Clear,
         Unit,
         Building,

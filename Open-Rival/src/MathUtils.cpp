@@ -22,5 +22,4 @@ namespace MathUtils {
         return val;
     }
 
-}
-}  // namespace Rival::MathUtils
+}}  // namespace Rival::MathUtils

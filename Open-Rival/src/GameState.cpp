@@ -147,8 +147,4 @@ namespace Rival {
         }
     }
 
-    Scenario& GameState::getScenario() {
-        return *scenario;
-    }
-
 }  // namespace Rival

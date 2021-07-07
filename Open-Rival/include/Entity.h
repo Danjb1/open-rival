@@ -10,7 +10,7 @@
 
 namespace Rival {
 
-    enum class EntityType {
+    enum class EntityType : std::uint8_t {
         Unit,
         Building,
         Projectile,
@@ -84,7 +84,7 @@ namespace Rival {
         /**
          * Determines if this Entity has been marked for deletion.
          */
-        const bool isDeleted() const;
+        const bool isDeleted() const { return deleted; }
 
         /**
          * Marks this Entity for deletion.
@@ -93,32 +93,32 @@ namespace Rival {
          * during the game loop, and should be considered non-existent for the
          * purposes of logic and rendering.
          */
-        void markForDeletion();
+        void markForDeletion() { deleted = true; }
 
         /**
          * Gets the unique identifier for this Entity.
          */
-        const int getId() const;
+        const int getId() const { return id; }
 
         /**
          * Gets the x co-ordinate of the tile this Entity is occupying.
          */
-        int getX() const;
+        int getX() const { return x; }
 
         /**
          * Gets the y co-ordinate of the tile this Entity is occupying.
          */
-        int getY() const;
+        int getY() const { return y; }
 
         /**
          * Gets the number of tiles this Entity occupies in the x-axis.
          */
-        int getWidth() const;
+        int getWidth() const { return width; }
 
         /**
          * Gets the number of tiles this Entity occupies in the y-axis.
          */
-        int getHeight() const;
+        int getHeight() const { return height; }
 
         /**
          * Retrieves the EntityComponent with the given key.

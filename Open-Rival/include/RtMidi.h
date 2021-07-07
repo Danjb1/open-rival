@@ -128,7 +128,7 @@ class RTMIDI_DLL_PUBLIC RtMidiError : public std::exception
     Note that class behaviour is undefined after a critical error (not
     a warning) is reported.
  */
-typedef void (*RtMidiErrorCallback)( RtMidiError::Type type, const std::string &errorText, void *userData );
+using RtMidiErrorCallback = void (*)( RtMidiError::Type type, const std::string &errorText, void *userData );
 
 class MidiApi;
 
@@ -253,7 +253,7 @@ class RTMIDI_DLL_PUBLIC RtMidiIn : public RtMidi
  public:
 
   //! User callback function type definition.
-  typedef void (*RtMidiCallback)( double timeStamp, std::vector<unsigned char> *message, void *userData );
+  using RtMidiCallback = void (*)( double timeStamp, std::vector<unsigned char> *message, void *userData );
 
   //! Default constructor that allows an optional api, client name and queue size.
   /*!

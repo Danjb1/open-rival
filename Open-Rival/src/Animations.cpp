@@ -18,5 +18,4 @@ namespace Animations {
         return objectAnimationLookup.at({ type, variant });
     }
 
-}
-}  // namespace Rival::Animations
+}}  // namespace Rival::Animations

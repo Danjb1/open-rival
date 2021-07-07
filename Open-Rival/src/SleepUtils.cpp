@@ -30,5 +30,4 @@ namespace SleepUtils {
 
 #endif
 
-}
-}  // namespace Rival::SleepUtils
+}}  // namespace Rival::SleepUtils

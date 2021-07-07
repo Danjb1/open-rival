@@ -1,10 +1,12 @@
 #ifndef BUILDING_H
 #define BUILDING_H
 
+#include <cstdint>
+
 namespace Rival {
 namespace Building {
 
-    enum class Type {
+    enum class Type : std::uint8_t {
 
         // Elf
         ElvenKeep,
@@ -47,7 +49,6 @@ namespace Building {
         Shipyard,
         WatchTower,
         Wall,
-
     };
 
     const int firstElfBuildingType = static_cast<int>(Type::ElvenKeep);

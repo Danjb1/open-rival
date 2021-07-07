@@ -6,7 +6,6 @@ namespace SleepUtils {
 
     void sleep(int ms);
 
-}
-}  // namespace Rival::SleepUtils
+}}  // namespace Rival::SleepUtils
 
 #endif  // SLEEP_UTILS_H

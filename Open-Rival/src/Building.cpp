@@ -18,5 +18,4 @@ namespace Building {
                 || type == Type::GreenskinWall;
     }
 
-}
-}  // namespace Rival::Building
+}}  // namespace Rival::Building

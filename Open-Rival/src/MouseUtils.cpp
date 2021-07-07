@@ -22,5 +22,4 @@ namespace MouseUtils {
         return static_cast<float>(mouseInViewportY) / viewport.height;
     }
 
-}
-}  // namespace Rival::MouseUtils
+}}  // namespace Rival::MouseUtils

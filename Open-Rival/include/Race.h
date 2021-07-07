@@ -1,7 +1,7 @@
 #ifndef RACE_H
 #define RACE_H
 
-enum class Race {
+enum class Race : std::uint8_t {
     Human,
     Elf,
     Greenskin

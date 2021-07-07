@@ -24,14 +24,16 @@ namespace Rival {
 
         void pollEvents();
 
-        void requestExit();
+        void requestExit() { exiting = true; }
 
-        void setState(std::unique_ptr<State> newState);
+        void setState(std::unique_ptr<State> newState) {
+            nextState = std::move(newState);
+        }
 
-        const Window& getWindow() const;
-        AudioSystem& getAudioSystem();
-        Resources& getResources();
-        State& getState();
+        const Window& getWindow() const { return window; }
+        AudioSystem& getAudioSystem() { return audioSystem; }
+        Resources& getResources() { return res; }
+        State& getState() { return *state; }
 
     private:
         /**

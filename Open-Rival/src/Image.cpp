@@ -19,18 +19,6 @@ namespace Rival {
           height(height),
           data(std::move(data)) {}
 
-    int Image::getWidth() const {
-        return width;
-    }
-
-    int Image::getHeight() const {
-        return height;
-    }
-
-    std::vector<unsigned char>* Image::getData() const {
-        return data.get();
-    }
-
     Image Image::loadImage(const std::string filename) {
         std::cout << "Loading: " << filename << "\n";
 

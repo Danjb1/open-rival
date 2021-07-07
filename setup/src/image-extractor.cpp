@@ -286,13 +286,13 @@ namespace ImageExtractor {
         uint32_t size;
         uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
-            throw std::runtime_error("Unable to open IMAGES.DAT\n");
+            throw std::runtime_error("Unable to open IMAGES.DAT");
         }
 
         // Make the code contained within "IMAGES.DAT" executable
         if (!make_executable(data, size)) {
             free(data);
-            throw std::runtime_error("Failed to make memory executable\n");
+            throw std::runtime_error("Failed to make memory executable");
         }
 
         int i = 0;

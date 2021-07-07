@@ -61,7 +61,6 @@ namespace Palette {
          */
     Texture createPaletteTexture();
 
-}
-}  // namespace Rival::Palette
+}}  // namespace Rival::Palette
 
 #endif  // PALETTE_H

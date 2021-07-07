@@ -10,8 +10,4 @@ namespace Rival {
         : EntityComponent(key),
           type(type) {}
 
-    Building::Type BuildingPropsComponent::getBuildingType() const {
-        return type;
-    }
-
 }  // namespace Rival
