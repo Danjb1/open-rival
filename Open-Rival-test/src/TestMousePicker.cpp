@@ -13,8 +13,8 @@ using namespace Rival;
 
 const int viewportWidth = 800;
 const int viewportHeight = 600;
-const double aspectRatio =
-        static_cast<double>(viewportWidth) / viewportHeight;
+const float aspectRatio =
+        static_cast<float>(viewportWidth) / viewportHeight;
 Rect viewport(0, 0, viewportWidth, viewportHeight);
 Scenario scenario(50, 50, false);
 
@@ -34,9 +34,10 @@ Scenario scenario(50, 50, false);
 SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picker]") {
 
     // Create a pixel-perfect Camera
+    float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));
     Camera camera(0.0f, 0.0f,
-            RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth)),
-            aspectRatio,
+            width,
+            width / aspectRatio,
             scenario);
 
     GIVEN("the mouse is outside the viewport") {
@@ -274,9 +275,10 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]") {
     scenario.addEntity(std::move(unit), 4, 4);
 
     // Create a pixel-perfect Camera
+    float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));
     Camera camera(0.0f, 0.0f,
-            RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth)),
-            aspectRatio,
+            width,
+            width / aspectRatio,
             scenario);
 
     GIVEN("the mouse is not over a unit") {

@@ -53,7 +53,8 @@ typedef Sint32 SDL_Keycode;
 typedef enum {
     SDL_QUIT = 0x100,
     SDL_KEYDOWN = 0x300,
-    SDL_MOUSEWHEEL = 0x600,
+    SDL_MOUSEBUTTONUP = 0x402,
+    SDL_MOUSEWHEEL = 0x600
 } SDL_EventType;
 
 typedef struct SDL_Keysym {
@@ -73,6 +74,7 @@ typedef struct SDL_KeyboardEvent {
 typedef union SDL_Event {
     Uint32 type;
     SDL_KeyboardEvent key;
+    SDL_MouseButtonEvent button;
     SDL_MouseWheelEvent wheel;
 } SDL_Event;
 

@@ -14,12 +14,7 @@
 #include <string>
 #include <vector>
 
-#ifdef _MSC_VER
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-#define snprintf sprintf_s
-#endif
-
+#pragma warning(push)
 #pragma warning(disable : 4244 4456)
 
 namespace Rival {
@@ -43,8 +38,8 @@ namespace Rival {
         event_type m_type;
         unsigned m_channel;
         unsigned long m_data_count;
-        uint8_t m_data[max_static_data_count];
-        std::vector<uint8_t> m_ext_data;
+        std::uint8_t m_data[max_static_data_count];
+        std::vector<std::uint8_t> m_ext_data;
 
 #pragma warning(push)
 #pragma warning(disable : 26495 26812)
@@ -56,7 +51,7 @@ namespace Rival {
 #pragma warning(pop)
         midi_event(const midi_event& p_in);
         midi_event(unsigned long p_timestamp, event_type p_type, unsigned p_channel,
-                const uint8_t* p_data, std::size_t p_data_count);
+                const std::uint8_t* p_data, std::size_t p_data_count);
 
         unsigned long get_data_count() const;
         void copy_data(uint8_t* p_out, unsigned long p_offset,
@@ -113,23 +108,23 @@ namespace Rival {
     };
 
     class system_exclusive_table {
-        std::vector<uint8_t> m_data;
+        std::vector<std::uint8_t> m_data;
         std::vector<system_exclusive_entry> m_entries;
 
     public:
         unsigned add_entry(
-                const uint8_t* p_data, std::size_t p_size, std::size_t p_port);
-        void get_entry(unsigned p_index, const uint8_t*& p_data,
+                const std::uint8_t* p_data, std::size_t p_size, std::size_t p_port);
+        void get_entry(unsigned p_index, const std::uint8_t*& p_data,
                 std::size_t& p_size, std::size_t& p_port);
     };
 
     struct midi_stream_event {
         unsigned long m_timestamp;
-        uint32_t m_event;
+        std::uint32_t m_event;
 
         midi_stream_event() : m_timestamp(0),
                               m_event(0) {}
-        midi_stream_event(unsigned long p_timestamp, uint32_t p_event);
+        midi_stream_event(unsigned long p_timestamp, std::uint32_t p_event);
     };
 
     struct midi_meta_data_item {
@@ -145,7 +140,7 @@ namespace Rival {
 
     class midi_meta_data {
         std::vector<midi_meta_data_item> m_data;
-        std::vector<uint8_t> m_bitmap;
+        std::vector<std::uint8_t> m_bitmap;
 
     public:
         midi_meta_data() {}
@@ -156,10 +151,10 @@ namespace Rival {
 
         bool get_item(const char* p_name, midi_meta_data_item& p_out) const;
 
-        bool get_bitmap(std::vector<uint8_t>& p_out);
+        bool get_bitmap(std::vector<std::uint8_t>& p_out);
 
-        void assign_bitmap(std::vector<uint8_t>::const_iterator const& begin,
-                std::vector<uint8_t>::const_iterator const& end);
+        void assign_bitmap(std::vector<std::uint8_t>::const_iterator const& begin,
+                std::vector<std::uint8_t>::const_iterator const& end);
 
         std::size_t get_count() const;
 
@@ -177,11 +172,11 @@ namespace Rival {
     private:
         unsigned m_form;
         unsigned m_dtx;
-        std::vector<uint64_t> m_channel_mask;
+        std::vector<std::uint64_t> m_channel_mask;
         std::vector<tempo_map> m_tempo_map;
         std::vector<midi_track> m_tracks;
 
-        std::vector<uint8_t> m_port_numbers;
+        std::vector<std::uint8_t> m_port_numbers;
 
         std::vector<std::vector<std::string>> m_device_names;
 
@@ -206,7 +201,7 @@ namespace Rival {
                     return;
                 }
             }
-            m_port_numbers.push_back((const uint8_t) number);
+            m_port_numbers.push_back((const std::uint8_t) number);
             number = m_port_numbers.size() - 1;
         }
 
@@ -254,7 +249,7 @@ namespace Rival {
                 unsigned clean_flags) const;
 
         void serialize_as_standard_midi_file(
-                std::vector<uint8_t>& p_midi_file) const;
+                std::vector<std::uint8_t>& p_midi_file) const;
 
         void promote_to_type1();
 
@@ -266,7 +261,7 @@ namespace Rival {
 
     public:
         using split_callback = std::string (*)(
-                uint8_t bank_msb, uint8_t bank_lsb, uint8_t instrument);
+                std::uint8_t bank_msb, std::uint8_t bank_lsb, std::uint8_t instrument);
 
         void split_by_instrument_changes(split_callback cb = NULL);
 
@@ -290,9 +285,10 @@ namespace Rival {
         void scan_for_loops(bool p_xmi_loops, bool p_marker_loops,
                 bool p_rpgmaker_loops, bool p_touhou_loops);
 
-        static void encode_delta(std::vector<uint8_t>& p_out, unsigned long delta);
+        static void encode_delta(std::vector<std::uint8_t>& p_out, unsigned long delta);
     };
 
 }  // namespace Rival
 
+#pragma warning(pop)
 #endif  // MIDI_CONTAINER_H

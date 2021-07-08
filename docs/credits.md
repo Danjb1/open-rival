@@ -12,5 +12,6 @@
     - FreeType
     - glew
     - GLM
+    - JSON for Modern C++
     - rtmidi
     - SDL2

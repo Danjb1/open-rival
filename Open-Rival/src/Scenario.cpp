@@ -3,6 +3,7 @@
 
 namespace Rival {
 
+    // Creates an empty Scenario
     Scenario::Scenario(int width, int height, bool wilderness)
         : width(width),
           height(height),
@@ -15,37 +16,31 @@ namespace Rival {
                   width * height, TilePassability::Clear)),
           nextId(0) {}
 
-    int Scenario::getWidth() const {
-        return width;
-    }
-
-    int Scenario::getHeight() const {
-        return height;
-    }
-
-    const std::vector<Tile>& Scenario::getTiles() const {
-        return tiles;
-    }
-
-    void Scenario::tilesLoaded(std::vector<Tile> newTiles) {
-        tiles = newTiles;
-    }
+    // Creates a Scenario from data
+    Scenario::Scenario(
+            int width,
+            int height,
+            bool wilderness,
+            std::vector<Tile> tiles)
+        : width(width),
+          height(height),
+          wilderness(wilderness),
+          tiles(tiles),
+          tilePassability(std::vector<TilePassability>(
+                  width * height, TilePassability::Clear)),
+          nextId(0) {}
 
     Tile Scenario::getTile(int x, int y) const {
         return tiles[y * width + x];
     }
 
-    bool Scenario::isWilderness() const {
-        return wilderness;
-    }
-
     void Scenario::addEntity(
-            std::unique_ptr<Entity> entity,
+            std::shared_ptr<Entity> entity,
             int x,
             int y) {
 
         // Add the Entity to the world
-        entities[nextId] = std::move(entity);
+        entities[nextId] = entity;
         entities[nextId]->onSpawn(
                 this,
                 nextId,
@@ -56,12 +51,38 @@ namespace Rival {
         ++nextId;
     }
 
-    void Scenario::setPassability(int x, int y, TilePassability passability) {
-        tilePassability[y * width + x] = passability;
+    const std::vector<std::shared_ptr<Entity>> Scenario::getEntities() const {
+        std::vector<std::shared_ptr<Entity>> entityList;
+        for (auto const& entry : entities) {
+            entityList.push_back(entry.second);
+        }
+        return entityList;
     }
 
-    const std::map<int, std::unique_ptr<Entity>>& Scenario::getEntities() const {
-        return entities;
+    const std::shared_ptr<Entity> Scenario::getEntity(int id) const {
+        auto const iter = entities.find(id);
+        if (iter == entities.end()) {
+            // Entity is not in the map
+            return std::shared_ptr<Entity>();
+        } else {
+            // iter points to the desired map entry
+            return iter->second;
+        }
+    }
+
+    void Scenario::cleanUpEntities() {
+        for (auto it = entities.cbegin(); it != entities.cend();) {
+            const auto& e = it->second;
+            if (e->isDeleted()) {
+                it = entities.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    void Scenario::setPassability(int x, int y, TilePassability passability) {
+        tilePassability[y * width + x] = passability;
     }
 
 }  // namespace Rival

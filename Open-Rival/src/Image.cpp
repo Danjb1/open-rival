@@ -35,8 +35,8 @@ namespace Rival {
         // Image specification
         /*uint16_t xOrigin = */ reader.readShort();
         /*uint16_t yOrigin = */ reader.readShort();
-        uint16_t width = reader.readShort();
-        uint16_t height = reader.readShort();
+        std::uint16_t width = reader.readShort();
+        std::uint16_t height = reader.readShort();
         /*uint8_t bpp = */ reader.readByte();
         /*uint8_t imageDescriptor = */ reader.readByte();
 

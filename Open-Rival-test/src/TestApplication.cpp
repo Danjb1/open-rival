@@ -42,7 +42,8 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
 
     GIVEN("An Application that has not yet started") {
         Window window(800, 600, "Rival Realms");
-        Application app(window);
+        json cfg;
+        Application app(window, cfg);
 
         WHEN("the game ticks, and the first render takes too long") {
             std::unique_ptr<SlowRenderingState> initialState =

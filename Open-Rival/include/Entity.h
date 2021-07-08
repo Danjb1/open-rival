@@ -193,6 +193,10 @@ namespace Rival {
          * EntityComponents owned by this Entity.
          */
         std::map<std::string, std::unique_ptr<EntityComponent>> components;
+
+    private:
+        void updateComponents() const;
+        void cleanUpComponents();
     };
 
 }  // namespace Rival

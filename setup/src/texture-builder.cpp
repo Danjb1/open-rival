@@ -288,7 +288,10 @@ namespace TextureBuilder {
         std::shared_ptr<unsigned char> data =
                 std::shared_ptr<unsigned char>(new unsigned char[width * height]);
         ifs.seekg(1042);
+#pragma warning(push)
+#pragma warning(disable : 26451)  // Ignore arithmetic overflow warning
         ifs.read((char*) data.get(), width * height);
+#pragma warning(pop : 26451)
 
         return Image(filename, width, height, data);
     }
@@ -307,12 +310,12 @@ namespace TextureBuilder {
         ifs.seekg(18);
 
         for (int i = 0; i < paletteSize; ++i) {
-            const uint8_t blue = ifs.get();
-            const uint8_t green = ifs.get();
-            const uint8_t red = ifs.get();
-            const uint8_t alpha = ifs.get();
+            const std::uint8_t blue = ifs.get();
+            const std::uint8_t green = ifs.get();
+            const std::uint8_t red = ifs.get();
+            const std::uint8_t alpha = ifs.get();
 
-            const uint32_t col = (red << 24)
+            const std::uint32_t col = (red << 24)
                     + (green << 16)
                     + (blue << 8)
                     + alpha;
@@ -329,7 +332,7 @@ namespace TextureBuilder {
     int writeImage(
             const std::string filename,
             const Image& image,
-            const std::vector<uint32_t>& palette) {
+            const std::vector<std::uint32_t>& palette) {
 
         // Open file for writing
         FILE* fp = fopen(filename.c_str(), "wb");
@@ -372,11 +375,11 @@ namespace TextureBuilder {
         // Colour map data
         for (int i = 0; i < paletteSize; ++i) {
 
-            const uint32_t col = palette[i];
-            const uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
-            const uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
-            const uint8_t alpha = (uint8_t)(col & 0x000000FF);
+            const std::uint32_t col = palette[i];
+            const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
+            const std::uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
+            const std::uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
+            const std::uint8_t alpha = (uint8_t)(col & 0x000000FF);
 
             fputc(blue, fp);
             fputc(green, fp);
@@ -388,7 +391,7 @@ namespace TextureBuilder {
         std::shared_ptr<unsigned char> data = image.getData();
         for (int y = image.getHeight() - 1; y >= 0; y--) {
             for (int x = 0; x < image.getWidth(); x++) {
-                const uint8_t index = data.get()[x + y * image.getWidth()];
+                const std::uint8_t index = data.get()[x + y * image.getWidth()];
                 fputc(index, fp);
             }
         }
@@ -506,7 +509,7 @@ namespace TextureBuilder {
             const std::string& outputDir,
             fs::path definitionFilename,
             std::vector<Image>& images,
-            const std::vector<uint32_t>& palette) {
+            const std::vector<std::uint32_t>& palette) {
 
         TextureAtlasBuilder builder;
 
@@ -546,7 +549,7 @@ namespace TextureBuilder {
             const std::string& outputDir,
             fs::path definitionFilename,
             const std::vector<Image>& sprites,
-            const std::vector<uint32_t>& palette) {
+            const std::vector<std::uint32_t>& palette) {
 
         // For a spritesheet, all images are the same size
         int spriteWidth = sprites[0].getWidth();
@@ -623,7 +626,7 @@ namespace TextureBuilder {
                         imageDir, path, atlasMode);
 
                 // Read palette from the first image
-                std::vector<uint32_t> palette;
+                std::vector<std::uint32_t> palette;
                 readPalette(palette, images[0].getFilename());
 
                 // Create texture

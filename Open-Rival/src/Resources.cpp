@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Resources.h"
 
+#include "FileUtils.h"
 #include "MidsDecoder.h"
 #include "RenderUtils.h"
 
@@ -241,13 +242,6 @@ namespace Rival {
         return soundsRead;
     }
 
-    std::vector<uint8_t> readFileToByteArray(std::string file_path) {
-        std::ifstream in(file_path, std::ios::in | std::ios::binary);
-        std::vector<uint8_t> data((std::istreambuf_iterator<char>(in)),
-                std::istreambuf_iterator<char>());
-        return data;
-    }
-
     std::vector<MidiFile> Resources::initMidis() {
         std::vector<MidiFile> midisRead;
 
@@ -255,7 +249,7 @@ namespace Rival {
             midi_container result;
 
             // Read MIDI file
-            std::vector<uint8_t> const& p_file = readFileToByteArray(
+            std::vector<std::uint8_t> const& p_file = FileUtils::readBinaryFile(
                     soundDir
                     + std::to_string(midiStartIndex + i)
                     + ".mid");

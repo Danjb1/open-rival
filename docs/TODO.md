@@ -10,10 +10,8 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
- - When a Unit is deleted, any references to it will become invalid
-    - We need a way to check if a Unit reference is still valid!
-    - Just store entity IDs instead of references, and retrieve the Entity each frame
-    - We can't enforce this, but it should at least be documented!
+ - Do iterators break if an Entity is added from inside the loop?
+ - Game will crash if no config file exists
  - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
  - Image filenames can be truncated due to limited size of char array
 
@@ -25,10 +23,6 @@
 
  - Set window icon
  - Custom cursors
- - Use a config file
-    - Log level
-    - MIDI active
-    - Sound active
  - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls
@@ -249,5 +243,7 @@
 
 ### Refactoring
 
- - Move constants from header files to CPP files
- - Move readFileToByteArray to a utility file?
+ - Sort source files into subfolders?
+    - Do not auto-format library subfolders
+ - Move constants from header files to CPP files?
+ - Consider using std::unordered_map instead of std::map

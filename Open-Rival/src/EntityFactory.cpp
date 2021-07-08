@@ -16,11 +16,11 @@ namespace Rival {
     EntityFactory::EntityFactory(const Resources& res)
         : res(res) {}
 
-    std::unique_ptr<Entity> EntityFactory::createUnit(
+    std::shared_ptr<Entity> EntityFactory::createUnit(
             const UnitPlacement& unitPlacement) const {
 
         // Create Entity
-        std::unique_ptr<Entity> unit = std::make_unique<Entity>(
+        std::shared_ptr<Entity> unit = std::make_shared<Entity>(
                 Unit::width, Unit::height);
 
         // Add UnitPropsComponent
@@ -51,7 +51,7 @@ namespace Rival {
         return unit;
     }
 
-    std::unique_ptr<Entity> EntityFactory::createBuilding(
+    std::shared_ptr<Entity> EntityFactory::createBuilding(
             const BuildingPlacement& buildingPlacement) const {
 
         // Create Entity
@@ -59,7 +59,7 @@ namespace Rival {
                 getBuildingType(buildingPlacement.type);
         int width = Building::getWidth(buildingType);
         int height = Building::getHeight(buildingType);
-        std::unique_ptr<Entity> building = std::make_unique<Entity>(
+        std::shared_ptr<Entity> building = std::make_unique<Entity>(
                 width, height);
 
         // Add BuildingPropsComponent
@@ -95,11 +95,11 @@ namespace Rival {
         return building;
     }
 
-    std::unique_ptr<Entity> EntityFactory::createObject(
+    std::shared_ptr<Entity> EntityFactory::createObject(
             const ObjectPlacement& objPlacement, bool wilderness) const {
 
         // Create Entity
-        std::unique_ptr<Entity> obj = std::make_unique<Entity>(
+        std::shared_ptr<Entity> obj = std::make_unique<Entity>(
                 Unit::width, Unit::height);
 
         // Add SpriteComponent

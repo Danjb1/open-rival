@@ -59,6 +59,10 @@ namespace Rival {
          * Object that renders the game.
          */
         GameRenderer gameRenderer;
+
+        void earlyUpdateEntities() const;
+        void updateEntities() const;
+        void respondToMouseInput();
     };
 
 }  // namespace Rival

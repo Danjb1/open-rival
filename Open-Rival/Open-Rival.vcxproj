@@ -30,6 +30,7 @@
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
     <ClCompile Include="src\FacingComponent.cpp" />
+    <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
     <ClCompile Include="src\GameInterface.cpp" />
@@ -88,14 +89,17 @@
     <ClInclude Include="include\Building.h" />
     <ClInclude Include="include\BuildingPropsComponent.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
     <ClInclude Include="include\FacingComponent.h" />
+    <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\GameInterface.h" />
     <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\json.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\MidiContainer.h" />

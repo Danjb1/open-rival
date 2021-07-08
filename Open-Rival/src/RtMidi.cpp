@@ -1,4 +1,5 @@
 #include "pch.h"
+#pragma warning(push)
 #pragma warning(disable : 4244 4456 26115 26495)
 /* clang-format off */
 
@@ -3393,3 +3394,4 @@ void MidiOutJack ::sendMessage(const unsigned char* message, size_t size) {
 #endif  // __UNIX_JACK__
 
 /* clang-format on */
+#pragma warning(pop)

@@ -22,13 +22,13 @@ namespace Rival {
 
     class MidsDecoder {
     public:
-        static const uint8_t end_of_track[2];
-        static const uint8_t loop_start[11];
-        static const uint8_t loop_end[9];
+        static const std::uint8_t end_of_track[2];
+        static const std::uint8_t loop_start[11];
+        static const std::uint8_t loop_end[9];
 
-        static bool is_mids(std::vector<uint8_t> const& p_file);
+        static bool is_mids(std::vector<std::uint8_t> const& p_file);
         static bool process_mids(
-                std::vector<uint8_t> const& p_file, midi_container& p_out);
+                std::vector<std::uint8_t> const& p_file, midi_container& p_out);
     };
 
 }  // namespace Rival

@@ -13,7 +13,7 @@ namespace Palette {
 
         for (int i = 0; i < paletteSize; i++) {
             int start = i * paletteChannels;
-            uint32_t col = palette[i];
+            std::uint32_t col = palette[i];
             // RGBA
             data[start] = static_cast<unsigned char>((col & 0xff000000) >> 24);
             data[start + 1] = static_cast<unsigned char>((col & 0x00ff0000) >> 16);

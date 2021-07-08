@@ -102,13 +102,13 @@ namespace TextureBuilder {
             const std::string& imageDir,
             fs::path definitionFilename,
             std::vector<Image>& images,
-            const std::vector<uint32_t>& palette);
+            const std::vector<std::uint32_t>& palette);
 
     void createSpritesheetTexture(
             const std::string& imageDir,
             fs::path definitionFilename,
             const std::vector<Image>& sprites,
-            const std::vector<uint32_t>& palette);
+            const std::vector<std::uint32_t>& palette);
 
 }  // namespace TextureBuilder
 
