@@ -184,12 +184,11 @@ namespace Rival {
             int mouseInViewportX,
             int mouseInViewportY) {
         auto& entities = scenario.getEntities();
-        for (auto it = entities.cbegin(); it != entities.cend(); ++it) {
+        for (auto e : entities) {
             // We could optimise this by considering only Entities that were
             // rendered in the previous frame.
-            const Entity& entity = *it->second;
-            if (isMouseInEntity(entity, mouseInViewportX, mouseInViewportY)) {
-                entityId = entity.getId();
+            if (isMouseInEntity(*e, mouseInViewportX, mouseInViewportY)) {
+                entityId = e->getId();
                 std::cout << "Entity " << entityId << " is under cursor\n";
                 break;
             }

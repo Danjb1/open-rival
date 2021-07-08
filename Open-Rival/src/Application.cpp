@@ -3,12 +3,14 @@
 
 #include <SDL.h>
 
+#include "ConfigUtils.h"
 #include "TimerUtils.h"
 
 namespace Rival {
 
-    Application::Application(Window& window)
-        : window(window) {
+    Application::Application(Window& window, json cfg)
+        : window(window),
+          cfg(cfg) {
 
         // Try to enable vsync.
         // Note that vsync may already be enabled by default!
@@ -20,8 +22,8 @@ namespace Rival {
         }
 
         // Set up the audio system
-        audioSystem.setMidiActive(true);
-        audioSystem.setSoundActive(true);
+        audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
+        audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
     }
 
     void Application::start(std::unique_ptr<State> initialState) {

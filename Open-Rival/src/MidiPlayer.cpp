@@ -63,8 +63,8 @@ namespace Rival {
 
             // Put each byte of the event into the message.
             // Events can be 1, 2 or 3 bytes long.
-            uint32_t eventValue = evt.m_event;
-            uint8_t eventId = eventValue & 0xFF;
+            std::uint32_t eventValue = evt.m_event;
+            std::uint8_t eventId = eventValue & 0xFF;
             int numBytes = getMessageSize(eventId);
             message.push_back(eventId);
             if (numBytes == 2) {
@@ -79,9 +79,9 @@ namespace Rival {
                     std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::system_clock::now().time_since_epoch());
             auto timeElapsed = currentTime - startTime;
-            long timeUntilMessage = evt.m_timestamp - timeElapsed.count();
+            auto timeUntilMessage = evt.m_timestamp - timeElapsed.count();
             if (timeUntilMessage > 0) {
-                SleepUtils::sleep(timeUntilMessage);
+                SleepUtils::sleep(static_cast<int>(timeUntilMessage));
             }
 
             // Send the message to our MIDI output

@@ -16,11 +16,6 @@ namespace Rival {
     std::unique_ptr<Scenario> ScenarioBuilder::build(
             const EntityFactory& entityFactory) {
 
-        std::unique_ptr<Scenario> scenario = std::make_unique<Scenario>(
-                data.hdr.mapWidth,
-                data.hdr.mapHeight,
-                data.hdr.wilderness);
-
         // Initialise Tiles
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
         std::vector<Tile> tiles;
@@ -28,17 +23,22 @@ namespace Rival {
         for (int i = 0; i < numTiles; ++i) {
             tiles.push_back(buildTile(data.tiles[i]));
         }
-        scenario->tilesLoaded(tiles);
+
+        std::unique_ptr<Scenario> scenario = std::make_unique<Scenario>(
+                data.hdr.mapWidth,
+                data.hdr.mapHeight,
+                data.hdr.wilderness,
+                tiles);
 
         // Initialise Units
         for (const UnitPlacement& unitPlacement : data.units) {
 
             // Create Unit
-            std::unique_ptr<Entity> unit =
+            std::shared_ptr<Entity> unit =
                     entityFactory.createUnit(unitPlacement);
 
             // Add to world
-            scenario->addEntity(std::move(unit),
+            scenario->addEntity(unit,
                     unitPlacement.x,
                     unitPlacement.y);
         }
@@ -58,7 +58,7 @@ namespace Rival {
             }
 
             // Create Building
-            std::unique_ptr<Entity> building =
+            std::shared_ptr<Entity> building =
                     entityFactory.createBuilding(buildingPlacement);
 
             // Add to world
@@ -71,7 +71,7 @@ namespace Rival {
         for (const ObjectPlacement& objPlacement : data.objects) {
 
             // Create Object
-            std::unique_ptr<Entity> obj = entityFactory.createObject(
+            std::shared_ptr<Entity> obj = entityFactory.createObject(
                     objPlacement, data.hdr.wilderness);
 
             // Add to world

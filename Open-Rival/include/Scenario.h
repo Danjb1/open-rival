@@ -13,28 +13,38 @@ namespace Rival {
     class Scenario {
 
     public:
-        // Creates a blank Scenario
         Scenario(int width, int height, bool wilderness);
+        Scenario(int width, int height, bool wilderness, std::vector<Tile> tiles);
 
-        int getWidth() const;
+        int getWidth() const { return width; }
 
-        int getHeight() const;
+        int getHeight() const { return height; }
 
-        const std::vector<Tile>& getTiles() const;
-
-        // Sets all tiles at once
-        void tilesLoaded(std::vector<Tile> tiles);
+        const std::vector<Tile>& getTiles() const { return tiles; }
 
         Tile getTile(int x, int y) const;
 
-        bool isWilderness() const;
+        bool isWilderness() const { return wilderness; }
 
         void addEntity(
-                std::unique_ptr<Entity> unit,
+                std::shared_ptr<Entity> unit,
                 int x,
                 int y);
 
-        const std::map<int, std::unique_ptr<Entity>>& getEntities() const;
+        /**
+         * Returns a read-only list of all entities currently present in the
+         * world.
+         */
+        const std::vector<std::shared_ptr<Entity>> getEntities() const;
+
+        /**
+         * Gets an entity by its ID.
+         *
+         * If the entity is not found, an empty shared_ptr is returned.
+         */
+        const std::shared_ptr<Entity> getEntity(int id) const;
+
+        void cleanUpEntities();
 
         void setPassability(int x, int y, TilePassability passability);
 
@@ -46,7 +56,7 @@ namespace Rival {
         std::vector<TilePassability> tilePassability;
 
         int nextId;
-        std::map<int, std::unique_ptr<Entity>> entities;
+        std::map<int, std::shared_ptr<Entity>> entities;
     };
 
 }  // namespace Rival

@@ -31,7 +31,7 @@ namespace ImageExtractor {
     // The last colour (index 0xff) is used for transparent areas;
     // this colour is never written by the code in "IMAGES.DAT".
     /* clang-format off */
-    const uint32_t PALETTE[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE[PALETTE_SIZE] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -68,10 +68,10 @@ namespace ImageExtractor {
     /* clang-format on */
 
     // Buffer to which the image will be rendered
-    uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT];
+    std::uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT];
 
     // Team colours to use when rendering
-    uint8_t team_color[6] = { 160, 161, 162, 163, 164, 165 };
+    std::uint8_t team_color[6] = { 160, 161, 162, 163, 164, 165 };
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
@@ -79,7 +79,7 @@ namespace ImageExtractor {
     /**
      * Makes a section of memory executable.
      */
-    BOOL make_executable(void* data, uint32_t size) {
+    BOOL make_executable(void* data, std::uint32_t size) {
         DWORD old;
         return VirtualProtect(data, size, PAGE_EXECUTE_READWRITE, &old);
     }
@@ -160,11 +160,11 @@ namespace ImageExtractor {
         // Colour map data
         for (int i = 0; i < PALETTE_SIZE; ++i) {
 
-            const uint32_t col = PALETTE[i];
-            const uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
-            const uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
-            const uint8_t alpha = (uint8_t)(col & 0x000000FF);
+            const std::uint32_t col = PALETTE[i];
+            const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
+            const std::uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
+            const std::uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
+            const std::uint8_t alpha = (uint8_t)(col & 0x000000FF);
 
             fputc(blue, fp);
             fputc(green, fp);
@@ -175,7 +175,7 @@ namespace ImageExtractor {
         // Pixel data
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                const uint8_t index = image[x + y * IMAGE_WIDTH];
+                const std::uint8_t index = image[x + y * IMAGE_WIDTH];
                 fputc(index, fp);
             }
         }
@@ -196,12 +196,12 @@ namespace ImageExtractor {
      * Recognizes only the subset of x86 actually used and takes as many shortcuts
      * as possible.
      */
-    uint8_t* find_end(uint8_t* start, uint8_t* end, int* read_from_esi) {
+    std::uint8_t* find_end(uint8_t* start, std::uint8_t* end, int* read_from_esi) {
 
         *read_from_esi = 0;
 
         while (start < end) {
-            uint8_t inst = *start++;
+            std::uint8_t inst = *start++;
             const int op_size = inst == 0x66;  // Operand size prefix
             if (op_size)
                 inst = *start++;
@@ -223,7 +223,7 @@ namespace ImageExtractor {
                 start++;  // imm8
             } else if (inst == 0x8a || inst == 0x8b) {
                 // MOV     r16/32     r/m16/32
-                const uint8_t modrm = *start++;  // MODR/M
+                const std::uint8_t modrm = *start++;  // MODR/M
                 if (MODRM_MOD(modrm) == 1) {
                     start++;  // disp8
                 }
@@ -283,8 +283,8 @@ namespace ImageExtractor {
     void extractImages(std::wstring inputFile, std::string outputDir) {
 
         // Read the file
-        uint32_t size;
-        uint8_t* data = (uint8_t*) read_file(inputFile, &size);
+        std::uint32_t size;
+        std::uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
             throw std::runtime_error("Unable to open IMAGES.DAT");
         }
@@ -296,15 +296,15 @@ namespace ImageExtractor {
         }
 
         int i = 0;
-        uint8_t* start = data + HEADER_SIZE;
-        uint8_t* end = data + size;
+        std::uint8_t* start = data + HEADER_SIZE;
+        std::uint8_t* end = data + size;
 
         // Extract the images!
         for (uint8_t* code = start; code < end; ++i) {
 
             // Figure out where the next function starts
             int read_from_esi;
-            uint8_t* const code_end = find_end(code, end, &read_from_esi);
+            std::uint8_t* const code_end = find_end(code, end, &read_from_esi);
 
             // Draw the image with our desired team colour
             reset_image();

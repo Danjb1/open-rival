@@ -12,7 +12,7 @@ bool createDirectory(const char* filename) {
             || ERROR_ALREADY_EXISTS == GetLastError();
 }
 
-void* read_file(std::wstring filename, uint32_t* size) {
+void* read_file(std::wstring filename, std::uint32_t* size) {
 
     FILE* fp = _wfopen(filename.c_str(), L"rb");
     if (!fp) {

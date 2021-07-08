@@ -6,15 +6,24 @@
 #include <gl/glew.h>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 #include "Application.h"
 #include "AudioUtils.h"
+#include "FileUtils.h"
 #include "GameState.h"
+#include "json.h"
 #include "Scenario.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
 #include "Window.h"
+
+using json = nlohmann::json;
+
+json readConfig() {
+    return Rival::FileUtils::readJsonFile("config.json");
+}
 
 void initSDL() {
     // This must be called before SDL_Init since we're not using SDL_main
@@ -82,6 +91,7 @@ int main() {
     try {
 
         // Initialization that does not require an OpenGL context
+        json cfg = readConfig();
         initSDL();
         initAL();
 
@@ -93,7 +103,7 @@ int main() {
         initGL();
 
         // Create our Application
-        Rival::Application app(window);
+        Rival::Application app(window, cfg);
 
         // Load some scenario
         Rival::ScenarioReader reader(Rival::Resources::mapsDir + "test-all.sco");

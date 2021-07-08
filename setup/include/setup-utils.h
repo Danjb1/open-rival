@@ -6,7 +6,7 @@
 
 bool createDirectory(const char* filename);
 
-void* read_file(std::wstring filename, uint32_t* size);
+void* read_file(std::wstring filename, std::uint32_t* size);
 
 int nextPowerOf2(int v);
 

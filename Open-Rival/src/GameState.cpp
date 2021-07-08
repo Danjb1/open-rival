@@ -30,26 +30,31 @@ namespace Rival {
           gameRenderer(window, *scenario, camera, viewport, res) {}
 
     void GameState::onLoad() {
-        // TMP: disable music
-        //app.getAudioSystem().playMidi(res.getMidi(0));
+        app.getAudioSystem().playMidi(res.getMidi(0));
     }
 
     void GameState::update() {
+        earlyUpdateEntities();
+        respondToMouseInput();
+        updateEntities();
+        scenario->cleanUpEntities();
+    }
 
-        // Early-update Entities
+    void GameState::earlyUpdateEntities() const {
         auto const& entities = scenario->getEntities();
-        for (auto const& kv : entities) {
-            Entity& e = *(kv.second);
-            e.earlyUpdate();
+        for (auto const& e : entities) {
+            e->earlyUpdate();
         }
+    }
 
-        // Respond to mouse input
+    void GameState::respondToMouseInput() {
         mousePicker.handleMouse();
+    }
 
-        // Update Entities
-        for (auto const& kv : entities) {
-            Entity& e = *(kv.second);
-            e.update();
+    void GameState::updateEntities() const {
+        auto const& entities = scenario->getEntities();
+        for (auto const& e : entities) {
+            e->update();
         }
     }
 

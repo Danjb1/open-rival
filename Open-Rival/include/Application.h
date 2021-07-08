@@ -4,9 +4,12 @@
 #include <memory>
 
 #include "AudioSystem.h"
+#include "json.h"
 #include "Resources.h"
 #include "State.h"
 #include "Window.h"
+
+using json = nlohmann::json;
 
 namespace Rival {
 
@@ -15,7 +18,7 @@ namespace Rival {
     public:
         bool vsyncEnabled;
 
-        Application(Window& window);
+        Application(Window& window, json cfg);
 
         /**
          * Runs the Application until the user exits.
@@ -47,6 +50,7 @@ namespace Rival {
         bool exiting { false };
 
         Window& window;
+        json& cfg;
         AudioSystem audioSystem;
         Resources res;
 

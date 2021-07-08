@@ -1,3 +1,4 @@
+#pragma warning(push)
 #pragma warning(disable : 25495 26439 26812)
 /* clang-format off */
 
@@ -632,3 +633,4 @@ inline void RtMidiOut :: setErrorCallback( RtMidiErrorCallback errorCallback, vo
 #endif
 
 /* clang-format on */
+#pragma warning(pop)

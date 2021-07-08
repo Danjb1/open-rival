@@ -2,10 +2,11 @@
 #include "ScenarioReader.h"
 
 #include <algorithm>
-#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
+
+#include "FileUtils.h"
 
 namespace Rival {
 
@@ -77,34 +78,12 @@ namespace Rival {
     ///////////////////////////////////////////////////////////////////////////
 
     ScenarioReader::ScenarioReader(const std::string filename) {
-
         try {
-            readFileContents(filename);
+            data = FileUtils::readBinaryFile(filename);
         } catch (const std::exception& e) {
             std::cerr << e.what();
             throw std::runtime_error("Failed to read scenario: " + filename);
         }
-    }
-
-    void ScenarioReader::readFileContents(const std::string filename) {
-
-        // Open the file at the end
-        std::ifstream is(filename, std::ios::binary | std::ios::ate);
-        if (!is.is_open()) {
-            throw std::runtime_error("Failed to open scenario: " + filename);
-        }
-
-        // Create a buffer to hold the entire file contents
-        std::streampos size = is.tellg();
-        if (size == -1) {
-            throw std::runtime_error("Failed to retrieve file size");
-        }
-        data = std::vector<unsigned char>(static_cast<size_t>(size));
-
-        // Read the entire file to memory
-        is.seekg(0, std::ios::beg);
-        is.read(reinterpret_cast<char*>(data.data()), size);
-        is.close();
     }
 
     ScenarioData ScenarioReader::readScenario() {
@@ -978,7 +957,7 @@ namespace Rival {
         return value;
     }
 
-    uint16_t ScenarioReader::readRivalShort(size_t offset) const {
+    std::uint16_t ScenarioReader::readRivalShort(size_t offset) const {
         // read 2 rival bytes, and combine them like a normal short
         return std::uint16_t(
                 fixRivalByte(data[offset + 1]) << 8
@@ -992,7 +971,7 @@ namespace Rival {
     }
 
     bool ScenarioReader::readBool(size_t offset) const {
-        uint8_t value = data[offset];
+        std::uint8_t value = data[offset];
         return value == 1;
     }
 
@@ -1002,7 +981,7 @@ namespace Rival {
         return value;
     }
 
-    uint16_t ScenarioReader::readShort(size_t offset) const {
+    std::uint16_t ScenarioReader::readShort(size_t offset) const {
         // little endian
         return std::uint16_t(
                 data[offset + 1] << 8
@@ -1015,7 +994,7 @@ namespace Rival {
         return value;
     }
 
-    uint32_t ScenarioReader::readInt(size_t offset) const {
+    std::uint32_t ScenarioReader::readInt(size_t offset) const {
         // little endian
         return std::uint32_t(
                 data[offset + 3] << 24

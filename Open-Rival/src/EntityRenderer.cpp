@@ -15,11 +15,10 @@ namespace Rival {
 
     void EntityRenderer::render(
             const Camera& camera,
-            const std::map<int, std::unique_ptr<Entity>>& entities) const {
-        for (auto const& kv : entities) {
-            Entity& e = *(kv.second);
-            if (isEntityVisible(e, camera)) {
-                renderEntity(e);
+            const std::vector<std::shared_ptr<Entity>> entities) const {
+        for (auto const& e : entities) {
+            if (isEntityVisible(*e, camera)) {
+                renderEntity(*e);
             }
         }
     }

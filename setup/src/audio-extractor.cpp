@@ -35,7 +35,7 @@ namespace AudioExtractor {
             }
 
             // Read file length
-            uint32_t length;
+            std::uint32_t length;
             input.read(reinterpret_cast<char*>(&length), sizeof length);
 
             // Add 8 bits because of the fields we've just read!

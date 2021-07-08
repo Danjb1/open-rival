@@ -36,16 +36,21 @@ namespace Rival {
     }
 
     void Entity::update() {
-        // Update our Components
+        updateComponents();
+        cleanUpComponents();
+    }
+
+    void Entity::updateComponents() const {
         for (auto const& kv : components) {
             const auto& component = kv.second;
             if (!component->isDeleted()) {
                 component->update();
             }
         }
+    }
 
-        // Remove deleted Components
-        for (auto it = components.begin(); it != components.end();) {
+    void Entity::cleanUpComponents() {
+        for (auto it = components.cbegin(); it != components.cend();) {
             const auto& component = it->second;
             if (component->isDeleted()) {
                 it = components.erase(it);

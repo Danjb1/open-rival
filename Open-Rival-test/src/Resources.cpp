@@ -42,9 +42,9 @@ namespace Rival {
         };
     }
 
-    std::map<int, Spritesheet> Resources::initTileSpritesheets() {
-        return std::map<int, Spritesheet> {
-            { 0, Spritesheet(Texture(0, 0, 0), 64, 64) }
+    std::vector<Spritesheet> Resources::initTileSpritesheets() {
+        return std::vector<Spritesheet> {
+            { Spritesheet(Texture(0, 0, 0), 64, 64) }
         };
     }
 

@@ -21,7 +21,7 @@ namespace Rival {
     }
 
     std::uint16_t BinaryFileReader::readShort() {
-        uint16_t val;
+        std::uint16_t val;
         in.read(reinterpret_cast<char*>(&val), sizeof(val));
         return val;
     }

@@ -20,19 +20,19 @@ namespace Rival {
         /**
          * Creates a Unit from raw data (e.g. read from a Scenario file).
          */
-        std::unique_ptr<Entity> createUnit(
+        std::shared_ptr<Entity> createUnit(
                 const UnitPlacement& unitPlacement) const;
 
         /**
          * Creates a Building from raw data (e.g. read from a Scenario file).
          */
-        std::unique_ptr<Entity> createBuilding(
+        std::shared_ptr<Entity> createBuilding(
                 const BuildingPlacement& buildingPlacement) const;
 
         /**
          * Creates an Object from raw data (e.g. read from a Scenario file).
          */
-        std::unique_ptr<Entity> EntityFactory::createObject(
+        std::shared_ptr<Entity> EntityFactory::createObject(
                 const ObjectPlacement& objPlacement, bool wilderness) const;
 
     private:

@@ -23,7 +23,7 @@ namespace InterfaceExtractor {
     // The palette used in-game.
     // The last colour (index 0xff) is used for transparent areas.
     /* clang-format off */
-    const uint32_t PALETTE_GAME[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE_GAME[PALETTE_SIZE] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -60,7 +60,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the title screen.
     // (no transparency)
-    const uint32_t PALETTE_TITLE[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE_TITLE[PALETTE_SIZE] = {
         0x000000ff, 0x313131ff, 0x5a5a5aff, 0x636363ff,    0x7b7b7bff, 0xa5a5a5ff, 0xb5b5b5ff, 0x100000ff,
         0x210000ff, 0xbd0000ff, 0xc60000ff, 0xd60000ff,    0xff0000ff, 0x5a0800ff, 0x7b1000ff, 0xf72100ff,
         0xbd3921ff, 0xad3921ff, 0x9c5a4aff, 0xbd5239ff,    0xde5231ff, 0xbd3918ff, 0xad3110ff, 0xad2100ff,
@@ -97,7 +97,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the loading screen.
     // The first colour (index 0x00) is used for transparent areas.
-    const uint32_t PALETTE_LOADING[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE_LOADING[PALETTE_SIZE] = {
         0x00000000, 0x8c2921ff, 0x733118ff, 0xff6329ff,    0xff6b31ff, 0x843110ff, 0xad3908ff, 0x943910ff,
         0xe75a18ff, 0xc64208ff, 0xd64a08ff, 0xad5a31ff,    0x633118ff, 0xff7329ff, 0x943908ff, 0x8c3100ff,
         0x8c5231ff, 0xf77b31ff, 0xce5a18ff, 0xa54208ff,    0xc66b31ff, 0x633110ff, 0x733108ff, 0x944a18ff,
@@ -134,7 +134,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the menus.
     // The first colour (index 0x00) is used for transparent areas.
-    const uint32_t PALETTE_MENU[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE_MENU[PALETTE_SIZE] = {
         0x00000000, 0x0c0c04ff, 0x381b1cff, 0x78595aff,    0x672930ff, 0x67484bff, 0x58272dff, 0x7a303bff,
         0x934c57ff, 0x804e56ff, 0xa26b73ff, 0x491c24ff,    0x382024ff, 0x75454dff, 0x935d67ff, 0x340c14ff,
         0x4a2b34ff, 0x250c14ff, 0x5b5255ff, 0xe2dddfff,    0x362c34ff, 0x150c14ff, 0x0c040cff, 0x151415ff,
@@ -171,7 +171,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the Hire Troops menu.
     // The first colour (index 0x00) is used for transparent areas.
-    const uint32_t PALETTE_HIRE_TROOPS[PALETTE_SIZE] = {
+    const std::uint32_t PALETTE_HIRE_TROOPS[PALETTE_SIZE] = {
         0x00000000, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -211,11 +211,11 @@ namespace InterfaceExtractor {
      * Writes an image to disk.
      */
     int write_image(
-            std::vector<uint8_t> image,
+            std::vector<std::uint8_t> image,
             const char* filename,
             int w,
             int h,
-            const uint32_t* palette) {
+            const std::uint32_t* palette) {
 
         // Open file for writing
         FILE* fp = fopen(filename, "wb");
@@ -258,11 +258,11 @@ namespace InterfaceExtractor {
         // Colour map data
         for (int i = 0; i < PALETTE_SIZE; ++i) {
 
-            const uint32_t col = palette[i];
-            const uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
-            const uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
-            const uint8_t alpha = (uint8_t)(col & 0x000000FF);
+            const std::uint32_t col = palette[i];
+            const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
+            const std::uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
+            const std::uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
+            const std::uint8_t alpha = (uint8_t)(col & 0x000000FF);
 
             fputc(blue, fp);
             fputc(green, fp);
@@ -273,7 +273,7 @@ namespace InterfaceExtractor {
         // Pixel data
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                const uint8_t index = image[x + y * w];
+                const std::uint8_t index = image[x + y * w];
                 fputc(index, fp);
             }
         }
@@ -282,7 +282,7 @@ namespace InterfaceExtractor {
         return 1;
     }
 
-    std::uint16_t readShort(const uint8_t* data, int& offset) {
+    std::uint16_t readShort(const std::uint8_t* data, int& offset) {
         // little endian
         std::uint16_t value = std::uint16_t(
                 data[offset + 1] << 8
@@ -291,7 +291,7 @@ namespace InterfaceExtractor {
         return value;
     }
 
-    std::uint8_t readByte(const uint8_t* data, int& offset) {
+    std::uint8_t readByte(const std::uint8_t* data, int& offset) {
         std::uint8_t value = std::uint8_t(data[offset]);
         offset += 1;
         return value;
@@ -299,9 +299,9 @@ namespace InterfaceExtractor {
 
     void extractImage(
             const std::string& outputDir,
-            const uint8_t* data,
+            const std::uint8_t* data,
             int& offset,
-            const uint32_t* palette) {
+            const std::uint32_t* palette) {
 
         int initialOffset = offset;
 
@@ -309,7 +309,7 @@ namespace InterfaceExtractor {
         std::uint16_t w = readShort(data, offset);
         std::uint16_t h = readShort(data, offset);
         int imageSize = w * h;
-        std::vector<uint8_t> pixels(imageSize);
+        std::vector<std::uint8_t> pixels(imageSize);
 
         // Skip 4 unknown bytes
         offset += 4;
@@ -362,7 +362,7 @@ namespace InterfaceExtractor {
         }
     }
 
-    void extractImages(const uint8_t* data, const std::string& outputDir) {
+    void extractImages(const std::uint8_t* data, const std::string& outputDir) {
 
         int offset = OFFSET_TITLE;
 
@@ -425,8 +425,8 @@ namespace InterfaceExtractor {
     void extractUiImages(std::wstring inputFile, std::string outputDir) {
 
         // Read the file
-        uint32_t size;
-        uint8_t* data = (uint8_t*) read_file(inputFile, &size);
+        std::uint32_t size;
+        std::uint8_t* data = (uint8_t*) read_file(inputFile, &size);
         if (!data) {
             throw std::runtime_error("Error reading Interfac.dat");
         }

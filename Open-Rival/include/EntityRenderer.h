@@ -28,7 +28,7 @@ namespace Rival {
 
         void render(
                 const Camera& camera,
-                const std::map<int, std::unique_ptr<Entity>>&) const;
+                const std::vector<std::shared_ptr<Entity>> entities) const;
 
     private:
         const Texture& paletteTexture;
