@@ -232,7 +232,6 @@
  - Why does FramebufferRendering require a different winding order to other renderers?
  - Extract common code from SpriteRenderable and AtlasRenderable
  - Use string constants to access images within a texture atlas
- - Image keys should have sensible names (not dependent on their precise byte location since this could differ between locales)
 
 ### Design
 
