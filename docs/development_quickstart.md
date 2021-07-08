@@ -10,7 +10,7 @@ These tutorials describe how to install each of our dependencies:
 
  - [glew](http://lazyfoo.net/tutorials/SDL/51_SDL_and_modern_opengl/index.php)
  - [SDL2](http://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
- - [SDL2_mixer](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/windows/msvc2019/index.php)
+ - [SDL2_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/windows/msvc2019/index.php)
  - [GLM](https://github.com/g-truc/glm/blob/master/manual.md#-1-getting-started)
  - [FreeType](https://github.com/ubawurinna/freetype-windows-binaries)
 
@@ -24,11 +24,13 @@ These dependencies should be placed in the `libs` folder:
             +-- glew-2.1.0/
 			+-- glm-0.9.9.5/
 			+-- openal-soft-1.21.0/
-            +-- SDL2-2.0.8/
+            +-- SDL2-2.0.14/
+            +-- SDL2_image-2.0.5/
 
 ### Include Directories
 
-    libs/SDL2-2.0.8/include
+    libs/SDL2-2.0.14/include
+    libs/SDL2_image-2.0.5/include
     libs/freetype-2.10.4
     libs/glew-2.1.0/include
     libs/glm-0.9.9.5
@@ -36,7 +38,8 @@ These dependencies should be placed in the `libs` folder:
 
 ### Library Directories
 
-    libs/SDL2-2.0.8/lib/x86
+    libs/SDL2-2.0.14/lib/x86
+    libs/SDL2_image-2.0.5/lib/x86
     libs/freetype-2.10.4
     libs/glew-2.1.0/lib/Release/Win32
 	libs/openal-soft-1.21.0/libs/Win32
@@ -50,6 +53,7 @@ These dependencies should be placed in the `libs` folder:
     opengl32.lib
     SDL2.lib
     SDL2main.lib
+    SDL2_image.lib
     winmm.lib
 
 ### DLL Files
@@ -58,8 +62,11 @@ These should be placed in the project directory (`Open-Rival`):
 
     freetype.dll
     glew32.dll
+    libpng16-16.dll (required by SDL2_image.dll)
 	OpenAL32.dll (renamed from soft_oal.dll)
     SDL2.dll
+    SDL2_image.dll
+    zlib1.dll (required by SDL2_image.dll)
 
 ## Build
 

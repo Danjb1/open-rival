@@ -21,7 +21,6 @@
 
 ### General
 
- - Set window icon
  - Custom cursors
  - Logging mechanism
     - Log important events to file
@@ -176,7 +175,6 @@
  - Build for Linux
  - Add script to build from command line
  - Add script to run tests from command line
- - Remove `SDL_image` dependency (if it remains unused)
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
