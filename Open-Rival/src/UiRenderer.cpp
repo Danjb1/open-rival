@@ -13,22 +13,22 @@ namespace Rival {
           mainUiRenderable(res.getUiTextureAtlas(), maxUiImages),
           minimapLeftBorder(GameInterface::minimapLeftBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_019F1333.tga"),
+                  "img_ui_0868.tga"),
           minimapTopBorder(GameInterface::minimapTopBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_019F0F70.tga"),
+                  "img_ui_0866.tga"),
           minimapBottomBorder(GameInterface::minimapBottomBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_019F1100.tga"),
+                  "img_ui_0867.tga"),
           mainPanel(GameInterface::mainPanel,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_01A07D3D.tga" : "img_ui_019E79C3.tga"),
+                  race == Race::Greenskin ? "img_ui_0931.tga" : "img_ui_0865.tga"),
           inventoryOverlay(GameInterface::inventoryOverlay,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_01A15E63.tga" : "img_ui_019F3D4E.tga"),
+                  race == Race::Greenskin ? "img_ui_0938.tga" : "img_ui_0872.tga"),
           statsPanel(GameInterface::statsPanel,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_01A1FF08.tga" : "img_ui_019FD2F7.tga") {}
+                  race == Race::Greenskin ? "img_ui_0944.tga" : "img_ui_0878.tga") {}
 
     void UiRenderer::renderUi() {
 

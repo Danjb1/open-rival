@@ -301,7 +301,8 @@ namespace InterfaceExtractor {
             const std::string& outputDir,
             const std::uint8_t* data,
             int& offset,
-            const std::uint32_t* palette) {
+            const std::uint32_t* palette,
+            int& index) {
 
         int initialOffset = offset;
 
@@ -341,15 +342,11 @@ namespace InterfaceExtractor {
         }
 
         // Save the rendered image to disk
-        // TODO: These don't get sorted properly by other applications since hex
-        //   characters don't play nicely with alphabetical order (e.g.
-        //   img_00A46D78 precedes img_00002131).
-        //   N.B. Sorting by created date does the trick!
         char filename[256];
         snprintf(filename,
                 sizeof(filename),
-                "%s\\img_ui_%08X.tga",
-                outputDir.c_str(), initialOffset);
+                "%s\\img_ui_%04d.tga",
+                outputDir.c_str(), index);
         write_image(pixels, filename, w, h, palette);
 
         // Skip some unknown bytes
@@ -360,41 +357,43 @@ namespace InterfaceExtractor {
         if (next != 0x03) {
             offset += 2;
         }
+
+        ++index;
     }
 
     void extractImages(const std::uint8_t* data, const std::string& outputDir) {
-
         int offset = OFFSET_TITLE;
+        int index = 0;
 
         // Title image
-        extractImage(outputDir, data, offset, PALETTE_TITLE);
+        extractImage(outputDir, data, offset, PALETTE_TITLE, index);
 
         // Menu backgrounds
         for (int i = 0; i < 9; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU);
+            extractImage(outputDir, data, offset, PALETTE_MENU, index);
         }
 
         // "Hire Troops" background
-        extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS);
+        extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
 
         // Campaign backgrounds
         for (int i = 0; i < 3; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU);
+            extractImage(outputDir, data, offset, PALETTE_MENU, index);
         }
 
         // Loading screen backgrounds
         for (int i = 0; i < 2; i++) {
-            extractImage(outputDir, data, offset, PALETTE_LOADING);
+            extractImage(outputDir, data, offset, PALETTE_LOADING, index);
         }
 
         // Campaign level intros and menu components
         for (int i = 0; i < 128; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU);
+            extractImage(outputDir, data, offset, PALETTE_MENU, index);
         }
 
         // "Hire Troops" menu components
         for (int i = 0; i < 20; i++) {
-            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS);
+            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
         }
 
         // Menu components continued
@@ -402,23 +401,23 @@ namespace InterfaceExtractor {
         //   doesn't really matter too much for our purposes since we choose the
         //   palette when we render
         for (int i = 0; i < 65; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU);
+            extractImage(outputDir, data, offset, PALETTE_MENU, index);
         }
 
         // Loading screen components
         for (int i = 0; i < 14; i++) {
-            extractImage(outputDir, data, offset, PALETTE_LOADING);
+            extractImage(outputDir, data, offset, PALETTE_LOADING, index);
         }
 
         // "Hire Troops" menu icons
         offset = OFFSET_HIRE_TROOP_ICONS;
         for (int i = 0; i < 239; i++) {
-            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS);
+            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
         }
 
         // Game icons
         for (int i = 0; i < 592; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME);
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
         }
     }
 

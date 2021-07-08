@@ -347,8 +347,8 @@ namespace ImageExtractor {
             char filename[256];
             snprintf(filename,
                     sizeof(filename),
-                    "%s\\img_%04d_%08X.tga",
-                    outputDir.c_str(), i, code - data);
+                    "%s\\img_%04d.tga",
+                    outputDir.c_str(), i);
             write_image(filename, w, h);
 
             // Jump to the next image
