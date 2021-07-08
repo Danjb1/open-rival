@@ -35,6 +35,9 @@
     <Filter Include="Source Files\audio\wav">
       <UniqueIdentifier>{2b44bf75-993c-4c43-beca-d112c453d73c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{679b36e1-8832-46d0-80a9-0e314855e7ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
@@ -408,5 +411,14 @@
     <ClInclude Include="include\ConfigUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Open-Rival.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icons\rival.ico" />
   </ItemGroup>
 </Project>

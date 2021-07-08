@@ -2,6 +2,7 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <SDL_image.h>
 
 #include <gl/glew.h>
 #include <iostream>
@@ -21,8 +22,10 @@
 
 using json = nlohmann::json;
 
+using namespace Rival;
+
 json readConfig() {
-    return Rival::FileUtils::readJsonFile("config.json");
+    return FileUtils::readJsonFile("config.json");
 }
 
 void initSDL() {
@@ -70,15 +73,30 @@ void initGL() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Rival::Shaders::initialiseShaders();
+    Shaders::initialiseShaders();
 }
 
 void initAL() {
-    Rival::AudioUtils::initAL();
+    AudioUtils::initAL();
+}
+
+void setWindowIcon(Window& window) {
+    std::string iconFilename = Resources::txDir + "icon.png";
+    SDL_Surface* surface;
+    surface = IMG_Load(iconFilename.c_str());
+    window.setIcon(surface);
+    SDL_FreeSurface(surface);
+}
+
+std::unique_ptr<Window> createWindow() {
+    std::unique_ptr<Window> window =
+            std::make_unique<Window>(800, 600, "Rival Realms");
+    setWindowIcon(*window);
+    return window;
 }
 
 void exit() {
-    Rival::AudioUtils::destroyAL();
+    AudioUtils::destroyAL();
     SDL_Quit();
 }
 
@@ -95,26 +113,25 @@ int main() {
         initSDL();
         initAL();
 
-        // Create our Window
-        Rival::Window window(800, 600, "Rival Realms");
+        std::unique_ptr<Window> window = createWindow();
 
         // Initialization that requires an OpenGL context
         initGLEW();
         initGL();
 
         // Create our Application
-        Rival::Application app(window, cfg);
+        Application app(*window, cfg);
 
         // Load some scenario
-        Rival::ScenarioReader reader(Rival::Resources::mapsDir + "test-all.sco");
-        Rival::ScenarioBuilder scenarioBuilder(reader.readScenario());
-        Rival::EntityFactory entityFactory(app.getResources());
-        std::unique_ptr<Rival::Scenario> scenario =
+        ScenarioReader reader(Resources::mapsDir + "test-all.sco");
+        ScenarioBuilder scenarioBuilder(reader.readScenario());
+        EntityFactory entityFactory(app.getResources());
+        std::unique_ptr<Scenario> scenario =
                 scenarioBuilder.build(entityFactory);
 
         // Create our initial state
-        std::unique_ptr<Rival::State> initialState =
-                std::make_unique<Rival::GameState>(app, std::move(scenario));
+        std::unique_ptr<State> initialState =
+                std::make_unique<GameState>(app, std::move(scenario));
 
         // Run the game!
         app.start(std::move(initialState));

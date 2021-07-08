@@ -13,19 +13,19 @@ namespace Rival {
           title(title),
           aspectRatio(static_cast<double>(width) / height) {
 
-        windowRef = SDL_CreateWindow(title,
+        sdlWindow = SDL_CreateWindow(title,
                 SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED,
                 width,
                 height,
                 SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
-        if (windowRef == nullptr) {
+        if (sdlWindow == nullptr) {
             std::cerr << "Window could not be created!\n";
             throw std::runtime_error(SDL_GetError());
         }
 
-        glContext = SDL_GL_CreateContext(windowRef);
+        glContext = SDL_GL_CreateContext(sdlWindow);
 
         if (glContext == nullptr) {
             std::cerr << "OpenGL context could not be created!\n";
@@ -34,12 +34,16 @@ namespace Rival {
     }
 
     Window::~Window() {
-        SDL_DestroyWindow(windowRef);
-        windowRef = nullptr;
+        SDL_DestroyWindow(sdlWindow);
+        sdlWindow = nullptr;
     }
 
     void Window::swapBuffers() const {
-        SDL_GL_SwapWindow(windowRef);
+        SDL_GL_SwapWindow(sdlWindow);
+    }
+
+    void Window::setIcon(SDL_Surface* surface) {
+        SDL_SetWindowIcon(sdlWindow, surface);
     }
 
     int Window::getWidth() const {

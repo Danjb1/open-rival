@@ -15,3 +15,4 @@
     - JSON for Modern C++
     - rtmidi
     - SDL2
+    - SDL_image
