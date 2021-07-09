@@ -14,20 +14,20 @@
 namespace InterfaceExtractor {
 
     // NOTE: It is possible these offsets will differ for other locales
-    const int OFFSET_TITLE = 0x2131;
-    const int OFFSET_IN_GAME_MENU = 0x1685AE4;
-    const int OFFSET_POSTGAME_MENU = 0x16F85A9;
-    const int OFFSET_CURSORS = 0x1932F0A;
-    const int OFFSET_MORE_CURSORS = 0x1935CDE;
-    const int OFFSET_HIRE_TROOP_ICONS = 0x1938DBB;
+    const int offsetTitle = 0x2131;
+    const int offsetInGameMenu = 0x1685AE4;
+    const int offsetPostgameMenu = 0x16F85A9;
+    const int offsetCursors = 0x1932F0A;
+    const int offsetMoreCursors = 0x1935CDE;
+    const int offsetHireTroops = 0x1938DBB;
 
     // Number of colours in the palette
-    const int PALETTE_SIZE = 256;
+    const int paletteSize = 256;
 
     // The palette used in-game.
     // The last colour (index 0xff) is used for transparent areas.
     /* clang-format off */
-    const std::uint32_t PALETTE_GAME[PALETTE_SIZE] = {
+    const std::uint32_t paletteGame[paletteSize] = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -64,7 +64,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the title screen.
     // (no transparency)
-    const std::uint32_t PALETTE_TITLE[PALETTE_SIZE] = {
+    const std::uint32_t paletteTitle[paletteSize] = {
         0x000000ff, 0x313131ff, 0x5a5a5aff, 0x636363ff,    0x7b7b7bff, 0xa5a5a5ff, 0xb5b5b5ff, 0x100000ff,
         0x210000ff, 0xbd0000ff, 0xc60000ff, 0xd60000ff,    0xff0000ff, 0x5a0800ff, 0x7b1000ff, 0xf72100ff,
         0xbd3921ff, 0xad3921ff, 0x9c5a4aff, 0xbd5239ff,    0xde5231ff, 0xbd3918ff, 0xad3110ff, 0xad2100ff,
@@ -101,7 +101,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the loading screen.
     // The first colour (index 0x00) is used for transparent areas.
-    const std::uint32_t PALETTE_LOADING[PALETTE_SIZE] = {
+    const std::uint32_t paletteLoading[paletteSize] = {
         0x00000000, 0x8c2921ff, 0x733118ff, 0xff6329ff,    0xff6b31ff, 0x843110ff, 0xad3908ff, 0x943910ff,
         0xe75a18ff, 0xc64208ff, 0xd64a08ff, 0xad5a31ff,    0x633118ff, 0xff7329ff, 0x943908ff, 0x8c3100ff,
         0x8c5231ff, 0xf77b31ff, 0xce5a18ff, 0xa54208ff,    0xc66b31ff, 0x633110ff, 0x733108ff, 0x944a18ff,
@@ -138,7 +138,7 @@ namespace InterfaceExtractor {
 
     // The palette used in-the menus.
     // The first colour (index 0x00) is used for transparent areas.
-    const std::uint32_t PALETTE_MENU[PALETTE_SIZE] = {
+    const std::uint32_t paletteMenu[paletteSize] = {
         0x00000000, 0x0c0c04ff, 0x381b1cff, 0x78595aff,    0x672930ff, 0x67484bff, 0x58272dff, 0x7a303bff,
         0x934c57ff, 0x804e56ff, 0xa26b73ff, 0x491c24ff,    0x382024ff, 0x75454dff, 0x935d67ff, 0x340c14ff,
         0x4a2b34ff, 0x250c14ff, 0x5b5255ff, 0xe2dddfff,    0x362c34ff, 0x150c14ff, 0x0c040cff, 0x151415ff,
@@ -174,8 +174,10 @@ namespace InterfaceExtractor {
     };
 
     // The palette used in-the Hire Troops menu.
+    // This is almost identical to the palette used in-game, since the troop
+    // portraits need to be rendered in both places.
     // The first colour (index 0x00) is used for transparent areas.
-    const std::uint32_t PALETTE_HIRE_TROOPS[PALETTE_SIZE] = {
+    const std::uint32_t paletteHireTroops[paletteSize] = {
         0x00000000, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
@@ -260,7 +262,7 @@ namespace InterfaceExtractor {
         fputc(8 | 1 << 5, fp);
 
         // Colour map data
-        for (int i = 0; i < PALETTE_SIZE; ++i) {
+        for (int i = 0; i < paletteSize; ++i) {
 
             const std::uint32_t col = palette[i];
             const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
@@ -349,7 +351,7 @@ namespace InterfaceExtractor {
                         throw std::runtime_error("Invalid image format");
                     }
                     int paletteIndex = readByte(data, offset);
-                    if (paletteIndex >= PALETTE_SIZE) {
+                    if (paletteIndex >= paletteSize) {
                         throw std::runtime_error("Invalid palette reference");
                     }
                     pixels[nextPxIndex] = paletteIndex;
@@ -382,113 +384,113 @@ namespace InterfaceExtractor {
         // I am not sure what comes before this offset but I am fairly confident
         // there are no more images. Possibly the palettes or image offsets are
         // included in this file.
-        int offset = OFFSET_TITLE;
+        int offset = offsetTitle;
         int index = 0;
 
         // Title image
-        extractImage(outputDir, data, offset, PALETTE_TITLE, index);
+        extractImage(outputDir, data, offset, paletteTitle, index);
 
         // Menu backgrounds
         for (int i = 0; i < 9; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+            extractImage(outputDir, data, offset, paletteMenu, index);
         }
 
         // "Hire Troops" background
-        extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
+        extractImage(outputDir, data, offset, paletteHireTroops, index);
 
         // Campaign backgrounds
         for (int i = 0; i < 3; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+            extractImage(outputDir, data, offset, paletteMenu, index);
         }
 
         // Loading screen backgrounds
         for (int i = 0; i < 2; i++) {
-            extractImage(outputDir, data, offset, PALETTE_LOADING, index);
+            extractImage(outputDir, data, offset, paletteLoading, index);
         }
 
         // Campaign level intros and menu components
         for (int i = 0; i < 128; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+            extractImage(outputDir, data, offset, paletteMenu, index);
         }
 
         // "Hire Troops" menu components
         for (int i = 0; i < 20; i++) {
-            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
+            extractImage(outputDir, data, offset, paletteHireTroops, index);
         }
 
         // Menu components continued
-        // TODO: A few of these might still be using the wrong palette, but it
-        //   doesn't really matter too much for our purposes since we choose the
-        //   palette when we render
-        for (int i = 0; i < 65; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+        for (int i = 0; i < 61; i++) {
+            extractImage(outputDir, data, offset, paletteMenu, index);
+        }
+        for (int i = 0; i < 2; i++) {
+            extractImage(outputDir, data, offset, paletteHireTroops, index);
+        }
+        for (int i = 0; i < 2; i++) {
+            extractImage(outputDir, data, offset, paletteMenu, index);
         }
 
         // Loading screen components
         for (int i = 0; i < 14; i++) {
-            extractImage(outputDir, data, offset, PALETTE_LOADING, index);
+            extractImage(outputDir, data, offset, paletteLoading, index);
         }
 
         // In-game menu
-        offset = OFFSET_IN_GAME_MENU;
+        offset = offsetInGameMenu;
         for (int i = 0; i < 75; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
 
         // Postgame menu components
-        offset = OFFSET_POSTGAME_MENU;
+        offset = offsetPostgameMenu;
         for (int i = 0; i < 41; i++) {
-            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+            extractImage(outputDir, data, offset, paletteMenu, index);
         }
 
         // "Save Troops" menu components
         for (int i = 0; i < 25; i++) {
-            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
+            extractImage(outputDir, data, offset, paletteHireTroops, index);
         }
 
         // Cursors
         // TODO: We skip a lot of bytes in this section. These are probably
         // offsets related to the cursor hotspots (some of them are offset
         // strangely), or the number of frames in an animated cursor.
-        offset = OFFSET_CURSORS;
+        offset = offsetCursors;
         for (int i = 0; i < 10; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
             offset += 2;
         }
-        offset = OFFSET_MORE_CURSORS;
+        offset = offsetMoreCursors;
         for (int i = 0; i < 4; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
         for (int i = 0; i < 3; i++) {
             offset += 2;
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
         for (int i = 0; i < 3; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
         offset += 2;
         for (int i = 0; i < 4; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
         offset += 2;
-        extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        extractImage(outputDir, data, offset, paletteGame, index);
         offset += 2;
-        extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        extractImage(outputDir, data, offset, paletteGame, index);
         for (int i = 0; i < 3; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
         offset += 2;
-        extractImage(outputDir, data, offset, PALETTE_GAME, index);
-
-        // "Hire Troops" menu icons
-        offset = OFFSET_HIRE_TROOP_ICONS;
-        for (int i = 0; i < 239; i++) {
-            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
+        for (int i = 0; i < 4; i++) {
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
 
         // Game icons
-        for (int i = 0; i < 592; i++) {
-            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        offset = offsetHireTroops;
+        for (int i = 0; i < 831; i++) {
+            extractImage(outputDir, data, offset, paletteGame, index);
         }
     }
 

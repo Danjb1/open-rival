@@ -13,22 +13,22 @@ namespace Rival {
           mainUiRenderable(res.getUiTextureAtlas(), maxUiImages),
           minimapLeftBorder(GameInterface::minimapLeftBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_0868.tga"),
+                  "img_ui_1042.tga"),
           minimapTopBorder(GameInterface::minimapTopBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_0866.tga"),
+                  "img_ui_1040.tga"),
           minimapBottomBorder(GameInterface::minimapBottomBorder,
                   res.getUiTextureAtlas(),
-                  "img_ui_0867.tga"),
+                  "img_ui_1041.tga"),
           mainPanel(GameInterface::mainPanel,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_0931.tga" : "img_ui_0865.tga"),
+                  race == Race::Greenskin ? "img_ui_1105.tga" : "img_ui_1039.tga"),
           inventoryOverlay(GameInterface::inventoryOverlay,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_0938.tga" : "img_ui_0872.tga"),
+                  race == Race::Greenskin ? "img_ui_1112.tga" : "img_ui_1046.tga"),
           statsPanel(GameInterface::statsPanel,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_0944.tga" : "img_ui_0878.tga") {}
+                  race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga") {}
 
     void UiRenderer::renderUi() {
 
