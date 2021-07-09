@@ -15,6 +15,10 @@ namespace InterfaceExtractor {
 
     // NOTE: It is possible these offsets will differ for other locales
     const int OFFSET_TITLE = 0x2131;
+    const int OFFSET_IN_GAME_MENU = 0x1685AE4;
+    const int OFFSET_POSTGAME_MENU = 0x16F85A9;
+    const int OFFSET_CURSORS = 0x1932F0A;
+    const int OFFSET_MORE_CURSORS = 0x1935CDE;
     const int OFFSET_HIRE_TROOP_ICONS = 0x1938DBB;
 
     // Number of colours in the palette
@@ -312,6 +316,10 @@ namespace InterfaceExtractor {
         int imageSize = w * h;
         std::vector<std::uint8_t> pixels(imageSize);
 
+        if (w > 800 || h > 600) {
+            throw std::runtime_error("Invalid image dimensions");
+        }
+
         // Skip 4 unknown bytes
         offset += 4;
 
@@ -326,6 +334,9 @@ namespace InterfaceExtractor {
                 int numSamePixels = next - 0x80;
                 int paletteIndex = readByte(data, offset);
                 for (int i = 0; i < numSamePixels; i++) {
+                    if (nextPxIndex >= imageSize) {
+                        throw std::runtime_error("Invalid image format");
+                    }
                     pixels[nextPxIndex] = paletteIndex;
                     nextPxIndex++;
                 }
@@ -334,7 +345,13 @@ namespace InterfaceExtractor {
                 // Next 'n' pixels are all different
                 int numDifferentPixels = next;
                 for (int i = 0; i < numDifferentPixels; i++) {
+                    if (nextPxIndex >= imageSize) {
+                        throw std::runtime_error("Invalid image format");
+                    }
                     int paletteIndex = readByte(data, offset);
+                    if (paletteIndex >= PALETTE_SIZE) {
+                        throw std::runtime_error("Invalid palette reference");
+                    }
                     pixels[nextPxIndex] = paletteIndex;
                     nextPxIndex++;
                 }
@@ -362,6 +379,9 @@ namespace InterfaceExtractor {
     }
 
     void extractImages(const std::uint8_t* data, const std::string& outputDir) {
+        // I am not sure what comes before this offset but I am fairly confident
+        // there are no more images. Possibly the palettes or image offsets are
+        // included in this file.
         int offset = OFFSET_TITLE;
         int index = 0;
 
@@ -408,6 +428,57 @@ namespace InterfaceExtractor {
         for (int i = 0; i < 14; i++) {
             extractImage(outputDir, data, offset, PALETTE_LOADING, index);
         }
+
+        // In-game menu
+        offset = OFFSET_IN_GAME_MENU;
+        for (int i = 0; i < 75; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+
+        // Postgame menu components
+        offset = OFFSET_POSTGAME_MENU;
+        for (int i = 0; i < 41; i++) {
+            extractImage(outputDir, data, offset, PALETTE_MENU, index);
+        }
+
+        // "Save Troops" menu components
+        for (int i = 0; i < 25; i++) {
+            extractImage(outputDir, data, offset, PALETTE_HIRE_TROOPS, index);
+        }
+
+        // Cursors
+        // TODO: We skip a lot of bytes in this section. These are probably
+        // offsets related to the cursor hotspots (some of them are offset
+        // strangely), or the number of frames in an animated cursor.
+        offset = OFFSET_CURSORS;
+        for (int i = 0; i < 10; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+            offset += 2;
+        }
+        offset = OFFSET_MORE_CURSORS;
+        for (int i = 0; i < 4; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+        for (int i = 0; i < 3; i++) {
+            offset += 2;
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+        for (int i = 0; i < 3; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+        offset += 2;
+        for (int i = 0; i < 4; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+        offset += 2;
+        extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        offset += 2;
+        extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        for (int i = 0; i < 3; i++) {
+            extractImage(outputDir, data, offset, PALETTE_GAME, index);
+        }
+        offset += 2;
+        extractImage(outputDir, data, offset, PALETTE_GAME, index);
 
         // "Hire Troops" menu icons
         offset = OFFSET_HIRE_TROOP_ICONS;
