@@ -4,7 +4,14 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - N/A
+ - Improve interface extraction
+    - Some bytes are still unknown
+    - Some images are using the wrong palettes
+    - Use lowercase for constants
+    - Update image names in texture definitions and code
+    - Our current image naming system is fragile if more images are discovered
+    - Improve error handling (don't use raw pointers / arrays!)
+    - Test with other locales
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -22,6 +29,7 @@
 ### General
 
  - Custom cursors
+    - Images for animated cursor (in-game) are missing
  - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls
