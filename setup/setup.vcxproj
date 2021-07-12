@@ -94,7 +94,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -158,6 +158,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h" />
+    <ClInclude Include="..\Open-Rival\include\FileUtils.h" />
+    <ClInclude Include="..\Open-Rival\include\Image.h" />
+    <ClInclude Include="..\Open-Rival\include\Palette.h" />
+    <ClInclude Include="..\Open-Rival\include\StringUtils.h" />
     <ClInclude Include="include\audio-extractor.h" />
     <ClInclude Include="include\image-extractor.h" />
     <ClInclude Include="include\interface-extractor.h" />
@@ -167,6 +172,11 @@
     <ClInclude Include="include\texture-builder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp" />
+    <ClCompile Include="..\Open-Rival\src\FileUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Image.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Palette.cpp" />
+    <ClCompile Include="..\Open-Rival\src\StringUtils.cpp" />
     <ClCompile Include="src\audio-extractor.cpp" />
     <ClCompile Include="src\image-extractor.cpp" />
     <ClCompile Include="src\interface-extractor.cpp" />

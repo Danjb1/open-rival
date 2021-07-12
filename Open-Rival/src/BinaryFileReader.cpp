@@ -8,12 +8,20 @@ namespace Rival {
     BinaryFileReader::BinaryFileReader(const std::string filename)
         : in(std::ifstream(filename, std::ios::binary | std::ios::in)) {
         if (!in) {
-            throw std::runtime_error("Failed to load image!");
+            throw std::runtime_error("Failed to load file: " + filename);
         }
     }
 
     void BinaryFileReader::skip(int n) {
         in.ignore(n);
+    }
+
+    std::streampos BinaryFileReader::getPos() {
+        return in.tellg();
+    }
+
+    void BinaryFileReader::setPos(std::streampos pos) {
+        in.seekg(pos);
     }
 
     std::uint8_t BinaryFileReader::readByte() {

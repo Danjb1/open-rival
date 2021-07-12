@@ -6,7 +6,7 @@
 #include "setup-utils.h"
 #include "texture-builder.h"
 
-using namespace TextureBuilder;
+using namespace Rival::Setup;
 
 int main(int argc, char* argv[]) {
 

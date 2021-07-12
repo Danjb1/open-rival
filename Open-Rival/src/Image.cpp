@@ -11,15 +11,25 @@ namespace Rival {
     Image::Image(int width, int height)
         : width(width),
           height(height),
-          data(std::make_unique<std::vector<unsigned char>>(width * height, '\xff')) {}
+          stride(width),
+          data(std::make_unique<std::vector<std::uint8_t>>(width * height, '\xff')) {}
 
     Image::Image(int width, int height,
-            std::unique_ptr<std::vector<unsigned char>> data)
+            std::unique_ptr<std::vector<std::uint8_t>> data)
         : width(width),
           height(height),
+          stride(width),
           data(std::move(data)) {}
 
-    Image Image::loadImage(const std::string filename) {
+    Image::Image(int width, int height,
+            std::unique_ptr<std::vector<std::uint8_t>> data,
+            int stride)
+        : width(width),
+          height(height),
+          stride(stride),
+          data(std::move(data)) {}
+
+    Image Image::readImage(const std::string filename) {
         std::cout << "Loading: " << filename << "\n";
 
         BinaryFileReader reader(filename);
@@ -44,8 +54,8 @@ namespace Rival {
         reader.skip(Palette::paletteBytes);
 
         // Pixel data
-        std::unique_ptr<std::vector<unsigned char>> data =
-                std::make_unique<std::vector<unsigned char>>(width * height);
+        std::unique_ptr<std::vector<std::uint8_t>> data =
+                std::make_unique<std::vector<std::uint8_t>>(width * height);
         reader.read(data.get());
 
         return Image(width, height, std::move(data));

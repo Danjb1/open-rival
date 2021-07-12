@@ -94,7 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\setup\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\setup\include;..\Open-Rival\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,11 +155,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h" />
+    <ClInclude Include="..\Open-Rival\include\Image.h" />
+    <ClInclude Include="..\Open-Rival\include\Palette.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\setup\include\setup-utils.h" />
     <ClInclude Include="..\setup\include\texture-builder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Image.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Palette.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

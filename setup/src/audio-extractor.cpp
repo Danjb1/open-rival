@@ -8,18 +8,19 @@
 #include <stdexcept>
 #include <string>
 
-namespace AudioExtractor {
+namespace Rival {
+namespace Setup {
 
     /**
-     * Reads the given "SOUNDS.dat" file
-     * and extracts the audio files therein to the given "output" directory.
+     * Reads the given "SOUNDS.dat" file and extracts the audio files therein to
+     * the given output directory.
      */
-    void extractAudio(std::wstring inputFile, std::string outputDir) {
+    void extractAudio(std::string inputFile, std::string outputDir) {
 
         // Open the data file
         std::ifstream input(inputFile, std::ios::binary);
         if (!input.is_open()) {
-            throw std::runtime_error("Unable to open SOUNDS.dat");
+            throw std::runtime_error("Unable to open file: " + inputFile);
         }
 
         // Find and extract all audio files
@@ -108,8 +109,6 @@ namespace AudioExtractor {
             std::streamoff lengthOffset = length;
             input.seekg(offset + lengthOffset);
         }
-
-        input.close();
     }
 
-}  // namespace AudioExtractor
+}}  // namespace Rival::Setup

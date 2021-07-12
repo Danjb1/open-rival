@@ -14,15 +14,13 @@
 
 namespace fs = std::filesystem;
 
-namespace TextureBuilder {
+namespace Rival {
+namespace Setup {
 
     // A border between images prevents texture bleeding
     const int borderSize = 1;  // px
 
     const int maxTextureSize = 2048;
-
-    // Number of colours in the palette
-    const int paletteSize = 256;
 
     ///////////////////////////////////////////////////////////////////////////
     // Comparison functions
@@ -31,57 +29,21 @@ namespace TextureBuilder {
     /**
      * Compare function to sort Images by size - largest first.
      */
-    bool compareImagesLargestFirst(Image& img1, Image& img2) {
+    bool compareImagesLargestFirst(const NamedImage& img1, const NamedImage& img2) {
         // returns true if img1 comes before img2
-        int img1Area = img1.getWidth() * img1.getHeight();
-        int img2Area = img2.getWidth() * img2.getHeight();
+        int img1Area = img1.image.getWidth() * img1.image.getHeight();
+        int img2Area = img2.image.getWidth() * img2.image.getHeight();
         return img1Area > img2Area;
     }
 
     /**
      * Compare function to sort Rects by size - smallest first.
      */
-    bool compareRectsSmallestFirst(Rect& rect1, Rect& rect2) {
+    bool compareRectsSmallestFirst(const Rect& rect1, const Rect& rect2) {
         // returns true if rect1 comes before rect2
         int rect1Area = rect1.width * rect1.height;
         int rect2Area = rect2.width * rect2.height;
         return rect1Area < rect2Area;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Image class
-    ///////////////////////////////////////////////////////////////////////////
-
-    Image::Image(std::string filename, int width, int height) {
-        this->filename = filename;
-        this->width = width;
-        this->height = height;
-
-        data = std::shared_ptr<unsigned char>(new unsigned char[width * height]);
-        std::fill_n(data.get(), width * height, 0xff);
-    }
-
-    Image::Image(std::string filename, int width, int height, const std::shared_ptr<unsigned char> data) {
-        this->filename = filename;
-        this->width = width;
-        this->height = height;
-        this->data = data;
-    }
-
-    std::string Image::getFilename() const {
-        return filename;
-    }
-
-    int Image::getWidth() const {
-        return width;
-    }
-
-    int Image::getHeight() const {
-        return height;
-    }
-
-    std::shared_ptr<unsigned char> Image::getData() const {
-        return data;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -108,25 +70,19 @@ namespace TextureBuilder {
     /**
      * Adds an image to the texture being constructed.
      */
-    void TextureAtlasBuilder::addImage(const Image& img) {
-
+    void TextureAtlasBuilder::addImage(const NamedImage& namedImage) {
         // Add some padding around the image
-        int imageWidth = img.getWidth() + 2 * borderSize;
-        int imageHeight = img.getHeight() + 2 * borderSize;
+        int imageWidth = namedImage.image.getWidth() + 2 * borderSize;
+        int imageHeight = namedImage.image.getHeight() + 2 * borderSize;
 
         // Store this image by its key for later retrieval
-        const std::string& filename = img.getFilename();
-        const std::string key =
-                filename.substr(filename.find_last_of("\\") + 1);
-        imagesByKey.insert(std::make_pair(key, img));
+        imagesByKey.insert(std::make_pair(namedImage.name, &namedImage));
 
         // Ask the builder for an empty space
         Rect dest = findOrMakeEmptyRect(imageWidth, imageHeight);
 
         // Map this image to its destination Rectangle
-        // We use the image filename as the key, but we could use anything, as
-        // long as we use the same key to refer to the image when we need it.
-        imagePlacements.insert(std::make_pair(key, dest));
+        imagePlacements.insert(std::make_pair(namedImage.name, dest));
     }
 
     /**
@@ -266,42 +222,9 @@ namespace TextureBuilder {
     // End of classes
     ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Loads an image from a file.
-     *
-     * This is basically the reverse of `write_image` from image-extractor,
-     * skipping all the data we don't care about.
-     */
-    Image loadImage(const std::string& filename) {
-
-        std::ifstream ifs(filename, std::ios::binary | std::ios::in);
-        if (!ifs) {
-            throw std::runtime_error("Failed to load image: " + filename);
-        }
-
-        // Read sprite dimensions
-        ifs.seekg(12);
-        int width = ifs.get() | (ifs.get() << 8);
-        int height = ifs.get() | (ifs.get() << 8);
-
-        // Read pixel data
-        std::shared_ptr<unsigned char> data =
-                std::shared_ptr<unsigned char>(new unsigned char[width * height]);
-        ifs.seekg(1042);
-#pragma warning(push)
-#pragma warning(disable : 26451)  // Ignore arithmetic overflow warning
-        ifs.read((char*) data.get(), width * height);
-#pragma warning(pop : 26451)
-
-        return Image(filename, width, height, data);
-    }
-
     void readPalette(
-            std::vector<std::uint32_t>& palette,
+            Palette::Palette& palette,
             const std::string filename) {
-
-        palette.reserve(paletteSize);
-
         std::ifstream ifs(filename, std::ios::binary | std::ios::in);
         if (!ifs) {
             throw std::runtime_error("Failed to load image for palette: " + filename);
@@ -309,7 +232,7 @@ namespace TextureBuilder {
 
         ifs.seekg(18);
 
-        for (int i = 0; i < paletteSize; ++i) {
+        for (int i = 0; i < Palette::paletteSize; ++i) {
             const std::uint8_t blue = ifs.get();
             const std::uint8_t green = ifs.get();
             const std::uint8_t red = ifs.get();
@@ -320,84 +243,8 @@ namespace TextureBuilder {
                     + (blue << 8)
                     + alpha;
 
-            palette.push_back(col);
+            palette[i] = col;
         }
-    }
-
-    /**
-     * Writes an image to file.
-     *
-     * Based on `write_image` from image-extractor.
-     */
-    int writeImage(
-            const std::string filename,
-            const Image& image,
-            const std::vector<std::uint32_t>& palette) {
-
-        // Open file for writing
-        FILE* fp = fopen(filename.c_str(), "wb");
-        if (!fp) {
-            perror(filename.c_str());
-            return 0;
-        }
-
-        /*
-         * Write using TGA format:
-         * http://tfc.duke.free.fr/coding/tga_specs.pdf
-         */
-
-        fputc(0x00, fp);  // ID Length
-        fputc(0x01, fp);  // Color map type
-        fputc(0x01, fp);  // Image type (uncompressed, colour-mapped)
-
-        // Color map specification
-        fputc(0, fp);  // Index of first entry
-        fputc(0x00, fp);
-        fputc(0x00, fp);  // Number of entries (256)
-        fputc(0x01, fp);
-        fputc(32, fp);  // Entry size (32-bit RGBA)
-
-        // Image specification
-        fputc(0x00, fp);  // X-origin
-        fputc(0x00, fp);
-        fputc(0x00, fp);  // Y-origin
-        fputc(0x00, fp);
-        fputc((uint8_t) image.getWidth(), fp);  // Width
-        fputc((uint8_t)(image.getWidth() >> 8), fp);
-        fputc((uint8_t) image.getHeight(), fp);  // Height
-        fputc((uint8_t)(image.getHeight() >> 8), fp);
-        fputc(8, fp);  // Bits per pixel
-
-        // Image descriptor byte
-        // (8 = number of alpha bits, bit5: lower-left origin)
-        fputc(8 | 0 << 5, fp);
-
-        // Colour map data
-        for (int i = 0; i < paletteSize; ++i) {
-
-            const std::uint32_t col = palette[i];
-            const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
-            const std::uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const std::uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
-            const std::uint8_t alpha = (uint8_t)(col & 0x000000FF);
-
-            fputc(blue, fp);
-            fputc(green, fp);
-            fputc(red, fp);
-            fputc(alpha, fp);
-        }
-
-        // Pixel data
-        std::shared_ptr<unsigned char> data = image.getData();
-        for (int y = image.getHeight() - 1; y >= 0; y--) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                const std::uint8_t index = data.get()[x + y * image.getWidth()];
-                fputc(index, fp);
-            }
-        }
-
-        fclose(fp);
-        return 1;
     }
 
     /**
@@ -418,7 +265,7 @@ namespace TextureBuilder {
         for (auto const& kv : builder.imagePlacements) {
             const std::string& key = kv.first;
             const Rect& target = kv.second;
-            const Image& img = builder.imagesByKey.at(key);
+            const Image& img = builder.imagesByKey.at(key)->image;
             atlasFile << key << " "
                       << target.x + borderSize << " "
                       << target.y + borderSize << " "
@@ -438,21 +285,20 @@ namespace TextureBuilder {
             const int dstX,
             const int dstY) {
 
-        std::shared_ptr<unsigned char> srcData = src.getData();
-        std::shared_ptr<unsigned char> dstData = dst.getData();
+        std::vector<std::uint8_t>* srcData = src.getData();
+        std::vector<std::uint8_t>* dstData = dst.getData();
 
         for (int y = 0; y < src.getHeight(); y++) {
             for (int x = 0; x < src.getWidth(); x++) {
-
                 const int srcIndex = (y * src.getWidth()) + x;
                 const int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
 
-                dstData.get()[dstIndex] = srcData.get()[srcIndex];
+                (*dstData)[dstIndex] = (*srcData)[srcIndex];
             }
         }
     }
 
-    std::vector<Image> readImagesFromDefinitionFile(
+    std::vector<NamedImage> readImagesFromDefinitionFile(
             const std::string& imageDir,
             fs::path path,
             bool atlasMode) {
@@ -463,15 +309,15 @@ namespace TextureBuilder {
         int spriteWidth = -1;
         int spriteHeight = -1;
 
-        std::vector<Image> sprites;
+        std::vector<NamedImage> sprites;
 
         // Load all sprites from the definition file
         while (std::getline(file, line)) {
-
-            Image sprite = loadImage(imageDir + "\\" + line);
+            const std::string imageName = line;
+            Image sprite = Image::readImage(imageDir + "\\" + imageName);
 
             if (atlasMode) {
-                sprites.push_back(sprite);
+                sprites.push_back({ imageName, std::move(sprite) });
             } else {
 
                 // Set the sprite size based on the first sprite
@@ -489,15 +335,15 @@ namespace TextureBuilder {
                 } else if (sprite.getWidth() < spriteWidth
                         || sprite.getHeight() < spriteHeight) {
                     // Sprite too small
-                    Image resizedSprite = Image(line, spriteWidth, spriteHeight);
+                    Image resizedSprite = Image(spriteWidth, spriteHeight);
                     const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                     const int dstY = (spriteHeight - sprite.getHeight()) / 2;
                     copyImage(sprite, resizedSprite, dstX, dstY);
-                    sprites.push_back(resizedSprite);
+                    sprites.push_back({ imageName, std::move(resizedSprite) });
 
                 } else {
                     // Sprite is ok!
-                    sprites.push_back(sprite);
+                    sprites.push_back({ imageName, std::move(sprite) });
                 }
             }
         }
@@ -508,16 +354,15 @@ namespace TextureBuilder {
     void createTextureAtlas(
             const std::string& outputDir,
             fs::path definitionFilename,
-            std::vector<Image>& images,
-            const std::vector<std::uint32_t>& palette) {
-
+            std::vector<NamedImage>& images,
+            const Palette::Palette& palette) {
         TextureAtlasBuilder builder;
 
         // Sort images (largest area first)
         std::sort(images.begin(), images.end(), compareImagesLargestFirst);
 
         // Find a suitable placement for each image
-        for (const auto& img : images) {
+        for (auto const& img : images) {
             builder.addImage(img);
         }
 
@@ -525,35 +370,38 @@ namespace TextureBuilder {
         int texWidth = nextPowerOf2(builder.texWidth);
         int texHeight = nextPowerOf2(builder.texHeight);
         std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
-        Image texture("", texWidth, texHeight);
+        Image texture(texWidth, texHeight);
 
         // Copy each image onto the texture
         for (auto const& kv : builder.imagePlacements) {
             const std::string& key = kv.first;
             const Rect& target = kv.second;
-            const Image& img = builder.imagesByKey.at(key);
-            std::cout << "Copying " << img.getFilename() << " to " << target.x << ", " << target.y << "\n";
+            const Image& img = builder.imagesByKey.at(key)->image;
+            std::cout << "Copying " << key << " to " << target.x << ", " << target.y << "\n";
             copyImage(img, texture, target.x + borderSize, target.y + borderSize);
         }
 
         // Save the final texture
-        writeImage(outputDir + "\\" + definitionFilename.replace_extension(".tga").string(),
-                texture,
-                palette);
+        std::string txFilename = outputDir
+                + "\\" + definitionFilename.replace_extension(".tga").string();
+        writeImage(texture, palette, txFilename);
 
         // Save the atlas definition
-        writeAtlas(outputDir + "\\" + definitionFilename.replace_extension(".atlas").string(), builder);
+        std::string altasFilename = outputDir
+                + "\\" + definitionFilename.replace_extension(".atlas").string();
+        writeAtlas(altasFilename, builder);
     }
 
     void createSpritesheetTexture(
             const std::string& outputDir,
             fs::path definitionFilename,
-            const std::vector<Image>& sprites,
-            const std::vector<std::uint32_t>& palette) {
+            const std::vector<NamedImage>& sprites,
+            const Palette::Palette& palette) {
 
         // For a spritesheet, all images are the same size
-        int spriteWidth = sprites[0].getWidth();
-        int spriteHeight = sprites[0].getHeight();
+        const Image& anySprite = sprites[0].image;
+        int spriteWidth = anySprite.getWidth();
+        int spriteHeight = anySprite.getHeight();
 
         // Find the optimal texture size:
         // Start with a single long row of sprites, and keep splitting it until
@@ -586,13 +434,14 @@ namespace TextureBuilder {
         }
 
         // Create an empty texture
-        Image texture = Image("", txWidth, txHeight);
+        Image texture = Image(txWidth, txHeight);
 
         int x = 0;
         int y = 0;
 
         // Draw the sprites to the texture
-        for (Image sprite : sprites) {
+        for (auto const& namedImage : sprites) {
+            const Image& sprite = namedImage.image;
             copyImage(sprite, texture, x, y);
 
             x += sprite.getWidth();
@@ -604,9 +453,9 @@ namespace TextureBuilder {
         }
 
         // Save the final texture
-        writeImage(outputDir + "\\" + definitionFilename.replace_extension(".tga").string(),
-                texture,
-                palette);
+        std::string filename = outputDir
+                + "\\" + definitionFilename.replace_extension(".tga").string();
+        writeImage(texture, palette, filename);
     }
 
     void buildTextures(
@@ -622,12 +471,12 @@ namespace TextureBuilder {
                 std::cout << "Processing: " << path.filename() << "\n";
 
                 // Read images
-                std::vector<Image> images = readImagesFromDefinitionFile(
+                std::vector<NamedImage> images = readImagesFromDefinitionFile(
                         imageDir, path, atlasMode);
 
                 // Read palette from the first image
-                std::vector<std::uint32_t> palette;
-                readPalette(palette, images[0].getFilename());
+                Palette::Palette palette { 0 };
+                readPalette(palette, imageDir + "\\" + images[0].name);
 
                 // Create texture
                 if (atlasMode) {
@@ -643,4 +492,4 @@ namespace TextureBuilder {
         }
     }
 
-}  // namespace TextureBuilder
+}}  // namespace Rival::Setup

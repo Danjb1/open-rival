@@ -8,6 +8,8 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 ## Projects
 
+This repository contains one Visual Studio solution file, which consists of multiple projects (outlined below). Note that there are some dependencies between the projects, so they cannot be compiled in isolation.
+
 ### [Open-Rival](/Open-Rival)
 
 > Rival Realms remake.

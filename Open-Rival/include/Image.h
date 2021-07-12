@@ -1,6 +1,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include <cstdint>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -11,29 +12,36 @@ namespace Rival {
     class Image {
 
     public:
-        /**
-         * Loads an image from a file.
-         *
-         * This is basically the reverse of `write_image` from image-extractor,
-         * skipping all the data we don't care about.
-         */
-        static Image loadImage(const std::string filename);
+        static Image readImage(const std::string filename);
 
+        // Creates a blank image
         Image(int width, int height);
 
         Image(int width, int height,
-                std::unique_ptr<std::vector<unsigned char>> data);
+                std::unique_ptr<std::vector<std::uint8_t>> data);
+
+        Image(int width, int height,
+                std::unique_ptr<std::vector<std::uint8_t>> data,
+                int stride);
 
         int getWidth() const { return width; }
 
         int getHeight() const { return height; }
 
-        std::vector<unsigned char>* getData() const { return data.get(); };
+        int getStride() const { return stride; }
+
+        std::vector<std::uint8_t>* getData() const { return data.get(); };
 
     private:
         int width;
         int height;
-        std::unique_ptr<std::vector<unsigned char>> data;
+
+        /**
+         * Stride used to separate rows of the image within the data buffer.
+         */
+        int stride;
+
+        std::unique_ptr<std::vector<std::uint8_t>> data;
     };
 
 }  // namespace Rival

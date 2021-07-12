@@ -38,11 +38,11 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{679b36e1-8832-46d0-80a9-0e314855e7ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{b4c25764-bb69-4f4e-9fe7-c8da32619be3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -217,12 +217,18 @@
     <ClCompile Include="src\FileUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PaletteUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pch.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Scenario.h">
@@ -413,6 +419,15 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pch.h">
+      <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PaletteUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
