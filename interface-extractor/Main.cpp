@@ -6,17 +6,19 @@
 #include "interface-extractor.h"
 #include "setup-utils.h"
 
-using namespace InterfaceExtractor;
+using namespace Rival::Setup;
+
+const std::string outputDir = "images";
 
 /**
  * Entry point for the application.
  */
 int main() {
-
-    if (!createDirectory("images")) {
-        std::cerr << "Could not create \"images\" directory\n";
+    if (!createDirectory(outputDir)) {
+        std::cerr << "Could not create directory: " << outputDir << "\n";
         return -1;
     }
 
-    extractUiImages(L"Interfac.dat", "images");
+    InterfaceExtractor imageExtractor("Interfac.dat");
+    imageExtractor.extractImages(outputDir);
 }

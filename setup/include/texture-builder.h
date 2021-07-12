@@ -6,34 +6,27 @@
 #include <string>
 #include <vector>
 
+#include "Image.h"
+#include "Palette.h"
+
 namespace fs = std::filesystem;
 
-namespace TextureBuilder {
+namespace Rival {
+namespace Setup {
 
     ///////////////////////////////////////////////////////////////////////////////
-    // Image class
+    // NamedImage class
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Image {
-
+    class NamedImage {
     public:
-        Image(std::string filename, int width, int height);
+        std::string name;
+        Image image;
 
-        Image(std::string filename, int width, int height, const std::shared_ptr<unsigned char> data);
-
-        std::string getFilename() const;
-
-        int getWidth() const;
-
-        int getHeight() const;
-
-        std::shared_ptr<unsigned char> getData() const;
-
-    private:
-        std::string filename;
-        int width;
-        int height;
-        std::shared_ptr<unsigned char> data;
+        // Wraps an Image by moving it into this NamedImage
+        NamedImage(const std::string name, Image&& image)
+            : name(name),
+              image(std::move(image)) {}
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -58,7 +51,7 @@ namespace TextureBuilder {
     class TextureAtlasBuilder {
 
     public:
-        std::map<std::string, Image> imagesByKey;
+        std::map<std::string, const NamedImage*> imagesByKey;
         std::map<std::string, Rect> imagePlacements;
         std::vector<Rect> emptyRects;
         int texWidth;
@@ -66,7 +59,7 @@ namespace TextureBuilder {
 
         TextureAtlasBuilder();
 
-        void addImage(const Image& img);
+        void addImage(const NamedImage& img);
 
     private:
         Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
@@ -91,9 +84,9 @@ namespace TextureBuilder {
             std::string outputDir,
             bool atlasMode);
 
-    void readPalette(std::vector<std::uint32_t>& palette, const std::string filename);
+    void readPalette(Palette::Palette& palette, const std::string filename);
 
-    std::vector<Image> readImagesFromDefinitionFile(
+    std::vector<NamedImage> readImagesFromDefinitionFile(
             const std::string& imageDir,
             fs::path path,
             bool atlasMode);
@@ -101,15 +94,15 @@ namespace TextureBuilder {
     void createTextureAtlas(
             const std::string& imageDir,
             fs::path definitionFilename,
-            std::vector<Image>& images,
-            const std::vector<std::uint32_t>& palette);
+            std::vector<NamedImage>& images,
+            const Palette::Palette& palette);
 
     void createSpritesheetTexture(
             const std::string& imageDir,
             fs::path definitionFilename,
-            const std::vector<Image>& sprites,
-            const std::vector<std::uint32_t>& palette);
+            const std::vector<NamedImage>& sprites,
+            const Palette::Palette& palette);
 
-}  // namespace TextureBuilder
+}}  // namespace Rival::Setup
 
 #endif  // TEXTURE_BUILDER_H

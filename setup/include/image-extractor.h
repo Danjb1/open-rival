@@ -3,10 +3,11 @@
 
 #include <string>
 
-namespace ImageExtractor {
+namespace Rival {
+namespace Setup {
 
-    void extractImages(std::wstring inputFile, std::string outputDir);
+    void extractImages(std::string inputFile, std::string outputDir);
 
-}
+}}  // namespace Rival::Setup
 
 #endif  // IMAGE_EXTRACTOR_H

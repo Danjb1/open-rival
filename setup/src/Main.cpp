@@ -13,9 +13,12 @@
 #include "interface-extractor.h"
 #include "registry.h"
 #include "setup-utils.h"
+#include "StringUtils.h"
 #include "texture-builder.h"
 
 namespace fs = std::filesystem;
+
+using namespace Rival;
 
 // Configuration
 bool shouldCreateOutputDirectories = true;
@@ -36,37 +39,38 @@ void createOutputDirectories() {
         "res\\video",
     };
     for (auto const& dir : directories) {
-        if (!createDirectory(dir.c_str())) {
+        if (!Setup::createDirectory(dir.c_str())) {
             std::cerr << "Could not create directory: " << dir << "\n";
             throw new std::runtime_error("Failed to create output directories");
         }
     }
 }
 
-void extractSounds(std::wstring gameDir) {
+void extractSounds(std::string gameDir) {
     try {
         std::wcout << "Extracting audio\n";
-        AudioExtractor::extractAudio(gameDir + L"\\DATA\\SOUNDS.DAT", "res\\sound");
+        Setup::extractAudio(gameDir + "\\DATA\\SOUNDS.DAT", "res\\sound");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to extract sounds: " << e.what() << "\n";
         throw new std::runtime_error("Failed to extract sounds");
     }
 }
 
-void extractImages(std::wstring gameDir) {
+void extractImages(std::string gameDir) {
     try {
         std::wcout << "Extracting images\n";
-        ImageExtractor::extractImages(gameDir + L"\\DATA\\IMAGES.DAT", "setup\\images\\game");
+        Setup::extractImages(gameDir + "\\DATA\\IMAGES.DAT", "setup\\images\\game");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to extract images: " << e.what() << "\n";
         throw new std::runtime_error("Failed to extract images");
     }
 }
 
-void extractInterface(std::wstring gameDir) {
+void extractInterface(std::string gameDir) {
     try {
         std::wcout << "Extracting UI images\n";
-        InterfaceExtractor::extractUiImages(gameDir + L"\\DATA\\Interfac.DAT", "setup\\images\\ui");
+        Setup::InterfaceExtractor imageExtractor(gameDir + "\\DATA\\Interfac.dat");
+        imageExtractor.extractImages("setup\\images\\ui");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to extract UI images: " << e.what() << "\n";
         throw new std::runtime_error("Failed to extract interface");
@@ -76,20 +80,15 @@ void extractInterface(std::wstring gameDir) {
 void buildTextures() {
     try {
         std::wcout << "Building textures\n";
-
-        // Game
-        TextureBuilder::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
-
-        // UI
-        TextureBuilder::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
-
+        Setup::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
+        Setup::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to build textures: " << e.what() << "\n";
         throw new std::runtime_error("Failed to build textures");
     }
 }
 
-void copyVideos(std::wstring videoDir, std::string outputDir) {
+void copyVideos(std::string videoDir, std::string outputDir) {
     for (const fs::directory_entry& entry : fs::directory_iterator(videoDir)) {
         const fs::path path = entry.path();
         std::filesystem::copy(path, outputDir + "\\" + path.filename().string(),
@@ -97,9 +96,9 @@ void copyVideos(std::wstring videoDir, std::string outputDir) {
     }
 }
 
-void copyVideos(std::wstring gameDir) {
+void copyVideos(std::string gameDir) {
     try {
-        copyVideos(gameDir + L"\\MOVIES", "res\\video");
+        copyVideos(gameDir + "\\MOVIES", "res\\video");
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to copy videos: " << e.what() << "\n";
         throw new std::runtime_error("Failed to copy videos");
@@ -116,7 +115,7 @@ void copyVideos(std::wstring gameDir) {
  */
 int main(int argc, char* argv[]) {
 
-    std::wstring gameDir;
+    std::string gameDir;
     bool findDirectoryFromRegistry = true;
     for (int count = 1; count < argc; ++count) {
         if (argv[count] == "-h") {
@@ -125,9 +124,9 @@ int main(int argc, char* argv[]) {
         }
         if (strcmp("-d", argv[count]) == 0 && count + 1 <= argc) {
             std::string tmpStr(argv[count + 1]);
-            gameDir = std::wstring(tmpStr.begin(), tmpStr.end());
+            gameDir = std::string(tmpStr.begin(), tmpStr.end());
             findDirectoryFromRegistry = false;
-            std::wcout << "Reading files from directory " << gameDir << '\n';
+            std::cout << "Reading files from directory " << gameDir << '\n';
             ++count;
         }
     }
@@ -136,11 +135,11 @@ int main(int argc, char* argv[]) {
         std::wcout << "Reading files from registry." << '\n';
         // Read original game directory from registry
         try {
-            gameDir = Registry::RegGetString(
+            gameDir = StringUtils::toUtf8(Registry::RegGetString(
                     HKEY_CURRENT_USER,
                     L"Software\\Titus Games\\Rival Realms",
-                    L"Game Directory");
-            std::wcout << "Found game at: " << gameDir << "\n";
+                    L"Game Directory"));
+            std::cout << "Found game at: " << gameDir << "\n";
         } catch (const Registry::RegistryError& e) {
             std::cerr << "Failed to find registry entry:\n"
                       << "HKEY_CURRENT_USER\\Software\\Titus Games\\Rival Realms\n"

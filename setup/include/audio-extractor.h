@@ -3,10 +3,11 @@
 
 #include <string>
 
-namespace AudioExtractor {
+namespace Rival {
+namespace Setup {
 
-    void extractAudio(std::wstring inputFile, std::string outputDir);
+    void extractAudio(std::string inputFile, std::string outputDir);
 
-}
+}}  // namespace Rival::Setup
 
 #endif  // AUDIO_EXTRACTOR_H

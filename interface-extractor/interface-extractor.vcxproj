@@ -85,14 +85,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\setup\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\setup\include;..\Open-Rival\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,14 +153,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h" />
+    <ClInclude Include="..\Open-Rival\include\FileUtils.h" />
+    <ClInclude Include="..\Open-Rival\include\Image.h" />
+    <ClInclude Include="..\Open-Rival\include\Palette.h" />
     <ClInclude Include="..\setup\include\setup-utils.h" />
     <ClInclude Include="..\setup\include\interface-extractor.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp" />
+    <ClCompile Include="..\Open-Rival\src\FileUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Image.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Palette.cpp" />
     <ClCompile Include="..\setup\src\setup-utils.cpp" />
     <ClCompile Include="..\setup\src\interface-extractor.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

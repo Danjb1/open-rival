@@ -47,6 +47,7 @@
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
+    <ClCompile Include="src\PaletteUtils.cpp" />
     <ClCompile Include="src\PassabilityComponent.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -68,6 +69,7 @@
     <ClCompile Include="src\SpriteRenderable.cpp" />
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\AtlasRenderable.cpp" />
+    <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\Tile.cpp" />
@@ -110,6 +112,7 @@
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
+    <ClInclude Include="include\PaletteUtils.h" />
     <ClInclude Include="include\PassabilityComponent.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Race.h" />
@@ -131,6 +134,7 @@
     <ClInclude Include="include\SpriteRenderable.h" />
     <ClInclude Include="include\State.h" />
     <ClInclude Include="include\AtlasRenderable.h" />
+    <ClInclude Include="include\StringUtils.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureAtlas.h" />
     <ClInclude Include="include\Tile.h" />

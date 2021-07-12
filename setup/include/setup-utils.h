@@ -4,10 +4,22 @@
 #include <stdint.h>
 #include <string>
 
-bool createDirectory(const char* filename);
+#include "Image.h"
+#include "Palette.h"
 
-void* read_file(std::wstring filename, std::uint32_t* size);
+namespace Rival {
+namespace Setup {
 
-int nextPowerOf2(int v);
+    bool createDirectory(const std::string dirName);
+
+    int nextPowerOf2(int v);
+
+    void writeImage(
+            Image& image,
+            const Palette::Palette& palette,
+            const std::string filename);
+
+}
+}  // namespace Rival::Setup
 
 #endif  // SETUP_UTILS_H

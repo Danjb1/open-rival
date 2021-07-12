@@ -6,7 +6,7 @@
 #include "image-extractor.h"
 #include "setup-utils.h"
 
-using namespace ImageExtractor;
+using namespace Rival::Setup;
 
 int main() {
 
@@ -15,5 +15,5 @@ int main() {
         return -1;
     }
 
-    extractImages(L"IMAGES.dat", "images");
+    extractImages("IMAGES.dat", "images");
 }

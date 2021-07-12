@@ -1096,7 +1096,6 @@ namespace Rival {
     }
 
     void ScenarioReader::printNext(const size_t n) const {
-
         // Switch to hex
         std::cout << std::setfill('0') << std::hex;
         int col = 0;

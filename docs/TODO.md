@@ -4,11 +4,12 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Improve interface extraction
-    - Some bytes are still unknown
-    - Improve error handling (don't use raw pointers / arrays!)
-    - Test with other locales
-        - Skip 'n' bytes instead of using specific offsets?
+ - Improve setup project
+    - Interface extractor: some bytes are still unknown
+    - Image ctor is cumbersome: std::make_unique<std::vector<std::uint8_t>>(data)
+    - Filenames can get truncated due to limited size of char array
+        - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
+        - Don't use snprintf!
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -16,8 +17,6 @@
 
  - Do iterators break if an Entity is added from inside the loop?
  - Game will crash if no config file exists
- - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
- - Image filenames can be truncated due to limited size of char array
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -30,6 +29,8 @@
  - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls
+    - texture-builder is particularly noisy
+ - Add support for [Unicode filenames](http://utf8everywhere.org/)
 
 ### Data Loading
 
@@ -38,6 +39,7 @@
  - Finish parsing Goals
  - Finish parsing Chests (contents)
  - Include missing alphabet entries (e.g. '!{})
+ - Test resource extraction from other locales
 
 ### Gameplay
 
@@ -249,3 +251,7 @@
     - Do not auto-format library subfolders
  - Move constants from header files to CPP files?
  - Consider using std::unordered_map instead of std::map
+ - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
+    - Add a new class that can read the buffer and maintain some offset
+ - Use a common file reading mechanism in audio-extractor
+ - Rather than supporting Images with a custom stride, we should just realign the data in image-extractor once we know the image size

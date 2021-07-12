@@ -5,5 +5,5 @@
 using namespace AudioExtractor;
 
 int main() {
-    extractAudio(L"SOUNDS.dat", "output");
+    extractAudio("SOUNDS.DAT", "output");
 }
