@@ -4,6 +4,8 @@
 #include <gl/glew.h>
 #include <string>
 
+#include "Image.h"
+
 namespace Rival {
 
     class Texture {
@@ -18,6 +20,8 @@ namespace Rival {
         const int getHeight() const;
 
         static const Texture loadTexture(const std::string filename);
+
+        static const Texture wrap(const Image img);
 
     private:
         const GLuint id;

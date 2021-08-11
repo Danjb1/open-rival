@@ -31,10 +31,12 @@
     <ClCompile Include="src\EntityComponent.cpp" />
     <ClCompile Include="src\FacingComponent.cpp" />
     <ClCompile Include="src\FileUtils.cpp" />
+    <ClCompile Include="src\Fonts.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
     <ClCompile Include="src\GameInterface.cpp" />
     <ClCompile Include="src\GameRenderer.cpp" />
+    <ClCompile Include="src\GLUtils.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
@@ -96,10 +98,12 @@
     <ClInclude Include="include\EntityComponent.h" />
     <ClInclude Include="include\FacingComponent.h" />
     <ClInclude Include="include\FileUtils.h" />
+    <ClInclude Include="include\Fonts.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
     <ClInclude Include="include\GameInterface.h" />
     <ClInclude Include="include\GameRenderer.h" />
+    <ClInclude Include="include\GLUtils.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\json.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
@@ -220,7 +224,7 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -228,7 +232,7 @@
     <Link>
       <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>

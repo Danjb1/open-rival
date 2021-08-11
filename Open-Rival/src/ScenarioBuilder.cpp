@@ -16,7 +16,7 @@ namespace Rival {
     std::unique_ptr<Scenario> ScenarioBuilder::build(
             const EntityFactory& entityFactory) {
 
-        // Initialise Tiles
+        // Initialize Tiles
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
         std::vector<Tile> tiles;
         tiles.reserve(numTiles);
@@ -30,7 +30,7 @@ namespace Rival {
                 data.hdr.wilderness,
                 tiles);
 
-        // Initialise Units
+        // Initialize Units
         for (const UnitPlacement& unitPlacement : data.units) {
 
             // Create Unit
@@ -43,7 +43,7 @@ namespace Rival {
                     unitPlacement.y);
         }
 
-        // Initialise Buildings
+        // Initialize Buildings
         for (BuildingPlacement& buildingPlacement : data.buildings) {
 
             if (buildingPlacement.type == 0xAB) {
@@ -67,7 +67,7 @@ namespace Rival {
                     buildingPlacement.y);
         }
 
-        // Initialise Objects
+        // Initialize Objects
         for (const ObjectPlacement& objPlacement : data.objects) {
 
             // Create Object

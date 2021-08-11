@@ -265,7 +265,7 @@ namespace Rival {
         std::uint8_t checksum {};
 
         ScenarioData() {
-            // Initialise AI strategies
+            // Initialize AI strategies
             for (int i = 0; i < numAiStrategies; i++) {
                 aiStrategies[i] = AiStrategy();
             }

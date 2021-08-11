@@ -226,6 +226,12 @@
     <ClCompile Include="src\StringUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Fonts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GLUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -427,6 +433,12 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\StringUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Fonts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>

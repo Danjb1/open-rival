@@ -7,6 +7,7 @@
 
 namespace Rival {
 
+    const std::string Resources::fontDir = "res\\fonts\\";
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::soundDir = "res\\sound\\";
     const std::string Resources::txDir = "res\\textures\\";
@@ -142,7 +143,7 @@ namespace Rival {
     }
 
     Texture Resources::initPaletteTexture() {
-        return Palette::createPaletteTexture();
+        return PaletteUtils::createPaletteTexture();
     }
 
     std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets() {

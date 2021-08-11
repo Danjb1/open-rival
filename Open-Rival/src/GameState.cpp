@@ -4,6 +4,7 @@
 #include <map>
 #include <stdexcept>
 
+#include "Fonts.h"  // TMP
 #include "GameInterface.h"
 #include "Image.h"
 #include "MouseUtils.h"
@@ -27,7 +28,11 @@ namespace Rival {
                           static_cast<float>(viewport.height)),
                   *scenario),
           mousePicker(camera, viewport, *scenario),
-          gameRenderer(window, *scenario, camera, viewport, res) {}
+          gameRenderer(window, *scenario, camera, viewport, res) {
+
+        // TMP
+        Font font = Font::loadFont("Procopius Regular.ttf");
+    }
 
     void GameState::onLoad() {
         app.getAudioSystem().playMidi(res.getMidi(0));

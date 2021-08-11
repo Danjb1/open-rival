@@ -33,7 +33,7 @@ namespace Rival {
             x1, y2
         };
 
-        // Initialise position buffer - this should never change
+        // Initialize position buffer - this should never change
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
                 Shaders::vertexAttribIndex,
@@ -48,7 +48,7 @@ namespace Rival {
                 vertexData.data(),
                 GL_STATIC_DRAW);
 
-        // Initialise tex co-ord buffer with empty data
+        // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glVertexAttribPointer(
                 Shaders::texCoordAttribIndex,
@@ -66,7 +66,7 @@ namespace Rival {
                 NULL,
                 GL_DYNAMIC_DRAW);
 
-        // Initialise index buffer - this should never need to change
+        // Initialize index buffer - this should never need to change
         std::vector<GLuint> indexData = { 3, 2, 1, 0 };
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(

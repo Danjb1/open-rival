@@ -61,4 +61,23 @@ namespace Rival {
         return Image(width, height, std::move(data));
     }
 
+    void Image::copyImage(
+            const Image& src,
+            const Image& dst,
+            const int dstX,
+            const int dstY) {
+
+        std::vector<std::uint8_t>* srcData = src.getData();
+        std::vector<std::uint8_t>* dstData = dst.getData();
+
+        for (int y = 0; y < src.getHeight(); y++) {
+            for (int x = 0; x < src.getWidth(); x++) {
+                const int srcIndex = (y * src.getWidth()) + x;
+                const int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
+
+                (*dstData)[dstIndex] = (*srcData)[srcIndex];
+            }
+        }
+    }
+
 };  // namespace Rival

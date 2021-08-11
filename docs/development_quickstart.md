@@ -31,7 +31,7 @@ These dependencies should be placed in the `libs` folder:
 
     libs/SDL2-2.0.14/include
     libs/SDL2_image-2.0.5/include
-    libs/freetype-2.10.4
+    libs/freetype-2.10.4/include
     libs/glew-2.1.0/include
     libs/glm-0.9.9.5
 	libs/openal-soft-1.21.0/include
@@ -40,7 +40,7 @@ These dependencies should be placed in the `libs` folder:
 
     libs/SDL2-2.0.14/lib/x86
     libs/SDL2_image-2.0.5/lib/x86
-    libs/freetype-2.10.4
+    libs/freetype-2.10.4/release dll/win32
     libs/glew-2.1.0/lib/Release/Win32
 	libs/openal-soft-1.21.0/libs/Win32
 

@@ -67,7 +67,7 @@ namespace Shaders {
     // Generic methods
     ///////////////////////////////////////////////////////////////////////////
 
-    void initialiseShaders();
+    void initializeShaders();
 
     GLuint createShader(const char* vertShader, const char* fragShader);
 
