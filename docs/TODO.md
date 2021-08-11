@@ -4,8 +4,13 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Fonts
-    - Try to render characters after loading font
+ - Font rendering
+    - Why is the face the wrong way round? (I have reversed the IBO temporarily)
+    - Use font shader
+        - Pass colour buffer
+        - Add a model-view matrix parameter
+    - Create TextRenderable class to hold the buffers for text instances
+    - Free font textures on exit
 
  - Improve setup project
     - Interface extractor: some bytes are still unknown
@@ -173,6 +178,8 @@
  - [ ] Easy military drag-select
  - [ ] Rally points
  - [ ] Find idle workers
+ - [ ] Queue traps for placement
+ - [ ] Show mana bars in unit tooltips
  - [ ] Stable net play!
  - [ ] Using abilities with a group selected
  - [ ] High-res fonts
@@ -185,6 +192,7 @@
  - [ ] Revamped Save / Hire Troops UI
  - [ ] Show map preview / description
  - [ ] More endgame stats
+ - [ ] Show additional unit stats (speed, hit speed, etc.)
 
 ### Balance
 
@@ -289,3 +297,4 @@
     - Add a new class that can read the buffer and maintain some offset
  - Use a common file reading mechanism in audio-extractor
  - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
+ - Use US spelling (e.g. "color")

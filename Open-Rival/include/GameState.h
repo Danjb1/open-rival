@@ -13,6 +13,9 @@
 #include "Scenario.h"
 #include "State.h"
 
+#include "Fonts.h"         // TMP
+#include "TextRenderer.h"  // TMP
+
 namespace Rival {
 
     class GameState : public State {
@@ -59,6 +62,10 @@ namespace Rival {
          * Object that renders the game.
          */
         GameRenderer gameRenderer;
+
+        // TMP
+        std::unique_ptr<Font> font;
+        TextRenderer textRenderer;
 
         void earlyUpdateEntities() const;
         void updateEntities() const;

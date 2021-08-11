@@ -23,6 +23,10 @@ namespace Rival {
           chars(chars) {
     }
 
+    Texture& Font::getTexture() {
+        return texture;
+    }
+
     /**
      * Loads a TrueType font and produces a Font object backed by a texture
      * atlas.

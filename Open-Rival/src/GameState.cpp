@@ -4,7 +4,6 @@
 #include <map>
 #include <stdexcept>
 
-#include "Fonts.h"  // TMP
 #include "GameInterface.h"
 #include "Image.h"
 #include "MouseUtils.h"
@@ -31,7 +30,7 @@ namespace Rival {
           gameRenderer(window, *scenario, camera, viewport, res) {
 
         // TMP
-        Font font = Font::loadFont("Procopius Regular.ttf");
+        font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
     }
 
     void GameState::onLoad() {
@@ -65,6 +64,9 @@ namespace Rival {
 
     void GameState::render() {
         gameRenderer.render();
+
+        TextRenderer tr;
+        tr.render(font->getTexture());
     }
 
     void GameState::keyDown(const SDL_Keycode keyCode) {

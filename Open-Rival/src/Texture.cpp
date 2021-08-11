@@ -29,7 +29,6 @@ namespace Rival {
     }
 
     const Texture Texture::wrap(const Image img) {
-
         // Generate texture
         GLuint textureId = 0;
         glGenTextures(1, &textureId);

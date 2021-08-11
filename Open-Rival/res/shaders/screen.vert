@@ -1,7 +1,5 @@
 #version 330
 
-uniform mat4 view_proj_matrix;
-
 layout(location = 0) in vec2 in_vertex;
 layout(location = 1) in vec2 in_tex_coord;
 
