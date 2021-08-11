@@ -4,12 +4,20 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+ - Fonts
+    - Try to render characters after loading font
+
  - Improve setup project
     - Interface extractor: some bytes are still unknown
-    - Image ctor is cumbersome: std::make_unique<std::vector<std::uint8_t>>(data)
     - Filenames can get truncated due to limited size of char array
         - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
         - Don't use snprintf!
+
+ - Improve Images
+    - Image ctor is cumbersome: std::make_unique<std::vector<std::uint8_t>>(data)
+    - Rather than supporting Images with a custom stride, we should just realign the data in image-extractor once we know the image size
+    - Image needn't always use a unique_ptr to hold data; sometimes we just need a temporary Image which can live on the stack (e.g. fonts)
+        - We could create an Image interface and 2 subclasses: StackImage / HeapImage
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -149,31 +157,56 @@
 ## Enhancements
 <!----------------------------------------------------------------------------->
 
- - [x] Camera zooming
- - [ ] Positional audio
- - [ ] UI scaling
- - [ ] Improved camera navigation
- - [ ] Easy military drag-select
- - [ ] Rally points
- - [ ] Configurable Gold multiplier
- - [ ] Multiplayer campaigns
- - [ ] Stable net play!
- - [ ] Random map generation
- - [ ] More endgame stats
- - [ ] Improved pathfinding
- - [ ] Non-suicidal peasants (don't go looking for gold)
- - [ ] Affordable Wall
- - [ ] Map preview / description
- - [ ] Using abilities with a group selected
- - [ ] Rank explanations
- - [ ] Replays
+### Compatibility
+
  - [ ] Multilanguage support
+ - [ ] Cross-platform releases (e.g. Raspberry Pi)
  - [x] Support for higher frame rates
  - [ ] Support for larger screen resolutions
- - [ ] Support for bigger maps
+
+### Quality of Life
+
+ - [ ] UI scaling
+ - [x] Camera zooming
+ - [ ] Smooth camera panning
+ - [ ] Middle-click camera panning
+ - [ ] Easy military drag-select
+ - [ ] Rally points
+ - [ ] Find idle workers
+ - [ ] Stable net play!
+ - [ ] Using abilities with a group selected
  - [ ] High-res fonts
  - [ ] Upscale graphics using AI?
- - [ ] Cross-platform releases (e.g. Raspberry Pi)
+
+### Menus
+
+ - [ ] Rank explanations
+ - [ ] Campaign map select
+ - [ ] Revamped Save / Hire Troops UI
+ - [ ] Show map preview / description
+ - [ ] More endgame stats
+
+### Balance
+
+ - [ ] Improved pathfinding
+ - [ ] Configurable Gold multiplier
+ - [ ] Configurable XP multiplier
+ - [ ] Affordable Wall
+ - [ ] Non-suicidal peasants (don't go looking for gold)
+
+### New Features
+
+ - [ ] Positional audio
+ - [ ] Bigger unit inventories (just for fun!)
+ - [ ] Multiplayer campaigns
+ - [ ] Support for bigger maps
+ - [ ] Replays
+ - [ ] Random map generation
+
+### Map Editor
+
+ - [ ] Revamped map editor
+ - [ ] Campaign editor
 
 <!----------------------------------------------------------------------------->
 ## Project
@@ -239,6 +272,7 @@
  - Why does FramebufferRendering require a different winding order to other renderers?
  - Extract common code from SpriteRenderable and AtlasRenderable
  - Use string constants to access images within a texture atlas
+ - Text would look a lot nicer if we didn't use GL_NEAREST
 
 ### Design
 
@@ -254,4 +288,4 @@
  - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset
  - Use a common file reading mechanism in audio-extractor
- - Rather than supporting Images with a custom stride, we should just realign the data in image-extractor once we know the image size
+ - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)

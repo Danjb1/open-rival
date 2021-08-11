@@ -25,17 +25,24 @@ namespace Rival {
     }
 
     const Texture Texture::loadTexture(const std::string filename) {
+        return wrap(Image::readImage(filename));
+    }
 
-        // Load image data
-        Image img = Image::readImage(filename);
+    const Texture Texture::wrap(const Image img) {
 
         // Generate texture
         GLuint textureId = 0;
         glGenTextures(1, &textureId);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
-                img.getWidth(), img.getHeight(),
-                0, GL_RED, GL_UNSIGNED_BYTE, img.getData()->data());
+        glTexImage2D(GL_TEXTURE_2D,
+                0,       // target slot
+                GL_RED,  // 1 byte per pixel
+                img.getWidth(),
+                img.getHeight(),
+                0,  // always zero!
+                GL_RED,
+                GL_UNSIGNED_BYTE,
+                img.getData()->data());
 
         // Set texture filtering.
         // We have to stick to GL_NEAREST since we use indexed textures.

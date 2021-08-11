@@ -54,7 +54,7 @@ SCENARIO("Entities can have components attached to them", "[entity]") {
     }
 }
 
-SCENARIO("Entities should initialise their components when they spawn", "[entity]") {
+SCENARIO("Entities should initialize their components when they spawn", "[entity]") {
 
     GIVEN("An Entity with a component") {
         Entity e(1, 1);

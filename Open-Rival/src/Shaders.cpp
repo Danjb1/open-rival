@@ -123,7 +123,7 @@ namespace Shaders {
     // Generic methods
     ///////////////////////////////////////////////////////////////////////////
 
-    void initialiseShaders() {
+    void initializeShaders() {
         IndexedTextureShader::init();
         ScreenShader::init();
     }

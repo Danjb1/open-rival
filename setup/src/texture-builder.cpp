@@ -276,28 +276,6 @@ namespace Setup {
         atlasFile.close();
     }
 
-    /**
-     * Copies pixels from one image into another.
-     */
-    void copyImage(
-            const Image& src,
-            const Image& dst,
-            const int dstX,
-            const int dstY) {
-
-        std::vector<std::uint8_t>* srcData = src.getData();
-        std::vector<std::uint8_t>* dstData = dst.getData();
-
-        for (int y = 0; y < src.getHeight(); y++) {
-            for (int x = 0; x < src.getWidth(); x++) {
-                const int srcIndex = (y * src.getWidth()) + x;
-                const int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
-
-                (*dstData)[dstIndex] = (*srcData)[srcIndex];
-            }
-        }
-    }
-
     std::vector<NamedImage> readImagesFromDefinitionFile(
             const std::string& imageDir,
             fs::path path,
@@ -338,7 +316,7 @@ namespace Setup {
                     Image resizedSprite = Image(spriteWidth, spriteHeight);
                     const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                     const int dstY = (spriteHeight - sprite.getHeight()) / 2;
-                    copyImage(sprite, resizedSprite, dstX, dstY);
+                    Image::copyImage(sprite, resizedSprite, dstX, dstY);
                     sprites.push_back({ imageName, std::move(resizedSprite) });
 
                 } else {
@@ -378,7 +356,7 @@ namespace Setup {
             const Rect& target = kv.second;
             const Image& img = builder.imagesByKey.at(key)->image;
             std::cout << "Copying " << key << " to " << target.x << ", " << target.y << "\n";
-            copyImage(img, texture, target.x + borderSize, target.y + borderSize);
+            Image::copyImage(img, texture, target.x + borderSize, target.y + borderSize);
         }
 
         // Save the final texture
@@ -442,7 +420,7 @@ namespace Setup {
         // Draw the sprites to the texture
         for (auto const& namedImage : sprites) {
             const Image& sprite = namedImage.image;
-            copyImage(sprite, texture, x, y);
+            Image::copyImage(sprite, texture, x, y);
 
             x += sprite.getWidth();
 

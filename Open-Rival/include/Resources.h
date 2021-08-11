@@ -7,7 +7,7 @@
 
 #include "Building.h"
 #include "MidiFile.h"
-#include "Palette.h"
+#include "PaletteUtils.h"
 #include "Spritesheet.h"
 #include "Texture.h"
 #include "TextureAtlas.h"
@@ -20,6 +20,7 @@ namespace Rival {
 
     public:
         // Directories
+        static const std::string fontDir;
         static const std::string mapsDir;
         static const std::string soundDir;
         static const std::string txDir;
@@ -82,7 +83,7 @@ namespace Rival {
         // MIDI Files
         const std::vector<MidiFile> midis;
 
-        // Initialisation
+        // Initialization
         std::vector<Texture> loadTextures();
         std::vector<TextureAtlas> loadTextureAtlases();
         Texture initPaletteTexture();

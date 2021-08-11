@@ -29,7 +29,7 @@ namespace Rival {
                 ? numIndicesForTriangleFan
                 : numIndicesForTriangles;
 
-        // Initialise position buffer with empty data
+        // Initialize position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
                 Shaders::vertexAttribIndex,
@@ -48,7 +48,7 @@ namespace Rival {
                 NULL,
                 GL_DYNAMIC_DRAW);
 
-        // Initialise tex co-ord buffer with empty data
+        // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         int texCoordBufferSize = maxSprites
                 * numTexCoordDimensions
@@ -67,7 +67,7 @@ namespace Rival {
                 NULL,
                 GL_DYNAMIC_DRAW);
 
-        // Initialise index buffer - this should never need to change
+        // Initialize index buffer - this should never need to change
         std::vector<GLuint> indexData;
         indexData.reserve(maxSprites * indicesPerSprite);
         for (int i = 0; i < maxSprites; i++) {

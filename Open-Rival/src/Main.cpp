@@ -34,7 +34,7 @@ void initSDL() {
     SDL_SetMainReady();
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "SDL could not initialise!\n";
+        std::cerr << "Failed to initialize SDL\n";
         throw std::runtime_error(SDL_GetError());
     }
 
@@ -50,9 +50,9 @@ void initGLEW() {
     GLenum glewError = glewInit();
 
     if (glewError != GLEW_OK) {
-        std::cerr << "Error initialising GLEW:"
+        std::cerr << "Error initializing GLEW:"
                   << glewGetErrorString(glewError) << "\n";
-        throw std::runtime_error("Failed to initialise GLEW");
+        throw std::runtime_error("Failed to initialize GLEW");
     }
 }
 
@@ -73,7 +73,7 @@ void initGL() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Shaders::initialiseShaders();
+    Shaders::initializeShaders();
 }
 
 void initAL() {
