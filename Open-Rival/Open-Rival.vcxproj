@@ -72,6 +72,7 @@
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\AtlasRenderable.cpp" />
     <ClCompile Include="src\StringUtils.cpp" />
+    <ClCompile Include="src\TextRenderer.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\Tile.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="include\State.h" />
     <ClInclude Include="include\AtlasRenderable.h" />
     <ClInclude Include="include\StringUtils.h" />
+    <ClInclude Include="include\TextRenderer.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureAtlas.h" />
     <ClInclude Include="include\Tile.h" />

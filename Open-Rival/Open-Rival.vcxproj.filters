@@ -232,6 +232,9 @@
     <ClCompile Include="src\GLUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextRenderer.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="include\GLUtils.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextRenderer.h">
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

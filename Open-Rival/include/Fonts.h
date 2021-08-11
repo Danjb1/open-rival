@@ -33,6 +33,8 @@ namespace Rival {
 
         Font(Texture texture, std::map<char, FontChar> chars);
 
+        Texture& getTexture();
+
         static Font loadFont(std::string fontName);
 
     private:
