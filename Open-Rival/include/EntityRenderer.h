@@ -44,8 +44,8 @@ namespace Rival {
                 const SpriteComponent* spriteComponent) const;
 
         void sendDataToGpu(
-                Entity& entity,
-                SpriteComponent* spriteComponent) const;
+                const Entity& entity,
+                const SpriteComponent* spriteComponent) const;
     };
 
 }  // namespace Rival

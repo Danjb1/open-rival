@@ -50,7 +50,7 @@ namespace Rival {
          * 4 indices are required to render a quad using GL_TRIANGLE_FAN:
          *     0------1
          *     | \    |
-         *     |   \..|
+         *     |   \  |
          *     3----- 2
          */
         static const int numIndicesForTriangleFan = 4;

@@ -1,8 +1,11 @@
 #include "pch.h"
 
 #define SDL_MAIN_HANDLED
+#pragma warning(push)
+#pragma warning(disable : 26819)
 #include <SDL.h>
 #include <SDL_image.h>
+#pragma warning(pop)
 
 #include <gl/glew.h>
 #include <iostream>

@@ -65,6 +65,7 @@ namespace Rival {
 
         // TMP
         std::unique_ptr<Font> font;
+        std::unique_ptr<TextRenderable> text;
         TextRenderer textRenderer;
 
         void earlyUpdateEntities() const;

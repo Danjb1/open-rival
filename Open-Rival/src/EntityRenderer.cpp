@@ -90,8 +90,8 @@ namespace Rival {
     }
 
     void EntityRenderer::sendDataToGpu(
-            Entity& entity,
-            SpriteComponent* spriteComponent) const {
+            const Entity& entity,
+            const SpriteComponent* spriteComponent) const {
 
         // Determine the frame of the texture to be rendered
         int txIndex = spriteComponent->getTxIndex();

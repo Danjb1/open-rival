@@ -3,7 +3,7 @@
 
 #include <algorithm>  // std::max
 #include <memory>     // std::make_unique
-#include <stdexcept>  // std::runtime_error
+#include <stdexcept>  // std::runtime_error, std::out_of_range
 #include <utility>    // std::pair
 
 #include "GLUtils.h"
@@ -23,8 +23,16 @@ namespace Rival {
           chars(chars) {
     }
 
-    Texture& Font::getTexture() {
+    const Texture& Font::getTexture() const {
         return texture;
+    }
+
+    const FontChar* Font::getCharData(char c) const {
+        try {
+            return &chars.at(c);
+        } catch (const std::out_of_range&) {
+            return nullptr;
+        }
     }
 
     /**
@@ -34,7 +42,7 @@ namespace Rival {
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
     Font Font::loadFont(std::string fontName) {
-        // Initialise FreeType
+        // Initialize FreeType
         FT_Library ft;
         if (FT_Init_FreeType(&ft)) {
             throw std::runtime_error("Failed to initialize FreeType library");
@@ -90,10 +98,13 @@ namespace Rival {
 
             int charWidth = face->glyph->bitmap.width;
             int charHeight = face->glyph->bitmap.rows;
+            float tx1 = static_cast<float>(nextX) / imgWidth;
+            float tx2 = static_cast<float>(nextX + charWidth) / imgWidth;
 
             // Store this character in the font
             FontChar fontChar = {
-                static_cast<float>(nextX) / imgWidth,
+                tx1,
+                tx2,
                 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
                 static_cast<int>(face->glyph->advance.x)

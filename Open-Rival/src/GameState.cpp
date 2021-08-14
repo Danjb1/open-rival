@@ -31,6 +31,7 @@ namespace Rival {
 
         // TMP
         font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
+        text = std::make_unique<TextRenderable>("Hello world", *font, -1000.0f, 10.0f);
     }
 
     void GameState::onLoad() {
@@ -65,8 +66,11 @@ namespace Rival {
     void GameState::render() {
         gameRenderer.render();
 
+        // TMP
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_DEPTH_TEST);
         TextRenderer tr;
-        tr.render(font->getTexture());
+        tr.render(*text);
     }
 
     void GameState::keyDown(const SDL_Keycode keyCode) {
