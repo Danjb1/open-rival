@@ -20,7 +20,7 @@ namespace Rival {
     public:
         static const std::string key;
 
-        bool dirty;
+        mutable bool dirty;
 
         SpriteComponent(const Spritesheet& spritesheet);
 

@@ -235,6 +235,9 @@
     <ClCompile Include="src\TextRenderer.cpp">
       <Filter>Source Files\gfx</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextRenderable.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -445,6 +448,9 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\TextRenderer.h">
+      <Filter>Source Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextRenderable.h">
       <Filter>Source Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,15 +1,14 @@
 #ifndef TEXT_RENDERER_H
 #define TEXT_RENDERER_H
 
-#include "Texture.h"
+#include "TextRenderable.h"
 
 namespace Rival {
 
     class TextRenderer {
 
     public:
-        TextRenderer();
-        void render(Texture& texture);
+        void render(const TextRenderable& textRenderable);
 
     private:
         static const int numVertexDimensions = 3;    // x, y, z
@@ -22,6 +21,9 @@ namespace Rival {
         GLuint ibo;
 
         int indicesPerSprite;
+
+        bool needsUpdate(const TextRenderable& textRenderable) const;
+        void sendDataToGpu(const TextRenderable& textRenderable) const;
     };
 
 }  // namespace Rival

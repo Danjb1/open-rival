@@ -13,7 +13,8 @@
 namespace Rival {
 
     struct FontChar {
-        float txCoordX;      // x-position of this FontChar within the containing texture (0-1)
+        float txCoordX1;     // x-position of the left edge of this FontChar within the containing texture (0-1)
+        float txCoordX2;     // x-position of the right edge of this FontChar within the containing texture (0-1)
         glm::ivec2 size;     // Width / height of this FontChar
         glm::ivec2 bearing;  // Offset from baseline to left / top of glyph
         int advance;         // Offset to advance to next glyph
@@ -33,7 +34,9 @@ namespace Rival {
 
         Font(Texture texture, std::map<char, FontChar> chars);
 
-        Texture& getTexture();
+        const Texture& getTexture() const;
+
+        const FontChar* getCharData(char c) const;
 
         static Font loadFont(std::string fontName);
 

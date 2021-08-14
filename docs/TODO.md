@@ -5,11 +5,22 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - Why is the face the wrong way round? (I have reversed the IBO temporarily)
-    - Use font shader
+    - Use font shader (this should get transparency working)
         - Pass colour buffer
-        - Add a model-view matrix parameter
-    - Create TextRenderable class to hold the buffers for text instances
+        - Add a model-view matrix parameter (this should fix scaling and flipping)
+    - Rename "Fonts.h" to "Font.h"?
+    - Font class
+        - Font tex co-ords do not respect padding around characters
+        - Use tex co-ords for y-positions as well
+        - Store tex co-ords buffer for each character directly rather than creating them dynamically
+    - TextRenderer class
+        - Use a constant for space size
+        - Reserve size in buffers upfront
+        - Adjust char positions for baseline
+    - TextRenderable class
+        - Support changing text
+        - Support multiple colours
+        - Ignore spaces when allocating buffers
     - Free font textures on exit
 
  - Improve setup project
@@ -223,6 +234,9 @@
  - Build for Linux
  - Add script to build from command line
  - Add script to run tests from command line
+ - Auto-arrange includes via clang-format?
+ - Suppress warnings around includes rather than editing library files
+ - Suppress warnings from SDL (C26819, C26812)
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -298,3 +312,5 @@
  - Use a common file reading mechanism in audio-extractor
  - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
  - Use US spelling (e.g. "color")
+ - Don't use `const` for member variables
+ - Avoid reference member variables (prefer pointers)

@@ -2,134 +2,12 @@
 #include "TextRenderer.h"
 
 #include "Framebuffer.h"
+#include "RenderUtils.h"
 #include "Shaders.h"
 
 namespace Rival {
 
-    TextRenderer::TextRenderer() {
-
-        // Generate VAO
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        // Generate VBOs
-        glGenBuffers(1, &positionVbo);
-        glGenBuffers(1, &texCoordVbo);
-        glGenBuffers(1, &ibo);
-
-        // Determine the number of indices per sprite
-        indicesPerSprite = 4;
-
-        // Initialize position buffer with empty data
-        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glVertexAttribPointer(
-                Shaders::vertexAttribIndex,
-                numVertexDimensions,
-                GL_FLOAT,
-                GL_FALSE,
-                numVertexDimensions * sizeof(GLfloat),
-                nullptr);
-        int positionBufferSize = 1
-                * numVertexDimensions
-                * indicesPerSprite
-                * sizeof(GLfloat);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                positionBufferSize,
-                NULL,
-                GL_DYNAMIC_DRAW);
-
-        // Initialize tex co-ord buffer with empty data
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        int texCoordBufferSize = 1
-                * numTexCoordDimensions
-                * indicesPerSprite
-                * sizeof(GLfloat);
-        glVertexAttribPointer(
-                Shaders::texCoordAttribIndex,
-                numTexCoordDimensions,
-                GL_FLOAT,
-                GL_FALSE,
-                numTexCoordDimensions * sizeof(GLfloat),
-                nullptr);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                texCoordBufferSize,
-                NULL,
-                GL_DYNAMIC_DRAW);
-
-        // Initialize index buffer - this should never need to change
-        std::vector<GLuint> indexData;
-        indexData.reserve(1 * indicesPerSprite);
-        for (int i = 0; i < 1; i++) {
-
-            unsigned int startIndex = i * numVerticesPerSprite;
-
-            indexData.push_back(startIndex + 3);
-            indexData.push_back(startIndex + 2);
-            indexData.push_back(startIndex + 1);
-            indexData.push_back(startIndex);
-        }
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                1 * indicesPerSprite * sizeof(GLuint),
-                indexData.data(),
-                GL_STATIC_DRAW);
-
-        // Enable vertex attributes
-        glEnableVertexAttribArray(Shaders::vertexAttribIndex);
-        glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
-
-        // Upload data to the GPU
-
-        // Define vertex positions
-        float width = 8;
-        float height = 0.5f;
-        float x1 = -0.5f;
-        float y1 = -0.5f;
-        float x2 = x1 + width;
-        float y2 = y1 + height;
-        float z = 0;
-        std::vector<GLfloat> vertexData = {
-            x1, y1, z,
-            x2, y1, z,
-            x2, y2, z,
-            x1, y2, z
-        };
-
-        // Determine texture co-ordinates
-        const float tx1 = 0;
-        const float tx2 = 1;
-        const float ty1 = 1;
-        const float ty2 = 0;
-        std::vector<GLfloat> texCoords = {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
-
-        // Upload position data
-        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                vertexData.size() * sizeof(GLfloat),
-                vertexData.data());
-
-        // Upload tex co-ord data
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                texCoords.size() * sizeof(GLfloat),
-                texCoords.data());
-    }
-
-    void TextRenderer::render(Texture& texture) {
-        // For now just try to render the whole texture
-
+    void TextRenderer::render(const TextRenderable& textRenderable) {
         glViewport(0, 0, 800, 600);
 
         // Use screen texture shader
@@ -137,17 +15,149 @@ namespace Rival {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture.getId());
+        glBindTexture(GL_TEXTURE_2D, textRenderable.getTextureId());
 
         // Bind vertex array
-        glBindVertexArray(vao);
+        glBindVertexArray(textRenderable.getVao());
+
+        // Update the data on the GPU
+        if (needsUpdate(textRenderable)) {
+            sendDataToGpu(textRenderable);
+        }
 
         // Render
+        GLsizei numIndices = TextRenderable::numIndicesPerChar
+                * textRenderable.getText().length();
         glDrawElements(
-                GL_TRIANGLE_FAN,
-                4,
+                GL_TRIANGLES,
+                numIndices,
                 GL_UNSIGNED_INT,
                 nullptr);
+    }
+
+    bool TextRenderer::needsUpdate(const TextRenderable& textRenderable) const {
+        return textRenderable.dirty;
+    }
+
+    void TextRenderer::sendDataToGpu(
+            const TextRenderable& textRenderable) const {
+
+        std::string text = textRenderable.getText();
+        const Font* font = textRenderable.getFont();
+
+        std::vector<GLfloat> vertexData;
+        std::vector<GLfloat> texCoords;
+        std::vector<GLuint> indexData;
+
+        indexData.reserve(text.length() * TextRenderable::numIndicesPerChar);
+
+        int charsAdded = 0;
+        float x = textRenderable.getX();
+        float y = textRenderable.getY();
+
+        for (char c : text) {
+            if (c == ' ') {
+                x += 200;
+                continue;
+            }
+
+            const FontChar* charData = font->getCharData(c);
+
+            if (!charData) {
+                std::cout << "Trying to render unsupported character: "
+                          << c
+                          << "\n";
+                continue;
+            }
+
+            std::cout << "rendering char at x = " << x << "\n";
+
+            // Define vertex positions
+            float width = static_cast<float>(charData->size.x);
+            float height = static_cast<float>(charData->size.y);
+            float x1 = static_cast<float>(x);
+            float y1 = static_cast<float>(y);
+            x1 /= 1000;     // TMP (no MVP matrix!)
+            y1 /= 1000;     // TMP (no MVP matrix!)
+            width /= 100;   // TMP (no MVP matrix!)
+            height /= 100;  // TMP (no MVP matrix!)
+            float x2 = x1 + width;
+            float y2 = y1 + height;
+            std::swap(y1, y2);  // TMP (no MVP matrix!)
+            float z = 0;
+            std::vector<GLfloat> newVertexData = {
+                x1, y1, z,
+                x2, y1, z,
+                x2, y2, z,
+                x1, y2, z
+            };
+            vertexData.insert(
+                    vertexData.end(),
+                    newVertexData.begin(),
+                    newVertexData.end());
+
+            // Determine texture co-ordinates
+            float tx1 = charData->txCoordX1;
+            float ty1 = 0;
+            float tx2 = charData->txCoordX2;
+            float ty2 = 1;
+            std::vector<GLfloat> newTexCoords = {
+                tx1, ty1,
+                tx2, ty1,
+                tx2, ty2,
+                tx1, ty2
+            };
+            texCoords.insert(
+                    texCoords.end(),
+                    newTexCoords.begin(),
+                    newTexCoords.end());
+
+            // Determine indices
+            unsigned int startIndex =
+                    charsAdded * TextRenderable::numVerticesPerChar;
+            indexData.push_back(startIndex);
+            indexData.push_back(startIndex + 1);
+            indexData.push_back(startIndex + 2);
+            indexData.push_back(startIndex + 2);
+            indexData.push_back(startIndex + 3);
+            indexData.push_back(startIndex + 0);
+
+            x += 150;  // TMP (no MVP matrix!)
+            //x += charData->advance;
+            ++charsAdded;
+        }
+
+        // Upload position data
+        glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getPositionVbo());
+        int positionBufferSize =
+                vertexData.size() * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                positionBufferSize,
+                vertexData.data());
+
+        // Upload tex co-ord data
+        glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getTexCoordVbo());
+        int texCoordBufferSize =
+                texCoords.size() * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                texCoordBufferSize,
+                texCoords.data());
+
+        // Upload index data
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textRenderable.getIbo());
+        int indexBufferSize = indexData.size() * sizeof(GLuint);
+        glBufferSubData(
+                GL_ELEMENT_ARRAY_BUFFER,
+                0,
+                indexBufferSize,
+                indexData.data());
+
+        // Clear the dirty flag now that the GPU is up to date
+        textRenderable.dirty = false;
     }
 
 }  // namespace Rival
