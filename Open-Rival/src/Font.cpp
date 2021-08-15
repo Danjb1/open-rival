@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Font.h"
 
+#include <gl/glew.h>
+
 #include <algorithm>  // std::max
 #include <memory>     // std::make_unique
 #include <stdexcept>  // std::runtime_error, std::out_of_range
@@ -58,7 +60,7 @@ namespace Rival {
 
         // Set font size. Using zero width means it will be auto-calculated
         // based on the height.
-        FT_Set_Pixel_Sizes(face, 0, 48);
+        FT_Set_Pixel_Sizes(face, 0, fontHeight);
 
         std::map<char, CharData> chars;
         GLsizei imgWidth = 0;
@@ -113,7 +115,12 @@ namespace Rival {
         GLUtils::PixelStore byteAlignment(GLUtils::PackAlignment::BYTES_1);
 
         // Generate texture to hold this font
-        Texture tex = Texture::wrap(std::move(fontBitmap));
+        TextureProperties props;
+        // We want to use interpolation here so that we can upscale or downscale
+        // the font without it looking terrible
+        props.minFilter = GL_LINEAR;
+        props.magFilter = GL_LINEAR;
+        Texture tex = Texture::wrap(std::move(fontBitmap), props);
 
         // Free resources
         FT_Done_Face(face);

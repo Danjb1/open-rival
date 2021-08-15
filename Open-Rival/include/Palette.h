@@ -7,10 +7,10 @@
 namespace Rival {
 namespace Palette {
 
-    // Number of colours in the palette
+    // Number of colors in the palette
     const int paletteSize = 256;
 
-    // Number of channels per colour of the palette
+    // Number of channels per color of the palette
     const int paletteChannels = 4;
 
     // Number of bytes required to store the palette

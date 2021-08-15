@@ -25,13 +25,15 @@ namespace Rival {
     }
 
     const Texture Texture::loadTexture(const std::string filename) {
-        return wrap(Image::readImage(filename));
+        TextureProperties props;  // use defaults
+        return wrap(Image::readImage(filename), props);
     }
 
-    const Texture Texture::wrap(const Image img) {
+    const Texture Texture::wrap(const Image img, const TextureProperties props) {
         // Generate texture
         GLuint textureId = 0;
         glGenTextures(1, &textureId);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glTexImage2D(GL_TEXTURE_2D,
                 0,       // target slot
@@ -43,14 +45,11 @@ namespace Rival {
                 GL_UNSIGNED_BYTE,
                 img.getData()->data());
 
-        // Set texture filtering.
-        // We have to stick to GL_NEAREST since we use indexed textures.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-        // Set wrapping mode
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // Set texture properties
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, props.magFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, props.minFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, props.wrapMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, props.wrapMode);
 
         // Revert the state back to normal
         glBindTexture(GL_TEXTURE_2D, 0);

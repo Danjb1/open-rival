@@ -42,6 +42,14 @@ namespace Rival {
         static const int charPadding = 1;
 
         /**
+         * Font height to use when generating the texture.
+         *
+         * It is best to use a somewhat high value here so that the font can be
+         * rendered at any size later without the quality suffering.
+         */
+        static const int fontHeight = 48;
+
+        /**
          * Creates a Font.
          */
         Font(Texture texture, std::map<char, CharData> chars);

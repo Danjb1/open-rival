@@ -688,7 +688,7 @@ namespace Rival {
         bldg.range = readByte();
         bldg.upgrade1Enabled = readBool();
         bldg.upgrade2Enabled = readBool();
-        bldg.specialColour = readByte();
+        bldg.specialColor = readByte();
         bldg.prisoner = readBool();
         bldg.name = readString(12);
         skip(1, false);
@@ -727,7 +727,7 @@ namespace Rival {
         unit.sight = readByte();
         unit.range = readByte();
         skip(2, false);
-        unit.specialColour = readByte();
+        unit.specialColor = readByte();
         unit.prisoner = readBool();
         unit.goldCost = readShort();
         unit.woodCost = readShort();
@@ -1246,7 +1246,7 @@ namespace Rival {
                 << "Range:          " << static_cast<int>(bldg.range) << '\n'
                 << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
                 << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
-                << "Special Colour: " << static_cast<int>(bldg.specialColour) << '\n'
+                << "Special Colour: " << static_cast<int>(bldg.specialColor) << '\n'
                 << "Prisoner:       " << bldg.prisoner << '\n'
                 << "Name:           " << bldg.name << '\n';
     }
@@ -1264,7 +1264,7 @@ namespace Rival {
                 << "Type2:          " << static_cast<int>(unit.type2) << '\n'
                 << "Sight:          " << static_cast<int>(unit.sight) << '\n'
                 << "Range:          " << static_cast<int>(unit.range) << '\n'
-                << "Special Colour: " << static_cast<int>(unit.specialColour) << '\n'
+                << "Special Colour: " << static_cast<int>(unit.specialColor) << '\n'
                 << "Prisoner:       " << unit.prisoner << '\n'
                 << "Gold Cost:      " << unit.goldCost << '\n'
                 << "Wood Cost:      " << unit.woodCost << '\n'
