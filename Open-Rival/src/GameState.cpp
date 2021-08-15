@@ -31,7 +31,7 @@ namespace Rival {
 
         // TMP
         font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
-        text = std::make_unique<TextRenderable>("Hello world", *font, -1000.0f, 10.0f);
+        text = std::make_unique<TextRenderable>("Howdy world", *font, -1000.0f, 10.0f);
     }
 
     void GameState::onLoad() {

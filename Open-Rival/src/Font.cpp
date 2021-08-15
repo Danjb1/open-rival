@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fonts.h"
+#include "Font.h"
 
 #include <algorithm>  // std::max
 #include <memory>     // std::make_unique
@@ -7,7 +7,6 @@
 #include <utility>    // std::pair
 
 #include "GLUtils.h"
-#include "Image.h"
 #include "Resources.h"
 #include "Texture.h"
 
@@ -18,7 +17,7 @@ namespace Rival {
             "ABCDEFGHJKLMNOPQRSTUVWXYZ"
             "1234567890";
 
-    Font::Font(Texture texture, std::map<char, FontChar> chars)
+    Font::Font(Texture texture, std::map<char, CharData> chars)
         : texture(texture),
           chars(chars) {
     }
@@ -27,7 +26,7 @@ namespace Rival {
         return texture;
     }
 
-    const FontChar* Font::getCharData(char c) const {
+    const CharData* Font::getCharData(char c) const {
         try {
             return &chars.at(c);
         } catch (const std::out_of_range&) {
@@ -36,8 +35,10 @@ namespace Rival {
     }
 
     /**
-     * Loads a TrueType font and produces a Font object backed by a texture
-     * atlas.
+     * Loads a TrueType font and produces a Font object backed by a texture.
+     *
+     * This texture contains every supported character in a single row, with
+     * padding between them.
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
@@ -59,7 +60,7 @@ namespace Rival {
         // based on the height.
         FT_Set_Pixel_Sizes(face, 0, 48);
 
-        std::map<char, FontChar> chars;
+        std::map<char, CharData> chars;
         GLsizei imgWidth = 0;
         GLsizei imgHeight = 0;
 
@@ -96,30 +97,15 @@ namespace Rival {
                 throw std::runtime_error("Failed to load character");
             }
 
-            int charWidth = face->glyph->bitmap.width;
-            int charHeight = face->glyph->bitmap.rows;
-            float tx1 = static_cast<float>(nextX) / imgWidth;
-            float tx2 = static_cast<float>(nextX + charWidth) / imgWidth;
-
             // Store this character in the font
-            FontChar fontChar = {
-                tx1,
-                tx2,
-                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                static_cast<int>(face->glyph->advance.x)
-            };
-            chars.insert(std::pair<char, FontChar>(c, fontChar));
+            CharData charData =
+                    makeChar(face->glyph, nextX, imgWidth, imgHeight);
+            chars.insert(std::pair<char, CharData>(c, charData));
 
             // Copy bitmap data to our Image
-            std::uint8_t* buffer = static_cast<std::uint8_t*>(
-                    face->glyph->bitmap.buffer);
-            int size = charWidth * charHeight;
-            std::vector<std::uint8_t> data(buffer, buffer + size);
-            Image src(charWidth, charHeight,
-                    std::make_unique<std::vector<std::uint8_t>>(data));
-            Image::copyImage(src, fontBitmap, nextX, 0);
+            copyCharImage(face->glyph, fontBitmap, nextX);
 
+            int charWidth = face->glyph->bitmap.width;
             nextX += charWidth + 2 * Font::charPadding;
         }
 
@@ -134,6 +120,60 @@ namespace Rival {
         FT_Done_FreeType(ft);
 
         return Font(tex, chars);
+    }
+
+    /**
+     * Makes a CharData from a glyph.
+     *
+     * @param glyph The glyph.
+     * @param x The x-position of the glyph within the font bitmap.
+     * @param imgWidth The width of the font bitmap.
+     * @param imgHeight The height of the font bitmap.
+     */
+    CharData Font::makeChar(
+            FT_GlyphSlot& glyph, int x, int imgWidth, int imgHeight) {
+        int charWidth = glyph->bitmap.width;
+        int charHeight = glyph->bitmap.rows;
+
+        float tx1 = static_cast<float>(x) / imgWidth;
+        float ty1 = 0;
+        float tx2 = static_cast<float>(x + charWidth) / imgWidth;
+        float ty2 = static_cast<float>(charHeight) / imgHeight;
+        std::vector<float> texCoords = { tx1, ty1, tx2, ty2 };
+
+        auto charSize = glm::ivec2(charWidth, charHeight);
+
+        auto bearing = glm::ivec2(
+                glyph->bitmap_left,
+                glyph->bitmap_top);
+
+        // Bit shift because the advance is given in 1/64 pixels
+        int advance = static_cast<int>(glyph->advance.x >> 6);
+
+        return { texCoords, charSize, bearing, advance };
+    }
+
+    /**
+     * Copies the bitmap data for a glyph into a target image.
+     */
+    void Font::copyCharImage(FT_GlyphSlot& glyph, Image& target, int x) {
+        int charWidth = glyph->bitmap.width;
+        int charHeight = glyph->bitmap.rows;
+        int size = charWidth * charHeight;
+        std::vector<std::uint8_t> data =
+                bitmapToVector(glyph->bitmap.buffer, size);
+        Image src(charWidth, charHeight,
+                std::make_unique<std::vector<std::uint8_t>>(data));
+        Image::copyImage(src, target, x, 0);
+    }
+
+    /**
+     * Converts bitmap data for a glyph into an equivalent vector.
+     */
+    std::vector<std::uint8_t> Font::bitmapToVector(
+            unsigned char* dataIn, int size) {
+        std::uint8_t* data = static_cast<std::uint8_t*>(dataIn);
+        return std::vector<std::uint8_t>(data, data + size);
     }
 
 }  // namespace Rival

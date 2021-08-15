@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Fonts.h"
+#include "Font.h"
 #include "Spritesheet.h"
 
 namespace Rival {
