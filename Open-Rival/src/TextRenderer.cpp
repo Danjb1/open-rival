@@ -63,7 +63,7 @@ namespace Rival {
         // Add characters to buffers
         for (char c : text) {
             if (c == ' ') {
-                x += 200;
+                x += 20;
                 continue;
             }
 
@@ -80,14 +80,9 @@ namespace Rival {
             float width = static_cast<float>(charData->size.x);
             float height = static_cast<float>(charData->size.y);
             float x1 = static_cast<float>(x + charData->bearing.x);
-            float y1 = static_cast<float>(y + charData->bearing.y);
-            x1 /= 1000;     // TMP (no MVP matrix!)
-            y1 /= 1000;     // TMP (no MVP matrix!)
-            width /= 100;   // TMP (no MVP matrix!)
-            height /= 100;  // TMP (no MVP matrix!)
+            float y1 = static_cast<float>(y - charData->bearing.y);
             float x2 = x1 + width;
             float y2 = y1 + height;
-            std::swap(y1, y2);  // TMP (no MVP matrix!)
             float z = 0;
             std::vector<GLfloat> newVertexData = {
                 x1, y1, z,
@@ -143,7 +138,7 @@ namespace Rival {
             indexData.push_back(startIndex + 3);
             indexData.push_back(startIndex + 0);
 
-            x += charData->advance * 8;  // TMP (no MVP matrix!)
+            x += charData->advance;
             ++charsAdded;
         }
 

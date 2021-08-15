@@ -36,7 +36,7 @@ namespace Rival {
 
         // Color map specification
         /*uint8_t idLength = */ reader.readByte();
-        /*uint8_t colourMapType = */ reader.readByte();
+        /*uint8_t colorMapType = */ reader.readByte();
         /*uint8_t imageType = */ reader.readByte();
         /*uint16_t firstEntryIndex = */ reader.readShort();
         /*uint16_t numEntries = */ reader.readShort();

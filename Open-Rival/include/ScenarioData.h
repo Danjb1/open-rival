@@ -152,7 +152,7 @@ namespace Rival {
         std::uint8_t range;
         bool upgrade1Enabled;
         bool upgrade2Enabled;
-        std::uint8_t specialColour;
+        std::uint8_t specialColor;
         bool prisoner;
         std::string name;
         // 1 byte: empty
@@ -175,7 +175,7 @@ namespace Rival {
         std::uint8_t sight;
         std::uint8_t range;
         // 2 bytes: empty
-        std::uint8_t specialColour;
+        std::uint8_t specialColor;
         bool prisoner;
         std::uint16_t goldCost;
         std::uint16_t woodCost;

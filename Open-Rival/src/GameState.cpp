@@ -33,7 +33,7 @@ namespace Rival {
 
         // TMP
         font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
-        text = std::make_unique<TextRenderable>("Howdy world", *font, -1000.0f, 10.0f);
+        text = std::make_unique<TextRenderable>("Hello world", *font, 300.0f, 525.0f);
     }
 
     void GameState::onLoad() {
@@ -74,10 +74,9 @@ namespace Rival {
         // Use font shader
         glUseProgram(Shaders::fontShader.programId);
 
-        // Project to game world
-        // TMP: Use identity matrix for now
-        glm::mat4 viewProjMatrix(1.0f); /* = RenderUtils::createGameProjection(
-                camera, viewport.width, viewport.height); */
+        // Project to menu
+        glm::mat4 viewProjMatrix =
+                RenderUtils::createMenuProjection(window.getAspectRatio());
 
         // Set uniform values
         glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc,

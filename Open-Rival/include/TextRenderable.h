@@ -9,7 +9,7 @@
 namespace Rival {
 
     /**
-     * Class that allows coloured text to be rendered as textured quads.
+     * Class that allows colored text to be rendered as textured quads.
      *
      * This creates the VAO and all necessary buffers.
      */

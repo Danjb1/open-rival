@@ -30,7 +30,7 @@ namespace Shaders {
     ///////////////////////////////////////////////////////////////////////////
     // IndexedTextureShader:
     // Renders a texture using a view-projection matrix and an accompanying
-    // palette texture for colour lookups.
+    // palette texture for color lookups.
     ///////////////////////////////////////////////////////////////////////////
 
     class IndexedTextureShader : public Shader {
@@ -60,7 +60,7 @@ namespace Shaders {
     ///////////////////////////////////////////////////////////////////////////
     // FontShader:
     // Renders a single-channel texture as an alpha channel, using a
-    // view-projection matrix and a colour buffer.
+    // view-projection matrix and a color buffer.
     ///////////////////////////////////////////////////////////////////////////
 
     class FontShader : public Shader {

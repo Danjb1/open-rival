@@ -5,7 +5,7 @@ namespace Rival {
 namespace Palette {
 
     // The palette used in-game.
-    // The last colour (index 0xff) is used for transparent areas.
+    // The last color (index 0xff) is used for transparent areas.
     /* clang-format off */
     extern Palette paletteGame = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
@@ -80,7 +80,7 @@ namespace Palette {
     };
 
     // The palette used in-the loading screen.
-    // The first colour (index 0x00) is used for transparent areas.
+    // The first color (index 0x00) is used for transparent areas.
     extern Palette paletteLoading = {
         0x00000000, 0x8c2921ff, 0x733118ff, 0xff6329ff,    0xff6b31ff, 0x843110ff, 0xad3908ff, 0x943910ff,
         0xe75a18ff, 0xc64208ff, 0xd64a08ff, 0xad5a31ff,    0x633118ff, 0xff7329ff, 0x943908ff, 0x8c3100ff,
@@ -117,7 +117,7 @@ namespace Palette {
     };
 
     // The palette used in-the menus.
-    // The first colour (index 0x00) is used for transparent areas.
+    // The first color (index 0x00) is used for transparent areas.
     extern Palette paletteMenu = {
         0x00000000, 0x0c0c04ff, 0x381b1cff, 0x78595aff,    0x672930ff, 0x67484bff, 0x58272dff, 0x7a303bff,
         0x934c57ff, 0x804e56ff, 0xa26b73ff, 0x491c24ff,    0x382024ff, 0x75454dff, 0x935d67ff, 0x340c14ff,
@@ -156,7 +156,7 @@ namespace Palette {
     // The palette used in-the Hire Troops menu.
     // This is almost identical to the palette used in-game, since the troop
     // portraits need to be rendered in both places.
-    // The first colour (index 0x00) is used for transparent areas.
+    // The first color (index 0x00) is used for transparent areas.
     extern Palette paletteHireTroops = {
         0x00000000, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,

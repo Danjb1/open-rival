@@ -16,8 +16,11 @@ namespace Rival {
 
         // Create a texture to back this framebuffer
         glGenTextures(1, &textureId);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D,
+                0,  // target slot
+                GL_RGB,
                 width, height,
                 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
@@ -31,7 +34,7 @@ namespace Rival {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        // Set this as our colour attachement #0
+        // Set this as our color attachement #0
         glFramebufferTexture(
                 GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
 
