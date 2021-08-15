@@ -226,9 +226,6 @@
     <ClCompile Include="src\StringUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Fonts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GLUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -237,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="src\TextRenderable.cpp">
       <Filter>Source Files\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -441,9 +441,6 @@
     <ClInclude Include="include\StringUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\Fonts.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GLUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
@@ -452,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="include\TextRenderable.h">
       <Filter>Source Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Font.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

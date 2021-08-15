@@ -13,7 +13,7 @@
 #include "Scenario.h"
 #include "State.h"
 
-#include "Fonts.h"         // TMP
+#include "Font.h"          // TMP
 #include "TextRenderer.h"  // TMP
 
 namespace Rival {

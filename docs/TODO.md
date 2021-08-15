@@ -8,15 +8,9 @@
     - Use font shader (this should get transparency working)
         - Pass colour buffer
         - Add a model-view matrix parameter (this should fix scaling and flipping)
-    - Rename "Fonts.h" to "Font.h"?
-    - Font class
-        - Font tex co-ords do not respect padding around characters
-        - Use tex co-ords for y-positions as well
-        - Store tex co-ords buffer for each character directly rather than creating them dynamically
     - TextRenderer class
         - Use a constant for space size
-        - Reserve size in buffers upfront
-        - Adjust char positions for baseline
+        - Bearing may not be implemented correctly
     - TextRenderable class
         - Support changing text
         - Support multiple colours
@@ -314,3 +308,6 @@
  - Use US spelling (e.g. "color")
  - Don't use `const` for member variables
  - Avoid reference member variables (prefer pointers)
+ - Avoid static methods
+    - Use a namespace for public methods
+    - Put private methods in a `.cpp` file

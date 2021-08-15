@@ -45,23 +45,32 @@ namespace Rival {
         std::string text = textRenderable.getText();
         const Font* font = textRenderable.getFont();
 
+        // Create buffers
         std::vector<GLfloat> vertexData;
         std::vector<GLfloat> texCoords;
         std::vector<GLuint> indexData;
 
-        indexData.reserve(text.length() * TextRenderable::numIndicesPerChar);
+        // Reserve space upfront
+        int numChars = text.length();
+        vertexData.reserve(numChars
+                * TextRenderable::numVertexDimensions
+                * TextRenderable::numVerticesPerChar);
+        texCoords.reserve(numChars * TextRenderable::numTexCoordDimensions
+                * TextRenderable::numVerticesPerChar);
+        indexData.reserve(numChars * TextRenderable::numIndicesPerChar);
 
         int charsAdded = 0;
         float x = textRenderable.getX();
         float y = textRenderable.getY();
 
+        // Add characters to buffers
         for (char c : text) {
             if (c == ' ') {
                 x += 200;
                 continue;
             }
 
-            const FontChar* charData = font->getCharData(c);
+            const CharData* charData = font->getCharData(c);
 
             if (!charData) {
                 std::cout << "Trying to render unsupported character: "
@@ -70,13 +79,11 @@ namespace Rival {
                 continue;
             }
 
-            std::cout << "rendering char at x = " << x << "\n";
-
             // Define vertex positions
             float width = static_cast<float>(charData->size.x);
             float height = static_cast<float>(charData->size.y);
-            float x1 = static_cast<float>(x);
-            float y1 = static_cast<float>(y);
+            float x1 = static_cast<float>(x + charData->bearing.x);
+            float y1 = static_cast<float>(y + charData->bearing.y);
             x1 /= 1000;     // TMP (no MVP matrix!)
             y1 /= 1000;     // TMP (no MVP matrix!)
             width /= 100;   // TMP (no MVP matrix!)
@@ -97,10 +104,10 @@ namespace Rival {
                     newVertexData.end());
 
             // Determine texture co-ordinates
-            float tx1 = charData->txCoordX1;
-            float ty1 = 0;
-            float tx2 = charData->txCoordX2;
-            float ty2 = 1;
+            float tx1 = charData->txCoords[0];
+            float ty1 = charData->txCoords[1];
+            float tx2 = charData->txCoords[2];
+            float ty2 = charData->txCoords[3];
             std::vector<GLfloat> newTexCoords = {
                 tx1, ty1,
                 tx2, ty1,
@@ -122,8 +129,7 @@ namespace Rival {
             indexData.push_back(startIndex + 3);
             indexData.push_back(startIndex + 0);
 
-            x += 150;  // TMP (no MVP matrix!)
-            //x += charData->advance;
+            x += charData->advance * 8;  // TMP (no MVP matrix!)
             ++charsAdded;
         }
 
