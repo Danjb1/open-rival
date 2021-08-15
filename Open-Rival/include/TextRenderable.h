@@ -18,6 +18,7 @@ namespace Rival {
     public:
         static const int numVertexDimensions = 3;    // x, y, z
         static const int numTexCoordDimensions = 2;  // u, v
+        static const int numColorDimensions = 3;     // r, g, b
         static const int numVerticesPerChar = 4;
 
         /*
@@ -44,6 +45,7 @@ namespace Rival {
         GLuint getVao() const { return vao; }
         GLuint getPositionVbo() const { return positionVbo; }
         GLuint getTexCoordVbo() const { return texCoordVbo; }
+        GLuint getColorVbo() const { return colorVbo; }
         GLuint getIbo() const { return ibo; }
 
         GLuint getTextureId() const;
@@ -57,6 +59,7 @@ namespace Rival {
         GLuint vao;
         GLuint positionVbo;
         GLuint texCoordVbo;
+        GLuint colorVbo;
         GLuint ibo;
 
         const Font* font;

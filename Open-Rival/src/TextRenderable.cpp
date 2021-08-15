@@ -19,6 +19,7 @@ namespace Rival {
         // Generate VBOs
         glGenBuffers(1, &positionVbo);
         glGenBuffers(1, &texCoordVbo);
+        glGenBuffers(1, &colorVbo);
         glGenBuffers(1, &ibo);
 
         // Initialize position buffer with empty data
@@ -59,6 +60,25 @@ namespace Rival {
                 NULL,
                 GL_STATIC_DRAW);
 
+        // Initialize color buffer with empty data
+        glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+        int colorBufferSize = text.length()
+                * numColorDimensions
+                * numIndicesPerChar
+                * sizeof(GLfloat);
+        glVertexAttribPointer(
+                Shaders::colorAttribIndex,
+                numColorDimensions,
+                GL_FLOAT,
+                GL_FALSE,
+                numColorDimensions * sizeof(GLfloat),
+                nullptr);
+        glBufferData(
+                GL_ARRAY_BUFFER,
+                colorBufferSize,
+                NULL,
+                GL_STATIC_DRAW);
+
         // Initialize index buffer with empty data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(
@@ -70,6 +90,7 @@ namespace Rival {
         // Enable vertex attributes
         glEnableVertexAttribArray(Shaders::vertexAttribIndex);
         glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
+        glEnableVertexAttribArray(Shaders::colorAttribIndex);
     }
 
     GLuint TextRenderable::getTextureId() const {
