@@ -3,16 +3,10 @@
 
 #include "Framebuffer.h"
 #include "RenderUtils.h"
-#include "Shaders.h"
 
 namespace Rival {
 
     void TextRenderer::render(const TextRenderable& textRenderable) {
-        glViewport(0, 0, 800, 600);
-
-        // Use screen texture shader
-        glUseProgram(Shaders::screenShader.programId);
-
         // Use textures
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textRenderable.getTextureId());
@@ -48,6 +42,7 @@ namespace Rival {
         // Create buffers
         std::vector<GLfloat> vertexData;
         std::vector<GLfloat> texCoords;
+        std::vector<GLfloat> colors;
         std::vector<GLuint> indexData;
 
         // Reserve space upfront
@@ -56,6 +51,8 @@ namespace Rival {
                 * TextRenderable::numVertexDimensions
                 * TextRenderable::numVerticesPerChar);
         texCoords.reserve(numChars * TextRenderable::numTexCoordDimensions
+                * TextRenderable::numVerticesPerChar);
+        colors.reserve(numChars * TextRenderable::numColorDimensions
                 * TextRenderable::numVerticesPerChar);
         indexData.reserve(numChars * TextRenderable::numIndicesPerChar);
 
@@ -119,6 +116,23 @@ namespace Rival {
                     newTexCoords.begin(),
                     newTexCoords.end());
 
+            // Determine colors
+            float r = 1;
+            float g = 0;
+            float b = 0;
+            std::vector<GLfloat> newColors = {
+                /* clang-format off */
+                r, g, b,
+                r, g, b,
+                r, g, b,
+                r, g, b,
+                /* clang-format on */
+            };
+            colors.insert(
+                    colors.end(),
+                    newColors.begin(),
+                    newColors.end());
+
             // Determine indices
             unsigned int startIndex =
                     charsAdded * TextRenderable::numVerticesPerChar;
@@ -135,8 +149,7 @@ namespace Rival {
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getPositionVbo());
-        int positionBufferSize =
-                vertexData.size() * sizeof(GLfloat);
+        int positionBufferSize = vertexData.size() * sizeof(GLfloat);
         glBufferSubData(
                 GL_ARRAY_BUFFER,
                 0,
@@ -145,13 +158,21 @@ namespace Rival {
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getTexCoordVbo());
-        int texCoordBufferSize =
-                texCoords.size() * sizeof(GLfloat);
+        int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
         glBufferSubData(
                 GL_ARRAY_BUFFER,
                 0,
                 texCoordBufferSize,
                 texCoords.data());
+
+        // Upload color data
+        glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getColorVbo());
+        int colorBufferSize = colors.size() * sizeof(GLfloat);
+        glBufferSubData(
+                GL_ARRAY_BUFFER,
+                0,
+                colorBufferSize,
+                colors.data());
 
         // Upload index data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textRenderable.getIbo());

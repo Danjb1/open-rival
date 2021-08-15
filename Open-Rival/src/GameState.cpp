@@ -12,6 +12,8 @@
 #include "RenderUtils.h"
 #include "Spritesheet.h"
 
+#include "Shaders.h"  // TMP
+
 namespace Rival {
 
     GameState::GameState(Application& app, std::unique_ptr<Scenario> scenarioToMove)
@@ -67,8 +69,21 @@ namespace Rival {
         gameRenderer.render();
 
         // TMP
-        glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
+
+        // Use font shader
+        glUseProgram(Shaders::fontShader.programId);
+
+        // Project to game world
+        // TMP: Use identity matrix for now
+        glm::mat4 viewProjMatrix(1.0f); /* = RenderUtils::createGameProjection(
+                camera, viewport.width, viewport.height); */
+
+        // Set uniform values
+        glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc,
+                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniform1i(Shaders::fontShader.texUnitUniformLoc, 0);
+
         TextRenderer tr;
         tr.render(*text);
     }

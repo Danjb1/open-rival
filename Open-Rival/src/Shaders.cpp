@@ -1,12 +1,43 @@
 #include "pch.h"
 #include "Shaders.h"
 
+#include <iostream>
 #include <stdexcept>
 
 #include "ShaderUtils.h"
 
 namespace Rival {
 namespace Shaders {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Shader
+    ///////////////////////////////////////////////////////////////////////////
+
+    bool Shader::validateVertexAttribute(
+            GLint attributeLoc, std::string attributeName) const {
+        if (attributeLoc == -1) {
+            std::cout << "Could not locate vertex attribute "
+                      << attributeName
+                      << " for shader "
+                      << getName()
+                      << "\n";
+            return false;
+        }
+        return true;
+    }
+
+    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName)
+            const {
+        if (uniformLoc == -1) {
+            std::cout << "Could not locate uniform "
+                      << uniformLoc
+                      << " for shader "
+                      << getName()
+                      << "\n";
+            return false;
+        }
+        return true;
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // IndexedTextureShader
@@ -22,12 +53,12 @@ namespace Shaders {
 
         indexedTextureShader = IndexedTextureShader();
         indexedTextureShader.programId = programId;
-        indexedTextureShader.viewProjMatrixUniformLoc =
-                glGetUniformLocation(programId, "view_proj_matrix");
         indexedTextureShader.vertexAttribLoc =
                 glGetAttribLocation(programId, "in_vertex");
         indexedTextureShader.texCoordAttribLoc =
-                glGetAttribLocation(programId, "in_tex_coord");
+                glGetAttribLocation(programId, "in_tex_coords");
+        indexedTextureShader.viewProjMatrixUniformLoc =
+                glGetUniformLocation(programId, "view_proj_matrix");
         indexedTextureShader.texUnitUniformLoc =
                 glGetUniformLocation(programId, "tex");
         indexedTextureShader.paletteTexUnitUniformLoc =
@@ -39,33 +70,63 @@ namespace Shaders {
     }
 
     bool IndexedTextureShader::isValid() const {
-
+        // Validate program ID
         if (programId == 0) {
             printf("Could not generate program ID\n");
             return false;
         }
 
-        if (vertexAttribLoc == -1) {
-            printf("Could not locate vertex attribute\n");
+        // Validate vertex attributes / uniforms
+        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+                && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+                && validateUniform(texUnitUniformLoc, "tex")
+                && validateUniform(paletteTexUnitUniformLoc, "palette");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FontShader
+    ///////////////////////////////////////////////////////////////////////////
+
+    FontShader fontShader;
+
+    void FontShader::init() {
+
+        GLuint programId = createShader(
+                "res\\shaders\\font.vert",
+                "res\\shaders\\font.frag");
+
+        fontShader = FontShader();
+        fontShader.programId = programId;
+        fontShader.vertexAttribLoc =
+                glGetAttribLocation(programId, "in_vertex");
+        fontShader.texCoordAttribLoc =
+                glGetAttribLocation(programId, "in_tex_coords");
+        fontShader.colorAttribLoc =
+                glGetAttribLocation(programId, "in_color");
+        fontShader.viewProjMatrixUniformLoc =
+                glGetUniformLocation(programId, "view_proj_matrix");
+        fontShader.texUnitUniformLoc =
+                glGetUniformLocation(programId, "tex");
+
+        if (!fontShader.isValid()) {
+            throw std::runtime_error("Failed to create FontShader");
+        }
+    }
+
+    bool FontShader::isValid() const {
+        // Validate program ID
+        if (programId == 0) {
+            printf("Could not generate program ID\n");
             return false;
         }
 
-        if (texCoordAttribLoc == -1) {
-            printf("Could not locate tex co-ord attribute\n");
-            return false;
-        }
-
-        if (texUnitUniformLoc == -1) {
-            printf("Could not locate tex unit uniform\n");
-            return false;
-        }
-
-        if (paletteTexUnitUniformLoc == -1) {
-            printf("Could not locate palette tex unit uniform\n");
-            return false;
-        }
-
-        return true;
+        // Validate vertex attributes / uniforms
+        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+                && validateVertexAttribute(colorAttribLoc, "in_color")
+                && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+                && validateUniform(texUnitUniformLoc, "tex");
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -85,7 +146,7 @@ namespace Shaders {
         screenShader.vertexAttribLoc =
                 glGetAttribLocation(programId, "in_vertex");
         screenShader.texCoordAttribLoc =
-                glGetAttribLocation(programId, "in_tex_coord");
+                glGetAttribLocation(programId, "in_tex_coords");
         screenShader.texUnitUniformLoc =
                 glGetUniformLocation(programId, "tex");
 
@@ -95,28 +156,16 @@ namespace Shaders {
     }
 
     bool ScreenShader::isValid() const {
-
+        // Validate program ID
         if (programId == 0) {
             printf("Could not generate program ID\n");
             return false;
         }
 
-        if (vertexAttribLoc == -1) {
-            printf("Could not locate vertex attribute\n");
-            return false;
-        }
-
-        if (texCoordAttribLoc == -1) {
-            printf("Could not locate tex co-ord attribute\n");
-            return false;
-        }
-
-        if (texUnitUniformLoc == -1) {
-            printf("Could not locate tex unit uniform\n");
-            return false;
-        }
-
-        return true;
+        // Validate vertex attributes / uniforms
+        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+                && validateUniform(texUnitUniformLoc, "tex");
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -125,6 +174,7 @@ namespace Shaders {
 
     void initializeShaders() {
         IndexedTextureShader::init();
+        FontShader::init();
         ScreenShader::init();
     }
 

@@ -86,7 +86,7 @@ namespace Rival {
         glBindVertexArray(vao);
 
         // Use the framebuffer's texture
-        glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, fbo.getTextureId());
 
         // Define the portion of the texture to be sampled.

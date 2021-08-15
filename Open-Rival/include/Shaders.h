@@ -3,6 +3,8 @@
 
 #include <gl/glew.h>
 
+#include <string>
+
 namespace Rival {
 namespace Shaders {
 
@@ -11,6 +13,19 @@ namespace Shaders {
     // rendered by any shader without requiring reconfiguration.
     static const GLint vertexAttribIndex = 0;
     static const GLint texCoordAttribIndex = 1;
+    static const GLint colorAttribIndex = 2;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Shader base class
+    ///////////////////////////////////////////////////////////////////////////
+
+    class Shader {
+    public:
+        virtual std::string getName() const = 0;
+        bool validateVertexAttribute(
+                GLint attributeLoc, std::string attributeName) const;
+        bool validateUniform(GLint uniformLoc, std::string uniformName) const;
+    };
 
     ///////////////////////////////////////////////////////////////////////////
     // IndexedTextureShader:
@@ -18,7 +33,7 @@ namespace Shaders {
     // palette texture for colour lookups.
     ///////////////////////////////////////////////////////////////////////////
 
-    class IndexedTextureShader {
+    class IndexedTextureShader : public Shader {
     public:
         GLuint programId;
 
@@ -36,16 +51,48 @@ namespace Shaders {
         static void init();
 
         bool isValid() const;
+
+        std::string getName() const override { return "IndexedTextureShader"; }
     };
 
     extern IndexedTextureShader indexedTextureShader;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FontShader:
+    // Renders a single-channel texture as an alpha channel, using a
+    // view-projection matrix and a colour buffer.
+    ///////////////////////////////////////////////////////////////////////////
+
+    class FontShader : public Shader {
+    public:
+        GLuint programId;
+
+        // Vertex shader uniform locations
+        GLint viewProjMatrixUniformLoc;
+
+        // Vertex shader attribute locations
+        GLint vertexAttribLoc;
+        GLint texCoordAttribLoc;
+        GLint colorAttribLoc;
+
+        // Fragment shader uniform locations
+        GLint texUnitUniformLoc;
+
+        static void init();
+
+        bool isValid() const;
+
+        std::string getName() const override { return "FontShader"; }
+    };
+
+    extern FontShader fontShader;
 
     ///////////////////////////////////////////////////////////////////////////
     // ScreenShader:
     // Just renders a texture without applying any transformations.
     ///////////////////////////////////////////////////////////////////////////
 
-    class ScreenShader {
+    class ScreenShader : public Shader {
     public:
         GLuint programId;
 
@@ -59,6 +106,8 @@ namespace Shaders {
         static void init();
 
         bool isValid() const;
+
+        std::string getName() const override { return "ScreenShader"; }
     };
 
     extern ScreenShader screenShader;
