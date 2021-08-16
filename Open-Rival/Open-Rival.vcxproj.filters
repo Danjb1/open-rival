@@ -241,6 +241,9 @@
     <ClCompile Include="src\MenuTextRenderer.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Color.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -458,6 +461,9 @@
     </ClInclude>
     <ClInclude Include="include\MenuTextRenderer.h">
       <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Color.h">
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

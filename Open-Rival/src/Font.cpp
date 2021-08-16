@@ -15,7 +15,7 @@
 namespace Rival {
 
     const std::string Font::supportedChars =
-            "abcdefghijklmnopqrstuvwxyz"
+            "éabcdefghijklmnopqrstuvwxyz"
             "ABCDEFGHJKLMNOPQRSTUVWXYZ"
             "1234567890";
 
@@ -41,6 +41,9 @@ namespace Rival {
      *
      * This texture contains every supported character in a single row, with
      * padding between them.
+     *
+     * If the font does not contain a glyph for one of our supported characters,
+     * then that character will be displayed as an empty space.
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
@@ -73,6 +76,16 @@ namespace Rival {
             // Load this character into the `face->glyph` slot
             if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
                 throw std::runtime_error("Failed to load character");
+            }
+
+            if (!face->glyph->bitmap.buffer) {
+                // Glyph is not present in font; character will be displayed as
+                // an empty space.
+                std::cout << "Font "
+                          << fontName
+                          << " does not support character "
+                          << c
+                          << "\n ";
             }
 
             int charWidth = face->glyph->bitmap.width;

@@ -34,7 +34,12 @@ namespace Rival {
 
         // TMP
         font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
-        text = std::make_unique<TextRenderable>("Hello world", *font, 300.0f, 525.0f);
+        std::vector<TextSpan> spans = {
+            { "Helloé ", TextRenderable::defaultColor },
+            { "world", TextRenderable::highlightColor }
+        };
+        TextProperties props = { *font };
+        text = std::make_unique<TextRenderable>(spans, props, 300.0f, 525.0f);
     }
 
     void GameState::onLoad() {
