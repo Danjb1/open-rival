@@ -238,6 +238,9 @@
     <ClCompile Include="src\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MenuTextRenderer.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -452,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="include\Font.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MenuTextRenderer.h">
+      <Filter>Source Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

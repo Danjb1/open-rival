@@ -29,7 +29,8 @@ namespace Rival {
                           static_cast<float>(viewport.height)),
                   *scenario),
           mousePicker(camera, viewport, *scenario),
-          gameRenderer(window, *scenario, camera, viewport, res) {
+          gameRenderer(window, *scenario, camera, viewport, res),
+          textRenderer(window) {
 
         // TMP
         font = std::make_unique<Font>(Font::loadFont("Procopius Regular.ttf"));
@@ -69,22 +70,7 @@ namespace Rival {
         gameRenderer.render();
 
         // TMP
-        glDisable(GL_DEPTH_TEST);
-
-        // Use font shader
-        glUseProgram(Shaders::fontShader.programId);
-
-        // Project to menu
-        glm::mat4 viewProjMatrix =
-                RenderUtils::createMenuProjection(window.getAspectRatio());
-
-        // Set uniform values
-        glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc,
-                1, GL_FALSE, &viewProjMatrix[0][0]);
-        glUniform1i(Shaders::fontShader.texUnitUniformLoc, 0);
-
-        TextRenderer tr;
-        tr.render(*text);
+        textRenderer.render(*text);
     }
 
     void GameState::keyDown(const SDL_Keycode keyCode) {

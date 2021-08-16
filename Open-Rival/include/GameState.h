@@ -13,8 +13,9 @@
 #include "Scenario.h"
 #include "State.h"
 
-#include "Font.h"          // TMP
-#include "TextRenderer.h"  // TMP
+#include "Font.h"              // TMP
+#include "MenuTextRenderer.h"  // TMP
+#include "TextRenderable.h"    // TMP
 
 namespace Rival {
 
@@ -66,7 +67,7 @@ namespace Rival {
         // TMP
         std::unique_ptr<Font> font;
         std::unique_ptr<TextRenderable> text;
-        TextRenderer textRenderer;
+        MenuTextRenderer textRenderer;
 
         void earlyUpdateEntities() const;
         void updateEntities() const;
