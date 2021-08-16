@@ -5,16 +5,16 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - Use font shader (this should get transparency working)
-        - Pass colour buffer
-        - Add a model-view matrix parameter (this should fix scaling and flipping)
     - TextRenderer class
         - Use a constant for space size
-        - Bearing may not be implemented correctly
     - TextRenderable class
-        - Support changing text
-        - Support multiple colours
-        - Ignore spaces when allocating buffers
+        - Support custom font size (rather than just using the character size from the source texture)
+        - Support changing text (may need to expand buffers!)
+        - Support multiple colors (ctor should take an array of spans, each with text + color)
+        - Ignore spaces when allocating buffers (right now the buffers are bigger than necessary)
+    - Create constants for the original game's font colors
+    - Load all fonts that we need on load and store them somewhere
+    - Load the font directory / font names from a config file
     - Free font textures on exit
 
  - Improve setup project
@@ -116,7 +116,7 @@
  - Render minimap
  - Render info points
  - Render chests
- - Respect unit colour
+ - Respect unit color
  - Respect Gold tile variants
  - Fog of war
 
@@ -244,6 +244,7 @@
 
 ### Assets
 
+ - Fix "libpng warning: iCCP: known incorrect sRGB profile""
  - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
@@ -281,14 +282,13 @@
 ### Rendering
 
  - Improve palette generation
-    - Separate team colours into their own arrays
-    - Build a palette for each team colour dynamically
-    - Render units using their correct colours (unit colours, not team colours!)
+    - Separate team colors into their own arrays
+    - Build a palette for each team color dynamically
+    - Render units using their correct colors (unit colors, not team colors!)
  - Framebuffer size calculations should use RenderUtils
  - Why does FramebufferRendering require a different winding order to other renderers?
  - Extract common code from SpriteRenderable and AtlasRenderable
  - Use string constants to access images within a texture atlas
- - Text would look a lot nicer if we didn't use GL_NEAREST
 
 ### Design
 
@@ -297,6 +297,8 @@
 
 ### Refactoring
 
+ - Add "DEBUG" macro variable that performs additional checks if set
+    - Ensure `programId` is non-zero when using a shader
  - Sort source files into subfolders?
     - Do not auto-format library subfolders
  - Move constants from header files to CPP files?
@@ -305,7 +307,6 @@
     - Add a new class that can read the buffer and maintain some offset
  - Use a common file reading mechanism in audio-extractor
  - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
- - Use US spelling (e.g. "color")
  - Don't use `const` for member variables
  - Avoid reference member variables (prefer pointers)
  - Avoid static methods

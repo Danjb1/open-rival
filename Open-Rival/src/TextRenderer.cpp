@@ -6,7 +6,7 @@
 
 namespace Rival {
 
-    void TextRenderer::render(const TextRenderable& textRenderable) {
+    void TextRenderer::render(const TextRenderable& textRenderable) const {
         // Use textures
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textRenderable.getTextureId());

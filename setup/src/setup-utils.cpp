@@ -57,7 +57,7 @@ namespace Setup {
 
         out.put(0x00);  // ID Length
         out.put(0x01);  // Color map type
-        out.put(0x01);  // Image type (uncompressed, colour-mapped)
+        out.put(0x01);  // Image type (uncompressed, color-mapped)
 
         // Color map specification
         out.put(0);  // Index of first entry
@@ -83,7 +83,7 @@ namespace Setup {
         // (8 = number of alpha bits, bit5: upper-left origin)
         out.put(8 | 1 << 5);
 
-        // Colour map data
+        // Color map data
         for (int i = 0; i < Palette::paletteSize; ++i) {
 
             const std::uint32_t col = palette[i];

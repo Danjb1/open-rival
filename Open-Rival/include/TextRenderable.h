@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <glm/glm.hpp>
+
 #include "Font.h"
 #include "Spritesheet.h"
 

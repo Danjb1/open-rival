@@ -35,12 +35,12 @@ namespace Setup {
     // 4 byte header: number of images in file
     const int headerSize = 4;
 
-    // Team colours to use when rendering
-    // (these 6 colours correspond to a single team)
+    // Team colors to use when rendering
+    // (these 6 colors correspond to a single team)
     std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
 
     // Pixel value corresponding to tranparency
-    int transparentColour = 0xff;
+    int transparentColor = 0xff;
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
@@ -169,16 +169,16 @@ namespace Setup {
         for (uint8_t* code = start; code < end; ++i) {
 
             // We don't currently use this, but it can tell us if this image
-            // made use of the team colour parameter
+            // made use of the team color parameter
             bool readFromEsi = false;
 
             // Figure out where the next function starts
             std::uint8_t* const codeEnd = findFunctionEnd(code, end, &readFromEsi);
 
             // Create an empty image buffer
-            std::vector<std::uint8_t> data(imageSize, transparentColour);
+            std::vector<std::uint8_t> data(imageSize, transparentColor);
 
-            // Draw the image with our desired team colour
+            // Draw the image with our desired team color
             callAssemblyCode(code, data.data());
 
             // Figure out the image dimensions based on what was drawn
@@ -186,7 +186,7 @@ namespace Setup {
             int h = 0;
             for (int y = 0; y < maxHeight; ++y) {
                 for (int x = 0; x < maxWidth; ++x) {
-                    if (data[x + y * maxWidth] != transparentColour) {
+                    if (data[x + y * maxWidth] != transparentColor) {
                         if (x > w) {
                             w = x + 1;
                         }
