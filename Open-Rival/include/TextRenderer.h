@@ -10,12 +10,20 @@ namespace Rival {
     class TextRenderer {
 
     public:
+        /**
+         * Renders a single TextRenderable.
+         *
+         * If the TextRenderable contains any unsupported characters, they will
+         * be skipped.
+         */
         void render(const TextRenderable& textRenderable) const;
 
     private:
         static const int numVertexDimensions = 3;    // x, y, z
         static const int numTexCoordDimensions = 2;  // u, v
         static const int numVerticesPerSprite = 4;
+
+        static const int spaceWidth = 20;
 
         GLuint vao;
         GLuint positionVbo;

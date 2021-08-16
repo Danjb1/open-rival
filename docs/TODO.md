@@ -5,14 +5,9 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - TextRenderer class
-        - Use a constant for space size
     - TextRenderable class
         - Support custom font size (rather than just using the character size from the source texture)
         - Support changing text (may need to expand buffers!)
-        - Support multiple colors (ctor should take an array of spans, each with text + color)
-        - Ignore spaces when allocating buffers (right now the buffers are bigger than necessary)
-    - Create constants for the original game's font colors
     - Load all fonts that we need on load and store them somewhere
     - Load the font directory / font names from a config file
     - Free font textures on exit
@@ -187,8 +182,9 @@
  - [ ] Show mana bars in unit tooltips
  - [ ] Stable net play!
  - [ ] Using abilities with a group selected
- - [ ] High-res fonts
- - [ ] Upscale graphics using AI?
+ - [x] High-res fonts
+ - [ ] Real translucency for fog of war
+ - [ ] Upscale graphics / videos using AI?
 
 ### Menus
 
@@ -307,8 +303,10 @@
     - Add a new class that can read the buffer and maintain some offset
  - Use a common file reading mechanism in audio-extractor
  - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
- - Don't use `const` for member variables
- - Avoid reference member variables (prefer pointers)
+ - Don't use `const` for member variables?
+ - Avoid reference member variables (prefer pointers)?
  - Avoid static methods
     - Use a namespace for public methods
     - Put private methods in a `.cpp` file
+ - List methods before fields in classes
+    - Separate fields using a new public/private heading

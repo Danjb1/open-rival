@@ -5,10 +5,27 @@
 
 #include <glm/glm.hpp>
 
+#include "Color.h"
 #include "Font.h"
 #include "Spritesheet.h"
 
 namespace Rival {
+
+    /**
+     * A portion of text with a configurable color.
+     */
+    struct TextSpan {
+        std::string text;
+        Color color;
+    };
+
+    /**
+     * Properties that control how some text should be rendered.
+     */
+    struct TextProperties {
+        const Font& font;
+        float scale = 1.0f;
+    };
 
     /**
      * Class that allows colored text to be rendered as textured quads.
@@ -23,6 +40,9 @@ namespace Rival {
         static const int numColorDimensions = 3;     // r, g, b
         static const int numVerticesPerChar = 4;
 
+        static const Color defaultColor;
+        static const Color highlightColor;
+
         /*
          * 6 indices are required to render a quad using GL_TRIANGLES:
          *  - First triangle: 0-1-2
@@ -36,7 +56,10 @@ namespace Rival {
          * Constructs a TextRenderable.
          */
         TextRenderable(
-                const std::string text, const Font& font, float x, float y);
+                std::vector<TextSpan> spans,
+                TextProperties props,
+                float x,
+                float y);
 
         // Disable moving / copying
         TextRenderable(const TextRenderable& other) = delete;
@@ -52,8 +75,9 @@ namespace Rival {
 
         GLuint getTextureId() const;
 
-        const Font* getFont() const { return font; }
-        std::string getText() const { return text; }
+        const Font* getFont() const { return &props.font; }
+        std::vector<TextSpan> getTextSpans() const { return spans; }
+        int getNumVisibleChars() const { return numVisibleChars; }
         float getX() const { return x; }
         float getY() const { return y; }
 
@@ -64,11 +88,15 @@ namespace Rival {
         GLuint colorVbo;
         GLuint ibo;
 
-        const Font* font;
-        std::string text;
-
+        std::vector<TextSpan> spans;
+        TextProperties props;
         float x;
         float y;
+
+        int numChars;
+        int numVisibleChars;
+
+        void refresh();
     };
 
 }  // namespace Rival

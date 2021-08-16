@@ -5,12 +5,22 @@
 
 namespace Rival {
 
+    const Color TextRenderable::defaultColor = Color::makeRgb(255, 221, 65);
+    const Color TextRenderable::highlightColor = Color::makeRgb(255, 43, 40);
+
     TextRenderable::TextRenderable(
-            const std::string text, const Font& font, float x, float y)
-        : text(text),
-          font(&font),
+            std::vector<TextSpan> spans,
+            const TextProperties props,
+            float x,
+            float y)
+        : spans(spans),
+          props(props),
           x(x),
-          y(y) {
+          y(y),
+          numChars(0),
+          numVisibleChars(0) {
+
+        refresh();
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -31,7 +41,7 @@ namespace Rival {
                 GL_FALSE,
                 numVertexDimensions * sizeof(GLfloat),
                 nullptr);
-        int positionBufferSize = text.length()
+        int positionBufferSize = numVisibleChars
                 * numVertexDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -43,7 +53,7 @@ namespace Rival {
 
         // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        int texCoordBufferSize = text.length()
+        int texCoordBufferSize = numVisibleChars
                 * numTexCoordDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -62,7 +72,7 @@ namespace Rival {
 
         // Initialize color buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
-        int colorBufferSize = text.length()
+        int colorBufferSize = numVisibleChars
                 * numColorDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -83,7 +93,7 @@ namespace Rival {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(
                 GL_ELEMENT_ARRAY_BUFFER,
-                text.length() * numIndicesPerChar * sizeof(GLuint),
+                numVisibleChars * numIndicesPerChar * sizeof(GLuint),
                 NULL,
                 GL_STATIC_DRAW);
 
@@ -93,8 +103,23 @@ namespace Rival {
         glEnableVertexAttribArray(Shaders::colorAttribIndex);
     }
 
+    void TextRenderable::refresh() {
+        numChars = 0;
+        numVisibleChars = 0;
+
+        for (TextSpan span : spans) {
+            for (char c : span.text) {
+                ++numChars;
+
+                if (c != ' ') {
+                    ++numVisibleChars;
+                }
+            }
+        }
+    }
+
     GLuint TextRenderable::getTextureId() const {
-        return font->getTexture().getId();
+        return props.font.getTexture().getId();
     }
 
 }  // namespace Rival
