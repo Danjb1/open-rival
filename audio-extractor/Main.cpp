@@ -2,7 +2,7 @@
 
 #include "audio-extractor.h"
 
-using namespace AudioExtractor;
+using namespace Rival::Setup;
 
 int main() {
     extractAudio("SOUNDS.DAT", "output");

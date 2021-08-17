@@ -23,7 +23,18 @@ namespace Rival {
      * Properties that control how some text should be rendered.
      */
     struct TextProperties {
+        /**
+         * Font to use when rendering the text.
+         */
         const Font& font;
+
+        /**
+         * Scale at which to render the text.
+         *
+         * This is a fraction of the font size used to create the Font's texture
+         * atlas. Quality may suffer at scales > 1 as the texture will have to
+         * stretch.
+         */
         float scale = 1.0f;
     };
 
@@ -80,6 +91,7 @@ namespace Rival {
         int getNumVisibleChars() const { return numVisibleChars; }
         float getX() const { return x; }
         float getY() const { return y; }
+        float getScale() const { return props.scale; }
 
     private:
         GLuint vao;
