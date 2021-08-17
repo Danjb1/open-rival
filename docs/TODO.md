@@ -5,9 +5,20 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - TextRenderable class
-        - Support custom font size (rather than just using the character size from the source texture)
-        - Support changing text (may need to expand buffers!)
+    - [TextRenderable] Support changing text (may need to expand buffers!)
+    - What font size should we use when we create the font texture?
+        - This has widespread ramifications as the scale used in rendering
+            depends on the texture size! Can we separate the two?
+        - `scale` should be a factor of the "default text height" rather than
+            the texture size.
+        - We should calculate the ACTUAL scale to render at based on:
+            scale * defaultTextHeight / fontTexHeight
+        - So if scale = 1, defaultTextHeight = 14 and fontTexHeight = 48,
+            we will actually render at 0.29 scale
+        - The space width should be set based on this default text size
+        - 16 or 18 looks good as a default
+            - Compare to original game
+            - Set fontTexHeight so that it divides nicely / gives a nice result!
     - Load all fonts that we need on load and store them somewhere
     - Load the font directory / font names from a config file
     - Free font textures on exit

@@ -44,8 +44,8 @@ namespace Rival {
         /**
          * Font height to use when generating the texture.
          *
-         * It is best to use a somewhat high value here so that the font can be
-         * rendered at any size later without the quality suffering.
+         * It is best to use the highest value we will need here so that the
+         * font can be rendered at any size later without the quality suffering.
          */
         static const int fontHeight = 48;
 

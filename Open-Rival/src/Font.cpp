@@ -14,10 +14,16 @@
 
 namespace Rival {
 
+    // These are all the printable ASCII characters. Although we theoretically
+    // support them, whether they can be rendered depends entirely on the font.
     const std::string Font::supportedChars =
-            "éabcdefghijklmnopqrstuvwxyz"
+            "!\"#$%&'()*+,-./"
+            "1234567890"
+            ":;<=>?@"
             "ABCDEFGHJKLMNOPQRSTUVWXYZ"
-            "1234567890";
+            "[\\]^_`"
+            "abcdefghijklmnopqrstuvwxyz"
+            "{|}~";
 
     Font::Font(Texture texture, std::map<char, CharData> chars)
         : texture(texture),
@@ -84,7 +90,11 @@ namespace Rival {
                 std::cout << "Font "
                           << fontName
                           << " does not support character "
-                          << c
+                          // Non-ASCII characters are not printed correctly,
+                          // so we print the int value instead. But first we
+                          // make it unsigned otherwise we can end up with
+                          // negative numbers.
+                          << static_cast<int>(static_cast<unsigned char>(c))
                           << "\n ";
             }
 
@@ -96,7 +106,7 @@ namespace Rival {
         }
 
         // Create an image to hold all of our characters
-        Image fontBitmap(imgWidth, imgHeight);
+        Image fontBitmap(imgWidth, imgHeight, 0);
 
         int nextX = Font::charPadding;
 

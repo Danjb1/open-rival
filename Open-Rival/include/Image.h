@@ -17,7 +17,7 @@ namespace Rival {
         /**
          * Creates a blank image.
          */
-        Image(int width, int height);
+        Image(int width, int height, std::uint8_t bgColor);
 
         /**
          * Creates an image by taking ownership of some data.

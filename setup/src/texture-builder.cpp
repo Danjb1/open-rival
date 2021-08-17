@@ -313,7 +313,7 @@ namespace Setup {
                 } else if (sprite.getWidth() < spriteWidth
                         || sprite.getHeight() < spriteHeight) {
                     // Sprite too small
-                    Image resizedSprite = Image(spriteWidth, spriteHeight);
+                    Image resizedSprite = Image(spriteWidth, spriteHeight, '\xff');
                     const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                     const int dstY = (spriteHeight - sprite.getHeight()) / 2;
                     Image::copyImage(sprite, resizedSprite, dstX, dstY);
@@ -348,7 +348,7 @@ namespace Setup {
         int texWidth = nextPowerOf2(builder.texWidth);
         int texHeight = nextPowerOf2(builder.texHeight);
         std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
-        Image texture(texWidth, texHeight);
+        Image texture(texWidth, texHeight, '\xff');
 
         // Copy each image onto the texture
         for (auto const& kv : builder.imagePlacements) {
@@ -412,7 +412,7 @@ namespace Setup {
         }
 
         // Create an empty texture
-        Image texture = Image(txWidth, txHeight);
+        Image texture = Image(txWidth, txHeight, '\xff');
 
         int x = 0;
         int y = 0;

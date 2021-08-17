@@ -8,11 +8,12 @@
 
 namespace Rival {
 
-    Image::Image(int width, int height)
+    Image::Image(int width, int height, std::uint8_t bgColor)
         : width(width),
           height(height),
           stride(width),
-          data(std::make_unique<std::vector<std::uint8_t>>(width * height, '\xff')) {}
+          data(std::make_unique<std::vector<std::uint8_t>>(width * height,
+                  bgColor)) {}
 
     Image::Image(int width, int height,
             std::unique_ptr<std::vector<std::uint8_t>> data)

@@ -38,6 +38,7 @@ namespace Rival {
 
         std::vector<TextSpan> spans = textRenderable.getTextSpans();
         const Font* font = textRenderable.getFont();
+        float scale = textRenderable.getScale();
 
         // Create buffers
         std::vector<GLfloat> vertexData;
@@ -66,7 +67,7 @@ namespace Rival {
         for (TextSpan span : spans) {
             for (char c : span.text) {
                 if (c == ' ') {
-                    x += spaceWidth;
+                    x += spaceWidth * scale;
                     continue;
                 }
 
@@ -80,10 +81,10 @@ namespace Rival {
                 }
 
                 // Define vertex positions
-                float width = static_cast<float>(charData->size.x);
-                float height = static_cast<float>(charData->size.y);
-                float x1 = static_cast<float>(x + charData->bearing.x);
-                float y1 = static_cast<float>(y - charData->bearing.y);
+                float width = static_cast<float>(charData->size.x) * scale;
+                float height = static_cast<float>(charData->size.y) * scale;
+                float x1 = static_cast<float>(x + charData->bearing.x * scale);
+                float y1 = static_cast<float>(y - charData->bearing.y * scale);
                 float x2 = x1 + width;
                 float y2 = y1 + height;
                 float z = 0;
@@ -141,7 +142,7 @@ namespace Rival {
                 indexData.push_back(startIndex + 3);
                 indexData.push_back(startIndex + 0);
 
-                x += charData->advance;
+                x += charData->advance * scale;
                 ++charsAdded;
             }
         }
