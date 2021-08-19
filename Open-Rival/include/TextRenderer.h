@@ -23,8 +23,6 @@ namespace Rival {
         static const int numTexCoordDimensions = 2;  // u, v
         static const int numVerticesPerSprite = 4;
 
-        static const int spaceWidth = 20;
-
         GLuint vao;
         GLuint positionVbo;
         GLuint texCoordVbo;

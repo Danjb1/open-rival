@@ -33,7 +33,7 @@ Here are our options, in preference order, depending on what permissions we can 
 
 4. Same as (2), but using the shareware version of the font. Accents will not be available.
 
-5. Do not distribute the font at all, but use it if is present on the system; wse a substitute font otherwise.
+5. Do not distribute the font at all, but use it if is present on the system; use a substitute font otherwise.
 
 > To date, I have reached out twice via [this form](http://www.fontcraft.com/fontcraft/contact/), but I have had no reply.
 

@@ -5,23 +5,17 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
+    - "serife.fon" is not being rendered properly
+        - Do we need to load an extra FreeType module?
     - [TextRenderable] Support changing text (may need to expand buffers!)
-    - What font size should we use when we create the font texture?
-        - This has widespread ramifications as the scale used in rendering
-            depends on the texture size! Can we separate the two?
-        - `scale` should be a factor of the "default text height" rather than
-            the texture size.
-        - We should calculate the ACTUAL scale to render at based on:
-            scale * defaultTextHeight / fontTexHeight
-        - So if scale = 1, defaultTextHeight = 14 and fontTexHeight = 48,
-            we will actually render at 0.29 scale
-        - The space width should be set based on this default text size
-        - 16 or 18 looks good as a default
-            - Compare to original game
-            - Set fontTexHeight so that it divides nicely / gives a nice result!
+    - Vanilla text has a slight shadow
+    - Vanilla text seems more saturated because it uses darker pixels instead of translucency
     - Load all fonts that we need on load and store them somewhere
-    - Load the font directory / font names from a config file
+    - Load the font directory / font names / default sizes from a config file
     - Free font textures on exit
+    - Add a convenience constructor for a single-span TextRenderable
+    - MenuTextRenderer class should allow TextRenderables to be registered
+        / unregistered, and should render them all in a loop (like EntityRenderer)
 
  - Improve setup project
     - Interface extractor: some bytes are still unknown
@@ -301,6 +295,7 @@
 
  - Central unit type registry: animations, UI image, etc.
  - Static objects (e.g. mountains) need not use an AnimationComponent
+ - Differentiate between components that need to be ticked and those that don't
 
 ### Refactoring
 
@@ -321,3 +316,5 @@
     - Put private methods in a `.cpp` file
  - List methods before fields in classes
     - Separate fields using a new public/private heading
+ - Pass small interfaces around instead of complex objects
+    - e.g. Resources should extend TextureStore, AudioStore, etc.
