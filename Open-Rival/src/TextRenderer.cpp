@@ -38,7 +38,8 @@ namespace Rival {
 
         std::vector<TextSpan> spans = textRenderable.getTextSpans();
         const Font* font = textRenderable.getFont();
-        float scale = textRenderable.getScale();
+        float scale = textRenderable.getScale()
+                * font->getDefaultSize() / Font::fontHeight;
 
         // Create buffers
         std::vector<GLfloat> vertexData;
@@ -66,17 +67,18 @@ namespace Rival {
         // Add characters to buffers
         for (TextSpan span : spans) {
             for (char c : span.text) {
-                if (c == ' ') {
-                    x += spaceWidth * scale;
-                    continue;
-                }
-
                 const CharData* charData = font->getCharData(c);
 
                 if (!charData) {
                     std::cout << "Trying to render unsupported character: "
                               << c
                               << "\n";
+                    continue;
+                }
+
+                if (c == ' ') {
+                    // Nothing to render for spaces
+                    x += charData->advance * scale;
                     continue;
                 }
 

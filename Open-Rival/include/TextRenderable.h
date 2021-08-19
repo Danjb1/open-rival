@@ -31,9 +31,7 @@ namespace Rival {
         /**
          * Scale at which to render the text.
          *
-         * This is a fraction of the font size used to create the Font's texture
-         * atlas. Quality may suffer at scales > 1 as the texture will have to
-         * stretch.
+         * This is a fraction of the default font size.
          */
         float scale = 1.0f;
     };

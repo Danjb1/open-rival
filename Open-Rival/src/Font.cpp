@@ -16,8 +16,10 @@ namespace Rival {
 
     // These are all the printable ASCII characters. Although we theoretically
     // support them, whether they can be rendered depends entirely on the font.
+    // Note that the space character is a special case; we take the width from
+    // the font, but it is skipped during rendering.
     const std::string Font::supportedChars =
-            "!\"#$%&'()*+,-./"
+            " !\"#$%&'()*+,-./"
             "1234567890"
             ":;<=>?@"
             "ABCDEFGHJKLMNOPQRSTUVWXYZ"
@@ -25,13 +27,10 @@ namespace Rival {
             "abcdefghijklmnopqrstuvwxyz"
             "{|}~";
 
-    Font::Font(Texture texture, std::map<char, CharData> chars)
+    Font::Font(Texture texture, std::map<char, CharData> chars, int defaultSize)
         : texture(texture),
-          chars(chars) {
-    }
-
-    const Texture& Font::getTexture() const {
-        return texture;
+          chars(chars),
+          defaultSize(defaultSize) {
     }
 
     const CharData* Font::getCharData(char c) const {
@@ -53,7 +52,7 @@ namespace Rival {
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
-    Font Font::loadFont(std::string fontName) {
+    Font Font::loadFont(std::string fontName, int defaultSize) {
         // Initialize FreeType
         FT_Library ft;
         if (FT_Init_FreeType(&ft)) {
@@ -64,7 +63,7 @@ namespace Rival {
         FT_Face face;
         std::string filename = Resources::fontDir + fontName;
         if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
-            throw std::runtime_error("Failed to load font");
+            throw std::runtime_error("Failed to load font: " + fontName);
         }
 
         // Set font size. Using zero width means it will be auto-calculated
@@ -79,9 +78,14 @@ namespace Rival {
         for (size_t i = 0; i < Font::supportedChars.length(); ++i) {
             char c = Font::supportedChars[i];
 
+            if (c == ' ') {
+                // Spaces are not part of the Font's texture
+                continue;
+            }
+
             // Load this character into the `face->glyph` slot
             if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-                throw std::runtime_error("Failed to load character");
+                throw std::runtime_error("Failed to load character: " + c);
             }
 
             if (!face->glyph->bitmap.buffer) {
@@ -117,15 +121,20 @@ namespace Rival {
             // It's unfortunate that we are loading every character twice, but
             // we need two passes to correctly determine the image dimensions.
             // The alternative would be to guess the image size and then crop
-            // it afterwards.
+            // it afterwards, or copy each char to memory after the first load.
             if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-                throw std::runtime_error("Failed to load character");
+                throw std::runtime_error("Failed to load character: " + c);
             }
 
             // Store this character in the font
             CharData charData =
                     makeChar(face->glyph, nextX, imgWidth, imgHeight);
             chars.insert(std::pair<char, CharData>(c, charData));
+
+            if (c == ' ') {
+                // Spaces are not part of the Font's texture
+                continue;
+            }
 
             // Copy bitmap data to our Image
             copyCharImage(face->glyph, fontBitmap, nextX);
@@ -149,7 +158,7 @@ namespace Rival {
         FT_Done_Face(face);
         FT_Done_FreeType(ft);
 
-        return Font(tex, chars);
+        return Font(tex, chars, defaultSize);
     }
 
     /**

@@ -47,17 +47,17 @@ namespace Rival {
          * It is best to use the highest value we will need here so that the
          * font can be rendered at any size later without the quality suffering.
          */
-        static const int fontHeight = 48;
+        static const int fontHeight = 32;
 
         /**
          * Creates a Font.
          */
-        Font(Texture texture, std::map<char, CharData> chars);
+        Font(Texture texture, std::map<char, CharData> chars, int defaultSize);
 
         /**
          * Gets the Texture that backs this Font.
          */
-        const Texture& getTexture() const;
+        const Texture& getTexture() const { return texture; }
 
         /**
          * Gets the data pertaining to the given character.
@@ -65,9 +65,14 @@ namespace Rival {
         const CharData* getCharData(char c) const;
 
         /**
+         * Gets the data pertaining to the given character.
+         */
+        const int getDefaultSize() const { return defaultSize; }
+
+        /**
          * Loads the font with the given name.
          */
-        static Font loadFont(std::string fontName);
+        static Font loadFont(std::string fontName, int defaultSize);
 
     private:
         /**
@@ -79,6 +84,11 @@ namespace Rival {
          * Data for each character in the font.
          */
         std::map<char, CharData> chars;
+
+        /**
+         * The size at which the font is rendered when scale = 1.
+         */
+        int defaultSize;
 
         static CharData makeChar(FT_GlyphSlot& glyph, int x, int imgWidth,
                 int imgHeight);
