@@ -22,7 +22,7 @@ namespace Rival {
             " !\"#$%&'()*+,-./"
             "1234567890"
             ":;<=>?@"
-            "ABCDEFGHJKLMNOPQRSTUVWXYZ"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "[\\]^_`"
             "abcdefghijklmnopqrstuvwxyz"
             "{|}~";
@@ -99,7 +99,7 @@ namespace Rival {
                           // make it unsigned otherwise we can end up with
                           // negative numbers.
                           << static_cast<int>(static_cast<unsigned char>(c))
-                          << "\n ";
+                          << "\n";
             }
 
             int charWidth = face->glyph->bitmap.width;
@@ -198,9 +198,7 @@ namespace Rival {
     void Font::copyCharImage(FT_GlyphSlot& glyph, Image& target, int x) {
         int charWidth = glyph->bitmap.width;
         int charHeight = glyph->bitmap.rows;
-        int size = charWidth * charHeight;
-        std::vector<std::uint8_t> data =
-                bitmapToVector(glyph->bitmap.buffer, size);
+        std::vector<std::uint8_t> data = bitmapToVector(glyph->bitmap);
         Image src(charWidth, charHeight,
                 std::make_unique<std::vector<std::uint8_t>>(data));
         Image::copyImage(src, target, x, 0);
@@ -208,10 +206,61 @@ namespace Rival {
 
     /**
      * Converts bitmap data for a glyph into an equivalent vector.
+     *
+     * The resulting vector uses one byte to represent each pixel.
      */
-    std::vector<std::uint8_t> Font::bitmapToVector(
-            unsigned char* dataIn, int size) {
-        std::uint8_t* data = static_cast<std::uint8_t*>(dataIn);
+    std::vector<std::uint8_t> Font::bitmapToVector(FT_Bitmap& bmp) {
+        switch (bmp.pixel_mode) {
+        case FT_Pixel_Mode::FT_PIXEL_MODE_MONO:
+            return monoBitmapToVector(bmp);
+        case FT_Pixel_Mode::FT_PIXEL_MODE_GRAY:
+            return grayBitmapToVector(bmp);
+        default:
+            throw std::runtime_error("Unsupported font format");
+        }
+    }
+
+    std::vector<std::uint8_t> Font::monoBitmapToVector(FT_Bitmap& bmp) {
+        // One bit per pixel - needs some tinkering
+        int charWidth = bmp.width;
+        int charHeight = bmp.rows;
+        int size = charWidth * charHeight;
+        std::vector<std::uint8_t> vecData;
+        vecData.reserve(size);
+
+        int bitIdx = 0;
+        for (int y = 0; y < charHeight; ++y) {
+            for (int x = 0; x < charWidth; ++x) {
+
+                // Find the byte containing our desired bit
+                int byteIdx = bitIdx / 8;
+                unsigned char containingByte = bmp.buffer[byteIdx];
+
+                // Find our bit within the byte
+                int relativeBitIdx = bitIdx % 8;
+                int bitShift = 7 - relativeBitIdx;
+                std::uint8_t bitVal = (containingByte >> bitShift) & 1;
+
+                // Resulting value is either 0 or 255 (invisible or opaque)
+                vecData.push_back(std::uint8_t(bitVal * 0xff));
+
+                ++bitIdx;
+            }
+
+            // Skip any padding at the end of the row
+            // (pitch is the width + row padding, in bytes)
+            bitIdx += (bmp.pitch * 8) - charWidth;
+        }
+
+        return vecData;
+    }
+
+    std::vector<std::uint8_t> Font::grayBitmapToVector(FT_Bitmap& bmp) {
+        // One byte per pixel - we can directly copy the original buffer
+        int charWidth = bmp.width;
+        int charHeight = bmp.rows;
+        int size = charWidth * charHeight;
+        std::uint8_t* data = static_cast<std::uint8_t*>(bmp.buffer);
         return std::vector<std::uint8_t>(data, data + size);
     }
 
