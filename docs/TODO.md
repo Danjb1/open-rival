@@ -5,19 +5,10 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - "serife.fon" is not being rendered properly
-        - The characters being loaded do not correspond to the ones we are trying to load!
-            - supported chars:  !\"#$%&'()*+,-./1234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-            - loaded chars:                                     @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-            - They are all offset by 32!
-            - `FT_Load_Char` does not take a literal char - it takes a character code, which is encoding-dependent
-            - We need to check the encoding of the font. From the docs:
-
-                > FT_ENCODING_NONE is always set (with a single exception) by the winfonts driver.
-                > Use FT_Get_WinFNT_Header and examine the charset field of the FT_WinFNT_HeaderRec
-                > structure to find out which encoding is really present. For example,
-                > FT_WinFNT_ID_CP1251 (204) means Windows code page 1251 (for Russian).
-
+    - Refactor font generation
+    - Why does our MS Serif font need to be generated at size 32 instead of size 12 (as expected)?
+        - Perhaps this size is not the same as the typical "point" units used by fonts - needs documenting
+    - The texture for mono fonts should use nearest neighbour interpolation
     - [TextRenderable] Support changing text (may need to expand buffers!)
     - Vanilla text has a slight shadow
     - Vanilla text seems more saturated because it uses darker pixels instead of translucency
