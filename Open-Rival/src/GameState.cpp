@@ -33,7 +33,6 @@ namespace Rival {
           textRenderer(window) {
 
         // TMP
-        /*
         regularFont = std::make_unique<Font>(
                 Font::loadFont("Procopius Regular.ttf", 16));
         std::vector<TextSpan> spans1 = {
@@ -42,11 +41,10 @@ namespace Rival {
         };
         TextProperties props1 = { *regularFont };
         text1 = std::make_unique<TextRenderable>(spans1, props1, 300.0f, 525.0f);
-        */
 
         // TMP
         smallFont = std::make_unique<Font>(
-                Font::loadFont("serife.fon", 64));
+                Font::loadFont("serife.fon", 32));
         std::vector<TextSpan> spans2 = {
             { "Warlord", TextRenderable::defaultColor }
         };
@@ -87,7 +85,7 @@ namespace Rival {
         gameRenderer.render();
 
         // TMP
-        //textRenderer.render(*text1);
+        textRenderer.render(*text1);
         textRenderer.render(*text2);
     }
 

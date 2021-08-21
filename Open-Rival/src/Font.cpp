@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Font.h"
 
+#include <freetype/ftfntfmt.h>
+#include <freetype/ftwinfnt.h>
 #include <gl/glew.h>
 
 #include <algorithm>  // std::max
@@ -13,6 +15,11 @@
 #include "Texture.h"
 
 namespace Rival {
+
+    /**
+     * Format identifier for Windows font files.
+     */
+    const std::string winFontFormat = "Windows FNT";
 
     // These are all the printable ASCII characters. Although we theoretically
     // support them, whether they can be rendered depends entirely on the font.
@@ -66,6 +73,30 @@ namespace Rival {
             throw std::runtime_error("Failed to load font: " + fontName);
         }
 
+        // Check font format
+        FT_Byte charOffset = 0;
+        std::string format = std::string(FT_Get_Font_Format(face));
+        if (format == winFontFormat) {
+            FT_WinFNT_HeaderRec winFontHeader;
+            if (FT_Get_WinFNT_Header(face, &winFontHeader)) {
+                throw std::runtime_error("Failed to read Windows font header: "
+                        + fontName);
+            }
+
+            // Check the charset. MS Serif uses `CP1252`, which fortunately maps
+            // directly to ASCII. Other fonts may require some more complex
+            // mapping to find the correct characters.
+            if (winFontHeader.charset != FT_WinFNT_ID_CP1252) {
+                throw std::runtime_error("Unsupported charset in font: "
+                        + fontName);
+            }
+
+            // The documentation of this field is poor, but it seems as though
+            // Windows fonts can have all characters offset by some amount.
+            // This might be a horrible hack, but it seems to work for now.
+            charOffset = winFontHeader.first_char - 1;
+        }
+
         // Set font size. Using zero width means it will be auto-calculated
         // based on the height.
         FT_Set_Pixel_Sizes(face, 0, fontHeight);
@@ -76,15 +107,20 @@ namespace Rival {
 
         // Determine the image size
         for (size_t i = 0; i < Font::supportedChars.length(); ++i) {
-            char c = Font::supportedChars[i];
+            unsigned char c = Font::supportedChars[i];
 
             if (c == ' ') {
                 // Spaces are not part of the Font's texture
                 continue;
             }
 
+            // Map our desired character to its index in the font.
+            // Note that this is repeated in the next loop and the statements
+            // must match!
+            unsigned char charCode = c - charOffset;
+
             // Load this character into the `face->glyph` slot
-            if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
                 throw std::runtime_error("Failed to load character: " + c);
             }
 
@@ -94,11 +130,9 @@ namespace Rival {
                 std::cout << "Font "
                           << fontName
                           << " does not support character "
-                          // Non-ASCII characters are not printed correctly,
-                          // so we print the int value instead. But first we
-                          // make it unsigned otherwise we can end up with
-                          // negative numbers.
-                          << static_cast<int>(static_cast<unsigned char>(c))
+                          // We convert to an int because some characters are
+                          // not printable
+                          << static_cast<int>(c)
                           << "\n";
             }
 
@@ -116,13 +150,16 @@ namespace Rival {
 
         // Create our characters
         for (size_t i = 0; i < Font::supportedChars.length(); ++i) {
-            char c = Font::supportedChars[i];
+            unsigned char c = Font::supportedChars[i];
+
+            // This must match the equivalent statement above!
+            unsigned char charCode = c - charOffset;
 
             // It's unfortunate that we are loading every character twice, but
             // we need two passes to correctly determine the image dimensions.
             // The alternative would be to guess the image size and then crop
             // it afterwards, or copy each char to memory after the first load.
-            if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
                 throw std::runtime_error("Failed to load character: " + c);
             }
 
