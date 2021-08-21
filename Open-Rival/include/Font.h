@@ -93,8 +93,9 @@ namespace Rival {
         static CharData makeChar(FT_GlyphSlot& glyph, int x, int imgWidth,
                 int imgHeight);
         static void copyCharImage(FT_GlyphSlot& glyph, Image& target, int x);
-        static std::vector<std::uint8_t> bitmapToVector(
-                unsigned char* dataIn, int size);
+        static std::vector<std::uint8_t> bitmapToVector(FT_Bitmap& bmp);
+        static std::vector<std::uint8_t> monoBitmapToVector(FT_Bitmap& bmp);
+        static std::vector<std::uint8_t> grayBitmapToVector(FT_Bitmap& bmp);
     };
 
 }  // namespace Rival
