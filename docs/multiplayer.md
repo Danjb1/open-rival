@@ -1,61 +1,55 @@
-# Multiplayer Strategy
+# Multiplayer
 
- - Use a client-server architecture with lockstep model.
+## Introduction
 
- - Commands are executed 1 turn AFTER the turn when the server sends them.
-    - This gives clients time to receive them.
-    - This means there could be a maximum delay of 2 turns (300ms) between a command being issued and it being executed.
+Online multiplayer is a complicated part of any game, but it is something that needs to be carefully planned from the early stages of development.
 
-    > In single-player mode, skip the client-server aspect entirely and process commands on the client as they are issued (?)
+There is a superb guide to all of the important concepts [here](https://meseta.medium.com/netcode-concepts-part-3-lockstep-and-rollback-f70e9297271).
 
- - To minimise the perceived delay, clients should receive some immediate feedback, e.g. unit voices.
-    - We could use client-side prediction but then we would have to contend with discrepancies arising.
+## Lockstep Model
 
- - If a client has not received a turn from the server by the time that turn arrives, they have to pause and wait for it (?)
+For RTS games, lockstep is a very commonly-used mechanism to keep clients in-sync. The general premise is that before every tick, every client waits to receive instructions from every other client. This ensures that the game runs in an identical manner on every client, because each of them is processing instructions sequentially in a deterministic manner. As an added bonus, this means that replays can be implemented easily by saving the commands for each turn.
 
- - If the server receives a command too late for it to be included in the turn it SHOULD HAVE belonged to, it should be queued for the following turn.
+Whenever a client issues a command (e.g. "Place Building"), the command should be scheduled for 'n' ticks in the future. This gives all other clients time to receive the command, so that they can all execute it in the same game tick without needing to wait. If a message is delayed, then all clients have to wait for the message to arrive before continuing.
 
- - Replays can be implemented easily by saving the commands for each turn.
+> Note that a message might just be "no input", if a client has not issued any commands.
 
----
+The one downside to this approach is perceived input lag, which can be mitigated using prediction (e.g. placing a "fake" building immediately and replacing it with the "real" building later), and rollback (if the building cannot be built when the time comes, the fake building must be deleted).
 
-## Example
+## Tick Rate
 
-Timestep = 15ms (60 fps)
-Turn interval = 150ms (10 frames)
+The notion of "tick rate" is a little confusing as there are really 3 separate values at play here:
 
-These numbers can be fine-tuned as required.
+### (Multiplayer) Input Tick Rate
 
-```
-t = 0
-ClientA issues MoveCommand
-ClientB issues BuildCommand
-ClientC issues AttackCommand
+This is the rate at which commands issued by players are processed. For example, if this is set to 10, then new commands from all players will be expected 10 times per second.
 
-t = 45
-Server receives and queues MoveCommand
+**If this is too high** the game uses more network traffic and the risk of delayed messages is higher.
 
-t = 60
-Server receives and queues BuildCommand
+**If this is too low** the game may feel slow to respond to user input.
 
-t = 150 (turn 1)
-Server sends queued commands to all clients
+### Logic Tick Rate
 
-t = 175
-Server receives AttackCommand - too late for turn 1! Command gets queued for the next turn.
+This is the rate at which the game logic is updated. This may be the same as the input tick rate, but it could also be a multiple of the input tick rate; for example, if this was double the input tick rate then every other frame would be executed with no additional input processing.
 
-t = 215
-ClientA receives turn 1 commands from server
-ClientB receives turn 1 commands from server
+This may be desirable to make the timing of actions in the game more fine-grained.
 
-t = 300 (turn 2)
-Server executes turn 1 commands
-ClientA executes turn 1 commands
-ClientB executes turn 1 commands
-ClientC pauses until it receives turn 1 commands, then executes them.
-```
+**If this is too high** the game uses more CPU power, and may be spending unnecessary cycles when there is nothing to update.
 
- - In this example, ClientC may experience frequent stutters due to a poor connection, and their commands may be frequently delayed. This should not impact the other players.
+**If this is too low** the game may feel less fluid.
 
- - The server should be able to detect lagging clients by looking at the timestamps on the commands it receives.
-    - We could also send pings periodically to gauge connection quality.
+### Framerate
+
+This is the rate at which the display is refreshed. If we implement interpolation correctly, then this also governs how smoothly entities can move across the map.
+
+**If this is too high** (i.e. it exceeds the monitor's refresh rate), then the game may perform unnecessary work.
+
+**If this is too low** the game will feel "stuttery".
+
+## Topology
+
+Since we are using the lockstep model, it makes sense to use a relay server. In other words, clients connect to a server, but the server does not run the game logic; it just passes messages between clients. This is simple to implement, and easier for players to set up than P2P connections.
+
+A client can also play the role of the relay server, to remove the need for a dedicated server.
+
+Since the game logic is running directly on the client, this also makes single-player games much simpler to implement. They can work in exactly the same way as multiplayer, but commands can be executed in the tick immediately after they are issued.

@@ -5,16 +5,8 @@
 <!----------------------------------------------------------------------------->
 
  - Font rendering
-    - Refactor font generation
-    - Why does our MS Serif font need to be generated at size 32 instead of size 12 (as expected)?
-        - Perhaps this size is not the same as the typical "point" units used by fonts - needs documenting
-    - The texture for mono fonts should use nearest neighbour interpolation
     - [TextRenderable] Support changing text (may need to expand buffers!)
-    - Vanilla text has a slight shadow
-    - Vanilla text seems more saturated because it uses darker pixels instead of translucency
-    - Load all fonts that we need on load and store them somewhere
     - Load the font directory / font names / default sizes from a config file
-    - Free font textures on exit
     - Add a convenience constructor for a single-span TextRenderable
     - MenuTextRenderer class should allow TextRenderables to be registered
         / unregistered, and should render them all in a loop (like EntityRenderer)
@@ -109,6 +101,14 @@
  - Smooth scrolling with the arrow keys
  - Scroll speed should depend on the zoom level
  - Drag-select
+
+### Fonts
+
+ - Vanilla text seems more saturated because it uses darker pixels instead of translucency
+    - We should support 2 options:
+        - Vanilla: Uses premade bitmaps with no translucency
+        - Smooth: The current implementation
+ - Include shareware version of Procopius?
 
 ### Rendering
 

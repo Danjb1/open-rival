@@ -8,6 +8,7 @@ in vec2 tex_coords;
 out vec4 frag_color;
 
 void main() {
-    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(tex, tex_coords).r);
-    frag_color = vec4(color, 1.0) * sampled;
+    float alpha = texture(tex, tex_coords).r;
+    vec4 sampled = vec4(1.0f, 1.0f, 1.0f, alpha);
+    frag_color = vec4(color, 1.0f) * sampled;
 }

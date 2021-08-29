@@ -34,6 +34,11 @@ namespace Rival {
          * This is a fraction of the default font size.
          */
         float scale = 1.0f;
+
+        /**
+         * Whether the text should have a shadow.
+         */
+        bool hasShadow = true;
     };
 
     /**
@@ -48,6 +53,12 @@ namespace Rival {
         static const int numTexCoordDimensions = 2;  // u, v
         static const int numColorDimensions = 3;     // r, g, b
         static const int numVerticesPerChar = 4;
+
+        static const int numLayersWithoutShadow = 1;
+        static const int numLayersWithShadow = 2;
+        static const int shadowLayerIndex = 0;
+        static const float shadowOffsetX;
+        static const float shadowOffsetY;
 
         static const Color defaultColor;
         static const Color highlightColor;
@@ -90,6 +101,8 @@ namespace Rival {
         float getX() const { return x; }
         float getY() const { return y; }
         float getScale() const { return props.scale; }
+
+        int getNumLayers() const;
 
     private:
         GLuint vao;

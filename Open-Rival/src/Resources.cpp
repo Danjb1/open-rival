@@ -13,7 +13,10 @@ namespace Rival {
     const std::string Resources::txDir = "res\\textures\\";
 
     Resources::Resources()
-        : textures(loadTextures()),
+        : freeTypeLib(initFreeType()),
+          fontSmall(initFontSmall()),
+          fontRegular(initFontRegular()),
+          textures(loadTextures()),
           textureAtlases(loadTextureAtlases()),
           paletteTexture(initPaletteTexture()),
           unitSpritesheets(initUnitSpritesheets()),
@@ -25,13 +28,47 @@ namespace Rival {
           midis(initMidis()) {}
 
     Resources::~Resources() {
-        // Delete Textures
+        // Clean up FreeType library
+        FT_Done_FreeType(freeTypeLib);
+
+        // Delete game Textures
         for (const Texture& texture : textures) {
             const GLuint texId = texture.getId();
             glDeleteTextures(1, &texId);
         }
-        const GLuint texId = paletteTexture.getId();
-        glDeleteTextures(1, &texId);
+
+        // Delete palette Texture
+        {
+            const GLuint texId = paletteTexture.getId();
+            glDeleteTextures(1, &texId);
+        }
+
+        // Delete Font Textures
+        {
+            const GLuint texId = fontSmall.getTexture().getId();
+            glDeleteTextures(1, &texId);
+        }
+        {
+            const GLuint texId = fontRegular.getTexture().getId();
+            glDeleteTextures(1, &texId);
+        }
+    }
+
+    FT_Library Resources::initFreeType() {
+        FT_Library ft;
+        if (FT_Init_FreeType(&ft)) {
+            throw std::runtime_error("Failed to initialize FreeType library");
+        }
+        return ft;
+    }
+
+    Font Resources::initFontSmall() {
+        return Font::loadFont(freeTypeLib, fontDir + "serife.fon", 32);
+    }
+
+    Font Resources::initFontRegular() {
+        return Font::loadFont(
+                freeTypeLib, fontDir + "Procopius Regular.ttf", 16);
     }
 
     std::vector<Texture> Resources::loadTextures() {
@@ -264,6 +301,14 @@ namespace Rival {
         }
 
         return midisRead;
+    }
+
+    const Font& Resources::getFontSmall() const {
+        return fontSmall;
+    }
+
+    const Font& Resources::getFontRegular() const {
+        return fontRegular;
     }
 
     const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {

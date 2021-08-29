@@ -24,6 +24,17 @@ namespace Rival {
     };
 
     /**
+     * Wrapper around an `FT_Face` that uses RAII.
+     */
+    class FontFace {
+    public:
+        FT_Face face;
+
+        FontFace(FT_Library& ft, std::string filename);
+        ~FontFace();
+    };
+
+    /**
      * Font that can be used to render characters.
      */
     class Font {
@@ -72,7 +83,8 @@ namespace Rival {
         /**
          * Loads the font with the given name.
          */
-        static Font loadFont(std::string fontName, int defaultSize);
+        static Font loadFont(
+                FT_Library& ft, std::string filename, int defaultSize);
 
     private:
         /**
@@ -90,12 +102,15 @@ namespace Rival {
          */
         int defaultSize;
 
+        static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
+        static inline int makePrintable(unsigned char c);
         static CharData makeChar(FT_GlyphSlot& glyph, int x, int imgWidth,
                 int imgHeight);
         static void copyCharImage(FT_GlyphSlot& glyph, Image& target, int x);
         static std::vector<std::uint8_t> bitmapToVector(FT_Bitmap& bmp);
         static std::vector<std::uint8_t> monoBitmapToVector(FT_Bitmap& bmp);
         static std::vector<std::uint8_t> grayBitmapToVector(FT_Bitmap& bmp);
+        static TextureProperties createTextureProperties(const FT_Face& face);
     };
 
 }  // namespace Rival

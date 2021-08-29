@@ -5,7 +5,11 @@
 #include <string>
 #include <vector>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "Building.h"
+#include "Font.h"
 #include "MidiFile.h"
 #include "PaletteUtils.h"
 #include "Spritesheet.h"
@@ -35,6 +39,8 @@ namespace Rival {
         Resources& operator=(Resources&& other) = delete;
 
         // Retrieval
+        const Font& getFontSmall() const;
+        const Font& getFontRegular() const;
         const Texture& getPalette() const;
         const Spritesheet& getTileSpritesheet(bool wilderness) const;
         const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
@@ -63,27 +69,35 @@ namespace Rival {
         // MIDI constants
         static const int midiStartIndex = 369;
 
+        // Fonts
+        FT_Library freeTypeLib;
+        Font fontSmall;
+        Font fontRegular;
+
         // Loaded textures
-        const std::vector<Texture> textures;
-        const Texture paletteTexture;
+        std::vector<Texture> textures;
+        Texture paletteTexture;
 
         // Spritesheets
-        const std::map<Unit::Type, Spritesheet> unitSpritesheets;
-        const std::map<Building::Type, Spritesheet> buildingSpritesheets;
-        const std::vector<Spritesheet> tileSpritesheets;
-        const std::vector<Spritesheet> objectSpritesheets;
-        const Spritesheet mapBorderSpritesheet;
+        std::map<Unit::Type, Spritesheet> unitSpritesheets;
+        std::map<Building::Type, Spritesheet> buildingSpritesheets;
+        std::vector<Spritesheet> tileSpritesheets;
+        std::vector<Spritesheet> objectSpritesheets;
+        Spritesheet mapBorderSpritesheet;
 
         // Texture Atlases
-        const std::vector<TextureAtlas> textureAtlases;
+        std::vector<TextureAtlas> textureAtlases;
 
         // Wave Files
-        const std::vector<WaveFile> sounds;
+        std::vector<WaveFile> sounds;
 
         // MIDI Files
-        const std::vector<MidiFile> midis;
+        std::vector<MidiFile> midis;
 
         // Initialization
+        FT_Library initFreeType();
+        Font initFontSmall();
+        Font initFontRegular();
         std::vector<Texture> loadTextures();
         std::vector<TextureAtlas> loadTextureAtlases();
         Texture initPaletteTexture();
