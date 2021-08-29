@@ -19,10 +19,6 @@ namespace Rival {
         void render(const TextRenderable& textRenderable) const;
 
     private:
-        static const int numVertexDimensions = 3;    // x, y, z
-        static const int numTexCoordDimensions = 2;  // u, v
-        static const int numVerticesPerSprite = 4;
-
         GLuint vao;
         GLuint positionVbo;
         GLuint texCoordVbo;

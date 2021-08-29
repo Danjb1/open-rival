@@ -20,7 +20,10 @@ namespace Rival {
         }
 
         // Render
-        GLsizei numIndices = TextRenderable::numIndicesPerChar
+        int numVisibleChars = textRenderable.getNumVisibleChars();
+        int numLayers = textRenderable.getNumLayers();
+        GLsizei numIndices = numVisibleChars
+                * numLayers
                 * textRenderable.getNumVisibleChars();
         glDrawElements(
                 GL_TRIANGLES,
@@ -49,103 +52,132 @@ namespace Rival {
 
         // Reserve space upfront
         int numVisibleChars = textRenderable.getNumVisibleChars();
+        int numLayers = textRenderable.getNumLayers();
         vertexData.reserve(numVisibleChars
+                * numLayers
                 * TextRenderable::numVertexDimensions
                 * TextRenderable::numVerticesPerChar);
         texCoords.reserve(numVisibleChars
+                * numLayers
                 * TextRenderable::numTexCoordDimensions
                 * TextRenderable::numVerticesPerChar);
         colors.reserve(numVisibleChars
+                * numLayers
                 * TextRenderable::numColorDimensions
                 * TextRenderable::numVerticesPerChar);
         indexData.reserve(numVisibleChars * TextRenderable::numIndicesPerChar);
 
         int charsAdded = 0;
-        float x = textRenderable.getX();
-        float y = textRenderable.getY();
 
         // Add characters to buffers
-        for (TextSpan span : spans) {
-            for (char c : span.text) {
-                const CharData* charData = font->getCharData(c);
+        for (int layer = 0; layer < numLayers; ++layer) {
+            float x = textRenderable.getX();
+            float y = textRenderable.getY();
 
-                if (!charData) {
-                    std::cout << "Trying to render unsupported character: "
-                              << c
-                              << "\n";
-                    continue;
-                }
+            for (TextSpan span : spans) {
+                for (char c : span.text) {
+                    const CharData* charData = font->getCharData(c);
 
-                if (c == ' ') {
-                    // Nothing to render for spaces
+                    if (!charData) {
+                        std::cout << "Trying to render unsupported character: "
+                                  << c
+                                  << "\n";
+                        continue;
+                    }
+
+                    if (c == ' ') {
+                        // Nothing to render for spaces
+                        x += charData->advance * scale;
+                        continue;
+                    }
+
+                    // Determine layer offsets
+                    float layerOffsetX;
+                    float layerOffsetY;
+                    if (layer == TextRenderable::shadowLayerIndex) {
+                        layerOffsetX = TextRenderable::shadowOffsetX;
+                        layerOffsetY = TextRenderable::shadowOffsetY;
+                    } else {
+                        layerOffsetX = 0.0f;
+                        layerOffsetY = 0.0f;
+                    }
+
+                    // Define vertex positions
+                    float width = static_cast<float>(charData->size.x) * scale;
+                    float height = static_cast<float>(charData->size.y) * scale;
+                    float x1 = static_cast<float>(x + charData->bearing.x * scale)
+                            + layerOffsetX;
+                    float y1 = static_cast<float>(y - charData->bearing.y * scale)
+                            + layerOffsetY;
+                    float x2 = x1 + width;
+                    float y2 = y1 + height;
+                    float z = 0.0f;
+                    std::vector<GLfloat> newVertexData = {
+                        x1, y1, z,
+                        x2, y1, z,
+                        x2, y2, z,
+                        x1, y2, z
+                    };
+                    vertexData.insert(
+                            vertexData.end(),
+                            newVertexData.begin(),
+                            newVertexData.end());
+
+                    // Determine texture co-ordinates
+                    float tx1 = charData->txCoords[0];
+                    float ty1 = charData->txCoords[1];
+                    float tx2 = charData->txCoords[2];
+                    float ty2 = charData->txCoords[3];
+                    std::vector<GLfloat> newTexCoords = {
+                        tx1, ty1,
+                        tx2, ty1,
+                        tx2, ty2,
+                        tx1, ty2
+                    };
+                    texCoords.insert(
+                            texCoords.end(),
+                            newTexCoords.begin(),
+                            newTexCoords.end());
+
+                    // Determine colors
+                    float r;
+                    float g;
+                    float b;
+                    if (layer == TextRenderable::shadowLayerIndex) {
+                        r = 0.0f;
+                        g = 0.0f;
+                        b = 0.0f;
+                    } else {
+                        r = span.color.r;
+                        g = span.color.g;
+                        b = span.color.b;
+                    }
+                    std::vector<GLfloat> newColors = {
+                        /* clang-format off */
+                        r, g, b,
+                        r, g, b,
+                        r, g, b,
+                        r, g, b,
+                        /* clang-format on */
+                    };
+                    colors.insert(
+                            colors.end(),
+                            newColors.begin(),
+                            newColors.end());
+
+                    // Determine indices
+                    unsigned int startIndex =
+                            charsAdded * TextRenderable::numVerticesPerChar;
+                    indexData.push_back(startIndex);
+                    indexData.push_back(startIndex + 1);
+                    indexData.push_back(startIndex + 2);
+                    indexData.push_back(startIndex + 2);
+                    indexData.push_back(startIndex + 3);
+                    indexData.push_back(startIndex + 0);
+
                     x += charData->advance * scale;
-                    continue;
+                    ++charsAdded;
                 }
-
-                // Define vertex positions
-                float width = static_cast<float>(charData->size.x) * scale;
-                float height = static_cast<float>(charData->size.y) * scale;
-                float x1 = static_cast<float>(x + charData->bearing.x * scale);
-                float y1 = static_cast<float>(y - charData->bearing.y * scale);
-                float x2 = x1 + width;
-                float y2 = y1 + height;
-                float z = 0;
-                std::vector<GLfloat> newVertexData = {
-                    x1, y1, z,
-                    x2, y1, z,
-                    x2, y2, z,
-                    x1, y2, z
-                };
-                vertexData.insert(
-                        vertexData.end(),
-                        newVertexData.begin(),
-                        newVertexData.end());
-
-                // Determine texture co-ordinates
-                float tx1 = charData->txCoords[0];
-                float ty1 = charData->txCoords[1];
-                float tx2 = charData->txCoords[2];
-                float ty2 = charData->txCoords[3];
-                std::vector<GLfloat> newTexCoords = {
-                    tx1, ty1,
-                    tx2, ty1,
-                    tx2, ty2,
-                    tx1, ty2
-                };
-                texCoords.insert(
-                        texCoords.end(),
-                        newTexCoords.begin(),
-                        newTexCoords.end());
-
-                // Determine colors
-                float r = span.color.r;
-                float g = span.color.g;
-                float b = span.color.b;
-                std::vector<GLfloat> newColors = {
-                    /* clang-format off */
-                    r, g, b,
-                    r, g, b,
-                    r, g, b,
-                    r, g, b,
-                    /* clang-format on */
-                };
-                colors.insert(
-                        colors.end(),
-                        newColors.begin(),
-                        newColors.end());
-
-                // Determine indices
-                unsigned int startIndex =
-                        charsAdded * TextRenderable::numVerticesPerChar;
-                indexData.push_back(startIndex);
-                indexData.push_back(startIndex + 1);
-                indexData.push_back(startIndex + 2);
-                indexData.push_back(startIndex + 2);
-                indexData.push_back(startIndex + 3);
-                indexData.push_back(startIndex + 0);
-
-                x += charData->advance * scale;
-                ++charsAdded;
             }
         }
 

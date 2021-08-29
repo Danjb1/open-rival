@@ -8,6 +8,9 @@ namespace Rival {
     const Color TextRenderable::defaultColor = Color::makeRgb(255, 221, 65);
     const Color TextRenderable::highlightColor = Color::makeRgb(255, 43, 40);
 
+    const float TextRenderable::shadowOffsetX = 0.0f;
+    const float TextRenderable::shadowOffsetY = 1.0f;
+
     TextRenderable::TextRenderable(
             std::vector<TextSpan> spans,
             const TextProperties props,
@@ -32,6 +35,8 @@ namespace Rival {
         glGenBuffers(1, &colorVbo);
         glGenBuffers(1, &ibo);
 
+        int numLayers = getNumLayers();
+
         // Initialize position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer(
@@ -42,6 +47,7 @@ namespace Rival {
                 numVertexDimensions * sizeof(GLfloat),
                 nullptr);
         int positionBufferSize = numVisibleChars
+                * numLayers
                 * numVertexDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -54,6 +60,7 @@ namespace Rival {
         // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         int texCoordBufferSize = numVisibleChars
+                * numLayers
                 * numTexCoordDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -73,6 +80,7 @@ namespace Rival {
         // Initialize color buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
         int colorBufferSize = numVisibleChars
+                * numLayers
                 * numColorDimensions
                 * numIndicesPerChar
                 * sizeof(GLfloat);
@@ -91,9 +99,13 @@ namespace Rival {
 
         // Initialize index buffer with empty data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        int numIndices = numVisibleChars
+                * numLayers
+                * numIndicesPerChar
+                * sizeof(GLuint);
         glBufferData(
                 GL_ELEMENT_ARRAY_BUFFER,
-                numVisibleChars * numIndicesPerChar * sizeof(GLuint),
+                numIndices,
                 NULL,
                 GL_STATIC_DRAW);
 
@@ -120,6 +132,10 @@ namespace Rival {
 
     GLuint TextRenderable::getTextureId() const {
         return props.font.getTexture().getId();
+    }
+
+    int TextRenderable::getNumLayers() const {
+        return props.hasShadow ? numLayersWithShadow : numLayersWithoutShadow;
     }
 
 }  // namespace Rival

@@ -18,6 +18,11 @@ namespace Rival {
 
     /**
      * Format identifier for Windows font files.
+     *
+     * The FreeType documentation surrounding these formats is poor, but there
+     * is some more information in the Windows SDK (page 425).
+     *
+     * @see http://www.os2museum.com/files/docs/win10sdk/windows-1.03-sdk-prgref-1986.pdf
      */
     const std::string winFontFormat = "Windows FNT";
 
@@ -26,13 +31,8 @@ namespace Rival {
     // Note that the space character is a special case; we take the width from
     // the font, but it is skipped during rendering.
     const std::string Font::supportedChars =
-            " !\"#$%&'()*+,-./"
-            "1234567890"
-            ":;<=>?@"
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "[\\]^_`"
-            "abcdefghijklmnopqrstuvwxyz"
-            "{|}~";
+            " !\"#$%&'()*+,-./1234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     Font::Font(Texture texture, std::map<char, CharData> chars, int defaultSize)
         : texture(texture),
@@ -48,6 +48,16 @@ namespace Rival {
         }
     }
 
+    FontFace::FontFace(FT_Library& ft, std::string filename) {
+        if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
+            throw std::runtime_error("Failed to load font: " + filename);
+        }
+    }
+
+    FontFace::~FontFace() {
+        FT_Done_Face(face);
+    }
+
     /**
      * Loads a TrueType font and produces a Font object backed by a texture.
      *
@@ -59,19 +69,9 @@ namespace Rival {
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
-    Font Font::loadFont(std::string fontName, int defaultSize) {
-        // Initialize FreeType
-        FT_Library ft;
-        if (FT_Init_FreeType(&ft)) {
-            throw std::runtime_error("Failed to initialize FreeType library");
-        }
-
-        // Load font
-        FT_Face face;
-        std::string filename = Resources::fontDir + fontName;
-        if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
-            throw std::runtime_error("Failed to load font: " + fontName);
-        }
+    Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize) {
+        FontFace faceWrapper(ft, filename);
+        FT_Face& face = faceWrapper.face;
 
         // Check font format
         FT_Byte charOffset = 0;
@@ -80,7 +80,7 @@ namespace Rival {
             FT_WinFNT_HeaderRec winFontHeader;
             if (FT_Get_WinFNT_Header(face, &winFontHeader)) {
                 throw std::runtime_error("Failed to read Windows font header: "
-                        + fontName);
+                        + filename);
             }
 
             // Check the charset. MS Serif uses `CP1252`, which fortunately maps
@@ -88,7 +88,7 @@ namespace Rival {
             // mapping to find the correct characters.
             if (winFontHeader.charset != FT_WinFNT_ID_CP1252) {
                 throw std::runtime_error("Unsupported charset in font: "
-                        + fontName);
+                        + filename);
             }
 
             // The documentation of this field is poor, but it seems as though
@@ -101,7 +101,6 @@ namespace Rival {
         // based on the height.
         FT_Set_Pixel_Sizes(face, 0, fontHeight);
 
-        std::map<char, CharData> chars;
         GLsizei imgWidth = 0;
         GLsizei imgHeight = 0;
 
@@ -114,10 +113,8 @@ namespace Rival {
                 continue;
             }
 
-            // Map our desired character to its index in the font.
-            // Note that this is repeated in the next loop and the statements
-            // must match!
-            unsigned char charCode = c - charOffset;
+            // Map our desired character to its index in the font
+            unsigned char charCode = getCharCode(c, charOffset);
 
             // Load this character into the `face->glyph` slot
             if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
@@ -128,11 +125,9 @@ namespace Rival {
                 // Glyph is not present in font; character will be displayed as
                 // an empty space.
                 std::cout << "Font "
-                          << fontName
+                          << filename
                           << " does not support character "
-                          // We convert to an int because some characters are
-                          // not printable
-                          << static_cast<int>(c)
+                          << makePrintable(c)
                           << "\n";
             }
 
@@ -143,16 +138,13 @@ namespace Rival {
             imgHeight = std::max(imgHeight, charHeight);
         }
 
-        // Create an image to hold all of our characters
         Image fontBitmap(imgWidth, imgHeight, 0);
-
+        std::map<char, CharData> chars;
         int nextX = Font::charPadding;
 
         // Create our characters
         for (size_t i = 0; i < Font::supportedChars.length(); ++i) {
             unsigned char c = Font::supportedChars[i];
-
-            // This must match the equivalent statement above!
             unsigned char charCode = c - charOffset;
 
             // It's unfortunate that we are loading every character twice, but
@@ -184,18 +176,25 @@ namespace Rival {
         GLUtils::PixelStore byteAlignment(GLUtils::PackAlignment::BYTES_1);
 
         // Generate texture to hold this font
-        TextureProperties props;
-        // We want to use interpolation here so that we can upscale or downscale
-        // the font without it looking terrible
-        props.minFilter = GL_LINEAR;
-        props.magFilter = GL_LINEAR;
+        TextureProperties props = createTextureProperties(face);
         Texture tex = Texture::wrap(std::move(fontBitmap), props);
 
-        // Free resources
-        FT_Done_Face(face);
-        FT_Done_FreeType(ft);
-
         return Font(tex, chars, defaultSize);
+    }
+
+    /**
+     * Gets the index of `c` within a font whose characters are offset by
+     * `charOffset`.
+     */
+    unsigned char Font::getCharCode(unsigned char c, FT_Byte charOffset) {
+        return c - charOffset;
+    }
+
+    /**
+     * Converts `c` to an int because some characters are not printable.
+     */
+    int Font::makePrintable(unsigned char c) {
+        return static_cast<int>(c);
     }
 
     /**
@@ -299,6 +298,22 @@ namespace Rival {
         int size = charWidth * charHeight;
         std::uint8_t* data = static_cast<std::uint8_t*>(bmp.buffer);
         return std::vector<std::uint8_t>(data, data + size);
+    }
+
+    TextureProperties Font::createTextureProperties(const FT_Face& face) {
+        TextureProperties props;
+        if (face->glyph->bitmap.pixel_mode == FT_Pixel_Mode::FT_PIXEL_MODE_MONO) {
+            // For 1-bit fonts, use nearest neighbor interpolation otherwise
+            // they become blurry
+            props.minFilter = GL_NEAREST;
+            props.magFilter = GL_NEAREST;
+        } else {
+            // For regular fonts, use linear interpolation so that we can
+            // upscale or downscale the font without it looking terrible
+            props.minFilter = GL_LINEAR;
+            props.magFilter = GL_LINEAR;
+        }
+        return props;
     }
 
 }  // namespace Rival

@@ -12,8 +12,6 @@
 #include "RenderUtils.h"
 #include "Spritesheet.h"
 
-#include "Shaders.h"  // TMP
-
 namespace Rival {
 
     GameState::GameState(Application& app, std::unique_ptr<Scenario> scenarioToMove)
@@ -33,22 +31,18 @@ namespace Rival {
           textRenderer(window) {
 
         // TMP
-        regularFont = std::make_unique<Font>(
-                Font::loadFont("Procopius Regular.ttf", 16));
         std::vector<TextSpan> spans1 = {
             { "Hello ", TextRenderable::defaultColor },
             { "world", TextRenderable::highlightColor }
         };
-        TextProperties props1 = { *regularFont };
+        TextProperties props1 = { res.getFontRegular() };
         text1 = std::make_unique<TextRenderable>(spans1, props1, 300.0f, 525.0f);
 
         // TMP
-        smallFont = std::make_unique<Font>(
-                Font::loadFont("serife.fon", 32));
         std::vector<TextSpan> spans2 = {
             { "Warlord", TextRenderable::defaultColor }
         };
-        TextProperties props2 = { *smallFont };
+        TextProperties props2 = { res.getFontSmall() };
         text2 = std::make_unique<TextRenderable>(spans2, props2, 300.0f, 500.0f);
     }
 
