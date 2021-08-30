@@ -2,7 +2,7 @@
 #include "catch2/catch.h"
 
 #include "Application.h"
-#include "SDL.h"
+#include "MockSDL.h"
 #include "State.h"
 #include "TimerUtils.h"
 

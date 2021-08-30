@@ -43,7 +43,7 @@ namespace Rival {
                 0,  // always zero!
                 GL_RED,
                 GL_UNSIGNED_BYTE,
-                img.getData()->data());
+                img.getData().data());
 
         // Set texture properties
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, props.magFilter);
@@ -57,8 +57,7 @@ namespace Rival {
         // Check for error
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            printf("Error loading texture from %p pixels! %s\n",
-                    img.getData(), gluErrorString(error));
+            printf("Error loading texture: %s\n", gluErrorString(error));
             throw std::runtime_error("Failed to load texture");
         }
 

@@ -127,7 +127,8 @@ namespace Rival {
 
             // Load this character into the `face->glyph` slot
             if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
-                throw std::runtime_error("Failed to load character: " + c);
+                throw std::runtime_error(
+                        "Failed to load character: " + makePrintable(c));
             }
 
             if (!face->glyph->bitmap.buffer) {
@@ -147,7 +148,7 @@ namespace Rival {
             imgHeight = std::max(imgHeight, charHeight);
         }
 
-        Image fontBitmap(imgWidth, imgHeight, 0);
+        Image fontBitmap = Image::createEmpty(imgWidth, imgHeight, 0);
         std::map<char, CharData> chars;
         int nextX = Font::charPadding;
 
@@ -161,7 +162,8 @@ namespace Rival {
             // The alternative would be to guess the image size and then crop
             // it afterwards, or copy each char to memory after the first load.
             if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
-                throw std::runtime_error("Failed to load character: " + c);
+                throw std::runtime_error(
+                        "Failed to load character: " + makePrintable(c));
             }
 
             // Store this character in the font
@@ -243,9 +245,8 @@ namespace Rival {
     void Font::copyCharImage(FT_GlyphSlot& glyph, Image& target, int x) {
         int charWidth = glyph->bitmap.width;
         int charHeight = glyph->bitmap.rows;
-        std::vector<std::uint8_t> data = bitmapToVector(glyph->bitmap);
-        Image src(charWidth, charHeight,
-                std::make_unique<std::vector<std::uint8_t>>(data));
+        Image src = Image::createByMove(charWidth, charHeight,
+                bitmapToVector(glyph->bitmap));
         Image::copyImage(src, target, x, 0);
     }
 

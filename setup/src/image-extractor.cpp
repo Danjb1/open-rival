@@ -222,9 +222,9 @@ namespace Setup {
                     + "\\img_"
                     + zeroPad(i, 4)
                     + ".tga";
-            Image image(w, h,
-                    std::make_unique<std::vector<std::uint8_t>>(data),
-                    maxWidth);
+            ImageProperties props;
+            props.stride = maxWidth;
+            Image image = Image::createByMove(w, h, std::move(data), props);
             writeImage(image, Palette::paletteGame, filename);
 
             // Jump to the next image
