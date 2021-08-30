@@ -194,11 +194,10 @@ namespace Setup {
         }
 
         // Generate the image filename
-        char filename[256];
-        snprintf(filename,
-                sizeof(filename),
-                "%s\\img_ui_%04d.tga",
-                outputDir.c_str(), index);
+        std::string filename = outputDir
+                + "\\img_ui_"
+                + zeroPad(index, 4)
+                + ".tga";
 
         // Save the rendered image to disk
         Image image(static_cast<int>(w), static_cast<int>(h),

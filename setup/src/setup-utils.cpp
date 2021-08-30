@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "setup-utils.h"
 
-#include <fstream>
-#include <stdio.h>
-#include <vector>
-#include <windows.h>
+#include <cstdint>    // uint8_t
+#include <fstream>    // ofstream
+#include <iomanip>    // setw, setfill
+#include <sstream>    // ostringstream
+#include <vector>     // vector
+#include <windows.h>  // CreateDirectoryA, etc.
 
 #include "Palette.h"
 
@@ -106,6 +108,12 @@ namespace Setup {
                 out.put((*data)[x + y * stride]);
             }
         }
+    }
+
+    std::string zeroPad(int value, int numDigits) {
+        std::ostringstream oss;
+        oss << std::setw(numDigits) << std::setfill('0') << value;
+        return oss.str();
     }
 
 }}  // namespace Rival::Setup
