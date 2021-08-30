@@ -4,11 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Improve setup project
-    - Filenames can get truncated due to limited size of char array
-        - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
-        - Don't use snprintf!
-
  - Improve Images
     - Image ctor is cumbersome: std::make_unique<std::vector<std::uint8_t>>(data)
     - Rather than supporting Images with a custom stride, we should just realign the data in image-extractor once we know the image size
