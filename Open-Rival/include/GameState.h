@@ -65,10 +65,9 @@ namespace Rival {
         GameRenderer gameRenderer;
 
         // TMP
-        std::unique_ptr<Font> smallFont;
-        std::unique_ptr<Font> regularFont;
         std::unique_ptr<TextRenderable> text1;
         std::unique_ptr<TextRenderable> text2;
+        std::vector<TextRenderable*> texts;
         MenuTextRenderer textRenderer;
 
         void earlyUpdateEntities() const;

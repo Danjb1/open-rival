@@ -26,7 +26,7 @@ namespace Rival {
         /**
          * Font to use when rendering the text.
          */
-        const Font& font;
+        const Font* font = nullptr;
 
         /**
          * Scale at which to render the text.
@@ -73,10 +73,28 @@ namespace Rival {
         mutable bool dirty = true;
 
         /**
-         * Constructs a TextRenderable.
+         * Constructs a TextRenderable to hold a single TextSpan.
+         */
+        TextRenderable(
+                TextSpan span,
+                TextProperties props,
+                float x,
+                float y);
+
+        /**
+         * Constructs a TextRenderable to hold the given TextSpans.
          */
         TextRenderable(
                 std::vector<TextSpan> spans,
+                TextProperties props,
+                float x,
+                float y);
+
+        /**
+         * Constructs a TextRenderable to hold strings up to a given length.
+         */
+        TextRenderable(
+                int maxChars,
                 TextProperties props,
                 float x,
                 float y);
@@ -95,7 +113,7 @@ namespace Rival {
 
         GLuint getTextureId() const;
 
-        const Font* getFont() const { return &props.font; }
+        const Font* getFont() const { return props.font; }
         std::vector<TextSpan> getTextSpans() const { return spans; }
         int getNumVisibleChars() const { return numVisibleChars; }
         float getX() const { return x; }
@@ -103,6 +121,9 @@ namespace Rival {
         float getScale() const { return props.scale; }
 
         int getNumLayers() const;
+
+        void setTextSpan(TextSpan newSpan);
+        void setTextSpans(std::vector<TextSpan> newSpans);
 
     private:
         GLuint vao;
@@ -119,7 +140,8 @@ namespace Rival {
         int numChars;
         int numVisibleChars;
 
-        void refresh();
+        void countChars();
+        void init();
     };
 
 }  // namespace Rival

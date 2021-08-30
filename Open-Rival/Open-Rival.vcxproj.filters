@@ -244,6 +244,9 @@
     <ClCompile Include="src\Color.cpp">
       <Filter>Source Files\gfx</Filter>
     </ClCompile>
+    <ClCompile Include="src\PathUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -464,6 +467,9 @@
     </ClInclude>
     <ClInclude Include="include\Color.h">
       <Filter>Source Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PathUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

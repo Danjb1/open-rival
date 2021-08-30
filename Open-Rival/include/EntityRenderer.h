@@ -13,9 +13,6 @@ namespace Rival {
 
     /**
      * Class responsible for rendering Entities.
-     *
-     * Entities must register themselves with the Renderer when spawned, and
-     * unregister themselves when they are removed.
      */
     class EntityRenderer {
 

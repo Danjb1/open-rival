@@ -10,6 +10,7 @@
 
 #include "Building.h"
 #include "Font.h"
+#include "json.h"
 #include "MidiFile.h"
 #include "PaletteUtils.h"
 #include "Spritesheet.h"
@@ -18,18 +19,19 @@
 #include "Unit.h"
 #include "WaveFile.h"
 
+using json = nlohmann::json;
+
 namespace Rival {
 
     class Resources {
 
     public:
         // Directories
-        static const std::string fontDir;
         static const std::string mapsDir;
         static const std::string soundDir;
         static const std::string txDir;
 
-        Resources();
+        Resources(json& cfg);
         ~Resources();
 
         // Prevent moving or copying (rule of 5)
@@ -53,6 +55,11 @@ namespace Rival {
         const MidiFile& getMidi(int id) const;
 
     private:
+        // Font settings
+        static const std::vector<std::string> defaultFontDirs;
+        static const std::string defaultFontSmall;
+        static const std::string defaultFontRegular;
+
         // Resource counts
         static const int numTextures = 58;
         static const int numTextureAtlases = 1;
@@ -68,6 +75,8 @@ namespace Rival {
 
         // MIDI constants
         static const int midiStartIndex = 369;
+
+        json& cfg;
 
         // Fonts
         FT_Library freeTypeLib;
