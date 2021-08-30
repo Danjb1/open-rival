@@ -4,10 +4,10 @@
 #include <memory>
 
 #include "Camera.h"
+#include "MockSDL.h"
 #include "MousePicker.h"
 #include "RenderUtils.h"
 #include "Scenario.h"
-#include "SDL.h"
 
 using namespace Rival;
 

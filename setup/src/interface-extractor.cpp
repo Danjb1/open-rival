@@ -200,8 +200,10 @@ namespace Setup {
                 + ".tga";
 
         // Save the rendered image to disk
-        Image image(static_cast<int>(w), static_cast<int>(h),
-                std::make_unique<std::vector<std::uint8_t>>(pixels));
+        Image image = Image::createByMove(
+                static_cast<int>(w),
+                static_cast<int>(h),
+                std::move(pixels));
         writeImage(image, palette, filename);
 
         // Skip some unknown bytes

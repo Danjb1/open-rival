@@ -12,8 +12,11 @@ namespace Rival {
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::txDir = "res\\textures\\";
 
-    Resources::Resources()
-        : textures(loadTextures()),
+    Resources::Resources(json& cfg)
+        : cfg(cfg),
+          fontSmall(initFontSmall()),
+          fontRegular(initFontRegular()),
+          textures(loadTextures()),
           paletteTexture(initPaletteTexture()),
           unitSpritesheets(initUnitSpritesheets()),
           buildingSpritesheets(initBuildingSpritesheets()),
@@ -21,6 +24,16 @@ namespace Rival {
           mapBorderSpritesheet(initMapBorderSpritesheet()) {}
 
     Resources::~Resources() {}
+
+    Font Resources::initFontSmall() {
+        Texture tex(0, 0, 0);
+        return Font(tex, {}, 0);
+    }
+
+    Font Resources::initFontRegular() {
+        Texture tex(0, 0, 0);
+        return Font(tex, {}, 0);
+    }
 
     std::vector<Texture> Resources::loadTextures() {
         return std::vector<Texture>();

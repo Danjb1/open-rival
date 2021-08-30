@@ -4,11 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Improve Images
-    - Image ctor is cumbersome: std::make_unique<std::vector<std::uint8_t>>(data)
-    - Rather than supporting Images with a custom stride, we should just realign the data in image-extractor once we know the image size
-    - Image needn't always use a unique_ptr to hold data; sometimes we just need a temporary Image which can live on the stack (e.g. fonts)
-        - We could create an Image interface and 2 subclasses: StackImage / HeapImage
+ - N/A
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -227,6 +223,9 @@
 ## Unit Tests
 <!----------------------------------------------------------------------------->
 
+ - Write a tool to automatically generate `Open-Rival-test.proj`
+    - Copy all includes from Open-Rival
+    - Copy all source files from Open-Rival (except those we have stubbed)
  - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
 
 <!----------------------------------------------------------------------------->
@@ -286,6 +285,7 @@
  - Central unit type registry: animations, UI image, etc.
  - Static objects (e.g. mountains) need not use an AnimationComponent
  - Differentiate between components that need to be ticked and those that don't
+ - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed
 
 ### Refactoring
 
@@ -308,3 +308,4 @@
     - Separate fields using a new public/private heading
  - Pass small interfaces around instead of complex objects
     - e.g. Resources should extend TextureStore, AudioStore, etc.
+ - Prefer forward-declarations to includes, to reduce compile times

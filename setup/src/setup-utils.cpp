@@ -101,11 +101,11 @@ namespace Setup {
         }
 
         // Pixel data
-        std::vector<std::uint8_t>* data = image.getData();
+        const std::vector<std::uint8_t>& data = image.getData();
         int stride = image.getStride();
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                out.put((*data)[x + y * stride]);
+                out.put(data[x + y * stride]);
             }
         }
     }
