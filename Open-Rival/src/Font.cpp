@@ -50,7 +50,7 @@ namespace Rival {
 
     FontFace::FontFace(FT_Library& ft, std::string filename) {
         if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
-            throw std::runtime_error("Failed to load font: " + filename);
+            throw FontLoadError("Failed to load font");
         }
     }
 
@@ -58,17 +58,26 @@ namespace Rival {
         FT_Done_Face(face);
     }
 
-    /**
-     * Loads a TrueType font and produces a Font object backed by a texture.
-     *
-     * This texture contains every supported character in a single row, with
-     * padding between them.
-     *
-     * If the font does not contain a glyph for one of our supported characters,
-     * then that character will be displayed as an empty space.
-     *
-     * @see https://learnopengl.com/In-Practice/Text-Rendering
-     */
+    FontLoadError::FontLoadError(const char* message)
+        : std::runtime_error(message) {}
+
+    Font Font::loadFont(
+            FT_Library& ft,
+            std::vector<std::string> fontDirs,
+            std::string filename,
+            int defaultSize) {
+        for (std::string fontDir : fontDirs) {
+            try {
+                return loadFont(ft, fontDir + filename, defaultSize);
+            } catch (const FontLoadError&) {
+                // Try the next directory
+                continue;
+            }
+        }
+
+        throw std::runtime_error("Failed to load font: " + filename);
+    }
+
     Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize) {
         FontFace faceWrapper(ft, filename);
         FT_Face& face = faceWrapper.face;

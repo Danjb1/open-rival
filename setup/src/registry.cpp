@@ -4,8 +4,8 @@
 namespace Registry {
 
     RegistryError::RegistryError(const char* message, LONG errorCode)
-        : std::runtime_error { message },
-          m_errorCode { errorCode } {}
+        : std::runtime_error(message),
+          m_errorCode(errorCode) {}
 
     LONG RegistryError::errorCode() const noexcept {
         return m_errorCode;

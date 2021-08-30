@@ -35,6 +35,14 @@ namespace Rival {
     };
 
     /**
+     * Exception thrown when a Font cannot be loaded.
+     */
+    class FontLoadError : public std::runtime_error {
+    public:
+        FontLoadError(const char* message);
+    };
+
+    /**
      * Font that can be used to render characters.
      */
     class Font {
@@ -81,10 +89,21 @@ namespace Rival {
         const int getDefaultSize() const { return defaultSize; }
 
         /**
-         * Loads the font with the given name.
+         * Loads a font and produces a Font object backed by a texture.
+         *
+         * This texture contains every supported character in a single row, with
+         * padding between them.
+         *
+         * If the font does not contain a glyph for one of our supported
+         * characters, then that character will be displayed as an empty space.
+         *
+         * @see https://learnopengl.com/In-Practice/Text-Rendering
          */
         static Font loadFont(
-                FT_Library& ft, std::string filename, int defaultSize);
+                FT_Library& ft,
+                std::vector<std::string> fontDirs,
+                std::string fontName,
+                int defaultSize);
 
     private:
         /**
@@ -101,6 +120,11 @@ namespace Rival {
          * The size at which the font is rendered when scale = 1.
          */
         int defaultSize;
+
+        static Font loadFont(
+                FT_Library& ft,
+                std::string filename,
+                int defaultSize);
 
         static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
         static inline int makePrintable(unsigned char c);

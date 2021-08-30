@@ -1,19 +1,26 @@
 #include "pch.h"
 #include "Resources.h"
 
+#include "ConfigUtils.h"
 #include "FileUtils.h"
 #include "MidsDecoder.h"
+#include "PathUtils.h"
 #include "RenderUtils.h"
 
 namespace Rival {
 
-    const std::string Resources::fontDir = "res\\fonts\\";
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::soundDir = "res\\sound\\";
     const std::string Resources::txDir = "res\\textures\\";
 
-    Resources::Resources()
-        : freeTypeLib(initFreeType()),
+    const std::vector<std::string> Resources::defaultFontDirs =
+            PathUtils::getDefaultFontDirs();
+    const std::string Resources::defaultFontSmall = "serife.fon";
+    const std::string Resources::defaultFontRegular = "Procopius Regular.ttf";
+
+    Resources::Resources(json& cfg)
+        : cfg(cfg),
+          freeTypeLib(initFreeType()),
           fontSmall(initFontSmall()),
           fontRegular(initFontRegular()),
           textures(loadTextures()),
@@ -63,16 +70,24 @@ namespace Rival {
     }
 
     Font Resources::initFontSmall() {
-        return Font::loadFont(freeTypeLib, fontDir + "serife.fon", 32);
+        std::vector<std::string> fontDirs =
+                ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
+        std::string fontName =
+                ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
+        int fontSize = ConfigUtils::get(cfg, "fontSmallSize", 32);
+        return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
 
     Font Resources::initFontRegular() {
-        return Font::loadFont(
-                freeTypeLib, fontDir + "Procopius Regular.ttf", 16);
+        std::vector<std::string> fontDirs =
+                ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
+        std::string fontName =
+                ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
+        int fontSize = ConfigUtils::get(cfg, "fontRegularSize", 16);
+        return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
 
     std::vector<Texture> Resources::loadTextures() {
-
         std::vector<Texture> texList;
         texList.reserve(numTextures);
 
@@ -163,7 +178,6 @@ namespace Rival {
     }
 
     std::vector<TextureAtlas> Resources::loadTextureAtlases() {
-
         std::vector<TextureAtlas> texAtlasList;
         texAtlasList.reserve(numTextureAtlases);
 
@@ -184,7 +198,6 @@ namespace Rival {
     }
 
     std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets() {
-
         std::map<Building::Type, Spritesheet> spritesheets;
         int nextIndex = txIndexBuildings;
 

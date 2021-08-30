@@ -12,6 +12,21 @@ namespace Rival {
     const float TextRenderable::shadowOffsetY = 1.0f;
 
     TextRenderable::TextRenderable(
+            TextSpan span,
+            TextProperties props,
+            float x,
+            float y)
+        : spans({ span }),
+          props(props),
+          x(x),
+          y(y),
+          numChars(0),
+          numVisibleChars(0) {
+        countChars();
+        init();
+    }
+
+    TextRenderable::TextRenderable(
             std::vector<TextSpan> spans,
             const TextProperties props,
             float x,
@@ -22,9 +37,24 @@ namespace Rival {
           y(y),
           numChars(0),
           numVisibleChars(0) {
+        countChars();
+        init();
+    }
 
-        refresh();
+    TextRenderable::TextRenderable(
+            int maxChars,
+            TextProperties props,
+            float x,
+            float y)
+        : props(props),
+          x(x),
+          y(y),
+          numChars(maxChars),
+          numVisibleChars(maxChars) {
+        init();
+    }
 
+    void TextRenderable::init() {
         // Generate VAO
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -115,7 +145,7 @@ namespace Rival {
         glEnableVertexAttribArray(Shaders::colorAttribIndex);
     }
 
-    void TextRenderable::refresh() {
+    void TextRenderable::countChars() {
         numChars = 0;
         numVisibleChars = 0;
 
@@ -131,11 +161,19 @@ namespace Rival {
     }
 
     GLuint TextRenderable::getTextureId() const {
-        return props.font.getTexture().getId();
+        return props.font->getTexture().getId();
     }
 
     int TextRenderable::getNumLayers() const {
         return props.hasShadow ? numLayersWithShadow : numLayersWithoutShadow;
+    }
+
+    void TextRenderable::setTextSpan(TextSpan newSpan) {
+        setTextSpans({ newSpan });
+    }
+
+    void TextRenderable::setTextSpans(std::vector<TextSpan> newSpans) {
+        spans = newSpans;
     }
 
 }  // namespace Rival

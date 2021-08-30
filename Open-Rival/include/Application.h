@@ -18,7 +18,7 @@ namespace Rival {
     public:
         bool vsyncEnabled;
 
-        Application(Window& window, json cfg);
+        Application(Window& window, json& cfg);
 
         /**
          * Runs the Application until the user exits.

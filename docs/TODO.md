@@ -4,15 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Font rendering
-    - [TextRenderable] Support changing text (may need to expand buffers!)
-    - Load the font directory / font names / default sizes from a config file
-    - Add a convenience constructor for a single-span TextRenderable
-    - MenuTextRenderer class should allow TextRenderables to be registered
-        / unregistered, and should render them all in a loop (like EntityRenderer)
-
  - Improve setup project
-    - Interface extractor: some bytes are still unknown
     - Filenames can get truncated due to limited size of char array
         - extractImages() method in setup/src/image-extractor.cpp assumes at most 63 character filename (including path)
         - Don't use snprintf!
@@ -37,7 +29,6 @@
 ### General
 
  - Custom cursors
-    - Images for animated cursor (in-game) are missing
  - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls
@@ -46,8 +37,10 @@
 
 ### Data Loading
 
+ - Some bytes of `Interfac.dat` are still unknown
+    - These are probably not too important but some may relate to cursor offsets
+    - Currently some cursor images are strangely offset and will need fixing
  - Pack interface images into textures
- - Add interface extraction to setup application
  - Finish parsing Goals
  - Finish parsing Chests (contents)
  - Include missing alphabet entries (e.g. '!{})

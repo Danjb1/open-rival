@@ -35,15 +35,19 @@ namespace Rival {
             { "Hello ", TextRenderable::defaultColor },
             { "world", TextRenderable::highlightColor }
         };
-        TextProperties props1 = { res.getFontRegular() };
+        TextProperties props1 = { &res.getFontRegular() };
         text1 = std::make_unique<TextRenderable>(spans1, props1, 300.0f, 525.0f);
 
         // TMP
         std::vector<TextSpan> spans2 = {
             { "Warlord", TextRenderable::defaultColor }
         };
-        TextProperties props2 = { res.getFontSmall() };
+        TextProperties props2 = { &res.getFontSmall() };
         text2 = std::make_unique<TextRenderable>(spans2, props2, 300.0f, 500.0f);
+
+        // TMP
+        texts.push_back(text1.get());
+        texts.push_back(text2.get());
     }
 
     void GameState::onLoad() {
@@ -79,8 +83,7 @@ namespace Rival {
         gameRenderer.render();
 
         // TMP
-        textRenderer.render(*text1);
-        textRenderer.render(*text2);
+        textRenderer.render(texts);
     }
 
     void GameState::keyDown(const SDL_Keycode keyCode) {
