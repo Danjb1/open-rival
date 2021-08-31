@@ -11,10 +11,10 @@ namespace Rival {
 namespace Pathfinding {
 
     /**
-     * A node with an associated score for pathfinding.
+     * A MapNode with an associated score for pathfinding.
      */
     struct ReachableNode {
-        Node node;
+        MapNode node;
 
         /**
          * Our current best guess as to how short a path from start to finish
@@ -47,7 +47,7 @@ namespace Pathfinding {
     class Pathfinder {
     public:
         Pathfinder::Pathfinder(
-                Node start, Node goal, const PathfindingMap& map);
+                MapNode start, MapNode goal, const PathfindingMap& map);
 
         Route getRoute() const { return route; }
 
@@ -55,12 +55,12 @@ namespace Pathfinding {
         /**
          * The starting node.
          */
-        Node start;
+        MapNode start;
 
         /**
          * The destination node.
          */
-        Node goal;
+        MapNode goal;
 
         /**
          * The PathfindingMap used to find obstacles, etc.
@@ -75,35 +75,35 @@ namespace Pathfinding {
         /**
          * Map of node -> lowest cost to reach that node from the start.
          */
-        std::unordered_map<Node, int> costToNode;
+        std::unordered_map<MapNode, int> costToNode;
 
         /**
          * Map of node -> previous node in the shortest path found.
          */
-        std::unordered_map<Node, Node> prevNode;
+        std::unordered_map<MapNode, MapNode> prevNode;
 
         /**
          * After construction, contains the shortest route to the goal.
          */
         Route route;
 
-        std::deque<Node> findPath();
+        std::deque<MapNode> findPath();
         bool isFinished() const;
         ReachableNode popBestNode();
-        int estimateCostToGoal(const Node& node) const;
-        std::deque<Node> reconstructPath(const Node& node) const;
-        std::vector<Node> findNeighbors(const Node& node) const;
-        bool isNodeTraversable(const Node& node) const;
-        int getCostToNode(const Node& node) const;
-        void updatePathToNode(const Node& node, int newCost);
-        ReachableNode* findDiscoveredNode(const Node& node);
+        int estimateCostToGoal(const MapNode& node) const;
+        std::deque<MapNode> reconstructPath(const MapNode& node) const;
+        std::vector<MapNode> findNeighbors(const MapNode& node) const;
+        bool isNodeTraversable(const MapNode& node) const;
+        int getCostToNode(const MapNode& node) const;
+        void updatePathToNode(const MapNode& node, int newCost);
+        ReachableNode* findDiscoveredNode(const MapNode& node);
     };
 
     /**
      * Constructs a Pathfinder which attempts to find a path connecting start
      * to goal.
      */
-    Pathfinder::Pathfinder(Node start, Node goal, const PathfindingMap& map)
+    Pathfinder::Pathfinder(MapNode start, MapNode goal, const PathfindingMap& map)
         : start(start),
           goal(goal),
           map(map),
@@ -112,7 +112,7 @@ namespace Pathfinding {
     /**
      * Attempts to find a path based on the Pathfinder's configuration.
      */
-    std::deque<Node> Pathfinder::findPath() {
+    std::deque<MapNode> Pathfinder::findPath() {
         discoveredNodes.push_back({ start, 0 });
         costToNode[start] = 0;
 
@@ -124,9 +124,9 @@ namespace Pathfinding {
                 return reconstructPath(current.node);
             }
 
-            std::vector<Node> neighbors = findNeighbors(current.node);
+            std::vector<MapNode> neighbors = findNeighbors(current.node);
 
-            for (Node neighbor : neighbors) {
+            for (MapNode neighbor : neighbors) {
                 int newCostToNeighbor = getCostToNode(current.node) + 1;
                 if (newCostToNeighbor < getCostToNode(neighbor)) {
                     // This path to neighbor is better than any previous one
@@ -167,9 +167,9 @@ namespace Pathfinding {
     }
 
     /**
-     * Heuristic function used to estimate the cost from a Node to the goal.
+     * Heuristic function used to estimate the cost from a MapNode to the goal.
      */
-    int Pathfinder::estimateCostToGoal(const Node& node) const {
+    int Pathfinder::estimateCostToGoal(const MapNode& node) const {
         if (node == goal) {
             return 0;
         }
@@ -185,11 +185,11 @@ namespace Pathfinding {
     }
 
     /**
-     * Returns the path found from the start to the given Node.
+     * Returns the path found from the start to the given MapNode.
      */
-    std::deque<Node> Pathfinder::reconstructPath(const Node& node) const {
-        std::deque<Node> path = { node };
-        Node currentNode = node;
+    std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const {
+        std::deque<MapNode> path = { node };
+        MapNode currentNode = node;
 
         // Follow the previous nodes back to the start
         while (currentNode != start) {
@@ -208,104 +208,34 @@ namespace Pathfinding {
     }
 
     /**
-     * Returns a vector containing all valid neighbors of the given Node.
+     * Returns a vector containing all valid neighbors of the given MapNode.
      */
-    std::vector<Node> Pathfinder::findNeighbors(const Node& node) const {
-        std::vector<Node> allNeighbors;
-
-        // First determine which map locations are valid relative to this node.
-        // The neighborhood is very strange due to the zigzag nature of the map.
-        // A direct move east or west actually moves 2 tiles.
-        bool hasNorth = node.y > 0;
-        bool hasSouth = node.y < map.getHeight() - 1;
-        bool hasEast = node.x > 1;
-        bool hasWest = node.x < map.getWidth() - 2;
-
-        // Find all valid neighbors
-        if (hasNorth) {
-            allNeighbors.push_back({ node.x, node.y - 1 });
-        }
-        if (hasEast) {
-            allNeighbors.push_back({ node.x + 2, node.y });
-        }
-        if (hasSouth) {
-            allNeighbors.push_back({ node.x, node.y + 1 });
-        }
-        if (hasWest) {
-            allNeighbors.push_back({ node.x - 2, node.y });
-        }
-
-        // The diagonal neighbors depend on which part of the zigzag we are in
-        bool hasDiagonalEast = node.x < map.getWidth() - 1;
-        bool hasDiagonalWest = node.x > 0;
-        if (node.x % 2 == 0) {
-            // We are in the top part of the zigzag;
-            // => Moving diagonally north moves us into the row above.
-            // => Moving diagonally south keeps us in the same row.
-            bool hasNorthEast = hasDiagonalEast && hasNorth;
-            bool hasNorthWest = hasDiagonalWest && hasNorth;
-            bool hasSouthEast = hasDiagonalEast;
-            bool hasSouthWest = hasDiagonalWest;
-
-            if (hasNorthEast) {
-                allNeighbors.push_back({ node.x + 1, node.y - 1 });
-            }
-            if (hasNorthWest) {
-                allNeighbors.push_back({ node.x - 1, node.y - 1 });
-            }
-            if (hasSouthEast) {
-                allNeighbors.push_back({ node.x + 1, node.y });
-            }
-            if (hasSouthWest) {
-                allNeighbors.push_back({ node.x - 1, node.y });
-            }
-
-        } else {
-            // We are in the bottom part of the zigzag;
-            // => Moving diagonally north keeps us in the same row
-            // => Moving diagonally south moves us into the row below.
-            bool hasNorthEast = hasDiagonalEast;
-            bool hasNorthWest = hasDiagonalWest;
-            bool hasSouthEast = hasDiagonalEast && hasSouth;
-            bool hasSouthWest = hasDiagonalWest && hasSouth;
-
-            if (hasNorthEast) {
-                allNeighbors.push_back({ node.x + 1, node.y });
-            }
-            if (hasNorthWest) {
-                allNeighbors.push_back({ node.x - 1, node.y });
-            }
-            if (hasSouthEast) {
-                allNeighbors.push_back({ node.x + 1, node.y + 1 });
-            }
-            if (hasSouthWest) {
-                allNeighbors.push_back({ node.x - 1, node.y + 1 });
-            }
-        }
+    std::vector<MapNode> Pathfinder::findNeighbors(const MapNode& node) const {
+        std::vector<MapNode> allNeighbors = MapUtils::findNeighbors(node, map);
 
         // Filter out non-traversable neighbors
-        std::vector<Node> validNeighbors;
+        std::vector<MapNode> validNeighbors;
         std::copy_if(allNeighbors.begin(),
                 allNeighbors.end(),
                 std::back_inserter(validNeighbors),
-                [this](Node n) { return this->isNodeTraversable(n); });
+                [this](MapNode n) { return this->isNodeTraversable(n); });
 
         return validNeighbors;
     }
 
     /**
-     * Determines if a Node is a traversable tile.
+     * Determines if a MapNode is a traversable tile.
      */
-    bool Pathfinder::isNodeTraversable(const Node& node) const {
+    bool Pathfinder::isNodeTraversable(const MapNode& node) const {
         return map.getPassability(node.x, node.y) == TilePassability::Clear;
     }
 
     /**
-     * Gets the cost of moving from the start to the given Node.
+     * Gets the cost of moving from the start to the given MapNode.
      *
      * Returns the integer max if no path has been found yet.
      */
-    int Pathfinder::getCostToNode(const Node& node) const {
+    int Pathfinder::getCostToNode(const MapNode& node) const {
         auto it = costToNode.find(node);
         if (it == costToNode.end()) {
             // No path to node found yet
@@ -315,10 +245,10 @@ namespace Pathfinding {
     }
 
     /**
-     * Updates the path to a Node with a shorter one, or adds a new path to the
-     * Node if this is the first one found.
+     * Updates the path to a node with a shorter one, or adds a new path to
+     * the node if this is the first one found.
      */
-    void Pathfinder::updatePathToNode(const Node& node, int newCost) {
+    void Pathfinder::updatePathToNode(const MapNode& node, int newCost) {
         int newEstimate = newCost + estimateCostToGoal(node);
         ReachableNode* existingNode = findDiscoveredNode(node);
         if (existingNode) {
@@ -329,9 +259,9 @@ namespace Pathfinding {
     }
 
     /**
-     * Finds the ReachableNode associated with the given Node, if present.
+     * Finds the ReachableNode associated with the given MapNode, if present.
      */
-    ReachableNode* Pathfinder::findDiscoveredNode(const Node& node) {
+    ReachableNode* Pathfinder::findDiscoveredNode(const MapNode& node) {
         for (ReachableNode& discoveredNode : discoveredNodes) {
             if (discoveredNode.node == node) {
                 return &discoveredNode;
@@ -343,7 +273,7 @@ namespace Pathfinding {
     Route::Route()
         : destination({ 0, 0 }) {}
 
-    Route::Route(Node destination, std::deque<Node> path)
+    Route::Route(MapNode destination, std::deque<MapNode> path)
         : destination(destination),
           path(path) {}
 
@@ -351,15 +281,15 @@ namespace Pathfinding {
         return path.size() == 0;
     }
 
-    Node Route::pop() {
-        Node node = path.front();
+    MapNode Route::pop() {
+        MapNode node = path.front();
         path.pop_front();
         return node;
     }
 
     Route findPath(
-            Node start,
-            Node goal,
+            MapNode start,
+            MapNode goal,
             const PathfindingMap& map) {
         return Pathfinder(start, goal, map).getRoute();
     }

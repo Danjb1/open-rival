@@ -11,12 +11,19 @@
 namespace Rival {
 
     /**
-     * Interface exposing map data for pathfinding.
+     * Interface exposing the map size.
      */
-    class PathfindingMap {
+    class GameArea {
     public:
         virtual int getWidth() const = 0;
         virtual int getHeight() const = 0;
+    };
+
+    /**
+     * Interface exposing map data for pathfinding.
+     */
+    class PathfindingMap : public GameArea {
+    public:
         virtual TilePassability getPassability(int x, int y) const = 0;
     };
 
