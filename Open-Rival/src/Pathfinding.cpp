@@ -113,6 +113,7 @@ namespace Pathfinding {
      */
     std::vector<Node> Pathfinder::findPath() {
         discoveredNodes.push_back({ start, 0 });
+        costToNode[start] = 0;
 
         while (!isFinished()) {
             ReachableNode current = popBestNode();
@@ -212,37 +213,76 @@ namespace Pathfinding {
      * Returns a vector containing all valid neighbors of the given Node.
      */
     std::vector<Node> Pathfinder::findNeighbors(const Node& node) const {
-        // Determine which neighbors are valid map locations
-        bool hasTop = node.y > 0;
-        bool hasLeft = node.x > 0;
-        bool hasBottom = node.y < map.getHeight() - 1;
-        bool hasRight = node.x < map.getWidth() - 1;
-
-        // Collect all neighbors
         std::vector<Node> allNeighbors;
-        if (hasTop && hasLeft) {
-            allNeighbors.push_back({ node.x - 1, node.y - 1 });
-        }
-        if (hasTop) {
+
+        // First determine which map locations are valid relative to this node.
+        // The neighborhood is very strange due to the zigzag nature of the map.
+        // A direct move east or west actually moves 2 tiles.
+        bool hasNorth = node.y > 0;
+        bool hasSouth = node.y < map.getHeight() - 1;
+        bool hasEast = node.x > 1;
+        bool hasWest = node.x < map.getWidth() - 2;
+
+        // Find all valid neighbors
+        if (hasNorth) {
             allNeighbors.push_back({ node.x, node.y - 1 });
         }
-        if (hasTop && hasRight) {
-            allNeighbors.push_back({ node.x + 1, node.y - 1 });
+        if (hasEast) {
+            allNeighbors.push_back({ node.x + 2, node.y });
         }
-        if (hasLeft) {
-            allNeighbors.push_back({ node.x - 1, node.y });
-        }
-        if (hasRight) {
-            allNeighbors.push_back({ node.x + 1, node.y });
-        }
-        if (hasBottom && hasLeft) {
-            allNeighbors.push_back({ node.x - 1, node.y + 1 });
-        }
-        if (hasBottom) {
+        if (hasSouth) {
             allNeighbors.push_back({ node.x, node.y + 1 });
         }
-        if (hasBottom && hasRight) {
-            allNeighbors.push_back({ node.x + 1, node.y + 1 });
+        if (hasWest) {
+            allNeighbors.push_back({ node.x - 2, node.y });
+        }
+
+        // The diagonal neighbors depend on which part of the zigzag we are in
+        bool hasDiagonalEast = node.x < map.getWidth() - 1;
+        bool hasDiagonalWest = node.x > 0;
+        if (node.x % 2 == 0) {
+            // We are in the top part of the zigzag;
+            // => Moving diagonally north moves us into the row above.
+            // => Moving diagonally south keeps us in the same row.
+            bool hasNorthEast = hasDiagonalEast && hasNorth;
+            bool hasNorthWest = hasDiagonalWest && hasNorth;
+            bool hasSouthEast = hasDiagonalEast;
+            bool hasSouthWest = hasDiagonalWest;
+
+            if (hasNorthEast) {
+                allNeighbors.push_back({ node.x + 1, node.y - 1 });
+            }
+            if (hasNorthWest) {
+                allNeighbors.push_back({ node.x - 1, node.y - 1 });
+            }
+            if (hasSouthEast) {
+                allNeighbors.push_back({ node.x + 1, node.y });
+            }
+            if (hasSouthWest) {
+                allNeighbors.push_back({ node.x - 1, node.y });
+            }
+
+        } else {
+            // We are in the bottom part of the zigzag;
+            // => Moving diagonally north keeps us in the same row
+            // => Moving diagonally south moves us into the row below.
+            bool hasNorthEast = hasDiagonalEast;
+            bool hasNorthWest = hasDiagonalWest;
+            bool hasSouthEast = hasDiagonalEast && hasSouth;
+            bool hasSouthWest = hasDiagonalWest && hasSouth;
+
+            if (hasNorthEast) {
+                allNeighbors.push_back({ node.x + 1, node.y });
+            }
+            if (hasNorthWest) {
+                allNeighbors.push_back({ node.x - 1, node.y });
+            }
+            if (hasSouthEast) {
+                allNeighbors.push_back({ node.x + 1, node.y + 1 });
+            }
+            if (hasSouthWest) {
+                allNeighbors.push_back({ node.x - 1, node.y + 1 });
+            }
         }
 
         // Filter out non-traversable neighbors

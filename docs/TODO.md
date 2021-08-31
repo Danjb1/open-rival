@@ -4,10 +4,15 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - Pathfinding
-    - Unit is moving through walls!
+ - Unit movement
     - `isTileTraversable` logic needs to change for flying units
     - Use a queue for the route instead of a vector?
+    - Units should move gradually between tiles
+    - Units should animate while walking
+    - Units should face the direction of movement
+    - We may need extra logic for moving groups
+    - Clicking should plan a route for the selected unit(s)
+    - Neighborhood logic from Pathfinding may need to live somewhere common
 
 <!----------------------------------------------------------------------------->
 ## Bugs
