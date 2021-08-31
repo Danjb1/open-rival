@@ -11,7 +11,6 @@
     - Units should face the direction of movement
     - We may need extra logic for moving groups
     - Clicking should plan a route for the selected unit(s)
-    - Neighborhood logic from Pathfinding may need to live somewhere common
     - Should units "try" to move somewhere even if there is no path?
     - Should we limit the pathfinding logic to 'n' iterations?
 

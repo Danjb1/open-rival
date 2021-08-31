@@ -41,6 +41,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
+    <ClCompile Include="src\MapUtils.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\MenuTextRenderer.cpp" />
     <ClCompile Include="src\MidiContainer.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\json.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
+    <ClInclude Include="include\MapUtils.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\MenuTextRenderer.h" />
     <ClInclude Include="include\MidiContainer.h" />

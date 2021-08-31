@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "WalkerComponent.h"
 
+#include "MapUtils.h"
+
 namespace Rival {
 
     const std::string WalkerComponent::key = "walker";
@@ -38,7 +40,7 @@ namespace Rival {
     }
 
     void WalkerComponent::walkToNextNode() {
-        Pathfinding::Node node = route.pop();
+        MapNode node = route.pop();
         entity->setPos(node.x, node.y);
     }
 
