@@ -22,10 +22,10 @@ namespace Rival {
         virtual void update() override;
         // End EntityComponent override
 
-        void setRoute(std::vector<Pathfinding::Node> route);
+        void setRoute(Pathfinding::Route route);
 
     private:
-        std::vector<Pathfinding::Node> route;
+        Pathfinding::Route route;
 
         // TMP
         int delay = 0;

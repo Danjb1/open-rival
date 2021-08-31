@@ -1,7 +1,7 @@
 #ifndef PATHFINDING_UTILS_H
 #define PATHFINDING_UTILS_H
 
-#include <vector>
+#include <deque>
 
 #include "Scenario.h"
 
@@ -25,10 +25,41 @@ namespace Pathfinding {
     };
 
     /**
+     * A planned path to a destination.
+     */
+    class Route {
+    public:
+        /**
+         * Default constructor; makes a Route with an empty path.
+         */
+        Route();
+
+        /**
+         * Constructs a Route with a path and destination.
+         */
+        Route(Node destination, std::deque<Node> path);
+
+        /**
+         * Determines if this Route is empty.
+         */
+        bool isEmpty() const;
+
+        Node getDestination() const { return destination; }
+
+        /**
+         * Removes the next Node from the path and returns it.
+         */
+        Node pop();
+
+    private:
+        Node destination;
+        std::deque<Node> path;
+    };
+
+    /**
      * Attempts to find the optimal path connecting `start` to `goal`.
      */
-    std::vector<Node> findPath(
-            Node start, Node goal, const PathfindingMap& map);
+    Route findPath(Node start, Node goal, const PathfindingMap& map);
 
 }}  // namespace Rival::Pathfinding
 

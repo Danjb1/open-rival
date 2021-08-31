@@ -49,7 +49,7 @@ namespace Rival {
         static const int baseTxIndexPalisade = 32;
         static const int baseTxIndexGrate = 48;
 
-        SpriteComponent* spriteComponent;
+        SpriteComponent* spriteComponent = nullptr;
 
         WallVariant variant;
 

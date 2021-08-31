@@ -9,7 +9,7 @@ namespace Rival {
 
     void WalkerComponent::update() {
         // TMP: plan a route
-        if (entity->getId() == 1 && route.size() == 0) {
+        if (entity->getId() == 1 && route.isEmpty()) {
             route = Pathfinding::findPath(
                     { entity->getX(), entity->getY() },
                     { 4, 3 },
@@ -29,17 +29,16 @@ namespace Rival {
         }
     }
 
-    void WalkerComponent::setRoute(std::vector<Pathfinding::Node> newRoute) {
+    void WalkerComponent::setRoute(Pathfinding::Route newRoute) {
         route = newRoute;
     }
 
     bool WalkerComponent::canWalk() {
-        return route.size() > 0;
+        return !route.isEmpty();
     }
 
     void WalkerComponent::walkToNextNode() {
-        Pathfinding::Node node = route[0];
-        route.erase(route.begin());
+        Pathfinding::Node node = route.pop();
         entity->setPos(node.x, node.y);
     }
 
