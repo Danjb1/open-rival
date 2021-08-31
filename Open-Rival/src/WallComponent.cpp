@@ -14,7 +14,6 @@ namespace Rival {
           variant(variant) {}
 
     void WallComponent::onEntitySpawned(Scenario*) {
-
         int baseTxIndex = 0;
 
         // Set txIndex based on Wall type
@@ -24,6 +23,9 @@ namespace Rival {
         if (buildingPropsComponent) {
             baseTxIndex = getBaseTxIndex(
                     buildingPropsComponent->getBuildingType());
+        } else {
+            // TMP: we need a way to distinguish between Palisades and Grates
+            baseTxIndex = baseTxIndexPalisade;
         }
 
         // Update txIndex in SpriteComponent

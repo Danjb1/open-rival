@@ -4,7 +4,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
- - N/A
+ - Pathfinding
+    - Unit is moving through walls!
+    - `isTileTraversable` logic needs to change for flying units
+    - Use a queue for the route instead of a vector?
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -49,7 +52,6 @@
  - Doors
  - Use the Command Pattern to manipulate game state?
  - Moving units to adjacent tiles
- - Pathfinding
  - Building placement
  - Training
  - Resting
@@ -65,18 +67,16 @@
 
 ### Multiplayer
 
- - Server code should be separated somehow
-    - 3 projects: client, server and common
-    - Client depends on the server, since the client can act as a host
-    - Server can be run as a standalone application
+ - Write server code that can forward messages between clients
+    - This should exist in a standalone project so that the server can be run independently
+    - Open-Rival should import this so that one player can act as a host
  - Clients should connect to server using TCP
- - Use a lock-step model, but with a client-server architecture
+ - Use a lock-step model
     - See [multiplayer notes](/docs/multiplayer.md)
     - https://www.informit.com/articles/article.aspx?p=2461064&seqNum=3
     - https://gafferongames.com/post/what_every_programmer_needs_to_know_about_game_networking/
- - Server awaits commands from all clients and executes them at fixed intervals, or "turns"
- - Server sends the commands from each turn to all clients
- - Each client runs a deterministic simulation of the game by applying these commands
+ - Clients schedule commands at 'n' ticks in the future
+ - Each client runs a deterministic simulation of the game by applying commands from all players each tick
 
 ### Input
 
@@ -309,3 +309,4 @@
  - Pass small interfaces around instead of complex objects
     - e.g. Resources should extend TextureStore, AudioStore, etc.
  - Prefer forward-declarations to includes, to reduce compile times
+ - EntityFactory should use maps instead of switch statements

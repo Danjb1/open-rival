@@ -6,6 +6,9 @@
 
 namespace Rival {
 
+    /**
+     * Component that affects the passability of an entity's tile.
+     */
     class PassabilityComponent : public EntityComponent {
 
     public:

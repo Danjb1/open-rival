@@ -30,6 +30,13 @@ namespace Rival {
                 const BuildingPlacement& buildingPlacement) const;
 
         /**
+         * Creates a Palisade from raw data (e.g. read from a Scenario file).
+         */
+        std::shared_ptr<Entity> createPalisade(
+                const BuildingPlacement& buildingPlacement,
+                bool wilderness) const;
+
+        /**
          * Creates an Object from raw data (e.g. read from a Scenario file).
          */
         std::shared_ptr<Entity> EntityFactory::createObject(

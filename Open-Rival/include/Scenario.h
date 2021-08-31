@@ -10,15 +10,32 @@
 
 namespace Rival {
 
-    class Scenario {
+    /**
+     * Interface exposing map data for pathfinding.
+     */
+    class PathfindingMap {
+    public:
+        virtual int getWidth() const = 0;
+        virtual int getHeight() const = 0;
+        virtual TilePassability getPassability(int x, int y) const = 0;
+    };
+
+    /**
+     * A loaded scenario.
+     *
+     * Contains map data and entities.
+     */
+    class Scenario : public PathfindingMap {
 
     public:
         Scenario(int width, int height, bool wilderness);
         Scenario(int width, int height, bool wilderness, std::vector<Tile> tiles);
 
-        int getWidth() const { return width; }
-
-        int getHeight() const { return height; }
+        // Begin PathfindingMap override
+        int getWidth() const override { return width; }
+        int getHeight() const override { return height; }
+        TilePassability getPassability(int x, int y) const override;
+        // End PathfindingMap override
 
         const std::vector<Tile>& getTiles() const { return tiles; }
 
