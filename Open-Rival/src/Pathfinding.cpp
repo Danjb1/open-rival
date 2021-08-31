@@ -5,6 +5,7 @@
 #include <iterator>   // back_inserter
 #include <limits>     // numeric_limits
 #include <unordered_map>
+#include <vector>
 
 namespace Rival {
 namespace Pathfinding {
@@ -48,7 +49,7 @@ namespace Pathfinding {
         Pathfinder::Pathfinder(
                 Node start, Node goal, const PathfindingMap& map);
 
-        std::vector<Node> getPath() const { return pathFound; }
+        Route getRoute() const { return route; }
 
     private:
         /**
@@ -82,15 +83,15 @@ namespace Pathfinding {
         std::unordered_map<Node, Node> prevNode;
 
         /**
-         * After construction, contains the shortest path found.
+         * After construction, contains the shortest route to the goal.
          */
-        std::vector<Node> pathFound;
+        Route route;
 
-        std::vector<Node> findPath();
+        std::deque<Node> findPath();
         bool isFinished() const;
         ReachableNode popBestNode();
         int estimateCostToGoal(const Node& node) const;
-        std::vector<Node> reconstructPath(const Node& node) const;
+        std::deque<Node> reconstructPath(const Node& node) const;
         std::vector<Node> findNeighbors(const Node& node) const;
         bool isNodeTraversable(const Node& node) const;
         int getCostToNode(const Node& node) const;
@@ -106,12 +107,12 @@ namespace Pathfinding {
         : start(start),
           goal(goal),
           map(map),
-          pathFound(findPath()) {}
+          route({ goal, findPath() }) {}
 
     /**
      * Attempts to find a path based on the Pathfinder's configuration.
      */
-    std::vector<Node> Pathfinder::findPath() {
+    std::deque<Node> Pathfinder::findPath() {
         discoveredNodes.push_back({ start, 0 });
         costToNode[start] = 0;
 
@@ -186,8 +187,8 @@ namespace Pathfinding {
     /**
      * Returns the path found from the start to the given Node.
      */
-    std::vector<Node> Pathfinder::reconstructPath(const Node& node) const {
-        std::vector<Node> path = { node };
+    std::deque<Node> Pathfinder::reconstructPath(const Node& node) const {
+        std::deque<Node> path = { node };
         Node currentNode = node;
 
         // Follow the previous nodes back to the start
@@ -199,12 +200,9 @@ namespace Pathfinding {
                 break;
             } else {
                 currentNode = it->second;
-                path.push_back(currentNode);
+                path.push_front(currentNode);
             }
         }
-
-        // We have a path from the end to the start, but we want the opposite
-        std::reverse(path.begin(), path.end());
 
         return path;
     }
@@ -342,11 +340,28 @@ namespace Pathfinding {
         return nullptr;
     }
 
-    std::vector<Node> findPath(
+    Route::Route()
+        : destination({ 0, 0 }) {}
+
+    Route::Route(Node destination, std::deque<Node> path)
+        : destination(destination),
+          path(path) {}
+
+    bool Route::isEmpty() const {
+        return path.size() == 0;
+    }
+
+    Node Route::pop() {
+        Node node = path.front();
+        path.pop_front();
+        return node;
+    }
+
+    Route findPath(
             Node start,
             Node goal,
             const PathfindingMap& map) {
-        return Pathfinder(start, goal, map).getPath();
+        return Pathfinder(start, goal, map).getRoute();
     }
 
 }}  // namespace Rival::Pathfinding
