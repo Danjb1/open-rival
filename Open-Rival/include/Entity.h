@@ -96,6 +96,11 @@ namespace Rival {
         void markForDeletion() { deleted = true; }
 
         /**
+         * Gets a pointer to the Scenario that holds this Entity.
+         */
+        Scenario* getScenario() { return scenario; }
+
+        /**
          * Gets the unique identifier for this Entity.
          */
         const int getId() const { return id; }
@@ -119,6 +124,11 @@ namespace Rival {
          * Gets the number of tiles this Entity occupies in the y-axis.
          */
         int getHeight() const { return height; }
+
+        /**
+         * Moves this Entity to a new position.
+         */
+        void setPos(int newX, int newY);
 
         /**
          * Retrieves the EntityComponent with the given key.

@@ -6,6 +6,9 @@
 
 namespace Rival {
 
+    /**
+     * Component containing basic unit properties.
+     */
     class UnitPropsComponent : public EntityComponent {
 
     public:

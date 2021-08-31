@@ -53,6 +53,7 @@
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\PaletteUtils.cpp" />
     <ClCompile Include="src\PassabilityComponent.cpp" />
+    <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PathUtils.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -86,6 +87,7 @@
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\UiRenderer.cpp" />
     <ClCompile Include="src\UnitPropsComponent.cpp" />
+    <ClCompile Include="src\WalkerComponent.cpp" />
     <ClCompile Include="src\WallComponent.cpp" />
     <ClCompile Include="src\WaveFile.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -125,6 +127,7 @@
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\PaletteUtils.h" />
     <ClInclude Include="include\PassabilityComponent.h" />
+    <ClInclude Include="include\Pathfinding.h" />
     <ClInclude Include="include\PathUtils.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Race.h" />
@@ -161,6 +164,7 @@
     <ClInclude Include="include\EntityRenderer.h" />
     <ClInclude Include="include\EntityFactory.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />
+    <ClInclude Include="include\WalkerComponent.h" />
     <ClInclude Include="include\WallComponent.h" />
     <ClInclude Include="include\WaveFile.h" />
     <ClInclude Include="include\Window.h" />

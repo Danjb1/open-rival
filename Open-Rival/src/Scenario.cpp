@@ -85,4 +85,8 @@ namespace Rival {
         tilePassability[y * width + x] = passability;
     }
 
+    TilePassability Scenario::getPassability(int x, int y) const {
+        return tilePassability[y * width + x];
+    }
+
 }  // namespace Rival

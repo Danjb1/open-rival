@@ -60,4 +60,10 @@ namespace Rival {
         }
     }
 
+    void Entity::setPos(int newX, int newY) {
+        x = newX;
+        y = newY;
+        moved = true;
+    }
+
 }  // namespace Rival

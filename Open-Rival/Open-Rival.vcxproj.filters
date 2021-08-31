@@ -247,6 +247,12 @@
     <ClCompile Include="src\PathUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\WalkerComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -470,6 +476,12 @@
     </ClInclude>
     <ClInclude Include="include\PathUtils.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WalkerComponent.h">
+      <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pathfinding.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
