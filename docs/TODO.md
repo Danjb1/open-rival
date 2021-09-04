@@ -5,12 +5,17 @@
 <!----------------------------------------------------------------------------->
 
  - Unit movement
-    - `isTileTraversable` logic needs to change for flying units
+    - Passability flags may need some more boilerplate: https://stackoverflow.com/a/1448478/1624459
     - Units should move gradually between tiles
     - Units should animate while walking
     - Units should face the direction of movement
     - We may need extra logic for moving groups
     - Clicking should plan a route for the selected unit(s)
+        - Specifically, this should issue a MoveCommand that sets the route
+        - Ensure we are iterating over entities deterministically so that pathfinding outcomes are consistent!
+    - Units should periodically re-plan their route
+    - Units should stop moving if the path becomes blocked
+    - Units should modify tile passability as they move
     - Should units "try" to move somewhere even if there is no path?
     - Should we limit the pathfinding logic to 'n' iterations?
 
@@ -190,6 +195,7 @@
  - [ ] Show map preview / description
  - [ ] More endgame stats
  - [ ] Show additional unit stats (speed, hit speed, etc.)
+ - [ ] Hover states for buttons
 
 ### Balance
 

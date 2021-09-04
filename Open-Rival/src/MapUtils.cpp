@@ -4,7 +4,7 @@
 namespace Rival {
 namespace MapUtils {
 
-    std::vector<MapNode> findNeighbors(MapNode node, const GameArea& area) {
+    std::vector<MapNode> findNeighbors(MapNode node, const MapBounds& area) {
         std::vector<MapNode> neighbors;
 
         // First determine which map locations are valid relative to this node.

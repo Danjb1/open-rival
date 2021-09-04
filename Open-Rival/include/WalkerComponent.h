@@ -9,6 +9,14 @@
 namespace Rival {
 
     /**
+     * PassabilityChecker that treats empty ground tiles as traversable.
+     */
+    class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker {
+        bool isNodeTraversable(
+                const PathfindingMap& map, const MapNode& node) const override;
+    };
+
+    /**
      * Component that allows an entity to walk around the map.
      */
     class WalkerComponent : public EntityComponent {
@@ -25,6 +33,8 @@ namespace Rival {
         void setRoute(Pathfinding::Route route);
 
     private:
+        static WalkerPassabilityChecker passabilityChecker;
+
         Pathfinding::Route route;
 
         // TMP

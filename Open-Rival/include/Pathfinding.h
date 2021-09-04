@@ -10,6 +10,15 @@ namespace Rival {
 namespace Pathfinding {
 
     /**
+     * Interface used to determine if a MapNode is traversable.
+     */
+    class PassabilityChecker {
+    public:
+        virtual bool isNodeTraversable(
+                const PathfindingMap& map, const MapNode& node) const = 0;
+    };
+
+    /**
      * A planned path to a destination.
      */
     class Route {
@@ -44,7 +53,10 @@ namespace Pathfinding {
     /**
      * Attempts to find the optimal path connecting `start` to `goal`.
      */
-    Route findPath(MapNode start, MapNode goal, const PathfindingMap& map);
+    Route findPath(MapNode start,
+            MapNode goal,
+            const PathfindingMap& map,
+            const PassabilityChecker& passabilityChecker);
 
 }}  // namespace Rival::Pathfinding
 

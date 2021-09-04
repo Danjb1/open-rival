@@ -28,7 +28,7 @@ namespace Rival {
         /**
          * Finds all valid neighbors of the given MapNode.
          */
-        std::vector<MapNode> findNeighbors(MapNode node, const GameArea& area);
+        std::vector<MapNode> findNeighbors(MapNode node, const MapBounds& area);
 
     }  // namespace MapUtils
 }  // namespace Rival

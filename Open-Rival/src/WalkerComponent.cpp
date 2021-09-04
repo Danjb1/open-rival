@@ -7,7 +7,15 @@ namespace Rival {
 
     const std::string WalkerComponent::key = "walker";
 
+    WalkerPassabilityChecker WalkerComponent::passabilityChecker =
+            WalkerPassabilityChecker();
+
     WalkerComponent::WalkerComponent() : EntityComponent(key) {}
+
+    bool WalkerPassabilityChecker::isNodeTraversable(
+            const PathfindingMap& map, const MapNode& node) const {
+        return map.getPassability(node.x, node.y) == TilePassability::Clear;
+    }
 
     void WalkerComponent::update() {
         // TMP: plan a route
@@ -15,7 +23,8 @@ namespace Rival {
             route = Pathfinding::findPath(
                     { entity->getX(), entity->getY() },
                     { 4, 3 },
-                    *entity->getScenario());
+                    *entity->getScenario(),
+                    passabilityChecker);
         }
 
         // TMP: wait between movements
