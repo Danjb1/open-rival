@@ -47,7 +47,10 @@ namespace Pathfinding {
     class Pathfinder {
     public:
         Pathfinder::Pathfinder(
-                MapNode start, MapNode goal, const PathfindingMap& map);
+                MapNode start,
+                MapNode goal,
+                const PathfindingMap& map,
+                const PassabilityChecker& passabilityChecker);
 
         Route getRoute() const { return route; }
 
@@ -66,6 +69,11 @@ namespace Pathfinding {
          * The PathfindingMap used to find obstacles, etc.
          */
         const PathfindingMap& map;
+
+        /**
+         * Object used to check for passability.
+         */
+        const PassabilityChecker& passabilityChecker;
 
         /**
          * All discovered nodes, sorted with the "best" nodes first.
@@ -103,11 +111,16 @@ namespace Pathfinding {
      * Constructs a Pathfinder which attempts to find a path connecting start
      * to goal.
      */
-    Pathfinder::Pathfinder(MapNode start, MapNode goal, const PathfindingMap& map)
+    Pathfinder::Pathfinder(
+            MapNode start,
+            MapNode goal,
+            const PathfindingMap& map,
+            const PassabilityChecker& passabilityChecker)
         : start(start),
           goal(goal),
           map(map),
-          route({ goal, findPath() }) {}
+          route({ goal, findPath() }),
+          passabilityChecker(passabilityChecker) {}
 
     /**
      * Attempts to find a path based on the Pathfinder's configuration.
@@ -218,16 +231,12 @@ namespace Pathfinding {
         std::copy_if(allNeighbors.begin(),
                 allNeighbors.end(),
                 std::back_inserter(validNeighbors),
-                [this](MapNode n) { return this->isNodeTraversable(n); });
+                [this](MapNode n) {
+                    return this->passabilityChecker
+                            .isNodeTraversable(this->map, n);
+                });
 
         return validNeighbors;
-    }
-
-    /**
-     * Determines if a MapNode is a traversable tile.
-     */
-    bool Pathfinder::isNodeTraversable(const MapNode& node) const {
-        return map.getPassability(node.x, node.y) == TilePassability::Clear;
     }
 
     /**
@@ -290,8 +299,9 @@ namespace Pathfinding {
     Route findPath(
             MapNode start,
             MapNode goal,
-            const PathfindingMap& map) {
-        return Pathfinder(start, goal, map).getRoute();
+            const PathfindingMap& map,
+            const PassabilityChecker& passabilityChecker) {
+        return Pathfinder(start, goal, map, passabilityChecker).getRoute();
     }
 
 }}  // namespace Rival::Pathfinding

@@ -13,7 +13,7 @@ namespace Rival {
     /**
      * Interface exposing the map size.
      */
-    class GameArea {
+    class MapBounds {
     public:
         virtual int getWidth() const = 0;
         virtual int getHeight() const = 0;
@@ -22,7 +22,7 @@ namespace Rival {
     /**
      * Interface exposing map data for pathfinding.
      */
-    class PathfindingMap : public GameArea {
+    class PathfindingMap : public MapBounds {
     public:
         virtual TilePassability getPassability(int x, int y) const = 0;
     };

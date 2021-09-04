@@ -50,7 +50,7 @@ namespace Rival {
         // Add Passability
         // TODO: consider flying units separately
         unit->attach(std::make_unique<PassabilityComponent>(
-                TilePassability::Unit));
+                TilePassability::GroundUnit));
 
         return unit;
     }
