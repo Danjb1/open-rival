@@ -2,19 +2,9 @@
 #define FACING_COMPONENT_H
 
 #include "EntityComponent.h"
+#include "MapUtils.h"
 
 namespace Rival {
-
-    enum class Facing : std::uint8_t {
-        South,
-        SouthWest,
-        West,
-        NorthWest,
-        North,
-        NorthEast,
-        East,
-        SouthEast
-    };
 
     class FacingComponent : public EntityComponent {
 

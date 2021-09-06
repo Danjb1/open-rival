@@ -5,7 +5,7 @@
 
 #include "Building.h"
 #include "Entity.h"
-#include "FacingComponent.h"
+#include "MapUtils.h"
 #include "Resources.h"
 #include "ScenarioData.h"
 #include "Unit.h"

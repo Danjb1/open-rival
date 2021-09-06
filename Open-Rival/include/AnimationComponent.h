@@ -18,9 +18,10 @@ namespace Rival {
 
         AnimationComponent(const Animations::Animation animation);
 
+        // Begin EntityComponent override
         void onEntitySpawned(Scenario* scenario) override;
-
         void update() override;
+        // End EntityComponent override
 
         void setAnimation(Animations::Animation newAnimation);
 

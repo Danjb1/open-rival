@@ -296,6 +296,10 @@ namespace Pathfinding {
         return node;
     }
 
+    MapNode Route::peek() {
+        return path.front();
+    }
+
     Route findPath(
             MapNode start,
             MapNode goal,

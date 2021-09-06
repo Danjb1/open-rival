@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "EntityComponent.h"
+#include "FacingComponent.h"
 #include "Pathfinding.h"
 
 namespace Rival {
@@ -27,7 +28,8 @@ namespace Rival {
         WalkerComponent();
 
         // Begin EntityComponent override
-        virtual void update() override;
+        void onEntitySpawned(Scenario* scenario) override;
+        void update() override;
         // End EntityComponent override
 
         void setRoute(Pathfinding::Route route);
@@ -35,10 +37,12 @@ namespace Rival {
     private:
         static WalkerPassabilityChecker passabilityChecker;
 
+        FacingComponent* facingComponent { nullptr };
+
         Pathfinding::Route route;
 
         // TMP
-        int delay = 0;
+        int ticksUntilMove = 10;
 
         bool canWalk();
 

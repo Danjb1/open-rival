@@ -23,12 +23,33 @@ namespace Rival {
         }
     };
 
+    /**
+     * A compass direction.
+     */
+    enum class Facing : std::uint8_t {
+        South,
+        SouthWest,
+        West,
+        NorthWest,
+        North,
+        NorthEast,
+        East,
+        SouthEast
+    };
+
     namespace MapUtils {
 
         /**
          * Finds all valid neighbors of the given MapNode.
          */
         std::vector<MapNode> findNeighbors(MapNode node, const MapBounds& area);
+
+        /**
+         * Gets the most pertinent direction between 2 neighbouring tiles.
+         *
+         * If the MapNodes are identical, this returns South.
+         */
+        Facing getDir(MapNode from, MapNode to);
 
     }  // namespace MapUtils
 }  // namespace Rival

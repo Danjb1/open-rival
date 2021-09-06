@@ -12,6 +12,11 @@ namespace Rival {
 
     WalkerComponent::WalkerComponent() : EntityComponent(key) {}
 
+    void WalkerComponent::onEntitySpawned(Scenario*) {
+        facingComponent = entity->getComponent<FacingComponent>(
+                FacingComponent::key);
+    }
+
     bool WalkerPassabilityChecker::isNodeTraversable(
             const PathfindingMap& map, const MapNode& node) const {
         return map.getPassability(node.x, node.y) == TilePassability::Clear;
@@ -28,11 +33,11 @@ namespace Rival {
         }
 
         // TMP: wait between movements
-        if (delay < 10) {
-            ++delay;
+        if (ticksUntilMove > 0) {
+            --ticksUntilMove;
             return;
         } else {
-            delay = 0;
+            ticksUntilMove = 10;
         }
 
         if (canWalk()) {
@@ -51,6 +56,12 @@ namespace Rival {
     void WalkerComponent::walkToNextNode() {
         MapNode node = route.pop();
         entity->setPos(node.x, node.y);
+
+        if (facingComponent && !route.isEmpty()) {
+            MapNode nextNode = route.peek();
+            Facing newFacing = MapUtils::getDir(node, nextNode);
+            facingComponent->facing = newFacing;
+        }
     }
 
 }  // namespace Rival
