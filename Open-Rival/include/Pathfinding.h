@@ -45,6 +45,11 @@ namespace Pathfinding {
          */
         MapNode pop();
 
+        /**
+         * Returns the next MapNode from the path without removing it.
+         */
+        MapNode peek();
+
     private:
         MapNode destination;
         std::deque<MapNode> path;

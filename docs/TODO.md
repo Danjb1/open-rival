@@ -5,10 +5,13 @@
 <!----------------------------------------------------------------------------->
 
  - Unit movement
+    - Write unit tests for `MapUtils::getDir`
     - Passability flags may need some more boilerplate: https://stackoverflow.com/a/1448478/1624459
+    - Changing a unit's facing does not update its appearance
+        - This only happens when we call `spriteComponent->setTxIndex` (i.e. during animation)
+        - FacingComponent should have a `setFacing` method which sets the sprite to dirty
     - Units should move gradually between tiles
     - Units should animate while walking
-    - Units should face the direction of movement
     - We may need extra logic for moving groups
     - Clicking should plan a route for the selected unit(s)
         - Specifically, this should issue a MoveCommand that sets the route
@@ -269,6 +272,11 @@
 
  - Defer loading MIDI files until needed to speed up initial load time
  - Use high-precision timers for MIDI playback
+
+### Fonts
+
+ - How do we calculate the font size correctly?
+    - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
 
 ### ScenarioReader
 
