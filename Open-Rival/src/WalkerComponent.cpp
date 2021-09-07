@@ -60,7 +60,7 @@ namespace Rival {
         if (facingComponent && !route.isEmpty()) {
             MapNode nextNode = route.peek();
             Facing newFacing = MapUtils::getDir(node, nextNode);
-            facingComponent->facing = newFacing;
+            facingComponent->setFacing(newFacing);
         }
     }
 

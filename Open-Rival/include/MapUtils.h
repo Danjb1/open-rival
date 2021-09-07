@@ -47,6 +47,9 @@ namespace Rival {
         /**
          * Gets the most pertinent direction between 2 neighbouring tiles.
          *
+         * For example, if `to` is directly above `from`, this will return
+         * `Facing::North`.
+         *
          * If the MapNodes are identical, this returns South.
          */
         Facing getDir(MapNode from, MapNode to);
