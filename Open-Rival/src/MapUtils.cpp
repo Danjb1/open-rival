@@ -84,9 +84,9 @@ namespace MapUtils {
         // Let's get the easy ones out of the way first
         if (from.x == to.x) {
             if (from.y < to.y) {
-                return Facing::North;
-            } else {
                 return Facing::South;
+            } else {
+                return Facing::North;
             }
         }
 
@@ -96,9 +96,9 @@ namespace MapUtils {
         int dy = from.y - to.y;
         if (abs(dx) > 2 * abs(dy)) {
             if (dx < 0) {
-                return Facing::West;
-            } else {
                 return Facing::East;
+            } else {
+                return Facing::West;
             }
         }
 
@@ -108,15 +108,15 @@ namespace MapUtils {
             // => Moving to the *same* row is diagonally south.
             if (dy < 0) {
                 if (dx < 0) {
-                    return Facing::NorthWest;
+                    return Facing::SouthEast;
                 } else {
-                    return Facing::NorthEast;
+                    return Facing::SouthWest;
                 }
             } else {
                 if (dx < 0) {
-                    return Facing::SouthWest;
+                    return Facing::NorthEast;
                 } else {
-                    return Facing::SouthEast;
+                    return Facing::NorthWest;
                 }
             }
         } else {
@@ -125,15 +125,15 @@ namespace MapUtils {
             // => Moving to the row below is diagonally north.
             if (dy <= 0) {
                 if (dx < 0) {
-                    return Facing::NorthWest;
+                    return Facing::SouthEast;
                 } else {
-                    return Facing::NorthEast;
+                    return Facing::SouthWest;
                 }
             } else {
                 if (dx < 0) {
-                    return Facing::SouthWest;
+                    return Facing::NorthEast;
                 } else {
-                    return Facing::SouthEast;
+                    return Facing::NorthWest;
                 }
             }
         }
