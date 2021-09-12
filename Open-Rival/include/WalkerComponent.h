@@ -77,7 +77,7 @@ namespace Rival {
         Movement movement;
 
         // TMP
-        int ticksPerMove = 10;
+        int ticksPerMove = 30;
 
         bool canWalk();
 

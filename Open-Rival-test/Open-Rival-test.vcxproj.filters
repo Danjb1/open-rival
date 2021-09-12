@@ -175,6 +175,12 @@
     <ClCompile Include="src\Font.cpp">
       <Filter>Test Doubles</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestMapUtils.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MapUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h">

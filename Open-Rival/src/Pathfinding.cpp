@@ -204,20 +204,19 @@ namespace Pathfinding {
      * Returns the path found from the start to the given MapNode.
      */
     std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const {
-        std::deque<MapNode> path = { node };
+        std::deque<MapNode> path = {};
         MapNode currentNode = node;
 
         // Follow the previous nodes back to the start
         while (currentNode != start) {
+            path.push_front(currentNode);
             auto it = prevNode.find(currentNode);
             if (it == prevNode.end()) {
                 // No previous node found. This should never happen since we
                 // don't enter the loop for the start node.
                 break;
-            } else {
-                currentNode = it->second;
-                path.push_front(currentNode);
             }
+            currentNode = it->second;
         }
 
         return path;

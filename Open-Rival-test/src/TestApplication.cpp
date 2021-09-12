@@ -28,7 +28,7 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
             updatesRun++;
         }
 
-        void render() override {
+        void render(int) override {
             // Simulate 2 frame-lengths passing
             MockSDL::ticks += 2 * TimerUtils::timeStepMs;
 

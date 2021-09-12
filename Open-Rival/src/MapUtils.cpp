@@ -84,23 +84,37 @@ namespace MapUtils {
     Facing getDir(const MapNode& from, const MapNode& to) {
         // Let's get the easy ones out of the way first
         if (from.x == to.x) {
-            if (from.y < to.y) {
-                return Facing::South;
+            return from.y <= to.y ? Facing::South : Facing::North;
+        }
+
+        // Determine x/y distance between the 2 nodes
+        int dx = to.x - from.x;
+        int dy = to.y - from.y;
+
+        // We need to factor in the zigzagging nature of the rows. Even within
+        // the same row, tiles can be positioned above or below each other.
+        if (from.x % 2 == 0 && to.x % 2 == 1) {
+            if (dy < 0) {
+                // Moving from top part of a zigzag to the row above
+                --dy;
             } else {
-                return Facing::North;
+                // Moving from top part of a zigzag to the bottom
+                ++dy;
+            }
+        } else if (from.x % 2 == 1 && to.x % 2 == 0) {
+            if (dy <= 0) {
+                // Moving from bottom part of a zigzag to the top
+                --dy;
+            } else {
+                // Moving from bottom part of a zigzag to the row below
+                ++dy;
             }
         }
 
         // If the x-delta is significantly more than the y-delta, we should
         // face east/west.
-        int dx = from.x - to.x;
-        int dy = from.y - to.y;
         if (abs(dx) > 2 * abs(dy)) {
-            if (dx < 0) {
-                return Facing::East;
-            } else {
-                return Facing::West;
-            }
+            return dx < 0 ? Facing::West : Facing::East;
         }
 
         if (from.x % 2 == 0) {
@@ -108,34 +122,18 @@ namespace MapUtils {
             // => Moving to the row above is diagonally north.
             // => Moving to the *same* row is diagonally south.
             if (dy < 0) {
-                if (dx < 0) {
-                    return Facing::SouthEast;
-                } else {
-                    return Facing::SouthWest;
-                }
+                return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
             } else {
-                if (dx < 0) {
-                    return Facing::NorthEast;
-                } else {
-                    return Facing::NorthWest;
-                }
+                return dx < 0 ? Facing::SouthWest : Facing::SouthEast;
             }
         } else {
             // We are in the bottom part of the zigzag;
             // => Moving to the *same* row is diagonally north.
-            // => Moving to the row below is diagonally north.
+            // => Moving to the row below is diagonally south.
             if (dy <= 0) {
-                if (dx < 0) {
-                    return Facing::SouthEast;
-                } else {
-                    return Facing::SouthWest;
-                }
+                return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
             } else {
-                if (dx < 0) {
-                    return Facing::NorthEast;
-                } else {
-                    return Facing::NorthWest;
-                }
+                return dx < 0 ? Facing ::SouthWest : Facing::SouthEast;
             }
         }
     }
