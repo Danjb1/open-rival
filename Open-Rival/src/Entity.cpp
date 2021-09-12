@@ -6,8 +6,7 @@ namespace Rival {
     Entity::Entity(int width, int height)
         : width(width),
           height(height),
-          x(-1),
-          y(-1),
+          pos({ -1, -1 }),
           scenario(nullptr),
           deleted(false),
           moved(true),
@@ -18,12 +17,10 @@ namespace Rival {
         components.insert({ component->getKey(), std::move(component) });
     }
 
-    void Entity::onSpawn(
-            Scenario* newScenario, int newId, int newX, int newY) {
+    void Entity::onSpawn(Scenario* newScenario, int newId, MapNode newPos) {
         scenario = newScenario;
         id = newId;
-        x = newX;
-        y = newY;
+        pos = newPos;
 
         for (auto const& kv : components) {
             const auto& component = kv.second;
@@ -60,9 +57,8 @@ namespace Rival {
         }
     }
 
-    void Entity::setPos(int newX, int newY) {
-        x = newX;
-        y = newY;
+    void Entity::setPos(MapNode newPos) {
+        pos = newPos;
         moved = true;
     }
 

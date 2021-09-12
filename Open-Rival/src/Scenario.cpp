@@ -44,8 +44,7 @@ namespace Rival {
         entities[nextId]->onSpawn(
                 this,
                 nextId,
-                x,
-                y);
+                { x, y });
 
         // Increase the ID for the next one
         ++nextId;
@@ -81,12 +80,13 @@ namespace Rival {
         }
     }
 
-    void Scenario::setPassability(int x, int y, TilePassability passability) {
-        tilePassability[y * width + x] = passability;
+    void Scenario::setPassability(
+            const MapNode& pos, TilePassability passability) {
+        tilePassability[pos.y * width + pos.x] = passability;
     }
 
-    TilePassability Scenario::getPassability(int x, int y) const {
-        return tilePassability[y * width + x];
+    TilePassability Scenario::getPassability(const MapNode& pos) const {
+        return tilePassability[pos.y * width + pos.x];
     }
 
 }  // namespace Rival

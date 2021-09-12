@@ -1,6 +1,7 @@
 #ifndef ENTITY_RENDERER_H
 #define ENTITY_RENDERER_H
 
+#include <array>
 #include <map>
 #include <string>
 
@@ -25,16 +26,21 @@ namespace Rival {
 
         void render(
                 const Camera& camera,
-                const std::vector<std::shared_ptr<Entity>> entities) const;
+                const std::vector<std::shared_ptr<Entity>> entities,
+                int delta) const;
 
     private:
+        static const int numLerpDimensions = 2;
+        static const int lerpIdxX = 0;
+        static const int lerpIdxY = 1;
+
         const Texture& paletteTexture;
 
         bool isEntityVisible(
                 const Entity& entity,
                 const Camera& camera) const;
 
-        void renderEntity(Entity& entity) const;
+        void renderEntity(Entity& entity, int delta) const;
 
         bool needsUpdate(
                 const Entity& entity,
@@ -42,7 +48,11 @@ namespace Rival {
 
         void sendDataToGpu(
                 const Entity& entity,
-                const SpriteComponent* spriteComponent) const;
+                const SpriteComponent* spriteComponent,
+                int delta) const;
+
+        std::array<float, numLerpDimensions> getLerpOffset(
+                const Entity& entity, int delta) const;
     };
 
 }  // namespace Rival

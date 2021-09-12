@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "Camera.h"
+#include "Entity.h"
 #include "Rect.h"
 #include "RenderUtils.h"
 #include "Unit.h"

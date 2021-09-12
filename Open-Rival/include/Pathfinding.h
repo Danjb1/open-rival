@@ -46,9 +46,12 @@ namespace Pathfinding {
         MapNode pop();
 
         /**
-         * Returns the next MapNode from the path without removing it.
+         * Returns a pointer to the next MapNode from the path, without removing
+         * it.
+         *
+         * Returns nullptr if the path is empty.
          */
-        MapNode peek();
+        const MapNode* peek() const;
 
     private:
         MapNode destination;
@@ -64,22 +67,5 @@ namespace Pathfinding {
             const PassabilityChecker& passabilityChecker);
 
 }}  // namespace Rival::Pathfinding
-
-namespace std {
-
-    /**
-     * Custom hash function for MapNode.
-     */
-    template <>
-    struct hash<Rival::MapNode> {
-        std::size_t operator()(
-                Rival::MapNode const& node) const noexcept {
-            // Given that x/y will never exceed 16 bits, this ought to give a
-            // totally unique value for each node.
-            return node.x | (node.y << 16);
-        }
-    };
-
-}  // namespace std
 
 #endif  // PATHFINDING_UTILS_H

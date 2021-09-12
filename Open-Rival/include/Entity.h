@@ -6,9 +6,12 @@
 #include <string>
 
 #include "EntityComponent.h"
-#include "Scenario.h"
+#include "MapUtils.h"
 
 namespace Rival {
+
+    // Forward-declarations
+    class Scenario;
 
     enum class EntityType : std::uint8_t {
         Unit,
@@ -35,15 +38,10 @@ namespace Rival {
      * https://gameprogrammingpatterns.com/component.html
      *
      * ---
-     *
-     * Note that while Entities such as units can move between tiles, their
-     * position is always represented as a single tile, and movement between
-     * tiles is handled by a completely separate mechanism.
-     *
-     * The reason for this is that the game world is not a continuous space -
-     * due to the peculiar nature of the isometric tile grid, as x increases,
-     * y fluctuates - so it does not make sense to try to store the absolute
-     * position of an Entity as a float.
+     * 
+     * Note that, unless specified, no guarantees are made about the order in
+     * Entities within the game world receive lifecycle callbacks, except that
+     * this order will always be deterministic.
      */
     class Entity final {
 
@@ -68,8 +66,7 @@ namespace Rival {
         /**
          * Called when this Entity is added to the game world.
          */
-        virtual void onSpawn(
-                Scenario* newScenario, int newId, int newX, int newY);
+        virtual void onSpawn(Scenario* newScenario, int newId, MapNode newPos);
 
         /**
          * Called once at the start of each frame.
@@ -106,14 +103,26 @@ namespace Rival {
         const int getId() const { return id; }
 
         /**
-         * Gets the x co-ordinate of the tile this Entity is occupying.
+         * Gets the co-ordinates of the tile this Entity is occupying.
+         * 
+         * In the case of Entities where width > 0 (e.g. buildings), the x
+         * refers to the horizontal centre of the Entity.
+         *
+         * In the case of Entities where height > 0 (e.g. buildings), the y
+         * refers to the bottom corner of the Entity, that is, its
+         * bottom-most row.
+         *
+         * Note that while Entities such as units can move between tiles, their
+         * logical position is always represented as a single tile. Movement
+         * between tiles is purely visual.
+         *
+         * In fact, it would not be possible to represent Entity positions as
+         * floats because the game world is not a continuous space. Due to the
+         * peculiar nature of the isometric tile grid, as x increases, y
+         * fluctuates - so it does not make sense to try to store the absolute
+         * position of an Entity as a float.
          */
-        int getX() const { return x; }
-
-        /**
-         * Gets the y co-ordinate of the tile this Entity is occupying.
-         */
-        int getY() const { return y; }
+        const MapNode& getPos() const { return pos; }
 
         /**
          * Gets the number of tiles this Entity occupies in the x-axis.
@@ -128,7 +137,7 @@ namespace Rival {
         /**
          * Moves this Entity to a new position.
          */
-        void setPos(int newX, int newY);
+        void setPos(MapNode newPos);
 
         /**
          * Retrieves the EntityComponent with the given key.
@@ -173,21 +182,9 @@ namespace Rival {
         Scenario* scenario;
 
         /**
-         * x co-ordinate of the tile the Entity is occupying.
-         *
-         * In the case of Entities where width > 0 (e.g. buildings), this
-         * refers to the horizontal centre of the Entity.
+         * Co-ordinate of the tile the Entity is occupying.
          */
-        int x;
-
-        /**
-         * y co-ordinate of the tile the Entity is occupying.
-         *
-         * In the case of Entities where height > 0 (e.g. buildings), this
-         * refers to the bottom corner of the Entity, that is, its
-         * bottom-most row.
-         */
-        int y;
+        MapNode pos;
 
         /**
          * Number of tiles this Entity occupies in the x-axis.

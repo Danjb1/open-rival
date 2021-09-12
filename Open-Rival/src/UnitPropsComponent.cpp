@@ -9,8 +9,8 @@ namespace Rival {
         : EntityComponent(key),
           type(type) {}
 
-    Unit::Type UnitPropsComponent::getUnitType() const {
-        return type;
+    void UnitPropsComponent::setState(UnitState newState) {
+        state = newState;
     }
 
 }  // namespace Rival

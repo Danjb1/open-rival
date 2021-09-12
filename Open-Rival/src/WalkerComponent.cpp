@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "WalkerComponent.h"
 
+#include "Entity.h"
 #include "MapUtils.h"
+#include "Scenario.h"
+#include "TimerUtils.h"
 
 namespace Rival {
 
@@ -10,38 +13,44 @@ namespace Rival {
     WalkerPassabilityChecker WalkerComponent::passabilityChecker =
             WalkerPassabilityChecker();
 
-    WalkerComponent::WalkerComponent() : EntityComponent(key) {}
+    WalkerComponent::WalkerComponent() : EntityComponent(key),
+                                         movement({ 0, 0 }) {}
 
     void WalkerComponent::onEntitySpawned(Scenario*) {
+        unitPropsComponent = entity->getComponent<UnitPropsComponent>(
+                FacingComponent::key);
         facingComponent = entity->getComponent<FacingComponent>(
                 FacingComponent::key);
     }
 
     bool WalkerPassabilityChecker::isNodeTraversable(
             const PathfindingMap& map, const MapNode& node) const {
-        return map.getPassability(node.x, node.y) == TilePassability::Clear;
+        return map.getPassability(node) == TilePassability::Clear;
     }
 
     void WalkerComponent::update() {
         // TMP: plan a route
         if (entity->getId() == 1 && route.isEmpty()) {
             route = Pathfinding::findPath(
-                    { entity->getX(), entity->getY() },
+                    entity->getPos(),
                     { 4, 3 },
                     *entity->getScenario(),
                     passabilityChecker);
+            movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
+            unitPropsComponent->setState(UnitState::Moving);
         }
 
-        // TMP: wait between movements
-        if (ticksUntilMove > 0) {
-            --ticksUntilMove;
+        if (!canWalk()) {
             return;
-        } else {
-            ticksUntilMove = 10;
         }
 
-        if (canWalk()) {
-            walkToNextNode();
+        entity->moved = true;
+
+        // Update movement
+        if (movement.timeElapsed >= movement.timeRequired) {
+            completeMovement();
+        } else {
+            movement.timeElapsed += TimerUtils::timeStepMs;
         }
     }
 
@@ -53,13 +62,20 @@ namespace Rival {
         return !route.isEmpty();
     }
 
-    void WalkerComponent::walkToNextNode() {
+    void WalkerComponent::completeMovement() {
         MapNode node = route.pop();
-        entity->setPos(node.x, node.y);
+        entity->setPos(node);
 
-        if (facingComponent && !route.isEmpty()) {
-            MapNode nextNode = route.peek();
-            Facing newFacing = MapUtils::getDir(node, nextNode);
+        movement.timeElapsed = 0;
+
+        if (route.isEmpty()) {
+            unitPropsComponent->setState(UnitState::Idle);
+            return;
+        }
+
+        if (facingComponent) {
+            const MapNode* nextNode = route.peek();
+            Facing newFacing = MapUtils::getDir(node, *nextNode);
             facingComponent->setFacing(newFacing);
         }
     }
