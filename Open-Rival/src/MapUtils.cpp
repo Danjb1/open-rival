@@ -4,7 +4,8 @@
 namespace Rival {
 namespace MapUtils {
 
-    std::vector<MapNode> findNeighbors(MapNode node, const MapBounds& area) {
+    std::vector<MapNode> findNeighbors(
+            const MapNode& node, const MapBounds& area) {
         std::vector<MapNode> neighbors;
 
         // First determine which map locations are valid relative to this node.
@@ -80,7 +81,7 @@ namespace MapUtils {
         return neighbors;
     }
 
-    Facing getDir(MapNode from, MapNode to) {
+    Facing getDir(const MapNode& from, const MapNode& to) {
         // Let's get the easy ones out of the way first
         if (from.x == to.x) {
             if (from.y < to.y) {

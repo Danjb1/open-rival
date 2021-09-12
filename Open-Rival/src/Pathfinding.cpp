@@ -101,7 +101,6 @@ namespace Pathfinding {
         int estimateCostToGoal(const MapNode& node) const;
         std::deque<MapNode> reconstructPath(const MapNode& node) const;
         std::vector<MapNode> findNeighbors(const MapNode& node) const;
-        bool isNodeTraversable(const MapNode& node) const;
         int getCostToNode(const MapNode& node) const;
         void updatePathToNode(const MapNode& node, int newCost);
         ReachableNode* findDiscoveredNode(const MapNode& node);
@@ -126,6 +125,10 @@ namespace Pathfinding {
      * Attempts to find a path based on the Pathfinder's configuration.
      */
     std::deque<MapNode> Pathfinder::findPath() {
+        if (start == goal) {
+            return {};
+        }
+
         discoveredNodes.push_back({ start, 0 });
         costToNode[start] = 0;
 
@@ -296,13 +299,13 @@ namespace Pathfinding {
         return node;
     }
 
-    MapNode Route::peek() {
-        return path.front();
+    const MapNode* Route::peek() const {
+        return path.empty() ? nullptr : &path.front();
     }
 
     Route findPath(
-            MapNode start,
-            MapNode goal,
+            const MapNode start,
+            const MapNode goal,
             const PathfindingMap& map,
             const PassabilityChecker& passabilityChecker) {
         return Pathfinder(start, goal, map, passabilityChecker).getRoute();

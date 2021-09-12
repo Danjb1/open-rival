@@ -2,6 +2,7 @@
 #define PASSABILITY_COMPONENT_H
 
 #include "EntityComponent.h"
+#include "Scenario.h"
 #include "Tile.h"
 
 namespace Rival {

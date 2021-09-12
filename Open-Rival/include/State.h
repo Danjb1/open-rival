@@ -49,7 +49,7 @@ namespace Rival {
         /**
          * Renders the current frame.
          */
-        virtual void render() = 0;
+        virtual void render(int delta) = 0;
 
     protected:
         Application& app;

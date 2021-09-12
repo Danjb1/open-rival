@@ -5,17 +5,17 @@
 <!----------------------------------------------------------------------------->
 
  - Unit movement
+    - Fix extrapolated positions being too extreme!
     - Write unit tests for `MapUtils::getDir`
     - Passability flags may need some more boilerplate: https://stackoverflow.com/a/1448478/1624459
-    - Changing a unit's facing does not update its appearance
-        - This only happens when we call `spriteComponent->setTxIndex` (i.e. during animation)
-        - FacingComponent should have a `setFacing` method which sets the sprite to dirty
-    - Units should move gradually between tiles
+    - Use a constant to represent number of tiles spanned by east/west movement
+    - Support flying / seafaring units
+    - `delta` value can be high if a lagspike occurs - how to handle this?
     - Units should animate while walking
     - We may need extra logic for moving groups
     - Clicking should plan a route for the selected unit(s)
         - Specifically, this should issue a MoveCommand that sets the route
-        - Ensure we are iterating over entities deterministically so that pathfinding outcomes are consistent!
+        - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
     - Units should periodically re-plan their route
     - Units should stop moving if the path becomes blocked
     - Units should modify tile passability as they move

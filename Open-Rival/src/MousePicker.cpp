@@ -4,7 +4,6 @@
 #include <SDL.h>
 #include <iostream>
 
-#include "Entity.h"
 #include "MathUtils.h"
 #include "MouseUtils.h"
 #include "Unit.h"
@@ -238,9 +237,9 @@ namespace Rival {
         // use the same units; that is, we have to always take the zoom level
         // into account!
         float zoom = camera.getZoom();
-        float tileX_px = RenderUtils::tileToScaledPx_X(entity.getX(), zoom);
-        float tileY_px = RenderUtils::tileToScaledPx_Y(
-                entity.getX(), entity.getY(), zoom);
+        const MapNode& pos = entity.getPos();
+        float tileX_px = RenderUtils::tileToScaledPx_X(pos.y, zoom);
+        float tileY_px = RenderUtils::tileToScaledPx_Y(pos.x, pos.y, zoom);
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)
