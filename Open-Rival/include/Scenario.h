@@ -9,10 +9,10 @@
 #include "MapUtils.h"
 #include "Tile.h"
 
-// Forward-declarations
-class Entity;
-
 namespace Rival {
+
+    // Forward-declarations
+    class Entity;
 
     /**
      * Interface exposing map data for pathfinding.

@@ -60,6 +60,8 @@ namespace Pathfinding {
 
     /**
      * Attempts to find the optimal path connecting `start` to `goal`.
+     *
+     * The start node is not included in the path.
      */
     Route findPath(MapNode start,
             MapNode goal,

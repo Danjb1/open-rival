@@ -27,6 +27,7 @@
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\FacingComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\GLUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MapUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MidiContainer.cpp" />
     <ClCompile Include="..\Open-Rival\src\MidiFile.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="src\TestApplication.cpp" />
     <ClCompile Include="src\TestCamera.cpp" />
     <ClCompile Include="src\TestEntity.cpp" />
+    <ClCompile Include="src\TestMapUtils.cpp" />
     <ClCompile Include="src\TestMousePicker.cpp" />
     <ClCompile Include="src\TestRenderUtils.cpp" />
     <ClCompile Include="src\TestSpritesheet.cpp" />

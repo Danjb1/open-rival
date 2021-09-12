@@ -163,6 +163,9 @@ namespace Rival {
      *
      * This takes into account the Entity's current movement and also the amount
      * of time that has elapsed since the last logical update.
+     *
+     * Due to the way tiles overlap, diagonal moves only actually span half a
+     * tile, in terms of pixels.
      */
     std::array<float, EntityRenderer::numLerpDimensions> EntityRenderer::getLerpOffset(
             const Entity& entity, int delta) const {
@@ -201,29 +204,24 @@ namespace Rival {
 
         // Determine x-offset
         if (dir == Facing::East) {
-            // A move directly east or west covers 2 tiles
-            offset[lerpIdxX] = 2 * progress * RenderUtils::tileWidthPx;
-        }
-        if (dir == Facing::West) {
-            offset[lerpIdxX] = -2 * progress * RenderUtils::tileWidthPx;
-        }
-        if (dir == Facing::NorthEast || dir == Facing::SouthEast) {
             offset[lerpIdxX] = progress * RenderUtils::tileWidthPx;
-        }
-        if (dir == Facing::NorthWest || dir == Facing::NorthEast) {
+        } else if (dir == Facing::West) {
             offset[lerpIdxX] = -progress * RenderUtils::tileWidthPx;
+        } else if (dir == Facing::NorthEast || dir == Facing::SouthEast) {
+            offset[lerpIdxX] = progress * 0.5f * RenderUtils::tileWidthPx;
+        } else if (dir == Facing::NorthWest || dir == Facing::SouthWest) {
+            offset[lerpIdxX] = -progress * 0.5f * RenderUtils::tileWidthPx;
         }
 
         // Determine y-offset
-        if (dir == Facing::NorthEast
-                || dir == Facing::North
-                || dir == Facing::NorthWest) {
-            offset[lerpIdxY] = progress * RenderUtils::tileHeightPx;
-        }
-        if (dir == Facing::SouthEast
-                || dir == Facing::South
-                || dir == Facing::SouthWest) {
+        if (dir == Facing::North) {
             offset[lerpIdxY] = -progress * RenderUtils::tileHeightPx;
+        } else if (dir == Facing::South) {
+            offset[lerpIdxY] = progress * RenderUtils::tileHeightPx;
+        } else if (dir == Facing::NorthEast || dir == Facing::NorthWest) {
+            offset[lerpIdxY] = -progress * 0.5f * RenderUtils::tileHeightPx;
+        } else if (dir == Facing::SouthEast || dir == Facing::SouthWest) {
+            offset[lerpIdxY] = progress * 0.5f * RenderUtils::tileHeightPx;
         }
 
         return offset;
