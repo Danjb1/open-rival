@@ -33,14 +33,16 @@ namespace Rival {
         if (entity->getId() == 1 && route.isEmpty()) {
             route = Pathfinding::findPath(
                     entity->getPos(),
-                    { 4, 3 },
+                    { 21, 8 },
+                    //{ 4, 3 },
                     *entity->getScenario(),
                     passabilityChecker);
             movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
             unitPropsComponent->setState(UnitState::Moving);
+            prepareNextMovement();
         }
 
-        if (!canWalk()) {
+        if (route.isEmpty()) {
             return;
         }
 
@@ -58,10 +60,24 @@ namespace Rival {
         route = newRoute;
     }
 
-    bool WalkerComponent::canWalk() {
-        return !route.isEmpty();
+    /**
+     * Called before moving to a new tile.
+     */
+    void WalkerComponent::prepareNextMovement() {
+        if (route.isEmpty()) {
+            return;
+        }
+
+        if (facingComponent) {
+            const MapNode* nextNode = route.peek();
+            Facing newFacing = MapUtils::getDir(entity->getPos(), *nextNode);
+            facingComponent->setFacing(newFacing);
+        }
     }
 
+    /**
+     * Called after moving to a new tile.
+     */
     void WalkerComponent::completeMovement() {
         MapNode node = route.pop();
         entity->setPos(node);
@@ -71,12 +87,6 @@ namespace Rival {
         if (route.isEmpty()) {
             unitPropsComponent->setState(UnitState::Idle);
             return;
-        }
-
-        if (facingComponent) {
-            const MapNode* nextNode = route.peek();
-            Facing newFacing = MapUtils::getDir(node, *nextNode);
-            facingComponent->setFacing(newFacing);
         }
     }
 

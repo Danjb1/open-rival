@@ -79,8 +79,7 @@ namespace Rival {
         // TMP
         int ticksPerMove = 30;
 
-        bool canWalk();
-
+        void prepareNextMovement();
         void completeMovement();
     };
 
