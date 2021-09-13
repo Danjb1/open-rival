@@ -27,7 +27,7 @@ namespace Pathfinding {
          * where fScore is the cost from the start to this node, and h is our
          * heuristic function (estimates the cost from a node to the goal).
          */
-        int cost;
+        float cost;
 
         bool operator<(const ReachableNode& other) const {
             return cost < other.cost;
@@ -83,7 +83,7 @@ namespace Pathfinding {
         /**
          * Map of node -> lowest cost to reach that node from the start.
          */
-        std::unordered_map<MapNode, int> costToNode;
+        std::unordered_map<MapNode, float> costToNode;
 
         /**
          * Map of node -> previous node in the shortest path found.
@@ -98,11 +98,12 @@ namespace Pathfinding {
         std::deque<MapNode> findPath();
         bool isFinished() const;
         ReachableNode popBestNode();
-        int estimateCostToGoal(const MapNode& node) const;
+        float estimateCostToGoal(const MapNode& node) const;
         std::deque<MapNode> reconstructPath(const MapNode& node) const;
         std::vector<MapNode> findNeighbors(const MapNode& node) const;
-        int getCostToNode(const MapNode& node) const;
-        void updatePathToNode(const MapNode& node, int newCost);
+        float getCostToNode(const MapNode& node) const;
+        float getMovementCost(const MapNode& from, const MapNode& to) const;
+        void updatePathToNode(const MapNode& node, float newCost);
         ReachableNode* findDiscoveredNode(const MapNode& node);
     };
 
@@ -143,7 +144,8 @@ namespace Pathfinding {
             std::vector<MapNode> neighbors = findNeighbors(current.node);
 
             for (MapNode neighbor : neighbors) {
-                int newCostToNeighbor = getCostToNode(current.node) + 1;
+                float newCostToNeighbor = getCostToNode(current.node)
+                        + getMovementCost(current.node, neighbor);
                 if (newCostToNeighbor < getCostToNode(neighbor)) {
                     // This path to neighbor is better than any previous one
                     costToNode[neighbor] = newCostToNeighbor;
@@ -185,9 +187,9 @@ namespace Pathfinding {
     /**
      * Heuristic function used to estimate the cost from a MapNode to the goal.
      */
-    int Pathfinder::estimateCostToGoal(const MapNode& node) const {
+    float Pathfinder::estimateCostToGoal(const MapNode& node) const {
         if (node == goal) {
-            return 0;
+            return 0.f;
         }
 
         int dx = abs(node.x - goal.x);
@@ -197,7 +199,7 @@ namespace Pathfinding {
         int diagonalDistance = std::min(dx, dy);
         int remainingDistance = abs(dx - dy);
 
-        return diagonalDistance + remainingDistance;
+        return static_cast<float>(diagonalDistance + remainingDistance);
     }
 
     /**
@@ -246,21 +248,55 @@ namespace Pathfinding {
      *
      * Returns the integer max if no path has been found yet.
      */
-    int Pathfinder::getCostToNode(const MapNode& node) const {
+    float Pathfinder::getCostToNode(const MapNode& node) const {
         auto it = costToNode.find(node);
         if (it == costToNode.end()) {
             // No path to node found yet
-            return std::numeric_limits<int>::max();
+            return std::numeric_limits<float>::max();
         }
         return it->second;
+    }
+
+    /**
+     * Gets the cost of moving to a neighboring tile.
+     */
+    float Pathfinder::getMovementCost(
+            const MapNode& from, const MapNode& to) const {
+        /*
+         * This warrants some explanation.
+         *
+         * Imagine you want to move 2 tiles north-east (A -> C):
+         * 
+         *           ,x
+         *         ,x C`x
+         *       ,x B`x'
+         *      x A`x'D`x
+         *       `x' `x'
+         * 
+         * This can be accomplished 2 different ways:
+         *   A -> B -> C
+         *   A -> D -> C
+         * 
+         * Both routes involve 2 movements, but it would look strange if we
+         * chose the second route because the diagonal route appears more
+         * logical and direct.
+         *
+         * To ensure that the first route gets chosen, we consider east and west
+         * movements to be slightly more expensive than other movements.
+         * Crucially, they are still cheaper than 2 diagonals movements, so
+         * units will still move directly east/west when it makes sense to do
+         * so.
+         */
+        Facing dir = MapUtils::getDir(from, to);
+        return (dir == Facing::East || dir == Facing::West) ? 1.5f : 1.f;
     }
 
     /**
      * Updates the path to a node with a shorter one, or adds a new path to
      * the node if this is the first one found.
      */
-    void Pathfinder::updatePathToNode(const MapNode& node, int newCost) {
-        int newEstimate = newCost + estimateCostToGoal(node);
+    void Pathfinder::updatePathToNode(const MapNode& node, float newCost) {
+        float newEstimate = newCost + estimateCostToGoal(node);
         ReachableNode* existingNode = findDiscoveredNode(node);
         if (existingNode) {
             existingNode->cost = newEstimate;

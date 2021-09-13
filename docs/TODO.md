@@ -5,20 +5,6 @@
 <!----------------------------------------------------------------------------->
 
  - Unit movement
-    - Pathfinding does not prefer diagonal routes (as it should)
-
-        EXPECTED:
-        18, 10
-        19, 9
-        20, 9
-        21, 8
-
-        ACTUAL:
-        19, 10
-        20, 10
-        21, 9
-        21, 8
-
     - Make a function for `x % 2 == 0` idiom
     - Passability flags may need some more boilerplate: https://stackoverflow.com/a/1448478/1624459
     - Use a constant to represent number of tiles spanned by east/west movement
