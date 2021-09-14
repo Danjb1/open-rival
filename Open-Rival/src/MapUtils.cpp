@@ -33,7 +33,7 @@ namespace MapUtils {
         // The diagonal neighbors depend on which part of the zigzag we are in
         bool hasDiagonalEast = node.x < area.getWidth() - 1;
         bool hasDiagonalWest = node.x > 0;
-        if (node.x % 2 == 0) {
+        if (isUpperTile(node.x)) {
             // We are in the top part of the zigzag;
             // => Moving diagonally north moves us into the row above.
             // => Moving diagonally south keeps us in the same row.
@@ -93,7 +93,7 @@ namespace MapUtils {
 
         // We need to factor in the zigzagging nature of the rows. Even within
         // the same row, tiles can be positioned above or below each other.
-        if (from.x % 2 == 0 && to.x % 2 == 1) {
+        if (isUpperTile(from.x) && isLowerTile(to.x)) {
             if (dy < 0) {
                 // Moving from top part of a zigzag to the row above
                 --dy;
@@ -101,7 +101,7 @@ namespace MapUtils {
                 // Moving from top part of a zigzag to the bottom
                 ++dy;
             }
-        } else if (from.x % 2 == 1 && to.x % 2 == 0) {
+        } else if (isLowerTile(from.x) && isUpperTile(to.x)) {
             if (dy <= 0) {
                 // Moving from bottom part of a zigzag to the top
                 --dy;
@@ -117,7 +117,7 @@ namespace MapUtils {
             return dx < 0 ? Facing::West : Facing::East;
         }
 
-        if (from.x % 2 == 0) {
+        if (isUpperTile(from.x)) {
             // We are in the top part of the zigzag;
             // => Moving to the row above is diagonally north.
             // => Moving to the *same* row is diagonally south.

@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <iostream>
 
+#include "MapUtils.h"
 #include "MathUtils.h"
 #include "MouseUtils.h"
 #include "Unit.h"
@@ -124,7 +125,7 @@ namespace Rival {
         // quadrant, and which side of the tile boundary we are on, we can
         // figure out what adjustments we need to make to our naive tile
         // co-ordinates.
-        if (tileX % 2 == 0) {
+        if (MapUtils::isUpperTile(tileX)) {
 
             // Even-column tiles are positioned "normally" (no extra y-offset).
             // This results in an offsetY of:

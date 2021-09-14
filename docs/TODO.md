@@ -5,8 +5,6 @@
 <!----------------------------------------------------------------------------->
 
  - Unit movement
-    - Make a function for `x % 2 == 0` idiom
-    - Passability flags may need some more boilerplate: https://stackoverflow.com/a/1448478/1624459
     - Use a constant to represent number of tiles spanned by east/west movement
     - Support flying / seafaring units
     - `delta` value can be high if a lagspike occurs - how to handle this?

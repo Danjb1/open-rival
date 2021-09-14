@@ -105,6 +105,7 @@
     <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
+    <ClInclude Include="include\EnumUtils.h" />
     <ClInclude Include="include\FacingComponent.h" />
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\Font.h" />
