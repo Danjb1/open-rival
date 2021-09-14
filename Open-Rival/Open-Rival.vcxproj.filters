@@ -489,6 +489,9 @@
     <ClInclude Include="include\MapUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\EnumUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Open-Rival.rc" />

@@ -48,6 +48,22 @@ namespace Rival {
     namespace MapUtils {
 
         /**
+         * Determines if a tile is an "upper tile".
+         *
+         * Each row of tiles is a zigzag, and the upper tiles are those that are
+         * higher up the screen within the row.
+         */
+        inline bool isUpperTile(int tileX) { return tileX % 2 == 0; }
+
+        /**
+         * Determines if a tile is a "lower tile".
+         *
+         * Each row of tiles is a zigzag, and the lower tiles are those that are
+         * lower down the screen within the row.
+         */
+        inline bool isLowerTile(int tileX) { return tileX % 2 == 1; }
+
+        /**
          * Finds all valid neighbors of the given MapNode.
          */
         std::vector<MapNode> findNeighbors(

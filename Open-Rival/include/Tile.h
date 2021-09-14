@@ -1,7 +1,9 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <cstdint>
+#include <cstdint>  // uint*_t
+
+#include "EnumUtils.h"
 
 namespace Rival {
 
@@ -65,6 +67,7 @@ namespace Rival {
          */
         Coastline = 1 << 8
     };
+    MAKE_ENUM_FLAGS(TilePassability)
 
     class Tile {
 
