@@ -37,7 +37,7 @@ namespace Rival {
         void setState(UnitState state);
 
     private:
-        Unit::Type type;
+        Unit::Type type = Unit::Type::Invalid;
 
         UnitState state = UnitState::Idle;
     };
