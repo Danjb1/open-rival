@@ -18,9 +18,11 @@ namespace Rival {
 
     void WalkerComponent::onEntitySpawned(Scenario*) {
         unitPropsComponent = entity->getComponent<UnitPropsComponent>(
-                FacingComponent::key);
+                UnitPropsComponent::key);
         facingComponent = entity->getComponent<FacingComponent>(
                 FacingComponent::key);
+        animComponent = entity->getComponent<AnimationComponent>(
+                AnimationComponent::key);
     }
 
     bool WalkerPassabilityChecker::isNodeTraversable(
@@ -33,8 +35,7 @@ namespace Rival {
         if (entity->getId() == 1 && route.isEmpty()) {
             route = Pathfinding::findPath(
                     entity->getPos(),
-                    { 21, 8 },
-                    //{ 4, 3 },
+                    { 4, 3 },
                     *entity->getScenario(),
                     passabilityChecker);
             movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
@@ -73,6 +74,13 @@ namespace Rival {
             Facing newFacing = MapUtils::getDir(entity->getPos(), *nextNode);
             facingComponent->setFacing(newFacing);
         }
+
+        if (animComponent) {
+            // TODO: Peasants may need to play the MovingWithBag animation
+            animComponent->setAnimation(Animations::getUnitAnimation(
+                    unitPropsComponent->getUnitType(),
+                    Animations::UnitAnimationType::Moving));
+        }
     }
 
     /**
@@ -86,6 +94,13 @@ namespace Rival {
 
         if (route.isEmpty()) {
             unitPropsComponent->setState(UnitState::Idle);
+
+            if (animComponent) {
+                animComponent->setAnimation(Animations::getUnitAnimation(
+                        unitPropsComponent->getUnitType(),
+                        Animations::UnitAnimationType::Standing));
+            }
+
             return;
         }
     }

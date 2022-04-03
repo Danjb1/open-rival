@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "AnimationComponent.h"
 #include "EntityComponent.h"
 #include "FacingComponent.h"
 #include "Pathfinding.h"
@@ -71,6 +72,7 @@ namespace Rival {
 
         UnitPropsComponent* unitPropsComponent { nullptr };
         FacingComponent* facingComponent { nullptr };
+        AnimationComponent* animComponent { nullptr };
 
         Pathfinding::Route route;
 

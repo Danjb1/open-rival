@@ -14,20 +14,20 @@ namespace MapUtils {
         bool hasNorth = node.y > 0;
         bool hasSouth = node.y < area.getHeight() - 1;
         bool hasEast = node.x > 1;
-        bool hasWest = node.x < area.getWidth() - 2;
+        bool hasWest = node.x < area.getWidth() - eastWestTileSpan;
 
         // Find all valid neighbors
         if (hasNorth) {
             neighbors.push_back({ node.x, node.y - 1 });
         }
         if (hasEast) {
-            neighbors.push_back({ node.x + 2, node.y });
+            neighbors.push_back({ node.x + eastWestTileSpan, node.y });
         }
         if (hasSouth) {
             neighbors.push_back({ node.x, node.y + 1 });
         }
         if (hasWest) {
-            neighbors.push_back({ node.x - 2, node.y });
+            neighbors.push_back({ node.x - eastWestTileSpan, node.y });
         }
 
         // The diagonal neighbors depend on which part of the zigzag we are in

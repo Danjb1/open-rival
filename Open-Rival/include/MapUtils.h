@@ -48,6 +48,11 @@ namespace Rival {
     namespace MapUtils {
 
         /**
+         * Tiles spanned by a direct east/west movement.
+         */
+        static constexpr int eastWestTileSpan = 2;
+
+        /**
          * Determines if a tile is an "upper tile".
          *
          * Each row of tiles is a zigzag, and the upper tiles are those that are

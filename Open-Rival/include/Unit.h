@@ -62,7 +62,10 @@ namespace Unit {
         Hydra,
         SeaMonster,
         Skeleton,
-        Snake
+        Snake,
+
+        // Other
+        Invalid
     };
 
     static const int firstUnitType = static_cast<int>(Type::Ballista);
