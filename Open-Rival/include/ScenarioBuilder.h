@@ -28,6 +28,26 @@ namespace Rival {
         ScenarioData data;
 
         Tile buildTile(TilePlacement& tile) const;
+
+        void addUnit(
+                Scenario* scenario,
+                const UnitPlacement& unitPlacement,
+                const EntityFactory& entityFactory) const;
+
+        void addPalisade(
+                Scenario* scenario,
+                const BuildingPlacement& buildingPlacement,
+                const EntityFactory& entityFactory) const;
+
+        void addBuilding(
+                Scenario* scenario,
+                const BuildingPlacement& buildingPlacement,
+                const EntityFactory& entityFactory) const;
+
+        void addObject(
+                Scenario* scenario,
+                const ObjectPlacement& objPlacement,
+                const EntityFactory& entityFactory) const;
     };
 
 }  // namespace Rival

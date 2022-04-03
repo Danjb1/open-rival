@@ -61,9 +61,6 @@
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SDL.cpp">
-      <Filter>Test Doubles</Filter>
-    </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Spritesheet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -169,16 +166,31 @@
     <ClCompile Include="..\Open-Rival\src\RtMidi.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\MockSDL.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\GLUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Test Doubles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestMapUtils.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MapUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h">
       <Filter>Test Framework\catch2</Filter>
     </ClInclude>
-    <ClInclude Include="include\SDL.h">
-      <Filter>Test Doubles</Filter>
-    </ClInclude>
     <ClInclude Include="include\gl\glew.h">
       <Filter>Test Doubles\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MockSDL.h">
+      <Filter>Test Doubles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

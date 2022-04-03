@@ -26,6 +26,8 @@
     <ClCompile Include="..\Open-Rival\src\Entity.cpp" />
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\FacingComponent.cpp" />
+    <ClCompile Include="..\Open-Rival\src\GLUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MapUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\MidiContainer.cpp" />
     <ClCompile Include="..\Open-Rival\src\MidiFile.cpp" />
@@ -50,14 +52,16 @@
     <ClCompile Include="..\Open-Rival\src\TextureAtlas.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\gl\glew.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Resources.cpp" />
-    <ClCompile Include="src\SDL.cpp" />
+    <ClCompile Include="src\MockSDL.cpp" />
     <ClCompile Include="src\TestAnimationComponent.cpp" />
     <ClCompile Include="src\TestApplication.cpp" />
     <ClCompile Include="src\TestCamera.cpp" />
     <ClCompile Include="src\TestEntity.cpp" />
+    <ClCompile Include="src\TestMapUtils.cpp" />
     <ClCompile Include="src\TestMousePicker.cpp" />
     <ClCompile Include="src\TestRenderUtils.cpp" />
     <ClCompile Include="src\TestSpritesheet.cpp" />
@@ -67,7 +71,7 @@
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h" />
     <ClInclude Include="include\gl\glew.h" />
-    <ClInclude Include="include\SDL.h" />
+    <ClInclude Include="include\MockSDL.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -141,6 +145,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\SDL2-2.0.14\include;..\Open-Rival\libs\SDL2_image-2.0.5\include;..\Open-Rival\libs\freetype-2.10.4\include;..\Open-Rival\libs\openal-soft-1.21.0\include;..\Open-Rival\libs\glew-2.1.0\include;..\Open-Rival\libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>

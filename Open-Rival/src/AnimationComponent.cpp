@@ -22,8 +22,13 @@ namespace Rival {
     void AnimationComponent::onEntitySpawned(Scenario*) {
         spriteComponent = entity->getComponent<SpriteComponent>(
                 SpriteComponent::key);
+
         facingComponent = entity->getComponent<FacingComponent>(
                 FacingComponent::key);
+        if (facingComponent) {
+            facingComponent->setListener(this);
+        }
+
         setAnimation(animation);
     }
 
@@ -43,6 +48,10 @@ namespace Rival {
         }
     }
 
+    void AnimationComponent::facingChanged(Facing) {
+        refreshSpriteComponent();
+    }
+
     void AnimationComponent::setAnimation(Animations::Animation newAnimation) {
         animation = newAnimation;
         msPassedCurrentAnimFrame = 0;
@@ -51,12 +60,17 @@ namespace Rival {
 
     void AnimationComponent::setCurrentAnimFrame(int newAnimFrame) {
         currentAnimFrame = newAnimFrame;
+        refreshSpriteComponent();
+    }
 
-        if (spriteComponent) {
-            // Update the SpriteComponent, if present.
-            // This is what actually causes the rendered image to change.
-            spriteComponent->setTxIndex(getCurrentSpriteIndex());
+    void AnimationComponent::refreshSpriteComponent() const {
+        if (!spriteComponent) {
+            return;
         }
+
+        // Update the SpriteComponent, if present.
+        // This is what actually causes the rendered image to change.
+        spriteComponent->setTxIndex(getCurrentSpriteIndex());
     }
 
     void AnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame) {
@@ -85,7 +99,7 @@ namespace Rival {
             return 0;
         }
         int numAnimFrames = getNumAnimFrames();
-        int facingIndex = static_cast<int>(facingComponent->facing)
+        int facingIndex = static_cast<int>(facingComponent->getFacing())
                 - static_cast<int>(Facing::South);
         return facingIndex * numAnimFrames;
     }

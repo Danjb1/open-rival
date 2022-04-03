@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PassabilityComponent.h"
 
-#include "Scenario.h"
+#include "Entity.h"
 
 namespace Rival {
 
@@ -12,7 +12,7 @@ namespace Rival {
           passability(passability) {}
 
     void PassabilityComponent::onEntitySpawned(Scenario* scenario) {
-        scenario->setPassability(entity->getX(), entity->getY(), passability);
+        scenario->setPassability(entity->getPos(), passability);
     }
 
     TilePassability PassabilityComponent::getPassability() const {

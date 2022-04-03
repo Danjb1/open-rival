@@ -1,21 +1,20 @@
 /**
  * Script to extract the Rival Realms images from "IMAGES.DAT".
  *
- * @author 0xa0000 - All the hard work (this guy is a wizard!).
- * @author Danjb - Tweaks and formatting changes.
+ * The images are not stored as data; instead the rendering routines are stored
+ * directly as assembly code. We load this code into memory and execute it in
+ * order to render the images to a buffer, and then we save the buffer to a
+ * file.
+ *
+ * Thanks to Reddit user 0xa0000 for all the ASM handling code.
  */
-
-// Formatter does not play nice with our preprocessor directives and ASM code
-/* clang-format off */
 
 #include "pch.h"
 #include "image-extractor.h"
 
-#include <cstdint>
-#include <stdexcept>
-#include <stdio.h>
-#include <stdint.h>
-#include <windows.h>
+#include <cstdint>    // uint8_t
+#include <stdexcept>  // runtime_error
+#include <windows.h>  // VirtualProtect, etc.
 
 #include "FileUtils.h"
 #include "Image.h"
@@ -39,8 +38,11 @@ namespace Setup {
     // (these 6 colors correspond to a single team)
     std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
 
-    // Pixel value corresponding to tranparency
+    // Pixel value corresponding to transparency
     int transparentColor = 0xff;
+
+// Formatter does not play nice with our preprocessor directives and ASM code
+/* clang-format off */
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
@@ -216,14 +218,13 @@ namespace Setup {
             w = h = nextPowerOf2(w);
 
             // Save the rendered image to disk
-            char filename[256];
-            snprintf(filename,
-                    sizeof(filename),
-                    "%s\\img_%04d.tga",
-                    outputDir.c_str(), i);
-            Image image(w, h,
-                    std::make_unique<std::vector<std::uint8_t>>(data),
-                    maxWidth);
+            std::string filename = outputDir
+                    + "\\img_"
+                    + zeroPad(i, 4)
+                    + ".tga";
+            ImageProperties props;
+            props.stride = maxWidth;
+            Image image = Image::createByMove(w, h, std::move(data), props);
             writeImage(image, Palette::paletteGame, filename);
 
             // Jump to the next image

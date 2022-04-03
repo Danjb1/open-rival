@@ -1,7 +1,11 @@
 #include "pch.h"
-#include "SDL.h"
+#include "MockSDL.h"
 
-#include <iostream>
+#define SDL_MAIN_HANDLED
+#pragma warning(push)
+#pragma warning(disable : 26819)
+#include <SDL.h>
+#pragma warning(pop)
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

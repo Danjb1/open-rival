@@ -8,28 +8,6 @@
 
 namespace Rival {
 
-    Image::Image(int width, int height, std::uint8_t bgColor)
-        : width(width),
-          height(height),
-          stride(width),
-          data(std::make_unique<std::vector<std::uint8_t>>(width * height,
-                  bgColor)) {}
-
-    Image::Image(int width, int height,
-            std::unique_ptr<std::vector<std::uint8_t>> data)
-        : width(width),
-          height(height),
-          stride(width),
-          data(std::move(data)) {}
-
-    Image::Image(int width, int height,
-            std::unique_ptr<std::vector<std::uint8_t>> data,
-            int stride)
-        : width(width),
-          height(height),
-          stride(stride),
-          data(std::move(data)) {}
-
     Image Image::readImage(const std::string filename) {
         std::cout << "Loading: " << filename << "\n";
 
@@ -55,28 +33,66 @@ namespace Rival {
         reader.skip(Palette::paletteBytes);
 
         // Pixel data
-        std::unique_ptr<std::vector<std::uint8_t>> data =
-                std::make_unique<std::vector<std::uint8_t>>(width * height);
-        reader.read(data.get());
+        std::vector<std::uint8_t> data(width * height);
+        reader.read(&data);
 
-        return Image(width, height, std::move(data));
+        return Image::createByMove(width, height, std::move(data));
+    }
+
+    Image Image::createEmpty(
+            int width,
+            int height,
+            std::uint8_t bgColor,
+            ImageProperties props) {
+        std::vector<std::uint8_t> data(width * height, bgColor);
+        return Image::createByMove(width, height, std::move(data), props);
+    }
+
+    Image Image::createByCopy(
+            int width,
+            int height,
+            std::vector<std::uint8_t>& data,
+            ImageProperties props) {
+        return Image(width, height, data, props);
+    }
+
+    Image Image::createByMove(
+            int width,
+            int height,
+            std::vector<std::uint8_t>&& data,
+            ImageProperties props) {
+        return Image(width, height, std::move(data), props);
+    }
+
+    Image::Image(
+            int width,
+            int height,
+            std::vector<std::uint8_t> data,
+            ImageProperties props)
+        : width(width),
+          height(height),
+          data(std::move(data)),
+          props(props) {}
+
+    int Image::getStride() const {
+        return props.stride == -1 ? width : props.stride;
     }
 
     void Image::copyImage(
             const Image& src,
-            const Image& dst,
+            Image& dst,
             const int dstX,
             const int dstY) {
 
-        std::vector<std::uint8_t>* srcData = src.getData();
-        std::vector<std::uint8_t>* dstData = dst.getData();
+        const std::vector<std::uint8_t>& srcData = src.getData();
+        std::vector<std::uint8_t>& dstData = dst.getEditableData();
 
         for (int y = 0; y < src.getHeight(); y++) {
             for (int x = 0; x < src.getWidth(); x++) {
                 const int srcIndex = (y * src.getWidth()) + x;
                 const int dstIndex = ((dstY + y) * dst.getWidth()) + (dstX + x);
 
-                (*dstData)[dstIndex] = (*srcData)[srcIndex];
+                dstData[dstIndex] = srcData[srcIndex];
             }
         }
     }

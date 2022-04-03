@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <iostream>
 
-#include "Entity.h"
+#include "MapUtils.h"
 #include "MathUtils.h"
 #include "MouseUtils.h"
 #include "Unit.h"
@@ -125,7 +125,7 @@ namespace Rival {
         // quadrant, and which side of the tile boundary we are on, we can
         // figure out what adjustments we need to make to our naive tile
         // co-ordinates.
-        if (tileX % 2 == 0) {
+        if (MapUtils::isUpperTile(tileX)) {
 
             // Even-column tiles are positioned "normally" (no extra y-offset).
             // This results in an offsetY of:
@@ -238,9 +238,9 @@ namespace Rival {
         // use the same units; that is, we have to always take the zoom level
         // into account!
         float zoom = camera.getZoom();
-        float tileX_px = RenderUtils::tileToScaledPx_X(entity.getX(), zoom);
-        float tileY_px = RenderUtils::tileToScaledPx_Y(
-                entity.getX(), entity.getY(), zoom);
+        const MapNode& pos = entity.getPos();
+        float tileX_px = RenderUtils::tileToScaledPx_X(pos.y, zoom);
+        float tileY_px = RenderUtils::tileToScaledPx_Y(pos.x, pos.y, zoom);
 
         // Adjust based on the camera position
         // (as the camera pans right, tiles are rendered further to the left!)

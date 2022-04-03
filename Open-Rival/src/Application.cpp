@@ -53,8 +53,9 @@ namespace Rival {
                 // Handle events on the queue
                 pollEvents();
 
-                // Update the game logic, as many times as necessary to keep it
-                // in-sync with the refresh rate.
+                // Update the game logic as many times as necessary to keep it
+                // up to date with the current time. The idea is to run the
+                // logic at a fixed rate, regardless of the game's framerate.
                 //
                 // For example:
                 //  - For a 30Hz monitor, this will run twice per render.
@@ -67,10 +68,19 @@ namespace Rival {
                     nextUpdateDue += TimerUtils::timeStepMs;
                 }
 
-                // Render the game, once per iteration.
-                // With vsync enabled, this matches the screen's refresh rate.
-                // Otherwise, this matches our target FPS.
-                state->render();
+                // Calculate our delta time for rendering. This is the number of
+                // milliseconds that have passed since the game logic was last
+                // updated. This enables us to accurately extrapolate unit
+                // positions between logical movements.
+                Uint32 now = SDL_GetTicks();
+                Uint32 lastUpdate = nextUpdateDue - TimerUtils::timeStepMs;
+                Uint32 delta = now - lastUpdate;
+
+                // Render the game, once per iteration. With vsync enabled, this
+                // will be called at the same frequency as the screen's refresh
+                // rate. Otherwise, this will be called at a frequency that
+                // matches our target FPS.
+                state->render(static_cast<int>(delta));
 
                 // Update the window with our newly-rendered game.
                 // If vsync is enabled, this will block execution until the

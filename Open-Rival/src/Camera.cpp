@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "MapUtils.h"
 #include "MathUtils.h"
 
 namespace Rival {
@@ -30,7 +31,6 @@ namespace Rival {
     }
 
     void Camera::centreOnPoint(float newX, float newY) {
-
         // Keep within the bounds of the map
         float cameraWidth = getWidth();
         float cameraHeight = getHeight();
@@ -51,7 +51,7 @@ namespace Rival {
 
     void Camera::centreOnTile(int tileX, int tileY) {
         float offsetY = 0;
-        if (tileX % 2 == 1) {
+        if (MapUtils::isLowerTile(tileX)) {
             // Tile co-ordinates zigzag up and down within a row
             offsetY = (tileHeight / 2.0f);
         }

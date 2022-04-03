@@ -10,6 +10,7 @@
 #include "Tile.h"
 #include "UnitPropsComponent.h"
 #include "WallComponent.h"
+#include "WalkerComponent.h"
 
 namespace Rival {
 
@@ -43,10 +44,13 @@ namespace Rival {
                 unitType, Animations::UnitAnimationType::Standing);
         unit->attach(std::make_unique<AnimationComponent>(anim));
 
+        // Add WalkerComponent
+        unit->attach(std::make_unique<WalkerComponent>());
+
         // Add Passability
         // TODO: consider flying units separately
         unit->attach(std::make_unique<PassabilityComponent>(
-                TilePassability::Unit));
+                TilePassability::GroundUnit));
 
         return unit;
     }
@@ -87,6 +91,29 @@ namespace Rival {
                     buildingType, Animations::BuildingAnimationType::Built);
             building->attach(std::make_unique<AnimationComponent>(anim));
         }
+
+        // Add Passability
+        building->attach(std::make_unique<PassabilityComponent>(
+                TilePassability::Building));
+
+        return building;
+    }
+
+    std::shared_ptr<Entity> EntityFactory::createPalisade(
+            const BuildingPlacement& buildingPlacement, bool wilderness) const {
+
+        // Create Entity
+        std::shared_ptr<Entity> building = std::make_unique<Entity>(
+                Building::wallWidth, Building::wallHeight);
+
+        // Add SpriteComponent
+        const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
+        building->attach(std::make_unique<SpriteComponent>(spritesheet));
+
+        // Add WallComponent
+        WallVariant wallVariant = static_cast<WallVariant>(
+                buildingPlacement.wallVariant);
+        building->attach(std::make_unique<WallComponent>(wallVariant));
 
         // Add Passability
         building->attach(std::make_unique<PassabilityComponent>(

@@ -79,8 +79,8 @@ namespace Rival {
         }
     }
 
-    void GameState::render() {
-        gameRenderer.render();
+    void GameState::render(int delta) {
+        gameRenderer.render(delta);
 
         // TMP
         textRenderer.render(texts);

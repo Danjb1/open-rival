@@ -6,6 +6,10 @@
 
 The following analysis was performed with the help of VBinDiff.
 
+## Warning
+
+**:warning: The scenario editor crashes when creating or loading a map smaller than the current window size!**
+
 ## Notes
 
  - Data is saved in little-endian format unless otherwise specified.

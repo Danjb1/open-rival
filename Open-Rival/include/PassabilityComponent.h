@@ -2,10 +2,14 @@
 #define PASSABILITY_COMPONENT_H
 
 #include "EntityComponent.h"
+#include "Scenario.h"
 #include "Tile.h"
 
 namespace Rival {
 
+    /**
+     * Component that affects the passability of an entity's tile.
+     */
     class PassabilityComponent : public EntityComponent {
 
     public:

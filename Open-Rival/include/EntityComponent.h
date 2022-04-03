@@ -5,12 +5,16 @@
 
 namespace Rival {
 
-    // Forward declarations to avoid circular references
+    // Forward declarations
     class Entity;
     class Scenario;
 
     /**
      * Class used to encapsulate some Entity behaviour.
+     *
+     * Note that, unless specified, no guarantees are made about the order in
+     * which EntityComponents of a given Entity receive lifecycle callbacks,
+     * except that this order will always be deterministic.
      */
     class EntityComponent {
 
