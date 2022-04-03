@@ -62,7 +62,7 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
         e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is spawned") {
-            e.onSpawn(nullptr, 0, 0, 0);
+            e.onSpawn(nullptr, 0, { 0, 0 });
 
             THEN("the component receives a callback") {
                 ExampleEntityComponent* component =

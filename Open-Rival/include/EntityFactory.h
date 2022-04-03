@@ -5,7 +5,7 @@
 
 #include "Building.h"
 #include "Entity.h"
-#include "FacingComponent.h"
+#include "MapUtils.h"
 #include "Resources.h"
 #include "ScenarioData.h"
 #include "Unit.h"
@@ -28,6 +28,13 @@ namespace Rival {
          */
         std::shared_ptr<Entity> createBuilding(
                 const BuildingPlacement& buildingPlacement) const;
+
+        /**
+         * Creates a Palisade from raw data (e.g. read from a Scenario file).
+         */
+        std::shared_ptr<Entity> createPalisade(
+                const BuildingPlacement& buildingPlacement,
+                bool wilderness) const;
 
         /**
          * Creates an Object from raw data (e.g. read from a Scenario file).

@@ -32,52 +32,29 @@ namespace Rival {
 
         // Initialize Units
         for (const UnitPlacement& unitPlacement : data.units) {
-
-            // Create Unit
-            std::shared_ptr<Entity> unit =
-                    entityFactory.createUnit(unitPlacement);
-
-            // Add to world
-            scenario->addEntity(unit,
-                    unitPlacement.x,
-                    unitPlacement.y);
+            addUnit(scenario.get(), unitPlacement, entityFactory);
         }
 
         // Initialize Buildings
-        for (BuildingPlacement& buildingPlacement : data.buildings) {
-
+        for (const BuildingPlacement& buildingPlacement : data.buildings) {
             if (buildingPlacement.type == 0xAB) {
                 // Palisade (not supported yet)
-                continue;
+                addPalisade(scenario.get(), buildingPlacement, entityFactory);
             } else if (buildingPlacement.type == 0xAC) {
                 // Grate (not supported yet)
                 continue;
             } else if (buildingPlacement.type == 0xAD) {
                 // Door (not supported yet)
                 continue;
+            } else {
+                // Player-owned building
+                addBuilding(scenario.get(), buildingPlacement, entityFactory);
             }
-
-            // Create Building
-            std::shared_ptr<Entity> building =
-                    entityFactory.createBuilding(buildingPlacement);
-
-            // Add to world
-            scenario->addEntity(std::move(building),
-                    buildingPlacement.x,
-                    buildingPlacement.y);
         }
 
         // Initialize Objects
         for (const ObjectPlacement& objPlacement : data.objects) {
-
-            // Create Object
-            std::shared_ptr<Entity> obj = entityFactory.createObject(
-                    objPlacement, data.hdr.wilderness);
-
-            // Add to world
-            scenario->addEntity(std::move(obj),
-                    objPlacement.x,
-                    objPlacement.y);
+            addObject(scenario.get(), objPlacement, entityFactory);
         }
 
         return scenario;
@@ -198,6 +175,42 @@ namespace Rival {
         }
 
         return Tile(type, txIndex, 0);
+    }
+
+    void ScenarioBuilder::addUnit(
+            Scenario* scenario,
+            const UnitPlacement& unitPlacement,
+            const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> unit =
+                entityFactory.createUnit(unitPlacement);
+        scenario->addEntity(unit, unitPlacement.x, unitPlacement.y);
+    }
+
+    void ScenarioBuilder::addPalisade(
+            Scenario* scenario,
+            const BuildingPlacement& buildingPlacement,
+            const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> building = entityFactory.createPalisade(
+                buildingPlacement, scenario->isWilderness());
+        scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+    }
+
+    void ScenarioBuilder::addBuilding(
+            Scenario* scenario,
+            const BuildingPlacement& buildingPlacement,
+            const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> building =
+                entityFactory.createBuilding(buildingPlacement);
+        scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+    }
+
+    void ScenarioBuilder::addObject(
+            Scenario* scenario,
+            const ObjectPlacement& objPlacement,
+            const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> obj = entityFactory.createObject(
+                objPlacement, scenario->isWilderness());
+        scenario->addEntity(obj, objPlacement.x, objPlacement.y);
     }
 
 }  // namespace Rival

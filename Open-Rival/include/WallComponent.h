@@ -28,6 +28,9 @@ namespace Rival {
         P
     };
 
+    /**
+     * Component containing data required by wall segments.
+     */
     class WallComponent : public EntityComponent {
 
     public:
@@ -43,8 +46,10 @@ namespace Rival {
         static const int baseTxIndexElf = 48;
         static const int baseTxIndexGreenskin = 33;
         static const int baseTxIndexHuman = 42;
+        static const int baseTxIndexPalisade = 32;
+        static const int baseTxIndexGrate = 48;
 
-        SpriteComponent* spriteComponent;
+        SpriteComponent* spriteComponent = nullptr;
 
         WallVariant variant;
 

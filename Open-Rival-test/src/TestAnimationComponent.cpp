@@ -31,7 +31,7 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
         REQUIRE(spriteComponent->getTxIndex() == 0);
 
         WHEN("the entity is spawned") {
-            e.onSpawn(nullptr, 0, 0, 0);
+            e.onSpawn(nullptr, 0, { 0, 0 });
 
             THEN("the entity's SpriteComponent has its txIndex set") {
                 REQUIRE(spriteComponent->getTxIndex() == 3);
@@ -58,7 +58,7 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
         int msPerFrame = static_cast<int>(1.5f * TimerUtils::timeStepMs);
         e.attach(std::make_unique<AnimationComponent>(
                 Animations::Animation { 3, 5, msPerFrame }));
-        e.onSpawn(nullptr, 0, 0, 0);
+        e.onSpawn(nullptr, 0, { 0, 0 });
 
         SpriteComponent* spriteComponent =
                 e.getComponent<SpriteComponent>(SpriteComponent::key);
@@ -108,7 +108,7 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
         e.attach(std::make_unique<SpriteComponent>(spritesheet));
         e.attach(std::make_unique<AnimationComponent>(
                 Animations::Animation { 3, 4, TimerUtils::timeStepMs }));
-        e.onSpawn(nullptr, 0, 0, 0);
+        e.onSpawn(nullptr, 0, { 0, 0 });
 
         SpriteComponent* spriteComponent =
                 e.getComponent<SpriteComponent>(SpriteComponent::key);

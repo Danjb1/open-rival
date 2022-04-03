@@ -34,7 +34,7 @@ namespace Rival {
         return val;
     }
 
-    void BinaryFileReader::read(std::vector<unsigned char>* buffer) {
+    void BinaryFileReader::read(std::vector<std::uint8_t>* buffer) {
         in.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
     }
 

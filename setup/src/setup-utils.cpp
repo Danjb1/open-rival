@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "setup-utils.h"
 
-#include <fstream>
-#include <stdio.h>
-#include <vector>
-#include <windows.h>
+#include <cstdint>    // uint8_t
+#include <fstream>    // ofstream
+#include <iomanip>    // setw, setfill
+#include <sstream>    // ostringstream
+#include <vector>     // vector
+#include <windows.h>  // CreateDirectoryA, etc.
 
 #include "Palette.h"
 
@@ -99,13 +101,19 @@ namespace Setup {
         }
 
         // Pixel data
-        std::vector<std::uint8_t>* data = image.getData();
+        const std::vector<std::uint8_t>& data = image.getData();
         int stride = image.getStride();
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
-                out.put((*data)[x + y * stride]);
+                out.put(data[x + y * stride]);
             }
         }
+    }
+
+    std::string zeroPad(int value, int numDigits) {
+        std::ostringstream oss;
+        oss << std::setw(numDigits) << std::setfill('0') << value;
+        return oss.str();
     }
 
 }}  // namespace Rival::Setup

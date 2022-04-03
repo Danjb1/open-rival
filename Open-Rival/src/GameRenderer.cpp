@@ -51,7 +51,7 @@ namespace Rival {
           // Hardcode the race for now
           uiRenderer(Race::Human, res) {}
 
-    void GameRenderer::render() {
+    void GameRenderer::render(int delta) {
         // Render to our framebuffer.
         // Here the viewport specifies the region of the framebuffer texture
         // that we render onto, in pixels. We use the camera size here; if the
@@ -61,7 +61,7 @@ namespace Rival {
         int canvasWidth = RenderUtils::getCanvasWidth(camera.getWidth());
         int canvasHeight = RenderUtils::getCanvasHeight(camera.getHeight());
         glViewport(0, 0, canvasWidth, canvasHeight);
-        renderGame(canvasWidth, canvasHeight);
+        renderGame(canvasWidth, canvasHeight, delta);
 
         // Render the framebuffer to the screen.
         // Here the viewport specifies the region of the game window that we
@@ -80,7 +80,10 @@ namespace Rival {
         renderUi();
     }
 
-    void GameRenderer::renderGame(int viewportWidth, int viewportHeight) const {
+    void GameRenderer::renderGame(
+            int viewportWidth,
+            int viewportHeight,
+            int delta) const {
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -113,7 +116,7 @@ namespace Rival {
         mapBorderRenderer.render();
 
         // Render Entities
-        entityRenderer.render(camera, scenario.getEntities());
+        entityRenderer.render(camera, scenario.getEntities(), delta);
     }
 
     void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const {

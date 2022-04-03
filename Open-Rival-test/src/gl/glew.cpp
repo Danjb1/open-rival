@@ -106,3 +106,7 @@ void glVertexAttribPointer(
 void glEnableVertexAttribArray(GLuint index) {
     // Do nothing!
 }
+
+void glPixelStorei(GLenum pname, GLint param) {
+    // Do nothing!
+}

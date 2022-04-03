@@ -41,6 +41,7 @@
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
+    <ClCompile Include="src\MapUtils.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\MenuTextRenderer.cpp" />
     <ClCompile Include="src\MidiContainer.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\PaletteUtils.cpp" />
     <ClCompile Include="src\PassabilityComponent.cpp" />
+    <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PathUtils.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -86,6 +88,7 @@
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\UiRenderer.cpp" />
     <ClCompile Include="src\UnitPropsComponent.cpp" />
+    <ClCompile Include="src\WalkerComponent.cpp" />
     <ClCompile Include="src\WallComponent.cpp" />
     <ClCompile Include="src\WaveFile.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -102,6 +105,7 @@
     <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
+    <ClInclude Include="include\EnumUtils.h" />
     <ClInclude Include="include\FacingComponent.h" />
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\Font.h" />
@@ -113,6 +117,7 @@
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\json.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
+    <ClInclude Include="include\MapUtils.h" />
     <ClInclude Include="include\MathUtils.h" />
     <ClInclude Include="include\MenuTextRenderer.h" />
     <ClInclude Include="include\MidiContainer.h" />
@@ -125,6 +130,7 @@
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\PaletteUtils.h" />
     <ClInclude Include="include\PassabilityComponent.h" />
+    <ClInclude Include="include\Pathfinding.h" />
     <ClInclude Include="include\PathUtils.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Race.h" />
@@ -161,6 +167,7 @@
     <ClInclude Include="include\EntityRenderer.h" />
     <ClInclude Include="include\EntityFactory.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />
+    <ClInclude Include="include\WalkerComponent.h" />
     <ClInclude Include="include\WallComponent.h" />
     <ClInclude Include="include\WaveFile.h" />
     <ClInclude Include="include\Window.h" />

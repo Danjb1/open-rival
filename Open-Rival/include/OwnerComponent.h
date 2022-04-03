@@ -5,6 +5,9 @@
 
 namespace Rival {
 
+    /**
+     * Component that links an entity to a player.
+     */
     class OwnerComponent : public EntityComponent {
 
     public:

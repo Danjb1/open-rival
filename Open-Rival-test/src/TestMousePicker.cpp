@@ -4,10 +4,11 @@
 #include <memory>
 
 #include "Camera.h"
+#include "Entity.h"
+#include "MockSDL.h"
 #include "MousePicker.h"
 #include "RenderUtils.h"
 #include "Scenario.h"
-#include "SDL.h"
 
 using namespace Rival;
 
@@ -271,7 +272,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]") {
 
     // Add a Unit
-    std::unique_ptr<Entity> unit = std::make_unique<Entity>(1, 1);
+    std::shared_ptr<Entity> unit = std::make_shared<Entity>(1, 1);
     scenario.addEntity(std::move(unit), 4, 4);
 
     // Create a pixel-perfect Camera

@@ -6,6 +6,9 @@
 
 namespace Rival {
 
+    /**
+     * Component containing basic building properties.
+     */
     class BuildingPropsComponent : public EntityComponent {
 
     public:

@@ -6,6 +6,8 @@
 #pragma warning(disable : 4127)
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
+
+#include "MapUtils.h"
 #include "Spritesheet.h"
 
 namespace Rival {
@@ -22,7 +24,7 @@ namespace RenderUtils {
         // Rows are positioned directly below each other
         int renderPos = y * tileHeightPx;
 
-        if (x % 2 == 1) {
+        if (MapUtils::isLowerTile(x)) {
             // Tile co-ordinates zigzag up and down within a row
             renderPos += (tileHeightPx / 2);
         }
@@ -40,7 +42,7 @@ namespace RenderUtils {
         // Same as tileToPx_Y, above, but with a zoom level applied
         float scaledTileHeight = tileHeightPx * zoomLevel;
         float renderPos = y * scaledTileHeight;
-        if (x % 2 == 1) {
+        if (MapUtils::isLowerTile(x)) {
             renderPos += (scaledTileHeight / 2);
         }
         return renderPos;
@@ -78,7 +80,7 @@ namespace RenderUtils {
         // Tiles in a given row zigzag up and down.
         // Entities at the bottom of this zigzag should be rendered on top
         // of others in the same row.
-        if (x % 2 == 1) {
+        if (MapUtils::isLowerTile(x)) {
             z += 0.5f;
         }
 

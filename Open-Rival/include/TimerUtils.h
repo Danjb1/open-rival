@@ -6,7 +6,9 @@
 namespace Rival {
 namespace TimerUtils {
 
-    static const int timeStepMs = 1000 / 60;
+    static const int fps = 60;
+
+    static const int timeStepMs = 1000 / fps;
 
 }}  // namespace Rival::TimerUtils
 

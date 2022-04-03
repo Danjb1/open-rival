@@ -14,6 +14,9 @@ namespace Rival {
      *
      * This ensures that all graphical resources are released automatically
      * when an Entity is destroyed.
+     *
+     * Note that this does not contain any logic to set the txIndex; that must
+     * be handled elsewhere.
      */
     class SpriteComponent : public EntityComponent {
 

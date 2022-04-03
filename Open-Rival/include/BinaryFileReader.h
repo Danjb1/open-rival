@@ -23,7 +23,13 @@ namespace Rival {
 
         std::uint16_t readShort();
 
-        void read(std::vector<unsigned char>* buffer);
+        /**
+         * Reads bytes into the given buffer until it is full or there are no
+         * bytes left to read.
+         *
+         * This will overwrite the contents of the buffer.
+         */
+        void read(std::vector<std::uint8_t>* buffer);
 
     private:
         std::ifstream in;

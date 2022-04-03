@@ -24,17 +24,14 @@ namespace Rival {
     public:
         GameState(Application& app, std::unique_ptr<Scenario> scenario);
 
+        // Begin State override
         void onLoad() override;
-
         void keyDown(const SDL_Keycode keyCode) override;
-
         void mouseUp(const SDL_MouseButtonEvent evt) override;
-
         void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
-
-        void render() override;
-
+        void render(int delta) override;
         void update() override;
+        // End State override
 
         Scenario& getScenario() { return *scenario; }
 

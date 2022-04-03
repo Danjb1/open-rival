@@ -126,7 +126,7 @@ int main() {
         Application app(*window, cfg);
 
         // Load some scenario
-        ScenarioReader reader(Resources::mapsDir + "test-all.sco");
+        ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         EntityFactory entityFactory(app.getResources());
         std::unique_ptr<Scenario> scenario =

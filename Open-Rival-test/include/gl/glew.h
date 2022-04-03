@@ -24,7 +24,11 @@ typedef char GLchar;
 #define GL_TRIANGLES 0x0004
 #define GL_TRIANGLE_STRIP 0x0005
 #define GL_TRIANGLE_FAN 0x0006
+#define GL_UNPACK_ALIGNMENT 0x0CF5
 #define GL_FLOAT 0x1406
+#define GL_NEAREST 0x2600
+#define GL_LINEAR 0x2601
+#define GL_CLAMP_TO_EDGE 0x812F
 #define GL_ARRAY_BUFFER 0x8892
 #define GL_ELEMENT_ARRAY_BUFFER 0x8893
 #define GL_STATIC_DRAW 0x88E4
@@ -98,5 +102,7 @@ void glVertexAttribPointer(
         const void* pointer);
 
 void glEnableVertexAttribArray(GLuint index);
+
+void glPixelStorei(GLenum pname, GLint param);
 
 #endif  // __GLEW_H__

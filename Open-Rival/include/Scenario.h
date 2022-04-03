@@ -6,19 +6,38 @@
 #include <vector>
 
 #include "Entity.h"
+#include "MapUtils.h"
 #include "Tile.h"
 
 namespace Rival {
 
-    class Scenario {
+    // Forward-declarations
+    class Entity;
+
+    /**
+     * Interface exposing map data for pathfinding.
+     */
+    class PathfindingMap : public MapBounds {
+    public:
+        virtual TilePassability getPassability(const MapNode& pos) const = 0;
+    };
+
+    /**
+     * A loaded scenario.
+     *
+     * Contains map data and entities.
+     */
+    class Scenario : public PathfindingMap {
 
     public:
         Scenario(int width, int height, bool wilderness);
         Scenario(int width, int height, bool wilderness, std::vector<Tile> tiles);
 
-        int getWidth() const { return width; }
-
-        int getHeight() const { return height; }
+        // Begin PathfindingMap override
+        int getWidth() const override { return width; }
+        int getHeight() const override { return height; }
+        TilePassability getPassability(const MapNode& pos) const override;
+        // End PathfindingMap override
 
         const std::vector<Tile>& getTiles() const { return tiles; }
 
@@ -46,7 +65,7 @@ namespace Rival {
 
         void cleanUpEntities();
 
-        void setPassability(int x, int y, TilePassability passability);
+        void setPassability(const MapNode& pos, TilePassability passability);
 
     private:
         const int width;
