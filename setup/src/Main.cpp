@@ -81,6 +81,7 @@ void buildTextures() {
     try {
         std::wcout << "Building textures\n";
         Setup::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures", false);
+        Setup::buildTextures("setup\\definitions\\ui", "setup\\images\\ui", "res\\textures", false);
         Setup::buildTextures("setup\\definitions\\ui\\atlas", "setup\\images\\ui", "res\\textures", true);
     } catch (const std::runtime_error& e) {
         std::cerr << "Failed to build textures: " << e.what() << "\n";

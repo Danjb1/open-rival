@@ -1,5 +1,7 @@
 # Sounds
 
+> Sounds are now indexed from zero, so subtract 1 from each of these values.
+
 ## Buildings
 
  - **001:** Human - Castle

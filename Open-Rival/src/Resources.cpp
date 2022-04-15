@@ -8,7 +8,8 @@
 #include "RenderUtils.h"
 
 namespace Rival {
-
+    
+    const std::string Resources::dataDir = "res\\data\\";
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::soundDir = "res\\sound\\";
     const std::string Resources::txDir = "res\\textures\\";

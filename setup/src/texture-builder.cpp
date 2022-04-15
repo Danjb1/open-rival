@@ -445,6 +445,11 @@ namespace Setup {
 
         // Process each definition file in the given directory
         for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir)) {
+
+            if (entry.is_directory()) {
+                continue;
+            }
+
             const fs::path path = entry.path();
             try {
                 std::cout << "Processing: " << path.filename() << "\n";

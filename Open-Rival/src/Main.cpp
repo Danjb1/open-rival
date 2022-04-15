@@ -83,6 +83,10 @@ void initAL() {
     AudioUtils::initAL();
 }
 
+json readUnitData() {
+    return FileUtils::readJsonFile(Resources::dataDir + "units.json");
+}
+
 void setWindowIcon(Window& window) {
     std::string iconFilename = Resources::txDir + "icon.png";
     SDL_Surface* surface;
@@ -121,6 +125,9 @@ int main() {
         // Initialization that requires an OpenGL context
         initGLEW();
         initGL();
+
+        // Read game data
+        json unitData = readUnitData();
 
         // Create our Application
         Application app(*window, cfg);

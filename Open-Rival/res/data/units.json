@@ -1,0 +1,1160 @@
+{
+  "units": [
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 2,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 25,
+          "msPerFrame": 60,
+          "startIndex": 24
+        }
+      },
+      "name": "Ballista",
+      "portrait": 42,
+      "sounds": {
+        "train": [
+          78
+        ],
+        "select": [
+          82,
+          83
+        ],
+        "move": [
+          79,
+          80,
+          81
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_1",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "msPerFrame": 60,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 80,
+          "msPerFrame": 60,
+          "startIndex": 72
+        }
+      },
+      "name": "unit_2",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_3",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "msPerFrame": 60,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "msPerFrame": 60,
+          "startIndex": 55
+        }
+      },
+      "name": "unit_4",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "msPerFrame": 60,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 79,
+          "msPerFrame": 60,
+          "startIndex": 72
+        }
+      },
+      "name": "unit_5",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_6",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "animType_1": {
+          "endIndex": 8,
+          "msPerFrame": 60,
+          "startIndex": 8
+        },
+        "moving": {
+          "endIndex": 21,
+          "msPerFrame": 60,
+          "startIndex": 16
+        },
+        "animType_3": {
+          "endIndex": 69,
+          "msPerFrame": 60,
+          "startIndex": 64
+        },
+        "attacking": {
+          "endIndex": 118,
+          "msPerFrame": 60,
+          "startIndex": 112
+        },
+        "animType_5": {
+          "endIndex": 21,
+          "msPerFrame": 60,
+          "startIndex": 16
+        }
+      },
+      "name": "unit_7",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_8",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_9",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_10",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_11",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "msPerFrame": 60,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "msPerFrame": 60,
+          "startIndex": 56
+        }
+      },
+      "name": "unit_12",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_13",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_14",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_15",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_16",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_17",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_18",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_19",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_20",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_21",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_22",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_23",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_24",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_25",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_26",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_27",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_28",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_29",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_30",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_31",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_32",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_33",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_34",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_35",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_36",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_37",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_38",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_39",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_40",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_41",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_42",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_43",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_44",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_45",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_46",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_47",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "standing": {
+          "endIndex": 0,
+          "msPerFrame": 60,
+          "startIndex": 0
+        }
+      },
+      "name": "unit_48",
+      "portrait": 0,
+      "sounds": {
+        "move": [
+          0
+        ],
+        "select": [
+          0
+        ],
+        "train": [
+          0
+        ]
+      }
+    }
+  ]
+}
