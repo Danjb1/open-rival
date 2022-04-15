@@ -6,10 +6,18 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+### Movement
+
 - Facing is not updated during movement
     - `prepareNextMovement` is only called once per route
 - WalkerComponent should not be responsible for animations
     - Perhaps UnitPropsComponent should broadcast the new state to the AnimationComponent
+
+### Data Loading
+
+- Central unit type registry: animations, UI image, etc.
+    - Data is being loaded from json but should be deserialised into a more useable object
+    - Hardcoded animations should be removed
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -262,6 +270,7 @@
 - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
+- Add padding between spritesheet images
 
 ### Sound
 
@@ -311,8 +320,6 @@
 
 ### Design
 
-- Central unit type registry: animations, UI image, etc.
-    - Data should be loaded from a file
 - Static objects (e.g. mountains) need not use an AnimationComponent
 - Differentiate between components that need to be ticked and those that don't
 - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed

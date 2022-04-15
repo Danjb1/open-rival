@@ -27,6 +27,7 @@ namespace Rival {
 
     public:
         // Directories
+        static const std::string dataDir;
         static const std::string mapsDir;
         static const std::string soundDir;
         static const std::string txDir;
