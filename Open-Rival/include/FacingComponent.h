@@ -3,8 +3,11 @@
 
 #include "EntityComponent.h"
 #include "MapUtils.h"
+#include "MovementComponent.h"
 
 namespace Rival {
+
+    struct MapNode;
 
     /**
      * Interface used to listen to changes in facing.
@@ -17,12 +20,20 @@ namespace Rival {
     /**
      * Component that manages an Entity's facing.
      */
-    class FacingComponent : public EntityComponent {
+    class FacingComponent : public EntityComponent,
+                            public MovementListener {
 
     public:
-        static const std::string key;
-
         FacingComponent(Facing initialFacing);
+
+        // Begin EntityComponent override
+        void onEntitySpawned(Scenario* scenario) override;
+        // End EntityComponent override
+
+        // Begin MovementComponent override
+        virtual void onUnitMoveStart(const MapNode* nextNode) override;
+        virtual void onUnitJourneyEnd() override;
+        // End MovementComponent override
 
         void setListener(FacingListener* listener);
 
@@ -35,13 +46,19 @@ namespace Rival {
         void rotateRight();
 
     private:
+        void notifyListener() const;
+
+    public:
+        static const std::string key;
+
+    private:
         static const int numFacings = 8;
+
+        MovementComponent* movementComponent;
 
         Facing facing;
 
         FacingListener* listener;
-
-        void notifyListener() const;
     };
 
 }  // namespace Rival

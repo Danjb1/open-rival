@@ -8,22 +8,10 @@
 
 namespace Rival {
 
-    const std::string WalkerComponent::key = "walker";
-
     WalkerPassabilityChecker WalkerComponent::passabilityChecker =
             WalkerPassabilityChecker();
 
-    WalkerComponent::WalkerComponent() : EntityComponent(key),
-                                         movement({ 0, 0 }) {}
-
-    void WalkerComponent::onEntitySpawned(Scenario*) {
-        unitPropsComponent = entity->getComponent<UnitPropsComponent>(
-                UnitPropsComponent::key);
-        facingComponent = entity->getComponent<FacingComponent>(
-                FacingComponent::key);
-        animComponent = entity->getComponent<AnimationComponent>(
-                AnimationComponent::key);
-    }
+    WalkerComponent::WalkerComponent() : movement({ 0, 0 }) {}
 
     bool WalkerPassabilityChecker::isNodeTraversable(
             const PathfindingMap& map, const MapNode& node) const {
@@ -38,9 +26,10 @@ namespace Rival {
                     { 4, 3 },
                     *entity->getScenario(),
                     passabilityChecker);
-            movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
-            unitPropsComponent->setState(UnitState::Moving);
-            prepareNextMovement();
+
+            if (!route.isEmpty()) {
+                prepareNextMovement();
+            }
         }
 
         if (route.isEmpty()) {
@@ -69,17 +58,10 @@ namespace Rival {
             return;
         }
 
-        if (facingComponent) {
-            const MapNode* nextNode = route.peek();
-            Facing newFacing = MapUtils::getDir(entity->getPos(), *nextNode);
-            facingComponent->setFacing(newFacing);
-        }
+        movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
 
-        if (animComponent) {
-            // TODO: Peasants may need to play the MovingWithBag animation
-            animComponent->setAnimation(Animations::getUnitAnimation(
-                    unitPropsComponent->getUnitType(),
-                    Animations::UnitAnimationType::Moving));
+        for (MovementListener* listener : listeners) {
+            listener->onUnitMoveStart(route.peek());
         }
     }
 
@@ -93,15 +75,11 @@ namespace Rival {
         movement.timeElapsed = 0;
 
         if (route.isEmpty()) {
-            unitPropsComponent->setState(UnitState::Idle);
-
-            if (animComponent) {
-                animComponent->setAnimation(Animations::getUnitAnimation(
-                        unitPropsComponent->getUnitType(),
-                        Animations::UnitAnimationType::Standing));
+            for (MovementListener* listener : listeners) {
+                listener->onUnitJourneyEnd();
             }
-
-            return;
+        } else {
+            prepareNextMovement();
         }
     }
 

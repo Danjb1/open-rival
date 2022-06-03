@@ -256,6 +256,9 @@
     <ClCompile Include="src\MapUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\MovementComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -494,6 +497,9 @@
     </ClInclude>
     <ClInclude Include="src\Main.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MovementComponent.h">
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

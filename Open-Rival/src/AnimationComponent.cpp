@@ -20,6 +20,12 @@ namespace Rival {
           msPassedCurrentAnimFrame(0) {}
 
     void AnimationComponent::onEntitySpawned(Scenario*) {
+        unitPropsComponent = entity->getComponent<UnitPropsComponent>(
+                UnitPropsComponent::key);
+        if (unitPropsComponent) {
+            unitPropsComponent->addStateListener(this);
+        }
+
         spriteComponent = entity->getComponent<SpriteComponent>(
                 SpriteComponent::key);
 
@@ -45,6 +51,19 @@ namespace Rival {
         int msPerAnimFrame = getMsPerAnimFrame();
         if (msPassedCurrentAnimFrame >= msPerAnimFrame) {
             advanceFrame(numAnimFrames, msPerAnimFrame);
+        }
+    }
+
+    void AnimationComponent::onUnitStateChanged(const UnitState newState) {
+        if (newState == UnitState::Idle) {
+            setAnimation(Animations::getUnitAnimation(
+                    unitPropsComponent->getUnitType(),
+                    Animations::UnitAnimationType::Standing));
+        } else if (newState == UnitState::Moving) {
+            // TODO: Peasants may need to play the MovingWithBag animation
+            setAnimation(Animations::getUnitAnimation(
+                    unitPropsComponent->getUnitType(),
+                    Animations::UnitAnimationType::Moving));
         }
     }
 
