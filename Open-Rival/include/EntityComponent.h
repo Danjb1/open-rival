@@ -1,5 +1,4 @@
-#ifndef ENTITY_COMPONENT_H
-#define ENTITY_COMPONENT_H
+#pragma once
 
 #include <string>
 
@@ -18,9 +17,11 @@ namespace Rival {
      */
     class EntityComponent {
 
+        friend class Entity;
+
     public:
         EntityComponent(std::string key);
-        virtual ~EntityComponent() {}
+        virtual ~EntityComponent() = default;
 
         /**
          * Callback for when this Component is attached to an Entity.
@@ -65,6 +66,11 @@ namespace Rival {
          */
         Entity* entity { nullptr };
 
+        /**
+         * Callback for when this EntityComponent is deleted.
+         */
+        virtual void onDelete() {};
+
     private:
         /**
          * Key used to store and retrieve this EntityComponent.
@@ -78,5 +84,3 @@ namespace Rival {
     };
 
 }  // namespace Rival
-
-#endif  // ENTITY_COMPONENT_H

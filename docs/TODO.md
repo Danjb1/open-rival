@@ -6,10 +6,13 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Listeners
+### Component Safety
 
-- Listeners should remove themselves when they get destroyed
-    - Need some kind of "OnDestroy" callback for components
+- Avoid raw pointers
+    - Consider storing components using shared_ptrs, and return weak_ptrs when
+        components are requested
+    - OR just make some guarantees about component lifetimes
+        - Could add a "require" mechanism when retrieving components (fail fast)
 
 ### Data Loading
 
@@ -324,14 +327,11 @@
 
 ### Refactoring
 
-- Add a "require" mechanism when retrieving components (fail fast)
-- We should use weakptrs whenever we store ptrs to other components
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
     - Do not auto-format library subfolders
 - Move constants from header files to CPP files?
-- Consider using std::unordered_map instead of std::map
 - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset
 - Use a common file reading mechanism in audio-extractor

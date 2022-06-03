@@ -1,16 +1,14 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
-#include <map>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "EntityComponent.h"
 #include "MapUtils.h"
 
 namespace Rival {
 
-    // Forward-declarations
     class Scenario;
 
     enum class EntityType : std::uint8_t {
@@ -32,16 +30,11 @@ namespace Rival {
     /**
      * A thing that exists within the game world.
      *
-     * This is essentially just a "bag of Components".
-     *
-     * Further reading:
+     * This is essentially just a "bag of Components":
      * https://gameprogrammingpatterns.com/component.html
      *
-     * ---
-     * 
      * Note that, unless specified, no guarantees are made about the order in
-     * Entities within the game world receive lifecycle callbacks, except that
-     * this order will always be deterministic.
+     * Entities within the game world receive lifecycle callbacks.
      */
     class Entity final {
 
@@ -199,13 +192,7 @@ namespace Rival {
         /**
          * EntityComponents owned by this Entity.
          */
-        std::map<std::string, std::unique_ptr<EntityComponent>> components;
-
-    private:
-        void updateComponents() const;
-        void cleanUpComponents();
+        std::unordered_map<std::string, std::unique_ptr<EntityComponent>> components;
     };
 
 }  // namespace Rival
-
-#endif  // ENTITY_H

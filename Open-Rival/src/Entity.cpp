@@ -33,27 +33,17 @@ namespace Rival {
     }
 
     void Entity::update() {
-        updateComponents();
-        cleanUpComponents();
-    }
-
-    void Entity::updateComponents() const {
-        for (auto const& kv : components) {
-            const auto& component = kv.second;
-            if (!component->isDeleted()) {
-                component->update();
-            }
-        }
-    }
-
-    void Entity::cleanUpComponents() {
         for (auto it = components.cbegin(); it != components.cend();) {
             const auto& component = it->second;
             if (component->isDeleted()) {
+                // Clean up deleted components
+                component->onDelete();
                 it = components.erase(it);
-            } else {
-                ++it;
+                continue;
             }
+
+            component->update();
+            ++it;
         }
     }
 

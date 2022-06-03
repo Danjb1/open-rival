@@ -38,6 +38,12 @@ namespace Rival {
         setAnimation(animation);
     }
 
+    void AnimationComponent::onDelete() {
+        if (facingComponent) {
+            facingComponent->setListener(nullptr);
+        }
+    }
+
     void AnimationComponent::update() {
         int numAnimFrames = getNumAnimFrames();
 

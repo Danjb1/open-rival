@@ -21,6 +21,10 @@ namespace Rival {
         }
     }
 
+    void FacingComponent::onDelete() {
+        movementComponent->removeListener(this);
+    }
+
     void FacingComponent::onUnitMoveStart(const MapNode* nextNode) {
         Facing newFacing = MapUtils::getDir(entity->getPos(), *nextNode);
         setFacing(newFacing);
