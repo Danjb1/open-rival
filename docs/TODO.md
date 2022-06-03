@@ -6,12 +6,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Movement
+### Listeners
 
-- Facing is not updated during movement
-    - `prepareNextMovement` is only called once per route
-- WalkerComponent should not be responsible for animations
-    - Perhaps UnitPropsComponent should broadcast the new state to the AnimationComponent
+- Listeners should remove themselves when they get destroyed
+    - Need some kind of "OnDestroy" callback for components
 
 ### Data Loading
 
@@ -326,6 +324,8 @@
 
 ### Refactoring
 
+- Add a "require" mechanism when retrieving components (fail fast)
+- We should use weakptrs whenever we store ptrs to other components
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?

@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "FacingComponent.h"
 
+#include "Entity.h"
+#include "MapUtils.h"
+#include "MovementComponent.h"
+
 namespace Rival {
 
     const std::string FacingComponent::key = "facing";
@@ -8,6 +12,23 @@ namespace Rival {
     FacingComponent::FacingComponent(Facing initialFacing)
         : EntityComponent(key),
           facing(initialFacing) {}
+
+    void FacingComponent::onEntitySpawned(Scenario*) {
+        movementComponent = entity->getComponent<MovementComponent>(
+                MovementComponent::key);
+        if (movementComponent) {
+            movementComponent->addListener(this);
+        }
+    }
+
+    void FacingComponent::onUnitMoveStart(const MapNode* nextNode) {
+        Facing newFacing = MapUtils::getDir(entity->getPos(), *nextNode);
+        setFacing(newFacing);
+    }
+
+    void FacingComponent::onUnitJourneyEnd() {
+        // Do nothing
+    }
 
     void FacingComponent::setListener(FacingListener* newListener) {
         listener = newListener;

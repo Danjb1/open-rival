@@ -45,16 +45,13 @@ namespace Rival {{
 
     # Write .h file
     template = '''\
-#ifndef {filename}_H
-#define {filename}_H
+#pragma once
 
 namespace Rival {{
 
     // TODO
 
 }}  // namespace Rival
-
-#endif  // {filename}_H
 '''
     context = {
         'filename': camelCaseToSnakeCase(filename)

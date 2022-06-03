@@ -1,13 +1,8 @@
 #ifndef WALKER_COMPONENT_H
 #define WALKER_COMPONENT_H
 
-#include <vector>
-
-#include "AnimationComponent.h"
-#include "EntityComponent.h"
-#include "FacingComponent.h"
+#include "MovementComponent.h"
 #include "Pathfinding.h"
-#include "UnitPropsComponent.h"
 
 namespace Rival {
 
@@ -20,35 +15,17 @@ namespace Rival {
     };
 
     /**
-     * Represents a movement between 2 tiles.
-     */
-    struct Movement {
-        /**
-         * Time spent moving so far, in ms.
-         */
-        int timeElapsed;
-
-        /**
-         * Total time required to complete the movement, in ms.
-         */
-        int timeRequired;
-    };
-
-    /**
      * Component that allows an entity to walk around the map.
      *
      * Note that during movement, entities are considered to occupy their
      * original tile until they have fully moved into the new tile.
      */
-    class WalkerComponent : public EntityComponent {
+    class WalkerComponent : public MovementComponent {
 
     public:
-        static const std::string key;
-
         WalkerComponent();
 
         // Begin EntityComponent override
-        void onEntitySpawned(Scenario* scenario) override;
         void update() override;
         // End EntityComponent override
 
@@ -68,21 +45,18 @@ namespace Rival {
         const Movement& getMovement() const { return movement; }
 
     private:
-        static WalkerPassabilityChecker passabilityChecker;
+        void prepareNextMovement();
+        void completeMovement();
 
-        UnitPropsComponent* unitPropsComponent { nullptr };
-        FacingComponent* facingComponent { nullptr };
-        AnimationComponent* animComponent { nullptr };
+    private:
+        static WalkerPassabilityChecker passabilityChecker;
 
         Pathfinding::Route route;
 
         Movement movement;
 
-        // TMP
+        // TMP: This should depend on the unit's speed
         int ticksPerMove = 30;
-
-        void prepareNextMovement();
-        void completeMovement();
     };
 
 }  // namespace Rival

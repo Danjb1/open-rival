@@ -50,6 +50,7 @@
     <ClCompile Include="src\MidsDecoder.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\MouseUtils.cpp" />
+    <ClCompile Include="src\MovementComponent.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\PaletteUtils.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="include\MidsDecoder.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\MouseUtils.h" />
+    <ClInclude Include="include\MovementComponent.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\PaletteUtils.h" />

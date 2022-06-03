@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "UnitPropsComponent.h"
 
+#include "Entity.h"
+#include "MapUtils.h"
+
 namespace Rival {
 
     const std::string UnitPropsComponent::key = "unit_props";
@@ -9,8 +12,47 @@ namespace Rival {
         : EntityComponent(key),
           type(type) {}
 
+    void UnitPropsComponent::onEntitySpawned(Scenario*) {
+        movementComponent = entity->getComponent<MovementComponent>(
+                MovementComponent::key);
+        if (movementComponent) {
+            movementComponent->addListener(this);
+        }
+    }
+
+    void UnitPropsComponent::onUnitMoveStart(const MapNode*) {
+        setState(UnitState::Moving);
+    }
+
+    void UnitPropsComponent::onUnitJourneyEnd() {
+        setState(UnitState::Idle);
+    }
+
+    void UnitPropsComponent::addStateListener(UnitStateListener* listener) {
+        if (!listener) {
+            return;
+        }
+        stateListeners.emplace(listener);
+    }
+
+    void UnitPropsComponent::removeStateListener(UnitStateListener* listener) {
+        if (!listener) {
+            return;
+        }
+        stateListeners.erase(listener);
+    }
+
     void UnitPropsComponent::setState(UnitState newState) {
+        if (state == newState) {
+            // No change
+            return;
+        }
+
         state = newState;
+
+        for (UnitStateListener* listener : stateListeners) {
+            listener->onUnitStateChanged(newState);
+        }
     }
 
 }  // namespace Rival

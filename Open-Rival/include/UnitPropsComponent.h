@@ -1,12 +1,15 @@
-#ifndef UNIT_PROPS_COMPONENT_H
-#define UNIT_PROPS_COMPONENT_H
+#pragma once
 
 #include <cstdint>  // uint8_t
+#include <unordered_set>
 
 #include "EntityComponent.h"
+#include "MovementComponent.h"
 #include "Unit.h"
 
 namespace Rival {
+
+    struct MapNode;
 
     enum class UnitState : std::uint8_t {
         Idle,
@@ -15,14 +18,33 @@ namespace Rival {
     };
 
     /**
+     * Interface used to listen to unit state changes.
+     */
+    class UnitStateListener {
+    public:
+        virtual void onUnitStateChanged(const UnitState newState) = 0;
+    };
+
+    /**
      * Component containing basic unit properties.
      */
-    class UnitPropsComponent : public EntityComponent {
+    class UnitPropsComponent : public EntityComponent,
+                               public MovementListener {
 
     public:
-        static const std::string key;
-
         UnitPropsComponent(Unit::Type type);
+
+        // Begin EntityComponent override
+        void onEntitySpawned(Scenario* scenario) override;
+        // End EntityComponent override
+
+        // Begin MovementListener override
+        virtual void onUnitMoveStart(const MapNode* nextNode) override;
+        virtual void onUnitJourneyEnd() override;
+        // End MovementListener override
+
+        void addStateListener(UnitStateListener* listener);
+        void removeStateListener(UnitStateListener* listener);
 
         Unit::Type getUnitType() const { return type; }
 
@@ -36,12 +58,17 @@ namespace Rival {
          */
         void setState(UnitState state);
 
+    public:
+        static const std::string key;
+
     private:
+        std::unordered_set<UnitStateListener*> stateListeners;
+
+        MovementComponent* movementComponent { nullptr };
+
         Unit::Type type = Unit::Type::Invalid;
 
         UnitState state = UnitState::Idle;
     };
 
 }  // namespace Rival
-
-#endif  // UNIT_PROPS_COMPONENT_H
