@@ -39,6 +39,7 @@ namespace Rival {
 
     public:
         MovementComponent();
+        virtual ~MovementComponent() = default;
 
         void addListener(MovementListener* listener);
         void removeListener(MovementListener* listener);

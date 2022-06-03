@@ -20,6 +20,10 @@ namespace Rival {
         }
     }
 
+    void UnitPropsComponent::onDelete() {
+        movementComponent->removeListener(this);
+    }
+
     void UnitPropsComponent::onUnitMoveStart(const MapNode*) {
         setState(UnitState::Moving);
     }

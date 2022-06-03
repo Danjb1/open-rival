@@ -1,5 +1,4 @@
-#ifndef FACING_COMPONENT_H
-#define FACING_COMPONENT_H
+#pragma once
 
 #include "EntityComponent.h"
 #include "MapUtils.h"
@@ -27,7 +26,8 @@ namespace Rival {
         FacingComponent(Facing initialFacing);
 
         // Begin EntityComponent override
-        void onEntitySpawned(Scenario* scenario) override;
+        virtual void onEntitySpawned(Scenario* scenario) override;
+        virtual void onDelete() override;
         // End EntityComponent override
 
         // Begin MovementComponent override
@@ -54,13 +54,11 @@ namespace Rival {
     private:
         static const int numFacings = 8;
 
-        MovementComponent* movementComponent;
+        MovementComponent* movementComponent { nullptr };
 
         Facing facing;
 
-        FacingListener* listener;
+        FacingListener* listener { nullptr };
     };
 
 }  // namespace Rival
-
-#endif  // FACING_COMPONENT_H

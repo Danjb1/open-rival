@@ -1,5 +1,4 @@
-#ifndef ANIMATION_COMPONENT_H
-#define ANIMATION_COMPONENT_H
+#pragma once
 
 #include "Animations.h"
 #include "EntityComponent.h"
@@ -20,8 +19,9 @@ namespace Rival {
         AnimationComponent(const Animations::Animation animation);
 
         // Begin EntityComponent override
-        void onEntitySpawned(Scenario* scenario) override;
-        void update() override;
+        virtual void onEntitySpawned(Scenario* scenario) override;
+        virtual void onDelete() override;
+        virtual void update() override;
         // End EntityComponent override
 
         // Begin UnitStateListener override
@@ -64,5 +64,3 @@ namespace Rival {
         int msPassedCurrentAnimFrame;
     };
 }  // namespace Rival
-
-#endif  // ANIMATION_COMPONENT_H

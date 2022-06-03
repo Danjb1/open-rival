@@ -35,7 +35,8 @@ namespace Rival {
         UnitPropsComponent(Unit::Type type);
 
         // Begin EntityComponent override
-        void onEntitySpawned(Scenario* scenario) override;
+        virtual void onEntitySpawned(Scenario* scenario) override;
+        virtual void onDelete() override;
         // End EntityComponent override
 
         // Begin MovementListener override
