@@ -3,10 +3,10 @@
 
 #include <GL\glew.h>
 
-namespace Rival {
-namespace GLUtils {
+namespace Rival { namespace GLUtils {
 
-    enum class PackAlignment : GLint {
+    enum class PackAlignment : GLint
+    {
         BYTES_1 = 1,
         BYTES_2 = 2,
         BYTES_4 = 4,

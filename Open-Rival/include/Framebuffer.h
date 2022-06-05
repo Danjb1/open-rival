@@ -17,13 +17,21 @@ namespace Rival {
         Framebuffer& operator=(const Framebuffer& other) = delete;
         Framebuffer& operator=(Framebuffer&& other) = delete;
 
-        GLuint getId() const { return id; }
+        GLuint getId() const {
+            return id;
+        }
 
-        GLuint getTextureId() const { return textureId; }
+        GLuint getTextureId() const {
+            return textureId;
+        }
 
-        int getWidth() const { return width; }
+        int getWidth() const {
+            return width;
+        }
 
-        int getHeight() const { return height; }
+        int getHeight() const {
+            return height;
+        }
 
     private:
         GLuint id;

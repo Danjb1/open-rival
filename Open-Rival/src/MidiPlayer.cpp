@@ -48,9 +48,8 @@ namespace Rival {
 
         stopped = false;
 
-        std::chrono::milliseconds startTime =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                        std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds startTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::system_clock::now().time_since_epoch());
 
         const std::vector<midi_stream_event>& events = file.getEvents();
 
@@ -75,9 +74,8 @@ namespace Rival {
             }
 
             // Wait until the message is due
-            std::chrono::milliseconds currentTime =
-                    std::chrono::duration_cast<std::chrono::milliseconds>(
-                            std::chrono::system_clock::now().time_since_epoch());
+            std::chrono::milliseconds currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::system_clock::now().time_since_epoch());
             auto timeElapsed = currentTime - startTime;
             auto timeUntilMessage = evt.m_timestamp - timeElapsed.count();
             if (timeUntilMessage > 0) {

@@ -4,11 +4,11 @@
 namespace Rival {
 
     Spritesheet::Spritesheet(const Texture& texture, int width, int height)
-        : texture(texture),
-          width(width),
-          height(height),
-          xSize(texture.getWidth() / width),
-          ySize(texture.getHeight() / height) {}
+        : texture(texture)
+        , width(width)
+        , height(height)
+        , xSize(texture.getWidth() / width)
+        , ySize(texture.getHeight() / height) {}
 
     const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const {
 
@@ -24,12 +24,7 @@ namespace Rival {
         const float ty1 = 1 - (y * height / txHeight);
         const float ty2 = 1 - ((y + 1) * height / txHeight);
 
-        return {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
+        return { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
     }
 
 }  // namespace Rival

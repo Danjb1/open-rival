@@ -1,5 +1,6 @@
-#ifndef WALL_COMPONENT_H
-#define WALL_COMPONENT_H
+#pragma once
+
+#include <memory>
 
 #include "Building.h"
 #include "EntityComponent.h"
@@ -9,7 +10,8 @@ namespace Rival {
 
     // We have 16 wall variants.
     // The underlying int value corresponds to the wall's texture index.
-    enum class WallVariant : std::uint8_t {
+    enum class WallVariant : std::uint8_t
+    {
         A,
         B,
         C,
@@ -49,7 +51,7 @@ namespace Rival {
         static const int baseTxIndexPalisade = 32;
         static const int baseTxIndexGrate = 48;
 
-        SpriteComponent* spriteComponent = nullptr;
+        std::weak_ptr<SpriteComponent> weakSpriteComponent;
 
         WallVariant variant;
 
@@ -57,5 +59,3 @@ namespace Rival {
     };
 
 }  // namespace Rival
-
-#endif  // WALL_COMPONENT_H

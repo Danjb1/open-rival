@@ -8,10 +8,7 @@
 
 namespace Rival {
 
-    MenuTextRenderer::MenuTextRenderer(const Window& window)
-        : window(&window),
-          textRenderer() {
-    }
+    MenuTextRenderer::MenuTextRenderer(const Window& window) : window(&window), textRenderer() {}
 
     void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const {
         // Disable depth testing for now (we may use it later)
@@ -21,12 +18,10 @@ namespace Rival {
         glUseProgram(Shaders::fontShader.programId);
 
         // Project to menu
-        glm::mat4 viewProjMatrix =
-                RenderUtils::createMenuProjection(window->getAspectRatio());
+        glm::mat4 viewProjMatrix = RenderUtils::createMenuProjection(window->getAspectRatio());
 
         // Set uniform values
-        glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc,
-                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
         glUniform1i(Shaders::fontShader.texUnitUniformLoc, 0);
 
         // Render!

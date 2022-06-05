@@ -8,8 +8,7 @@
 #include "BinaryFileReader.h"
 #include "Palette.h"
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     class InterfaceExtractor {
     public:
@@ -21,9 +20,7 @@ namespace Setup {
         int index;
         Rival::BinaryFileReader reader;
 
-        void extractImage(
-                const std::string& outputDir,
-                const Palette::Palette& palette);
+        void extractImage(const std::string& outputDir, const Palette::Palette& palette);
     };
 
 }}  // namespace Rival::Setup

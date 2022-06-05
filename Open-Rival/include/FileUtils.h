@@ -9,8 +9,7 @@
 
 using json = nlohmann::json;
 
-namespace Rival {
-namespace FileUtils {
+namespace Rival { namespace FileUtils {
 
     std::vector<std::uint8_t> readBinaryFile(std::string filename);
 

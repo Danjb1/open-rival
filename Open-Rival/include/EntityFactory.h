@@ -20,27 +20,22 @@ namespace Rival {
         /**
          * Creates a Unit from raw data (e.g. read from a Scenario file).
          */
-        std::shared_ptr<Entity> createUnit(
-                const UnitPlacement& unitPlacement) const;
+        std::shared_ptr<Entity> createUnit(const UnitPlacement& unitPlacement) const;
 
         /**
          * Creates a Building from raw data (e.g. read from a Scenario file).
          */
-        std::shared_ptr<Entity> createBuilding(
-                const BuildingPlacement& buildingPlacement) const;
+        std::shared_ptr<Entity> createBuilding(const BuildingPlacement& buildingPlacement) const;
 
         /**
          * Creates a Palisade from raw data (e.g. read from a Scenario file).
          */
-        std::shared_ptr<Entity> createPalisade(
-                const BuildingPlacement& buildingPlacement,
-                bool wilderness) const;
+        std::shared_ptr<Entity> createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const;
 
         /**
          * Creates an Object from raw data (e.g. read from a Scenario file).
          */
-        std::shared_ptr<Entity> EntityFactory::createObject(
-                const ObjectPlacement& objPlacement, bool wilderness) const;
+        std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
 
     private:
         const Resources& res;

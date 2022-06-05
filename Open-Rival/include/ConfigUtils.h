@@ -5,8 +5,7 @@
 
 using json = nlohmann::json;
 
-namespace Rival {
-namespace ConfigUtils {
+namespace Rival { namespace ConfigUtils {
 
     template <class T>
     T get(json cfg, std::string key, T defaultValue) {

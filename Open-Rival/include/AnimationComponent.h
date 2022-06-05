@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Animations.h"
 #include "EntityComponent.h"
 #include "FacingComponent.h"
@@ -11,9 +13,10 @@ namespace Rival {
     /**
      * Component that controls the animation and facing of a SpriteComponent.
      */
-    class AnimationComponent : public EntityComponent,
-                               public UnitStateListener,
-                               public FacingListener {
+    class AnimationComponent
+        : public EntityComponent
+        , public UnitStateListener
+        , public FacingListener {
 
     public:
         AnimationComponent(const Animations::Animation animation);
@@ -53,9 +56,9 @@ namespace Rival {
         static const std::string key;
 
     private:
-        UnitPropsComponent* unitPropsComponent { nullptr };
-        SpriteComponent* spriteComponent { nullptr };
-        FacingComponent* facingComponent { nullptr };
+        std::weak_ptr<UnitPropsComponent> weakUnitPropsComponent;
+        std::weak_ptr<SpriteComponent> weakSpriteComponent;
+        std::weak_ptr<FacingComponent> weakFacingComponent;
 
         Animations::Animation animation;
 

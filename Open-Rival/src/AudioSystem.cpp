@@ -8,9 +8,7 @@
 
 namespace Rival {
 
-    AudioSystem::AudioSystem()
-        : midiActive(false),
-          soundActive(false) {}
+    AudioSystem::AudioSystem() : midiActive(false), soundActive(false) {}
 
     AudioSystem::~AudioSystem() {
         setMidiActive(false);

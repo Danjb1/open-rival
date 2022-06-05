@@ -10,11 +10,9 @@
 
 namespace Rival {
 
-    ScenarioBuilder::ScenarioBuilder(ScenarioData data)
-        : data(data) {}
+    ScenarioBuilder::ScenarioBuilder(ScenarioData data) : data(data) {}
 
-    std::unique_ptr<Scenario> ScenarioBuilder::build(
-            const EntityFactory& entityFactory) {
+    std::unique_ptr<Scenario> ScenarioBuilder::build(const EntityFactory& entityFactory) {
 
         // Initialize Tiles
         int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
@@ -24,11 +22,8 @@ namespace Rival {
             tiles.push_back(buildTile(data.tiles[i]));
         }
 
-        std::unique_ptr<Scenario> scenario = std::make_unique<Scenario>(
-                data.hdr.mapWidth,
-                data.hdr.mapHeight,
-                data.hdr.wilderness,
-                tiles);
+        std::unique_ptr<Scenario> scenario =
+                std::make_unique<Scenario>(data.hdr.mapWidth, data.hdr.mapHeight, data.hdr.wilderness, tiles);
 
         // Initialize Units
         for (const UnitPlacement& unitPlacement : data.units) {
@@ -67,10 +62,7 @@ namespace Rival {
      * @param baseIndex Texture index of the first tile of this edge type.
      * @param baseTileType Tile type of the first tile of this edge type.
      */
-    std::uint8_t getTerrainEdgeTxIndex(
-            TilePlacement& tile,
-            std::uint8_t baseIndex,
-            std::uint8_t baseTileType) {
+    std::uint8_t getTerrainEdgeTxIndex(TilePlacement& tile, std::uint8_t baseIndex, std::uint8_t baseTileType) {
         if (tile.type == baseTileType) {
             return baseIndex;
         } else if (tile.type == baseTileType + 1) {
@@ -155,8 +147,7 @@ namespace Rival {
                 txIndex = 164 + tile.variant;
 
             } else {
-                throw std::runtime_error("Unknown tile type: "
-                        + tile.type);
+                throw std::runtime_error("Unknown tile type: " + tile.type);
             }
 
         } else if (tile.resource == 1) {
@@ -170,46 +161,33 @@ namespace Rival {
             txIndex = 200;
 
         } else {
-            throw std::runtime_error("Unknown tile resource: "
-                    + tile.resource);
+            throw std::runtime_error("Unknown tile resource: " + tile.resource);
         }
 
         return Tile(type, txIndex, 0);
     }
 
     void ScenarioBuilder::addUnit(
-            Scenario* scenario,
-            const UnitPlacement& unitPlacement,
-            const EntityFactory& entityFactory) const {
-        std::shared_ptr<Entity> unit =
-                entityFactory.createUnit(unitPlacement);
+            Scenario* scenario, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> unit = entityFactory.createUnit(unitPlacement);
         scenario->addEntity(unit, unitPlacement.x, unitPlacement.y);
     }
 
     void ScenarioBuilder::addPalisade(
-            Scenario* scenario,
-            const BuildingPlacement& buildingPlacement,
-            const EntityFactory& entityFactory) const {
-        std::shared_ptr<Entity> building = entityFactory.createPalisade(
-                buildingPlacement, scenario->isWilderness());
+            Scenario* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness());
         scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
     }
 
     void ScenarioBuilder::addBuilding(
-            Scenario* scenario,
-            const BuildingPlacement& buildingPlacement,
-            const EntityFactory& entityFactory) const {
-        std::shared_ptr<Entity> building =
-                entityFactory.createBuilding(buildingPlacement);
+            Scenario* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> building = entityFactory.createBuilding(buildingPlacement);
         scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
     }
 
     void ScenarioBuilder::addObject(
-            Scenario* scenario,
-            const ObjectPlacement& objPlacement,
-            const EntityFactory& entityFactory) const {
-        std::shared_ptr<Entity> obj = entityFactory.createObject(
-                objPlacement, scenario->isWilderness());
+            Scenario* scenario, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const {
+        std::shared_ptr<Entity> obj = entityFactory.createObject(objPlacement, scenario->isWilderness());
         scenario->addEntity(obj, objPlacement.x, objPlacement.y);
     }
 

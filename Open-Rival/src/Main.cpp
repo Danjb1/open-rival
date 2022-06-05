@@ -44,8 +44,7 @@ void initSDL() {
     // Use OpenGL 3.1 core
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-            SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 }
 
 void initGLEW() {
@@ -53,8 +52,7 @@ void initGLEW() {
     GLenum glewError = glewInit();
 
     if (glewError != GLEW_OK) {
-        std::cerr << "Error initializing GLEW:"
-                  << glewGetErrorString(glewError) << "\n";
+        std::cerr << "Error initializing GLEW:" << glewGetErrorString(glewError) << "\n";
         throw std::runtime_error("Failed to initialize GLEW");
     }
 }
@@ -96,8 +94,7 @@ void setWindowIcon(Window& window) {
 }
 
 std::unique_ptr<Window> createWindow() {
-    std::unique_ptr<Window> window =
-            std::make_unique<Window>(800, 600, "Rival Realms");
+    std::unique_ptr<Window> window = std::make_unique<Window>(800, 600, "Rival Realms");
     setWindowIcon(*window);
     return window;
 }
@@ -136,12 +133,10 @@ int main() {
         ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         EntityFactory entityFactory(app.getResources());
-        std::unique_ptr<Scenario> scenario =
-                scenarioBuilder.build(entityFactory);
+        std::unique_ptr<Scenario> scenario = scenarioBuilder.build(entityFactory);
 
         // Create our initial state
-        std::unique_ptr<State> initialState =
-                std::make_unique<GameState>(app, std::move(scenario));
+        std::unique_ptr<State> initialState = std::make_unique<GameState>(app, std::move(scenario));
 
         // Run the game!
         app.start(std::move(initialState));

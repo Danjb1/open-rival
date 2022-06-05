@@ -6,34 +6,23 @@
 
 #include "ShaderUtils.h"
 
-namespace Rival {
-namespace Shaders {
+namespace Rival { namespace Shaders {
 
     ///////////////////////////////////////////////////////////////////////////
     // Shader
     ///////////////////////////////////////////////////////////////////////////
 
-    bool Shader::validateVertexAttribute(
-            GLint attributeLoc, std::string attributeName) const {
+    bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const {
         if (attributeLoc == -1) {
-            std::cout << "Could not locate vertex attribute "
-                      << attributeName
-                      << " for shader "
-                      << getName()
-                      << "\n";
+            std::cout << "Could not locate vertex attribute " << attributeName << " for shader " << getName() << "\n";
             return false;
         }
         return true;
     }
 
-    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName)
-            const {
+    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const {
         if (uniformLoc == -1) {
-            std::cout << "Could not locate uniform "
-                      << uniformLoc
-                      << " for shader "
-                      << getName()
-                      << "\n";
+            std::cout << "Could not locate uniform " << uniformLoc << " for shader " << getName() << "\n";
             return false;
         }
         return true;
@@ -47,22 +36,15 @@ namespace Shaders {
 
     void IndexedTextureShader::init() {
 
-        GLuint programId = createShader(
-                "res\\shaders\\gameWorld.vert",
-                "res\\shaders\\gameWorld.frag");
+        GLuint programId = createShader("res\\shaders\\gameWorld.vert", "res\\shaders\\gameWorld.frag");
 
         indexedTextureShader = IndexedTextureShader();
         indexedTextureShader.programId = programId;
-        indexedTextureShader.vertexAttribLoc =
-                glGetAttribLocation(programId, "in_vertex");
-        indexedTextureShader.texCoordAttribLoc =
-                glGetAttribLocation(programId, "in_tex_coords");
-        indexedTextureShader.viewProjMatrixUniformLoc =
-                glGetUniformLocation(programId, "view_proj_matrix");
-        indexedTextureShader.texUnitUniformLoc =
-                glGetUniformLocation(programId, "tex");
-        indexedTextureShader.paletteTexUnitUniformLoc =
-                glGetUniformLocation(programId, "palette");
+        indexedTextureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+        indexedTextureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+        indexedTextureShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+        indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+        indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
 
         if (!indexedTextureShader.isValid()) {
             throw std::runtime_error("Failed to create IndexedTextureShader");
@@ -80,8 +62,7 @@ namespace Shaders {
         return validateVertexAttribute(vertexAttribLoc, "in_vertex")
                 && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
                 && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
-                && validateUniform(texUnitUniformLoc, "tex")
-                && validateUniform(paletteTexUnitUniformLoc, "palette");
+                && validateUniform(texUnitUniformLoc, "tex") && validateUniform(paletteTexUnitUniformLoc, "palette");
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -92,22 +73,15 @@ namespace Shaders {
 
     void FontShader::init() {
 
-        GLuint programId = createShader(
-                "res\\shaders\\font.vert",
-                "res\\shaders\\font.frag");
+        GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
 
         fontShader = FontShader();
         fontShader.programId = programId;
-        fontShader.vertexAttribLoc =
-                glGetAttribLocation(programId, "in_vertex");
-        fontShader.texCoordAttribLoc =
-                glGetAttribLocation(programId, "in_tex_coords");
-        fontShader.colorAttribLoc =
-                glGetAttribLocation(programId, "in_color");
-        fontShader.viewProjMatrixUniformLoc =
-                glGetUniformLocation(programId, "view_proj_matrix");
-        fontShader.texUnitUniformLoc =
-                glGetUniformLocation(programId, "tex");
+        fontShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+        fontShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+        fontShader.colorAttribLoc = glGetAttribLocation(programId, "in_color");
+        fontShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+        fontShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
 
         if (!fontShader.isValid()) {
             throw std::runtime_error("Failed to create FontShader");
@@ -137,18 +111,13 @@ namespace Shaders {
 
     void ScreenShader::init() {
 
-        GLuint programId = createShader(
-                "res\\shaders\\screen.vert",
-                "res\\shaders\\screen.frag");
+        GLuint programId = createShader("res\\shaders\\screen.vert", "res\\shaders\\screen.frag");
 
         screenShader = ScreenShader();
         screenShader.programId = programId;
-        screenShader.vertexAttribLoc =
-                glGetAttribLocation(programId, "in_vertex");
-        screenShader.texCoordAttribLoc =
-                glGetAttribLocation(programId, "in_tex_coords");
-        screenShader.texUnitUniformLoc =
-                glGetUniformLocation(programId, "tex");
+        screenShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+        screenShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+        screenShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
 
         if (!screenShader.isValid()) {
             throw std::runtime_error("Failed to create ScreenShader");
@@ -186,8 +155,7 @@ namespace Shaders {
         GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
         // Read / set vertex source
-        std::string vertexShaderSource =
-                ShaderUtils::readShaderSource(vertShader);
+        std::string vertexShaderSource = ShaderUtils::readShaderSource(vertShader);
         const char* vertexShaderSource2 = vertexShaderSource.c_str();
         glShaderSource(vertexShader, 1, &vertexShaderSource2, nullptr);
 
@@ -210,8 +178,7 @@ namespace Shaders {
         GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
         // Read / set fragment source
-        std::string fragmentShaderSource =
-                ShaderUtils::readShaderSource(fragShader);
+        std::string fragmentShaderSource = ShaderUtils::readShaderSource(fragShader);
         const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
         glShaderSource(fragmentShader, 1, &fragmentShaderSource2, nullptr);
 

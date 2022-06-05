@@ -7,11 +7,9 @@
 
 namespace Rival {
 
-    TextureAtlas::TextureAtlas(
-            Texture texture,
-            std::map<std::string, Rect> imagePlacements)
-        : texture(std::move(texture)),
-          imagePlacements(imagePlacements) {}
+    TextureAtlas::TextureAtlas(Texture texture, std::map<std::string, Rect> imagePlacements)
+        : texture(std::move(texture))
+        , imagePlacements(imagePlacements) {}
 
     const int TextureAtlas::getImageWidth(std::string key) const {
         return static_cast<int>(imagePlacements.at(key).width);
@@ -41,16 +39,10 @@ namespace Rival {
         const float ty1 = 1 - (y / txHeight);
         const float ty2 = 1 - ((y + height) / txHeight);
 
-        return {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
+        return { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
     }
 
-    const TextureAtlas TextureAtlas::loadTextureAtlas(
-            const std::string resourceName) {
+    const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName) {
 
         std::string textureName = resourceName + ".tga";
         std::string atlasName = resourceName + ".atlas";
@@ -87,9 +79,7 @@ namespace Rival {
 
         reader.close();
 
-        return TextureAtlas(
-                Texture::loadTexture(textureName),
-                imagePlacements);
+        return TextureAtlas(Texture::loadTexture(textureName), imagePlacements);
     }
 
 }  // namespace Rival

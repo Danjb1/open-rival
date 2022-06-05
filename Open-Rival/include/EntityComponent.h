@@ -4,7 +4,6 @@
 
 namespace Rival {
 
-    // Forward declarations
     class Entity;
     class Scenario;
 
@@ -44,7 +43,9 @@ namespace Rival {
         /**
          * Determines if this EntityComponent has been marked for deletion.
          */
-        const bool isDeleted() const { return deleted; }
+        const bool isDeleted() const {
+            return deleted;
+        }
 
         /**
          * Marks this EntityComponent for deletion.
@@ -53,12 +54,16 @@ namespace Rival {
          * processing, and should be considered non-existent for the purposes
          * of logic and rendering.
          */
-        void markForDeletion() { deleted = true; }
+        void markForDeletion() {
+            deleted = true;
+        }
 
         /**
          * Gets the key used to store and retrieve this EntityComponent.
          */
-        std::string getKey() { return _key; }
+        std::string getKey() {
+            return _key;
+        }
 
     protected:
         /**

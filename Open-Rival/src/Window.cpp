@@ -8,12 +8,13 @@
 namespace Rival {
 
     Window::Window(int width, int height, const char* title)
-        : width(width),
-          height(height),
-          title(title),
-          aspectRatio(static_cast<double>(width) / height) {
+        : width(width)
+        , height(height)
+        , title(title)
+        , aspectRatio(static_cast<double>(width) / height) {
 
-        sdlWindow = SDL_CreateWindow(title,
+        sdlWindow = SDL_CreateWindow(
+                title,
                 SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED,
                 width,

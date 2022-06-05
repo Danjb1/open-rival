@@ -16,10 +16,8 @@ namespace Rival {
 
     // Framebuffer size, in pixels.
     // We divide by 2 because our tiles overlap (see RenderUtils).
-    const int GameRenderer::framebufferWidth =
-            RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
-    const int GameRenderer::framebufferHeight =
-            RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
+    const int GameRenderer::framebufferWidth = RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
+    const int GameRenderer::framebufferHeight = RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
 
     GameRenderer::GameRenderer(
             const Window& window,
@@ -27,29 +25,28 @@ namespace Rival {
             const Camera& camera,
             const Rect& viewport,
             const Resources& res)
-        : window(window),
-          scenario(scenario),
-          camera(camera),
-          viewport(viewport),
-          res(res),
-          gameFbo(framebufferWidth, framebufferHeight, true),
-          gameFboRenderer(gameFbo),
+        : window(window)
+        , scenario(scenario)
+        , camera(camera)
+        , viewport(viewport)
+        , res(res)
+        , gameFbo(framebufferWidth, framebufferHeight, true)
+        , gameFboRenderer(gameFbo)
+        ,
 
-          tileRenderer(res.getTileSpritesheet(
-                               scenario.isWilderness()),
-                  res.getPalette()),
+        tileRenderer(res.getTileSpritesheet(scenario.isWilderness()), res.getPalette())
+        ,
 
-          // Hardcode the race for now
-          mapBorderRenderer(Race::Human,
-                  scenario.getWidth(),
-                  scenario.getHeight(),
-                  res.getMapBorderSpritesheet(),
-                  res.getPalette()),
+        // Hardcode the race for now
+        mapBorderRenderer(
+                Race::Human, scenario.getWidth(), scenario.getHeight(), res.getMapBorderSpritesheet(), res.getPalette())
+        ,
 
-          entityRenderer(res.getPalette()),
+        entityRenderer(res.getPalette())
+        ,
 
-          // Hardcode the race for now
-          uiRenderer(Race::Human, res) {}
+        // Hardcode the race for now
+        uiRenderer(Race::Human, res) {}
 
     void GameRenderer::render(int delta) {
         // Render to our framebuffer.
@@ -70,8 +67,7 @@ namespace Rival {
         glViewport(
                 static_cast<int>(viewport.x),
                 // Adjust for OpenGL origin
-                static_cast<int>(window.getHeight()
-                        - (viewport.y + viewport.height)),
+                static_cast<int>(window.getHeight() - (viewport.y + viewport.height)),
                 static_cast<int>(viewport.width),
                 static_cast<int>(viewport.height));
         renderFramebuffer(canvasWidth, canvasHeight);
@@ -80,10 +76,7 @@ namespace Rival {
         renderUi();
     }
 
-    void GameRenderer::renderGame(
-            int viewportWidth,
-            int viewportHeight,
-            int delta) const {
+    void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) const {
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -96,21 +89,15 @@ namespace Rival {
         glUseProgram(Shaders::indexedTextureShader.programId);
 
         // Project to game world
-        glm::mat4 viewProjMatrix = RenderUtils::createGameProjection(
-                camera, viewportWidth, viewportHeight);
+        glm::mat4 viewProjMatrix = RenderUtils::createGameProjection(camera, viewportWidth, viewportHeight);
 
         // Set uniform values
-        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc,
-                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
         glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
         glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 
         // Render Tiles
-        tileRenderer.render(
-                camera,
-                scenario.getTiles(),
-                scenario.getWidth(),
-                scenario.getHeight());
+        tileRenderer.render(camera, scenario.getTiles(), scenario.getWidth(), scenario.getHeight());
 
         // Render Map Borders
         mapBorderRenderer.render();
@@ -151,12 +138,10 @@ namespace Rival {
         glUseProgram(Shaders::indexedTextureShader.programId);
 
         // Project to menu
-        glm::mat4 viewProjMatrix =
-                RenderUtils::createMenuProjection(window.getAspectRatio());
+        glm::mat4 viewProjMatrix = RenderUtils::createMenuProjection(window.getAspectRatio());
 
         // Set uniform values
-        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc,
-                1, GL_FALSE, &viewProjMatrix[0][0]);
+        glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
         glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
         glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 

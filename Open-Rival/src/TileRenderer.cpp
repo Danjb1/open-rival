@@ -16,11 +16,9 @@
 
 namespace Rival {
 
-    TileRenderer::TileRenderer(
-            const Spritesheet& spritesheet,
-            const Texture& paletteTexture)
-        : paletteTexture(paletteTexture),
-          renderable { spritesheet, maxTilesToRender } {}
+    TileRenderer::TileRenderer(const Spritesheet& spritesheet, const Texture& paletteTexture)
+        : paletteTexture(paletteTexture)
+        , renderable { spritesheet, maxTilesToRender } {}
 
     /**
      * Renders all tiles visible to the camera.
@@ -28,11 +26,7 @@ namespace Rival {
      * Note that while this is very slow in Debug mode, performance is not an
      * issue in Release mode.
      */
-    void TileRenderer::render(
-            const Camera& camera,
-            const std::vector<Tile>& tiles,
-            int mapWidth,
-            int mapHeight) const {
+    void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
@@ -50,10 +44,7 @@ namespace Rival {
 
         // Render
         glDrawElements(
-                renderable.getDrawMode(),
-                tiles.size() * renderable.getIndicesPerSprite(),
-                GL_UNSIGNED_INT,
-                nullptr);
+                renderable.getDrawMode(), tiles.size() * renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
     }
 
     bool TileRenderer::needsUpdate() const {
@@ -66,10 +57,7 @@ namespace Rival {
     }
 
     void TileRenderer::sendDataToGpu(
-            const Camera& camera,
-            const std::vector<Tile>& tiles,
-            int mapWidth,
-            int mapHeight) const {
+            const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const {
 
         // Find the first visible tiles.
         // We subtract 1 because we need to start drawing offscreen, to account
@@ -135,26 +123,14 @@ namespace Rival {
                 float x2 = x1 + width;
                 float y2 = y1 + height;
                 float z = RenderUtils::zTiles;
-                std::vector<GLfloat> thisVertexData = {
-                    x1, y1, z,
-                    x2, y1, z,
-                    x2, y2, z,
-                    x1, y2, z
-                };
+                std::vector<GLfloat> thisVertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
 
                 // Determine texture co-ordinates
-                std::vector<GLfloat> thisTexCoords =
-                        renderable.spritesheet.getTexCoords(txIndex);
+                std::vector<GLfloat> thisTexCoords = renderable.spritesheet.getTexCoords(txIndex);
 
                 // Copy this tile's data to the main buffers
-                positions.insert(
-                        positions.cend(),
-                        thisVertexData.cbegin(),
-                        thisVertexData.cend());
-                texCoords.insert(
-                        texCoords.cend(),
-                        thisTexCoords.cbegin(),
-                        thisTexCoords.cend());
+                positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());
+                texCoords.insert(texCoords.cend(), thisTexCoords.cbegin(), thisTexCoords.cend());
 
                 ++tileIndex;
             }
@@ -162,19 +138,11 @@ namespace Rival {
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                positions.size() * sizeof(GLfloat),
-                positions.data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, positions.size() * sizeof(GLfloat), positions.data());
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                texCoords.size() * sizeof(GLfloat),
-                texCoords.data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, texCoords.size() * sizeof(GLfloat), texCoords.data());
     }
 
 }  // namespace Rival

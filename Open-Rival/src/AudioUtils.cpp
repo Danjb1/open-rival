@@ -5,8 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace Rival {
-namespace AudioUtils {
+namespace Rival { namespace AudioUtils {
 
     ALCdevice* openALDevice;
     ALCcontext* openALContext;
@@ -52,8 +51,7 @@ namespace AudioUtils {
         ALenum error = alGetError();
         if (error != AL_NO_ERROR) {
             std::cerr << "OpenAL error: " << error << "\n";
-            throw std::runtime_error(
-                    "Error playing sound: " + waveFile.filename);
+            throw std::runtime_error("Error playing sound: " + waveFile.filename);
         }
     }
 
@@ -67,8 +65,8 @@ namespace AudioUtils {
         } else if (waveHeader.numChannels == 2 && waveHeader.bitsPerSample == 16) {
             return AL_FORMAT_STEREO16;
         }
-        throw std::runtime_error("Unrecognised wave format: "
-                + std::to_string(waveHeader.numChannels) + " channels, "
+        throw std::runtime_error(
+                "Unrecognised wave format: " + std::to_string(waveHeader.numChannels) + " channels, "
                 + std::to_string(waveHeader.bitsPerSample) + " bps");
     }
 
@@ -94,16 +92,9 @@ namespace AudioUtils {
         checkPlaySoundALError(source.waveFile);
         alSourcef(sourceId, AL_PITCH, source.pitch);
         alSourcef(sourceId, AL_GAIN, source.gain);
-        alSource3f(sourceId, AL_POSITION,
-                source.position[0],
-                source.position[1],
-                source.position[2]);
-        alSourcei(sourceId, AL_SOURCE_RELATIVE,
-                source.positionRelativeToListener ? AL_TRUE : AL_FALSE);
-        alSource3f(sourceId, AL_VELOCITY,
-                source.velocity[0],
-                source.velocity[1],
-                source.velocity[2]);
+        alSource3f(sourceId, AL_POSITION, source.position[0], source.position[1], source.position[2]);
+        alSourcei(sourceId, AL_SOURCE_RELATIVE, source.positionRelativeToListener ? AL_TRUE : AL_FALSE);
+        alSource3f(sourceId, AL_VELOCITY, source.velocity[0], source.velocity[1], source.velocity[2]);
         alSourcei(sourceId, AL_LOOPING, source.looping ? AL_TRUE : AL_FALSE);
         alSourcei(sourceId, AL_BUFFER, buffer);
         checkPlaySoundALError(source.waveFile);

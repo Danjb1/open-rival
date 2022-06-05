@@ -12,26 +12,22 @@ namespace Rival {
 
     const std::string AnimationComponent::key = "animation";
 
-    AnimationComponent::AnimationComponent(
-            const Animations::Animation animation)
-        : EntityComponent(key),
-          animation(animation),
-          currentAnimFrame(0),
-          msPassedCurrentAnimFrame(0) {}
+    AnimationComponent::AnimationComponent(const Animations::Animation animation)
+        : EntityComponent(key)
+        , animation(animation)
+        , currentAnimFrame(0)
+        , msPassedCurrentAnimFrame(0) {}
 
     void AnimationComponent::onEntitySpawned(Scenario*) {
-        unitPropsComponent = entity->getComponent<UnitPropsComponent>(
-                UnitPropsComponent::key);
-        if (unitPropsComponent) {
+        weakUnitPropsComponent = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+        if (auto unitPropsComponent = weakUnitPropsComponent.lock()) {
             unitPropsComponent->addStateListener(this);
         }
 
-        spriteComponent = entity->getComponent<SpriteComponent>(
-                SpriteComponent::key);
+        weakSpriteComponent = entity->getComponent<SpriteComponent>(SpriteComponent::key);
 
-        facingComponent = entity->getComponent<FacingComponent>(
-                FacingComponent::key);
-        if (facingComponent) {
+        weakFacingComponent = entity->getComponent<FacingComponent>(FacingComponent::key);
+        if (auto facingComponent = weakFacingComponent.lock()) {
             facingComponent->setListener(this);
         }
 
@@ -39,7 +35,7 @@ namespace Rival {
     }
 
     void AnimationComponent::onDelete() {
-        if (facingComponent) {
+        if (auto facingComponent = weakFacingComponent.lock()) {
             facingComponent->setListener(nullptr);
         }
     }
@@ -61,15 +57,18 @@ namespace Rival {
     }
 
     void AnimationComponent::onUnitStateChanged(const UnitState newState) {
+        auto unitPropsComponent = weakUnitPropsComponent.lock();
+        if (!unitPropsComponent) {
+            return;
+        }
+
         if (newState == UnitState::Idle) {
             setAnimation(Animations::getUnitAnimation(
-                    unitPropsComponent->getUnitType(),
-                    Animations::UnitAnimationType::Standing));
+                    unitPropsComponent->getUnitType(), Animations::UnitAnimationType::Standing));
         } else if (newState == UnitState::Moving) {
             // TODO: Peasants may need to play the MovingWithBag animation
             setAnimation(Animations::getUnitAnimation(
-                    unitPropsComponent->getUnitType(),
-                    Animations::UnitAnimationType::Moving));
+                    unitPropsComponent->getUnitType(), Animations::UnitAnimationType::Moving));
         }
     }
 
@@ -89,6 +88,7 @@ namespace Rival {
     }
 
     void AnimationComponent::refreshSpriteComponent() const {
+        auto spriteComponent = weakSpriteComponent.lock();
         if (!spriteComponent) {
             return;
         }
@@ -105,9 +105,7 @@ namespace Rival {
     }
 
     int AnimationComponent::getCurrentSpriteIndex() const {
-        return animation.startIndex
-                + getFacingOffset()
-                + currentAnimFrame;
+        return animation.startIndex + getFacingOffset() + currentAnimFrame;
     }
 
     int AnimationComponent::getNumAnimFrames() const {
@@ -120,12 +118,13 @@ namespace Rival {
     }
 
     int AnimationComponent::getFacingOffset() const {
+        auto facingComponent = weakFacingComponent.lock();
         if (!facingComponent) {
             return 0;
         }
+
         int numAnimFrames = getNumAnimFrames();
-        int facingIndex = static_cast<int>(facingComponent->getFacing())
-                - static_cast<int>(Facing::South);
+        int facingIndex = static_cast<int>(facingComponent->getFacing()) - static_cast<int>(Facing::South);
         return facingIndex * numAnimFrames;
     }
 

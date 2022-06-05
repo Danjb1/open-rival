@@ -9,8 +9,7 @@
 
 namespace Rival {
 
-    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
-        : fbo(fbo) {
+    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo) : fbo(fbo) {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -26,12 +25,7 @@ namespace Rival {
         float y1 = -1.0f;
         float x2 = 1.0f;
         float y2 = 1.0f;
-        std::vector<GLfloat> vertexData = {
-            x1, y1,
-            x2, y1,
-            x2, y2,
-            x1, y2
-        };
+        std::vector<GLfloat> vertexData = { x1, y1, x2, y1, x2, y2, x1, y2 };
 
         // Initialize position buffer - this should never change
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
@@ -42,11 +36,7 @@ namespace Rival {
                 GL_FALSE,
                 numVertexDimensions * sizeof(GLfloat),
                 nullptr);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                vertexData.size() * sizeof(GLfloat),
-                vertexData.data(),
-                GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(GLfloat), vertexData.data(), GL_STATIC_DRAW);
 
         // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
@@ -57,23 +47,13 @@ namespace Rival {
                 GL_FALSE,
                 numTexCoordDimensions * sizeof(GLfloat),
                 nullptr);
-        int texCoordBufferSize = numTexCoordDimensions
-                * numIndices
-                * sizeof(GLfloat);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                texCoordBufferSize,
-                NULL,
-                GL_DYNAMIC_DRAW);
+        int texCoordBufferSize = numTexCoordDimensions * numIndices * sizeof(GLfloat);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_DYNAMIC_DRAW);
 
         // Initialize index buffer - this should never need to change
         std::vector<GLuint> indexData = { 3, 2, 1, 0 };
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                indexData.size() * sizeof(GLuint),
-                indexData.data(),
-                GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData.size() * sizeof(GLuint), indexData.data(), GL_STATIC_DRAW);
 
         // Enable vertex attributes
         glEnableVertexAttribArray(Shaders::vertexAttribIndex);
@@ -96,27 +76,14 @@ namespace Rival {
         float ty1 = 0.0f;
         float tx2 = static_cast<float>(srcWidth) / fbo.getWidth();
         float ty2 = static_cast<float>(srcHeight) / fbo.getHeight();
-        std::vector<GLfloat> texCoords = {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
+        std::vector<GLfloat> texCoords = { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                texCoords.size() * sizeof(GLfloat),
-                texCoords.data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, texCoords.size() * sizeof(GLfloat), texCoords.data());
 
         // Render
-        glDrawElements(
-                GL_TRIANGLE_FAN,
-                numIndices,
-                GL_UNSIGNED_INT,
-                nullptr);
+        glDrawElements(GL_TRIANGLE_FAN, numIndices, GL_UNSIGNED_INT, nullptr);
     }
 
 }  // namespace Rival

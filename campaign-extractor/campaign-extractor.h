@@ -3,8 +3,7 @@
 
 #include <string>
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     void extractCampaign(std::string filename);
 

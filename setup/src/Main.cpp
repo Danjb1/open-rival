@@ -31,12 +31,7 @@ bool shouldCopyVideos = true;
 void createOutputDirectories() {
     std::wcout << "Creating output directories\n";
     std::vector<std::string> directories = {
-        "setup\\images",
-        "setup\\images\\game",
-        "setup\\images\\ui",
-        "res\\sound",
-        "res\\textures",
-        "res\\video",
+        "setup\\images", "setup\\images\\game", "setup\\images\\ui", "res\\sound", "res\\textures", "res\\video",
     };
     for (auto const& dir : directories) {
         if (!Setup::createDirectory(dir.c_str())) {
@@ -92,8 +87,8 @@ void buildTextures() {
 void copyVideos(std::string videoDir, std::string outputDir) {
     for (const fs::directory_entry& entry : fs::directory_iterator(videoDir)) {
         const fs::path path = entry.path();
-        std::filesystem::copy(path, outputDir + "\\" + path.filename().string(),
-                std::filesystem::copy_options::update_existing);
+        std::filesystem::copy(
+                path, outputDir + "\\" + path.filename().string(), std::filesystem::copy_options::update_existing);
     }
 }
 
@@ -137,9 +132,7 @@ int main(int argc, char* argv[]) {
         // Read original game directory from registry
         try {
             gameDir = StringUtils::toUtf8(Registry::RegGetString(
-                    HKEY_CURRENT_USER,
-                    L"Software\\Titus Games\\Rival Realms",
-                    L"Game Directory"));
+                    HKEY_CURRENT_USER, L"Software\\Titus Games\\Rival Realms", L"Game Directory"));
             std::cout << "Found game at: " << gameDir << "\n";
         } catch (const Registry::RegistryError& e) {
             std::cerr << "Failed to find registry entry:\n"

@@ -9,8 +9,7 @@
 #include "RenderUtils.h"
 #include "TextureAtlas.h"
 
-namespace Rival {
-namespace GameInterface {
+namespace Rival { namespace GameInterface {
 
     /**
      * Height of the in-game UI, in menu co-ordinates.
@@ -38,13 +37,9 @@ namespace GameInterface {
     public:
         const Rect pos;
 
-        UiImage(Rect pos,
-                const TextureAtlas& texAtlas,
-                const std::string imageKey);
+        UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey);
 
-        void addToBuffers(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords) const;
+        void addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
 
     private:
         const TextureAtlas& texAtlas;

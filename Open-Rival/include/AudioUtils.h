@@ -6,8 +6,7 @@
 #include "SoundSource.h"
 #include "WaveFile.h"
 
-namespace Rival {
-namespace AudioUtils {
+namespace Rival { namespace AudioUtils {
 
     void initAL();
 

@@ -1,11 +1,9 @@
 #include "pch.h"
 #include "MapUtils.h"
 
-namespace Rival {
-namespace MapUtils {
+namespace Rival { namespace MapUtils {
 
-    std::vector<MapNode> findNeighbors(
-            const MapNode& node, const MapBounds& area) {
+    std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area) {
         std::vector<MapNode> neighbors;
 
         // First determine which map locations are valid relative to this node.

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>  // uint8_t
+#include <memory>
 #include <unordered_set>
 
 #include "EntityComponent.h"
@@ -11,11 +12,7 @@ namespace Rival {
 
     struct MapNode;
 
-    enum class UnitState : std::uint8_t {
-        Idle,
-        Moving,
-        Attacking
-    };
+    enum class UnitState : std::uint8_t { Idle, Moving, Attacking };
 
     /**
      * Interface used to listen to unit state changes.
@@ -28,8 +25,7 @@ namespace Rival {
     /**
      * Component containing basic unit properties.
      */
-    class UnitPropsComponent : public EntityComponent,
-                               public MovementListener {
+    class UnitPropsComponent : public EntityComponent, public MovementListener {
 
     public:
         UnitPropsComponent(Unit::Type type);
@@ -47,12 +43,16 @@ namespace Rival {
         void addStateListener(UnitStateListener* listener);
         void removeStateListener(UnitStateListener* listener);
 
-        Unit::Type getUnitType() const { return type; }
+        Unit::Type getUnitType() const {
+            return type;
+        }
 
         /**
          * Gets the unit's current state.
          */
-        UnitState getState() const { return state; }
+        UnitState getState() const {
+            return state;
+        }
 
         /**
          * Sets this Entity's state.
@@ -65,7 +65,7 @@ namespace Rival {
     private:
         std::unordered_set<UnitStateListener*> stateListeners;
 
-        MovementComponent* movementComponent { nullptr };
+        std::weak_ptr<MovementComponent> weakMovementComponent;
 
         Unit::Type type = Unit::Type::Invalid;
 

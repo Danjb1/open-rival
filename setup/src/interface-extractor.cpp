@@ -10,8 +10,7 @@
 
 #include <iostream>
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     // NOTE: It is possible these offsets will differ for other locales.
     // In this case, maybe we can just "skip 'n' bytes" instead of jumping to
@@ -23,9 +22,7 @@ namespace Setup {
     const int offsetMoreCursors = 0x1935CDE;
     const int offsetHireTroops = 0x1938DBB;
 
-    InterfaceExtractor::InterfaceExtractor(std::string inputFile)
-        : index(0),
-          reader(inputFile) {}
+    InterfaceExtractor::InterfaceExtractor(std::string inputFile) : index(0), reader(inputFile) {}
 
     void InterfaceExtractor::extractImages(std::string outputDir) {
         // I am not sure what comes before this offset but I am fairly confident
@@ -141,9 +138,7 @@ namespace Setup {
         }
     }
 
-    void InterfaceExtractor::extractImage(
-            const std::string& outputDir,
-            const Palette::Palette& palette) {
+    void InterfaceExtractor::extractImage(const std::string& outputDir, const Palette::Palette& palette) {
 
         // Read dimensions
         std::uint16_t w = reader.readShort();
@@ -194,16 +189,10 @@ namespace Setup {
         }
 
         // Generate the image filename
-        std::string filename = outputDir
-                + "\\img_ui_"
-                + zeroPad(index, 4)
-                + ".tga";
+        std::string filename = outputDir + "\\img_ui_" + zeroPad(index, 4) + ".tga";
 
         // Save the rendered image to disk
-        Image image = Image::createByMove(
-                static_cast<int>(w),
-                static_cast<int>(h),
-                std::move(pixels));
+        Image image = Image::createByMove(static_cast<int>(w), static_cast<int>(h), std::move(pixels));
         writeImage(image, palette, filename);
 
         // Skip some unknown bytes

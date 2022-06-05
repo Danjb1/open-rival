@@ -8,25 +8,22 @@
 namespace Rival {
 
     UiRenderer::UiRenderer(const Race& race, const Resources& res)
-        : res(res),
-          numUiImages(0),
-          mainUiRenderable(res.getUiTextureAtlas(), maxUiImages),
-          minimapLeftBorder(GameInterface::minimapLeftBorder,
+        : res(res)
+        , numUiImages(0)
+        , mainUiRenderable(res.getUiTextureAtlas(), maxUiImages)
+        , minimapLeftBorder(GameInterface::minimapLeftBorder, res.getUiTextureAtlas(), "img_ui_1042.tga")
+        , minimapTopBorder(GameInterface::minimapTopBorder, res.getUiTextureAtlas(), "img_ui_1040.tga")
+        , minimapBottomBorder(GameInterface::minimapBottomBorder, res.getUiTextureAtlas(), "img_ui_1041.tga")
+        , mainPanel(
+                  GameInterface::mainPanel,
                   res.getUiTextureAtlas(),
-                  "img_ui_1042.tga"),
-          minimapTopBorder(GameInterface::minimapTopBorder,
+                  race == Race::Greenskin ? "img_ui_1105.tga" : "img_ui_1039.tga")
+        , inventoryOverlay(
+                  GameInterface::inventoryOverlay,
                   res.getUiTextureAtlas(),
-                  "img_ui_1040.tga"),
-          minimapBottomBorder(GameInterface::minimapBottomBorder,
-                  res.getUiTextureAtlas(),
-                  "img_ui_1041.tga"),
-          mainPanel(GameInterface::mainPanel,
-                  res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_1105.tga" : "img_ui_1039.tga"),
-          inventoryOverlay(GameInterface::inventoryOverlay,
-                  res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_1112.tga" : "img_ui_1046.tga"),
-          statsPanel(GameInterface::statsPanel,
+                  race == Race::Greenskin ? "img_ui_1112.tga" : "img_ui_1046.tga")
+        , statsPanel(
+                  GameInterface::statsPanel,
                   res.getUiTextureAtlas(),
                   race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga") {}
 
@@ -87,23 +84,13 @@ namespace Rival {
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getPositionVbo());
-        int positionBufferSize =
-                positions.size() * sizeof(GLfloat);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                positionBufferSize,
-                positions.data());
+        int positionBufferSize = positions.size() * sizeof(GLfloat);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getTexCoordVbo());
-        int texCoordBufferSize =
-                texCoords.size() * sizeof(GLfloat);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                texCoordBufferSize,
-                texCoords.data());
+        int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
     }
 
     bool UiRenderer::isInventoryVisible() const {

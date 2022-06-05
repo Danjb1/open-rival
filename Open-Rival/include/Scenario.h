@@ -59,6 +59,10 @@ namespace Rival {
         /**
          * Gets an entity by its ID.
          *
+         * We use shared_ptrs here because we sometimes need to maintain a
+         * reference to an entity even when it is removed from the level, e.g.
+         * for transported units or saving troops.
+         *
          * If the entity is not found, an empty shared_ptr is returned.
          */
         const std::shared_ptr<Entity> getEntity(int id) const;

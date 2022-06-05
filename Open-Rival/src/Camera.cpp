@@ -17,15 +17,10 @@ namespace Rival {
 
     const float Camera::bottomEdgePadding = tileHeight / 2.0f;
 
-    Camera::Camera(
-            float x,
-            float y,
-            float width,
-            float height,
-            Scenario& scenario)
-        : defaultWidth(width),
-          defaultHeight(height),
-          scenario(scenario) {
+    Camera::Camera(float x, float y, float width, float height, Scenario& scenario)
+        : defaultWidth(width)
+        , defaultHeight(height)
+        , scenario(scenario) {
 
         centreOnPoint(x, y);
     }
@@ -56,9 +51,7 @@ namespace Rival {
             offsetY = (tileHeight / 2.0f);
         }
 
-        centreOnPoint(
-                tileX + (tileWidth / 2.0f),
-                tileY + (tileHeight / 2.0f) + offsetY);
+        centreOnPoint(tileX + (tileWidth / 2.0f), tileY + (tileHeight / 2.0f) + offsetY);
     }
 
     void Camera::translate(float dx, float dy) {
@@ -99,10 +92,7 @@ namespace Rival {
     }
 
     bool Camera::contains(float px, float py) const {
-        return px > getLeft()
-                && px < getRight()
-                && py > getTop()
-                && py < getBottom();
+        return px > getLeft() && px < getRight() && py > getTop() && py < getBottom();
     }
 
 }  // namespace Rival

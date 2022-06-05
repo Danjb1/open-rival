@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "MathUtils.h"
 
-namespace Rival {
-namespace MathUtils {
+namespace Rival { namespace MathUtils {
 
     int clampi(int val, int min, int max) {
         if (val < min) {

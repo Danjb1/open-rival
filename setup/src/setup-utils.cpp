@@ -10,15 +10,13 @@
 
 #include "Palette.h"
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     /**
      * Attempts to create the given directory.
      */
     bool createDirectory(const std::string dirName) {
-        return CreateDirectoryA(dirName.c_str(), NULL)
-                || ERROR_ALREADY_EXISTS == GetLastError();
+        return CreateDirectoryA(dirName.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError();
     }
 
     /**
@@ -43,10 +41,7 @@ namespace Setup {
     /**
      * Writes an image to disk.
      */
-    void writeImage(
-            Image& image,
-            const Palette::Palette& palette,
-            const std::string filename) {
+    void writeImage(Image& image, const Palette::Palette& palette, const std::string filename) {
 
         // Open file for writing
         std::ofstream out;
@@ -76,9 +71,9 @@ namespace Setup {
         int w = image.getWidth();
         int h = image.getHeight();
         out.put((uint8_t) w);  // Width
-        out.put((uint8_t)(w >> 8));
+        out.put((uint8_t) (w >> 8));
         out.put((uint8_t) h);  // Height
-        out.put((uint8_t)(h >> 8));
+        out.put((uint8_t) (h >> 8));
         out.put(8);  // Bits per pixel
 
         // Image descriptor byte
@@ -89,10 +84,10 @@ namespace Setup {
         for (int i = 0; i < Palette::paletteSize; ++i) {
 
             const std::uint32_t col = palette[i];
-            const std::uint8_t red = (uint8_t)((col & 0xFF000000) >> 24);
-            const std::uint8_t green = (uint8_t)((col & 0x00FF0000) >> 16);
-            const std::uint8_t blue = (uint8_t)((col & 0x0000FF00) >> 8);
-            const std::uint8_t alpha = (uint8_t)(col & 0x000000FF);
+            const std::uint8_t red = (uint8_t) ((col & 0xFF000000) >> 24);
+            const std::uint8_t green = (uint8_t) ((col & 0x00FF0000) >> 16);
+            const std::uint8_t blue = (uint8_t) ((col & 0x0000FF00) >> 8);
+            const std::uint8_t alpha = (uint8_t) (col & 0x000000FF);
 
             out.put(blue);
             out.put(green);

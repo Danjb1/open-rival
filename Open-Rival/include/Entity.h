@@ -11,7 +11,8 @@ namespace Rival {
 
     class Scenario;
 
-    enum class EntityType : std::uint8_t {
+    enum class EntityType : std::uint8_t
+    {
         Unit,
         Building,
         Projectile,
@@ -74,7 +75,9 @@ namespace Rival {
         /**
          * Determines if this Entity has been marked for deletion.
          */
-        const bool isDeleted() const { return deleted; }
+        const bool isDeleted() const {
+            return deleted;
+        }
 
         /**
          * Marks this Entity for deletion.
@@ -83,21 +86,27 @@ namespace Rival {
          * during the game loop, and should be considered non-existent for the
          * purposes of logic and rendering.
          */
-        void markForDeletion() { deleted = true; }
+        void markForDeletion() {
+            deleted = true;
+        }
 
         /**
          * Gets a pointer to the Scenario that holds this Entity.
          */
-        Scenario* getScenario() { return scenario; }
+        Scenario* getScenario() {
+            return scenario;
+        }
 
         /**
          * Gets the unique identifier for this Entity.
          */
-        const int getId() const { return id; }
+        const int getId() const {
+            return id;
+        }
 
         /**
          * Gets the co-ordinates of the tile this Entity is occupying.
-         * 
+         *
          * In the case of Entities where width > 0 (e.g. buildings), the x
          * refers to the horizontal centre of the Entity.
          *
@@ -115,17 +124,23 @@ namespace Rival {
          * fluctuates - so it does not make sense to try to store the absolute
          * position of an Entity as a float.
          */
-        const MapNode& getPos() const { return pos; }
+        const MapNode& getPos() const {
+            return pos;
+        }
 
         /**
          * Gets the number of tiles this Entity occupies in the x-axis.
          */
-        int getWidth() const { return width; }
+        int getWidth() const {
+            return width;
+        }
 
         /**
          * Gets the number of tiles this Entity occupies in the y-axis.
          */
-        int getHeight() const { return height; }
+        int getHeight() const {
+            return height;
+        }
 
         /**
          * Moves this Entity to a new position.
@@ -133,29 +148,31 @@ namespace Rival {
         void setPos(MapNode newPos);
 
         /**
-         * Retrieves the EntityComponent with the given key.
+         * Returns a pointer to the EntityComponent with the given key (mutable version).
          *
-         * Returns nullptr if no matching EntityComponent is found.
+         * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        T* getComponent(std::string key) {
-            // Casts away the const from the const version of this method.
-            // See: https://stackoverflow.com/a/47369227/1624459
-            return const_cast<T*>(std::as_const(*this).getComponent<T>(key));
+        std::weak_ptr<T> getComponent(const std::string key) {
+            auto findResult = components.find(key);
+            if (findResult == components.end()) {
+                return std::weak_ptr<T>();
+            }
+            return std::dynamic_pointer_cast<T>(findResult->second);
         }
 
         /**
-         * Retrieves the EntityComponent with the given key.
+         * Returns a pointer to the EntityComponent with the given key (read-only version).
          *
-         * Returns nullptr if no matching EntityComponent is found.
+         * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        const T* getComponent(std::string key) const {
-            if (components.find(key) != components.end()) {
-                const auto& component = components.at(key);
-                return static_cast<T*>(component.get());
+        std::weak_ptr<const T> getComponent(const std::string key) const {
+            const auto findResult = components.find(key);
+            if (findResult == components.end()) {
+                return std::weak_ptr<T>();
             }
-            return nullptr;
+            return std::dynamic_pointer_cast<const T>(findResult->second);
         }
 
     protected:
@@ -191,8 +208,11 @@ namespace Rival {
 
         /**
          * EntityComponents owned by this Entity.
+         *
+         * We use shared_ptrs here so that we can create weak_ptrs to
+         * components, although in practice the Entity is the sole owner.
          */
-        std::unordered_map<std::string, std::unique_ptr<EntityComponent>> components;
+        std::unordered_map<std::string, std::shared_ptr<EntityComponent>> components;
     };
 
 }  // namespace Rival

@@ -34,16 +34,33 @@ namespace Rival {
         AtlasRenderable& operator=(const AtlasRenderable& other) = delete;
         AtlasRenderable& operator=(AtlasRenderable&& other) = delete;
 
-        GLuint getVao() const { return vao; }
-        GLuint getPositionVbo() const { return positionVbo; }
-        GLuint getTexCoordVbo() const { return texCoordVbo; }
-        GLuint getIbo() const { return ibo; }
+        GLuint getVao() const {
+            return vao;
+        }
 
-        GLuint getTextureId() const { return texAtlas.texture.getId(); }
+        GLuint getPositionVbo() const {
+            return positionVbo;
+        }
 
-        GLenum getDrawMode() const { return drawMode; }
+        GLuint getTexCoordVbo() const {
+            return texCoordVbo;
+        }
 
-        int getIndicesPerSprite() const { return indicesPerSprite; }
+        GLuint getIbo() const {
+            return ibo;
+        }
+
+        GLuint getTextureId() const {
+            return texAtlas.texture.getId();
+        }
+
+        GLenum getDrawMode() const {
+            return drawMode;
+        }
+
+        int getIndicesPerSprite() const {
+            return indicesPerSprite;
+        }
 
     private:
         /*

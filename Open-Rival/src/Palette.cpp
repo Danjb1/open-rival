@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "Palette.h"
 
-namespace Rival {
-namespace Palette {
+namespace Rival { namespace Palette {
 
     // The palette used in-game.
     // The last color (index 0xff) is used for transparent areas.

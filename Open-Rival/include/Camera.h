@@ -30,12 +30,7 @@ namespace Rival {
         static const float zoomMin;
         static const float zoomMax;
 
-        Camera(
-                float x,
-                float y,
-                float width,
-                float height,
-                Scenario& scenario);
+        Camera(float x, float y, float width, float height, Scenario& scenario);
 
         void centreOnPoint(float x, float y);
 
@@ -50,9 +45,13 @@ namespace Rival {
          */
         void translate(float dx, float dy);
 
-        float getX() const { return x; }
+        float getX() const {
+            return x;
+        }
 
-        float getY() const { return y; }
+        float getY() const {
+            return y;
+        }
 
         float getWidth() const;
 
@@ -66,7 +65,9 @@ namespace Rival {
 
         float getBottom() const;
 
-        float getZoom() const { return zoom; }
+        float getZoom() const {
+            return zoom;
+        }
 
         void modZoom(float zoomInterval);
 

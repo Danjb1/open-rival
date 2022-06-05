@@ -8,24 +8,18 @@
 
 namespace Rival {
 
-    WalkerPassabilityChecker WalkerComponent::passabilityChecker =
-            WalkerPassabilityChecker();
+    WalkerPassabilityChecker WalkerComponent::passabilityChecker = WalkerPassabilityChecker();
 
     WalkerComponent::WalkerComponent() : movement({ 0, 0 }) {}
 
-    bool WalkerPassabilityChecker::isNodeTraversable(
-            const PathfindingMap& map, const MapNode& node) const {
+    bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const {
         return map.getPassability(node) == TilePassability::Clear;
     }
 
     void WalkerComponent::update() {
         // TMP: plan a route
         if (entity->getId() == 1 && route.isEmpty()) {
-            route = Pathfinding::findPath(
-                    entity->getPos(),
-                    { 4, 3 },
-                    *entity->getScenario(),
-                    passabilityChecker);
+            route = Pathfinding::findPath(entity->getPos(), { 4, 3 }, *entity->getScenario(), passabilityChecker);
 
             if (!route.isEmpty()) {
                 prepareNextMovement();
