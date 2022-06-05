@@ -6,22 +6,22 @@
 #include "MapUtils.h"
 #include "Scenario.h"
 
-namespace Rival {
-namespace Pathfinding {
+namespace Rival { namespace Pathfinding {
 
     /**
      * Interface used to determine if a MapNode is traversable.
      */
-    class PassabilityChecker {
+    class PassabilityChecker
+    {
     public:
-        virtual bool isNodeTraversable(
-                const PathfindingMap& map, const MapNode& node) const = 0;
+        virtual bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const = 0;
     };
 
     /**
      * A planned path to a destination.
      */
-    class Route {
+    class Route
+    {
     public:
         /**
          * Default constructor; makes a Route with an empty path.
@@ -38,7 +38,10 @@ namespace Pathfinding {
          */
         bool isEmpty() const;
 
-        MapNode getDestination() const { return destination; }
+        MapNode getDestination() const
+        {
+            return destination;
+        }
 
         /**
          * Removes the next MapNode from the path and returns it.
@@ -63,10 +66,8 @@ namespace Pathfinding {
      *
      * The start node is not included in the path.
      */
-    Route findPath(MapNode start,
-            MapNode goal,
-            const PathfindingMap& map,
-            const PassabilityChecker& passabilityChecker);
+    Route
+    findPath(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
 
 }}  // namespace Rival::Pathfinding
 

@@ -18,7 +18,8 @@ namespace Rival {
      * Note that this does not contain any logic to set the txIndex; that must
      * be handled elsewhere.
      */
-    class SpriteComponent : public EntityComponent {
+    class SpriteComponent : public EntityComponent
+    {
 
     public:
         static const std::string key;

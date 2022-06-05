@@ -16,7 +16,8 @@ namespace Rival {
     class AnimationComponent
         : public EntityComponent
         , public UnitStateListener
-        , public FacingListener {
+        , public FacingListener
+    {
 
     public:
         AnimationComponent(const Animations::Animation animation);

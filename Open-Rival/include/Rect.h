@@ -3,7 +3,8 @@
 
 namespace Rival {
 
-    class Rect {
+    class Rect
+    {
 
     public:
         float x;

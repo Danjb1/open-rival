@@ -33,7 +33,8 @@ namespace Rival { namespace GameInterface {
     // UiImage class
     ///////////////////////////////////////////////////////////////////////////
 
-    class UiImage {
+    class UiImage
+    {
     public:
         const Rect pos;
 

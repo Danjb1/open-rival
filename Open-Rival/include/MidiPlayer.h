@@ -8,7 +8,8 @@
 
 namespace Rival {
 
-    class MidiPlayer {
+    class MidiPlayer
+    {
     public:
         /**
          * Initializes the MIDI system.

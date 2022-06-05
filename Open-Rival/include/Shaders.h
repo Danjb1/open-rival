@@ -5,8 +5,7 @@
 
 #include <string>
 
-namespace Rival {
-namespace Shaders {
+namespace Rival { namespace Shaders {
 
     // Vertex shader attribute indices.
     // We keep these common between all shaders so that our VAOs can be
@@ -19,11 +18,11 @@ namespace Shaders {
     // Shader base class
     ///////////////////////////////////////////////////////////////////////////
 
-    class Shader {
+    class Shader
+    {
     public:
         virtual std::string getName() const = 0;
-        bool validateVertexAttribute(
-                GLint attributeLoc, std::string attributeName) const;
+        bool validateVertexAttribute(GLint attributeLoc, std::string attributeName) const;
         bool validateUniform(GLint uniformLoc, std::string uniformName) const;
     };
 
@@ -33,7 +32,8 @@ namespace Shaders {
     // palette texture for color lookups.
     ///////////////////////////////////////////////////////////////////////////
 
-    class IndexedTextureShader : public Shader {
+    class IndexedTextureShader : public Shader
+    {
     public:
         GLuint programId;
 
@@ -52,7 +52,10 @@ namespace Shaders {
 
         bool isValid() const;
 
-        std::string getName() const override { return "IndexedTextureShader"; }
+        std::string getName() const override
+        {
+            return "IndexedTextureShader";
+        }
     };
 
     extern IndexedTextureShader indexedTextureShader;
@@ -63,7 +66,8 @@ namespace Shaders {
     // view-projection matrix and a color buffer.
     ///////////////////////////////////////////////////////////////////////////
 
-    class FontShader : public Shader {
+    class FontShader : public Shader
+    {
     public:
         GLuint programId;
 
@@ -82,7 +86,10 @@ namespace Shaders {
 
         bool isValid() const;
 
-        std::string getName() const override { return "FontShader"; }
+        std::string getName() const override
+        {
+            return "FontShader";
+        }
     };
 
     extern FontShader fontShader;
@@ -92,7 +99,8 @@ namespace Shaders {
     // Just renders a texture without applying any transformations.
     ///////////////////////////////////////////////////////////////////////////
 
-    class ScreenShader : public Shader {
+    class ScreenShader : public Shader
+    {
     public:
         GLuint programId;
 
@@ -107,7 +115,10 @@ namespace Shaders {
 
         bool isValid() const;
 
-        std::string getName() const override { return "ScreenShader"; }
+        std::string getName() const override
+        {
+            return "ScreenShader";
+        }
     };
 
     extern ScreenShader screenShader;

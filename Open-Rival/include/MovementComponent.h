@@ -11,7 +11,8 @@ namespace Rival {
     /**
      * Represents a movement between 2 tiles.
      */
-    struct Movement {
+    struct Movement
+    {
         /**
          * Time spent moving so far, in ms.
          */
@@ -26,7 +27,8 @@ namespace Rival {
     /**
      * Interface used to listen to movements.
      */
-    class MovementListener {
+    class MovementListener
+    {
     public:
         virtual void onUnitMoveStart(const MapNode* nextNode) = 0;
         virtual void onUnitJourneyEnd() = 0;
@@ -35,7 +37,8 @@ namespace Rival {
     /**
      * Base class for a component that allows entities to move between tiles.
      */
-    class MovementComponent : public EntityComponent {
+    class MovementComponent : public EntityComponent
+    {
 
     public:
         MovementComponent();

@@ -7,7 +7,8 @@
 
 namespace Rival {
 
-    enum class TileType : std::uint8_t {
+    enum class TileType : std::uint8_t
+    {
         Grass,
         Coastline,
         Water,
@@ -21,7 +22,8 @@ namespace Rival {
     /**
      * Flags used to indicate tile passability.
      */
-    enum class TilePassability : std::uint16_t {
+    enum class TilePassability : std::uint16_t
+    {
         /**
          * Default value for empty (ground) tiles.
          */
@@ -69,12 +71,11 @@ namespace Rival {
     };
     MAKE_ENUM_FLAGS(TilePassability)
 
-    class Tile {
+    class Tile
+    {
 
     public:
-        Tile(const TileType type,
-                const std::uint8_t txIndex,
-                std::uint16_t resourceCount);
+        Tile(const TileType type, const std::uint8_t txIndex, std::uint16_t resourceCount);
 
         TileType type;
 

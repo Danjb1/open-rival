@@ -9,7 +9,8 @@ namespace Rival {
     /**
      * Interface exposing the map size.
      */
-    class MapBounds {
+    class MapBounds
+    {
     public:
         virtual int getWidth() const = 0;
         virtual int getHeight() const = 0;
@@ -18,15 +19,18 @@ namespace Rival {
     /**
      * The co-ordinates of a tile.
      */
-    struct MapNode {
+    struct MapNode
+    {
         int x;
         int y;
 
-        bool operator==(const MapNode& other) const {
+        bool operator==(const MapNode& other) const
+        {
             return x == other.x && y == other.y;
         }
 
-        bool operator!=(const MapNode& other) const {
+        bool operator!=(const MapNode& other) const
+        {
             return !(*this == other);
         }
     };
@@ -34,7 +38,8 @@ namespace Rival {
     /**
      * A compass direction.
      */
-    enum class Facing : std::uint8_t {
+    enum class Facing : std::uint8_t
+    {
         South,
         SouthWest,
         West,
@@ -58,7 +63,10 @@ namespace Rival {
          * Each row of tiles is a zigzag, and the upper tiles are those that are
          * higher up the screen within the row.
          */
-        inline bool isUpperTile(int tileX) { return tileX % 2 == 0; }
+        inline bool isUpperTile(int tileX)
+        {
+            return tileX % 2 == 0;
+        }
 
         /**
          * Determines if a tile is a "lower tile".
@@ -66,13 +74,15 @@ namespace Rival {
          * Each row of tiles is a zigzag, and the lower tiles are those that are
          * lower down the screen within the row.
          */
-        inline bool isLowerTile(int tileX) { return tileX % 2 == 1; }
+        inline bool isLowerTile(int tileX)
+        {
+            return tileX % 2 == 1;
+        }
 
         /**
          * Finds all valid neighbors of the given MapNode.
          */
-        std::vector<MapNode> findNeighbors(
-                const MapNode& node, const MapBounds& area);
+        std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area);
 
         /**
          * Gets the most pertinent direction between 2 neighbouring tiles.
@@ -93,8 +103,10 @@ namespace std {
      * Custom hash function for MapNode.
      */
     template <>
-    struct hash<Rival::MapNode> {
-        inline size_t operator()(Rival::MapNode const& node) const noexcept {
+    struct hash<Rival::MapNode>
+    {
+        inline size_t operator()(Rival::MapNode const& node) const noexcept
+        {
             // Given that x/y will never exceed 16 bits, this ought to give a
             // totally unique value for each node.
             return node.x | (node.y << 16);
@@ -104,7 +116,8 @@ namespace std {
     /**
      * Print method for MapNodes.
      */
-    inline ostream& operator<<(ostream& out, const Rival::MapNode& node) {
+    inline ostream& operator<<(ostream& out, const Rival::MapNode& node)
+    {
         return out << node.x << ", " << node.y;
     }
 

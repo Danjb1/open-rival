@@ -12,7 +12,8 @@ namespace Rival { namespace Pathfinding {
     /**
      * A MapNode with an associated score for pathfinding.
      */
-    struct ReachableNode {
+    struct ReachableNode
+    {
         MapNode node;
 
         /**
@@ -28,11 +29,13 @@ namespace Rival { namespace Pathfinding {
          */
         float cost;
 
-        bool operator<(const ReachableNode& other) const {
+        bool operator<(const ReachableNode& other) const
+        {
             return cost < other.cost;
         }
 
-        bool operator>(const ReachableNode& other) const {
+        bool operator>(const ReachableNode& other) const
+        {
             return other < *this;
         }
     };
@@ -43,12 +46,14 @@ namespace Rival { namespace Pathfinding {
      * For now this uses a simple A* search. Later, we could investigate the use
      * of waypoints if this does not perform adequately.
      */
-    class Pathfinder {
+    class Pathfinder
+    {
     public:
         Pathfinder::Pathfinder(
                 MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
 
-        Route getRoute() const {
+        Route getRoute() const
+        {
             return route;
         }
 
@@ -115,32 +120,40 @@ namespace Rival { namespace Pathfinding {
         , goal(goal)
         , map(map)
         , route({ goal, findPath() })
-        , passabilityChecker(passabilityChecker) {}
+        , passabilityChecker(passabilityChecker)
+    {
+    }
 
     /**
      * Attempts to find a path based on the Pathfinder's configuration.
      */
-    std::deque<MapNode> Pathfinder::findPath() {
-        if (start == goal) {
+    std::deque<MapNode> Pathfinder::findPath()
+    {
+        if (start == goal)
+        {
             return {};
         }
 
         discoveredNodes.push_back({ start, 0 });
         costToNode[start] = 0;
 
-        while (!isFinished()) {
+        while (!isFinished())
+        {
             ReachableNode current = popBestNode();
 
             // See if we've reached the goal
-            if (current.node == goal) {
+            if (current.node == goal)
+            {
                 return reconstructPath(current.node);
             }
 
             std::vector<MapNode> neighbors = findNeighbors(current.node);
 
-            for (MapNode neighbor : neighbors) {
+            for (MapNode neighbor : neighbors)
+            {
                 float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
-                if (newCostToNeighbor < getCostToNode(neighbor)) {
+                if (newCostToNeighbor < getCostToNode(neighbor))
+                {
                     // This path to neighbor is better than any previous one
                     costToNode[neighbor] = newCostToNeighbor;
                     prevNode[neighbor] = current.node;
@@ -153,7 +166,8 @@ namespace Rival { namespace Pathfinding {
         return {};
     }
 
-    bool Pathfinder::isFinished() const {
+    bool Pathfinder::isFinished() const
+    {
         return discoveredNodes.empty();
     }
 
@@ -161,7 +175,8 @@ namespace Rival { namespace Pathfinding {
      * Removes the ReachableNode with the lowest estimated cost from the list
      * of discovered Nodes, and returns it.
      */
-    ReachableNode Pathfinder::popBestNode() {
+    ReachableNode Pathfinder::popBestNode()
+    {
         // Making `discoveredNodes` into a min-heap means we can extract the
         // best node in O(1) time.
         std::make_heap(discoveredNodes.begin(), discoveredNodes.end(), std::greater<ReachableNode> {});
@@ -175,8 +190,10 @@ namespace Rival { namespace Pathfinding {
     /**
      * Heuristic function used to estimate the cost from a MapNode to the goal.
      */
-    float Pathfinder::estimateCostToGoal(const MapNode& node) const {
-        if (node == goal) {
+    float Pathfinder::estimateCostToGoal(const MapNode& node) const
+    {
+        if (node == goal)
+        {
             return 0.f;
         }
 
@@ -193,15 +210,18 @@ namespace Rival { namespace Pathfinding {
     /**
      * Returns the path found from the start to the given MapNode.
      */
-    std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const {
+    std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const
+    {
         std::deque<MapNode> path = {};
         MapNode currentNode = node;
 
         // Follow the previous nodes back to the start
-        while (currentNode != start) {
+        while (currentNode != start)
+        {
             path.push_front(currentNode);
             auto it = prevNode.find(currentNode);
-            if (it == prevNode.end()) {
+            if (it == prevNode.end())
+            {
                 // No previous node found. This should never happen since we
                 // don't enter the loop for the start node.
                 break;
@@ -215,7 +235,8 @@ namespace Rival { namespace Pathfinding {
     /**
      * Returns a vector containing all valid neighbors of the given MapNode.
      */
-    std::vector<MapNode> Pathfinder::findNeighbors(const MapNode& node) const {
+    std::vector<MapNode> Pathfinder::findNeighbors(const MapNode& node) const
+    {
         std::vector<MapNode> allNeighbors = MapUtils::findNeighbors(node, map);
 
         // Filter out non-traversable neighbors
@@ -232,9 +253,11 @@ namespace Rival { namespace Pathfinding {
      *
      * Returns the integer max if no path has been found yet.
      */
-    float Pathfinder::getCostToNode(const MapNode& node) const {
+    float Pathfinder::getCostToNode(const MapNode& node) const
+    {
         auto it = costToNode.find(node);
-        if (it == costToNode.end()) {
+        if (it == costToNode.end())
+        {
             // No path to node found yet
             return std::numeric_limits<float>::max();
         }
@@ -244,7 +267,8 @@ namespace Rival { namespace Pathfinding {
     /**
      * Gets the cost of moving to a neighboring tile.
      */
-    float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const {
+    float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
+    {
         /*
          * This warrants some explanation.
          *
@@ -278,12 +302,16 @@ namespace Rival { namespace Pathfinding {
      * Updates the path to a node with a shorter one, or adds a new path to
      * the node if this is the first one found.
      */
-    void Pathfinder::updatePathToNode(const MapNode& node, float newCost) {
+    void Pathfinder::updatePathToNode(const MapNode& node, float newCost)
+    {
         float newEstimate = newCost + estimateCostToGoal(node);
         ReachableNode* existingNode = findDiscoveredNode(node);
-        if (existingNode) {
+        if (existingNode)
+        {
             existingNode->cost = newEstimate;
-        } else {
+        }
+        else
+        {
             discoveredNodes.push_back({ node, newEstimate });
         }
     }
@@ -291,9 +319,12 @@ namespace Rival { namespace Pathfinding {
     /**
      * Finds the ReachableNode associated with the given MapNode, if present.
      */
-    ReachableNode* Pathfinder::findDiscoveredNode(const MapNode& node) {
-        for (ReachableNode& discoveredNode : discoveredNodes) {
-            if (discoveredNode.node == node) {
+    ReachableNode* Pathfinder::findDiscoveredNode(const MapNode& node)
+    {
+        for (ReachableNode& discoveredNode : discoveredNodes)
+        {
+            if (discoveredNode.node == node)
+            {
                 return &discoveredNode;
             }
         }
@@ -304,17 +335,20 @@ namespace Rival { namespace Pathfinding {
 
     Route::Route(MapNode destination, std::deque<MapNode> path) : destination(destination), path(path) {}
 
-    bool Route::isEmpty() const {
+    bool Route::isEmpty() const
+    {
         return path.size() == 0;
     }
 
-    MapNode Route::pop() {
+    MapNode Route::pop()
+    {
         MapNode node = path.front();
         path.pop_front();
         return node;
     }
 
-    const MapNode* Route::peek() const {
+    const MapNode* Route::peek() const
+    {
         return path.empty() ? nullptr : &path.front();
     }
 
@@ -322,7 +356,8 @@ namespace Rival { namespace Pathfinding {
             const MapNode start,
             const MapNode goal,
             const PathfindingMap& map,
-            const PassabilityChecker& passabilityChecker) {
+            const PassabilityChecker& passabilityChecker)
+    {
         return Pathfinder(start, goal, map, passabilityChecker).getRoute();
     }
 

@@ -17,7 +17,8 @@ namespace Rival {
     /**
      * Interface exposing map data for pathfinding.
      */
-    class PathfindingMap : public MapBounds {
+    class PathfindingMap : public MapBounds
+    {
     public:
         virtual TilePassability getPassability(const MapNode& pos) const = 0;
     };
@@ -27,28 +28,38 @@ namespace Rival {
      *
      * Contains map data and entities.
      */
-    class Scenario : public PathfindingMap {
+    class Scenario : public PathfindingMap
+    {
 
     public:
         Scenario(int width, int height, bool wilderness);
         Scenario(int width, int height, bool wilderness, std::vector<Tile> tiles);
 
         // Begin PathfindingMap override
-        int getWidth() const override { return width; }
-        int getHeight() const override { return height; }
+        int getWidth() const override
+        {
+            return width;
+        }
+        int getHeight() const override
+        {
+            return height;
+        }
         TilePassability getPassability(const MapNode& pos) const override;
         // End PathfindingMap override
 
-        const std::vector<Tile>& getTiles() const { return tiles; }
+        const std::vector<Tile>& getTiles() const
+        {
+            return tiles;
+        }
 
         Tile getTile(int x, int y) const;
 
-        bool isWilderness() const { return wilderness; }
+        bool isWilderness() const
+        {
+            return wilderness;
+        }
 
-        void addEntity(
-                std::shared_ptr<Entity> unit,
-                int x,
-                int y);
+        void addEntity(std::shared_ptr<Entity> unit, int x, int y);
 
         /**
          * Returns a read-only list of all entities currently present in the

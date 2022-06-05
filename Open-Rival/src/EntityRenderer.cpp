@@ -17,15 +17,19 @@ namespace Rival {
     EntityRenderer::EntityRenderer(const Texture& paletteTexture) : paletteTexture(paletteTexture) {}
 
     void
-    EntityRenderer::render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const {
-        for (auto const& e : entities) {
-            if (isEntityVisible(*e, camera)) {
+    EntityRenderer::render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const
+    {
+        for (auto const& e : entities)
+        {
+            if (isEntityVisible(*e, camera))
+            {
                 renderEntity(*e, delta);
             }
         }
     }
 
-    bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const {
+    bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const
+    {
 
         // Find the centre of this Entity's tile, in Camera units
         const MapNode& pos = entity.getPos();
@@ -47,14 +51,16 @@ namespace Rival {
         return camera.contains(x1, y1) || camera.contains(x2, y1) || camera.contains(x2, y2) || camera.contains(x1, y2);
     }
 
-    void EntityRenderer::renderEntity(Entity& entity, int delta) const {
+    void EntityRenderer::renderEntity(Entity& entity, int delta) const
+    {
 
         // Get this Entity's SpriteComponent
         std::weak_ptr<SpriteComponent> weakSpriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
         // Entities without a SpriteComponent cannot be rendered
         auto spriteComponent = weakSpriteComponent.lock();
-        if (!spriteComponent) {
+        if (!spriteComponent)
+        {
             return;
         }
 
@@ -69,7 +75,8 @@ namespace Rival {
         glBindVertexArray(renderable.getVao());
 
         // Update the data on the GPU
-        if (needsUpdate(entity, spriteComponent)) {
+        if (needsUpdate(entity, spriteComponent))
+        {
             sendDataToGpu(entity, spriteComponent, delta);
         }
 
@@ -77,13 +84,14 @@ namespace Rival {
         glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
     }
 
-    bool
-    EntityRenderer::needsUpdate(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent) const {
+    bool EntityRenderer::needsUpdate(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent) const
+    {
         return entity.moved || spriteComponent->dirty;
     }
 
     void EntityRenderer::sendDataToGpu(
-            const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent, int delta) const {
+            const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent, int delta) const
+    {
 
         // Determine the frame of the texture to be rendered
         int txIndex = spriteComponent->getTxIndex();
@@ -136,7 +144,8 @@ namespace Rival {
      * tile, in terms of pixels.
      */
     std::array<float, EntityRenderer::numLerpDimensions>
-    EntityRenderer::getLerpOffset(const Entity& entity, int delta) const {
+    EntityRenderer::getLerpOffset(const Entity& entity, int delta) const
+    {
         std::array<float, numLerpDimensions> offset = { 0, 0 };
 
         // See if the Entity can move
@@ -144,20 +153,23 @@ namespace Rival {
         std::weak_ptr<const WalkerComponent> weakWalkerComponent =
                 entity.getComponent<WalkerComponent>(WalkerComponent::key);
         auto walkerComponent = weakWalkerComponent.lock();
-        if (!walkerComponent) {
+        if (!walkerComponent)
+        {
             return offset;
         }
 
         // See if the Entity is currently moving
         const Movement& movement = walkerComponent->getMovement();
-        if (movement.timeElapsed == 0) {
+        if (movement.timeElapsed == 0)
+        {
             return offset;
         }
 
         // Find the MapNode the Entity is moving to
         const Pathfinding::Route route = walkerComponent->getRoute();
         const MapNode* nextNode = route.peek();
-        if (!nextNode) {
+        if (!nextNode)
+        {
             // Should never happen since we've already established the Entity
             // is moving!
             return offset;
@@ -171,24 +183,38 @@ namespace Rival {
         float progress = std::min(static_cast<float>(timeElapsed) / movement.timeRequired, 1.f);
 
         // Determine x-offset
-        if (dir == Facing::East) {
+        if (dir == Facing::East)
+        {
             offset[lerpIdxX] = progress * RenderUtils::tileWidthPx;
-        } else if (dir == Facing::West) {
+        }
+        else if (dir == Facing::West)
+        {
             offset[lerpIdxX] = -progress * RenderUtils::tileWidthPx;
-        } else if (dir == Facing::NorthEast || dir == Facing::SouthEast) {
+        }
+        else if (dir == Facing::NorthEast || dir == Facing::SouthEast)
+        {
             offset[lerpIdxX] = progress * 0.5f * RenderUtils::tileWidthPx;
-        } else if (dir == Facing::NorthWest || dir == Facing::SouthWest) {
+        }
+        else if (dir == Facing::NorthWest || dir == Facing::SouthWest)
+        {
             offset[lerpIdxX] = -progress * 0.5f * RenderUtils::tileWidthPx;
         }
 
         // Determine y-offset
-        if (dir == Facing::North) {
+        if (dir == Facing::North)
+        {
             offset[lerpIdxY] = -progress * RenderUtils::tileHeightPx;
-        } else if (dir == Facing::South) {
+        }
+        else if (dir == Facing::South)
+        {
             offset[lerpIdxY] = progress * RenderUtils::tileHeightPx;
-        } else if (dir == Facing::NorthEast || dir == Facing::NorthWest) {
+        }
+        else if (dir == Facing::NorthEast || dir == Facing::NorthWest)
+        {
             offset[lerpIdxY] = -progress * 0.5f * RenderUtils::tileHeightPx;
-        } else if (dir == Facing::SouthEast || dir == Facing::SouthWest) {
+        }
+        else if (dir == Facing::SouthEast || dir == Facing::SouthWest)
+        {
             offset[lerpIdxY] = progress * 0.5f * RenderUtils::tileHeightPx;
         }
 

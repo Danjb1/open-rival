@@ -8,9 +8,11 @@
 
 using namespace Rival::Setup;
 
-int main() {
+int main()
+{
 
-    if (!createDirectory("images")) {
+    if (!createDirectory("images"))
+    {
         std::cerr << "Could not create \"images\" directory\n";
         return -1;
     }

@@ -7,7 +7,8 @@
 
 namespace Rival {
 
-    class TextRenderer {
+    class TextRenderer
+    {
 
     public:
         /**

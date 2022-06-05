@@ -9,11 +9,10 @@
 
 namespace Rival {
 
-    AudioSystem::AudioSystem()
-        : midiActive(false),
-          soundActive(false) {}
+    AudioSystem::AudioSystem() : midiActive(false), soundActive(false) {}
 
-    AudioSystem::~AudioSystem() {
+    AudioSystem::~AudioSystem()
+    {
         setMidiActive(false);
         setSoundActive(false);
     }
@@ -28,11 +27,13 @@ namespace Rival {
 
     void AudioSystem::destroyMidiSystem() {}
 
-    void AudioSystem::setMidiActive(bool active) {
+    void AudioSystem::setMidiActive(bool active)
+    {
         midiActive = active;
     }
 
-    void AudioSystem::setSoundActive(bool active) {
+    void AudioSystem::setSoundActive(bool active)
+    {
         soundActive = active;
     }
 

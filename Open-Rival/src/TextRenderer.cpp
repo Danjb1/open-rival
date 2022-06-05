@@ -6,7 +6,8 @@
 
 namespace Rival {
 
-    void TextRenderer::render(const TextRenderable& textRenderable) const {
+    void TextRenderer::render(const TextRenderable& textRenderable) const
+    {
         // Use textures
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textRenderable.getTextureId());
@@ -15,7 +16,8 @@ namespace Rival {
         glBindVertexArray(textRenderable.getVao());
 
         // Update the data on the GPU
-        if (needsUpdate(textRenderable)) {
+        if (needsUpdate(textRenderable))
+        {
             sendDataToGpu(textRenderable);
         }
 
@@ -26,11 +28,13 @@ namespace Rival {
         glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
     }
 
-    bool TextRenderer::needsUpdate(const TextRenderable& textRenderable) const {
+    bool TextRenderer::needsUpdate(const TextRenderable& textRenderable) const
+    {
         return textRenderable.dirty;
     }
 
-    void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const {
+    void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
+    {
 
         std::vector<TextSpan> spans = textRenderable.getTextSpans();
         const Font* font = textRenderable.getFont();
@@ -57,20 +61,25 @@ namespace Rival {
         int charsAdded = 0;
 
         // Add characters to buffers
-        for (int layer = 0; layer < numLayers; ++layer) {
+        for (int layer = 0; layer < numLayers; ++layer)
+        {
             float x = textRenderable.getX();
             float y = textRenderable.getY();
 
-            for (TextSpan span : spans) {
-                for (char c : span.text) {
+            for (TextSpan span : spans)
+            {
+                for (char c : span.text)
+                {
                     const CharData* charData = font->getCharData(c);
 
-                    if (!charData) {
+                    if (!charData)
+                    {
                         std::cout << "Trying to render unsupported character: " << c << "\n";
                         continue;
                     }
 
-                    if (c == ' ') {
+                    if (c == ' ')
+                    {
                         // Nothing to render for spaces
                         x += charData->advance * scale;
                         continue;
@@ -79,10 +88,13 @@ namespace Rival {
                     // Determine layer offsets
                     float layerOffsetX;
                     float layerOffsetY;
-                    if (layer == TextRenderable::shadowLayerIndex) {
+                    if (layer == TextRenderable::shadowLayerIndex)
+                    {
                         layerOffsetX = TextRenderable::shadowOffsetX;
                         layerOffsetY = TextRenderable::shadowOffsetY;
-                    } else {
+                    }
+                    else
+                    {
                         layerOffsetX = 0.0f;
                         layerOffsetY = 0.0f;
                     }
@@ -110,11 +122,14 @@ namespace Rival {
                     float r;
                     float g;
                     float b;
-                    if (layer == TextRenderable::shadowLayerIndex) {
+                    if (layer == TextRenderable::shadowLayerIndex)
+                    {
                         r = 0.0f;
                         g = 0.0f;
                         b = 0.0f;
-                    } else {
+                    }
+                    else
+                    {
                         r = span.color.r;
                         g = span.color.g;
                         b = span.color.b;

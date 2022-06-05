@@ -15,6 +15,7 @@
 ### Formatting and Libraries
 
 - Clang-Format crashes with out-of-memory error when formatting all headers
+    - This is because of json.h
 - Auto-arrange includes via clang-format?
 - Improve handling of libary files
     - Suppress warnings around includes rather than editing library files

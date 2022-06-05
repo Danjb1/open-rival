@@ -10,7 +10,8 @@
 
 namespace Rival { namespace Setup {
 
-    class InterfaceExtractor {
+    class InterfaceExtractor
+    {
     public:
         InterfaceExtractor(std::string inputFile);
 

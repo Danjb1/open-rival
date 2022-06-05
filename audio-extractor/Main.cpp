@@ -4,6 +4,7 @@
 
 using namespace Rival::Setup;
 
-int main() {
+int main()
+{
     extractAudio("SOUNDS.DAT", "output");
 }

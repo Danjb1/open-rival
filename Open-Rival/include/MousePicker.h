@@ -26,13 +26,11 @@ namespace Rival {
      * special mouse-picking shader that encodes information about the rendered
      * game world).
      */
-    class MousePicker {
+    class MousePicker
+    {
 
     public:
-        MousePicker(
-                Camera& camera,
-                Rect& viewport,
-                Scenario& scenario);
+        MousePicker(Camera& camera, Rect& viewport, Scenario& scenario);
 
         void handleMouse();
 
@@ -49,8 +47,7 @@ namespace Rival {
         static const int unitHitboxOffsetY = 25;
 
         // Size of a Unit's hitbox
-        static const int unitHitboxWidth = RenderUtils::tileWidthPx
-                - (2 * unitHitboxOffsetX);
+        static const int unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
         static const int unitHitboxHeight = 40;
 
         Camera& camera;
@@ -74,10 +71,7 @@ namespace Rival {
 
         void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
-        bool isMouseInEntity(
-                const Entity& entity,
-                int mouseInViewportX,
-                int mouseInViewportY);
+        bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
     };
 
 }  // namespace Rival

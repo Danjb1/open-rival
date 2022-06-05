@@ -19,7 +19,8 @@
 
 namespace Rival {
 
-    class GameState : public State {
+    class GameState : public State
+    {
 
     public:
         GameState(Application& app, std::unique_ptr<Scenario> scenario);
@@ -33,7 +34,8 @@ namespace Rival {
         void update() override;
         // End State override
 
-        Scenario& getScenario() {
+        Scenario& getScenario()
+        {
             return *scenario;
         }
 

@@ -16,7 +16,8 @@ namespace Rival {
     /**
      * Data relating to a character within a Font.
      */
-    struct CharData {
+    struct CharData
+    {
         std::vector<float> txCoords;  // tx1, ty1, tx2, ty2 (between 0-1)
         glm::ivec2 size;              // Width / height of this FontChar (pixels)
         glm::ivec2 bearing;           // Offset from baseline to left / top of glyph (pixels)
@@ -26,7 +27,8 @@ namespace Rival {
     /**
      * Wrapper around an `FT_Face` that uses RAII.
      */
-    class FontFace {
+    class FontFace
+    {
     public:
         FT_Face face;
 
@@ -37,7 +39,8 @@ namespace Rival {
     /**
      * Exception thrown when a Font cannot be loaded.
      */
-    class FontLoadError : public std::runtime_error {
+    class FontLoadError : public std::runtime_error
+    {
     public:
         FontLoadError(const char* message);
     };
@@ -45,7 +48,8 @@ namespace Rival {
     /**
      * Font that can be used to render characters.
      */
-    class Font {
+    class Font
+    {
     public:
         /**
          * Characters that can be rendered using this font.
@@ -76,7 +80,8 @@ namespace Rival {
         /**
          * Gets the Texture that backs this Font.
          */
-        const Texture& getTexture() const {
+        const Texture& getTexture() const
+        {
             return texture;
         }
 
@@ -88,7 +93,8 @@ namespace Rival {
         /**
          * Gets the data pertaining to the given character.
          */
-        const int getDefaultSize() const {
+        const int getDefaultSize() const
+        {
             return defaultSize;
         }
 

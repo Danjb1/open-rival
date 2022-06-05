@@ -11,7 +11,8 @@ namespace Rival {
      *
      * This creates the VAO and all necessary buffers.
      */
-    class AtlasRenderable {
+    class AtlasRenderable
+    {
 
     public:
         static const int numVertexDimensions = 3;    // x, y, z
@@ -34,31 +35,38 @@ namespace Rival {
         AtlasRenderable& operator=(const AtlasRenderable& other) = delete;
         AtlasRenderable& operator=(AtlasRenderable&& other) = delete;
 
-        GLuint getVao() const {
+        GLuint getVao() const
+        {
             return vao;
         }
 
-        GLuint getPositionVbo() const {
+        GLuint getPositionVbo() const
+        {
             return positionVbo;
         }
 
-        GLuint getTexCoordVbo() const {
+        GLuint getTexCoordVbo() const
+        {
             return texCoordVbo;
         }
 
-        GLuint getIbo() const {
+        GLuint getIbo() const
+        {
             return ibo;
         }
 
-        GLuint getTextureId() const {
+        GLuint getTextureId() const
+        {
             return texAtlas.texture.getId();
         }
 
-        GLenum getDrawMode() const {
+        GLenum getDrawMode() const
+        {
             return drawMode;
         }
 
-        int getIndicesPerSprite() const {
+        int getIndicesPerSprite() const
+        {
             return indicesPerSprite;
         }
 

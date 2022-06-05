@@ -25,7 +25,8 @@ namespace Rival {
                  *scenario)
         , mousePicker(camera, viewport, *scenario)
         , gameRenderer(window, *scenario, camera, viewport, res)
-        , textRenderer(window) {
+        , textRenderer(window)
+    {
 
         // TMP
         std::vector<TextSpan> spans1 = { { "Hello ", TextRenderable::defaultColor },
@@ -43,44 +44,54 @@ namespace Rival {
         texts.push_back(text2.get());
     }
 
-    void GameState::onLoad() {
+    void GameState::onLoad()
+    {
         app.getAudioSystem().playMidi(res.getMidi(0));
     }
 
-    void GameState::update() {
+    void GameState::update()
+    {
         earlyUpdateEntities();
         respondToMouseInput();
         updateEntities();
         scenario->cleanUpEntities();
     }
 
-    void GameState::earlyUpdateEntities() const {
+    void GameState::earlyUpdateEntities() const
+    {
         auto const& entities = scenario->getEntities();
-        for (auto const& e : entities) {
+        for (auto const& e : entities)
+        {
             e->earlyUpdate();
         }
     }
 
-    void GameState::respondToMouseInput() {
+    void GameState::respondToMouseInput()
+    {
         mousePicker.handleMouse();
     }
 
-    void GameState::updateEntities() const {
+    void GameState::updateEntities() const
+    {
         auto const& entities = scenario->getEntities();
-        for (auto const& e : entities) {
+        for (auto const& e : entities)
+        {
             e->update();
         }
     }
 
-    void GameState::render(int delta) {
+    void GameState::render(int delta)
+    {
         gameRenderer.render(delta);
 
         // TMP
         textRenderer.render(texts);
     }
 
-    void GameState::keyDown(const SDL_Keycode keyCode) {
-        switch (keyCode) {
+    void GameState::keyDown(const SDL_Keycode keyCode)
+    {
+        switch (keyCode)
+        {
         case SDLK_UP:
             camera.translate(0.0f, -0.5f);
             break;
@@ -103,14 +114,16 @@ namespace Rival {
     }
 
 #include <cstdlib>  // TMP (for rand)
-    void GameState::mouseUp(const SDL_MouseButtonEvent) {
+    void GameState::mouseUp(const SDL_MouseButtonEvent)
+    {
         // TMP: play a random sound!
         int soundId = std::rand() % 369;
         const WaveFile& waveFile = res.getSound(soundId);
         app.getAudioSystem().playSound(SoundSource(waveFile));
     }
 
-    void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt) {
+    void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
+    {
 
         // Get the mouse position relative to the window, in pixels
         int mouseX;
@@ -118,33 +131,40 @@ namespace Rival {
         SDL_GetMouseState(&mouseX, &mouseY);
 
         // Abort if the mouse is outside the viewport
-        if (!viewport.contains(mouseX, mouseY)) {
+        if (!viewport.contains(mouseX, mouseY))
+        {
             return;
         }
 
         // Check if any scrolling took place
         int scrollAmount = evt.y;
-        if (scrollAmount == 0) {
+        if (scrollAmount == 0)
+        {
             return;
         }
 
         // Determine the normalized scroll amount
-        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED) {
+        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED)
+        {
             scrollAmount *= -1;
         }
 
         // Zoom
         float zoomBefore = camera.getZoom();
-        if (scrollAmount > 0) {
+        if (scrollAmount > 0)
+        {
             camera.modZoom(Camera::zoomInterval);
-        } else {
+        }
+        else
+        {
             camera.modZoom(-Camera::zoomInterval);
         }
         float zoomAfter = camera.getZoom();
 
         // If the zoom level hasn't changed, there is no need to translate
         // the camera
-        if (zoomBefore == zoomAfter) {
+        if (zoomBefore == zoomAfter)
+        {
             return;
         }
 
@@ -160,9 +180,12 @@ namespace Rival {
         // Move the camera based on the cursor position.
         // We move towards the cursor when zooming in, and away from the cursor
         // when zooming out.
-        if (scrollAmount > 0) {
+        if (scrollAmount > 0)
+        {
             camera.translate(relativeMouseX, relativeMouseY);
-        } else {
+        }
+        else
+        {
             camera.translate(-relativeMouseX, -relativeMouseY);
         }
     }

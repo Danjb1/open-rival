@@ -10,7 +10,8 @@ namespace Rival {
 
     MenuTextRenderer::MenuTextRenderer(const Window& window) : window(&window), textRenderer() {}
 
-    void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const {
+    void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const
+    {
         // Disable depth testing for now (we may use it later)
         glDisable(GL_DEPTH_TEST);
 
@@ -25,7 +26,8 @@ namespace Rival {
         glUniform1i(Shaders::fontShader.texUnitUniformLoc, 0);
 
         // Render!
-        for (const TextRenderable* textRenderable : textRenderables) {
+        for (const TextRenderable* textRenderable : textRenderables)
+        {
             textRenderer.render(*textRenderable);
         }
     }

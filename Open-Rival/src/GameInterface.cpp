@@ -28,9 +28,12 @@ namespace Rival { namespace GameInterface {
     UiImage::UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey)
         : pos(pos)
         , texAtlas(texAtlas)
-        , imageKey(imageKey) {}
+        , imageKey(imageKey)
+    {
+    }
 
-    void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const {
+    void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const
+    {
 
         // Define vertex positions
         float x1 = pos.x;

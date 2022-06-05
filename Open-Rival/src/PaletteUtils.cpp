@@ -9,12 +9,14 @@
 
 namespace Rival { namespace PaletteUtils {
 
-    Texture createPaletteTexture() {
+    Texture createPaletteTexture()
+    {
 
         // Create palette texture
         std::array<std::uint8_t, Palette::paletteBytes> data { 0 };
 
-        for (int i = 0; i < Palette::paletteSize; i++) {
+        for (int i = 0; i < Palette::paletteSize; i++)
+        {
             int start = i * Palette::paletteChannels;
             std::uint32_t col = Palette::paletteGame[i];
             // RGBA

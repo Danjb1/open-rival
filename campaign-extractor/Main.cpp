@@ -4,7 +4,8 @@
 
 using namespace Rival::Setup;
 
-int main() {
+int main()
+{
     extractCampaign("CELF.CMP");
     extractCampaign("CGRE.CMP");
     extractCampaign("CHUMAN.CMP");

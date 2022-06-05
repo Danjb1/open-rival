@@ -9,7 +9,8 @@
 
 namespace Rival {
 
-    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo) : fbo(fbo) {
+    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo) : fbo(fbo)
+    {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -60,7 +61,8 @@ namespace Rival {
         glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
     }
 
-    void FramebufferRenderer::render(int srcWidth, int srcHeight) const {
+    void FramebufferRenderer::render(int srcWidth, int srcHeight) const
+    {
 
         // Bind vertex array
         glBindVertexArray(vao);

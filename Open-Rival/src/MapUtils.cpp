@@ -3,7 +3,8 @@
 
 namespace Rival { namespace MapUtils {
 
-    std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area) {
+    std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
+    {
         std::vector<MapNode> neighbors;
 
         // First determine which map locations are valid relative to this node.
@@ -15,23 +16,28 @@ namespace Rival { namespace MapUtils {
         bool hasWest = node.x < area.getWidth() - eastWestTileSpan;
 
         // Find all valid neighbors
-        if (hasNorth) {
+        if (hasNorth)
+        {
             neighbors.push_back({ node.x, node.y - 1 });
         }
-        if (hasEast) {
+        if (hasEast)
+        {
             neighbors.push_back({ node.x + eastWestTileSpan, node.y });
         }
-        if (hasSouth) {
+        if (hasSouth)
+        {
             neighbors.push_back({ node.x, node.y + 1 });
         }
-        if (hasWest) {
+        if (hasWest)
+        {
             neighbors.push_back({ node.x - eastWestTileSpan, node.y });
         }
 
         // The diagonal neighbors depend on which part of the zigzag we are in
         bool hasDiagonalEast = node.x < area.getWidth() - 1;
         bool hasDiagonalWest = node.x > 0;
-        if (isUpperTile(node.x)) {
+        if (isUpperTile(node.x))
+        {
             // We are in the top part of the zigzag;
             // => Moving diagonally north moves us into the row above.
             // => Moving diagonally south keeps us in the same row.
@@ -40,20 +46,25 @@ namespace Rival { namespace MapUtils {
             bool hasSouthEast = hasDiagonalEast;
             bool hasSouthWest = hasDiagonalWest;
 
-            if (hasNorthEast) {
+            if (hasNorthEast)
+            {
                 neighbors.push_back({ node.x + 1, node.y - 1 });
             }
-            if (hasNorthWest) {
+            if (hasNorthWest)
+            {
                 neighbors.push_back({ node.x - 1, node.y - 1 });
             }
-            if (hasSouthEast) {
+            if (hasSouthEast)
+            {
                 neighbors.push_back({ node.x + 1, node.y });
             }
-            if (hasSouthWest) {
+            if (hasSouthWest)
+            {
                 neighbors.push_back({ node.x - 1, node.y });
             }
-
-        } else {
+        }
+        else
+        {
             // We are in the bottom part of the zigzag;
             // => Moving diagonally north keeps us in the same row.
             // => Moving diagonally south moves us into the row below.
@@ -62,16 +73,20 @@ namespace Rival { namespace MapUtils {
             bool hasSouthEast = hasDiagonalEast && hasSouth;
             bool hasSouthWest = hasDiagonalWest && hasSouth;
 
-            if (hasNorthEast) {
+            if (hasNorthEast)
+            {
                 neighbors.push_back({ node.x + 1, node.y });
             }
-            if (hasNorthWest) {
+            if (hasNorthWest)
+            {
                 neighbors.push_back({ node.x - 1, node.y });
             }
-            if (hasSouthEast) {
+            if (hasSouthEast)
+            {
                 neighbors.push_back({ node.x + 1, node.y + 1 });
             }
-            if (hasSouthWest) {
+            if (hasSouthWest)
+            {
                 neighbors.push_back({ node.x - 1, node.y + 1 });
             }
         }
@@ -79,9 +94,11 @@ namespace Rival { namespace MapUtils {
         return neighbors;
     }
 
-    Facing getDir(const MapNode& from, const MapNode& to) {
+    Facing getDir(const MapNode& from, const MapNode& to)
+    {
         // Let's get the easy ones out of the way first
-        if (from.x == to.x) {
+        if (from.x == to.x)
+        {
             return from.y <= to.y ? Facing::South : Facing::North;
         }
 
@@ -91,19 +108,28 @@ namespace Rival { namespace MapUtils {
 
         // We need to factor in the zigzagging nature of the rows. Even within
         // the same row, tiles can be positioned above or below each other.
-        if (isUpperTile(from.x) && isLowerTile(to.x)) {
-            if (dy < 0) {
+        if (isUpperTile(from.x) && isLowerTile(to.x))
+        {
+            if (dy < 0)
+            {
                 // Moving from top part of a zigzag to the row above
                 --dy;
-            } else {
+            }
+            else
+            {
                 // Moving from top part of a zigzag to the bottom
                 ++dy;
             }
-        } else if (isLowerTile(from.x) && isUpperTile(to.x)) {
-            if (dy <= 0) {
+        }
+        else if (isLowerTile(from.x) && isUpperTile(to.x))
+        {
+            if (dy <= 0)
+            {
                 // Moving from bottom part of a zigzag to the top
                 --dy;
-            } else {
+            }
+            else
+            {
                 // Moving from bottom part of a zigzag to the row below
                 ++dy;
             }
@@ -111,26 +137,36 @@ namespace Rival { namespace MapUtils {
 
         // If the x-delta is significantly more than the y-delta, we should
         // face east/west.
-        if (abs(dx) > 2 * abs(dy)) {
+        if (abs(dx) > 2 * abs(dy))
+        {
             return dx < 0 ? Facing::West : Facing::East;
         }
 
-        if (isUpperTile(from.x)) {
+        if (isUpperTile(from.x))
+        {
             // We are in the top part of the zigzag;
             // => Moving to the row above is diagonally north.
             // => Moving to the *same* row is diagonally south.
-            if (dy < 0) {
+            if (dy < 0)
+            {
                 return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
-            } else {
+            }
+            else
+            {
                 return dx < 0 ? Facing::SouthWest : Facing::SouthEast;
             }
-        } else {
+        }
+        else
+        {
             // We are in the bottom part of the zigzag;
             // => Moving to the *same* row is diagonally north.
             // => Moving to the row below is diagonally south.
-            if (dy <= 0) {
+            if (dy <= 0)
+            {
                 return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
-            } else {
+            }
+            else
+            {
                 return dx < 0 ? Facing ::SouthWest : Facing::SouthEast;
             }
         }

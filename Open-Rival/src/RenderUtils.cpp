@@ -12,18 +12,21 @@
 
 namespace Rival { namespace RenderUtils {
 
-    int tileToPx_X(int x) {
+    int tileToPx_X(int x)
+    {
         // Tile co-ordinates are consistent in the x direction.
         // We divide by 2 because the tiles overlap; 10 tiles in a row
         // actually have the width of 5.
         return x * (tileWidthPx / 2);
     }
 
-    int tileToPx_Y(int x, int y) {
+    int tileToPx_Y(int x, int y)
+    {
         // Rows are positioned directly below each other
         int renderPos = y * tileHeightPx;
 
-        if (MapUtils::isLowerTile(x)) {
+        if (MapUtils::isLowerTile(x))
+        {
             // Tile co-ordinates zigzag up and down within a row
             renderPos += (tileHeightPx / 2);
         }
@@ -31,29 +34,34 @@ namespace Rival { namespace RenderUtils {
         return renderPos;
     }
 
-    float tileToScaledPx_X(int x, float zoomLevel) {
+    float tileToScaledPx_X(int x, float zoomLevel)
+    {
         // Same as tileToPx_X, above, but with a zoom level applied
         float scaledTileWidth = tileWidthPx * zoomLevel;
         return x * (scaledTileWidth / 2);
     }
 
-    float tileToScaledPx_Y(int x, int y, float zoomLevel) {
+    float tileToScaledPx_Y(int x, int y, float zoomLevel)
+    {
         // Same as tileToPx_Y, above, but with a zoom level applied
         float scaledTileHeight = tileHeightPx * zoomLevel;
         float renderPos = y * scaledTileHeight;
-        if (MapUtils::isLowerTile(x)) {
+        if (MapUtils::isLowerTile(x))
+        {
             renderPos += (scaledTileHeight / 2);
         }
         return renderPos;
     }
 
-    float cameraToPx_X(float x) {
+    float cameraToPx_X(float x)
+    {
         // Same as tileToPx_X, above, but using floats, since the camera can be
         // "between" tiles.
         return x * (tileWidthPx / 2);
     }
 
-    float cameraToPx_Y(float y) {
+    float cameraToPx_Y(float y)
+    {
         // Same as tileToPx_Y, above, but using floats, since the camera can be
         // "between" tiles. This also the omits the zigzagging aspect, since we
         // don't want the camera to move up and down when panning left and
@@ -61,17 +69,20 @@ namespace Rival { namespace RenderUtils {
         return y * tileHeightPx;
     }
 
-    float pxToCamera_X(float x) {
+    float pxToCamera_X(float x)
+    {
         // This is the reverse of cameraToPx_X
         return 2 * (x / tileWidthPx);
     }
 
-    float pxToCamera_Y(float y) {
+    float pxToCamera_Y(float y)
+    {
         // This is the reverse of cameraToPx_Y
         return y / tileHeightPx;
     }
 
-    float getEntityZ(int x, int y) {
+    float getEntityZ(int x, int y)
+    {
         // Depth is controlled by the y-position, so entities further down the
         // map will be rendered on top
         float z = RenderUtils::zEntitiesStart + static_cast<float>(y);
@@ -79,14 +90,16 @@ namespace Rival { namespace RenderUtils {
         // Tiles in a given row zigzag up and down.
         // Entities at the bottom of this zigzag should be rendered on top
         // of others in the same row.
-        if (MapUtils::isLowerTile(x)) {
+        if (MapUtils::isLowerTile(x))
+        {
             z += 0.5f;
         }
 
         return z;
     }
 
-    int getCanvasWidth(float cameraWidth) {
+    int getCanvasWidth(float cameraWidth)
+    {
         int canvasWidth = static_cast<int>(RenderUtils::cameraToPx_X(cameraWidth));
         // Round up to the nearest even number.
         // This is crucial as this value gets divided by 2 when setting the
@@ -99,17 +112,20 @@ namespace Rival { namespace RenderUtils {
         return canvasWidth + (canvasWidth & 1);
     }
 
-    int getCanvasHeight(float cameraHeight) {
+    int getCanvasHeight(float cameraHeight)
+    {
         int canvasHeight = static_cast<int>(RenderUtils::cameraToPx_Y(cameraHeight));
         // See comments in `getCanvasWidth`.
         return canvasHeight + (canvasHeight & 1);
     }
 
-    int getMenuWidth(double aspectRatio) {
+    int getMenuWidth(double aspectRatio)
+    {
         return static_cast<int>(menuHeight * aspectRatio);
     }
 
-    glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight) {
+    glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight)
+    {
 
         // Determine view matrix.
         //
@@ -146,7 +162,8 @@ namespace Rival { namespace RenderUtils {
         return projection * view;
     }
 
-    glm::mat4 createMenuProjection(double aspectRatio) {
+    glm::mat4 createMenuProjection(double aspectRatio)
+    {
 
         // Determine view matrix
         // (camera looking at the centre of the menu)

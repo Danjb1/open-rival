@@ -10,50 +10,63 @@ namespace Rival {
 
     UnitPropsComponent::UnitPropsComponent(Unit::Type type) : EntityComponent(key), type(type) {}
 
-    void UnitPropsComponent::onEntitySpawned(Scenario*) {
+    void UnitPropsComponent::onEntitySpawned(Scenario*)
+    {
         weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
-        if (auto movementComponent = weakMovementComponent.lock()) {
+        if (auto movementComponent = weakMovementComponent.lock())
+        {
             movementComponent->addListener(this);
         }
     }
 
-    void UnitPropsComponent::onDelete() {
-        if (auto movementComponent = weakMovementComponent.lock()) {
+    void UnitPropsComponent::onDelete()
+    {
+        if (auto movementComponent = weakMovementComponent.lock())
+        {
             movementComponent->removeListener(this);
         }
     }
 
-    void UnitPropsComponent::onUnitMoveStart(const MapNode*) {
+    void UnitPropsComponent::onUnitMoveStart(const MapNode*)
+    {
         setState(UnitState::Moving);
     }
 
-    void UnitPropsComponent::onUnitJourneyEnd() {
+    void UnitPropsComponent::onUnitJourneyEnd()
+    {
         setState(UnitState::Idle);
     }
 
-    void UnitPropsComponent::addStateListener(UnitStateListener* listener) {
-        if (!listener) {
+    void UnitPropsComponent::addStateListener(UnitStateListener* listener)
+    {
+        if (!listener)
+        {
             return;
         }
         stateListeners.emplace(listener);
     }
 
-    void UnitPropsComponent::removeStateListener(UnitStateListener* listener) {
-        if (!listener) {
+    void UnitPropsComponent::removeStateListener(UnitStateListener* listener)
+    {
+        if (!listener)
+        {
             return;
         }
         stateListeners.erase(listener);
     }
 
-    void UnitPropsComponent::setState(UnitState newState) {
-        if (state == newState) {
+    void UnitPropsComponent::setState(UnitState newState)
+    {
+        if (state == newState)
+        {
             // No change
             return;
         }
 
         state = newState;
 
-        for (UnitStateListener* listener : stateListeners) {
+        for (UnitStateListener* listener : stateListeners)
+        {
             listener->onUnitStateChanged(newState);
         }
     }

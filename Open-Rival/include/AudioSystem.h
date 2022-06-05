@@ -13,7 +13,8 @@
 
 namespace Rival {
 
-    class AudioSystem {
+    class AudioSystem
+    {
     public:
         AudioSystem();
         ~AudioSystem();

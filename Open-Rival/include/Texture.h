@@ -9,7 +9,8 @@
 
 namespace Rival {
 
-    struct TextureProperties {
+    struct TextureProperties
+    {
         /**
          * Minification filter.
          *
@@ -32,7 +33,8 @@ namespace Rival {
         GLint wrapMode = GL_CLAMP_TO_EDGE;
     };
 
-    class Texture {
+    class Texture
+    {
 
     public:
         Texture(const GLuint id, int width, int height);

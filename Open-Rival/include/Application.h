@@ -13,7 +13,8 @@ using json = nlohmann::json;
 
 namespace Rival {
 
-    class Application {
+    class Application
+    {
 
     public:
         bool vsyncEnabled;
@@ -27,27 +28,33 @@ namespace Rival {
 
         void pollEvents();
 
-        void requestExit() {
+        void requestExit()
+        {
             exiting = true;
         }
 
-        void setState(std::unique_ptr<State> newState) {
+        void setState(std::unique_ptr<State> newState)
+        {
             nextState = std::move(newState);
         }
 
-        const Window& getWindow() const {
+        const Window& getWindow() const
+        {
             return window;
         }
 
-        AudioSystem& getAudioSystem() {
+        AudioSystem& getAudioSystem()
+        {
             return audioSystem;
         }
 
-        Resources& getResources() {
+        Resources& getResources()
+        {
             return res;
         }
 
-        State& getState() {
+        State& getState()
+        {
             return *state;
         }
 

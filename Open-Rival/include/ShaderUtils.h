@@ -5,8 +5,7 @@
 
 #include <gl/glew.h>
 
-namespace Rival {
-namespace ShaderUtils {
+namespace Rival { namespace ShaderUtils {
 
     std::string readShaderSource(const char* filename);
 

@@ -14,7 +14,8 @@ namespace Rival {
     /**
      * Class responsible for rendering Entities.
      */
-    class EntityRenderer {
+    class EntityRenderer
+    {
 
     public:
         EntityRenderer(const Texture& paletteTexture);

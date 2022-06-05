@@ -18,7 +18,8 @@ namespace Rival {
      * the camera in tile space, it would bob up and down while panning left
      * and right!
      */
-    class Camera {
+    class Camera
+    {
 
     public:
         // Size of a tile, in camera co-ordinates
@@ -45,11 +46,13 @@ namespace Rival {
          */
         void translate(float dx, float dy);
 
-        float getX() const {
+        float getX() const
+        {
             return x;
         }
 
-        float getY() const {
+        float getY() const
+        {
             return y;
         }
 
@@ -65,7 +68,8 @@ namespace Rival {
 
         float getBottom() const;
 
-        float getZoom() const {
+        float getZoom() const
+        {
             return zoom;
         }
 

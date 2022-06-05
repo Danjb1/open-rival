@@ -17,7 +17,8 @@ namespace Rival {
         , x(x)
         , y(y)
         , numChars(0)
-        , numVisibleChars(0) {
+        , numVisibleChars(0)
+    {
         countChars();
         init();
     }
@@ -28,7 +29,8 @@ namespace Rival {
         , x(x)
         , y(y)
         , numChars(0)
-        , numVisibleChars(0) {
+        , numVisibleChars(0)
+    {
         countChars();
         init();
     }
@@ -38,11 +40,13 @@ namespace Rival {
         , x(x)
         , y(y)
         , numChars(maxChars)
-        , numVisibleChars(maxChars) {
+        , numVisibleChars(maxChars)
+    {
         init();
     }
 
-    void TextRenderable::init() {
+    void TextRenderable::init()
+    {
         // Generate VAO
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -104,34 +108,42 @@ namespace Rival {
         glEnableVertexAttribArray(Shaders::colorAttribIndex);
     }
 
-    void TextRenderable::countChars() {
+    void TextRenderable::countChars()
+    {
         numChars = 0;
         numVisibleChars = 0;
 
-        for (TextSpan span : spans) {
-            for (char c : span.text) {
+        for (TextSpan span : spans)
+        {
+            for (char c : span.text)
+            {
                 ++numChars;
 
-                if (c != ' ') {
+                if (c != ' ')
+                {
                     ++numVisibleChars;
                 }
             }
         }
     }
 
-    GLuint TextRenderable::getTextureId() const {
+    GLuint TextRenderable::getTextureId() const
+    {
         return props.font->getTexture().getId();
     }
 
-    int TextRenderable::getNumLayers() const {
+    int TextRenderable::getNumLayers() const
+    {
         return props.hasShadow ? numLayersWithShadow : numLayersWithoutShadow;
     }
 
-    void TextRenderable::setTextSpan(TextSpan newSpan) {
+    void TextRenderable::setTextSpan(TextSpan newSpan)
+    {
         setTextSpans({ newSpan });
     }
 
-    void TextRenderable::setTextSpans(std::vector<TextSpan> newSpans) {
+    void TextRenderable::setTextSpans(std::vector<TextSpan> newSpans)
+    {
         spans = newSpans;
     }
 

@@ -10,16 +10,19 @@
 
 namespace Rival { namespace ShaderUtils {
 
-    std::string readShaderSource(const char* filename) {
+    std::string readShaderSource(const char* filename)
+    {
         std::ifstream t(filename);
         std::stringstream buffer;
         buffer << t.rdbuf();
         return buffer.str();
     }
 
-    void printProgramLog(const GLuint program) {
+    void printProgramLog(const GLuint program)
+    {
 
-        if (!glIsProgram(program)) {
+        if (!glIsProgram(program))
+        {
             printf("Name %d is not a program\n", program);
             return;
         }
@@ -36,7 +39,8 @@ namespace Rival { namespace ShaderUtils {
 
         // Get info log
         glGetProgramInfoLog(program, maxLength, &infoLogLength, infoLog);
-        if (infoLogLength > 0) {
+        if (infoLogLength > 0)
+        {
             // Print Log
             printf("%s\n", infoLog);
         }
@@ -45,9 +49,11 @@ namespace Rival { namespace ShaderUtils {
         delete[] infoLog;
     }
 
-    void printShaderLog(const GLuint shader) {
+    void printShaderLog(const GLuint shader)
+    {
 
-        if (!glIsShader(shader)) {
+        if (!glIsShader(shader))
+        {
             printf("Name %d is not a shader\n", shader);
         }
 
@@ -63,7 +69,8 @@ namespace Rival { namespace ShaderUtils {
 
         // Get info log
         glGetShaderInfoLog(shader, maxLength, &infoLogLength, infoLog);
-        if (infoLogLength > 0) {
+        if (infoLogLength > 0)
+        {
             // Print Log
             printf("%s\n", infoLog);
         }

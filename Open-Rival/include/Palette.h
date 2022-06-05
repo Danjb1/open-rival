@@ -4,8 +4,7 @@
 #include <array>
 #include <cstdint>
 
-namespace Rival {
-namespace Palette {
+namespace Rival { namespace Palette {
 
     // Number of colors in the palette
     const int paletteSize = 256;

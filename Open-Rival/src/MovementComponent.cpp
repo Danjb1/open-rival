@@ -7,15 +7,19 @@ namespace Rival {
 
     MovementComponent::MovementComponent() : EntityComponent(key) {}
 
-    void MovementComponent::addListener(MovementListener* listener) {
-        if (!listener) {
+    void MovementComponent::addListener(MovementListener* listener)
+    {
+        if (!listener)
+        {
             return;
         }
         listeners.emplace(listener);
     }
 
-    void MovementComponent::removeListener(MovementListener* listener) {
-        if (!listener) {
+    void MovementComponent::removeListener(MovementListener* listener)
+    {
+        if (!listener)
+        {
             return;
         }
         listeners.erase(listener);

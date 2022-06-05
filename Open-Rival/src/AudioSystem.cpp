@@ -10,7 +10,8 @@ namespace Rival {
 
     AudioSystem::AudioSystem() : midiActive(false), soundActive(false) {}
 
-    AudioSystem::~AudioSystem() {
+    AudioSystem::~AudioSystem()
+    {
         setMidiActive(false);
         setSoundActive(false);
     }
@@ -19,48 +20,61 @@ namespace Rival {
     // MIDI playback
     ///////////////////////////////////////////////////////////////////////////
 
-    void AudioSystem::midiThreadLoop() {
-        while (midiActive) {
+    void AudioSystem::midiThreadLoop()
+    {
+        while (midiActive)
+        {
             waitForMidi();
             midiPlayer.play(currentMidiTrack);
         }
     }
 
-    void AudioSystem::waitForMidi() {
+    void AudioSystem::waitForMidi()
+    {
         std::unique_lock<std::mutex> midiReadyLock(midiMutex);
-        while (midiActive && currentMidiTrack.isEmpty()) {
+        while (midiActive && currentMidiTrack.isEmpty())
+        {
             midiReadyCondition.wait(midiReadyLock);
         }
     }
 
-    void AudioSystem::setMidiActive(bool active) {
-        if (midiActive == active) {
+    void AudioSystem::setMidiActive(bool active)
+    {
+        if (midiActive == active)
+        {
             // Nothing to do!
             return;
         }
 
-        if (active) {
+        if (active)
+        {
             startMidiSystem();
-        } else {
+        }
+        else
+        {
             destroyMidiSystem();
         }
     }
 
-    void AudioSystem::startMidiSystem() {
+    void AudioSystem::startMidiSystem()
+    {
         midiActive = true;
         midiPlayer.init();
         midiThread = std::thread(&AudioSystem::midiThreadLoop, this);
     }
 
-    void AudioSystem::destroyMidiSystem() {
+    void AudioSystem::destroyMidiSystem()
+    {
         midiActive = false;
         midiPlayer.stop();
         midiReadyCondition.notify_one();
         midiThread.join();
     }
 
-    void AudioSystem::playMidi(MidiFile midi) {
-        if (!midiActive) {
+    void AudioSystem::playMidi(MidiFile midi)
+    {
+        if (!midiActive)
+        {
             return;
         }
 
@@ -79,54 +93,68 @@ namespace Rival {
     // WAV playback
     ///////////////////////////////////////////////////////////////////////////
 
-    void AudioSystem::soundThreadLoop() {
-        while (soundActive) {
+    void AudioSystem::soundThreadLoop()
+    {
+        while (soundActive)
+        {
             waitForSound();
             playNextSound();
         }
     }
 
-    void AudioSystem::waitForSound() {
+    void AudioSystem::waitForSound()
+    {
         std::unique_lock<std::mutex> soundReadyLock(soundQueueMutex);
-        while (soundActive && soundQueue.size() == 0) {
+        while (soundActive && soundQueue.size() == 0)
+        {
             soundReadyCondition.wait(soundReadyLock);
         }
     }
 
-    void AudioSystem::playNextSound() {
+    void AudioSystem::playNextSound()
+    {
         const std::scoped_lock<std::mutex> lock(soundQueueMutex);
-        if (soundQueue.size() > 0) {
+        if (soundQueue.size() > 0)
+        {
             SoundSource& sound = soundQueue.front();
             AudioUtils::playSound(sound);
             soundQueue.pop();
         }
     }
 
-    void AudioSystem::setSoundActive(bool active) {
-        if (soundActive == active) {
+    void AudioSystem::setSoundActive(bool active)
+    {
+        if (soundActive == active)
+        {
             // Nothing to do!
             return;
         }
 
-        if (active) {
+        if (active)
+        {
             startSoundSystem();
-        } else {
+        }
+        else
+        {
             destroySoundSystem();
         }
     }
 
-    void AudioSystem::startSoundSystem() {
+    void AudioSystem::startSoundSystem()
+    {
         soundActive = true;
         soundThread = std::thread(&AudioSystem::soundThreadLoop, this);
     }
 
-    void clear(std::queue<SoundSource>& q) {
+    void clear(std::queue<SoundSource>& q)
+    {
         // See: https://stackoverflow.com/a/709161/1624459
         std::queue<SoundSource> empty;
         std::swap(q, empty);
     }
 
-    void AudioSystem::destroySoundSystem() {
+    void AudioSystem::destroySoundSystem()
+    {
         soundActive = false;
         stopAllSounds();
         clear(soundQueue);
@@ -134,11 +162,13 @@ namespace Rival {
         soundThread.join();
     }
 
-    void AudioSystem::stopAllSounds() {
+    void AudioSystem::stopAllSounds()
+    {
         // TODO
     }
 
-    void AudioSystem::playSound(SoundSource source) {
+    void AudioSystem::playSound(SoundSource source)
+    {
         const std::scoped_lock<std::mutex> lock(soundQueueMutex);
 
         // Add the sound to the queue

@@ -9,9 +9,9 @@ namespace Rival {
     /**
      * PassabilityChecker that treats empty ground tiles as traversable.
      */
-    class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker {
-        bool isNodeTraversable(
-                const PathfindingMap& map, const MapNode& node) const override;
+    class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker
+    {
+        bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
     };
 
     /**
@@ -20,7 +20,8 @@ namespace Rival {
      * Note that during movement, entities are considered to occupy their
      * original tile until they have fully moved into the new tile.
      */
-    class WalkerComponent : public MovementComponent {
+    class WalkerComponent : public MovementComponent
+    {
 
     public:
         WalkerComponent();
@@ -37,12 +38,18 @@ namespace Rival {
         /**
          * Gets the current route.
          */
-        const Pathfinding::Route getRoute() const { return route; }
+        const Pathfinding::Route getRoute() const
+        {
+            return route;
+        }
 
         /**
          * Gets the movement that's currently in progress.
          */
-        const Movement& getMovement() const { return movement; }
+        const Movement& getMovement() const
+        {
+            return movement;
+        }
 
     private:
         void prepareNextMovement();

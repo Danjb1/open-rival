@@ -16,7 +16,8 @@ namespace Rival {
 
     EntityFactory::EntityFactory(const Resources& res) : res(res) {}
 
-    std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const {
+    std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const
+    {
 
         // Create Entity
         std::shared_ptr<Entity> unit = std::make_shared<Entity>(Unit::width, Unit::height);
@@ -51,7 +52,8 @@ namespace Rival {
         return unit;
     }
 
-    std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const {
+    std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const
+    {
 
         // Create Entity
         Building::Type buildingType = getBuildingType(buildingPlacement.type);
@@ -69,12 +71,14 @@ namespace Rival {
         const Spritesheet& spritesheet = res.getBuildingSpritesheet(buildingType);
         building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
-        if (Building::isWall(buildingType)) {
+        if (Building::isWall(buildingType))
+        {
             // Add WallComponent
             WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
             building->attach(std::make_unique<WallComponent>(wallVariant));
-
-        } else {
+        }
+        else
+        {
             // Add AnimationComponent
             const Animations::Animation anim =
                     Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
@@ -88,7 +92,8 @@ namespace Rival {
     }
 
     std::shared_ptr<Entity>
-    EntityFactory::createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const {
+    EntityFactory::createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const
+    {
 
         // Create Entity
         std::shared_ptr<Entity> building = std::make_unique<Entity>(Building::wallWidth, Building::wallHeight);
@@ -107,16 +112,20 @@ namespace Rival {
         return building;
     }
 
-    std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const {
+    std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const
+    {
 
         // Create Entity
         std::shared_ptr<Entity> obj = std::make_unique<Entity>(Unit::width, Unit::height);
 
         // Add SpriteComponent
-        if (objPlacement.type == 0xAF) {
+        if (objPlacement.type == 0xAF)
+        {
             const Spritesheet& spritesheet = res.getCommonObjectSpritesheet();
             obj->attach(std::make_unique<SpriteComponent>(spritesheet));
-        } else {
+        }
+        else
+        {
             const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
             obj->attach(std::make_unique<SpriteComponent>(spritesheet));
         }
@@ -128,8 +137,10 @@ namespace Rival {
         return obj;
     }
 
-    Unit::Type EntityFactory::getUnitType(std::uint8_t unitType) const {
-        switch (unitType) {
+    Unit::Type EntityFactory::getUnitType(std::uint8_t unitType) const
+    {
+        switch (unitType)
+        {
         case 0x33:
             return Unit::Type::Peasant;
         case 0x34:
@@ -279,8 +290,10 @@ namespace Rival {
         }
     }
 
-    Facing EntityFactory::getFacing(std::uint8_t facing) const {
-        switch (facing) {
+    Facing EntityFactory::getFacing(std::uint8_t facing) const
+    {
+        switch (facing)
+        {
         case 0:
             return Facing::South;
         case 1:
@@ -302,8 +315,10 @@ namespace Rival {
         }
     }
 
-    Building::Type EntityFactory::getBuildingType(std::uint8_t buildingType) const {
-        switch (buildingType) {
+    Building::Type EntityFactory::getBuildingType(std::uint8_t buildingType) const
+    {
+        switch (buildingType)
+        {
         case 0x27:
             return Building::Type::ElvenKeep;
         case 0x28:

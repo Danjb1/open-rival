@@ -1,4 +1,8 @@
 ﻿# Config generator: https://zed0.co.uk/clang-format-configurator/
+#
+# NOTE: Some settings are not fully supported by this tool:
+# - AlignAfterOpenBracket causes an error when loading the config: https://github.com/zed0/clang-format-configurator/issues/31
+# - BraceWrapping is not saved to file: https://github.com/zed0/clang-format-configurator/issues/17
 ---
 AccessModifierOffset: '-4'
 AlignAfterOpenBracket: DontAlign
@@ -14,9 +18,20 @@ AllowShortFunctionsOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: 'true'
 BinPackArguments: 'false'
 BinPackParameters: 'false'
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
 BreakAfterJavaFieldAnnotations: 'true'
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma

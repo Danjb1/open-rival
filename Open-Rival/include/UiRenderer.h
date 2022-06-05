@@ -9,7 +9,8 @@
 
 namespace Rival {
 
-    class UiRenderer {
+    class UiRenderer
+    {
     public:
         UiRenderer::UiRenderer(const Race& race, const Resources& res);
 
@@ -34,13 +35,9 @@ namespace Rival {
 
         void sendDataToGpu();
 
-        void addMainPanelToBuffers(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords) const;
+        void addMainPanelToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
 
-        void addStatsPanelToBuffers(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords) const;
+        void addStatsPanelToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
 
         bool isInventoryVisible() const;
     };

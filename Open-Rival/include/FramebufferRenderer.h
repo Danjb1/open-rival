@@ -8,7 +8,8 @@ namespace Rival {
     /**
      * Class responsible for rendering a framebuffer to the screen.
      */
-    class FramebufferRenderer {
+    class FramebufferRenderer
+    {
 
     public:
         FramebufferRenderer(Framebuffer& fbo);

@@ -12,16 +12,20 @@ namespace Rival { namespace Shaders {
     // Shader
     ///////////////////////////////////////////////////////////////////////////
 
-    bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const {
-        if (attributeLoc == -1) {
+    bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const
+    {
+        if (attributeLoc == -1)
+        {
             std::cout << "Could not locate vertex attribute " << attributeName << " for shader " << getName() << "\n";
             return false;
         }
         return true;
     }
 
-    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const {
-        if (uniformLoc == -1) {
+    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const
+    {
+        if (uniformLoc == -1)
+        {
             std::cout << "Could not locate uniform " << uniformLoc << " for shader " << getName() << "\n";
             return false;
         }
@@ -34,7 +38,8 @@ namespace Rival { namespace Shaders {
 
     IndexedTextureShader indexedTextureShader;
 
-    void IndexedTextureShader::init() {
+    void IndexedTextureShader::init()
+    {
 
         GLuint programId = createShader("res\\shaders\\gameWorld.vert", "res\\shaders\\gameWorld.frag");
 
@@ -46,14 +51,17 @@ namespace Rival { namespace Shaders {
         indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
         indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
 
-        if (!indexedTextureShader.isValid()) {
+        if (!indexedTextureShader.isValid())
+        {
             throw std::runtime_error("Failed to create IndexedTextureShader");
         }
     }
 
-    bool IndexedTextureShader::isValid() const {
+    bool IndexedTextureShader::isValid() const
+    {
         // Validate program ID
-        if (programId == 0) {
+        if (programId == 0)
+        {
             printf("Could not generate program ID\n");
             return false;
         }
@@ -71,7 +79,8 @@ namespace Rival { namespace Shaders {
 
     FontShader fontShader;
 
-    void FontShader::init() {
+    void FontShader::init()
+    {
 
         GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
 
@@ -83,14 +92,17 @@ namespace Rival { namespace Shaders {
         fontShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
         fontShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
 
-        if (!fontShader.isValid()) {
+        if (!fontShader.isValid())
+        {
             throw std::runtime_error("Failed to create FontShader");
         }
     }
 
-    bool FontShader::isValid() const {
+    bool FontShader::isValid() const
+    {
         // Validate program ID
-        if (programId == 0) {
+        if (programId == 0)
+        {
             printf("Could not generate program ID\n");
             return false;
         }
@@ -109,7 +121,8 @@ namespace Rival { namespace Shaders {
 
     ScreenShader screenShader;
 
-    void ScreenShader::init() {
+    void ScreenShader::init()
+    {
 
         GLuint programId = createShader("res\\shaders\\screen.vert", "res\\shaders\\screen.frag");
 
@@ -119,14 +132,17 @@ namespace Rival { namespace Shaders {
         screenShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
         screenShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
 
-        if (!screenShader.isValid()) {
+        if (!screenShader.isValid())
+        {
             throw std::runtime_error("Failed to create ScreenShader");
         }
     }
 
-    bool ScreenShader::isValid() const {
+    bool ScreenShader::isValid() const
+    {
         // Validate program ID
-        if (programId == 0) {
+        if (programId == 0)
+        {
             printf("Could not generate program ID\n");
             return false;
         }
@@ -141,13 +157,15 @@ namespace Rival { namespace Shaders {
     // Generic methods
     ///////////////////////////////////////////////////////////////////////////
 
-    void initializeShaders() {
+    void initializeShaders()
+    {
         IndexedTextureShader::init();
         FontShader::init();
         ScreenShader::init();
     }
 
-    GLuint createShader(const char* vertShader, const char* fragShader) {
+    GLuint createShader(const char* vertShader, const char* fragShader)
+    {
 
         GLuint programId = glCreateProgram();
 
@@ -165,7 +183,8 @@ namespace Rival { namespace Shaders {
         // Check vertex shader for errors
         GLint vShaderCompiled = GL_FALSE;
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
-        if (vShaderCompiled != GL_TRUE) {
+        if (vShaderCompiled != GL_TRUE)
+        {
             printf("Unable to compile vertex shader %d!\n", vertexShader);
             ShaderUtils::printShaderLog(vertexShader);
             return 0;
@@ -188,7 +207,8 @@ namespace Rival { namespace Shaders {
         // Check fragment shader for errors
         GLint fShaderCompiled = GL_FALSE;
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
-        if (fShaderCompiled != GL_TRUE) {
+        if (fShaderCompiled != GL_TRUE)
+        {
             printf("Unable to compile fragment shader %d!\n", fragmentShader);
             ShaderUtils::printShaderLog(fragmentShader);
             return 0;
@@ -203,7 +223,8 @@ namespace Rival { namespace Shaders {
         // Check for errors
         GLint programSuccess = GL_TRUE;
         glGetProgramiv(programId, GL_LINK_STATUS, &programSuccess);
-        if (programSuccess != GL_TRUE) {
+        if (programSuccess != GL_TRUE)
+        {
             printf("Error linking program %d!\n", programId);
             ShaderUtils::printProgramLog(programId);
             return 0;

@@ -16,7 +16,7 @@ Contributions are very much appreciated. If you are not a programmer, you can st
 
 ## Developer Guidelines
 
-Development of Open-Rival is driven by certain values which should be generally followed by all contributors.
+Development of Open-Rival is driven by certain values which should be followed by all contributors.
 
 ### Stay Faithful
 

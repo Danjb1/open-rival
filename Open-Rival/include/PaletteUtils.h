@@ -3,8 +3,7 @@
 
 #include "Texture.h"
 
-namespace Rival {
-namespace PaletteUtils {
+namespace Rival { namespace PaletteUtils {
 
     Texture createPaletteTexture();
 

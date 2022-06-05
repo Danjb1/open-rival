@@ -5,7 +5,8 @@
 
 namespace Rival {
 
-    Color Color::makeRgb(int r, int g, int b) {
+    Color Color::makeRgb(int r, int g, int b)
+    {
         return Color(
                 static_cast<std::uint8_t>(r) / 255.0f,
                 static_cast<std::uint8_t>(g) / 255.0f,

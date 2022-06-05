@@ -6,7 +6,8 @@
 
 namespace Rival {
 
-    Framebuffer::Framebuffer(int w, int h, bool useDepth) : width(w), height(h) {
+    Framebuffer::Framebuffer(int w, int h, bool useDepth) : width(w), height(h)
+    {
 
         // Generate framebuffer
         glGenFramebuffers(1, &id);
@@ -45,15 +46,19 @@ namespace Rival {
         glDrawBuffers(1, drawBuffers);
 
         // Add the depth buffer, if required
-        if (useDepth) {
+        if (useDepth)
+        {
             addDepthBuffer();
-        } else {
+        }
+        else
+        {
             depthRenderBufferId = 0;
         }
 
         // Check for errors
         GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE) {
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
             std::cerr << "Framebuffer status: " << status << "\n";
             throw std::runtime_error("Failed to create framebuffer");
         }
@@ -64,7 +69,8 @@ namespace Rival {
 
     // See:
     // https://github.com/opengl-tutorials/ogl/blob/master/tutorial14_render_to_texture/tutorial14.cpp
-    void Framebuffer::addDepthBuffer() {
+    void Framebuffer::addDepthBuffer()
+    {
         // Create a render buffer to store the depth information
         glGenRenderbuffers(1, &depthRenderBufferId);
         glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBufferId);
@@ -72,7 +78,8 @@ namespace Rival {
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBufferId);
     }
 
-    Framebuffer::~Framebuffer() {
+    Framebuffer::~Framebuffer()
+    {
         glDeleteTextures(1, &textureId);
         glDeleteFramebuffers(1, &id);
     }

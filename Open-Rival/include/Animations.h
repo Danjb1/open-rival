@@ -25,7 +25,8 @@ namespace Rival { namespace Animations {
         Built
     };
 
-    struct Animation {
+    struct Animation
+    {
         int startIndex;
         int endIndex;
         int msPerFrame;

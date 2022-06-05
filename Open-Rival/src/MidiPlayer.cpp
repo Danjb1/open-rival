@@ -9,13 +9,16 @@
 
 namespace Rival {
 
-    void MidiPlayer::init() {
-        if (midiOut.isPortOpen()) {
+    void MidiPlayer::init()
+    {
+        if (midiOut.isPortOpen())
+        {
             return;
         }
 
         unsigned int nPorts = midiOut.getPortCount();
-        if (nPorts == 0) {
+        if (nPorts == 0)
+        {
             throw std::runtime_error("No MIDI output ports available!");
         }
 
@@ -30,19 +33,25 @@ namespace Rival {
      * Based on:
      * https://www.midi.org/specifications-old/item/table-2-expanded-messages-list-status-bytes
      */
-    static int getMessageSize(uint8_t eventId) {
-        if ((eventId >= 0xC0 && eventId <= 0xDF) || eventId == 0xF3) {
+    static int getMessageSize(uint8_t eventId)
+    {
+        if ((eventId >= 0xC0 && eventId <= 0xDF) || eventId == 0xF3)
+        {
             return 2;
-        } else if (eventId >= 0xF4) {
+        }
+        else if (eventId >= 0xF4)
+        {
             return 1;
         }
         return 3;
     }
 
-    void MidiPlayer::play(MidiFile file) {
+    void MidiPlayer::play(MidiFile file)
+    {
         const std::scoped_lock<std::mutex> lock(playingMutex);
 
-        if (!midiOut.isPortOpen()) {
+        if (!midiOut.isPortOpen())
+        {
             throw std::runtime_error("MIDI system not initialized");
         }
 
@@ -53,8 +62,10 @@ namespace Rival {
 
         const std::vector<midi_stream_event>& events = file.getEvents();
 
-        for (auto const& evt : events) {
-            if (stopped) {
+        for (auto const& evt : events)
+        {
+            if (stopped)
+            {
                 break;
             }
 
@@ -66,9 +77,12 @@ namespace Rival {
             std::uint8_t eventId = eventValue & 0xFF;
             int numBytes = getMessageSize(eventId);
             message.push_back(eventId);
-            if (numBytes == 2) {
+            if (numBytes == 2)
+            {
                 message.push_back((eventValue >> 8) & 0xFF);
-            } else if (numBytes == 3) {
+            }
+            else if (numBytes == 3)
+            {
                 message.push_back((eventValue >> 8) & 0xFF);
                 message.push_back((eventValue >> 16) & 0xFF);
             }
@@ -78,7 +92,8 @@ namespace Rival {
                     std::chrono::system_clock::now().time_since_epoch());
             auto timeElapsed = currentTime - startTime;
             auto timeUntilMessage = evt.m_timestamp - timeElapsed.count();
-            if (timeUntilMessage > 0) {
+            if (timeUntilMessage > 0)
+            {
                 SleepUtils::sleep(static_cast<int>(timeUntilMessage));
             }
 
@@ -87,7 +102,8 @@ namespace Rival {
         }
     }
 
-    void MidiPlayer::stop() {
+    void MidiPlayer::stop()
+    {
         stopped = true;
 
         // Wait until the play() method terminates
