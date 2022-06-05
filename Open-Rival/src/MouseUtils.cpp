@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "MouseUtils.h"
 
-namespace Rival {
-namespace MouseUtils {
+namespace Rival { namespace MouseUtils {
 
     int getMouseInViewportX(int mouseX, const Rect viewport) {
         return mouseX - static_cast<int>(viewport.x);

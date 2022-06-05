@@ -4,8 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace Rival {
-namespace FileUtils {
+namespace Rival { namespace FileUtils {
 
     std::vector<std::uint8_t> readBinaryFile(std::string filename) {
         // Open the file at the end

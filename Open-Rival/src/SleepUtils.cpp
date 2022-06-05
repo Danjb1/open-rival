@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "SleepUtils.h"
 
-namespace Rival {
-namespace SleepUtils {
+namespace Rival { namespace SleepUtils {
 
     ///////////////////////////////////////////////////////////////////////////
     // Windows

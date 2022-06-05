@@ -15,33 +15,26 @@
 namespace Rival {
 
     GameState::GameState(Application& app, std::unique_ptr<Scenario> scenarioToMove)
-        : State(app),
-          scenario(std::move(scenarioToMove)),
-          viewport(0, 0,
-                  window.getWidth(),
-                  window.getHeight() - GameInterface::uiHeight),
-          camera(0.0f, 0.0f,
-                  RenderUtils::pxToCamera_X(
-                          static_cast<float>(viewport.width)),
-                  RenderUtils::pxToCamera_Y(
-                          static_cast<float>(viewport.height)),
-                  *scenario),
-          mousePicker(camera, viewport, *scenario),
-          gameRenderer(window, *scenario, camera, viewport, res),
-          textRenderer(window) {
+        : State(app)
+        , scenario(std::move(scenarioToMove))
+        , viewport(0, 0, window.getWidth(), window.getHeight() - GameInterface::uiHeight)
+        , camera(0.0f,
+                 0.0f,
+                 RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
+                 RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
+                 *scenario)
+        , mousePicker(camera, viewport, *scenario)
+        , gameRenderer(window, *scenario, camera, viewport, res)
+        , textRenderer(window) {
 
         // TMP
-        std::vector<TextSpan> spans1 = {
-            { "Hello ", TextRenderable::defaultColor },
-            { "world", TextRenderable::highlightColor }
-        };
+        std::vector<TextSpan> spans1 = { { "Hello ", TextRenderable::defaultColor },
+                                         { "world", TextRenderable::highlightColor } };
         TextProperties props1 = { &res.getFontRegular() };
         text1 = std::make_unique<TextRenderable>(spans1, props1, 300.0f, 525.0f);
 
         // TMP
-        std::vector<TextSpan> spans2 = {
-            { "Warlord", TextRenderable::defaultColor }
-        };
+        std::vector<TextSpan> spans2 = { { "Warlord", TextRenderable::defaultColor } };
         TextProperties props2 = { &res.getFontSmall() };
         text2 = std::make_unique<TextRenderable>(spans2, props2, 300.0f, 500.0f);
 
@@ -156,10 +149,8 @@ namespace Rival {
         }
 
         // Calculate mouse position relative to the viewport, in the range 0-1
-        float normalizedMouseX =
-                MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
-        float normalizedMouseY =
-                MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
+        float normalizedMouseX = MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
+        float normalizedMouseY = MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
 
         // Calculate mouse position relative to the viewport centre, in the
         // range -1 to 1

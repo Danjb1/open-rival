@@ -39,50 +39,30 @@ namespace Rival {
         return Image::createByMove(width, height, std::move(data));
     }
 
-    Image Image::createEmpty(
-            int width,
-            int height,
-            std::uint8_t bgColor,
-            ImageProperties props) {
+    Image Image::createEmpty(int width, int height, std::uint8_t bgColor, ImageProperties props) {
         std::vector<std::uint8_t> data(width * height, bgColor);
         return Image::createByMove(width, height, std::move(data), props);
     }
 
-    Image Image::createByCopy(
-            int width,
-            int height,
-            std::vector<std::uint8_t>& data,
-            ImageProperties props) {
+    Image Image::createByCopy(int width, int height, std::vector<std::uint8_t>& data, ImageProperties props) {
         return Image(width, height, data, props);
     }
 
-    Image Image::createByMove(
-            int width,
-            int height,
-            std::vector<std::uint8_t>&& data,
-            ImageProperties props) {
+    Image Image::createByMove(int width, int height, std::vector<std::uint8_t>&& data, ImageProperties props) {
         return Image(width, height, std::move(data), props);
     }
 
-    Image::Image(
-            int width,
-            int height,
-            std::vector<std::uint8_t> data,
-            ImageProperties props)
-        : width(width),
-          height(height),
-          data(std::move(data)),
-          props(props) {}
+    Image::Image(int width, int height, std::vector<std::uint8_t> data, ImageProperties props)
+        : width(width)
+        , height(height)
+        , data(std::move(data))
+        , props(props) {}
 
     int Image::getStride() const {
         return props.stride == -1 ? width : props.stride;
     }
 
-    void Image::copyImage(
-            const Image& src,
-            Image& dst,
-            const int dstX,
-            const int dstY) {
+    void Image::copyImage(const Image& src, Image& dst, const int dstX, const int dstY) {
 
         const std::vector<std::uint8_t>& srcData = src.getData();
         std::vector<std::uint8_t>& dstData = dst.getEditableData();

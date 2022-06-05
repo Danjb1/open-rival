@@ -6,9 +6,7 @@
 
 namespace Rival {
 
-    Framebuffer::Framebuffer(int w, int h, bool useDepth)
-        : width(w),
-          height(h) {
+    Framebuffer::Framebuffer(int w, int h, bool useDepth) : width(w), height(h) {
 
         // Generate framebuffer
         glGenFramebuffers(1, &id);
@@ -18,11 +16,16 @@ namespace Rival {
         glGenTextures(1, &textureId);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D,
+        glTexImage2D(
+                GL_TEXTURE_2D,
                 0,  // target slot
                 GL_RGB,
-                width, height,
-                0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+                width,
+                height,
+                0,
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
+                NULL);
 
         // Set texture filtering
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -35,8 +38,7 @@ namespace Rival {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         // Set this as our color attachement #0
-        glFramebufferTexture(
-                GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureId, 0);
 
         // Set the list of draw buffers
         GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
@@ -66,10 +68,8 @@ namespace Rival {
         // Create a render buffer to store the depth information
         glGenRenderbuffers(1, &depthRenderBufferId);
         glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBufferId);
-        glRenderbufferStorage(
-                GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                GL_RENDERBUFFER, depthRenderBufferId);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBufferId);
     }
 
     Framebuffer::~Framebuffer() {

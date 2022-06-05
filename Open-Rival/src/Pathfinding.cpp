@@ -7,8 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace Rival {
-namespace Pathfinding {
+namespace Rival { namespace Pathfinding {
 
     /**
      * A MapNode with an associated score for pathfinding.
@@ -21,7 +20,7 @@ namespace Pathfinding {
          * can be if it goes through this node.
          *
          * This is calculated as:
-         * 
+         *
          *     fScore + h(n)
          *
          * where fScore is the cost from the start to this node, and h is our
@@ -47,12 +46,11 @@ namespace Pathfinding {
     class Pathfinder {
     public:
         Pathfinder::Pathfinder(
-                MapNode start,
-                MapNode goal,
-                const PathfindingMap& map,
-                const PassabilityChecker& passabilityChecker);
+                MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
 
-        Route getRoute() const { return route; }
+        Route getRoute() const {
+            return route;
+        }
 
     private:
         /**
@@ -112,15 +110,12 @@ namespace Pathfinding {
      * to goal.
      */
     Pathfinder::Pathfinder(
-            MapNode start,
-            MapNode goal,
-            const PathfindingMap& map,
-            const PassabilityChecker& passabilityChecker)
-        : start(start),
-          goal(goal),
-          map(map),
-          route({ goal, findPath() }),
-          passabilityChecker(passabilityChecker) {}
+            MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker)
+        : start(start)
+        , goal(goal)
+        , map(map)
+        , route({ goal, findPath() })
+        , passabilityChecker(passabilityChecker) {}
 
     /**
      * Attempts to find a path based on the Pathfinder's configuration.
@@ -144,8 +139,7 @@ namespace Pathfinding {
             std::vector<MapNode> neighbors = findNeighbors(current.node);
 
             for (MapNode neighbor : neighbors) {
-                float newCostToNeighbor = getCostToNode(current.node)
-                        + getMovementCost(current.node, neighbor);
+                float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
                 if (newCostToNeighbor < getCostToNode(neighbor)) {
                     // This path to neighbor is better than any previous one
                     costToNode[neighbor] = newCostToNeighbor;
@@ -170,15 +164,9 @@ namespace Pathfinding {
     ReachableNode Pathfinder::popBestNode() {
         // Making `discoveredNodes` into a min-heap means we can extract the
         // best node in O(1) time.
-        std::make_heap(
-                discoveredNodes.begin(),
-                discoveredNodes.end(),
-                std::greater<ReachableNode> {});
+        std::make_heap(discoveredNodes.begin(), discoveredNodes.end(), std::greater<ReachableNode> {});
         // After calling `pop_heap`, the best node is at the back of the list
-        std::pop_heap(
-                discoveredNodes.begin(),
-                discoveredNodes.end(),
-                std::greater<ReachableNode> {});
+        std::pop_heap(discoveredNodes.begin(), discoveredNodes.end(), std::greater<ReachableNode> {});
         ReachableNode bestNode = discoveredNodes.back();
         discoveredNodes.pop_back();
         return bestNode;
@@ -232,13 +220,9 @@ namespace Pathfinding {
 
         // Filter out non-traversable neighbors
         std::vector<MapNode> validNeighbors;
-        std::copy_if(allNeighbors.begin(),
-                allNeighbors.end(),
-                std::back_inserter(validNeighbors),
-                [this](MapNode n) {
-                    return this->passabilityChecker
-                            .isNodeTraversable(this->map, n);
-                });
+        std::copy_if(allNeighbors.begin(), allNeighbors.end(), std::back_inserter(validNeighbors), [this](MapNode n) {
+            return this->passabilityChecker.isNodeTraversable(this->map, n);
+        });
 
         return validNeighbors;
     }
@@ -260,23 +244,22 @@ namespace Pathfinding {
     /**
      * Gets the cost of moving to a neighboring tile.
      */
-    float Pathfinder::getMovementCost(
-            const MapNode& from, const MapNode& to) const {
+    float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const {
         /*
          * This warrants some explanation.
          *
          * Imagine you want to move 2 tiles north-east (A -> C):
-         * 
+         *
          *           ,x
          *         ,x C`x
          *       ,x B`x'
          *      x A`x'D`x
          *       `x' `x'
-         * 
+         *
          * This can be accomplished 2 different ways:
          *   A -> B -> C
          *   A -> D -> C
-         * 
+         *
          * Both routes involve 2 movements, but it would look strange if we
          * chose the second route because the diagonal route appears more
          * logical and direct.
@@ -317,12 +300,9 @@ namespace Pathfinding {
         return nullptr;
     }
 
-    Route::Route()
-        : destination({ 0, 0 }) {}
+    Route::Route() : destination({ 0, 0 }) {}
 
-    Route::Route(MapNode destination, std::deque<MapNode> path)
-        : destination(destination),
-          path(path) {}
+    Route::Route(MapNode destination, std::deque<MapNode> path) : destination(destination), path(path) {}
 
     bool Route::isEmpty() const {
         return path.size() == 0;

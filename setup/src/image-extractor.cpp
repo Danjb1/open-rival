@@ -21,8 +21,7 @@
 #include "Palette.h"
 #include "setup-utils.h"
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     // Largest image in "IMAGES.DAT" is 128 x 128
     const int maxWidth = 128;

@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "Building.h"
 
-namespace Rival {
-namespace Building {
+namespace Rival { namespace Building {
 
     int getWidth(Type type) {
         return isWall(type) ? wallWidth : defaultWidth;
@@ -13,9 +12,7 @@ namespace Building {
     }
 
     bool isWall(Type type) {
-        return type == Type::Wall
-                || type == Type::TreeWall
-                || type == Type::GreenskinWall;
+        return type == Type::Wall || type == Type::TreeWall || type == Type::GreenskinWall;
     }
 
 }}  // namespace Rival::Building

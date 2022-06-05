@@ -10,8 +10,7 @@
 #include "MapUtils.h"
 #include "Spritesheet.h"
 
-namespace Rival {
-namespace RenderUtils {
+namespace Rival { namespace RenderUtils {
 
     int tileToPx_X(int x) {
         // Tile co-ordinates are consistent in the x direction.
@@ -88,8 +87,7 @@ namespace RenderUtils {
     }
 
     int getCanvasWidth(float cameraWidth) {
-        int canvasWidth = static_cast<int>(
-                RenderUtils::cameraToPx_X(cameraWidth));
+        int canvasWidth = static_cast<int>(RenderUtils::cameraToPx_X(cameraWidth));
         // Round up to the nearest even number.
         // This is crucial as this value gets divided by 2 when setting the
         // projection matrix using `glm::ortho`. For an odd number, floating
@@ -102,8 +100,7 @@ namespace RenderUtils {
     }
 
     int getCanvasHeight(float cameraHeight) {
-        int canvasHeight = static_cast<int>(
-                RenderUtils::cameraToPx_Y(cameraHeight));
+        int canvasHeight = static_cast<int>(RenderUtils::cameraToPx_Y(cameraHeight));
         // See comments in `getCanvasWidth`.
         return canvasHeight + (canvasHeight & 1);
     }
@@ -112,10 +109,7 @@ namespace RenderUtils {
         return static_cast<int>(menuHeight * aspectRatio);
     }
 
-    glm::mat4 createGameProjection(
-            const Camera& camera,
-            int viewportWidth,
-            int viewportHeight) {
+    glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight) {
 
         // Determine view matrix.
         //

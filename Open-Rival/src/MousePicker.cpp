@@ -11,16 +11,13 @@
 
 namespace Rival {
 
-    MousePicker::MousePicker(
-            Camera& camera,
-            Rect& viewport,
-            Scenario& scenario)
-        : camera(camera),
-          viewport(viewport),
-          scenario(scenario),
-          mapWidth(scenario.getWidth()),
-          mapHeight(scenario.getHeight()),
-          entityId(-1) {}
+    MousePicker::MousePicker(Camera& camera, Rect& viewport, Scenario& scenario)
+        : camera(camera)
+        , viewport(viewport)
+        , scenario(scenario)
+        , mapWidth(scenario.getWidth())
+        , mapHeight(scenario.getHeight())
+        , entityId(-1) {}
 
     void MousePicker::handleMouse() {
 
@@ -43,10 +40,8 @@ namespace Rival {
 
         // Calculate the mouse position relative to the viewport,
         // in the range 0-1.
-        float normalizedMouseX =
-                MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
-        float normalizedMouseY =
-                MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
+        float normalizedMouseX = MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
+        float normalizedMouseY = MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
 
         // Calculate the mouse position in camera units
         float mouseCameraX = getMouseInCameraX(normalizedMouseX);
@@ -65,9 +60,7 @@ namespace Rival {
         return camera.getTop() + normalizedMouseY * camera.getHeight();
     }
 
-    std::pair<int, int> MousePicker::getTilePos(
-            float mouseCameraX,
-            float mouseCameraY) {
+    std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCameraY) {
 
         /*
          * The goal here is to reverse-engineer the rendering process to figure
@@ -180,9 +173,7 @@ namespace Rival {
         return std::pair<int, int>(tileX, tileY);
     }
 
-    void MousePicker::findEntityUnderMouse(
-            int mouseInViewportX,
-            int mouseInViewportY) {
+    void MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY) {
         auto& entities = scenario.getEntities();
         for (auto e : entities) {
             // We could optimise this by considering only Entities that were
@@ -195,10 +186,7 @@ namespace Rival {
         }
     }
 
-    bool MousePicker::isMouseInEntity(
-            const Entity& entity,
-            int mouseInViewportX,
-            int mouseInViewportY) {
+    bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY) {
 
         /*
          * Entities are always rendered at a fixed pixel offset from the tile
@@ -260,9 +248,7 @@ namespace Rival {
         float unitY1 = unitY2 - (unitHitboxHeight * zoom);
 
         // Finally, see if the mouse is inside the hitbox
-        return mouseInViewportX >= unitX1
-                && mouseInViewportY >= unitY1
-                && mouseInViewportX < unitX2
+        return mouseInViewportX >= unitX1 && mouseInViewportY >= unitY1 && mouseInViewportX < unitX2
                 && mouseInViewportY < unitY2;
     }
 

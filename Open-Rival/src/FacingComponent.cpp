@@ -9,20 +9,20 @@ namespace Rival {
 
     const std::string FacingComponent::key = "facing";
 
-    FacingComponent::FacingComponent(Facing initialFacing)
-        : EntityComponent(key),
-          facing(initialFacing) {}
+    FacingComponent::FacingComponent(Facing initialFacing) : EntityComponent(key), facing(initialFacing) {}
 
     void FacingComponent::onEntitySpawned(Scenario*) {
-        movementComponent = entity->getComponent<MovementComponent>(
-                MovementComponent::key);
-        if (movementComponent) {
+        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        if (auto movementComponent = weakMovementComponent.lock()) {
             movementComponent->addListener(this);
         }
     }
 
     void FacingComponent::onDelete() {
-        movementComponent->removeListener(this);
+        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        if (auto movementComponent = weakMovementComponent.lock()) {
+            movementComponent->removeListener(this);
+        }
     }
 
     void FacingComponent::onUnitMoveStart(const MapNode* nextNode) {

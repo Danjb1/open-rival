@@ -9,29 +9,24 @@ namespace Rival {
 
     const std::string WallComponent::key = "wall";
 
-    WallComponent::WallComponent(WallVariant variant)
-        : EntityComponent(key),
-          variant(variant) {}
+    WallComponent::WallComponent(WallVariant variant) : EntityComponent(key), variant(variant) {}
 
     void WallComponent::onEntitySpawned(Scenario*) {
         int baseTxIndex = 0;
 
         // Set txIndex based on Wall type
-        BuildingPropsComponent* buildingPropsComponent =
-                entity->getComponent<BuildingPropsComponent>(
-                        BuildingPropsComponent::key);
-        if (buildingPropsComponent) {
-            baseTxIndex = getBaseTxIndex(
-                    buildingPropsComponent->getBuildingType());
+        std::weak_ptr<BuildingPropsComponent> weakBuildingPropsComponent =
+                entity->getComponent<BuildingPropsComponent>(BuildingPropsComponent::key);
+        if (auto buildingPropsComponent = weakBuildingPropsComponent.lock()) {
+            baseTxIndex = getBaseTxIndex(buildingPropsComponent->getBuildingType());
         } else {
             // TMP: we need a way to distinguish between Palisades and Grates
             baseTxIndex = baseTxIndexPalisade;
         }
 
         // Update txIndex in SpriteComponent
-        spriteComponent = entity->getComponent<SpriteComponent>(
-                SpriteComponent::key);
-        if (spriteComponent) {
+        weakSpriteComponent = entity->getComponent<SpriteComponent>(SpriteComponent::key);
+        if (auto spriteComponent = weakSpriteComponent.lock()) {
             int newTxIndex = baseTxIndex + static_cast<int>(variant);
             spriteComponent->setTxIndex(newTxIndex);
         }

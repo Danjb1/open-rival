@@ -5,10 +5,7 @@
 
 namespace Rival {
 
-    AtlasRenderable::AtlasRenderable(
-            const TextureAtlas& texAtlas,
-            int maxSprites)
-        : texAtlas(texAtlas) {
+    AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites) : texAtlas(texAtlas) {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -20,14 +17,10 @@ namespace Rival {
         glGenBuffers(1, &ibo);
 
         // Determine the primitive that should be drawn
-        drawMode = (maxSprites == 1)
-                ? GL_TRIANGLE_FAN
-                : GL_TRIANGLES;
+        drawMode = (maxSprites == 1) ? GL_TRIANGLE_FAN : GL_TRIANGLES;
 
         // Determine the number of indices per sprite
-        indicesPerSprite = (drawMode == GL_TRIANGLE_FAN)
-                ? numIndicesForTriangleFan
-                : numIndicesForTriangles;
+        indicesPerSprite = (drawMode == GL_TRIANGLE_FAN) ? numIndicesForTriangleFan : numIndicesForTriangles;
 
         // Initialize position buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
@@ -38,22 +31,12 @@ namespace Rival {
                 GL_FALSE,
                 numVertexDimensions * sizeof(GLfloat),
                 nullptr);
-        int positionBufferSize = maxSprites
-                * numVertexDimensions
-                * indicesPerSprite
-                * sizeof(GLfloat);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                positionBufferSize,
-                NULL,
-                GL_DYNAMIC_DRAW);
+        int positionBufferSize = maxSprites * numVertexDimensions * indicesPerSprite * sizeof(GLfloat);
+        glBufferData(GL_ARRAY_BUFFER, positionBufferSize, NULL, GL_DYNAMIC_DRAW);
 
         // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        int texCoordBufferSize = maxSprites
-                * numTexCoordDimensions
-                * indicesPerSprite
-                * sizeof(GLfloat);
+        int texCoordBufferSize = maxSprites * numTexCoordDimensions * indicesPerSprite * sizeof(GLfloat);
         glVertexAttribPointer(
                 Shaders::texCoordAttribIndex,
                 numTexCoordDimensions,
@@ -61,11 +44,7 @@ namespace Rival {
                 GL_FALSE,
                 numTexCoordDimensions * sizeof(GLfloat),
                 nullptr);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                texCoordBufferSize,
-                NULL,
-                GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_DYNAMIC_DRAW);
 
         // Initialize index buffer - this should never need to change
         std::vector<GLuint> indexData;

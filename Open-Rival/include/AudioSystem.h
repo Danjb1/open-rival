@@ -36,7 +36,7 @@ namespace Rival {
 
         /**
          * Plays the given MIDI file.
-         * 
+         *
          * Requires that MIDI playback is enabled.
          */
         void playMidi(MidiFile midi);
@@ -110,7 +110,7 @@ namespace Rival {
 
         /**
          * Plays the given sound.
-         * 
+         *
          * Requires that sound playback is enabled.
          */
         void playSound(SoundSource source);

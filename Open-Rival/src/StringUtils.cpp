@@ -9,8 +9,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4996)
 
-namespace Rival {
-namespace StringUtils {
+namespace Rival { namespace StringUtils {
 
     // Based on: https://stackoverflow.com/a/12903901/1624459
     std::string toUtf8(const std::wstring& wstr) {

@@ -14,8 +14,7 @@
 
 namespace fs = std::filesystem;
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     // A border between images prevents texture bleeding
     const int borderSize = 1;  // px
@@ -50,11 +49,7 @@ namespace Setup {
     // Rect class
     ///////////////////////////////////////////////////////////////////////////
 
-    Rect::Rect(int x, int y, int width, int height)
-        : x(x),
-          y(y),
-          width(width),
-          height(height) {}
+    Rect::Rect(int x, int y, int width, int height) : x(x), y(y), width(width), height(height) {}
 
     ///////////////////////////////////////////////////////////////////////////
     // TextureAtlasBuilder class
@@ -63,9 +58,7 @@ namespace Setup {
     /**
      * Creates an empty TextureAtlasBuilder.
      */
-    TextureAtlasBuilder::TextureAtlasBuilder()
-        : texWidth(0),
-          texHeight(0) {}
+    TextureAtlasBuilder::TextureAtlasBuilder() : texWidth(0), texHeight(0) {}
 
     /**
      * Adds an image to the texture being constructed.
@@ -91,21 +84,15 @@ namespace Setup {
      * If no Rect matches this size exactly, an empty Rect will be subdivided.
      * If no Rect is big enough, the texture will be expanded.
      */
-    Rect TextureAtlasBuilder::findOrMakeEmptyRect(
-            const int reqWidth, const int reqHeight) {
+    Rect TextureAtlasBuilder::findOrMakeEmptyRect(const int reqWidth, const int reqHeight) {
 
         // Find the smallest rectangle that fits our required size
-        std::sort(
-                emptyRects.begin(),
-                emptyRects.end(),
-                compareRectsSmallestFirst);
-        int rectIndex = findRectBiggerThan(
-                emptyRects, reqWidth, reqHeight);
+        std::sort(emptyRects.begin(), emptyRects.end(), compareRectsSmallestFirst);
+        int rectIndex = findRectBiggerThan(emptyRects, reqWidth, reqHeight);
 
         // No free space - need to expand our texture!
         if (rectIndex == -1) {
-            rectIndex = expandTextureToFitRect(
-                    reqWidth, reqHeight);
+            rectIndex = expandTextureToFitRect(reqWidth, reqHeight);
         }
 
         // Make a copy of our target rectangle
@@ -115,28 +102,16 @@ namespace Setup {
         emptyRects.erase(emptyRects.begin() + rectIndex);
 
         // Trim the destination Rect to precisely match our required size
-        Rect trimmedDest = Rect(
-                dest.x,
-                dest.y,
-                reqWidth,
-                reqHeight);
+        Rect trimmedDest = Rect(dest.x, dest.y, reqWidth, reqHeight);
 
         // Split the leftover space from the destination Rect into new empties
         if (dest.width > reqWidth) {
             // Empty space to the right
-            emptyRects.push_back(Rect(
-                    dest.x + reqWidth,
-                    dest.y,
-                    dest.width - reqWidth,
-                    reqHeight));
+            emptyRects.push_back(Rect(dest.x + reqWidth, dest.y, dest.width - reqWidth, reqHeight));
         }
         if (dest.height > reqHeight) {
             // Empty space below
-            emptyRects.push_back(Rect(
-                    dest.x,
-                    dest.y + reqHeight,
-                    dest.width,
-                    dest.height - reqHeight));
+            emptyRects.push_back(Rect(dest.x, dest.y + reqHeight, dest.width, dest.height - reqHeight));
         }
 
         // TODO: We could improve this by combining adjacent empty Rectangles
@@ -148,10 +123,8 @@ namespace Setup {
     /**
      * Finds the smallest Rect greater than the given size.
      */
-    int TextureAtlasBuilder::findRectBiggerThan(
-            const std::vector<Rect>& rects,
-            const int minWidth,
-            const int minHeight) {
+    int
+    TextureAtlasBuilder::findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight) {
         int rectIndex = -1;
         for (size_t i = 0; i < rects.size(); i++) {
             auto const& rect = rects[i];
@@ -169,9 +142,7 @@ namespace Setup {
      *
      * Returns the index of the newly-created Rect.
      */
-    int TextureAtlasBuilder::expandTextureToFitRect(
-            const int reqWidth,
-            const int reqHeight) {
+    int TextureAtlasBuilder::expandTextureToFitRect(const int reqWidth, const int reqHeight) {
 
         // Remember the previous texture size
         int prevWidth = texWidth;
@@ -186,11 +157,7 @@ namespace Setup {
         }
 
         // We now have space for the desired Rect
-        emptyRects.push_back(Rect(
-                0,
-                prevHeight,
-                reqWidth,
-                reqHeight));
+        emptyRects.push_back(Rect(0, prevHeight, reqWidth, reqHeight));
 
         // The Rect we just created is the one we want to return
         int rectIndex = emptyRects.size() - 1;
@@ -198,21 +165,13 @@ namespace Setup {
         // Expanding outwards creates empty space to the right of any
         // previously-added Rects
         if (texWidth > prevWidth && prevHeight > 0) {
-            emptyRects.push_back(Rect(
-                    prevWidth,
-                    0,
-                    texWidth - prevWidth,
-                    prevHeight));
+            emptyRects.push_back(Rect(prevWidth, 0, texWidth - prevWidth, prevHeight));
         }
 
         // Our newly-created Rect may also have empty space to the right,
         // if it does not fill the image width
         if (reqWidth < texWidth) {
-            emptyRects.push_back(Rect(
-                    reqWidth,
-                    prevHeight,
-                    texWidth - reqWidth,
-                    texHeight - prevHeight));
+            emptyRects.push_back(Rect(reqWidth, prevHeight, texWidth - reqWidth, texHeight - prevHeight));
         }
 
         return rectIndex;
@@ -222,9 +181,7 @@ namespace Setup {
     // End of classes
     ///////////////////////////////////////////////////////////////////////////
 
-    void readPalette(
-            Palette::Palette& palette,
-            const std::string filename) {
+    void readPalette(Palette::Palette& palette, const std::string filename) {
         std::ifstream ifs(filename, std::ios::binary | std::ios::in);
         if (!ifs) {
             throw std::runtime_error("Failed to load image for palette: " + filename);
@@ -238,10 +195,7 @@ namespace Setup {
             const std::uint8_t red = ifs.get();
             const std::uint8_t alpha = ifs.get();
 
-            const std::uint32_t col = (red << 24)
-                    + (green << 16)
-                    + (blue << 8)
-                    + alpha;
+            const std::uint32_t col = (red << 24) + (green << 16) + (blue << 8) + alpha;
 
             palette[i] = col;
         }
@@ -250,9 +204,7 @@ namespace Setup {
     /**
      * Writes an atlas definition to file.
      */
-    void writeAtlas(
-            const std::string filename,
-            TextureAtlasBuilder& builder) {
+    void writeAtlas(const std::string filename, TextureAtlasBuilder& builder) {
 
         // Open the file for writing
         std::ofstream atlasFile;
@@ -266,20 +218,14 @@ namespace Setup {
             const std::string& key = kv.first;
             const Rect& target = kv.second;
             const Image& img = builder.imagesByKey.at(key)->image;
-            atlasFile << key << " "
-                      << target.x + borderSize << " "
-                      << target.y + borderSize << " "
-                      << target.width - (2 * borderSize) << " "
-                      << target.height - (2 * borderSize) << "\n";
+            atlasFile << key << " " << target.x + borderSize << " " << target.y + borderSize << " "
+                      << target.width - (2 * borderSize) << " " << target.height - (2 * borderSize) << "\n";
         }
 
         atlasFile.close();
     }
 
-    std::vector<NamedImage> readImagesFromDefinitionFile(
-            const std::string& imageDir,
-            fs::path path,
-            bool atlasMode) {
+    std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode) {
 
         std::ifstream file(path);
         std::string line;
@@ -305,16 +251,13 @@ namespace Setup {
                 }
 
                 // Check dimensions against the expected sprite size
-                if (sprite.getWidth() > spriteWidth
-                        || sprite.getHeight() > spriteHeight) {
+                if (sprite.getWidth() > spriteWidth || sprite.getHeight() > spriteHeight) {
                     // Sprite too large
                     throw std::runtime_error("Sprite is too large to fit!");
 
-                } else if (sprite.getWidth() < spriteWidth
-                        || sprite.getHeight() < spriteHeight) {
+                } else if (sprite.getWidth() < spriteWidth || sprite.getHeight() < spriteHeight) {
                     // Sprite too small
-                    Image resizedSprite = Image::createEmpty(
-                            spriteWidth, spriteHeight, '\xff');
+                    Image resizedSprite = Image::createEmpty(spriteWidth, spriteHeight, '\xff');
                     const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                     const int dstY = (spriteHeight - sprite.getHeight()) / 2;
                     Image::copyImage(sprite, resizedSprite, dstX, dstY);
@@ -361,13 +304,11 @@ namespace Setup {
         }
 
         // Save the final texture
-        std::string txFilename = outputDir
-                + "\\" + definitionFilename.replace_extension(".tga").string();
+        std::string txFilename = outputDir + "\\" + definitionFilename.replace_extension(".tga").string();
         writeImage(texture, palette, txFilename);
 
         // Save the atlas definition
-        std::string altasFilename = outputDir
-                + "\\" + definitionFilename.replace_extension(".atlas").string();
+        std::string altasFilename = outputDir + "\\" + definitionFilename.replace_extension(".atlas").string();
         writeAtlas(altasFilename, builder);
     }
 
@@ -432,16 +373,11 @@ namespace Setup {
         }
 
         // Save the final texture
-        std::string filename = outputDir
-                + "\\" + definitionFilename.replace_extension(".tga").string();
+        std::string filename = outputDir + "\\" + definitionFilename.replace_extension(".tga").string();
         writeImage(texture, palette, filename);
     }
 
-    void buildTextures(
-            std::string definitionsDir,
-            std::string imageDir,
-            std::string outputDir,
-            bool atlasMode) {
+    void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode) {
 
         // Process each definition file in the given directory
         for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir)) {
@@ -455,8 +391,7 @@ namespace Setup {
                 std::cout << "Processing: " << path.filename() << "\n";
 
                 // Read images
-                std::vector<NamedImage> images = readImagesFromDefinitionFile(
-                        imageDir, path, atlasMode);
+                std::vector<NamedImage> images = readImagesFromDefinitionFile(imageDir, path, atlasMode);
 
                 // Read palette from the first image
                 Palette::Palette palette { 0 };

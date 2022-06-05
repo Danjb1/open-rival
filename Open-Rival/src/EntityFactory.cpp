@@ -14,15 +14,12 @@
 
 namespace Rival {
 
-    EntityFactory::EntityFactory(const Resources& res)
-        : res(res) {}
+    EntityFactory::EntityFactory(const Resources& res) : res(res) {}
 
-    std::shared_ptr<Entity> EntityFactory::createUnit(
-            const UnitPlacement& unitPlacement) const {
+    std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const {
 
         // Create Entity
-        std::shared_ptr<Entity> unit = std::make_shared<Entity>(
-                Unit::width, Unit::height);
+        std::shared_ptr<Entity> unit = std::make_shared<Entity>(Unit::width, Unit::height);
 
         // Add UnitPropsComponent
         const Unit::Type unitType = getUnitType(unitPlacement.type);
@@ -40,8 +37,8 @@ namespace Rival {
         unit->attach(std::make_unique<SpriteComponent>(spritesheet));
 
         // Add AnimationComponent
-        const Animations::Animation anim = Animations::getUnitAnimation(
-                unitType, Animations::UnitAnimationType::Standing);
+        const Animations::Animation anim =
+                Animations::getUnitAnimation(unitType, Animations::UnitAnimationType::Standing);
         unit->attach(std::make_unique<AnimationComponent>(anim));
 
         // Add WalkerComponent
@@ -49,85 +46,71 @@ namespace Rival {
 
         // Add Passability
         // TODO: consider flying units separately
-        unit->attach(std::make_unique<PassabilityComponent>(
-                TilePassability::GroundUnit));
+        unit->attach(std::make_unique<PassabilityComponent>(TilePassability::GroundUnit));
 
         return unit;
     }
 
-    std::shared_ptr<Entity> EntityFactory::createBuilding(
-            const BuildingPlacement& buildingPlacement) const {
+    std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const {
 
         // Create Entity
-        Building::Type buildingType =
-                getBuildingType(buildingPlacement.type);
+        Building::Type buildingType = getBuildingType(buildingPlacement.type);
         int width = Building::getWidth(buildingType);
         int height = Building::getHeight(buildingType);
-        std::shared_ptr<Entity> building = std::make_unique<Entity>(
-                width, height);
+        std::shared_ptr<Entity> building = std::make_unique<Entity>(width, height);
 
         // Add BuildingPropsComponent
-        building->attach(
-                std::make_unique<BuildingPropsComponent>(buildingType));
+        building->attach(std::make_unique<BuildingPropsComponent>(buildingType));
 
         // Add OwnerComponent
-        building->attach(std::make_unique<OwnerComponent>(
-                buildingPlacement.player));
+        building->attach(std::make_unique<OwnerComponent>(buildingPlacement.player));
 
         // Add SpriteComponent
-        const Spritesheet& spritesheet =
-                res.getBuildingSpritesheet(buildingType);
+        const Spritesheet& spritesheet = res.getBuildingSpritesheet(buildingType);
         building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
         if (Building::isWall(buildingType)) {
             // Add WallComponent
-            WallVariant wallVariant = static_cast<WallVariant>(
-                    buildingPlacement.wallVariant);
+            WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
             building->attach(std::make_unique<WallComponent>(wallVariant));
 
         } else {
             // Add AnimationComponent
-            const Animations::Animation anim = Animations::getBuildingAnimation(
-                    buildingType, Animations::BuildingAnimationType::Built);
+            const Animations::Animation anim =
+                    Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
             building->attach(std::make_unique<AnimationComponent>(anim));
         }
 
         // Add Passability
-        building->attach(std::make_unique<PassabilityComponent>(
-                TilePassability::Building));
+        building->attach(std::make_unique<PassabilityComponent>(TilePassability::Building));
 
         return building;
     }
 
-    std::shared_ptr<Entity> EntityFactory::createPalisade(
-            const BuildingPlacement& buildingPlacement, bool wilderness) const {
+    std::shared_ptr<Entity>
+    EntityFactory::createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const {
 
         // Create Entity
-        std::shared_ptr<Entity> building = std::make_unique<Entity>(
-                Building::wallWidth, Building::wallHeight);
+        std::shared_ptr<Entity> building = std::make_unique<Entity>(Building::wallWidth, Building::wallHeight);
 
         // Add SpriteComponent
         const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
         building->attach(std::make_unique<SpriteComponent>(spritesheet));
 
         // Add WallComponent
-        WallVariant wallVariant = static_cast<WallVariant>(
-                buildingPlacement.wallVariant);
+        WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
         building->attach(std::make_unique<WallComponent>(wallVariant));
 
         // Add Passability
-        building->attach(std::make_unique<PassabilityComponent>(
-                TilePassability::Building));
+        building->attach(std::make_unique<PassabilityComponent>(TilePassability::Building));
 
         return building;
     }
 
-    std::shared_ptr<Entity> EntityFactory::createObject(
-            const ObjectPlacement& objPlacement, bool wilderness) const {
+    std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const {
 
         // Create Entity
-        std::shared_ptr<Entity> obj = std::make_unique<Entity>(
-                Unit::width, Unit::height);
+        std::shared_ptr<Entity> obj = std::make_unique<Entity>(Unit::width, Unit::height);
 
         // Add SpriteComponent
         if (objPlacement.type == 0xAF) {
@@ -139,8 +122,7 @@ namespace Rival {
         }
 
         // Add AnimationComponent
-        const Animations::Animation anim = Animations::getObjectAnimation(
-                objPlacement.type, objPlacement.variant);
+        const Animations::Animation anim = Animations::getObjectAnimation(objPlacement.type, objPlacement.variant);
         obj->attach(std::make_unique<AnimationComponent>(anim));
 
         return obj;
@@ -293,8 +275,7 @@ namespace Rival {
         case 0x7A:
             return Unit::Type::Dragon;  // Green
         default:
-            throw std::runtime_error(
-                    "Unknown unit type: " + std::to_string(unitType));
+            throw std::runtime_error("Unknown unit type: " + std::to_string(unitType));
         }
     }
 
@@ -317,13 +298,11 @@ namespace Rival {
         case 7:
             return Facing::SouthEast;
         default:
-            throw std::runtime_error(
-                    "Unknown facing: " + std::to_string(facing));
+            throw std::runtime_error("Unknown facing: " + std::to_string(facing));
         }
     }
 
-    Building::Type EntityFactory::getBuildingType(
-            std::uint8_t buildingType) const {
+    Building::Type EntityFactory::getBuildingType(std::uint8_t buildingType) const {
         switch (buildingType) {
         case 0x27:
             return Building::Type::ElvenKeep;
@@ -398,8 +377,7 @@ namespace Rival {
         case 0x1a:
             return Building::Type::Wall;
         default:
-            throw std::runtime_error(
-                    "Unknown building type: " + std::to_string(buildingType));
+            throw std::runtime_error("Unknown building type: " + std::to_string(buildingType));
         }
     }
 

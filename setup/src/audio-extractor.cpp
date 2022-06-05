@@ -8,8 +8,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     /**
      * Reads the given "SOUNDS.dat" file and extracts the audio files therein to
@@ -84,18 +83,10 @@ namespace Setup {
 
             // Write the data to a new file
             std::ostringstream filename;
-            filename << outputDir
-                     << "\\"
-                     << std::setw(3)
-                     << std::setfill('0')
-                     << numFiles
-                     << ext;
+            filename << outputDir << "\\" << std::setw(3) << std::setfill('0') << numFiles << ext;
             std::ofstream output(filename.str(), std::ios::binary);
             if (!output.is_open()) {
-                throw std::runtime_error(
-                        "Failed to open file for writing:\n"
-                        + filename.str()
-                        + "\n");
+                throw std::runtime_error("Failed to open file for writing:\n" + filename.str() + "\n");
             }
             output.write(&data[0], length);
             output.close();

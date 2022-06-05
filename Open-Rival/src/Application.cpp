@@ -8,10 +8,7 @@
 
 namespace Rival {
 
-    Application::Application(Window& window, json& cfg)
-        : window(window),
-          cfg(cfg),
-          res(cfg) {
+    Application::Application(Window& window, json& cfg) : window(window), cfg(cfg), res(cfg) {
 
         // Try to enable vsync.
         // Note that vsync may already be enabled by default!

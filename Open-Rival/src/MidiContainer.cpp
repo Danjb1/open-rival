@@ -24,8 +24,12 @@ namespace Rival {
         m_ext_data = p_in.m_ext_data;
     }
 
-    midi_event::midi_event(unsigned long p_timestamp, event_type p_type,
-            unsigned p_channel, const std::uint8_t* p_data, std::size_t p_data_count) {
+    midi_event::midi_event(
+            unsigned long p_timestamp,
+            event_type p_type,
+            unsigned p_channel,
+            const std::uint8_t* p_data,
+            std::size_t p_data_count) {
         m_timestamp = p_timestamp;
         m_type = p_type;
         m_channel = p_channel;
@@ -35,8 +39,7 @@ namespace Rival {
         } else {
             m_data_count = max_static_data_count;
             memcpy(m_data, p_data, max_static_data_count);
-            m_ext_data.assign(
-                    p_data + max_static_data_count, p_data + p_data_count);
+            m_ext_data.assign(p_data + max_static_data_count, p_data + p_data_count);
         }
     }
 
@@ -44,8 +47,7 @@ namespace Rival {
         return m_data_count + m_ext_data.size();
     }
 
-    void midi_event::copy_data(
-            std::uint8_t* p_out, unsigned long p_offset, unsigned long p_count) const {
+    void midi_event::copy_data(std::uint8_t* p_out, unsigned long p_offset, unsigned long p_count) const {
         unsigned long max_count = m_data_count + m_ext_data.size() - p_offset;
         p_count = std::min(p_count, max_count);
         if (p_offset < max_static_data_count) {
@@ -60,15 +62,17 @@ namespace Rival {
             memcpy(p_out, &m_ext_data[0], p_count);
     }
 
-    midi_track::midi_track(const midi_track& p_in) { m_events = p_in.m_events; }
+    midi_track::midi_track(const midi_track& p_in) {
+        m_events = p_in.m_events;
+    }
 
     void midi_track::add_event(const midi_event& p_event) {
         auto it = m_events.end();
 
         if (m_events.size()) {
             midi_event& event = *(it - 1);
-            if (event.m_type == midi_event::extended && event.get_data_count() >= 2
-                    && event.m_data[0] == 0xFF && event.m_data[1] == 0x2F) {
+            if (event.m_type == midi_event::extended && event.get_data_count() >= 2 && event.m_data[0] == 0xFF
+                && event.m_data[1] == 0x2F) {
                 --it;
                 if (event.m_timestamp < p_event.m_timestamp) {
                     event.m_timestamp = p_event.m_timestamp;
@@ -85,7 +89,9 @@ namespace Rival {
         m_events.insert(it, p_event);
     }
 
-    std::size_t midi_track::get_count() const { return m_events.size(); }
+    std::size_t midi_track::get_count() const {
+        return m_events.size();
+    }
 
     const midi_event& midi_track::operator[](std::size_t p_index) const {
         return m_events[p_index];
@@ -120,8 +126,7 @@ namespace Rival {
         }
     }
 
-    unsigned long tempo_map::timestamp_to_ms(
-            unsigned long p_timestamp, unsigned p_dtx) const {
+    unsigned long tempo_map::timestamp_to_ms(unsigned long p_timestamp, unsigned p_dtx) const {
         unsigned long timestamp_ms = 0;
         unsigned long timestamp = 0;
         auto tempo_it = m_entries.begin();
@@ -130,25 +135,23 @@ namespace Rival {
         unsigned half_dtx = p_dtx * 500;
         p_dtx = half_dtx * 2;
 
-        while (tempo_it < m_entries.end()
-                && timestamp + p_timestamp >= (*tempo_it).m_timestamp) {
+        while (tempo_it < m_entries.end() && timestamp + p_timestamp >= (*tempo_it).m_timestamp) {
             unsigned long delta = (*tempo_it).m_timestamp - timestamp;
-            timestamp_ms += ((uint64_t) current_tempo * (uint64_t) delta + half_dtx)
-                    / p_dtx;
+            timestamp_ms += ((uint64_t) current_tempo * (uint64_t) delta + half_dtx) / p_dtx;
             current_tempo = (*tempo_it).m_tempo;
             ++tempo_it;
             timestamp += delta;
             p_timestamp -= delta;
         }
 
-        timestamp_ms +=
-                ((uint64_t) current_tempo * (uint64_t) p_timestamp + half_dtx)
-                / p_dtx;
+        timestamp_ms += ((uint64_t) current_tempo * (uint64_t) p_timestamp + half_dtx) / p_dtx;
 
         return timestamp_ms;
     }
 
-    std::size_t tempo_map::get_count() const { return m_entries.size(); }
+    std::size_t tempo_map::get_count() const {
+        return m_entries.size();
+    }
 
     const tempo_entry& tempo_map::operator[](std::size_t p_index) const {
         return m_entries[p_index];
@@ -158,26 +161,22 @@ namespace Rival {
         return m_entries[p_index];
     }
 
-    system_exclusive_entry::system_exclusive_entry(
-            const system_exclusive_entry& p_in) {
+    system_exclusive_entry::system_exclusive_entry(const system_exclusive_entry& p_in) {
         m_port = p_in.m_port;
         m_offset = p_in.m_offset;
         m_length = p_in.m_length;
     }
 
-    system_exclusive_entry::system_exclusive_entry(
-            std::size_t p_port, std::size_t p_offset, std::size_t p_length) {
+    system_exclusive_entry::system_exclusive_entry(std::size_t p_port, std::size_t p_offset, std::size_t p_length) {
         m_port = p_port;
         m_offset = p_offset;
         m_length = p_length;
     }
 
-    unsigned system_exclusive_table::add_entry(
-            const std::uint8_t* p_data, std::size_t p_size, std::size_t p_port) {
+    unsigned system_exclusive_table::add_entry(const std::uint8_t* p_data, std::size_t p_size, std::size_t p_port) {
         for (auto it = m_entries.begin(); it < m_entries.end(); ++it) {
             const system_exclusive_entry& entry = *it;
-            if (p_port == entry.m_port && p_size == entry.m_length
-                    && !memcmp(p_data, &m_data[entry.m_offset], p_size))
+            if (p_port == entry.m_port && p_size == entry.m_length && !memcmp(p_data, &m_data[entry.m_offset], p_size))
                 return ((unsigned) (it - m_entries.begin()));
         }
         system_exclusive_entry entry(p_port, m_data.size(), p_size);
@@ -186,16 +185,15 @@ namespace Rival {
         return ((unsigned) (m_entries.size() - 1));
     }
 
-    void system_exclusive_table::get_entry(unsigned p_index, const std::uint8_t*& p_data,
-            std::size_t& p_size, std::size_t& p_port) {
+    void system_exclusive_table::get_entry(
+            unsigned p_index, const std::uint8_t*& p_data, std::size_t& p_size, std::size_t& p_port) {
         const system_exclusive_entry& entry = m_entries[p_index];
         p_data = &m_data[entry.m_offset];
         p_size = entry.m_length;
         p_port = entry.m_port;
     }
 
-    midi_stream_event::midi_stream_event(
-            unsigned long p_timestamp, std::uint32_t p_event) {
+    midi_stream_event::midi_stream_event(unsigned long p_timestamp, std::uint32_t p_event) {
         m_timestamp = p_timestamp;
         m_event = p_event;
     }
@@ -206,8 +204,7 @@ namespace Rival {
         m_value = p_in.m_value;
     }
 
-    midi_meta_data_item::midi_meta_data_item(
-            unsigned long p_timestamp, const char* p_name, const char* p_value) {
+    midi_meta_data_item::midi_meta_data_item(unsigned long p_timestamp, const char* p_name, const char* p_value) {
         m_timestamp = p_timestamp;
         m_name = p_name;
         m_value = p_value;
@@ -222,8 +219,7 @@ namespace Rival {
         m_bitmap = p_data.m_bitmap;
     }
 
-    bool midi_meta_data::get_item(
-            const char* p_name, midi_meta_data_item& p_out) const {
+    bool midi_meta_data::get_item(const char* p_name, midi_meta_data_item& p_out) const {
         for (unsigned i = 0; i < m_data.size(); ++i) {
             const midi_meta_data_item& item = m_data[i];
             if (!strcasecmp(p_name, item.m_name.c_str())) {
@@ -245,15 +241,15 @@ namespace Rival {
         m_bitmap.assign(begin, end);
     }
 
-    std::size_t midi_meta_data::get_count() const { return m_data.size(); }
+    std::size_t midi_meta_data::get_count() const {
+        return m_data.size();
+    }
 
-    const midi_meta_data_item& midi_meta_data::operator[](
-            std::size_t p_index) const {
+    const midi_meta_data_item& midi_meta_data::operator[](std::size_t p_index) const {
         return m_data[p_index];
     }
 
-    void midi_container::encode_delta(
-            std::vector<std::uint8_t>& p_out, unsigned long delta) {
+    void midi_container::encode_delta(std::vector<std::uint8_t>& p_out, unsigned long delta) {
         unsigned shift = 7 * 4;
         while (shift && !(delta >> shift)) {
             shift -= 7;
@@ -265,8 +261,7 @@ namespace Rival {
         p_out.push_back((unsigned char) (delta & 0x7F));
     }
 
-    unsigned long midi_container::timestamp_to_ms(
-            unsigned long p_timestamp, unsigned long p_subsong) const {
+    unsigned long midi_container::timestamp_to_ms(unsigned long p_timestamp, unsigned long p_subsong) const {
         unsigned long timestamp_ms = 0;
         unsigned long timestamp = 0;
         std::size_t tempo_index = 0;
@@ -292,14 +287,9 @@ namespace Rival {
 
             std::size_t tempo_count = m_entries.get_count();
 
-            while (tempo_index < tempo_count
-                    && timestamp + p_timestamp
-                            >= m_entries[tempo_index].m_timestamp) {
-                unsigned long delta =
-                        m_entries[tempo_index].m_timestamp - timestamp;
-                timestamp_ms +=
-                        ((uint64_t) current_tempo * (uint64_t) delta + half_dtx)
-                        / p_dtx;
+            while (tempo_index < tempo_count && timestamp + p_timestamp >= m_entries[tempo_index].m_timestamp) {
+                unsigned long delta = m_entries[tempo_index].m_timestamp - timestamp;
+                timestamp_ms += ((uint64_t) current_tempo * (uint64_t) delta + half_dtx) / p_dtx;
                 current_tempo = m_entries[tempo_index].m_tempo;
                 ++tempo_index;
                 timestamp += delta;
@@ -307,9 +297,7 @@ namespace Rival {
             }
         }
 
-        timestamp_ms +=
-                ((uint64_t) current_tempo * (uint64_t) p_timestamp + half_dtx)
-                / p_dtx;
+        timestamp_ms += ((uint64_t) current_tempo * (uint64_t) p_timestamp + half_dtx) / p_dtx;
 
         return timestamp_ms;
     }
@@ -339,39 +327,33 @@ namespace Rival {
 
         for (i = 0; i < p_track.get_count(); ++i) {
             const midi_event& event = p_track[i];
-            if (event.m_type == midi_event::extended && event.get_data_count() >= 5
-                    && event.m_data[0] == 0xFF && event.m_data[1] == 0x51) {
-                unsigned tempo = (event.m_data[2] << 16) + (event.m_data[3] << 8)
-                        + event.m_data[4];
+            if (event.m_type == midi_event::extended && event.get_data_count() >= 5 && event.m_data[0] == 0xFF
+                && event.m_data[1] == 0x51) {
+                unsigned tempo = (event.m_data[2] << 16) + (event.m_data[3] << 8) + event.m_data[4];
                 if (m_form != 2)
                     m_tempo_map[0].add_tempo(tempo, event.m_timestamp);
                 else {
                     m_tempo_map.resize(m_tracks.size());
-                    m_tempo_map[m_tracks.size() - 1].add_tempo(
-                            tempo, event.m_timestamp);
+                    m_tempo_map[m_tracks.size() - 1].add_tempo(tempo, event.m_timestamp);
                 }
-            } else if (event.m_type == midi_event::extended
-                    && event.get_data_count() >= 3 && event.m_data[0] == 0xFF) {
+            } else if (event.m_type == midi_event::extended && event.get_data_count() >= 3 && event.m_data[0] == 0xFF) {
                 if (event.m_data[1] == 4 || event.m_data[1] == 9) {
                     unsigned long data_count = event.get_data_count() - 2;
                     data.resize(data_count);
                     event.copy_data(&data[0], 2, data_count);
                     device_name.assign(data.begin(), data.begin() + data_count);
-                    std::transform(device_name.begin(), device_name.end(),
-                            device_name.begin(), ::tolower);
+                    std::transform(device_name.begin(), device_name.end(), device_name.begin(), ::tolower);
                 } else if (event.m_data[1] == 0x21) {
                     port_number = event.m_data[2];
                     limit_port_number(port_number);
                     device_name.clear();
                 }
-            } else if (event.m_type == midi_event::note_on
-                    || event.m_type == midi_event::note_off) {
+            } else if (event.m_type == midi_event::note_on || event.m_type == midi_event::note_off) {
                 unsigned channel = event.m_channel;
                 if (device_name.length()) {
                     unsigned long j, k;
                     for (j = 0, k = m_device_names[channel].size(); j < k; ++j) {
-                        if (!strcmp(m_device_names[channel][j].c_str(),
-                                    device_name.c_str()))
+                        if (!strcmp(m_device_names[channel][j].c_str(), device_name.c_str()))
                             break;
                     }
                     if (j < k)
@@ -405,24 +387,21 @@ namespace Rival {
         }
     }
 
-    void midi_container::add_track_event(
-            std::size_t p_track_index, const midi_event& p_event) {
+    void midi_container::add_track_event(std::size_t p_track_index, const midi_event& p_event) {
         midi_track& track = m_tracks[p_track_index];
 
         track.add_event(p_event);
 
-        if (p_event.m_type == midi_event::extended && p_event.get_data_count() >= 5
-                && p_event.m_data[0] == 0xFF && p_event.m_data[1] == 0x51) {
-            unsigned tempo = (p_event.m_data[2] << 16) + (p_event.m_data[3] << 8)
-                    + p_event.m_data[4];
+        if (p_event.m_type == midi_event::extended && p_event.get_data_count() >= 5 && p_event.m_data[0] == 0xFF
+            && p_event.m_data[1] == 0x51) {
+            unsigned tempo = (p_event.m_data[2] << 16) + (p_event.m_data[3] << 8) + p_event.m_data[4];
             if (m_form != 2)
                 m_tempo_map[0].add_tempo(tempo, p_event.m_timestamp);
             else {
                 m_tempo_map.resize(m_tracks.size());
                 m_tempo_map[p_track_index].add_tempo(tempo, p_event.m_timestamp);
             }
-        } else if (p_event.m_type == midi_event::note_on
-                || p_event.m_type == midi_event::note_off) {
+        } else if (p_event.m_type == midi_event::note_on || p_event.m_type == midi_event::note_off) {
             if (m_form != 2)
                 m_channel_mask[0] |= 1ULL << p_event.m_channel;
             else {
@@ -433,8 +412,7 @@ namespace Rival {
 
         if (m_form != 2 && p_event.m_timestamp > m_timestamp_end[0]) {
             m_timestamp_end[0] = p_event.m_timestamp;
-        } else if (m_form == 2
-                && p_event.m_timestamp > m_timestamp_end[p_track_index]) {
+        } else if (m_form == 2 && p_event.m_timestamp > m_timestamp_end[p_track_index]) {
             m_timestamp_end[p_track_index] = p_event.m_timestamp;
         }
     }
@@ -445,7 +423,9 @@ namespace Rival {
         }
     }
 
-    void midi_container::set_track_count(unsigned count) { m_tracks.resize(count); }
+    void midi_container::set_track_count(unsigned count) {
+        m_tracks.resize(count);
+    }
 
     void midi_container::set_extra_meta_data(const midi_meta_data& p_data) {
         m_extra_meta_data = p_data;
@@ -457,8 +437,7 @@ namespace Rival {
             for (unsigned i = 0; i < m_tracks.size(); ++i) {
                 midi_track& t = m_tracks[i];
                 for (unsigned j = 0; j < t.get_count();) {
-                    if (t[j].m_type != midi_event::extended
-                            && t[j].m_channel == 16) {
+                    if (t[j].m_type != midi_event::extended && t[j].m_channel == 16) {
                         t.remove_event(j);
                     } else {
                         ++j;
@@ -471,8 +450,7 @@ namespace Rival {
             for (unsigned i = 0; i < m_tracks.size(); ++i) {
                 midi_track& t = m_tracks[i];
                 for (unsigned j = 0; j < t.get_count();) {
-                    if (t[j].m_type != midi_event::extended
-                            && (t[j].m_channel - 10 < 6)) {
+                    if (t[j].m_type != midi_event::extended && (t[j].m_channel - 10 < 6)) {
                         t.remove_event(j);
                     } else {
                         ++j;
@@ -483,10 +461,13 @@ namespace Rival {
         }
     }
 
-    void midi_container::serialize_as_stream(unsigned long subsong,
+    void midi_container::serialize_as_stream(
+            unsigned long subsong,
             std::vector<midi_stream_event>& p_stream,
-            system_exclusive_table& p_system_exclusive, unsigned long& loop_start,
-            unsigned long& loop_end, unsigned clean_flags) const {
+            system_exclusive_table& p_system_exclusive,
+            unsigned long& loop_start,
+            unsigned long& loop_end,
+            unsigned clean_flags) const {
         std::vector<std::uint8_t> data;
         std::vector<std::size_t> track_positions;
         std::vector<std::uint8_t> port_numbers;
@@ -512,10 +493,8 @@ namespace Rival {
                 const midi_track& track = m_tracks[i];
                 for (unsigned j = 0; j < track.get_count(); ++j) {
                     const midi_event& event = track[j];
-                    if (event.m_type == midi_event::control_change
-                            && event.m_data[0] == 110) {
-                        if (event.m_data[1] != 0 && event.m_data[1] != 1
-                                && event.m_data[1] != 127) {
+                    if (event.m_type == midi_event::control_change && event.m_data[0] == 110) {
+                        if (event.m_data[1] != 0 && event.m_data[1] != 1 && event.m_data[1] != 127) {
                             skip_track = true;
                             break;
                         }
@@ -551,11 +530,11 @@ namespace Rival {
             bool filtered = false;
 
             if (clean_instruments || clean_banks) {
-                const midi_event& event =
-                        m_tracks[next_track][track_positions[next_track]];
+                const midi_event& event = m_tracks[next_track][track_positions[next_track]];
                 if (clean_instruments && event.m_type == midi_event::program_change)
                     filtered = true;
-                else if (clean_banks && event.m_type == midi_event::control_change
+                else if (
+                        clean_banks && event.m_type == midi_event::control_change
                         && (event.m_data[0] == 0x00 || event.m_data[0] == 0x20))
                     filtered = true;
             }
@@ -565,24 +544,19 @@ namespace Rival {
                 if (m_form == 2 && subsong)
                     tempo_track = subsong;
 
-                const midi_event& event =
-                        m_tracks[next_track][track_positions[next_track]];
+                const midi_event& event = m_tracks[next_track][track_positions[next_track]];
 
-                if (local_loop_start == ~0UL
-                        && event.m_timestamp >= tick_loop_start)
+                if (local_loop_start == ~0UL && event.m_timestamp >= tick_loop_start)
                     local_loop_start = p_stream.size();
                 if (local_loop_end == ~0UL && event.m_timestamp > tick_loop_end)
                     local_loop_end = p_stream.size();
 
-                unsigned long timestamp_ms =
-                        timestamp_to_ms(event.m_timestamp, tempo_track);
+                unsigned long timestamp_ms = timestamp_to_ms(event.m_timestamp, tempo_track);
                 if (event.m_type != midi_event::extended) {
                     if (device_names[next_track].length()) {
                         unsigned long i, j;
-                        for (i = 0, j = m_device_names[event.m_channel].size();
-                                i < j; ++i) {
-                            if (!strcmp(m_device_names[event.m_channel][i].c_str(),
-                                        device_names[next_track].c_str()))
+                        for (i = 0, j = m_device_names[event.m_channel].size(); i < j; ++i) {
+                            if (!strcmp(m_device_names[event.m_channel][i].c_str(), device_names[next_track].c_str()))
                                 break;
                         }
                         port_numbers[next_track] = (uint8_t) i;
@@ -590,8 +564,7 @@ namespace Rival {
                         limit_port_number(port_numbers[next_track]);
                     }
 
-                    std::uint32_t event_code =
-                            ((event.m_type + 8) << 4) + event.m_channel;
+                    std::uint32_t event_code = ((event.m_type + 8) << 4) + event.m_channel;
                     if (event.m_data_count >= 1)
                         event_code += event.m_data[0] << 8;
                     if (event.m_data_count >= 2)
@@ -603,10 +576,8 @@ namespace Rival {
                     if (data_count >= 3 && event.m_data[0] == 0xF0) {
                         if (device_names[next_track].length()) {
                             unsigned long i, j;
-                            for (i = 0, j = m_device_names[event.m_channel].size();
-                                    i < j; ++i) {
-                                if (!strcmp(m_device_names[event.m_channel][i]
-                                                    .c_str(),
+                            for (i = 0, j = m_device_names[event.m_channel].size(); i < j; ++i) {
+                                if (!strcmp(m_device_names[event.m_channel][i].c_str(),
                                             device_names[next_track].c_str()))
                                     break;
                             }
@@ -619,10 +590,8 @@ namespace Rival {
                         event.copy_data(&data[0], 0, data_count);
                         if (data[data_count - 1] == 0xF7) {
                             std::uint32_t system_exclusive_index =
-                                    p_system_exclusive.add_entry(&data[0],
-                                            data_count, port_numbers[next_track]);
-                            p_stream.push_back(midi_stream_event(timestamp_ms,
-                                    system_exclusive_index | 0x80000000));
+                                    p_system_exclusive.add_entry(&data[0], data_count, port_numbers[next_track]);
+                            p_stream.push_back(midi_stream_event(timestamp_ms, system_exclusive_index | 0x80000000));
                         }
                     } else if (data_count >= 3 && event.m_data[0] == 0xFF) {
                         if (event.m_data[1] == 4 || event.m_data[1] == 9) {
@@ -630,11 +599,12 @@ namespace Rival {
                             data.resize(_data_count);
                             event.copy_data(&data[0], 2, _data_count);
                             device_names[next_track].clear();
-                            device_names[next_track].assign(
-                                    data.begin(), data.begin() + _data_count);
-                            std::transform(device_names[next_track].begin(),
+                            device_names[next_track].assign(data.begin(), data.begin() + _data_count);
+                            std::transform(
+                                    device_names[next_track].begin(),
                                     device_names[next_track].end(),
-                                    device_names[next_track].begin(), ::tolower);
+                                    device_names[next_track].begin(),
+                                    ::tolower);
                         } else if (event.m_data[1] == 0x21) {
                             port_numbers[next_track] = event.m_data[2];
                             device_names[next_track].clear();
@@ -643,10 +613,8 @@ namespace Rival {
                     } else if (data_count == 1 && event.m_data[0] >= 0xF8) {
                         if (device_names[next_track].length()) {
                             unsigned long i, j;
-                            for (i = 0, j = m_device_names[event.m_channel].size();
-                                    i < j; ++i) {
-                                if (!strcmp(m_device_names[event.m_channel][i]
-                                                    .c_str(),
+                            for (i = 0, j = m_device_names[event.m_channel].size(); i < j; ++i) {
+                                if (!strcmp(m_device_names[event.m_channel][i].c_str(),
                                             device_names[next_track].c_str()))
                                     break;
                             }
@@ -657,8 +625,7 @@ namespace Rival {
 
                         std::uint32_t event_code = port_numbers[next_track] << 24;
                         event_code += event.m_data[0];
-                        p_stream.push_back(
-                                midi_stream_event(timestamp_ms, event_code));
+                        p_stream.push_back(midi_stream_event(timestamp_ms, event_code));
                     }
                 }
             }
@@ -670,8 +637,7 @@ namespace Rival {
         loop_end = local_loop_end;
     }
 
-    void midi_container::serialize_as_standard_midi_file(
-            std::vector<std::uint8_t>& p_midi_file) const {
+    void midi_container::serialize_as_standard_midi_file(std::vector<std::uint8_t>& p_midi_file) const {
         if (!m_tracks.size())
             return;
 
@@ -685,7 +651,7 @@ namespace Rival {
         p_midi_file.push_back(6);
         p_midi_file.push_back(0);
         p_midi_file.push_back(m_form);
-        p_midi_file.push_back((uint8_t)(m_tracks.size() >> 8));
+        p_midi_file.push_back((uint8_t) (m_tracks.size() >> 8));
         p_midi_file.push_back((uint8_t) m_tracks.size());
         p_midi_file.push_back((m_dtx >> 8));
         p_midi_file.push_back(m_dtx);
@@ -710,14 +676,12 @@ namespace Rival {
                 encode_delta(p_midi_file, event.m_timestamp - last_timestamp);
                 last_timestamp = event.m_timestamp;
                 if (event.m_type != midi_event::extended) {
-                    const unsigned char event_code =
-                            ((event.m_type + 8) << 4) + event.m_channel;
+                    const unsigned char event_code = ((event.m_type + 8) << 4) + event.m_channel;
                     if (event_code != last_event_code) {
                         p_midi_file.push_back(event_code);
                         last_event_code = event_code;
                     }
-                    p_midi_file.insert(p_midi_file.end(), event.m_data,
-                            event.m_data + event.m_data_count);
+                    p_midi_file.insert(p_midi_file.end(), event.m_data, event.m_data + event.m_data_count);
                 } else {
                     std::size_t data_count = event.get_data_count();
                     if (data_count >= 1) {
@@ -728,8 +692,7 @@ namespace Rival {
                             if (data_count) {
                                 data.resize(data_count);
                                 event.copy_data(&data[0], 1, data_count);
-                                p_midi_file.insert(p_midi_file.end(), data.begin(),
-                                        data.begin() + data_count);
+                                p_midi_file.insert(p_midi_file.end(), data.begin(), data.begin() + data_count);
                             }
                         } else if (event.m_data[0] == 0xFF && data_count >= 2) {
                             data_count -= 2;
@@ -739,14 +702,12 @@ namespace Rival {
                             if (data_count) {
                                 data.resize(data_count);
                                 event.copy_data(&data[0], 2, data_count);
-                                p_midi_file.insert(p_midi_file.end(), data.begin(),
-                                        data.begin() + data_count);
+                                p_midi_file.insert(p_midi_file.end(), data.begin(), data.begin() + data_count);
                             }
                         } else {
                             data.resize(data_count);
                             event.copy_data(&data[0], 1, data_count);
-                            p_midi_file.insert(p_midi_file.end(), data.begin(),
-                                    data.begin() + data_count);
+                            p_midi_file.insert(p_midi_file.end(), data.begin(), data.begin() + data_count);
                         }
                     }
                 }
@@ -778,8 +739,7 @@ namespace Rival {
                 if (event.m_type != midi_event::extended) {
                     new_tracks[1 + event.m_channel].add_event(event);
                 } else {
-                    if (event.m_data[0] != 0xFF || event.get_data_count() < 2
-                            || event.m_data[1] != 0x2F) {
+                    if (event.m_data[0] != 0xFF || event.get_data_count() < 2 || event.m_data[1] != 0x2F) {
                         new_tracks[0].add_event(event);
                     } else {
                         if (!meter_track_present)
@@ -821,8 +781,7 @@ namespace Rival {
         return 0;
     }
 
-    unsigned long midi_container::get_timestamp_end(
-            unsigned long subsong, bool ms /* = false */) const {
+    unsigned long midi_container::get_timestamp_end(unsigned long subsong, bool ms /* = false */) const {
         unsigned long tempo_track = 0;
         unsigned long timestamp = m_timestamp_end[0];
         if (m_form == 2 && subsong) {
@@ -835,7 +794,9 @@ namespace Rival {
             return timestamp_to_ms(timestamp, tempo_track);
     }
 
-    unsigned midi_container::get_format() const { return m_form; }
+    unsigned midi_container::get_format() const {
+        return m_form;
+    }
 
     unsigned midi_container::get_track_count() const {
         return (unsigned) m_tracks.size();
@@ -851,8 +812,7 @@ namespace Rival {
         return count;
     }
 
-    unsigned long midi_container::get_timestamp_loop_start(
-            unsigned long subsong, bool ms /* = false */) const {
+    unsigned long midi_container::get_timestamp_loop_start(unsigned long subsong, bool ms /* = false */) const {
         unsigned long tempo_track = 0;
         unsigned long timestamp = m_timestamp_loop_start[0];
         if (m_form == 2 && subsong) {
@@ -867,8 +827,7 @@ namespace Rival {
             return ~0UL;
     }
 
-    unsigned long midi_container::get_timestamp_loop_end(
-            unsigned long subsong, bool ms /* = false */) const {
+    unsigned long midi_container::get_timestamp_loop_end(unsigned long subsong, bool ms /* = false */) const {
         unsigned long tempo_track = 0;
         unsigned long timestamp = m_timestamp_loop_end[0];
         if (m_form == 2 && subsong) {
@@ -884,14 +843,12 @@ namespace Rival {
     }
 
     /* TODO: Use iconv or libintl or something to probe for code pages and convert
- * some mess to UTF-8 */
-    static void convert_mess_to_utf8(
-            const char* p_src, std::size_t p_src_len, std::string& p_dst) {
+     * some mess to UTF-8 */
+    static void convert_mess_to_utf8(const char* p_src, std::size_t p_src_len, std::string& p_dst) {
         p_dst.assign(p_src, p_src + p_src_len);
     }
 
-    void midi_container::get_meta_data(
-            unsigned long subsong, midi_meta_data& p_out) {
+    void midi_container::get_meta_data(unsigned long subsong, midi_meta_data& p_out) {
         char temp[32];
         std::string convert;
 
@@ -913,8 +870,7 @@ namespace Rival {
                 const midi_event& event = track[j];
                 if (event.m_type == midi_event::extended) {
                     std::size_t data_count = event.get_data_count();
-                    if (!type_non_gm_found && data_count >= 1
-                            && event.m_data[0] == 0xF0) {
+                    if (!type_non_gm_found && data_count >= 1 && event.m_data[0] == 0xF0) {
                         unsigned char test = 0;
                         unsigned char test2 = 0;
                         if (data_count > 1)
@@ -946,9 +902,8 @@ namespace Rival {
                         if (type) {
                             type_found = true;
                             type_non_gm_found = true;
-                            p_out.add_item(midi_meta_data_item(
-                                    timestamp_to_ms(event.m_timestamp, tempo_track),
-                                    "type", type));
+                            p_out.add_item(
+                                    midi_meta_data_item(timestamp_to_ms(event.m_timestamp, tempo_track), "type", type));
                         }
                     } else if (data_count >= 2 && event.m_data[0] == 0xFF) {
                         data_count -= 2;
@@ -956,44 +911,36 @@ namespace Rival {
                         case 6:
                             data.resize(data_count);
                             event.copy_data(&data[0], 2, data_count);
-                            convert_mess_to_utf8(
-                                    (const char*) &data[0], data_count, convert);
+                            convert_mess_to_utf8((const char*) &data[0], data_count, convert);
                             p_out.add_item(midi_meta_data_item(
-                                    timestamp_to_ms(event.m_timestamp, tempo_track),
-                                    "track_marker", convert.c_str()));
+                                    timestamp_to_ms(event.m_timestamp, tempo_track), "track_marker", convert.c_str()));
                             break;
 
                         case 2:
                             data.resize(data_count);
                             event.copy_data(&data[0], 2, data_count);
-                            convert_mess_to_utf8(
-                                    (const char*) &data[0], data_count, convert);
+                            convert_mess_to_utf8((const char*) &data[0], data_count, convert);
                             p_out.add_item(midi_meta_data_item(
-                                    timestamp_to_ms(event.m_timestamp, tempo_track),
-                                    "copyright", convert.c_str()));
+                                    timestamp_to_ms(event.m_timestamp, tempo_track), "copyright", convert.c_str()));
                             break;
 
                         case 1:
                             data.resize(data_count);
                             event.copy_data(&data[0], 2, data_count);
-                            convert_mess_to_utf8(
-                                    (const char*) &data[0], data_count, convert);
+                            convert_mess_to_utf8((const char*) &data[0], data_count, convert);
                             snprintf(temp, 31, "track_text_%02lu", i);
                             p_out.add_item(midi_meta_data_item(
-                                    timestamp_to_ms(event.m_timestamp, tempo_track),
-                                    temp, convert.c_str()));
+                                    timestamp_to_ms(event.m_timestamp, tempo_track), temp, convert.c_str()));
                             break;
 
                         case 3:
                         case 4:
                             data.resize(data_count);
                             event.copy_data(&data[0], 2, data_count);
-                            convert_mess_to_utf8(
-                                    (const char*) &data[0], data_count, convert);
+                            convert_mess_to_utf8((const char*) &data[0], data_count, convert);
                             snprintf(temp, 31, "track_name_%02lu", i);
                             p_out.add_item(midi_meta_data_item(
-                                    timestamp_to_ms(event.m_timestamp, tempo_track),
-                                    temp, convert.c_str()));
+                                    timestamp_to_ms(event.m_timestamp, tempo_track), temp, convert.c_str()));
                             break;
                         }
                     }
@@ -1008,8 +955,7 @@ namespace Rival {
         p_out.append(m_extra_meta_data);
     }
 
-    void midi_container::trim_tempo_map(
-            unsigned long p_index, unsigned long base_timestamp) {
+    void midi_container::trim_tempo_map(unsigned long p_index, unsigned long base_timestamp) {
         if (p_index < m_tempo_map.size()) {
             tempo_map& map = m_tempo_map[p_index];
 
@@ -1023,8 +969,7 @@ namespace Rival {
         }
     }
 
-    void midi_container::trim_range_of_tracks(
-            unsigned long start, unsigned long end) {
+    void midi_container::trim_range_of_tracks(unsigned long start, unsigned long end) {
         unsigned long timestamp_first_note = ~0UL;
 
         for (unsigned long i = start; i <= end; ++i) {
@@ -1113,9 +1058,8 @@ namespace Rival {
             for (unsigned long k = 0, l = source_track.get_count(); k < l; ++k) {
                 const midi_event& event = source_track[k];
                 if (event.m_type == midi_event::program_change
-                        || (event.m_type == midi_event::control_change
-                                && (event.m_data[0] == 0
-                                        || event.m_data[0] == 0x20))) {
+                    || (event.m_type == midi_event::control_change
+                        && (event.m_data[0] == 0 || event.m_data[0] == 0x20))) {
                     program_change.add_event(event);
                 } else {
                     if (program_change.get_count()) {
@@ -1125,8 +1069,7 @@ namespace Rival {
                         if (cb) {
                             unsigned long timestamp = 0;
                             std::uint8_t bank_msb = 0, bank_lsb = 0, instrument = 0;
-                            for (int i = 0, j = program_change.get_count(); i < j;
-                                    ++i) {
+                            for (int i = 0, j = program_change.get_count(); i < j; ++i) {
                                 const midi_event& ev = program_change[i];
                                 if (ev.m_type == midi_event::program_change)
                                     instrument = ev.m_data[0];
@@ -1150,8 +1093,7 @@ namespace Rival {
                             std::copy(name.begin(), name.end(), data.begin() + 2);
 
                             output_track.add_event(
-                                    midi_event(timestamp, midi_event::extended, 0,
-                                            &data[0], data.size()));
+                                    midi_event(timestamp, midi_event::extended, 0, &data[0], data.size()));
                         }
                         program_change = midi_track();
                     }
@@ -1164,8 +1106,8 @@ namespace Rival {
         }
     }
 
-    void midi_container::scan_for_loops(bool p_xmi_loops, bool p_marker_loops,
-            bool p_rpgmaker_loops, bool p_touhou_loops) {
+    void
+    midi_container::scan_for_loops(bool p_xmi_loops, bool p_marker_loops, bool p_rpgmaker_loops, bool p_touhou_loops) {
         std::vector<std::uint8_t> data;
 
         unsigned long subsong_count = m_form == 2 ? m_tracks.size() : 1;
@@ -1226,15 +1168,14 @@ namespace Rival {
                 for (unsigned long j = 0; j < track.get_count(); ++j) {
                     const midi_event& event = track[j];
                     if (event.m_type == midi_event::control_change
-                            && (event.m_data[0] == 110 || event.m_data[0] == 111)) {
+                        && (event.m_data[0] == 110 || event.m_data[0] == 111)) {
                         if (event.m_data[0] == 110) {
                             emidi_commands_found = true;
                             break;
                         }
                         {
                             if (m_timestamp_loop_start[subsong] == ~0UL
-                                    || m_timestamp_loop_start[subsong]
-                                            > event.m_timestamp) {
+                                || m_timestamp_loop_start[subsong] > event.m_timestamp) {
                                 m_timestamp_loop_start[subsong] = event.m_timestamp;
                             }
                         }
@@ -1259,18 +1200,15 @@ namespace Rival {
                 for (unsigned long j = 0; j < track.get_count(); ++j) {
                     const midi_event& event = track[j];
                     if (event.m_type == midi_event::control_change
-                            && (event.m_data[0] >= 0x74
-                                    && event.m_data[0] <= 0x77)) {
+                        && (event.m_data[0] >= 0x74 && event.m_data[0] <= 0x77)) {
                         if (event.m_data[0] == 0x74 || event.m_data[0] == 0x76) {
                             if (m_timestamp_loop_start[subsong] == ~0UL
-                                    || m_timestamp_loop_start[subsong]
-                                            > event.m_timestamp) {
+                                || m_timestamp_loop_start[subsong] > event.m_timestamp) {
                                 m_timestamp_loop_start[subsong] = event.m_timestamp;
                             }
                         } else {
                             if (m_timestamp_loop_end[subsong] == ~0UL
-                                    || m_timestamp_loop_end[subsong]
-                                            < event.m_timestamp) {
+                                || m_timestamp_loop_end[subsong] < event.m_timestamp) {
                                 m_timestamp_loop_end[subsong] = event.m_timestamp;
                             }
                         }
@@ -1288,27 +1226,20 @@ namespace Rival {
                 const midi_track& track = m_tracks[i];
                 for (unsigned long j = 0; j < track.get_count(); ++j) {
                     const midi_event& event = track[j];
-                    if (event.m_type == midi_event::extended
-                            && event.get_data_count() >= 9
-                            && event.m_data[0] == 0xFF && event.m_data[1] == 0x06) {
+                    if (event.m_type == midi_event::extended && event.get_data_count() >= 9 && event.m_data[0] == 0xFF
+                        && event.m_data[1] == 0x06) {
                         unsigned long data_count = event.get_data_count() - 2;
                         data.resize(data_count);
                         event.copy_data(&data[0], 2, data_count);
 
-                        if (data_count == 9
-                                && !strncasecmp(
-                                        (const char*) &data[0], "loopStart", 9)) {
+                        if (data_count == 9 && !strncasecmp((const char*) &data[0], "loopStart", 9)) {
                             if (m_timestamp_loop_start[subsong] == ~0UL
-                                    || m_timestamp_loop_start[subsong]
-                                            > event.m_timestamp) {
+                                || m_timestamp_loop_start[subsong] > event.m_timestamp) {
                                 m_timestamp_loop_start[subsong] = event.m_timestamp;
                             }
-                        } else if (data_count == 7
-                                && !strncasecmp(
-                                        (const char*) &data[0], "loopEnd", 7)) {
+                        } else if (data_count == 7 && !strncasecmp((const char*) &data[0], "loopEnd", 7)) {
                             if (m_timestamp_loop_end[subsong] == ~0UL
-                                    || m_timestamp_loop_end[subsong]
-                                            < event.m_timestamp) {
+                                || m_timestamp_loop_end[subsong] < event.m_timestamp) {
                                 m_timestamp_loop_end[subsong] = event.m_timestamp;
                             }
                         }
@@ -1322,21 +1253,19 @@ namespace Rival {
         for (unsigned long i = 0; i < subsong_count; ++i) {
             unsigned long timestamp_song_end;
             if (m_form == 2)
-                timestamp_song_end =
-                        m_tracks[i][m_tracks[i].get_count() - 1].m_timestamp;
+                timestamp_song_end = m_tracks[i][m_tracks[i].get_count() - 1].m_timestamp;
             else {
                 timestamp_song_end = 0;
                 for (unsigned long j = 0; j < m_tracks.size(); ++j) {
                     const midi_track& track = m_tracks[j];
-                    unsigned long timestamp =
-                            track[track.get_count() - 1].m_timestamp;
+                    unsigned long timestamp = track[track.get_count() - 1].m_timestamp;
                     if (timestamp > timestamp_song_end)
                         timestamp_song_end = timestamp;
                 }
             }
             if (m_timestamp_loop_start[i] != ~0UL
-                    && ((m_timestamp_loop_start[i] == m_timestamp_loop_end[i])
-                            || (m_timestamp_loop_start[i] == timestamp_song_end))) {
+                && ((m_timestamp_loop_start[i] == m_timestamp_loop_end[i])
+                    || (m_timestamp_loop_start[i] == timestamp_song_end))) {
                 m_timestamp_loop_start[i] = ~0UL;
                 m_timestamp_loop_end[i] = ~0UL;
             }

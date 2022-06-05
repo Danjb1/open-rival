@@ -8,11 +8,19 @@
 
 ### Component Safety
 
-- Avoid raw pointers
-    - Consider storing components using shared_ptrs, and return weak_ptrs when
-        components are requested
-    - OR just make some guarantees about component lifetimes
-        - Could add a "require" mechanism when retrieving components (fail fast)
+- Add a "require" mechanism when retrieving components (fail fast)
+- Ensure `onDelete` is never called before `onEntitySpawned`
+- Use `getComponent<const T>` variants where possible
+
+### Formatting and Libraries
+
+- Clang-Format crashes with out-of-memory error when formatting all headers
+- Auto-arrange includes via clang-format?
+- Improve handling of libary files
+    - Suppress warnings around includes rather than editing library files
+    - Move library headers (json, RtMidi) into a separate project or folder?
+    - Clearly annotate any changes to library files
+- Suppress warnings from SDL (C26819, C26812)
 
 ### Data Loading
 
@@ -245,12 +253,6 @@
 - Build for Linux
 - Add script to build from command line
 - Add script to run tests from command line
-- Auto-arrange includes via clang-format?
-- Improve handling of libary files
-    - Suppress warnings around includes rather than editing library files
-    - Move library headers (json, RtMidi) into a separate project or folder?
-    - Clearly annotate any changes to library files
-- Suppress warnings from SDL (C26819, C26812)
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests

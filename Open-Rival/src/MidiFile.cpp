@@ -10,13 +10,7 @@ namespace Rival {
         unsigned long loop_start = 0;
         unsigned long loop_end = 0;
         unsigned clean_flags = 0;
-        midiContainer.serialize_as_stream(
-                subsong,
-                events,
-                p_system_exclusive,
-                loop_start,
-                loop_end,
-                clean_flags);
+        midiContainer.serialize_as_stream(subsong, events, p_system_exclusive, loop_start, loop_end, clean_flags);
     }
 
     bool MidiFile::isEmpty() const {

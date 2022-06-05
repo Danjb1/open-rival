@@ -9,15 +9,13 @@ namespace Rival {
 
     // Based on:
     // https://github.com/zxf8665905/wavDecoder
-    WaveFile::WaveFile(std::string filename)
-        : filename(filename) {
+    WaveFile::WaveFile(std::string filename) : filename(filename) {
 
         std::cout << "Loading: " << filename << "\n";
 
         // Open file and check size
         std::streamoff remainSize;
-        std::ifstream in(filename,
-                std::ios::in | std::ios::binary | std::ios::ate);
+        std::ifstream in(filename, std::ios::in | std::ios::binary | std::ios::ate);
         if (in.is_open() == false) {
             throw std::runtime_error("Failed to open file: " + filename);
         }

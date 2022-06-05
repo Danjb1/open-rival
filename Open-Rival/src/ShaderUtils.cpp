@@ -8,8 +8,7 @@
 
 #include <SDL.h>
 
-namespace Rival {
-namespace ShaderUtils {
+namespace Rival { namespace ShaderUtils {
 
     std::string readShaderSource(const char* filename) {
         std::ifstream t(filename);

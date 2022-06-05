@@ -7,10 +7,10 @@
 #include "Building.h"
 #include "Unit.h"
 
-namespace Rival {
-namespace Animations {
+namespace Rival { namespace Animations {
 
-    enum class UnitAnimationType : std::uint8_t {
+    enum class UnitAnimationType : std::uint8_t
+    {
         Standing,
         HoldingBag,
         Moving,
@@ -19,7 +19,8 @@ namespace Animations {
         Dying
     };
 
-    enum class BuildingAnimationType : std::uint8_t {
+    enum class BuildingAnimationType : std::uint8_t
+    {
         Constructing,
         Built
     };
@@ -229,11 +230,9 @@ namespace Animations {
         { { std::uint8_t(0xAF), std::uint8_t(7) }, { 13, 13, 60 } },  // Beige rock
     };
 
-    Animation getUnitAnimation(
-            Unit::Type unitType, UnitAnimationType animType);
+    Animation getUnitAnimation(Unit::Type unitType, UnitAnimationType animType);
 
-    Animation getBuildingAnimation(
-            Building::Type buildingType, BuildingAnimationType animType);
+    Animation getBuildingAnimation(Building::Type buildingType, BuildingAnimationType animType);
 
     Animation getObjectAnimation(std::uint8_t type, std::uint8_t variant);
 

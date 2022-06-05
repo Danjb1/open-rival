@@ -7,10 +7,7 @@
 
 namespace Rival {
 
-    Texture::Texture(const GLuint id, int width, int height)
-        : id(id),
-          width(width),
-          height(height) {}
+    Texture::Texture(const GLuint id, int width, int height) : id(id), width(width), height(height) {}
 
     const GLuint Texture::getId() const {
         return id;
@@ -35,7 +32,8 @@ namespace Rival {
         glGenTextures(1, &textureId);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D,
+        glTexImage2D(
+                GL_TEXTURE_2D,
                 0,       // target slot
                 GL_RED,  // 1 byte per pixel
                 img.getWidth(),

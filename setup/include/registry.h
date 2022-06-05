@@ -33,10 +33,7 @@ namespace Registry {
      *       std::cout << e.errorCode() << "\n";
      *   }
      */
-    DWORD RegGetDword(
-            HKEY hKey,
-            const std::wstring& subKey,
-            const std::wstring& value);
+    DWORD RegGetDword(HKEY hKey, const std::wstring& subKey, const std::wstring& value);
 
     /**
      * Gets a string from the registry.
@@ -49,10 +46,7 @@ namespace Registry {
      *       std::cout << e.errorCode() << "\n";
      *   }
      */
-    std::wstring RegGetString(
-            HKEY hKey,
-            const std::wstring& subKey,
-            const std::wstring& value);
+    std::wstring RegGetString(HKEY hKey, const std::wstring& subKey, const std::wstring& value);
 
 }  // namespace Registry
 

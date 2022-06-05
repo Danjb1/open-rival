@@ -8,20 +8,19 @@ namespace Rival {
 
     const std::string UnitPropsComponent::key = "unit_props";
 
-    UnitPropsComponent::UnitPropsComponent(Unit::Type type)
-        : EntityComponent(key),
-          type(type) {}
+    UnitPropsComponent::UnitPropsComponent(Unit::Type type) : EntityComponent(key), type(type) {}
 
     void UnitPropsComponent::onEntitySpawned(Scenario*) {
-        movementComponent = entity->getComponent<MovementComponent>(
-                MovementComponent::key);
-        if (movementComponent) {
+        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        if (auto movementComponent = weakMovementComponent.lock()) {
             movementComponent->addListener(this);
         }
     }
 
     void UnitPropsComponent::onDelete() {
-        movementComponent->removeListener(this);
+        if (auto movementComponent = weakMovementComponent.lock()) {
+            movementComponent->removeListener(this);
+        }
     }
 
     void UnitPropsComponent::onUnitMoveStart(const MapNode*) {

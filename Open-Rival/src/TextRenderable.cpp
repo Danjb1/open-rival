@@ -11,46 +11,34 @@ namespace Rival {
     const float TextRenderable::shadowOffsetX = 0.0f;
     const float TextRenderable::shadowOffsetY = 1.0f;
 
-    TextRenderable::TextRenderable(
-            TextSpan span,
-            TextProperties props,
-            float x,
-            float y)
-        : spans({ span }),
-          props(props),
-          x(x),
-          y(y),
-          numChars(0),
-          numVisibleChars(0) {
+    TextRenderable::TextRenderable(TextSpan span, TextProperties props, float x, float y)
+        : spans({ span })
+        , props(props)
+        , x(x)
+        , y(y)
+        , numChars(0)
+        , numVisibleChars(0) {
         countChars();
         init();
     }
 
-    TextRenderable::TextRenderable(
-            std::vector<TextSpan> spans,
-            const TextProperties props,
-            float x,
-            float y)
-        : spans(spans),
-          props(props),
-          x(x),
-          y(y),
-          numChars(0),
-          numVisibleChars(0) {
+    TextRenderable::TextRenderable(std::vector<TextSpan> spans, const TextProperties props, float x, float y)
+        : spans(spans)
+        , props(props)
+        , x(x)
+        , y(y)
+        , numChars(0)
+        , numVisibleChars(0) {
         countChars();
         init();
     }
 
-    TextRenderable::TextRenderable(
-            int maxChars,
-            TextProperties props,
-            float x,
-            float y)
-        : props(props),
-          x(x),
-          y(y),
-          numChars(maxChars),
-          numVisibleChars(maxChars) {
+    TextRenderable::TextRenderable(int maxChars, TextProperties props, float x, float y)
+        : props(props)
+        , x(x)
+        , y(y)
+        , numChars(maxChars)
+        , numVisibleChars(maxChars) {
         init();
     }
 
@@ -76,24 +64,14 @@ namespace Rival {
                 GL_FALSE,
                 numVertexDimensions * sizeof(GLfloat),
                 nullptr);
-        int positionBufferSize = numVisibleChars
-                * numLayers
-                * numVertexDimensions
-                * numIndicesPerChar
-                * sizeof(GLfloat);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                positionBufferSize,
-                NULL,
-                GL_STATIC_DRAW);
+        int positionBufferSize =
+                numVisibleChars * numLayers * numVertexDimensions * numIndicesPerChar * sizeof(GLfloat);
+        glBufferData(GL_ARRAY_BUFFER, positionBufferSize, NULL, GL_STATIC_DRAW);
 
         // Initialize tex co-ord buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        int texCoordBufferSize = numVisibleChars
-                * numLayers
-                * numTexCoordDimensions
-                * numIndicesPerChar
-                * sizeof(GLfloat);
+        int texCoordBufferSize =
+                numVisibleChars * numLayers * numTexCoordDimensions * numIndicesPerChar * sizeof(GLfloat);
         glVertexAttribPointer(
                 Shaders::texCoordAttribIndex,
                 numTexCoordDimensions,
@@ -101,19 +79,11 @@ namespace Rival {
                 GL_FALSE,
                 numTexCoordDimensions * sizeof(GLfloat),
                 nullptr);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                texCoordBufferSize,
-                NULL,
-                GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_STATIC_DRAW);
 
         // Initialize color buffer with empty data
         glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
-        int colorBufferSize = numVisibleChars
-                * numLayers
-                * numColorDimensions
-                * numIndicesPerChar
-                * sizeof(GLfloat);
+        int colorBufferSize = numVisibleChars * numLayers * numColorDimensions * numIndicesPerChar * sizeof(GLfloat);
         glVertexAttribPointer(
                 Shaders::colorAttribIndex,
                 numColorDimensions,
@@ -121,23 +91,12 @@ namespace Rival {
                 GL_FALSE,
                 numColorDimensions * sizeof(GLfloat),
                 nullptr);
-        glBufferData(
-                GL_ARRAY_BUFFER,
-                colorBufferSize,
-                NULL,
-                GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, colorBufferSize, NULL, GL_STATIC_DRAW);
 
         // Initialize index buffer with empty data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        int numIndices = numVisibleChars
-                * numLayers
-                * numIndicesPerChar
-                * sizeof(GLuint);
-        glBufferData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                numIndices,
-                NULL,
-                GL_STATIC_DRAW);
+        int numIndices = numVisibleChars * numLayers * numIndicesPerChar * sizeof(GLuint);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices, NULL, GL_STATIC_DRAW);
 
         // Enable vertex attributes
         glEnableVertexAttribArray(Shaders::vertexAttribIndex);

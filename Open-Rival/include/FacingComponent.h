@@ -19,8 +19,9 @@ namespace Rival {
     /**
      * Component that manages an Entity's facing.
      */
-    class FacingComponent : public EntityComponent,
-                            public MovementListener {
+    class FacingComponent
+        : public EntityComponent
+        , public MovementListener {
 
     public:
         FacingComponent(Facing initialFacing);
@@ -39,7 +40,9 @@ namespace Rival {
 
         void setFacing(Facing newFacing);
 
-        Facing getFacing() const { return facing; }
+        Facing getFacing() const {
+            return facing;
+        }
 
         void rotateLeft();
 
@@ -54,7 +57,7 @@ namespace Rival {
     private:
         static const int numFacings = 8;
 
-        MovementComponent* movementComponent { nullptr };
+        std::weak_ptr<MovementComponent> weakMovementComponent;
 
         Facing facing;
 

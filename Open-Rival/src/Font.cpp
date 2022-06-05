@@ -30,15 +30,13 @@ namespace Rival {
     // support them, whether they can be rendered depends entirely on the font.
     // Note that the space character is a special case; we take the width from
     // the font, but it is skipped during rendering.
-    const std::string Font::supportedChars =
-            " !\"#$%&'()*+,-./1234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    const std::string Font::supportedChars = " !\"#$%&'()*+,-./1234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                             "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     Font::Font(Texture texture, std::map<char, CharData> chars, int defaultSize)
-        : texture(texture),
-          chars(chars),
-          defaultSize(defaultSize) {
-    }
+        : texture(texture)
+        , chars(chars)
+        , defaultSize(defaultSize) {}
 
     const CharData* Font::getCharData(char c) const {
         try {
@@ -58,14 +56,9 @@ namespace Rival {
         FT_Done_Face(face);
     }
 
-    FontLoadError::FontLoadError(const char* message)
-        : std::runtime_error(message) {}
+    FontLoadError::FontLoadError(const char* message) : std::runtime_error(message) {}
 
-    Font Font::loadFont(
-            FT_Library& ft,
-            std::vector<std::string> fontDirs,
-            std::string filename,
-            int defaultSize) {
+    Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize) {
         for (std::string fontDir : fontDirs) {
             try {
                 return loadFont(ft, fontDir + filename, defaultSize);
@@ -88,16 +81,14 @@ namespace Rival {
         if (format == winFontFormat) {
             FT_WinFNT_HeaderRec winFontHeader;
             if (FT_Get_WinFNT_Header(face, &winFontHeader)) {
-                throw std::runtime_error("Failed to read Windows font header: "
-                        + filename);
+                throw std::runtime_error("Failed to read Windows font header: " + filename);
             }
 
             // Check the charset. MS Serif uses `CP1252`, which fortunately maps
             // directly to ASCII. Other fonts may require some more complex
             // mapping to find the correct characters.
             if (winFontHeader.charset != FT_WinFNT_ID_CP1252) {
-                throw std::runtime_error("Unsupported charset in font: "
-                        + filename);
+                throw std::runtime_error("Unsupported charset in font: " + filename);
             }
 
             // The documentation of this field is poor, but it seems as though
@@ -127,18 +118,13 @@ namespace Rival {
 
             // Load this character into the `face->glyph` slot
             if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
-                throw std::runtime_error(
-                        "Failed to load character: " + makePrintable(c));
+                throw std::runtime_error("Failed to load character: " + makePrintable(c));
             }
 
             if (!face->glyph->bitmap.buffer) {
                 // Glyph is not present in font; character will be displayed as
                 // an empty space.
-                std::cout << "Font "
-                          << filename
-                          << " does not support character "
-                          << makePrintable(c)
-                          << "\n";
+                std::cout << "Font " << filename << " does not support character " << makePrintable(c) << "\n";
             }
 
             int charWidth = face->glyph->bitmap.width;
@@ -162,13 +148,11 @@ namespace Rival {
             // The alternative would be to guess the image size and then crop
             // it afterwards, or copy each char to memory after the first load.
             if (FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
-                throw std::runtime_error(
-                        "Failed to load character: " + makePrintable(c));
+                throw std::runtime_error("Failed to load character: " + makePrintable(c));
             }
 
             // Store this character in the font
-            CharData charData =
-                    makeChar(face->glyph, nextX, imgWidth, imgHeight);
+            CharData charData = makeChar(face->glyph, nextX, imgWidth, imgHeight);
             chars.insert(std::pair<char, CharData>(c, charData));
 
             if (c == ' ') {
@@ -216,8 +200,7 @@ namespace Rival {
      * @param imgWidth The width of the font bitmap.
      * @param imgHeight The height of the font bitmap.
      */
-    CharData Font::makeChar(
-            FT_GlyphSlot& glyph, int x, int imgWidth, int imgHeight) {
+    CharData Font::makeChar(FT_GlyphSlot& glyph, int x, int imgWidth, int imgHeight) {
         int charWidth = glyph->bitmap.width;
         int charHeight = glyph->bitmap.rows;
 
@@ -229,9 +212,7 @@ namespace Rival {
 
         auto charSize = glm::ivec2(charWidth, charHeight);
 
-        auto bearing = glm::ivec2(
-                glyph->bitmap_left,
-                glyph->bitmap_top);
+        auto bearing = glm::ivec2(glyph->bitmap_left, glyph->bitmap_top);
 
         // Bit shift because the advance is given in 1/64 pixels
         int advance = static_cast<int>(glyph->advance.x >> 6);
@@ -245,8 +226,7 @@ namespace Rival {
     void Font::copyCharImage(FT_GlyphSlot& glyph, Image& target, int x) {
         int charWidth = glyph->bitmap.width;
         int charHeight = glyph->bitmap.rows;
-        Image src = Image::createByMove(charWidth, charHeight,
-                bitmapToVector(glyph->bitmap));
+        Image src = Image::createByMove(charWidth, charHeight, bitmapToVector(glyph->bitmap));
         Image::copyImage(src, target, x, 0);
     }
 

@@ -11,66 +11,26 @@
 namespace Rival {
 
     const std::map<std::uint8_t, char> ScenarioReader::alphabet = {
-        { std::uint8_t(0x12), 'b' },
-        { std::uint8_t(0x13), 'c' },
-        { std::uint8_t(0x15), 'a' },
-        { std::uint8_t(0x16), 'f' },
-        { std::uint8_t(0x17), 'g' },
-        { std::uint8_t(0x18), 'd' },
-        { std::uint8_t(0x19), 'e' },
-        { std::uint8_t(0x1A), 'j' },
-        { std::uint8_t(0x1B), 'k' },
-        { std::uint8_t(0x1C), 'h' },
-        { std::uint8_t(0x1D), 'i' },
-        { std::uint8_t(0x1E), 'n' },
-        { std::uint8_t(0x1F), 'o' },
-        { std::uint8_t(0x20), 'l' },
-        { std::uint8_t(0x21), 'm' },
-        { std::uint8_t(0x22), 'r' },
-        { std::uint8_t(0x23), 's' },
-        { std::uint8_t(0x24), 'p' },
-        { std::uint8_t(0x26), 'v' },
-        { std::uint8_t(0x27), 'w' },
-        { std::uint8_t(0x28), 't' },
-        { std::uint8_t(0x29), 'u' },
-        { std::uint8_t(0x2A), 'z' },
-        { std::uint8_t(0x2C), 'x' },
-        { std::uint8_t(0x2D), 'y' },
-        { std::uint8_t(0x32), 'B' },
-        { std::uint8_t(0x33), 'C' },
-        { std::uint8_t(0x35), 'A' },
-        { std::uint8_t(0x36), 'F' },
-        { std::uint8_t(0x37), 'G' },
-        { std::uint8_t(0x38), 'D' },
-        { std::uint8_t(0x39), 'E' },
-        { std::uint8_t(0x3A), 'J' },
-        { std::uint8_t(0x3B), 'K' },
-        { std::uint8_t(0x3C), 'H' },
-        { std::uint8_t(0x3D), 'I' },
-        { std::uint8_t(0x3E), 'N' },
-        { std::uint8_t(0x3F), 'O' },
-        { std::uint8_t(0x40), 'L' },
-        { std::uint8_t(0x41), 'M' },
-        { std::uint8_t(0x42), 'R' },
-        { std::uint8_t(0x43), 'S' },
-        { std::uint8_t(0x44), 'P' },
-        { std::uint8_t(0x46), 'V' },
-        { std::uint8_t(0x47), 'W' },
-        { std::uint8_t(0x48), 'T' },
-        { std::uint8_t(0x49), 'U' },
-        { std::uint8_t(0x4A), 'Z' },
-        { std::uint8_t(0x4C), 'X' },
-        { std::uint8_t(0x4D), 'Y' },
-        { std::uint8_t(0x52), '"' },
-        { std::uint8_t(0x54), ' ' },
-        { std::uint8_t(0x56), '&' },
-        { std::uint8_t(0x60), ',' },
-        { std::uint8_t(0x61), '-' },
-        { std::uint8_t(0x62), '2' },
-        { std::uint8_t(0x63), '3' },
-        { std::uint8_t(0x71), '=' },
-        { std::uint8_t(0x81), '\r' },
-        { std::uint8_t(0x7A), '\n' }
+        { std::uint8_t(0x12), 'b' }, { std::uint8_t(0x13), 'c' },  { std::uint8_t(0x15), 'a' },
+        { std::uint8_t(0x16), 'f' }, { std::uint8_t(0x17), 'g' },  { std::uint8_t(0x18), 'd' },
+        { std::uint8_t(0x19), 'e' }, { std::uint8_t(0x1A), 'j' },  { std::uint8_t(0x1B), 'k' },
+        { std::uint8_t(0x1C), 'h' }, { std::uint8_t(0x1D), 'i' },  { std::uint8_t(0x1E), 'n' },
+        { std::uint8_t(0x1F), 'o' }, { std::uint8_t(0x20), 'l' },  { std::uint8_t(0x21), 'm' },
+        { std::uint8_t(0x22), 'r' }, { std::uint8_t(0x23), 's' },  { std::uint8_t(0x24), 'p' },
+        { std::uint8_t(0x26), 'v' }, { std::uint8_t(0x27), 'w' },  { std::uint8_t(0x28), 't' },
+        { std::uint8_t(0x29), 'u' }, { std::uint8_t(0x2A), 'z' },  { std::uint8_t(0x2C), 'x' },
+        { std::uint8_t(0x2D), 'y' }, { std::uint8_t(0x32), 'B' },  { std::uint8_t(0x33), 'C' },
+        { std::uint8_t(0x35), 'A' }, { std::uint8_t(0x36), 'F' },  { std::uint8_t(0x37), 'G' },
+        { std::uint8_t(0x38), 'D' }, { std::uint8_t(0x39), 'E' },  { std::uint8_t(0x3A), 'J' },
+        { std::uint8_t(0x3B), 'K' }, { std::uint8_t(0x3C), 'H' },  { std::uint8_t(0x3D), 'I' },
+        { std::uint8_t(0x3E), 'N' }, { std::uint8_t(0x3F), 'O' },  { std::uint8_t(0x40), 'L' },
+        { std::uint8_t(0x41), 'M' }, { std::uint8_t(0x42), 'R' },  { std::uint8_t(0x43), 'S' },
+        { std::uint8_t(0x44), 'P' }, { std::uint8_t(0x46), 'V' },  { std::uint8_t(0x47), 'W' },
+        { std::uint8_t(0x48), 'T' }, { std::uint8_t(0x49), 'U' },  { std::uint8_t(0x4A), 'Z' },
+        { std::uint8_t(0x4C), 'X' }, { std::uint8_t(0x4D), 'Y' },  { std::uint8_t(0x52), '"' },
+        { std::uint8_t(0x54), ' ' }, { std::uint8_t(0x56), '&' },  { std::uint8_t(0x60), ',' },
+        { std::uint8_t(0x61), '-' }, { std::uint8_t(0x62), '2' },  { std::uint8_t(0x63), '3' },
+        { std::uint8_t(0x71), '=' }, { std::uint8_t(0x81), '\r' }, { std::uint8_t(0x7A), '\n' }
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -210,8 +170,7 @@ namespace Rival {
         printSection("Parsing upgrade properties");
         printOffset();
         for (int i = 0; i < numUpgrades; ++i) {
-            scenarioData.upgradeProperties[i] =
-                    parseUpgradeProperties(doesUpgradeHaveAmount(i));
+            scenarioData.upgradeProperties[i] = parseUpgradeProperties(doesUpgradeHaveAmount(i));
         }
         print(scenarioData.upgradeProperties[0]);
 
@@ -271,8 +230,7 @@ namespace Rival {
         // Parse hire troops restrictions
         printSection("Parsing hire troops restrictions");
         printOffset();
-        scenarioData.hireTroopsRestrictions =
-                parseHireTroopsRestrictions();
+        scenarioData.hireTroopsRestrictions = parseHireTroopsRestrictions();
         print(scenarioData.hireTroopsRestrictions);
 
         // Parse AI building settings
@@ -280,8 +238,7 @@ namespace Rival {
         printOffset();
         for (int i = 0; i < numBuildingsPerRace; ++i) {
             for (int j = 0; j < numAiStrategies; ++j) {
-                scenarioData.aiStrategies[j].aiBuildingSettings[i] =
-                        parseAiSetting();
+                scenarioData.aiStrategies[j].aiBuildingSettings[i] = parseAiSetting();
             }
         }
 
@@ -290,8 +247,7 @@ namespace Rival {
         printOffset();
         for (int i = 0; i < numTroopsPerRace; ++i) {
             for (int j = 0; j < numAiStrategies; ++j) {
-                scenarioData.aiStrategies[j].aiTroopSettings[i] =
-                        parseAiSetting();
+                scenarioData.aiStrategies[j].aiTroopSettings[i] = parseAiSetting();
             }
         }
 
@@ -331,15 +287,13 @@ namespace Rival {
         // Parse terrain data
         printSection("Parsing terrain data");
         printOffset();
-        scenarioData.tiles = parseTiles(
-                scenarioData.hdr.mapWidth, scenarioData.hdr.mapHeight);
+        scenarioData.tiles = parseTiles(scenarioData.hdr.mapWidth, scenarioData.hdr.mapHeight);
 
         // Parse objects
         printSection("Parsing objects");
         printOffset();
         scenarioData.objects = parseObjects();
-        std::cout << "Found "
-                  << scenarioData.objects.size() << " object(s)\n";
+        std::cout << "Found " << scenarioData.objects.size() << " object(s)\n";
         if (scenarioData.objects.size() > 0) {
             print(scenarioData.objects[0]);
         }
@@ -348,8 +302,7 @@ namespace Rival {
         printSection("Parsing buildings");
         printOffset();
         scenarioData.buildings = parseBuildings();
-        std::cout << "Found "
-                  << scenarioData.buildings.size() << " building(s)\n";
+        std::cout << "Found " << scenarioData.buildings.size() << " building(s)\n";
         if (scenarioData.buildings.size() > 0) {
             print(scenarioData.buildings[0]);
         }
@@ -358,8 +311,7 @@ namespace Rival {
         printSection("Parsing units");
         printOffset();
         scenarioData.units = parseUnits();
-        std::cout << "Found "
-                  << scenarioData.units.size() << " unit(s)\n";
+        std::cout << "Found " << scenarioData.units.size() << " unit(s)\n";
         if (scenarioData.units.size() > 0) {
             print(scenarioData.units[0]);
         }
@@ -368,28 +320,25 @@ namespace Rival {
         printSection("Parsing chests");
         printOffset();
         scenarioData.chests = parseChests();
-        std::cout << "Found "
-                  << scenarioData.chests.size() << " chest(s)\n";
+        std::cout << "Found " << scenarioData.chests.size() << " chest(s)\n";
         if (scenarioData.chests.size() > 0) {
-            //print(scenarioData.chests[0]);
+            // print(scenarioData.chests[0]);
         }
 
         // Parse info points
         printSection("Parsing info points");
         printOffset();
         scenarioData.infoPoints = parseInfoPoints();
-        std::cout << "Found "
-                  << scenarioData.infoPoints.size() << " info point(s)\n";
+        std::cout << "Found " << scenarioData.infoPoints.size() << " info point(s)\n";
         if (scenarioData.infoPoints.size() > 0) {
-            //print(scenarioData.infoPoints[0]);
+            // print(scenarioData.infoPoints[0]);
         }
 
         // Parse traps
         printSection("Parsing traps");
         printOffset();
         scenarioData.traps = parseTraps();
-        std::cout << "Found "
-                  << scenarioData.traps.size() << " trap(s)\n";
+        std::cout << "Found " << scenarioData.traps.size() << " trap(s)\n";
         if (scenarioData.traps.size() > 0) {
             print(scenarioData.traps[0]);
         }
@@ -399,8 +348,7 @@ namespace Rival {
         printSection("Parsing goal locations");
         printOffset();
         scenarioData.goalLocations = parseGoalLocations();
-        std::cout << "Found "
-                  << scenarioData.goalLocations.size() << " goal location(s)\n";
+        std::cout << "Found " << scenarioData.goalLocations.size() << " goal location(s)\n";
         if (scenarioData.goalLocations.size() > 0) {
             print(scenarioData.goalLocations[0]);
         }
@@ -429,8 +377,7 @@ namespace Rival {
                 std::cout << "Reached end of file\n";
             } else {
                 std::cout << "Found unexpected bytes:\n";
-                size_t remainingBytesCapped =
-                        std::min(remainingBytes, static_cast<size_t>(256));
+                size_t remainingBytesCapped = std::min(remainingBytes, static_cast<size_t>(256));
                 printNext(remainingBytesCapped);
                 throw std::runtime_error("Did not reach end of file");
             }
@@ -491,8 +438,7 @@ namespace Rival {
         return i <= 47 || (i >= 67 && i <= 69);
     }
 
-    UpgradeProperties ScenarioReader::parseUpgradeProperties(
-            bool readAmount) {
+    UpgradeProperties ScenarioReader::parseUpgradeProperties(bool readAmount) {
 
         UpgradeProperties upgrade;
 
@@ -586,8 +532,7 @@ namespace Rival {
         return setting;
     }
 
-    std::vector<TilePlacement> ScenarioReader::parseTiles(
-            int width, int height) {
+    std::vector<TilePlacement> ScenarioReader::parseTiles(int width, int height) {
 
         unsigned int numTiles = width * height;
         std::vector<TilePlacement> tiles;
@@ -959,9 +904,7 @@ namespace Rival {
 
     std::uint16_t ScenarioReader::readRivalShort(size_t offset) const {
         // read 2 rival bytes, and combine them like a normal short
-        return std::uint16_t(
-                fixRivalByte(data[offset + 1]) << 8
-                | fixRivalByte(data[offset + 0]));
+        return std::uint16_t(fixRivalByte(data[offset + 1]) << 8 | fixRivalByte(data[offset + 0]));
     }
 
     bool ScenarioReader::readBool() {
@@ -983,9 +926,7 @@ namespace Rival {
 
     std::uint16_t ScenarioReader::readShort(size_t offset) const {
         // little endian
-        return std::uint16_t(
-                data[offset + 1] << 8
-                | data[offset + 0]);
+        return std::uint16_t(data[offset + 1] << 8 | data[offset + 0]);
     }
 
     std::uint32_t ScenarioReader::readInt() {
@@ -997,10 +938,7 @@ namespace Rival {
     std::uint32_t ScenarioReader::readInt(size_t offset) const {
         // little endian
         return std::uint32_t(
-                data[offset + 3] << 24
-                | data[offset + 2] << 16
-                | data[offset + 1] << 8
-                | data[offset + 0]);
+                data[offset + 3] << 24 | data[offset + 2] << 16 | data[offset + 1] << 8 | data[offset + 0]);
     }
 
     std::string ScenarioReader::readString(size_t length) {
@@ -1009,8 +947,7 @@ namespace Rival {
         return value;
     }
 
-    std::string ScenarioReader::readString(
-            size_t offset, size_t length) const {
+    std::string ScenarioReader::readString(size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
         for (size_t i = 0; i < length; ++i) {
@@ -1026,8 +963,7 @@ namespace Rival {
         return value;
     }
 
-    std::string ScenarioReader::readRivalString(
-            size_t offset, size_t length) const {
+    std::string ScenarioReader::readRivalString(size_t offset, size_t length) const {
 
         std::vector<char> chars(length);
         for (size_t i = 0; i < length; ++i) {
@@ -1056,9 +992,7 @@ namespace Rival {
             return it->second;
         }
 
-        std::cout << "Found unknown character: "
-                  << static_cast<int>(c)
-                  << "\n";
+        std::cout << "Found unknown character: " << static_cast<int>(c) << "\n";
 
         // Unknown character
         return '?';
@@ -1078,21 +1012,13 @@ namespace Rival {
 
     void ScenarioReader::printOffset() const {
         // Switch to hex, print the value, and switch back
-        std::cout
-                << "Offset: 0x"
-                << std::setw(4)
-                << std::setfill('0')
-                << std::hex
-                << pos
-                << '\n'
-                << std::dec;
+        std::cout << "Offset: 0x" << std::setw(4) << std::setfill('0') << std::hex << pos << '\n' << std::dec;
     }
 
     void ScenarioReader::printSection(std::string title) const {
-        std::cout
-                << "\n==================================================\n"
-                << title << '\n'
-                << "==================================================\n\n";
+        std::cout << "\n==================================================\n"
+                  << title << '\n'
+                  << "==================================================\n\n";
     }
 
     void ScenarioReader::printNext(const size_t n) const {
@@ -1116,185 +1042,165 @@ namespace Rival {
             }
         }
         // Switch back to decimal
-        std::cout << '\n'
-                  << std::dec;
+        std::cout << '\n' << std::dec;
     }
 
     void ScenarioReader::print(const ScenarioHeader& hdr) const {
-        std::cout
-                << "Map Name: " << hdr.mapName << '\n'
-                << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
+        std::cout << "Map Name: " << hdr.mapName << '\n'
+                  << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
     }
 
     void ScenarioReader::print(const PlayerProperties& props) const {
         if (props.hasStartLocation) {
-            std::cout
-                    << "Start Location: "
-                    << props.startLocX
-                    << ", "
-                    << props.startLocY
-                    << '\n';
+            std::cout << "Start Location: " << props.startLocX << ", " << props.startLocY << '\n';
         }
-        std::cout
-                << "Starting Gold:  " << props.startingGold << '\n'
-                << "Starting Wood:  " << props.startingWood << '\n'
-                << "Starting Food:  " << props.startingFood << '\n'
-                << "Race:           " << static_cast<int>(props.race) << '\n'
-                << "AI:             " << props.ai << '\n'
-                << "AI Type:        " << static_cast<int>(props.aiType) << '\n'
-                << "AI Performance: " << static_cast<int>(props.aiPerformance) << '\n'
-                << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
+        std::cout << "Starting Gold:  " << props.startingGold << '\n'
+                  << "Starting Wood:  " << props.startingWood << '\n'
+                  << "Starting Food:  " << props.startingFood << '\n'
+                  << "Race:           " << static_cast<int>(props.race) << '\n'
+                  << "AI:             " << props.ai << '\n'
+                  << "AI Type:        " << static_cast<int>(props.aiType) << '\n'
+                  << "AI Performance: " << static_cast<int>(props.aiPerformance) << '\n'
+                  << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
     }
 
     void ScenarioReader::print(const TroopDefaults& troop) const {
-        std::cout
-                << "Hitpoints: " << troop.hitpoints << '\n'
-                << "Magic:     " << troop.magic << '\n'
-                << "Armour:    " << static_cast<int>(troop.armour) << '\n'
-                << "Sight:     " << static_cast<int>(troop.sight) << '\n'
-                << "Range:     " << static_cast<int>(troop.range) << '\n';
+        std::cout << "Hitpoints: " << troop.hitpoints << '\n'
+                  << "Magic:     " << troop.magic << '\n'
+                  << "Armour:    " << static_cast<int>(troop.armour) << '\n'
+                  << "Sight:     " << static_cast<int>(troop.sight) << '\n'
+                  << "Range:     " << static_cast<int>(troop.range) << '\n';
     }
 
     void ScenarioReader::print(const UpgradeProperties& upgrade) const {
-        std::cout
-                << "Amount:    " << upgrade.amount << '\n'
-                << "Gold Cost: " << upgrade.goldCost << '\n'
-                << "Wood Cost: " << upgrade.woodCost << '\n'
-                << "Unknown:   " << upgrade.unknown << '\n';
+        std::cout << "Amount:    " << upgrade.amount << '\n'
+                  << "Gold Cost: " << upgrade.goldCost << '\n'
+                  << "Wood Cost: " << upgrade.woodCost << '\n'
+                  << "Unknown:   " << upgrade.unknown << '\n';
     }
 
     void ScenarioReader::print(const ProductionCost& cost) const {
-        std::cout
-                << "Gold Cost:         " << cost.goldCost << '\n'
-                << "Wood Cost:         " << cost.woodCost << '\n'
-                << "Construction Time: " << cost.constructionTime << '\n'
-                << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
+        std::cout << "Gold Cost:         " << cost.goldCost << '\n'
+                  << "Wood Cost:         " << cost.woodCost << '\n'
+                  << "Construction Time: " << cost.constructionTime << '\n'
+                  << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
     }
 
     void ScenarioReader::print(const WeaponDefaults& wpn) const {
-        std::cout
-                << "Move Spaces:  " << wpn.moveSpaces << '\n'
-                << "Move Time:    " << wpn.moveSpaces << '\n'
-                << "Damage:       " << wpn.damage << '\n'
-                << "Penetrate:    " << wpn.penetrate << '\n'
-                << "Accuracy:     " << wpn.accuracy << '\n'
-                << "Effect Range: " << static_cast<int>(wpn.effectRange) << '\n'
-                << "Attack Range: " << static_cast<int>(wpn.attackRange) << '\n'
-                << "Mana Cost:    " << wpn.manaCost << '\n'
-                << "Reload Time:  " << wpn.reloadTime << '\n'
-                << "Unknown:      " << wpn.unknown << '\n';
+        std::cout << "Move Spaces:  " << wpn.moveSpaces << '\n'
+                  << "Move Time:    " << wpn.moveSpaces << '\n'
+                  << "Damage:       " << wpn.damage << '\n'
+                  << "Penetrate:    " << wpn.penetrate << '\n'
+                  << "Accuracy:     " << wpn.accuracy << '\n'
+                  << "Effect Range: " << static_cast<int>(wpn.effectRange) << '\n'
+                  << "Attack Range: " << static_cast<int>(wpn.attackRange) << '\n'
+                  << "Mana Cost:    " << wpn.manaCost << '\n'
+                  << "Reload Time:  " << wpn.reloadTime << '\n'
+                  << "Unknown:      " << wpn.unknown << '\n';
     }
 
     void ScenarioReader::print(const AvailableBuildings& bldg) const {
-        std::cout
-                << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
-                << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
-                << "Ranged Troop Building:      " << static_cast<int>(bldg.rangedTroopBuilding) << '\n'
-                << "Siege Troop Building:       " << static_cast<int>(bldg.siegeTroopBuilding) << '\n'
-                << "Melee Troop Building:       " << static_cast<int>(bldg.meleeTroopBuilding) << '\n'
-                << "Flying Troop Building:      " << static_cast<int>(bldg.flyingTroopBuilding) << '\n'
-                << "Engineer Troop Building:    " << static_cast<int>(bldg.engineerTroopBuilding) << '\n'
-                << "Healer Troop Building:      " << static_cast<int>(bldg.healerTroopBuilding) << '\n'
-                << "Spellcaster Troop Building: " << static_cast<int>(bldg.spellcasterTroopBuilding) << '\n'
-                << "Shipyard:                   " << static_cast<int>(bldg.shipyard) << '\n'
-                << "Watch Tower:                " << static_cast<int>(bldg.watchTower) << '\n'
-                << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
+        std::cout << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
+                  << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
+                  << "Ranged Troop Building:      " << static_cast<int>(bldg.rangedTroopBuilding) << '\n'
+                  << "Siege Troop Building:       " << static_cast<int>(bldg.siegeTroopBuilding) << '\n'
+                  << "Melee Troop Building:       " << static_cast<int>(bldg.meleeTroopBuilding) << '\n'
+                  << "Flying Troop Building:      " << static_cast<int>(bldg.flyingTroopBuilding) << '\n'
+                  << "Engineer Troop Building:    " << static_cast<int>(bldg.engineerTroopBuilding) << '\n'
+                  << "Healer Troop Building:      " << static_cast<int>(bldg.healerTroopBuilding) << '\n'
+                  << "Spellcaster Troop Building: " << static_cast<int>(bldg.spellcasterTroopBuilding) << '\n'
+                  << "Shipyard:                   " << static_cast<int>(bldg.shipyard) << '\n'
+                  << "Watch Tower:                " << static_cast<int>(bldg.watchTower) << '\n'
+                  << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
     }
 
     void ScenarioReader::print(const HireTroopsRestrictions& restrictions) const {
-        std::cout
-                << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
-                << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
-                << "Light Melee / Spellcaster: " << static_cast<int>(restrictions.lightMeleeOrSpellcasterTroop) << '\n'
-                << "Heavy Melee Troop:         " << static_cast<int>(restrictions.heavyMeleeTroop) << '\n'
-                << "Engineer:                  " << static_cast<int>(restrictions.engineer) << '\n'
-                << "Stealth Troop:             " << static_cast<int>(restrictions.stealthTroop) << '\n'
-                << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
-                << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
-                << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
-                << "Healer:                    " << static_cast<int>(restrictions.healer) << '\n'
-                << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
-                << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
-                << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
-                << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
-                << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
+        std::cout << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
+                  << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
+                  << "Light Melee / Spellcaster: " << static_cast<int>(restrictions.lightMeleeOrSpellcasterTroop)
+                  << '\n'
+                  << "Heavy Melee Troop:         " << static_cast<int>(restrictions.heavyMeleeTroop) << '\n'
+                  << "Engineer:                  " << static_cast<int>(restrictions.engineer) << '\n'
+                  << "Stealth Troop:             " << static_cast<int>(restrictions.stealthTroop) << '\n'
+                  << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
+                  << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
+                  << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
+                  << "Healer:                    " << static_cast<int>(restrictions.healer) << '\n'
+                  << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
+                  << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
+                  << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
+                  << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
+                  << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
     }
 
     void ScenarioReader::print(const AiSetting& settings) const {
-        std::cout
-                << "Count: " << static_cast<int>(settings.amount) << '\n'
-                << "Flag:  " << static_cast<int>(settings.flag) << '\n';
+        std::cout << "Count: " << static_cast<int>(settings.amount) << '\n'
+                  << "Flag:  " << static_cast<int>(settings.flag) << '\n';
     }
 
     void ScenarioReader::print(const ObjectPlacement& obj) const {
-        std::cout
-                << "Type:    " << static_cast<int>(obj.type) << '\n'
-                << "Variant: " << static_cast<int>(obj.variant) << '\n'
-                << "X:       " << obj.x << '\n'
-                << "Y:       " << obj.y << '\n';
+        std::cout << "Type:    " << static_cast<int>(obj.type) << '\n'
+                  << "Variant: " << static_cast<int>(obj.variant) << '\n'
+                  << "X:       " << obj.x << '\n'
+                  << "Y:       " << obj.y << '\n';
     }
 
     void ScenarioReader::print(const BuildingPlacement& bldg) const {
-        std::cout
-                << "Type:           " << static_cast<int>(bldg.type) << '\n'
-                << "Player:         " << static_cast<int>(bldg.player) << '\n'
-                << "X:              " << bldg.x << '\n'
-                << "Y:              " << bldg.y << '\n'
-                << "Hitpoints:      " << bldg.hitpoints << '\n'
-                << "Armour:         " << bldg.armour << '\n'
-                << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
-                << "Range:          " << static_cast<int>(bldg.range) << '\n'
-                << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
-                << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
-                << "Special Colour: " << static_cast<int>(bldg.specialColor) << '\n'
-                << "Prisoner:       " << bldg.prisoner << '\n'
-                << "Name:           " << bldg.name << '\n';
+        std::cout << "Type:           " << static_cast<int>(bldg.type) << '\n'
+                  << "Player:         " << static_cast<int>(bldg.player) << '\n'
+                  << "X:              " << bldg.x << '\n'
+                  << "Y:              " << bldg.y << '\n'
+                  << "Hitpoints:      " << bldg.hitpoints << '\n'
+                  << "Armour:         " << bldg.armour << '\n'
+                  << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
+                  << "Range:          " << static_cast<int>(bldg.range) << '\n'
+                  << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
+                  << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
+                  << "Special Colour: " << static_cast<int>(bldg.specialColor) << '\n'
+                  << "Prisoner:       " << bldg.prisoner << '\n'
+                  << "Name:           " << bldg.name << '\n';
     }
 
     void ScenarioReader::print(const UnitPlacement& unit) const {
-        std::cout
-                << "Type:           " << static_cast<int>(unit.type) << '\n'
-                << "Facing:         " << static_cast<int>(unit.facing) << '\n'
-                << "X:              " << unit.x << '\n'
-                << "Y:              " << unit.y << '\n'
-                << "Player:         " << static_cast<int>(unit.player) << '\n'
-                << "Hitpoints:      " << unit.hitpoints << '\n'
-                << "Magic:          " << static_cast<int>(unit.magic) << '\n'
-                << "Armour:         " << unit.armour << '\n'
-                << "Type2:          " << static_cast<int>(unit.type2) << '\n'
-                << "Sight:          " << static_cast<int>(unit.sight) << '\n'
-                << "Range:          " << static_cast<int>(unit.range) << '\n'
-                << "Special Colour: " << static_cast<int>(unit.specialColor) << '\n'
-                << "Prisoner:       " << unit.prisoner << '\n'
-                << "Gold Cost:      " << unit.goldCost << '\n'
-                << "Wood Cost:      " << unit.woodCost << '\n'
-                << "Name:           " << unit.name << '\n'
-                << "Upgrade 1:      " << unit.upgrade1Enabled << '\n'
-                << "Upgrade 2:      " << unit.upgrade2Enabled << '\n'
-                << "Upgrade 3:      " << unit.upgrade3Enabled << '\n'
-                << "Upgrade 4:      " << unit.upgrade4Enabled << '\n'
-                << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
+        std::cout << "Type:           " << static_cast<int>(unit.type) << '\n'
+                  << "Facing:         " << static_cast<int>(unit.facing) << '\n'
+                  << "X:              " << unit.x << '\n'
+                  << "Y:              " << unit.y << '\n'
+                  << "Player:         " << static_cast<int>(unit.player) << '\n'
+                  << "Hitpoints:      " << unit.hitpoints << '\n'
+                  << "Magic:          " << static_cast<int>(unit.magic) << '\n'
+                  << "Armour:         " << unit.armour << '\n'
+                  << "Type2:          " << static_cast<int>(unit.type2) << '\n'
+                  << "Sight:          " << static_cast<int>(unit.sight) << '\n'
+                  << "Range:          " << static_cast<int>(unit.range) << '\n'
+                  << "Special Colour: " << static_cast<int>(unit.specialColor) << '\n'
+                  << "Prisoner:       " << unit.prisoner << '\n'
+                  << "Gold Cost:      " << unit.goldCost << '\n'
+                  << "Wood Cost:      " << unit.woodCost << '\n'
+                  << "Name:           " << unit.name << '\n'
+                  << "Upgrade 1:      " << unit.upgrade1Enabled << '\n'
+                  << "Upgrade 2:      " << unit.upgrade2Enabled << '\n'
+                  << "Upgrade 3:      " << unit.upgrade3Enabled << '\n'
+                  << "Upgrade 4:      " << unit.upgrade4Enabled << '\n'
+                  << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
     }
 
     void ScenarioReader::print(const TrapPlacement& trap) const {
-        std::cout
-                << "X:              " << static_cast<int>(trap.x) << '\n'
-                << "Y:              " << static_cast<int>(trap.y) << '\n'
-                << "Player:         " << static_cast<int>(trap.player) << '\n';
+        std::cout << "X:              " << static_cast<int>(trap.x) << '\n'
+                  << "Y:              " << static_cast<int>(trap.y) << '\n'
+                  << "Player:         " << static_cast<int>(trap.player) << '\n';
     }
 
     void ScenarioReader::print(const GoalLocation& goalLoc) const {
-        std::cout
-                << "Type: " << static_cast<int>(goalLoc.type) << '\n'
-                << "X:    " << static_cast<int>(goalLoc.x) << '\n'
-                << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
+        std::cout << "Type: " << static_cast<int>(goalLoc.type) << '\n'
+                  << "X:    " << static_cast<int>(goalLoc.x) << '\n'
+                  << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
     }
 
     void ScenarioReader::print(const CampaignText& text) const {
-        std::cout
-                << "Title:      " << text.title << '\n'
-                << "Objectives: " << text.objectives << '\n'
-                << "Narration:  " << text.narration << '\n';
+        std::cout << "Title:      " << text.title << '\n'
+                  << "Objectives: " << text.objectives << '\n'
+                  << "Narration:  " << text.narration << '\n';
     }
 
 }  // namespace Rival

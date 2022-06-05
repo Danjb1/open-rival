@@ -8,32 +8,31 @@
 #include "RenderUtils.h"
 
 namespace Rival {
-    
+
     const std::string Resources::dataDir = "res\\data\\";
     const std::string Resources::mapsDir = "res\\maps\\";
     const std::string Resources::soundDir = "res\\sound\\";
     const std::string Resources::txDir = "res\\textures\\";
 
-    const std::vector<std::string> Resources::defaultFontDirs =
-            PathUtils::getDefaultFontDirs();
+    const std::vector<std::string> Resources::defaultFontDirs = PathUtils::getDefaultFontDirs();
     const std::string Resources::defaultFontSmall = "serife.fon";
     const std::string Resources::defaultFontRegular = "Procopius Regular.ttf";
 
     Resources::Resources(json& cfg)
-        : cfg(cfg),
-          freeTypeLib(initFreeType()),
-          fontSmall(initFontSmall()),
-          fontRegular(initFontRegular()),
-          textures(loadTextures()),
-          textureAtlases(loadTextureAtlases()),
-          paletteTexture(initPaletteTexture()),
-          unitSpritesheets(initUnitSpritesheets()),
-          buildingSpritesheets(initBuildingSpritesheets()),
-          tileSpritesheets(initTileSpritesheets()),
-          objectSpritesheets(initObjectSpritesheets()),
-          mapBorderSpritesheet(initMapBorderSpritesheet()),
-          sounds(initSounds()),
-          midis(initMidis()) {}
+        : cfg(cfg)
+        , freeTypeLib(initFreeType())
+        , fontSmall(initFontSmall())
+        , fontRegular(initFontRegular())
+        , textures(loadTextures())
+        , textureAtlases(loadTextureAtlases())
+        , paletteTexture(initPaletteTexture())
+        , unitSpritesheets(initUnitSpritesheets())
+        , buildingSpritesheets(initBuildingSpritesheets())
+        , tileSpritesheets(initTileSpritesheets())
+        , objectSpritesheets(initObjectSpritesheets())
+        , mapBorderSpritesheet(initMapBorderSpritesheet())
+        , sounds(initSounds())
+        , midis(initMidis()) {}
 
     Resources::~Resources() {
         // Clean up FreeType library
@@ -71,19 +70,15 @@ namespace Rival {
     }
 
     Font Resources::initFontSmall() {
-        std::vector<std::string> fontDirs =
-                ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
-        std::string fontName =
-                ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
+        std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
+        std::string fontName = ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
         int fontSize = ConfigUtils::get(cfg, "fontSmallSize", 32);
         return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
 
     Font Resources::initFontRegular() {
-        std::vector<std::string> fontDirs =
-                ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
-        std::string fontName =
-                ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
+        std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
+        std::string fontName = ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
         int fontSize = ConfigUtils::get(cfg, "fontRegularSize", 16);
         return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
@@ -92,83 +87,82 @@ namespace Rival {
         std::vector<Texture> texList;
         texList.reserve(numTextures);
 
-        std::vector<std::string> textureNames = {
-            // Units - Human
-            "unit_human_ballista.tga",
-            "unit_human_battleship.tga",
-            "unit_human_bowman.tga",
-            "unit_human_chariot_of_war.tga",
-            "unit_human_fire_master.tga",
-            "unit_human_knight.tga",
-            "unit_human_light_cavalry.tga",
-            "unit_human_peasant.tga",
-            "unit_human_pegas_rider.tga",
-            "unit_human_priest.tga",
-            "unit_human_sea_barge.tga",
-            "unit_human_thief.tga",
-            "unit_human_wizard.tga",
-            "unit_human_zeppelin.tga",
+        std::vector<std::string> textureNames = { // Units - Human
+                                                  "unit_human_ballista.tga",
+                                                  "unit_human_battleship.tga",
+                                                  "unit_human_bowman.tga",
+                                                  "unit_human_chariot_of_war.tga",
+                                                  "unit_human_fire_master.tga",
+                                                  "unit_human_knight.tga",
+                                                  "unit_human_light_cavalry.tga",
+                                                  "unit_human_peasant.tga",
+                                                  "unit_human_pegas_rider.tga",
+                                                  "unit_human_priest.tga",
+                                                  "unit_human_sea_barge.tga",
+                                                  "unit_human_thief.tga",
+                                                  "unit_human_wizard.tga",
+                                                  "unit_human_zeppelin.tga",
 
-            // Units - Greenskin
-            "unit_greenskin_balloon.tga",
-            "unit_greenskin_catapult.tga",
-            "unit_greenskin_gnome_boomer.tga",
-            "unit_greenskin_horde_rider.tga",
-            "unit_greenskin_landing_craft.tga",
-            "unit_greenskin_necromancer.tga",
-            "unit_greenskin_priest_of_doom.tga",
-            "unit_greenskin_rock_thrower.tga",
-            "unit_greenskin_rogue.tga",
-            "unit_greenskin_serf.tga",
-            "unit_greenskin_storm_trooper.tga",
-            "unit_greenskin_troll_galley.tga",
-            "unit_greenskin_warbat.tga",
-            "unit_greenskin_warlord.tga",
+                                                  // Units - Greenskin
+                                                  "unit_greenskin_balloon.tga",
+                                                  "unit_greenskin_catapult.tga",
+                                                  "unit_greenskin_gnome_boomer.tga",
+                                                  "unit_greenskin_horde_rider.tga",
+                                                  "unit_greenskin_landing_craft.tga",
+                                                  "unit_greenskin_necromancer.tga",
+                                                  "unit_greenskin_priest_of_doom.tga",
+                                                  "unit_greenskin_rock_thrower.tga",
+                                                  "unit_greenskin_rogue.tga",
+                                                  "unit_greenskin_serf.tga",
+                                                  "unit_greenskin_storm_trooper.tga",
+                                                  "unit_greenskin_troll_galley.tga",
+                                                  "unit_greenskin_warbat.tga",
+                                                  "unit_greenskin_warlord.tga",
 
-            // Units - Elf
-            "unit_elf_archer.tga",
-            "unit_elf_arquebusier.tga",
-            "unit_elf_bark.tga",
-            "unit_elf_bombard.tga",
-            "unit_elf_centaur.tga",
-            "unit_elf_druid.tga",
-            "unit_elf_dwarf_miner.tga",
-            "unit_elf_enchanter.tga",
-            "unit_elf_mage.tga",
-            "unit_elf_magic_chopper.tga",
-            "unit_elf_scout.tga",
-            "unit_elf_sky_rider.tga",
-            "unit_elf_warship.tga",
-            "unit_elf_yeoman.tga",
+                                                  // Units - Elf
+                                                  "unit_elf_archer.tga",
+                                                  "unit_elf_arquebusier.tga",
+                                                  "unit_elf_bark.tga",
+                                                  "unit_elf_bombard.tga",
+                                                  "unit_elf_centaur.tga",
+                                                  "unit_elf_druid.tga",
+                                                  "unit_elf_dwarf_miner.tga",
+                                                  "unit_elf_enchanter.tga",
+                                                  "unit_elf_mage.tga",
+                                                  "unit_elf_magic_chopper.tga",
+                                                  "unit_elf_scout.tga",
+                                                  "unit_elf_sky_rider.tga",
+                                                  "unit_elf_warship.tga",
+                                                  "unit_elf_yeoman.tga",
 
-            // Units - Monsters
-            "unit_monster_devil.tga",
-            "unit_monster_dragon.tga",
-            "unit_monster_golem.tga",
-            "unit_monster_gryphon.tga",
-            "unit_monster_hydra.tga",
-            "unit_monster_sea_monster.tga",
-            "unit_monster_skeleton.tga",
-            "unit_monster_snake.tga",
+                                                  // Units - Monsters
+                                                  "unit_monster_devil.tga",
+                                                  "unit_monster_dragon.tga",
+                                                  "unit_monster_golem.tga",
+                                                  "unit_monster_gryphon.tga",
+                                                  "unit_monster_hydra.tga",
+                                                  "unit_monster_sea_monster.tga",
+                                                  "unit_monster_skeleton.tga",
+                                                  "unit_monster_snake.tga",
 
-            // Tiles
-            "tiles_meadow.tga",
-            "tiles_wilderness.tga",
-            "tiles_fog.tga",
-            "tiles_map_border.tga",
+                                                  // Tiles
+                                                  "tiles_meadow.tga",
+                                                  "tiles_wilderness.tga",
+                                                  "tiles_fog.tga",
+                                                  "tiles_map_border.tga",
 
-            // Objects
-            "objects_common.tga",
-            "objects_meadow.tga",
-            "objects_wilderness.tga",
+                                                  // Objects
+                                                  "objects_common.tga",
+                                                  "objects_meadow.tga",
+                                                  "objects_wilderness.tga",
 
-            // Cursors
-            "cursor_select.tga",
+                                                  // Cursors
+                                                  "cursor_select.tga",
 
-            // Buildings
-            "buildings_elf.tga",
-            "buildings_greenskin.tga",
-            "buildings_human.tga"
+                                                  // Buildings
+                                                  "buildings_elf.tga",
+                                                  "buildings_greenskin.tga",
+                                                  "buildings_human.tga"
         };
 
         for (auto const& textureName : textureNames) {
@@ -182,13 +176,10 @@ namespace Rival {
         std::vector<TextureAtlas> texAtlasList;
         texAtlasList.reserve(numTextureAtlases);
 
-        std::vector<std::string> resourceNames = {
-            "game_interface"
-        };
+        std::vector<std::string> resourceNames = { "game_interface" };
 
         for (auto const& resourceName : resourceNames) {
-            texAtlasList.push_back(TextureAtlas::loadTextureAtlas(
-                    Resources::txDir + resourceName));
+            texAtlasList.push_back(TextureAtlas::loadTextureAtlas(Resources::txDir + resourceName));
         }
 
         return texAtlasList;
@@ -204,12 +195,11 @@ namespace Rival {
 
         auto createSpritesheets = [&](int first, int last) {
             for (auto it = first; it <= last; ++it) {
-                spritesheets.emplace(std::piecewise_construct,
+                spritesheets.emplace(
+                        std::piecewise_construct,
                         std::forward_as_tuple(static_cast<Building::Type>(it)),
                         std::forward_as_tuple(
-                                textures.at(nextIndex),
-                                RenderUtils::entityWidthPx,
-                                RenderUtils::entityHeightPx));
+                                textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx));
             }
         };
 
@@ -228,12 +218,11 @@ namespace Rival {
         int nextIndex = txIndexUnits;
 
         for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it) {
-            spritesheets.emplace(std::piecewise_construct,
+            spritesheets.emplace(
+                    std::piecewise_construct,
                     std::forward_as_tuple(static_cast<Unit::Type>(it)),
                     std::forward_as_tuple(
-                            textures.at(nextIndex),
-                            RenderUtils::entityWidthPx,
-                            RenderUtils::entityHeightPx));
+                            textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx));
             nextIndex++;
         }
 
@@ -247,10 +236,7 @@ namespace Rival {
         // 1 = Wilderness
         // 2 = Fog
         for (int i = txIndexTiles; i < txIndexTiles + 3; i++) {
-            spritesheets.emplace_back(
-                    textures.at(i),
-                    RenderUtils::tileSpriteWidthPx,
-                    RenderUtils::tileSpriteHeightPx);
+            spritesheets.emplace_back(textures.at(i), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
         }
 
         return spritesheets;
@@ -263,10 +249,7 @@ namespace Rival {
         // 1 = Meadow
         // 2 = Wilderness
         for (int i = txIndexObjects; i < txIndexObjects + 3; i++) {
-            spritesheets.emplace_back(
-                    textures.at(i),
-                    RenderUtils::entityWidthPx,
-                    RenderUtils::entityHeightPx);
+            spritesheets.emplace_back(textures.at(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx);
         }
 
         return spritesheets;
@@ -274,9 +257,7 @@ namespace Rival {
 
     Spritesheet Resources::initMapBorderSpritesheet() {
         return Spritesheet(
-                textures.at(txIndexTiles + 3),
-                RenderUtils::tileSpriteWidthPx,
-                RenderUtils::tileSpriteHeightPx);
+                textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
     }
 
     std::vector<WaveFile> Resources::initSounds() {
@@ -285,9 +266,7 @@ namespace Rival {
 
         for (int i = 0; i < numSounds; ++i) {
             std::string fileNum = std::to_string(i);
-            std::string filename = std::string(3 - fileNum.length(), '0')
-                    + fileNum
-                    + ".wav";
+            std::string filename = std::string(3 - fileNum.length(), '0') + fileNum + ".wav";
             soundsRead.emplace_back(Resources::soundDir + filename);
         }
 
@@ -301,10 +280,8 @@ namespace Rival {
             midi_container result;
 
             // Read MIDI file
-            std::vector<std::uint8_t> const& p_file = FileUtils::readBinaryFile(
-                    soundDir
-                    + std::to_string(midiStartIndex + i)
-                    + ".mid");
+            std::vector<std::uint8_t> const& p_file =
+                    FileUtils::readBinaryFile(soundDir + std::to_string(midiStartIndex + i) + ".mid");
 
             // Parse MIDI file
             if (!MidsDecoder::process_mids(p_file, result)) {
@@ -326,18 +303,14 @@ namespace Rival {
     }
 
     const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {
-        return wilderness
-                ? tileSpritesheets.at(1)
-                : tileSpritesheets.at(0);
+        return wilderness ? tileSpritesheets.at(1) : tileSpritesheets.at(0);
     }
 
-    const Spritesheet& Resources::getUnitSpritesheet(
-            Unit::Type unitType) const {
+    const Spritesheet& Resources::getUnitSpritesheet(Unit::Type unitType) const {
         return unitSpritesheets.at(unitType);
     }
 
-    const Spritesheet& Resources::getBuildingSpritesheet(
-            Building::Type buildingType) const {
+    const Spritesheet& Resources::getBuildingSpritesheet(Building::Type buildingType) const {
         return buildingSpritesheets.at(buildingType);
     }
 
@@ -346,9 +319,7 @@ namespace Rival {
     }
 
     const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const {
-        return wilderness
-                ? objectSpritesheets.at(2)
-                : objectSpritesheets.at(1);
+        return wilderness ? objectSpritesheets.at(2) : objectSpritesheets.at(1);
     }
 
     const Spritesheet& Resources::getMapBorderSpritesheet() const {

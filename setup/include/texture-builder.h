@@ -11,8 +11,7 @@
 
 namespace fs = std::filesystem;
 
-namespace Rival {
-namespace Setup {
+namespace Rival { namespace Setup {
 
     ///////////////////////////////////////////////////////////////////////////////
     // NamedImage class
@@ -24,9 +23,7 @@ namespace Setup {
         Image image;
 
         // Wraps an Image by moving it into this NamedImage
-        NamedImage(const std::string name, Image&& image)
-            : name(name),
-              image(std::move(image)) {}
+        NamedImage(const std::string name, Image&& image) : name(name), image(std::move(image)) {}
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -64,32 +61,20 @@ namespace Setup {
     private:
         Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
 
-        int findRectBiggerThan(
-                const std::vector<Rect>& rects,
-                const int minWidth,
-                const int minHeight);
+        int findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight);
 
-        int expandTextureToFitRect(
-                const int reqWidth,
-                const int reqHeight);
+        int expandTextureToFitRect(const int reqWidth, const int reqHeight);
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // End of classes
     ///////////////////////////////////////////////////////////////////////////////
 
-    void buildTextures(
-            std::string definitionsDir,
-            std::string imageDir,
-            std::string outputDir,
-            bool atlasMode);
+    void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode);
 
     void readPalette(Palette::Palette& palette, const std::string filename);
 
-    std::vector<NamedImage> readImagesFromDefinitionFile(
-            const std::string& imageDir,
-            fs::path path,
-            bool atlasMode);
+    std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode);
 
     void createTextureAtlas(
             const std::string& imageDir,

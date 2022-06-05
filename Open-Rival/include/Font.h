@@ -76,7 +76,9 @@ namespace Rival {
         /**
          * Gets the Texture that backs this Font.
          */
-        const Texture& getTexture() const { return texture; }
+        const Texture& getTexture() const {
+            return texture;
+        }
 
         /**
          * Gets the data pertaining to the given character.
@@ -86,7 +88,9 @@ namespace Rival {
         /**
          * Gets the data pertaining to the given character.
          */
-        const int getDefaultSize() const { return defaultSize; }
+        const int getDefaultSize() const {
+            return defaultSize;
+        }
 
         /**
          * Loads a font and produces a Font object backed by a texture.
@@ -99,11 +103,7 @@ namespace Rival {
          *
          * @see https://learnopengl.com/In-Practice/Text-Rendering
          */
-        static Font loadFont(
-                FT_Library& ft,
-                std::vector<std::string> fontDirs,
-                std::string fontName,
-                int defaultSize);
+        static Font loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
 
     private:
         /**
@@ -121,15 +121,11 @@ namespace Rival {
          */
         int defaultSize;
 
-        static Font loadFont(
-                FT_Library& ft,
-                std::string filename,
-                int defaultSize);
+        static Font loadFont(FT_Library& ft, std::string filename, int defaultSize);
 
         static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
         static inline int makePrintable(unsigned char c);
-        static CharData makeChar(FT_GlyphSlot& glyph, int x, int imgWidth,
-                int imgHeight);
+        static CharData makeChar(FT_GlyphSlot& glyph, int x, int imgWidth, int imgHeight);
         static void copyCharImage(FT_GlyphSlot& glyph, Image& target, int x);
         static std::vector<std::uint8_t> bitmapToVector(FT_Bitmap& bmp);
         static std::vector<std::uint8_t> monoBitmapToVector(FT_Bitmap& bmp);

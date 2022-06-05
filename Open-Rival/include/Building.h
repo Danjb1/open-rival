@@ -3,10 +3,10 @@
 
 #include <cstdint>
 
-namespace Rival {
-namespace Building {
+namespace Rival { namespace Building {
 
-    enum class Type : std::uint8_t {
+    enum class Type : std::uint8_t
+    {
 
         // Elf
         ElvenKeep,

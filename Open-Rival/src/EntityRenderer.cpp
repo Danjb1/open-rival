@@ -14,13 +14,10 @@
 
 namespace Rival {
 
-    EntityRenderer::EntityRenderer(const Texture& paletteTexture)
-        : paletteTexture(paletteTexture) {}
+    EntityRenderer::EntityRenderer(const Texture& paletteTexture) : paletteTexture(paletteTexture) {}
 
-    void EntityRenderer::render(
-            const Camera& camera,
-            const std::vector<std::shared_ptr<Entity>> entities,
-            int delta) const {
+    void
+    EntityRenderer::render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const {
         for (auto const& e : entities) {
             if (isEntityVisible(*e, camera)) {
                 renderEntity(*e, delta);
@@ -28,9 +25,7 @@ namespace Rival {
         }
     }
 
-    bool EntityRenderer::isEntityVisible(
-            const Entity& entity,
-            const Camera& camera) const {
+    bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const {
 
         // Find the centre of this Entity's tile, in Camera units
         const MapNode& pos = entity.getPos();
@@ -49,20 +44,17 @@ namespace Rival {
         float y2 = y + height / 2.0f;
 
         // Check if any corner of this area is visible
-        return camera.contains(x1, y1)
-                || camera.contains(x2, y1)
-                || camera.contains(x2, y2)
-                || camera.contains(x1, y2);
+        return camera.contains(x1, y1) || camera.contains(x2, y1) || camera.contains(x2, y2) || camera.contains(x1, y2);
     }
 
     void EntityRenderer::renderEntity(Entity& entity, int delta) const {
 
         // Get this Entity's SpriteComponent
-        SpriteComponent* spriteComponent =
-                entity.getComponent<SpriteComponent>(SpriteComponent::key);
+        std::weak_ptr<SpriteComponent> weakSpriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
         // Entities without a SpriteComponent cannot be rendered
-        if (spriteComponent == nullptr) {
+        auto spriteComponent = weakSpriteComponent.lock();
+        if (!spriteComponent) {
             return;
         }
 
@@ -82,23 +74,16 @@ namespace Rival {
         }
 
         // Render
-        glDrawElements(
-                renderable.getDrawMode(),
-                renderable.getIndicesPerSprite(),
-                GL_UNSIGNED_INT,
-                nullptr);
+        glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
     }
 
-    bool EntityRenderer::needsUpdate(
-            const Entity& entity,
-            const SpriteComponent* spriteComponent) const {
+    bool
+    EntityRenderer::needsUpdate(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent) const {
         return entity.moved || spriteComponent->dirty;
     }
 
     void EntityRenderer::sendDataToGpu(
-            const Entity& entity,
-            const SpriteComponent* spriteComponent,
-            int delta) const {
+            const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent, int delta) const {
 
         // Determine the frame of the texture to be rendered
         int txIndex = spriteComponent->getTxIndex();
@@ -110,8 +95,7 @@ namespace Rival {
         x1 += static_cast<float>(RenderUtils::entityDrawOffsetX);
         y1 += static_cast<float>(RenderUtils::entityDrawOffsetY);
 
-        std::array<float, numLerpDimensions> lerpOffset =
-                getLerpOffset(entity, delta);
+        std::array<float, numLerpDimensions> lerpOffset = getLerpOffset(entity, delta);
         x1 += lerpOffset[lerpIdxX];
         y1 += lerpOffset[lerpIdxY];
 
@@ -121,37 +105,21 @@ namespace Rival {
         float y2 = y1 + height;
 
         float z = RenderUtils::getEntityZ(pos.x, pos.y);
-        std::vector<GLfloat> vertexData = {
-            x1, y1, z,
-            x2, y1, z,
-            x2, y2, z,
-            x1, y2, z
-        };
+        std::vector<GLfloat> vertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
 
         // Determine texture co-ordinates
         const SpriteRenderable& renderable = spriteComponent->getRenderable();
-        std::vector<GLfloat> texCoords =
-                renderable.spritesheet.getTexCoords(txIndex);
+        std::vector<GLfloat> texCoords = renderable.spritesheet.getTexCoords(txIndex);
 
         // Upload position data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-        int positionBufferSize =
-                vertexData.size() * sizeof(GLfloat);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                positionBufferSize,
-                vertexData.data());
+        int positionBufferSize = vertexData.size() * sizeof(GLfloat);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, vertexData.data());
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-        int texCoordBufferSize =
-                texCoords.size() * sizeof(GLfloat);
-        glBufferSubData(
-                GL_ARRAY_BUFFER,
-                0,
-                texCoordBufferSize,
-                texCoords.data());
+        int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
         // Clear the dirty flag now that the GPU is up to date
         spriteComponent->dirty = false;
@@ -167,14 +135,15 @@ namespace Rival {
      * Due to the way tiles overlap, diagonal moves only actually span half a
      * tile, in terms of pixels.
      */
-    std::array<float, EntityRenderer::numLerpDimensions> EntityRenderer::getLerpOffset(
-            const Entity& entity, int delta) const {
+    std::array<float, EntityRenderer::numLerpDimensions>
+    EntityRenderer::getLerpOffset(const Entity& entity, int delta) const {
         std::array<float, numLerpDimensions> offset = { 0, 0 };
 
         // See if the Entity can move
         // TODO: This needs to work for flying units too
-        const WalkerComponent* walkerComponent =
+        std::weak_ptr<const WalkerComponent> weakWalkerComponent =
                 entity.getComponent<WalkerComponent>(WalkerComponent::key);
+        auto walkerComponent = weakWalkerComponent.lock();
         if (!walkerComponent) {
             return offset;
         }
@@ -199,8 +168,7 @@ namespace Rival {
 
         // Determine the overall "progress" through the movement (0-1)
         int timeElapsed = movement.timeElapsed + delta;
-        float progress = std::min(
-                static_cast<float>(timeElapsed) / movement.timeRequired, 1.f);
+        float progress = std::min(static_cast<float>(timeElapsed) / movement.timeRequired, 1.f);
 
         // Determine x-offset
         if (dir == Facing::East) {

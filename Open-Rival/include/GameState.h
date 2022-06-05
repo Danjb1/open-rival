@@ -33,7 +33,9 @@ namespace Rival {
         void update() override;
         // End State override
 
-        Scenario& getScenario() { return *scenario; }
+        Scenario& getScenario() {
+            return *scenario;
+        }
 
     private:
         /**
