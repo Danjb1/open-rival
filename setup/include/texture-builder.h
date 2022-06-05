@@ -17,7 +17,8 @@ namespace Rival { namespace Setup {
     // NamedImage class
     ///////////////////////////////////////////////////////////////////////////////
 
-    class NamedImage {
+    class NamedImage
+    {
     public:
         std::string name;
         Image image;
@@ -30,7 +31,8 @@ namespace Rival { namespace Setup {
     // Rect class
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Rect {
+    class Rect
+    {
 
     public:
         int x;
@@ -45,7 +47,8 @@ namespace Rival { namespace Setup {
     // TextureAtlasBuilder class
     ///////////////////////////////////////////////////////////////////////////////
 
-    class TextureAtlasBuilder {
+    class TextureAtlasBuilder
+    {
 
     public:
         std::map<std::string, const NamedImage*> imagesByKey;

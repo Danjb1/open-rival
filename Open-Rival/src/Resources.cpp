@@ -32,14 +32,18 @@ namespace Rival {
         , objectSpritesheets(initObjectSpritesheets())
         , mapBorderSpritesheet(initMapBorderSpritesheet())
         , sounds(initSounds())
-        , midis(initMidis()) {}
+        , midis(initMidis())
+    {
+    }
 
-    Resources::~Resources() {
+    Resources::~Resources()
+    {
         // Clean up FreeType library
         FT_Done_FreeType(freeTypeLib);
 
         // Delete game Textures
-        for (const Texture& texture : textures) {
+        for (const Texture& texture : textures)
+        {
             const GLuint texId = texture.getId();
             glDeleteTextures(1, &texId);
         }
@@ -61,29 +65,34 @@ namespace Rival {
         }
     }
 
-    FT_Library Resources::initFreeType() {
+    FT_Library Resources::initFreeType()
+    {
         FT_Library ft;
-        if (FT_Init_FreeType(&ft)) {
+        if (FT_Init_FreeType(&ft))
+        {
             throw std::runtime_error("Failed to initialize FreeType library");
         }
         return ft;
     }
 
-    Font Resources::initFontSmall() {
+    Font Resources::initFontSmall()
+    {
         std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
         std::string fontName = ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
         int fontSize = ConfigUtils::get(cfg, "fontSmallSize", 32);
         return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
 
-    Font Resources::initFontRegular() {
+    Font Resources::initFontRegular()
+    {
         std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
         std::string fontName = ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
         int fontSize = ConfigUtils::get(cfg, "fontRegularSize", 16);
         return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
     }
 
-    std::vector<Texture> Resources::loadTextures() {
+    std::vector<Texture> Resources::loadTextures()
+    {
         std::vector<Texture> texList;
         texList.reserve(numTextures);
 
@@ -165,36 +174,42 @@ namespace Rival {
                                                   "buildings_human.tga"
         };
 
-        for (auto const& textureName : textureNames) {
+        for (auto const& textureName : textureNames)
+        {
             texList.push_back(Texture::loadTexture(txDir + textureName));
         }
 
         return texList;
     }
 
-    std::vector<TextureAtlas> Resources::loadTextureAtlases() {
+    std::vector<TextureAtlas> Resources::loadTextureAtlases()
+    {
         std::vector<TextureAtlas> texAtlasList;
         texAtlasList.reserve(numTextureAtlases);
 
         std::vector<std::string> resourceNames = { "game_interface" };
 
-        for (auto const& resourceName : resourceNames) {
+        for (auto const& resourceName : resourceNames)
+        {
             texAtlasList.push_back(TextureAtlas::loadTextureAtlas(Resources::txDir + resourceName));
         }
 
         return texAtlasList;
     }
 
-    Texture Resources::initPaletteTexture() {
+    Texture Resources::initPaletteTexture()
+    {
         return PaletteUtils::createPaletteTexture();
     }
 
-    std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets() {
+    std::map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets()
+    {
         std::map<Building::Type, Spritesheet> spritesheets;
         int nextIndex = txIndexBuildings;
 
         auto createSpritesheets = [&](int first, int last) {
-            for (auto it = first; it <= last; ++it) {
+            for (auto it = first; it <= last; ++it)
+            {
                 spritesheets.emplace(
                         std::piecewise_construct,
                         std::forward_as_tuple(static_cast<Building::Type>(it)),
@@ -212,12 +227,14 @@ namespace Rival {
         return spritesheets;
     }
 
-    std::map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets() {
+    std::map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
+    {
 
         std::map<Unit::Type, Spritesheet> spritesheets;
         int nextIndex = txIndexUnits;
 
-        for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it) {
+        for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it)
+        {
             spritesheets.emplace(
                     std::piecewise_construct,
                     std::forward_as_tuple(static_cast<Unit::Type>(it)),
@@ -229,42 +246,49 @@ namespace Rival {
         return spritesheets;
     }
 
-    std::vector<Spritesheet> Resources::initTileSpritesheets() {
+    std::vector<Spritesheet> Resources::initTileSpritesheets()
+    {
         std::vector<Spritesheet> spritesheets;
 
         // 0 = Meadow
         // 1 = Wilderness
         // 2 = Fog
-        for (int i = txIndexTiles; i < txIndexTiles + 3; i++) {
+        for (int i = txIndexTiles; i < txIndexTiles + 3; i++)
+        {
             spritesheets.emplace_back(textures.at(i), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
         }
 
         return spritesheets;
     }
 
-    std::vector<Spritesheet> Resources::initObjectSpritesheets() {
+    std::vector<Spritesheet> Resources::initObjectSpritesheets()
+    {
         std::vector<Spritesheet> spritesheets;
 
         // 0 = Common
         // 1 = Meadow
         // 2 = Wilderness
-        for (int i = txIndexObjects; i < txIndexObjects + 3; i++) {
+        for (int i = txIndexObjects; i < txIndexObjects + 3; i++)
+        {
             spritesheets.emplace_back(textures.at(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx);
         }
 
         return spritesheets;
     }
 
-    Spritesheet Resources::initMapBorderSpritesheet() {
+    Spritesheet Resources::initMapBorderSpritesheet()
+    {
         return Spritesheet(
                 textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
     }
 
-    std::vector<WaveFile> Resources::initSounds() {
+    std::vector<WaveFile> Resources::initSounds()
+    {
         std::vector<WaveFile> soundsRead;
         soundsRead.reserve(numSounds);
 
-        for (int i = 0; i < numSounds; ++i) {
+        for (int i = 0; i < numSounds; ++i)
+        {
             std::string fileNum = std::to_string(i);
             std::string filename = std::string(3 - fileNum.length(), '0') + fileNum + ".wav";
             soundsRead.emplace_back(Resources::soundDir + filename);
@@ -273,10 +297,12 @@ namespace Rival {
         return soundsRead;
     }
 
-    std::vector<MidiFile> Resources::initMidis() {
+    std::vector<MidiFile> Resources::initMidis()
+    {
         std::vector<MidiFile> midisRead;
 
-        for (int i = 0; i < numMidis; ++i) {
+        for (int i = 0; i < numMidis; ++i)
+        {
             midi_container result;
 
             // Read MIDI file
@@ -284,7 +310,8 @@ namespace Rival {
                     FileUtils::readBinaryFile(soundDir + std::to_string(midiStartIndex + i) + ".mid");
 
             // Parse MIDI file
-            if (!MidsDecoder::process_mids(p_file, result)) {
+            if (!MidsDecoder::process_mids(p_file, result))
+            {
                 throw std::runtime_error("Failed to parse MIDI file!");
             }
 
@@ -294,51 +321,63 @@ namespace Rival {
         return midisRead;
     }
 
-    const Font& Resources::getFontSmall() const {
+    const Font& Resources::getFontSmall() const
+    {
         return fontSmall;
     }
 
-    const Font& Resources::getFontRegular() const {
+    const Font& Resources::getFontRegular() const
+    {
         return fontRegular;
     }
 
-    const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const {
+    const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const
+    {
         return wilderness ? tileSpritesheets.at(1) : tileSpritesheets.at(0);
     }
 
-    const Spritesheet& Resources::getUnitSpritesheet(Unit::Type unitType) const {
+    const Spritesheet& Resources::getUnitSpritesheet(Unit::Type unitType) const
+    {
         return unitSpritesheets.at(unitType);
     }
 
-    const Spritesheet& Resources::getBuildingSpritesheet(Building::Type buildingType) const {
+    const Spritesheet& Resources::getBuildingSpritesheet(Building::Type buildingType) const
+    {
         return buildingSpritesheets.at(buildingType);
     }
 
-    const Spritesheet& Resources::getCommonObjectSpritesheet() const {
+    const Spritesheet& Resources::getCommonObjectSpritesheet() const
+    {
         return objectSpritesheets.at(0);
     }
 
-    const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const {
+    const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const
+    {
         return wilderness ? objectSpritesheets.at(2) : objectSpritesheets.at(1);
     }
 
-    const Spritesheet& Resources::getMapBorderSpritesheet() const {
+    const Spritesheet& Resources::getMapBorderSpritesheet() const
+    {
         return mapBorderSpritesheet;
     }
 
-    const Texture& Resources::getPalette() const {
+    const Texture& Resources::getPalette() const
+    {
         return paletteTexture;
     }
 
-    const TextureAtlas& Resources::getUiTextureAtlas() const {
+    const TextureAtlas& Resources::getUiTextureAtlas() const
+    {
         return textureAtlases.at(0);
     }
 
-    const WaveFile& Resources::getSound(int id) const {
+    const WaveFile& Resources::getSound(int id) const
+    {
         return sounds.at(id);
     }
 
-    const MidiFile& Resources::getMidi(int id) const {
+    const MidiFile& Resources::getMidi(int id) const
+    {
         return midis.at(id);
     }
 

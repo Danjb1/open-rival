@@ -12,12 +12,18 @@ namespace Rival {
 
     struct MapNode;
 
-    enum class UnitState : std::uint8_t { Idle, Moving, Attacking };
+    enum class UnitState : std::uint8_t
+    {
+        Idle,
+        Moving,
+        Attacking
+    };
 
     /**
      * Interface used to listen to unit state changes.
      */
-    class UnitStateListener {
+    class UnitStateListener
+    {
     public:
         virtual void onUnitStateChanged(const UnitState newState) = 0;
     };
@@ -25,7 +31,10 @@ namespace Rival {
     /**
      * Component containing basic unit properties.
      */
-    class UnitPropsComponent : public EntityComponent, public MovementListener {
+    class UnitPropsComponent
+        : public EntityComponent
+        , public MovementListener
+    {
 
     public:
         UnitPropsComponent(Unit::Type type);
@@ -43,14 +52,16 @@ namespace Rival {
         void addStateListener(UnitStateListener* listener);
         void removeStateListener(UnitStateListener* listener);
 
-        Unit::Type getUnitType() const {
+        Unit::Type getUnitType() const
+        {
             return type;
         }
 
         /**
          * Gets the unit's current state.
          */
-        UnitState getState() const {
+        UnitState getState() const
+        {
             return state;
         }
 

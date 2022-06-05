@@ -22,7 +22,8 @@ namespace Rival {
     const int numUpgrades = 112;
     const int numAiStrategies = 7;
 
-    struct ScenarioHeader {
+    struct ScenarioHeader
+    {
         // 8 bytes: unknown
         bool wilderness;
         std::string mapName;
@@ -31,7 +32,8 @@ namespace Rival {
         // 9 bytes: unknown
     };
 
-    struct PlayerProperties {
+    struct PlayerProperties
+    {
         bool hasStartLocation;
         std::uint32_t startLocX;
         std::uint32_t startLocY;
@@ -45,7 +47,8 @@ namespace Rival {
         std::uint8_t aiStrategy;
     };
 
-    struct TroopDefaults {  // also used for Monster Defaults
+    struct TroopDefaults
+    {  // also used for Monster Defaults
         std::uint16_t hitpoints;
         std::uint16_t magic;
         std::uint8_t armour;
@@ -55,21 +58,24 @@ namespace Rival {
         // 39 bytes: unknown
     };
 
-    struct UpgradeProperties {
+    struct UpgradeProperties
+    {
         std::uint32_t amount;
         std::uint32_t goldCost;
         std::uint32_t woodCost;
         std::uint32_t unknown;
     };
 
-    struct ProductionCost {
+    struct ProductionCost
+    {
         std::uint16_t goldCost;
         std::uint16_t woodCost;
         std::uint32_t constructionTime;
         std::uint32_t requiredExpOrIncreasePercent;
     };
 
-    struct WeaponDefaults {
+    struct WeaponDefaults
+    {
         std::uint16_t moveSpaces;
         std::uint16_t moveTime;
         std::uint16_t damage;
@@ -83,7 +89,8 @@ namespace Rival {
         // 1 byte: empty
     };
 
-    struct AvailableBuildings {
+    struct AvailableBuildings
+    {
         bool cropLand;
         bool goldAmplifier;
         bool rangedTroopBuilding;
@@ -98,7 +105,8 @@ namespace Rival {
         bool wall;
     };
 
-    struct HireTroopsRestrictions {
+    struct HireTroopsRestrictions
+    {
         bool worker;
         bool rangedTroop;
         bool lightMeleeOrSpellcasterTroop;
@@ -116,23 +124,27 @@ namespace Rival {
         bool mustHire;
     };
 
-    struct AiSetting {
+    struct AiSetting
+    {
         std::uint8_t amount;
         std::uint8_t flag;
     };
 
-    struct AiStrategy {
+    struct AiStrategy
+    {
         std::array<AiSetting, numBuildingsPerRace> aiBuildingSettings;
         std::array<AiSetting, numTroopsPerRace> aiTroopSettings;
     };
 
-    struct TilePlacement {
+    struct TilePlacement
+    {
         std::uint8_t type;
         std::uint8_t resource;
         std::uint8_t variant;
     };
 
-    struct BuildingPlacement {
+    struct BuildingPlacement
+    {
         std::uint8_t type;
         // 1 byte: unknown (0x00 - 0x0f for Palisade)
         //     Always 0 in buildings example
@@ -159,7 +171,8 @@ namespace Rival {
         //     Always 0 in buildings example
     };
 
-    struct UnitPlacement {
+    struct UnitPlacement
+    {
         std::uint8_t type;
         // 2 bytes: empty
         std::uint8_t facing;
@@ -188,26 +201,30 @@ namespace Rival {
         std::uint8_t fightingArea;
     };
 
-    struct ChestPlacement {
+    struct ChestPlacement
+    {
         std::uint32_t type;
         std::uint32_t variant;
         std::uint8_t x;
         std::uint8_t y;
     };
 
-    struct InfoPointPlacement {
+    struct InfoPointPlacement
+    {
         std::uint8_t x;
         std::uint8_t y;
         std::string message;
     };
 
-    struct TrapPlacement {
+    struct TrapPlacement
+    {
         std::uint8_t x;
         std::uint8_t y;
         std::uint8_t player;
     };
 
-    struct ObjectPlacement {
+    struct ObjectPlacement
+    {
         std::uint8_t type;
         // 1 byte: empty
         std::uint8_t variant;
@@ -215,7 +232,8 @@ namespace Rival {
         std::uint32_t y;
     };
 
-    struct GoalLocation {
+    struct GoalLocation
+    {
         std::uint8_t type;
         std::uint8_t x;
         // 3 bytes: empty
@@ -223,7 +241,8 @@ namespace Rival {
         // 3 bytes: empty
     };
 
-    struct Goal {
+    struct Goal
+    {
         std::uint8_t type;
         std::uint8_t x;
         std::uint8_t y;
@@ -235,13 +254,15 @@ namespace Rival {
         std::uint8_t itemType;
     };
 
-    struct CampaignText {
+    struct CampaignText
+    {
         std::string title;
         std::string objectives;
         std::string narration;
     };
 
-    struct ScenarioData {
+    struct ScenarioData
+    {
         ScenarioHeader hdr {};
         std::array<PlayerProperties, numPlayers> playerProperties {};
         std::array<TroopDefaults, numTroops> troopDefaults {};
@@ -264,9 +285,11 @@ namespace Rival {
         CampaignText campaignText {};
         std::uint8_t checksum {};
 
-        ScenarioData() {
+        ScenarioData()
+        {
             // Initialize AI strategies
-            for (int i = 0; i < numAiStrategies; i++) {
+            for (int i = 0; i < numAiStrategies; i++)
+            {
                 aiStrategies[i] = AiStrategy();
             }
         }

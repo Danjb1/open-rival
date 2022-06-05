@@ -13,7 +13,8 @@ namespace Rival { namespace GLUtils {
         BYTES_8 = 8
     };
 
-    class PixelStore {
+    class PixelStore
+    {
     public:
         PixelStore(PackAlignment alignment);
         ~PixelStore();

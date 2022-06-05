@@ -17,9 +17,12 @@ namespace Rival {
         , scenario(scenario)
         , mapWidth(scenario.getWidth())
         , mapHeight(scenario.getHeight())
-        , entityId(-1) {}
+        , entityId(-1)
+    {
+    }
 
-    void MousePicker::handleMouse() {
+    void MousePicker::handleMouse()
+    {
 
         // Reset selected entity
         entityId = -1;
@@ -30,7 +33,8 @@ namespace Rival {
         SDL_GetMouseState(&mouseX, &mouseY);
 
         // Abort if the mouse is outside the viewport
-        if (!viewport.contains(mouseX, mouseY)) {
+        if (!viewport.contains(mouseX, mouseY))
+        {
             return;
         }
 
@@ -52,15 +56,18 @@ namespace Rival {
         findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
     }
 
-    float MousePicker::getMouseInCameraX(float normalizedMouseX) {
+    float MousePicker::getMouseInCameraX(float normalizedMouseX)
+    {
         return camera.getLeft() + normalizedMouseX * camera.getWidth();
     }
 
-    float MousePicker::getMouseInCameraY(float normalizedMouseY) {
+    float MousePicker::getMouseInCameraY(float normalizedMouseY)
+    {
         return camera.getTop() + normalizedMouseY * camera.getHeight();
     }
 
-    std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCameraY) {
+    std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
+    {
 
         /*
          * The goal here is to reverse-engineer the rendering process to figure
@@ -118,29 +125,36 @@ namespace Rival {
         // quadrant, and which side of the tile boundary we are on, we can
         // figure out what adjustments we need to make to our naive tile
         // co-ordinates.
-        if (MapUtils::isUpperTile(tileX)) {
+        if (MapUtils::isUpperTile(tileX))
+        {
 
             // Even-column tiles are positioned "normally" (no extra y-offset).
             // This results in an offsetY of:
             //  - 0 at the top of the tile
             //  - 1 at the bottom of the tile
 
-            if (offsetY < 0.5f) {
+            if (offsetY < 0.5f)
+            {
                 // Top-left quadrant
                 //  => Diagonal: 2y + x = 1
-                if (2 * offsetY + offsetX < 1) {
+                if (2 * offsetY + offsetX < 1)
+                {
                     tileX--;
                     tileY--;
                 }
-            } else {
+            }
+            else
+            {
                 // Bottom-left quadrant
                 //  => Diagonal: 2y - x = 1
-                if (2 * offsetY - offsetX > 1) {
+                if (2 * offsetY - offsetX > 1)
+                {
                     tileX--;
                 }
             }
-
-        } else {
+        }
+        else
+        {
 
             // Odd-column tiles are positioned with an extra y-offset.
             // This results in an offsetY of:
@@ -148,18 +162,25 @@ namespace Rival {
             //  - 0.5 at the bottom of that tile
             //  - 1 at the centre of the next tile down
 
-            if (offsetY < 0.5f) {
+            if (offsetY < 0.5f)
+            {
                 // Bottom-left quadrant
                 //  => Diagonal: 2y - x = 0
-                if (2 * offsetY - offsetX > 0) {
+                if (2 * offsetY - offsetX > 0)
+                {
                     tileX--;
-                } else {
+                }
+                else
+                {
                     tileY--;
                 }
-            } else {
+            }
+            else
+            {
                 // Top-left quadrant
                 //  => Diagonal: 2y + x = 2
-                if (2 * offsetY + offsetX < 2) {
+                if (2 * offsetY + offsetX < 2)
+                {
                     tileX--;
                 }
             }
@@ -173,12 +194,15 @@ namespace Rival {
         return std::pair<int, int>(tileX, tileY);
     }
 
-    void MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY) {
+    void MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
+    {
         auto& entities = scenario.getEntities();
-        for (auto e : entities) {
+        for (auto e : entities)
+        {
             // We could optimise this by considering only Entities that were
             // rendered in the previous frame.
-            if (isMouseInEntity(*e, mouseInViewportX, mouseInViewportY)) {
+            if (isMouseInEntity(*e, mouseInViewportX, mouseInViewportY))
+            {
                 entityId = e->getId();
                 std::cout << "Entity " << entityId << " is under cursor\n";
                 break;
@@ -186,7 +210,8 @@ namespace Rival {
         }
     }
 
-    bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY) {
+    bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY)
+    {
 
         /*
          * Entities are always rendered at a fixed pixel offset from the tile
@@ -252,15 +277,18 @@ namespace Rival {
                 && mouseInViewportY < unitY2;
     }
 
-    int MousePicker::getTileX() const {
+    int MousePicker::getTileX() const
+    {
         return tile.first;
     }
 
-    int MousePicker::getTileY() const {
+    int MousePicker::getTileY() const
+    {
         return tile.second;
     }
 
-    int MousePicker::getEntityId() const {
+    int MousePicker::getEntityId() const
+    {
         return entityId;
     }
 

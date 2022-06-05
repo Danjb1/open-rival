@@ -11,7 +11,8 @@ namespace Rival {
     /**
      * Interface used to listen to changes in facing.
      */
-    class FacingListener {
+    class FacingListener
+    {
     public:
         virtual void facingChanged(Facing newFacing) = 0;
     };
@@ -21,7 +22,8 @@ namespace Rival {
      */
     class FacingComponent
         : public EntityComponent
-        , public MovementListener {
+        , public MovementListener
+    {
 
     public:
         FacingComponent(Facing initialFacing);
@@ -40,7 +42,8 @@ namespace Rival {
 
         void setFacing(Facing newFacing);
 
-        Facing getFacing() const {
+        Facing getFacing() const
+        {
             return facing;
         }
 

@@ -15,7 +15,8 @@
 
 namespace Rival {
 
-    class GameRenderer {
+    class GameRenderer
+    {
     public:
         GameRenderer(
                 const Window& window,

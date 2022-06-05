@@ -3,8 +3,7 @@
 
 #include <chrono>
 
-namespace Rival {
-namespace TimerUtils {
+namespace Rival { namespace TimerUtils {
 
     static const int fps = 60;
 

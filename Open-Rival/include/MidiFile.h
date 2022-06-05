@@ -7,7 +7,8 @@
 
 namespace Rival {
 
-    class MidiFile {
+    class MidiFile
+    {
     public:
         MidiFile() {}
         MidiFile(midi_container midiContainer);

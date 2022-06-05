@@ -23,7 +23,8 @@ using json = nlohmann::json;
 
 namespace Rival {
 
-    class Resources {
+    class Resources
+    {
 
     public:
         // Directories
@@ -65,7 +66,7 @@ namespace Rival {
         static const int numTextures = 58;
         static const int numTextureAtlases = 1;
         static const int numSounds = 369;
-        static const int numMidis = 1;  //13;
+        static const int numMidis = 1;  // 13;
 
         // Texture constants
         static const int txIndexUnits = 0;

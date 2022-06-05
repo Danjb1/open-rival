@@ -18,7 +18,9 @@ namespace Rival {
 
     TileRenderer::TileRenderer(const Spritesheet& spritesheet, const Texture& paletteTexture)
         : paletteTexture(paletteTexture)
-        , renderable { spritesheet, maxTilesToRender } {}
+        , renderable { spritesheet, maxTilesToRender }
+    {
+    }
 
     /**
      * Renders all tiles visible to the camera.
@@ -26,7 +28,8 @@ namespace Rival {
      * Note that while this is very slow in Debug mode, performance is not an
      * issue in Release mode.
      */
-    void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const {
+    void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const
+    {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
@@ -38,7 +41,8 @@ namespace Rival {
         glBindVertexArray(renderable.getVao());
 
         // Update the data on the GPU
-        if (needsUpdate()) {
+        if (needsUpdate())
+        {
             sendDataToGpu(camera, tiles, mapWidth, mapHeight);
         }
 
@@ -47,7 +51,8 @@ namespace Rival {
                 renderable.getDrawMode(), tiles.size() * renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
     }
 
-    bool TileRenderer::needsUpdate() const {
+    bool TileRenderer::needsUpdate() const
+    {
         // Currently we update the buffers every frame.
         // Later, we could optimise this by updating only when:
         //   1) Camera has moved
@@ -56,8 +61,9 @@ namespace Rival {
         return true;
     }
 
-    void TileRenderer::sendDataToGpu(
-            const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const {
+    void
+    TileRenderer::sendDataToGpu(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const
+    {
 
         // Find the first visible tiles.
         // We subtract 1 because we need to start drawing offscreen, to account
@@ -66,10 +72,12 @@ namespace Rival {
         int minY = static_cast<int>(camera.getTop()) - 1;
 
         // Keep within bounds
-        if (minX < 0) {
+        if (minX < 0)
+        {
             minX = 0;
         }
-        if (minY < 0) {
+        if (minY < 0)
+        {
             minY = 0;
         }
 
@@ -101,12 +109,14 @@ namespace Rival {
         texCoords.reserve(texCoordDataSize);
 
         // Add data to buffers
-        for (int tileY = minY; tileY <= maxY; ++tileY) {
+        for (int tileY = minY; tileY <= maxY; ++tileY)
+        {
 
             // Calculate the index of the first tile in this row
             int tileIndex = tileY * mapWidth + minX;
 
-            for (int tileX = minX; tileX <= maxX; ++tileX) {
+            for (int tileX = minX; tileX <= maxX; ++tileX)
+            {
 
                 auto const& tile = tiles[tileIndex];
                 const int txIndex = tile.txIndex;

@@ -10,7 +10,8 @@ namespace Rival { namespace SleepUtils {
 #ifdef _WIN32
 #include <windows.h>
 
-    void sleep(int ms) {
+    void sleep(int ms)
+    {
         Sleep((DWORD) ms);
     }
 
@@ -23,7 +24,8 @@ namespace Rival { namespace SleepUtils {
 #ifdef __linux__
 #include <unistd.h>
 
-    void sleep(int ms) {
+    void sleep(int ms)
+    {
         usleep((unsigned long) (milliseconds * 1000.0));
     }
 

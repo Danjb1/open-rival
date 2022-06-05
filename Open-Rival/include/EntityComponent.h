@@ -14,7 +14,8 @@ namespace Rival {
      * which EntityComponents of a given Entity receive lifecycle callbacks,
      * except that this order will always be deterministic.
      */
-    class EntityComponent {
+    class EntityComponent
+    {
 
         friend class Entity;
 
@@ -43,7 +44,8 @@ namespace Rival {
         /**
          * Determines if this EntityComponent has been marked for deletion.
          */
-        const bool isDeleted() const {
+        const bool isDeleted() const
+        {
             return deleted;
         }
 
@@ -54,14 +56,16 @@ namespace Rival {
          * processing, and should be considered non-existent for the purposes
          * of logic and rendering.
          */
-        void markForDeletion() {
+        void markForDeletion()
+        {
             deleted = true;
         }
 
         /**
          * Gets the key used to store and retrieve this EntityComponent.
          */
-        std::string getKey() {
+        std::string getKey()
+        {
             return _key;
         }
 

@@ -18,22 +18,16 @@ namespace Rival {
      *
      * It renders all Tiles in a single draw operation.
      */
-    class TileRenderer {
+    class TileRenderer
+    {
 
     public:
         // The maximum number of tiles we can render at once
-        static const int maxTilesToRender =
-                RenderUtils::maxTilesX * RenderUtils::maxTilesY;
+        static const int maxTilesToRender = RenderUtils::maxTilesX * RenderUtils::maxTilesY;
 
-        TileRenderer(
-                const Spritesheet& spritesheet,
-                const Texture& paletteTexture);
+        TileRenderer(const Spritesheet& spritesheet, const Texture& paletteTexture);
 
-        void render(
-                const Camera& camera,
-                const std::vector<Tile>& tiles,
-                int mapWidth,
-                int mapHeight) const;
+        void render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
 
     private:
         SpriteRenderable renderable;
@@ -42,11 +36,7 @@ namespace Rival {
 
         bool TileRenderer::needsUpdate() const;
 
-        void sendDataToGpu(
-                const Camera& camera,
-                const std::vector<Tile>& tiles,
-                int mapWidth,
-                int mapHeight) const;
+        void sendDataToGpu(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
     };
 
 }  // namespace Rival

@@ -9,24 +9,29 @@ namespace Rival {
 
     Texture::Texture(const GLuint id, int width, int height) : id(id), width(width), height(height) {}
 
-    const GLuint Texture::getId() const {
+    const GLuint Texture::getId() const
+    {
         return id;
     }
 
-    const int Texture::getWidth() const {
+    const int Texture::getWidth() const
+    {
         return width;
     }
 
-    const int Texture::getHeight() const {
+    const int Texture::getHeight() const
+    {
         return height;
     }
 
-    const Texture Texture::loadTexture(const std::string filename) {
+    const Texture Texture::loadTexture(const std::string filename)
+    {
         TextureProperties props;  // use defaults
         return wrap(Image::readImage(filename), props);
     }
 
-    const Texture Texture::wrap(const Image img, const TextureProperties props) {
+    const Texture Texture::wrap(const Image img, const TextureProperties props)
+    {
         // Generate texture
         GLuint textureId = 0;
         glGenTextures(1, &textureId);
@@ -54,7 +59,8 @@ namespace Rival {
 
         // Check for error
         GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
+        if (error != GL_NO_ERROR)
+        {
             printf("Error loading texture: %s\n", gluErrorString(error));
             throw std::runtime_error("Failed to load texture");
         }

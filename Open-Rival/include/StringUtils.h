@@ -4,8 +4,7 @@
 #include <codecvt>
 #include <string>
 
-namespace Rival {
-namespace StringUtils {
+namespace Rival { namespace StringUtils {
 
     /**
      * Converts a wide string to a UTF-8 string.

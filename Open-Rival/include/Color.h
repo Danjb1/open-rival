@@ -3,7 +3,8 @@
 
 namespace Rival {
 
-    class Color {
+    class Color
+    {
     public:
         float r;
         float g;

@@ -14,7 +14,8 @@ namespace Rival {
     /**
      * A portion of text with a configurable color.
      */
-    struct TextSpan {
+    struct TextSpan
+    {
         std::string text;
         Color color;
     };
@@ -22,7 +23,8 @@ namespace Rival {
     /**
      * Properties that control how some text should be rendered.
      */
-    struct TextProperties {
+    struct TextProperties
+    {
         /**
          * Font to use when rendering the text.
          */
@@ -46,7 +48,8 @@ namespace Rival {
      *
      * This creates the VAO and all necessary buffers.
      */
-    class TextRenderable {
+    class TextRenderable
+    {
 
     public:
         static const int numVertexDimensions = 3;    // x, y, z
@@ -75,29 +78,17 @@ namespace Rival {
         /**
          * Constructs a TextRenderable to hold a single TextSpan.
          */
-        TextRenderable(
-                TextSpan span,
-                TextProperties props,
-                float x,
-                float y);
+        TextRenderable(TextSpan span, TextProperties props, float x, float y);
 
         /**
          * Constructs a TextRenderable to hold the given TextSpans.
          */
-        TextRenderable(
-                std::vector<TextSpan> spans,
-                TextProperties props,
-                float x,
-                float y);
+        TextRenderable(std::vector<TextSpan> spans, TextProperties props, float x, float y);
 
         /**
          * Constructs a TextRenderable to hold strings up to a given length.
          */
-        TextRenderable(
-                int maxChars,
-                TextProperties props,
-                float x,
-                float y);
+        TextRenderable(int maxChars, TextProperties props, float x, float y);
 
         // Disable moving / copying
         TextRenderable(const TextRenderable& other) = delete;
@@ -105,20 +96,53 @@ namespace Rival {
         TextRenderable& operator=(const TextRenderable& other) = delete;
         TextRenderable& operator=(TextRenderable&& other) = delete;
 
-        GLuint getVao() const { return vao; }
-        GLuint getPositionVbo() const { return positionVbo; }
-        GLuint getTexCoordVbo() const { return texCoordVbo; }
-        GLuint getColorVbo() const { return colorVbo; }
-        GLuint getIbo() const { return ibo; }
+        GLuint getVao() const
+        {
+            return vao;
+        }
+        GLuint getPositionVbo() const
+        {
+            return positionVbo;
+        }
+        GLuint getTexCoordVbo() const
+        {
+            return texCoordVbo;
+        }
+        GLuint getColorVbo() const
+        {
+            return colorVbo;
+        }
+        GLuint getIbo() const
+        {
+            return ibo;
+        }
 
         GLuint getTextureId() const;
 
-        const Font* getFont() const { return props.font; }
-        std::vector<TextSpan> getTextSpans() const { return spans; }
-        int getNumVisibleChars() const { return numVisibleChars; }
-        float getX() const { return x; }
-        float getY() const { return y; }
-        float getScale() const { return props.scale; }
+        const Font* getFont() const
+        {
+            return props.font;
+        }
+        std::vector<TextSpan> getTextSpans() const
+        {
+            return spans;
+        }
+        int getNumVisibleChars() const
+        {
+            return numVisibleChars;
+        }
+        float getX() const
+        {
+            return x;
+        }
+        float getY() const
+        {
+            return y;
+        }
+        float getScale() const
+        {
+            return props.scale;
+        }
 
         int getNumLayers() const;
 

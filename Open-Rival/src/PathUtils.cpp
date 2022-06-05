@@ -11,11 +11,13 @@ namespace Rival { namespace PathUtils {
 
     static std::vector<std::string> defaultFontDirs;
 
-    std::string getLocalAppData() {
+    std::string getLocalAppData()
+    {
         wchar_t* localAppDataRaw = 0;
         HRESULT result = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &localAppDataRaw);
 
-        if (result != S_OK) {
+        if (result != S_OK)
+        {
             std::cerr << "Get local app data failed: " << result << "\n";
         }
 
@@ -25,13 +27,16 @@ namespace Rival { namespace PathUtils {
         return StringUtils::toUtf8(localAppData) + "\\";
     }
 
-    void initDefaultFontDirs() {
+    void initDefaultFontDirs()
+    {
         std::string localAppData = getLocalAppData();
         defaultFontDirs = { "res\\fonts\\", "C:\\Windows\\Fonts\\", localAppData + "Microsoft\\Windows\\Fonts\\" };
     }
 
-    std::vector<std::string> getDefaultFontDirs() {
-        if (defaultFontDirs.size() == 0) {
+    std::vector<std::string> getDefaultFontDirs()
+    {
+        if (defaultFontDirs.size() == 0)
+        {
             initDefaultFontDirs();
         }
         return defaultFontDirs;

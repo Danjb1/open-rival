@@ -7,7 +7,8 @@ namespace Rival {
     const std::uint8_t MidsDecoder::loop_start[11] = { 0xFF, 0x06, 'l', 'o', 'o', 'p', 'S', 't', 'a', 'r', 't' };
     const std::uint8_t MidsDecoder::loop_end[9] = { 0xFF, 0x06, 'l', 'o', 'o', 'p', 'E', 'n', 'd' };
 
-    bool MidsDecoder::is_mids(std::vector<std::uint8_t> const& p_file) {
+    bool MidsDecoder::is_mids(std::vector<std::uint8_t> const& p_file)
+    {
         if (p_file.size() < 8)
             return false;
         if (p_file[0] != 'R' || p_file[1] != 'I' || p_file[2] != 'F' || p_file[3] != 'F')
@@ -21,7 +22,8 @@ namespace Rival {
         return true;
     }
 
-    bool MidsDecoder::process_mids(std::vector<std::uint8_t> const& p_file, midi_container& p_out) {
+    bool MidsDecoder::process_mids(std::vector<std::uint8_t> const& p_file, midi_container& p_out)
+    {
         if (p_file.size() < 20)
             return false;
         std::vector<std::uint8_t>::const_iterator it = p_file.begin() + 16;
@@ -36,7 +38,8 @@ namespace Rival {
         /*uint32_t max_buffer = 0;*/
         std::uint32_t flags = 0;
 
-        if (fmt_size >= 4) {
+        if (fmt_size >= 4)
+        {
             time_format = it[0] | (it[1] << 8) | (it[2] << 16) | (it[3] << 24);
             it += 4;
             fmt_size -= 4;
@@ -44,13 +47,15 @@ namespace Rival {
                                // calculations
                 return false;
         }
-        if (fmt_size >= 4) {
+        if (fmt_size >= 4)
+        {
             /*max_buffer = it[ 0 ] | ( it[ 1 ] << 8 ) | ( it[ 2 ] << 16 ) | ( it[ 3
              * ] << 24 );*/
             it += 4;
             fmt_size -= 4;
         }
-        if (fmt_size >= 4) {
+        if (fmt_size >= 4)
+        {
             flags = it[0] | (it[1] << 8) | (it[2] << 16) | (it[3] << 24);
             it += 4;
             fmt_size -= 4;
@@ -96,21 +101,24 @@ namespace Rival {
 
         unsigned current_timestamp = 0;
 
-        for (unsigned i = 0; i < segment_count; ++i) {
+        for (unsigned i = 0; i < segment_count; ++i)
+        {
             if (end - it < 12)
                 return false;
             it += 4;
             std::uint32_t segment_size = it[0] | (it[1] << 8) | (it[2] << 16) | (it[3] << 24);
             it += 4;
             std::vector<std::uint8_t>::const_iterator segment_end = it + segment_size;
-            while (it != segment_end && it != body_end) {
+            while (it != segment_end && it != body_end)
+            {
                 if (segment_end - it < 4)
                     return false;
                 std::uint32_t delta = it[0] | (it[1] << 8) | (it[2] << 16) | (it[3] << 24);
                 it += 4;
                 std::uint32_t event;
                 current_timestamp += delta;
-                if (!is_eight_byte) {
+                if (!is_eight_byte)
+                {
                     if (segment_end - it < 4)
                         return false;
                     it += 4;
@@ -119,20 +127,25 @@ namespace Rival {
                     return false;
                 event = it[0] | (it[1] << 8) | (it[2] << 16) | (it[3] << 24);
                 it += 4;
-                if (event >> 24 == 0x01) {
+                if (event >> 24 == 0x01)
+                {
                     std::uint8_t buffer[5] = { 0xFF, 0x51 };
                     buffer[2] = (uint8_t) (event >> 16);
                     buffer[3] = (uint8_t) (event >> 8);
                     buffer[4] = (uint8_t) event;
                     p_out.add_track_event(
                             0, midi_event(current_timestamp, midi_event::extended, 0, buffer, sizeof(buffer)));
-                } else if (!(event >> 24)) {
+                }
+                else if (!(event >> 24))
+                {
                     unsigned event_code = (event & 0xF0) >> 4;
-                    if (event_code >= 0x8 && event_code <= 0xE) {
+                    if (event_code >= 0x8 && event_code <= 0xE)
+                    {
                         unsigned bytes_to_write = 1;
                         std::uint8_t buffer[2];
                         buffer[0] = (uint8_t) (event >> 8);
-                        if (event_code != 0xC && event_code != 0xD) {
+                        if (event_code != 0xC && event_code != 0xD)
+                        {
                             buffer[1] = (uint8_t) (event >> 16);
                             bytes_to_write = 2;
                         }

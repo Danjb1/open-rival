@@ -9,20 +9,23 @@ namespace Rival {
 
     // Based on:
     // https://github.com/zxf8665905/wavDecoder
-    WaveFile::WaveFile(std::string filename) : filename(filename) {
+    WaveFile::WaveFile(std::string filename) : filename(filename)
+    {
 
         std::cout << "Loading: " << filename << "\n";
 
         // Open file and check size
         std::streamoff remainSize;
         std::ifstream in(filename, std::ios::in | std::ios::binary | std::ios::ate);
-        if (in.is_open() == false) {
+        if (in.is_open() == false)
+        {
             throw std::runtime_error("Failed to open file: " + filename);
         }
         remainSize = in.tellg();
 
         // Read WAV header
-        if (remainSize <= sizeof(header)) {
+        if (remainSize <= sizeof(header))
+        {
             throw std::runtime_error("WAV file is too small: " + filename);
         }
         in.seekg(0, std::ios::beg);
@@ -30,7 +33,8 @@ namespace Rival {
 
         // Determine the remaining size
         remainSize -= sizeof(header);
-        if (remainSize < header.subchunk2Size) {
+        if (remainSize < header.subchunk2Size)
+        {
             throw std::runtime_error("WAV file is too small: " + filename);
         }
         size_t soundDataSize = header.subchunk2Size;

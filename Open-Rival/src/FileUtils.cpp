@@ -6,16 +6,19 @@
 
 namespace Rival { namespace FileUtils {
 
-    std::vector<std::uint8_t> readBinaryFile(std::string filename) {
+    std::vector<std::uint8_t> readBinaryFile(std::string filename)
+    {
         // Open the file at the end
         std::ifstream is(filename, std::ios::binary | std::ios::ate);
-        if (!is.is_open()) {
+        if (!is.is_open())
+        {
             throw std::runtime_error("Failed to open scenario: " + filename);
         }
 
         // Create a buffer to hold the entire file contents
         std::streampos size = is.tellg();
-        if (size == -1) {
+        if (size == -1)
+        {
             throw std::runtime_error("Failed to retrieve file size");
         }
         auto data = std::vector<unsigned char>(static_cast<size_t>(size));
@@ -28,14 +31,16 @@ namespace Rival { namespace FileUtils {
         return data;
     }
 
-    std::string readTextFile(std::string filename) {
+    std::string readTextFile(std::string filename)
+    {
         std::ifstream is(filename);
         std::stringstream buffer;
         buffer << is.rdbuf();
         return buffer.str();
     }
 
-    json readJsonFile(std::string filename) {
+    json readJsonFile(std::string filename)
+    {
         std::ifstream is(filename);
         json j;
         is >> j;

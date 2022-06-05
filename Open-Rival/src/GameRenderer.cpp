@@ -46,9 +46,12 @@ namespace Rival {
         ,
 
         // Hardcode the race for now
-        uiRenderer(Race::Human, res) {}
+        uiRenderer(Race::Human, res)
+    {
+    }
 
-    void GameRenderer::render(int delta) {
+    void GameRenderer::render(int delta)
+    {
         // Render to our framebuffer.
         // Here the viewport specifies the region of the framebuffer texture
         // that we render onto, in pixels. We use the camera size here; if the
@@ -76,7 +79,8 @@ namespace Rival {
         renderUi();
     }
 
-    void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) const {
+    void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) const
+    {
 
         // Clear framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -106,7 +110,8 @@ namespace Rival {
         entityRenderer.render(camera, scenario.getEntities(), delta);
     }
 
-    void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const {
+    void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
+    {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT);
@@ -128,7 +133,8 @@ namespace Rival {
         gameFboRenderer.render(srcWidth, srcHeight);
     }
 
-    void GameRenderer::renderUi() {
+    void GameRenderer::renderUi()
+    {
 
         // Disable depth testing since we can trivially manage the rendering
         // order ourselves

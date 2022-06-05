@@ -11,7 +11,8 @@ namespace Rival {
         : width(width)
         , height(height)
         , title(title)
-        , aspectRatio(static_cast<double>(width) / height) {
+        , aspectRatio(static_cast<double>(width) / height)
+    {
 
         sdlWindow = SDL_CreateWindow(
                 title,
@@ -21,41 +22,49 @@ namespace Rival {
                 height,
                 SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
-        if (sdlWindow == nullptr) {
+        if (sdlWindow == nullptr)
+        {
             std::cerr << "Window could not be created!\n";
             throw std::runtime_error(SDL_GetError());
         }
 
         glContext = SDL_GL_CreateContext(sdlWindow);
 
-        if (glContext == nullptr) {
+        if (glContext == nullptr)
+        {
             std::cerr << "OpenGL context could not be created!\n";
             throw std::runtime_error(SDL_GetError());
         }
     }
 
-    Window::~Window() {
+    Window::~Window()
+    {
         SDL_DestroyWindow(sdlWindow);
         sdlWindow = nullptr;
     }
 
-    void Window::swapBuffers() const {
+    void Window::swapBuffers() const
+    {
         SDL_GL_SwapWindow(sdlWindow);
     }
 
-    void Window::setIcon(SDL_Surface* surface) {
+    void Window::setIcon(SDL_Surface* surface)
+    {
         SDL_SetWindowIcon(sdlWindow, surface);
     }
 
-    int Window::getWidth() const {
+    int Window::getWidth() const
+    {
         return width;
     }
 
-    int Window::getHeight() const {
+    int Window::getHeight() const
+    {
         return height;
     }
 
-    double Window::getAspectRatio() const {
+    double Window::getAspectRatio() const
+    {
         return aspectRatio;
     }
 

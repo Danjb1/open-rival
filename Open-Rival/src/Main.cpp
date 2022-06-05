@@ -27,16 +27,19 @@ using json = nlohmann::json;
 
 using namespace Rival;
 
-json readConfig() {
+json readConfig()
+{
     return FileUtils::readJsonFile("config.json");
 }
 
-void initSDL() {
+void initSDL()
+{
     // This must be called before SDL_Init since we're not using SDL_main
     // as an entry point
     SDL_SetMainReady();
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
         std::cerr << "Failed to initialize SDL\n";
         throw std::runtime_error(SDL_GetError());
     }
@@ -47,17 +50,20 @@ void initSDL() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 }
 
-void initGLEW() {
+void initGLEW()
+{
     glewExperimental = GL_TRUE;
     GLenum glewError = glewInit();
 
-    if (glewError != GLEW_OK) {
+    if (glewError != GLEW_OK)
+    {
         std::cerr << "Error initializing GLEW:" << glewGetErrorString(glewError) << "\n";
         throw std::runtime_error("Failed to initialize GLEW");
     }
 }
 
-void initGL() {
+void initGL()
+{
     // Set clear color
     glClearColor(0.f, 0.f, 0.f, 1.f);
 
@@ -77,15 +83,18 @@ void initGL() {
     Shaders::initializeShaders();
 }
 
-void initAL() {
+void initAL()
+{
     AudioUtils::initAL();
 }
 
-json readUnitData() {
+json readUnitData()
+{
     return FileUtils::readJsonFile(Resources::dataDir + "units.json");
 }
 
-void setWindowIcon(Window& window) {
+void setWindowIcon(Window& window)
+{
     std::string iconFilename = Resources::txDir + "icon.png";
     SDL_Surface* surface;
     surface = IMG_Load(iconFilename.c_str());
@@ -93,13 +102,15 @@ void setWindowIcon(Window& window) {
     SDL_FreeSurface(surface);
 }
 
-std::unique_ptr<Window> createWindow() {
+std::unique_ptr<Window> createWindow()
+{
     std::unique_ptr<Window> window = std::make_unique<Window>(800, 600, "Rival Realms");
     setWindowIcon(*window);
     return window;
 }
 
-void exit() {
+void exit()
+{
     AudioUtils::destroyAL();
     SDL_Quit();
 }
@@ -107,10 +118,12 @@ void exit() {
 /**
  * Entry point for the application.
  */
-int main() {
+int main()
+{
     int exitCode = 0;
 
-    try {
+    try
+    {
 
         // Initialization that does not require an OpenGL context
         json cfg = readConfig();
@@ -140,8 +153,9 @@ int main() {
 
         // Run the game!
         app.start(std::move(initialState));
-
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         std::cerr << "Unhandled error during initialization or gameplay\n";
         std::cerr << e.what() << "\n";
         exitCode = 1;

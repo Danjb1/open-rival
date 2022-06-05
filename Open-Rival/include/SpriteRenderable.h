@@ -11,7 +11,8 @@ namespace Rival {
      *
      * This creates the VAO and all necessary buffers.
      */
-    class SpriteRenderable {
+    class SpriteRenderable
+    {
 
     public:
         static const int numVertexDimensions = 3;    // x, y, z

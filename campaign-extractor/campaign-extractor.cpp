@@ -12,13 +12,15 @@
 
 namespace Rival { namespace Setup {
 
-    uint32_t readInt(std::vector<std::uint8_t>& data, size_t offset) {
+    uint32_t readInt(std::vector<std::uint8_t>& data, size_t offset)
+    {
         // little endian
         return std::uint32_t(
                 data[offset + 3] << 24 | data[offset + 2] << 16 | data[offset + 1] << 8 | data[offset + 0]);
     }
 
-    void extractCampaign(std::string filename) {
+    void extractCampaign(std::string filename)
+    {
         auto data = FileUtils::readBinaryFile(filename);
 
         // Read the number of levels
@@ -27,7 +29,8 @@ namespace Rival { namespace Setup {
         pos++;
 
         // Extract each level in turn
-        for (int i = 0; i < numLevels; i++) {
+        for (int i = 0; i < numLevels; i++)
+        {
 
             // Read the scenario offset and size
             std::uint32_t offset = readInt(data, pos);
@@ -42,7 +45,8 @@ namespace Rival { namespace Setup {
 
             // Prepare to write to a new file
             std::ofstream output(outputFilename.str(), std::ios::binary);
-            if (!output.is_open()) {
+            if (!output.is_open())
+            {
                 throw std::runtime_error("Failed to open file for writing");
             }
 

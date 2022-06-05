@@ -5,7 +5,8 @@
 
 namespace Rival {
 
-    AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites) : texAtlas(texAtlas) {
+    AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites) : texAtlas(texAtlas)
+    {
 
         // Generate VAO
         glGenVertexArrays(1, &vao);
@@ -49,17 +50,20 @@ namespace Rival {
         // Initialize index buffer - this should never need to change
         std::vector<GLuint> indexData;
         indexData.reserve(maxSprites * indicesPerSprite);
-        for (int i = 0; i < maxSprites; i++) {
+        for (int i = 0; i < maxSprites; i++)
+        {
 
             unsigned int startIndex = i * numVerticesPerSprite;
 
-            if (drawMode == GL_TRIANGLE_FAN) {
+            if (drawMode == GL_TRIANGLE_FAN)
+            {
                 indexData.push_back(startIndex);
                 indexData.push_back(startIndex + 1);
                 indexData.push_back(startIndex + 2);
                 indexData.push_back(startIndex + 3);
-
-            } else if (drawMode == GL_TRIANGLES) {
+            }
+            else if (drawMode == GL_TRIANGLES)
+            {
                 indexData.push_back(startIndex);
                 indexData.push_back(startIndex + 1);
                 indexData.push_back(startIndex + 2);

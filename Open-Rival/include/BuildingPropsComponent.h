@@ -9,14 +9,16 @@ namespace Rival {
     /**
      * Component containing basic building properties.
      */
-    class BuildingPropsComponent : public EntityComponent {
+    class BuildingPropsComponent : public EntityComponent
+    {
 
     public:
         static const std::string key;
 
         BuildingPropsComponent(Building::Type type);
 
-        Building::Type getBuildingType() const {
+        Building::Type getBuildingType() const
+        {
             return type;
         }
 

@@ -7,7 +7,8 @@
 
 namespace Rival {
 
-    class SoundSource {
+    class SoundSource
+    {
     public:
         const WaveFile& waveFile;
         float pitch { 1.0f };

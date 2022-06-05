@@ -8,9 +8,12 @@ namespace Rival {
         , width(width)
         , height(height)
         , xSize(texture.getWidth() / width)
-        , ySize(texture.getHeight() / height) {}
+        , ySize(texture.getHeight() / height)
+    {
+    }
 
-    const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const {
+    const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
+    {
 
         const int x = index % xSize;
         const int y = index / xSize;

@@ -20,12 +20,14 @@ namespace Rival {
     Camera::Camera(float x, float y, float width, float height, Scenario& scenario)
         : defaultWidth(width)
         , defaultHeight(height)
-        , scenario(scenario) {
+        , scenario(scenario)
+    {
 
         centreOnPoint(x, y);
     }
 
-    void Camera::centreOnPoint(float newX, float newY) {
+    void Camera::centreOnPoint(float newX, float newY)
+    {
         // Keep within the bounds of the map
         float cameraWidth = getWidth();
         float cameraHeight = getHeight();
@@ -44,9 +46,11 @@ namespace Rival {
         y = MathUtils::clampf(newY, minY, maxY);
     }
 
-    void Camera::centreOnTile(int tileX, int tileY) {
+    void Camera::centreOnTile(int tileX, int tileY)
+    {
         float offsetY = 0;
-        if (MapUtils::isLowerTile(tileX)) {
+        if (MapUtils::isLowerTile(tileX))
+        {
             // Tile co-ordinates zigzag up and down within a row
             offsetY = (tileHeight / 2.0f);
         }
@@ -54,35 +58,43 @@ namespace Rival {
         centreOnPoint(tileX + (tileWidth / 2.0f), tileY + (tileHeight / 2.0f) + offsetY);
     }
 
-    void Camera::translate(float dx, float dy) {
+    void Camera::translate(float dx, float dy)
+    {
         centreOnPoint(x + dx, y + dy);
     }
 
-    float Camera::getWidth() const {
+    float Camera::getWidth() const
+    {
         return defaultWidth / zoom;
     }
 
-    float Camera::getHeight() const {
+    float Camera::getHeight() const
+    {
         return defaultHeight / zoom;
     }
 
-    float Camera::getLeft() const {
+    float Camera::getLeft() const
+    {
         return x - getWidth() / 2;
     }
 
-    float Camera::getTop() const {
+    float Camera::getTop() const
+    {
         return y - getHeight() / 2;
     }
 
-    float Camera::getRight() const {
+    float Camera::getRight() const
+    {
         return x + getWidth() / 2;
     }
 
-    float Camera::getBottom() const {
+    float Camera::getBottom() const
+    {
         return y + getHeight() / 2;
     }
 
-    void Camera::modZoom(float interval) {
+    void Camera::modZoom(float interval)
+    {
         zoom += interval;
         zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
 
@@ -91,7 +103,8 @@ namespace Rival {
         centreOnPoint(x, y);
     }
 
-    bool Camera::contains(float px, float py) const {
+    bool Camera::contains(float px, float py) const
+    {
         return px > getLeft() && px < getRight() && py > getTop() && py < getBottom();
     }
 

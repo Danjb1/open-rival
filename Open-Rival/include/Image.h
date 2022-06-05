@@ -9,7 +9,8 @@
 
 namespace Rival {
 
-    struct ImageProperties {
+    struct ImageProperties
+    {
         /**
          * Stride used to separate rows of the image within the data buffer.
          *
@@ -18,7 +19,8 @@ namespace Rival {
         int stride = -1;
     };
 
-    class Image {
+    class Image
+    {
 
     public:
         static Image readImage(const std::string filename);
@@ -38,21 +40,25 @@ namespace Rival {
          */
         static Image createByMove(int width, int height, std::vector<std::uint8_t>&& data, ImageProperties props = {});
 
-        int getWidth() const {
+        int getWidth() const
+        {
             return width;
         }
 
-        int getHeight() const {
+        int getHeight() const
+        {
             return height;
         }
 
         int getStride() const;
 
-        std::vector<std::uint8_t>& getEditableData() {
+        std::vector<std::uint8_t>& getEditableData()
+        {
             return data;
         };
 
-        const std::vector<std::uint8_t>& getData() const {
+        const std::vector<std::uint8_t>& getData() const
+        {
             return data;
         };
 

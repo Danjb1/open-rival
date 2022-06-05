@@ -10,7 +10,8 @@ namespace Rival {
     /**
      * Component that affects the passability of an entity's tile.
      */
-    class PassabilityComponent : public EntityComponent {
+    class PassabilityComponent : public EntityComponent
+    {
 
     public:
         static const std::string key;

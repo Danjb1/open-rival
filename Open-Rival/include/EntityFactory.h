@@ -12,7 +12,8 @@
 
 namespace Rival {
 
-    class EntityFactory {
+    class EntityFactory
+    {
 
     public:
         EntityFactory(const Resources& res);

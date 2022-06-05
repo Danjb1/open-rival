@@ -17,7 +17,8 @@
 namespace Rival {
 
     // Class that can create a Scenario from previously-loaded ScenarioData
-    class ScenarioBuilder {
+    class ScenarioBuilder
+    {
 
     public:
         ScenarioBuilder(ScenarioData data);
@@ -29,10 +30,7 @@ namespace Rival {
 
         Tile buildTile(TilePlacement& tile) const;
 
-        void addUnit(
-                Scenario* scenario,
-                const UnitPlacement& unitPlacement,
-                const EntityFactory& entityFactory) const;
+        void addUnit(Scenario* scenario, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const;
 
         void addPalisade(
                 Scenario* scenario,
@@ -44,10 +42,8 @@ namespace Rival {
                 const BuildingPlacement& buildingPlacement,
                 const EntityFactory& entityFactory) const;
 
-        void addObject(
-                Scenario* scenario,
-                const ObjectPlacement& objPlacement,
-                const EntityFactory& entityFactory) const;
+        void
+        addObject(Scenario* scenario, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
     };
 
 }  // namespace Rival

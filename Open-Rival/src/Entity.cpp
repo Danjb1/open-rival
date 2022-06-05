@@ -4,38 +4,47 @@
 namespace Rival {
 
     Entity::Entity(int width, int height)
-        : width(width),
-          height(height),
-          pos({ -1, -1 }),
-          scenario(nullptr),
-          deleted(false),
-          moved(true),
-          id(-1) {}
+        : width(width)
+        , height(height)
+        , pos({ -1, -1 })
+        , scenario(nullptr)
+        , deleted(false)
+        , moved(true)
+        , id(-1)
+    {
+    }
 
-    void Entity::attach(std::unique_ptr<EntityComponent> component) {
+    void Entity::attach(std::unique_ptr<EntityComponent> component)
+    {
         component->onAttach(this);
         components.insert({ component->getKey(), std::move(component) });
     }
 
-    void Entity::onSpawn(Scenario* newScenario, int newId, MapNode newPos) {
+    void Entity::onSpawn(Scenario* newScenario, int newId, MapNode newPos)
+    {
         scenario = newScenario;
         id = newId;
         pos = newPos;
 
-        for (auto const& kv : components) {
+        for (auto const& kv : components)
+        {
             const auto& component = kv.second;
             component->onEntitySpawned(scenario);
         }
     }
 
-    void Entity::earlyUpdate() {
+    void Entity::earlyUpdate()
+    {
         moved = false;
     }
 
-    void Entity::update() {
-        for (auto it = components.cbegin(); it != components.cend();) {
+    void Entity::update()
+    {
+        for (auto it = components.cbegin(); it != components.cend();)
+        {
             const auto& component = it->second;
-            if (component->isDeleted()) {
+            if (component->isDeleted())
+            {
                 // Clean up deleted components
                 component->onDelete();
                 it = components.erase(it);
@@ -47,7 +56,8 @@ namespace Rival {
         }
     }
 
-    void Entity::setPos(MapNode newPos) {
+    void Entity::setPos(MapNode newPos)
+    {
         pos = newPos;
         moved = true;
     }

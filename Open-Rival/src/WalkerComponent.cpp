@@ -12,49 +12,61 @@ namespace Rival {
 
     WalkerComponent::WalkerComponent() : movement({ 0, 0 }) {}
 
-    bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const {
+    bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
+    {
         return map.getPassability(node) == TilePassability::Clear;
     }
 
-    void WalkerComponent::update() {
+    void WalkerComponent::update()
+    {
         // TMP: plan a route
-        if (entity->getId() == 1 && route.isEmpty()) {
+        if (entity->getId() == 1 && route.isEmpty())
+        {
             route = Pathfinding::findPath(entity->getPos(), { 4, 3 }, *entity->getScenario(), passabilityChecker);
 
-            if (!route.isEmpty()) {
+            if (!route.isEmpty())
+            {
                 prepareNextMovement();
             }
         }
 
-        if (route.isEmpty()) {
+        if (route.isEmpty())
+        {
             return;
         }
 
         entity->moved = true;
 
         // Update movement
-        if (movement.timeElapsed >= movement.timeRequired) {
+        if (movement.timeElapsed >= movement.timeRequired)
+        {
             completeMovement();
-        } else {
+        }
+        else
+        {
             movement.timeElapsed += TimerUtils::timeStepMs;
         }
     }
 
-    void WalkerComponent::setRoute(Pathfinding::Route newRoute) {
+    void WalkerComponent::setRoute(Pathfinding::Route newRoute)
+    {
         route = newRoute;
     }
 
     /**
      * Called before moving to a new tile.
      */
-    void WalkerComponent::prepareNextMovement() {
-        if (route.isEmpty()) {
+    void WalkerComponent::prepareNextMovement()
+    {
+        if (route.isEmpty())
+        {
             return;
         }
 
         movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
 
-        for (MovementListener* listener : listeners) {
+        for (MovementListener* listener : listeners)
+        {
             listener->onUnitMoveStart(route.peek());
         }
     }
@@ -62,17 +74,22 @@ namespace Rival {
     /**
      * Called after moving to a new tile.
      */
-    void WalkerComponent::completeMovement() {
+    void WalkerComponent::completeMovement()
+    {
         MapNode node = route.pop();
         entity->setPos(node);
 
         movement.timeElapsed = 0;
 
-        if (route.isEmpty()) {
-            for (MovementListener* listener : listeners) {
+        if (route.isEmpty())
+        {
+            for (MovementListener* listener : listeners)
+            {
                 listener->onUnitJourneyEnd();
             }
-        } else {
+        }
+        else
+        {
             prepareNextMovement();
         }
     }

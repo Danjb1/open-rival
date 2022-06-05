@@ -8,6 +8,8 @@ namespace Rival {
     SoundSource::SoundSource(const WaveFile& waveFile, std::vector<float> position)
         : waveFile(waveFile)
         , position(position)
-        , positionRelativeToListener(false) {}
+        , positionRelativeToListener(false)
+    {
+    }
 
 }  // namespace Rival

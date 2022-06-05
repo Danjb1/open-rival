@@ -25,9 +25,12 @@ namespace Rival {
         , statsPanel(
                   GameInterface::statsPanel,
                   res.getUiTextureAtlas(),
-                  race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga") {}
+                  race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga")
+    {
+    }
 
-    void UiRenderer::renderUi() {
+    void UiRenderer::renderUi()
+    {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0);
@@ -39,7 +42,8 @@ namespace Rival {
         glBindVertexArray(mainUiRenderable.getVao());
 
         // Update the data on the GPU
-        if (needsUpdate()) {
+        if (needsUpdate())
+        {
             sendDataToGpu();
         }
 
@@ -51,12 +55,14 @@ namespace Rival {
                 nullptr);
     }
 
-    bool UiRenderer::needsUpdate() const {
+    bool UiRenderer::needsUpdate() const
+    {
         // Later, perhaps we can optimise this
         return true;
     }
 
-    void UiRenderer::sendDataToGpu() {
+    void UiRenderer::sendDataToGpu()
+    {
 
         // Determine the number of images to render
         bool inventoryVisible = isInventoryVisible();
@@ -76,7 +82,8 @@ namespace Rival {
         minimapTopBorder.addToBuffers(positions, texCoords);
         minimapBottomBorder.addToBuffers(positions, texCoords);
         mainPanel.addToBuffers(positions, texCoords);
-        if (!inventoryVisible) {
+        if (!inventoryVisible)
+        {
             // When rendered, this hides the inventory
             inventoryOverlay.addToBuffers(positions, texCoords);
         }
@@ -93,7 +100,8 @@ namespace Rival {
         glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
     }
 
-    bool UiRenderer::isInventoryVisible() const {
+    bool UiRenderer::isInventoryVisible() const
+    {
         // TODO
         return false;
     }

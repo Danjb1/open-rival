@@ -11,7 +11,8 @@
 
 namespace Rival {
 
-    class ScenarioReader {
+    class ScenarioReader
+    {
 
     public:
         ScenarioReader(const std::string filename);
@@ -57,8 +58,7 @@ namespace Rival {
 
         AiSetting parseAiSetting();
 
-        std::vector<TilePlacement> parseTiles(
-                int width, int height);
+        std::vector<TilePlacement> parseTiles(int width, int height);
 
         TilePlacement parseTile();
 

@@ -5,7 +5,8 @@
 
 namespace Rival {
 
-    class Framebuffer {
+    class Framebuffer
+    {
 
     public:
         Framebuffer(int width, int height, bool useDepth);
@@ -17,19 +18,23 @@ namespace Rival {
         Framebuffer& operator=(const Framebuffer& other) = delete;
         Framebuffer& operator=(Framebuffer&& other) = delete;
 
-        GLuint getId() const {
+        GLuint getId() const
+        {
             return id;
         }
 
-        GLuint getTextureId() const {
+        GLuint getTextureId() const
+        {
             return textureId;
         }
 
-        int getWidth() const {
+        int getWidth() const
+        {
             return width;
         }
 
-        int getHeight() const {
+        int getHeight() const
+        {
             return height;
         }
 

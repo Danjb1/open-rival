@@ -15,7 +15,8 @@ namespace Rival { namespace Setup {
     /**
      * Attempts to create the given directory.
      */
-    bool createDirectory(const std::string dirName) {
+    bool createDirectory(const std::string dirName)
+    {
         return CreateDirectoryA(dirName.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError();
     }
 
@@ -25,7 +26,8 @@ namespace Rival { namespace Setup {
      * See:
      * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
      */
-    int nextPowerOf2(int v) {
+    int nextPowerOf2(int v)
+    {
 
         v--;
         v |= v >> 1;
@@ -41,7 +43,8 @@ namespace Rival { namespace Setup {
     /**
      * Writes an image to disk.
      */
-    void writeImage(Image& image, const Palette::Palette& palette, const std::string filename) {
+    void writeImage(Image& image, const Palette::Palette& palette, const std::string filename)
+    {
 
         // Open file for writing
         std::ofstream out;
@@ -81,7 +84,8 @@ namespace Rival { namespace Setup {
         out.put(8 | 1 << 5);
 
         // Color map data
-        for (int i = 0; i < Palette::paletteSize; ++i) {
+        for (int i = 0; i < Palette::paletteSize; ++i)
+        {
 
             const std::uint32_t col = palette[i];
             const std::uint8_t red = (uint8_t) ((col & 0xFF000000) >> 24);
@@ -98,14 +102,17 @@ namespace Rival { namespace Setup {
         // Pixel data
         const std::vector<std::uint8_t>& data = image.getData();
         int stride = image.getStride();
-        for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < w; ++x) {
+        for (int y = 0; y < h; ++y)
+        {
+            for (int x = 0; x < w; ++x)
+            {
                 out.put(data[x + y * stride]);
             }
         }
     }
 
-    std::string zeroPad(int value, int numDigits) {
+    std::string zeroPad(int value, int numDigits)
+    {
         std::ostringstream oss;
         oss << std::setw(numDigits) << std::setfill('0') << value;
         return oss.str();

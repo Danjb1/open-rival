@@ -13,7 +13,8 @@ namespace Rival {
      * Wrapper around a texture that defines how it divides into individual
      * images.
      */
-    class Spritesheet {
+    class Spritesheet
+    {
 
     public:
         const Texture& texture;

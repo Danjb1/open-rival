@@ -9,17 +9,22 @@ namespace Rival {
 
     TextureAtlas::TextureAtlas(Texture texture, std::map<std::string, Rect> imagePlacements)
         : texture(std::move(texture))
-        , imagePlacements(imagePlacements) {}
+        , imagePlacements(imagePlacements)
+    {
+    }
 
-    const int TextureAtlas::getImageWidth(std::string key) const {
+    const int TextureAtlas::getImageWidth(std::string key) const
+    {
         return static_cast<int>(imagePlacements.at(key).width);
     }
 
-    const int TextureAtlas::getImageHeight(std::string key) const {
+    const int TextureAtlas::getImageHeight(std::string key) const
+    {
         return static_cast<int>(imagePlacements.at(key).height);
     }
 
-    const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const {
+    const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
+    {
 
         // Find the location of the image with the given key
         const Rect& imagePlacement = imagePlacements.at(key);
@@ -42,7 +47,8 @@ namespace Rival {
         return { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
     }
 
-    const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName) {
+    const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName)
+    {
 
         std::string textureName = resourceName + ".tga";
         std::string atlasName = resourceName + ".atlas";
@@ -51,11 +57,13 @@ namespace Rival {
         std::cout << "Loading: " << atlasName << "\n";
 
         std::ifstream reader(atlasName);
-        if (!reader) {
+        if (!reader)
+        {
             throw std::runtime_error("Failed to load atlas!");
         }
 
-        while (reader.good()) {
+        while (reader.good())
+        {
             std::string key;
             int x;
             int y;
@@ -66,7 +74,8 @@ namespace Rival {
             reader >> key;
 
             // The last line of the file is just whitespace
-            if (reader.eof()) {
+            if (reader.eof())
+            {
                 break;
             }
 

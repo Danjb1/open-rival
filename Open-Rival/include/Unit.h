@@ -1,10 +1,10 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-namespace Rival {
-namespace Unit {
+namespace Rival { namespace Unit {
 
-    enum class Type : std::uint8_t {
+    enum class Type : std::uint8_t
+    {
 
         // Human
         Ballista,

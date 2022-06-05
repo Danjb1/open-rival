@@ -10,59 +10,77 @@ namespace Rival { namespace AudioUtils {
     ALCdevice* openALDevice;
     ALCcontext* openALContext;
 
-    void initAL() {
+    void initAL()
+    {
         // Find the default audio device
         openALDevice = alcOpenDevice(nullptr);
-        if (!openALDevice) {
+        if (!openALDevice)
+        {
             throw std::runtime_error("Failed to find audio device");
         }
 
         // Create the OpenAL context
         openALContext = alcCreateContext(openALDevice, nullptr);
-        if (!openALContext) {
+        if (!openALContext)
+        {
             throw std::runtime_error("Failed to create audio context");
         }
 
         // Make this context current
-        if (alcMakeContextCurrent(openALContext) != ALC_TRUE) {
+        if (alcMakeContextCurrent(openALContext) != ALC_TRUE)
+        {
             throw std::runtime_error("Failed to make audio context current");
         }
     }
 
-    void destroyAL() {
+    void destroyAL()
+    {
         // Clear active audio context
-        if (alcMakeContextCurrent(nullptr) != ALC_TRUE) {
+        if (alcMakeContextCurrent(nullptr) != ALC_TRUE)
+        {
             std::cerr << "Failed to clear active audio context\n";
         }
 
         // Destroy audio context
         alcDestroyContext(openALContext);
-        if (alcGetError(openALDevice) != ALC_NO_ERROR) {
+        if (alcGetError(openALDevice) != ALC_NO_ERROR)
+        {
             std::cerr << "Failed to destroy audio context\n";
         }
 
         // Close audio device
-        if (alcCloseDevice(openALDevice) != ALC_TRUE) {
+        if (alcCloseDevice(openALDevice) != ALC_TRUE)
+        {
             std::cerr << "Failed to close audio device\n";
         }
     }
 
-    void checkPlaySoundALError(const WaveFile& waveFile) {
+    void checkPlaySoundALError(const WaveFile& waveFile)
+    {
         ALenum error = alGetError();
-        if (error != AL_NO_ERROR) {
+        if (error != AL_NO_ERROR)
+        {
             std::cerr << "OpenAL error: " << error << "\n";
             throw std::runtime_error("Error playing sound: " + waveFile.filename);
         }
     }
 
-    ALenum getAudioFormat(const WavHeader& waveHeader) {
-        if (waveHeader.numChannels == 1 && waveHeader.bitsPerSample == 8) {
+    ALenum getAudioFormat(const WavHeader& waveHeader)
+    {
+        if (waveHeader.numChannels == 1 && waveHeader.bitsPerSample == 8)
+        {
             return AL_FORMAT_MONO8;
-        } else if (waveHeader.numChannels == 1 && waveHeader.bitsPerSample == 16) {
+        }
+        else if (waveHeader.numChannels == 1 && waveHeader.bitsPerSample == 16)
+        {
             return AL_FORMAT_MONO16;
-        } else if (waveHeader.numChannels == 2 && waveHeader.bitsPerSample == 8) {
+        }
+        else if (waveHeader.numChannels == 2 && waveHeader.bitsPerSample == 8)
+        {
             return AL_FORMAT_STEREO8;
-        } else if (waveHeader.numChannels == 2 && waveHeader.bitsPerSample == 16) {
+        }
+        else if (waveHeader.numChannels == 2 && waveHeader.bitsPerSample == 16)
+        {
             return AL_FORMAT_STEREO16;
         }
         throw std::runtime_error(
@@ -70,7 +88,8 @@ namespace Rival { namespace AudioUtils {
                 + std::to_string(waveHeader.bitsPerSample) + " bps");
     }
 
-    void playSound(const SoundSource& source) {
+    void playSound(const SoundSource& source)
+    {
         // Generate buffer
         ALuint buffer;
         alGenBuffers(1, &buffer);

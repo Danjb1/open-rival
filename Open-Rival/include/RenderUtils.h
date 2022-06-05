@@ -7,8 +7,7 @@
 #include "Camera.h"
 #include "Window.h"
 
-namespace Rival {
-namespace RenderUtils {
+namespace Rival { namespace RenderUtils {
 
     // Size of a single Tile image, in pixels
     static const int tileSpriteWidthPx = 64;
@@ -151,10 +150,7 @@ namespace RenderUtils {
     /**
      * Creates a view-projection matrix for rendering to the game world.
      */
-    glm::mat4 createGameProjection(
-            const Camera& camera,
-            int viewportWidth,
-            int viewportHeight);
+    glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight);
 
     /**
      * Creates a view-projection matrix for rendering to a menu.

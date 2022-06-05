@@ -8,7 +8,8 @@
 
 namespace Rival {
 
-    class BinaryFileReader {
+    class BinaryFileReader
+    {
 
     public:
         BinaryFileReader(const std::string filename);

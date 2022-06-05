@@ -8,7 +8,8 @@
 
 namespace Rival {
 
-    class Window {
+    class Window
+    {
 
     public:
         Window(int width, int height, const char* title);

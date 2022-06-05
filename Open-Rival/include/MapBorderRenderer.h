@@ -13,27 +13,18 @@
 
 namespace Rival {
 
-    class MapBorderRenderer {
+    class MapBorderRenderer
+    {
 
     public:
         MapBorderRenderer(
-                Race race,
-                int mapWidth,
-                int mapHeight,
-                const Spritesheet& spritesheet,
-                const Texture& paletteTexture);
+                Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture);
 
-        void createLeftEdge(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int raceOffset,
-                int mapHeight);
+        void
+        createLeftEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
 
-        void createTopEdge(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int raceOffset,
-                int mapWidth);
+        void
+        createTopEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth);
 
         void createRightEdge(
                 std::vector<GLfloat>& positions,

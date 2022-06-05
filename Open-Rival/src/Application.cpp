@@ -8,13 +8,17 @@
 
 namespace Rival {
 
-    Application::Application(Window& window, json& cfg) : window(window), cfg(cfg), res(cfg) {
+    Application::Application(Window& window, json& cfg) : window(window), cfg(cfg), res(cfg)
+    {
 
         // Try to enable vsync.
         // Note that vsync may already be enabled by default!
-        if (SDL_GL_SetSwapInterval(1) == 0) {
+        if (SDL_GL_SetSwapInterval(1) == 0)
+        {
             vsyncEnabled = true;
-        } else {
+        }
+        else
+        {
             printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
             vsyncEnabled = false;
         }
@@ -24,16 +28,19 @@ namespace Rival {
         audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
     }
 
-    void Application::start(std::unique_ptr<State> initialState) {
+    void Application::start(std::unique_ptr<State> initialState)
+    {
         setState(std::move(initialState));
 
         Uint32 nextUpdateDue = SDL_GetTicks();
 
         // Game loop
-        while (!exiting) {
+        while (!exiting)
+        {
 
             // Switch to the next State, if set
-            if (nextState.get()) {
+            if (nextState.get())
+            {
                 makeNextStateActive();
             }
 
@@ -45,7 +52,8 @@ namespace Rival {
             Uint32 frameStartTime = SDL_GetTicks();
 
             // Is the next update due?
-            if (vsyncEnabled || nextUpdateDue <= frameStartTime) {
+            if (vsyncEnabled || nextUpdateDue <= frameStartTime)
+            {
 
                 // Handle events on the queue
                 pollEvents();
@@ -60,7 +68,8 @@ namespace Rival {
                 //  - For a 120Hz monitor, this will run every other render.
                 //
                 // If vsync is disabled, this should run once per render.
-                while (nextUpdateDue <= frameStartTime) {
+                while (nextUpdateDue <= frameStartTime)
+                {
                     state->update();
                     nextUpdateDue += TimerUtils::timeStepMs;
                 }
@@ -83,34 +92,46 @@ namespace Rival {
                 // If vsync is enabled, this will block execution until the
                 // next swap interval.
                 window.swapBuffers();
-
-            } else {
+            }
+            else
+            {
                 // Next update is not yet due (frameStartTime < nextUpdateDue),
                 // so let's sleep (unless the next update is imminent!)
                 Uint32 sleepTime = nextUpdateDue - frameStartTime;
-                if (sleepTime >= minSleepTime) {
+                if (sleepTime >= minSleepTime)
+                {
                     SDL_Delay(sleepTime);
                 }
             }
         }
     }
 
-    void Application::pollEvents() {
+    void Application::pollEvents()
+    {
         SDL_Event e;
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT)
+            {
                 exiting = true;
-            } else if (e.type == SDL_KEYDOWN) {
+            }
+            else if (e.type == SDL_KEYDOWN)
+            {
                 state->keyDown(e.key.keysym.sym);
-            } else if (e.type == SDL_MOUSEBUTTONUP) {
+            }
+            else if (e.type == SDL_MOUSEBUTTONUP)
+            {
                 state->mouseUp(e.button);
-            } else if (e.type == SDL_MOUSEWHEEL) {
+            }
+            else if (e.type == SDL_MOUSEWHEEL)
+            {
                 state->mouseWheelMoved(e.wheel);
             }
         }
     }
 
-    void Application::makeNextStateActive() {
+    void Application::makeNextStateActive()
+    {
         state = std::move(nextState);
         state->onLoad();
     }

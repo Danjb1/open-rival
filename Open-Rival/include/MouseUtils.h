@@ -3,8 +3,7 @@
 
 #include "Rect.h"
 
-namespace Rival {
-namespace MouseUtils {
+namespace Rival { namespace MouseUtils {
 
     /**
      * Calculates the mouse position relative to the viewport, in pixels.

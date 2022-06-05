@@ -37,7 +37,8 @@ namespace Rival {
      * Note that, unless specified, no guarantees are made about the order in
      * Entities within the game world receive lifecycle callbacks.
      */
-    class Entity final {
+    class Entity final
+    {
 
     public:
         /**
@@ -75,7 +76,8 @@ namespace Rival {
         /**
          * Determines if this Entity has been marked for deletion.
          */
-        const bool isDeleted() const {
+        const bool isDeleted() const
+        {
             return deleted;
         }
 
@@ -86,21 +88,24 @@ namespace Rival {
          * during the game loop, and should be considered non-existent for the
          * purposes of logic and rendering.
          */
-        void markForDeletion() {
+        void markForDeletion()
+        {
             deleted = true;
         }
 
         /**
          * Gets a pointer to the Scenario that holds this Entity.
          */
-        Scenario* getScenario() {
+        Scenario* getScenario()
+        {
             return scenario;
         }
 
         /**
          * Gets the unique identifier for this Entity.
          */
-        const int getId() const {
+        const int getId() const
+        {
             return id;
         }
 
@@ -124,21 +129,24 @@ namespace Rival {
          * fluctuates - so it does not make sense to try to store the absolute
          * position of an Entity as a float.
          */
-        const MapNode& getPos() const {
+        const MapNode& getPos() const
+        {
             return pos;
         }
 
         /**
          * Gets the number of tiles this Entity occupies in the x-axis.
          */
-        int getWidth() const {
+        int getWidth() const
+        {
             return width;
         }
 
         /**
          * Gets the number of tiles this Entity occupies in the y-axis.
          */
-        int getHeight() const {
+        int getHeight() const
+        {
             return height;
         }
 
@@ -153,9 +161,11 @@ namespace Rival {
          * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        std::weak_ptr<T> getComponent(const std::string key) {
+        std::weak_ptr<T> getComponent(const std::string key)
+        {
             auto findResult = components.find(key);
-            if (findResult == components.end()) {
+            if (findResult == components.end())
+            {
                 return std::weak_ptr<T>();
             }
             return std::dynamic_pointer_cast<T>(findResult->second);
@@ -167,9 +177,11 @@ namespace Rival {
          * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        std::weak_ptr<const T> getComponent(const std::string key) const {
+        std::weak_ptr<const T> getComponent(const std::string key) const
+        {
             const auto findResult = components.find(key);
-            if (findResult == components.end()) {
+            if (findResult == components.end())
+            {
                 return std::weak_ptr<T>();
             }
             return std::dynamic_pointer_cast<const T>(findResult->second);

@@ -7,7 +7,8 @@ namespace Rival {
 
     OwnerComponent::OwnerComponent(int player) : EntityComponent(key), player(player) {}
 
-    int OwnerComponent::getPlayer() const {
+    int OwnerComponent::getPlayer() const
+    {
         return player;
     }
 

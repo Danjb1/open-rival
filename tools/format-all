@@ -1,16 +1,40 @@
+#!/usr/bin/env bash
+
 cd ..
+
+echo "Formatting audio-extractor"
 clang-format -i -style=file audio-extractor/*.cpp
 clang-format -i -style=file audio-extractor/*.h
+
+echo "Formatting campaign-extractor"
 clang-format -i -style=file campaign-extractor/*.cpp
 clang-format -i -style=file campaign-extractor/*.h
+
+echo "Formatting image-extractor"
 clang-format -i -style=file image-extractor/*.cpp
 clang-format -i -style=file image-extractor/*.h
+
+echo "Formatting interface-extractor"
 clang-format -i -style=file interface-extractor/*.cpp
 clang-format -i -style=file interface-extractor/*.h
+
+echo "Formatting Open-Rival"
+mv Open-Rival/include/json.h Open-Rival/include/json.h.bak
 clang-format -i -style=file Open-Rival/include/*.h
+mv Open-Rival/include/json.h.bak Open-Rival/include/json.h
 clang-format -i -style=file Open-Rival/src/*.cpp
+
+echo "Formatting Open-Rival-test"
+clang-format -i -style=file Open-Rival-test/include/*.h
+clang-format -i -style=file Open-Rival-test/src/*.cpp
+
+echo "Formatting setup"
 clang-format -i -style=file setup/include/*.h
 clang-format -i -style=file setup/src/*.cpp
+
+echo "Formatting texture-builder"
 clang-format -i -style=file texture-builder/*.cpp
 clang-format -i -style=file texture-builder/*.h
+
+echo ""
 cd tools

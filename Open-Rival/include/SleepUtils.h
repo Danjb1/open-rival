@@ -1,8 +1,7 @@
 #ifndef SLEEP_UTILS_H
 #define SLEEP_UTILS_H
 
-namespace Rival {
-namespace SleepUtils {
+namespace Rival { namespace SleepUtils {
 
     void sleep(int ms);
 

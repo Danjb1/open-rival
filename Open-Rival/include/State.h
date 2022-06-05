@@ -11,7 +11,8 @@ namespace Rival {
     // Forward declaration to avoid circular reference
     class Application;
 
-    class State {
+    class State
+    {
 
     public:
         State(Application& app);

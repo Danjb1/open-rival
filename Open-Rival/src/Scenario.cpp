@@ -13,7 +13,9 @@ namespace Rival {
         // Default to Grass everywhere
         tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
         , tilePassability(std::vector<TilePassability>(width * height, TilePassability::Clear))
-        , nextId(0) {}
+        , nextId(0)
+    {
+    }
 
     // Creates a Scenario from data
     Scenario::Scenario(int width, int height, bool wilderness, std::vector<Tile> tiles)
@@ -22,13 +24,17 @@ namespace Rival {
         , wilderness(wilderness)
         , tiles(tiles)
         , tilePassability(std::vector<TilePassability>(width * height, TilePassability::Clear))
-        , nextId(0) {}
+        , nextId(0)
+    {
+    }
 
-    Tile Scenario::getTile(int x, int y) const {
+    Tile Scenario::getTile(int x, int y) const
+    {
         return tiles[y * width + x];
     }
 
-    void Scenario::addEntity(std::shared_ptr<Entity> entity, int x, int y) {
+    void Scenario::addEntity(std::shared_ptr<Entity> entity, int x, int y)
+    {
 
         // Add the Entity to the world
         entities[nextId] = entity;
@@ -38,41 +44,54 @@ namespace Rival {
         ++nextId;
     }
 
-    const std::vector<std::shared_ptr<Entity>> Scenario::getEntities() const {
+    const std::vector<std::shared_ptr<Entity>> Scenario::getEntities() const
+    {
         std::vector<std::shared_ptr<Entity>> entityList;
-        for (auto const& entry : entities) {
+        for (auto const& entry : entities)
+        {
             entityList.push_back(entry.second);
         }
         return entityList;
     }
 
-    const std::shared_ptr<Entity> Scenario::getEntity(int id) const {
+    const std::shared_ptr<Entity> Scenario::getEntity(int id) const
+    {
         auto const iter = entities.find(id);
-        if (iter == entities.end()) {
+        if (iter == entities.end())
+        {
             // Entity is not in the map
             return std::shared_ptr<Entity>();
-        } else {
+        }
+        else
+        {
             // iter points to the desired map entry
             return iter->second;
         }
     }
 
-    void Scenario::cleanUpEntities() {
-        for (auto it = entities.cbegin(); it != entities.cend();) {
+    void Scenario::cleanUpEntities()
+    {
+        for (auto it = entities.cbegin(); it != entities.cend();)
+        {
             const auto& e = it->second;
-            if (e->isDeleted()) {
+            if (e->isDeleted())
+            {
                 it = entities.erase(it);
-            } else {
+            }
+            else
+            {
                 ++it;
             }
         }
     }
 
-    void Scenario::setPassability(const MapNode& pos, TilePassability passability) {
+    void Scenario::setPassability(const MapNode& pos, TilePassability passability)
+    {
         tilePassability[pos.y * width + pos.x] = passability;
     }
 
-    TilePassability Scenario::getPassability(const MapNode& pos) const {
+    TilePassability Scenario::getPassability(const MapNode& pos) const
+    {
         return tilePassability[pos.y * width + pos.x];
     }
 

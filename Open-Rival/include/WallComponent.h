@@ -33,7 +33,8 @@ namespace Rival {
     /**
      * Component containing data required by wall segments.
      */
-    class WallComponent : public EntityComponent {
+    class WallComponent : public EntityComponent
+    {
 
     public:
         static const std::string key;

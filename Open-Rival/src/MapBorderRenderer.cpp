@@ -24,7 +24,8 @@ namespace Rival {
         //  - Plus 2 (some overlap at the bottom corners is actually required
         //      to prevent gaps in maps with an odd height)
         maxSegmentsToRender(2 * (mapWidth + mapHeight) - 2)
-        , renderable { spritesheet, maxSegmentsToRender } {
+        , renderable { spritesheet, maxSegmentsToRender }
+    {
 
         // The map border never changes, so we set the buffers here and never
         // touch them again.
@@ -58,7 +59,8 @@ namespace Rival {
         glBufferSubData(GL_ARRAY_BUFFER, 0, texCoords.size() * sizeof(GLfloat), texCoords.data());
     }
 
-    void MapBorderRenderer::render() const {
+    void MapBorderRenderer::render() const
+    {
 
         // Use textures
         glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
@@ -75,16 +77,20 @@ namespace Rival {
     }
 
     void MapBorderRenderer::createLeftEdge(
-            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight) {
-        for (int tileY = 1; tileY < mapHeight; ++tileY) {
+            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight)
+    {
+        for (int tileY = 1; tileY < mapHeight; ++tileY)
+        {
             addDataToBuffers(positions, texCoords, raceOffset + txIndexLeft, 0, static_cast<float>(tileY));
             numSegments++;
         }
     }
 
     void MapBorderRenderer::createTopEdge(
-            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth) {
-        for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
+            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth)
+    {
+        for (int tileX = 1; tileX < mapWidth - 1; ++tileX)
+        {
             addDataToBuffers(positions, texCoords, raceOffset + txIndexTop, static_cast<float>(tileX), 0);
             numSegments++;
         }
@@ -95,8 +101,10 @@ namespace Rival {
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,
-            int mapHeight) {
-        for (int tileY = 1; tileY < mapHeight; ++tileY) {
+            int mapHeight)
+    {
+        for (int tileY = 1; tileY < mapHeight; ++tileY)
+        {
             addDataToBuffers(
                     positions, texCoords, raceOffset + txIndexRight, mapWidth - 1.0f, static_cast<float>(tileY));
             numSegments++;
@@ -108,8 +116,10 @@ namespace Rival {
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,
-            int mapHeight) {
-        for (int tileX = 1; tileX < mapWidth - 1; ++tileX) {
+            int mapHeight)
+    {
+        for (int tileX = 1; tileX < mapWidth - 1; ++tileX)
+        {
             addDataToBuffers(
                     positions, texCoords, raceOffset + txIndexBottom, static_cast<float>(tileX), mapHeight - 0.5f);
             numSegments++;
@@ -121,7 +131,8 @@ namespace Rival {
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,
-            int mapHeight) {
+            int mapHeight)
+    {
 
         addDataToBuffers(positions, texCoords, raceOffset + txIndexTopLeft, 0, 0);
         addDataToBuffers(positions, texCoords, raceOffset + txIndexTopRight, mapWidth - 1.0f, 0);
@@ -132,7 +143,8 @@ namespace Rival {
     }
 
     void MapBorderRenderer::addDataToBuffers(
-            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int txIndex, float tileX, float tileY) {
+            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int txIndex, float tileX, float tileY)
+    {
 
         // Define vertex positions
         float width = static_cast<float>(RenderUtils::tileSpriteWidthPx);

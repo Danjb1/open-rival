@@ -13,8 +13,10 @@ const std::string outputDir = "images";
 /**
  * Entry point for the application.
  */
-int main() {
-    if (!createDirectory(outputDir)) {
+int main()
+{
+    if (!createDirectory(outputDir))
+    {
         std::cerr << "Could not create directory: " << outputDir << "\n";
         return -1;
     }
