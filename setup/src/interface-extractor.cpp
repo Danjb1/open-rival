@@ -3,12 +3,13 @@
  */
 
 #include "pch.h"
+
 #include "interface-extractor.h"
+
+#include <iostream>
 
 #include "FileUtils.h"
 #include "setup-utils.h"
-
-#include <iostream>
 
 namespace Rival { namespace Setup {
 

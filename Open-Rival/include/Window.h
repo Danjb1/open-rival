@@ -1,10 +1,10 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <SDL.h>
+
 #include <string>
 #include <vector>
-
-#include <SDL.h>
 
 namespace Rival {
 

@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "ScenarioReader.h"
 
 #include <algorithm>

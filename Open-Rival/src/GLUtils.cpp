@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "GLUtils.h"
 
 namespace Rival { namespace GLUtils {

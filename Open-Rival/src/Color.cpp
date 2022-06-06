@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Color.h"
 
 #include <cstdint>

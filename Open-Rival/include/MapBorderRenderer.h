@@ -2,13 +2,14 @@
 #define MAP_BORDER_RENDERER_H
 
 #include <gl/glew.h>
+
 #include <vector>
 
 #include "Camera.h"
 #include "Race.h"
 #include "RenderUtils.h"
-#include "Spritesheet.h"
 #include "SpriteRenderable.h"
+#include "Spritesheet.h"
 #include "Texture.h"
 
 namespace Rival {

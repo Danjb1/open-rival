@@ -1,7 +1,9 @@
 #include "pch.h"
+
 #include "AudioUtils.h"
 
 #include <AL/al.h>
+
 #include <iostream>
 #include <stdexcept>
 

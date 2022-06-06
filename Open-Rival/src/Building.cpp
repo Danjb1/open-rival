@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Building.h"
 
 namespace Rival { namespace Building {

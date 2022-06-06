@@ -2,6 +2,7 @@
 #define SPRITESHEET_H
 
 #include <gl/glew.h>
+
 #include <iostream>
 #include <vector>
 

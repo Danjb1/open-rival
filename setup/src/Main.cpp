@@ -2,18 +2,19 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+#include <windows.h>
+
 #include <cstring>
 #include <filesystem>
 #include <iostream>
 #include <string>
-#include <windows.h>
 
+#include "StringUtils.h"
 #include "audio-extractor.h"
 #include "image-extractor.h"
 #include "interface-extractor.h"
 #include "registry.h"
 #include "setup-utils.h"
-#include "StringUtils.h"
 #include "texture-builder.h"
 
 namespace fs = std::filesystem;

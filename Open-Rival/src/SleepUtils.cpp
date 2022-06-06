@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "SleepUtils.h"
 
 namespace Rival { namespace SleepUtils {

@@ -10,11 +10,13 @@
  */
 
 #include "pch.h"
+
 #include "image-extractor.h"
+
+#include <windows.h>  // VirtualProtect, etc.
 
 #include <cstdint>    // uint8_t
 #include <stdexcept>  // runtime_error
-#include <windows.h>  // VirtualProtect, etc.
 
 #include "FileUtils.h"
 #include "Image.h"

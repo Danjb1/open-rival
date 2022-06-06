@@ -1,11 +1,11 @@
 #ifndef FONTS_H
 #define FONTS_H
 
-#include <map>
-#include <string>
-
 #include <glm/glm.hpp>
 #include <ft2build.h>
+
+#include <map>
+#include <string>
 #include FT_FREETYPE_H
 
 #include "Image.h"

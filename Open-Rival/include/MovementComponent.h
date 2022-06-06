@@ -1,8 +1,8 @@
 #pragma once
 
-#include "EntityComponent.h"
-
 #include <unordered_set>
+
+#include "EntityComponent.h"
 
 namespace Rival {
 

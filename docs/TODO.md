@@ -8,20 +8,20 @@
 
 ### Component Safety
 
+- Test project no longer compiles
 - Add a "require" mechanism when retrieving components (fail fast)
 - Ensure `onDelete` is never called before `onEntitySpawned`
 - Use `getComponent<const T>` variants where possible
 
 ### Formatting and Libraries
 
-- Clang-Format crashes with out-of-memory error when formatting all headers
-    - This is because of json.h
-- Auto-arrange includes via clang-format?
 - Improve handling of libary files
     - Suppress warnings around includes rather than editing library files
     - Move library headers (json, RtMidi) into a separate project or folder?
+    - Do not auto-format library subfolders
     - Clearly annotate any changes to library files
 - Suppress warnings from SDL (C26819, C26812)
+- Use CppCheck VS Add-in: https://github.com/VioletGiraffe/cppcheck-vs-addin
 
 ### Data Loading
 
@@ -252,6 +252,7 @@
 <!----------------------------------------------------------------------------->
 
 - Build for Linux
+- Use a dependency manager
 - Add script to build from command line
 - Add script to run tests from command line
 
@@ -333,7 +334,6 @@
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
-    - Do not auto-format library subfolders
 - Move constants from header files to CPP files?
 - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset

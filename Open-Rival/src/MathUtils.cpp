@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "MathUtils.h"
 
 namespace Rival { namespace MathUtils {

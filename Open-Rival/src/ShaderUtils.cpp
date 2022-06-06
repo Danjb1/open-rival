@@ -1,12 +1,14 @@
 #include "pch.h"
+
 #include "ShaderUtils.h"
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include <SDL.h>
+
 #include <stdio.h>
 
-#include <SDL.h>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 namespace Rival { namespace ShaderUtils {
 

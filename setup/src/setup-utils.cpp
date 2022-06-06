@@ -1,12 +1,14 @@
 #include "pch.h"
+
 #include "setup-utils.h"
 
-#include <cstdint>    // uint8_t
-#include <fstream>    // ofstream
-#include <iomanip>    // setw, setfill
-#include <sstream>    // ostringstream
-#include <vector>     // vector
 #include <windows.h>  // CreateDirectoryA, etc.
+
+#include <cstdint>  // uint8_t
+#include <fstream>  // ofstream
+#include <iomanip>  // setw, setfill
+#include <sstream>  // ostringstream
+#include <vector>   // vector
 
 #include "Palette.h"
 

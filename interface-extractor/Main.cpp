@@ -1,7 +1,8 @@
 #include "pch.h"
 
-#include <iostream>
 #include <windows.h>
+
+#include <iostream>
 
 #include "interface-extractor.h"
 #include "setup-utils.h"

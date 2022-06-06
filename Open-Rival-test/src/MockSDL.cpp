@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "MockSDL.h"
 
 #define SDL_MAIN_HANDLED

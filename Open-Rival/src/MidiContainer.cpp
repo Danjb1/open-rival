@@ -1,8 +1,10 @@
 #include "pch.h"
+
 #include "MidiContainer.h"
 
-#include <algorithm>
 #include <string.h>
+
+#include <algorithm>
 
 #pragma warning(push)
 #pragma warning(disable : 4244 4456)

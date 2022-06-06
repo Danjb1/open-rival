@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Scenario.h"
 
 namespace Rival {

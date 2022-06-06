@@ -1,9 +1,9 @@
 #ifndef TEXT_RENDERABLE_H
 #define TEXT_RENDERABLE_H
 
-#include <string>
-
 #include <glm/glm.hpp>
+
+#include <string>
 
 #include "Color.h"
 #include "Font.h"

@@ -1,9 +1,10 @@
 #include "pch.h"
+
 #include "Font.h"
 
+#include <gl/glew.h>
 #include <freetype/ftfntfmt.h>
 #include <freetype/ftwinfnt.h>
-#include <gl/glew.h>
 
 #include <algorithm>  // std::max
 #include <memory>     // std::make_unique

@@ -8,6 +8,7 @@
 #pragma warning(pop)
 
 #include <gl/glew.h>
+
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -16,12 +17,12 @@
 #include "AudioUtils.h"
 #include "FileUtils.h"
 #include "GameState.h"
-#include "json.h"
 #include "Scenario.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
 #include "Window.h"
+#include "json.h"
 
 using json = nlohmann::json;
 

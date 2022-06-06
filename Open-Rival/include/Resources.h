@@ -1,16 +1,15 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 
+#include <ft2build.h>
+
 #include <map>
 #include <string>
 #include <vector>
-
-#include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include "Building.h"
 #include "Font.h"
-#include "json.h"
 #include "MidiFile.h"
 #include "PaletteUtils.h"
 #include "Spritesheet.h"
@@ -18,6 +17,7 @@
 #include "TextureAtlas.h"
 #include "Unit.h"
 #include "WaveFile.h"
+#include "json.h"
 
 using json = nlohmann::json;
 

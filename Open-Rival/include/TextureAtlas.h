@@ -2,6 +2,7 @@
 #define TEXTURE_ATLAS_H
 
 #include <gl/glew.h>
+
 #include <map>
 #include <vector>
 
