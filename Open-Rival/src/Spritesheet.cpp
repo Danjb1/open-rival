@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Spritesheet.h"
 
 namespace Rival {

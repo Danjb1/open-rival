@@ -2,20 +2,20 @@
 #define RIVAL_H
 
 #include <SDL.h>
+
 #include <iostream>
 #include <memory>
 
 #include "Application.h"
 #include "Camera.h"
+#include "Font.h"  // TMP
 #include "GameRenderer.h"
+#include "MenuTextRenderer.h"  // TMP
 #include "MousePicker.h"
 #include "Rect.h"
 #include "Scenario.h"
 #include "State.h"
-
-#include "Font.h"              // TMP
-#include "MenuTextRenderer.h"  // TMP
-#include "TextRenderable.h"    // TMP
+#include "TextRenderable.h"  // TMP
 
 namespace Rival {
 

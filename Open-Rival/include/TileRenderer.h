@@ -2,12 +2,13 @@
 #define TILE_RENDERER_H
 
 #include <gl/glew.h>
+
 #include <vector>
 
 #include "Camera.h"
 #include "RenderUtils.h"
-#include "Spritesheet.h"
 #include "SpriteRenderable.h"
+#include "Spritesheet.h"
 #include "Texture.h"
 #include "Tile.h"
 

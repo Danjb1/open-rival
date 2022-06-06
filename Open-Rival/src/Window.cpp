@@ -1,9 +1,10 @@
 #include "pch.h"
+
 #include "Window.h"
 
-#include <iostream>
-
 #include <SDL.h>
+
+#include <iostream>
 
 namespace Rival {
 

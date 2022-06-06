@@ -1,8 +1,10 @@
 ﻿# Config generator: https://zed0.co.uk/clang-format-configurator/
 #
 # NOTE: Some settings are not fully supported by this tool:
-# - AlignAfterOpenBracket causes an error when loading the config: https://github.com/zed0/clang-format-configurator/issues/31
-# - BraceWrapping is not saved to file: https://github.com/zed0/clang-format-configurator/issues/17
+# - AlignAfterOpenBracket causes an error when loading the config:
+#     https://github.com/zed0/clang-format-configurator/issues/31
+# - BraceWrapping is not saved to file:
+#     https://github.com/zed0/clang-format-configurator/issues/17
 ---
 AccessModifierOffset: '-4'
 AlignAfterOpenBracket: DontAlign
@@ -44,6 +46,57 @@ ContinuationIndentWidth: '8'
 Cpp11BracedListStyle: 'false'
 DerivePointerAlignment: 'false'
 FixNamespaceComments: 'true'
+IncludeBlocks: Regroup
+# Include ordering:
+# - Includes are first sorted by SortPriority
+# - Adjacent includes with the same Priority are then grouped
+# - The header file directly corresponding to a .cpp file gets Priority 0
+IncludeCategories:
+  # Precompiled headers
+  - Regex:           '^\"pch\.h\"'
+    Priority:        -1
+    SortPriority:    -20
+    CaseSensitive:   true
+  # Testing framework
+  - Regex:           '^\"catch2\/.*\"'
+    Priority:        -1
+    SortPriority:    -10
+    CaseSensitive:   true
+  # SDL
+  - Regex:           '^<SDL.*>'
+    Priority:        1
+    SortPriority:    10
+    CaseSensitive:   true
+  # GL
+  - Regex:           '^<glm?\/.+>'
+    Priority:        1
+    SortPriority:    11
+    CaseSensitive:   true
+  # Freetype
+  - Regex:           '^<freetype\/.+>'
+    Priority:        1
+    SortPriority:    12
+    CaseSensitive:   true
+  - Regex:           '^<ft2build\.h>'
+    Priority:        1
+    SortPriority:    13
+    CaseSensitive:   true
+  - Regex:           '^FT_FREETYPE_H'
+    Priority:        1
+    SortPriority:    14
+    CaseSensitive:   true
+  # C system headers
+  - Regex:           '^<.+\.h>'
+    Priority:        2
+    SortPriority:    20
+  # C++ standard library headers
+  - Regex:           '^<.+>'
+    Priority:        3
+    SortPriority:    30
+  # Project files
+  - Regex:           '^\".*\"'
+    Priority:        4
+    SortPriority:    40
 IndentCaseLabels: 'false'
 IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'
@@ -51,7 +104,7 @@ Language: Cpp
 MaxEmptyLinesToKeep: '1'
 NamespaceIndentation: All
 PointerAlignment: Left
-SortIncludes: 'false'
+SortIncludes: 'true'
 SpaceAfterCStyleCast: 'true'
 SpaceBeforeCpp11BracedList: 'true'
 SpaceBeforeParens: ControlStatements

@@ -1,7 +1,9 @@
 #include "pch.h"
+
 #include "PaletteUtils.h"
 
 #include <gl/glew.h>
+
 #include <array>
 #include <cstdint>
 

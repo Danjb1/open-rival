@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "MapUtils.h"
 
 namespace Rival { namespace MapUtils {

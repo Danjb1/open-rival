@@ -1,9 +1,9 @@
 #ifndef SHADER_UTILS_H
 #define SHADER_UTILS_H
 
-#include <string>
-
 #include <gl/glew.h>
+
+#include <string>
 
 namespace Rival { namespace ShaderUtils {
 

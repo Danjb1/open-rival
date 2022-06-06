@@ -1,7 +1,9 @@
 #include "pch.h"
+
 #include "MousePicker.h"
 
 #include <SDL.h>
+
 #include <iostream>
 
 #include "MapUtils.h"

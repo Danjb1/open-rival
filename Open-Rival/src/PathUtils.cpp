@@ -1,8 +1,10 @@
 #include "pch.h"
+
 #include "PathUtils.h"
 
-#include <iostream>
 #include <shlobj_core.h>
+
+#include <iostream>
 #include <sstream>
 
 #include "StringUtils.h"

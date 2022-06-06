@@ -2,6 +2,7 @@
 #define GAME_INTERFACE_H
 
 #include <gl/glew.h>
+
 #include <string>
 #include <vector>
 

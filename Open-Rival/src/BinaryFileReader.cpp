@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "BinaryFileReader.h"
 
 #include <stdexcept>

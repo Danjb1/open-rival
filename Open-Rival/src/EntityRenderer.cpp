@@ -1,7 +1,9 @@
 #include "pch.h"
+
 #include "EntityRenderer.h"
 
 #include <gl/glew.h>
+
 #include <algorithm>  // min
 #include <vector>
 

@@ -2,6 +2,7 @@
 #define RENDER_UTILS_H
 
 #include <glm/mat4x4.hpp>
+
 #include <cmath>
 
 #include "Camera.h"

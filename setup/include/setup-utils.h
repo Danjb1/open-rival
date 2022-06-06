@@ -2,6 +2,7 @@
 #define SETUP_UTILS_H
 
 #include <stdint.h>
+
 #include <string>
 
 #include "Image.h"

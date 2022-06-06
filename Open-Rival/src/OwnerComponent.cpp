@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "OwnerComponent.h"
 
 namespace Rival {

@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "MovementComponent.h"
 
 namespace Rival {

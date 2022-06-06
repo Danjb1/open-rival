@@ -1,8 +1,9 @@
 #include "pch.h"
+
 #include "MapBorderRenderer.h"
 
-#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #pragma warning(push)
 #pragma warning(disable : 4127)
 #include <glm/gtc/matrix_transform.hpp>

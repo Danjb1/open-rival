@@ -2,8 +2,9 @@
 #define REGISTRY_H
 
 #include <IntSafe.h>
-#include <stdexcept>
 #include <windows.h>
+
+#include <stdexcept>
 
 /*
  * Based on:

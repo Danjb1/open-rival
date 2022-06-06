@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Palette.h"
 
 namespace Rival { namespace Palette {

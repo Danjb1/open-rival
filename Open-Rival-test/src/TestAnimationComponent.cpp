@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "Animations.h"
 #include "AnimationComponent.h"
+#include "Animations.h"
 #include "Entity.h"
 #include "SpriteComponent.h"
 #include "Spritesheet.h"

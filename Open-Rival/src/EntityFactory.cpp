@@ -1,16 +1,17 @@
 #include "pch.h"
+
 #include "EntityFactory.h"
 
-#include "Animations.h"
 #include "AnimationComponent.h"
+#include "Animations.h"
 #include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
 #include "PassabilityComponent.h"
 #include "SpriteComponent.h"
 #include "Tile.h"
 #include "UnitPropsComponent.h"
-#include "WallComponent.h"
 #include "WalkerComponent.h"
+#include "WallComponent.h"
 
 namespace Rival {
 
