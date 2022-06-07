@@ -7,7 +7,9 @@
 
 namespace Rival {
 
-    Framebuffer::Framebuffer(int w, int h, bool useDepth) : width(w), height(h)
+    Framebuffer::Framebuffer(int w, int h, bool useDepth)
+        : width(w)
+        , height(h)
     {
 
         // Generate framebuffer

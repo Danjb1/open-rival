@@ -24,8 +24,8 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
         e.attach(std::make_unique<SpriteComponent>(spritesheet));
         e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 3, TimerUtils::timeStepMs }));
 
-        SpriteComponent* spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key);
+        auto spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key).lock();
+        auto animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key).lock();
 
         REQUIRE(spriteComponent->getTxIndex() == 0);
 
@@ -64,8 +64,8 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
         e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 5, msPerFrame }));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
-        SpriteComponent* spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key);
+        auto spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key).lock();
+        auto animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key).lock();
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 
@@ -119,8 +119,8 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
         e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 4, TimerUtils::timeStepMs }));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
-        SpriteComponent* spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key);
+        auto spriteComponent = e.getComponent<SpriteComponent>(SpriteComponent::key).lock();
+        auto animComponent = e.getComponent<AnimationComponent>(AnimationComponent::key).lock();
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 

@@ -49,7 +49,13 @@ namespace Rival {
 
 #pragma warning(push)
 #pragma warning(disable : 26495 26812)
-        midi_event() : m_timestamp(0), m_type(note_off), m_channel(0), m_data_count(0) {}
+        midi_event()
+            : m_timestamp(0)
+            , m_type(note_off)
+            , m_channel(0)
+            , m_data_count(0)
+        {
+        }
 #pragma warning(pop)
         midi_event(const midi_event& p_in);
         midi_event(
@@ -84,7 +90,11 @@ namespace Rival {
         unsigned long m_timestamp;
         unsigned m_tempo;
 
-        tempo_entry() : m_timestamp(0), m_tempo(0) {}
+        tempo_entry()
+            : m_timestamp(0)
+            , m_tempo(0)
+        {
+        }
         tempo_entry(unsigned long p_timestamp, unsigned p_tempo);
     };
 
@@ -106,7 +116,12 @@ namespace Rival {
         std::size_t m_port;
         std::size_t m_offset;
         std::size_t m_length;
-        system_exclusive_entry() : m_port(0), m_offset(0), m_length(0) {}
+        system_exclusive_entry()
+            : m_port(0)
+            , m_offset(0)
+            , m_length(0)
+        {
+        }
         system_exclusive_entry(const system_exclusive_entry& p_in);
         system_exclusive_entry(std::size_t p_port, std::size_t p_offset, std::size_t p_length);
     };
@@ -126,7 +141,11 @@ namespace Rival {
         unsigned long m_timestamp;
         std::uint32_t m_event;
 
-        midi_stream_event() : m_timestamp(0), m_event(0) {}
+        midi_stream_event()
+            : m_timestamp(0)
+            , m_event(0)
+        {
+        }
         midi_stream_event(unsigned long p_timestamp, std::uint32_t p_event);
     };
 
@@ -136,7 +155,10 @@ namespace Rival {
         std::string m_name;
         std::string m_value;
 
-        midi_meta_data_item() : m_timestamp(0) {}
+        midi_meta_data_item()
+            : m_timestamp(0)
+        {
+        }
         midi_meta_data_item(const midi_meta_data_item& p_in);
         midi_meta_data_item(unsigned long p_timestamp, const char* p_name, const char* p_value);
     };

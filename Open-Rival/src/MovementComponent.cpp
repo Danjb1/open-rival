@@ -6,7 +6,10 @@ namespace Rival {
 
     const std::string MovementComponent::key = "movement";
 
-    MovementComponent::MovementComponent() : EntityComponent(key) {}
+    MovementComponent::MovementComponent()
+        : EntityComponent(key)
+    {
+    }
 
     void MovementComponent::addListener(MovementListener* listener)
     {

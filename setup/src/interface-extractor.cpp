@@ -23,7 +23,11 @@ namespace Rival { namespace Setup {
     const int offsetMoreCursors = 0x1935CDE;
     const int offsetHireTroops = 0x1938DBB;
 
-    InterfaceExtractor::InterfaceExtractor(std::string inputFile) : index(0), reader(inputFile) {}
+    InterfaceExtractor::InterfaceExtractor(std::string inputFile)
+        : index(0)
+        , reader(inputFile)
+    {
+    }
 
     void InterfaceExtractor::extractImages(std::string outputDir)
     {

@@ -11,7 +11,10 @@ namespace Rival {
 
     WalkerPassabilityChecker WalkerComponent::passabilityChecker = WalkerPassabilityChecker();
 
-    WalkerComponent::WalkerComponent() : movement({ 0, 0 }) {}
+    WalkerComponent::WalkerComponent()
+        : movement({ 0, 0 })
+    {
+    }
 
     bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
     {

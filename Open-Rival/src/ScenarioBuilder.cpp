@@ -11,7 +11,10 @@
 
 namespace Rival {
 
-    ScenarioBuilder::ScenarioBuilder(ScenarioData data) : data(data) {}
+    ScenarioBuilder::ScenarioBuilder(ScenarioData data)
+        : data(data)
+    {
+    }
 
     std::unique_ptr<Scenario> ScenarioBuilder::build(const EntityFactory& entityFactory)
     {

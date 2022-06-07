@@ -332,9 +332,16 @@ namespace Rival { namespace Pathfinding {
         return nullptr;
     }
 
-    Route::Route() : destination({ 0, 0 }) {}
+    Route::Route()
+        : destination({ 0, 0 })
+    {
+    }
 
-    Route::Route(MapNode destination, std::deque<MapNode> path) : destination(destination), path(path) {}
+    Route::Route(MapNode destination, std::deque<MapNode> path)
+        : destination(destination)
+        , path(path)
+    {
+    }
 
     bool Route::isEmpty() const
     {

@@ -23,7 +23,10 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
         int framesPassed = 0;
         int updatesRun = 0;
 
-        SlowRenderingState(Application& app) : State(app) {}
+        SlowRenderingState(Application& app)
+            : State(app)
+        {
+        }
 
         void update() override
         {

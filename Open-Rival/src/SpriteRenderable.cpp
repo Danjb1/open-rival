@@ -6,7 +6,8 @@
 
 namespace Rival {
 
-    SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprites) : spritesheet(spritesheet)
+    SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprites)
+        : spritesheet(spritesheet)
     {
 
         // Generate VAO

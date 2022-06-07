@@ -11,7 +11,8 @@
 
 namespace Rival {
 
-    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo) : fbo(fbo)
+    FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
+        : fbo(fbo)
     {
 
         // Generate VAO

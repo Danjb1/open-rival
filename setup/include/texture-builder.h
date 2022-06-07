@@ -24,7 +24,11 @@ namespace Rival { namespace Setup {
         Image image;
 
         // Wraps an Image by moving it into this NamedImage
-        NamedImage(const std::string name, Image&& image) : name(name), image(std::move(image)) {}
+        NamedImage(const std::string name, Image&& image)
+            : name(name)
+            , image(std::move(image))
+        {
+        }
     };
 
     ///////////////////////////////////////////////////////////////////////////////

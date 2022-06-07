@@ -6,7 +6,8 @@
 
 namespace Rival {
 
-    AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites) : texAtlas(texAtlas)
+    AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites)
+        : texAtlas(texAtlas)
     {
 
         // Generate VAO

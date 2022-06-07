@@ -10,7 +10,8 @@ namespace Rival {
 
     // Based on:
     // https://github.com/zxf8665905/wavDecoder
-    WaveFile::WaveFile(std::string filename) : filename(filename)
+    WaveFile::WaveFile(std::string filename)
+        : filename(filename)
     {
 
         std::cout << "Loading: " << filename << "\n";
