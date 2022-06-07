@@ -35,7 +35,6 @@ namespace Rival {
 
     bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const
     {
-
         // Find the centre of this Entity's tile, in Camera units
         const MapNode& pos = entity.getPos();
         float x = static_cast<float>(pos.x + Camera::tileWidth / 2.0f);
@@ -58,12 +57,10 @@ namespace Rival {
 
     void EntityRenderer::renderEntity(Entity& entity, int delta) const
     {
-
         // Get this Entity's SpriteComponent
-        std::weak_ptr<SpriteComponent> weakSpriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
+        const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
         // Entities without a SpriteComponent cannot be rendered
-        auto spriteComponent = weakSpriteComponent.lock();
         if (!spriteComponent)
         {
             return;
@@ -80,26 +77,25 @@ namespace Rival {
         glBindVertexArray(renderable.getVao());
 
         // Update the data on the GPU
-        if (needsUpdate(entity, spriteComponent))
+        if (needsUpdate(entity, *spriteComponent))
         {
-            sendDataToGpu(entity, spriteComponent, delta);
+            sendDataToGpu(entity, *spriteComponent, delta);
         }
 
         // Render
         glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
     }
 
-    bool EntityRenderer::needsUpdate(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent) const
+    bool EntityRenderer::needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const
     {
-        return entity.moved || spriteComponent->dirty;
+        return entity.moved || spriteComponent.dirty;
     }
 
-    void EntityRenderer::sendDataToGpu(
-            const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent, int delta) const
+    void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& spriteComponent, int delta) const
     {
 
         // Determine the frame of the texture to be rendered
-        int txIndex = spriteComponent->getTxIndex();
+        int txIndex = spriteComponent.getTxIndex();
 
         // Define vertex positions
         const MapNode& pos = entity.getPos();
@@ -126,7 +122,7 @@ namespace Rival {
         };
 
         // Determine texture co-ordinates
-        const SpriteRenderable& renderable = spriteComponent->getRenderable();
+        const SpriteRenderable& renderable = spriteComponent.getRenderable();
         std::vector<GLfloat> texCoords = renderable.spritesheet.getTexCoords(txIndex);
 
         // Upload position data
@@ -140,7 +136,7 @@ namespace Rival {
         glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
         // Clear the dirty flag now that the GPU is up to date
-        spriteComponent->dirty = false;
+        spriteComponent.dirty = false;
     }
 
     /**
@@ -160,9 +156,7 @@ namespace Rival {
 
         // See if the Entity can move
         // TODO: This needs to work for flying units too
-        std::weak_ptr<const WalkerComponent> weakWalkerComponent =
-                entity.getComponent<WalkerComponent>(WalkerComponent::key);
-        auto walkerComponent = weakWalkerComponent.lock();
+        const WalkerComponent* walkerComponent = entity.getComponent<WalkerComponent>(WalkerComponent::key);
         if (!walkerComponent)
         {
             return offset;

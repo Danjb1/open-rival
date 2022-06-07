@@ -21,9 +21,9 @@ namespace Rival {
         int baseTxIndex = 0;
 
         // Set txIndex based on Wall type
-        std::weak_ptr<BuildingPropsComponent> weakBuildingPropsComponent =
+        const BuildingPropsComponent* buildingPropsComponent =
                 entity->getComponent<BuildingPropsComponent>(BuildingPropsComponent::key);
-        if (auto buildingPropsComponent = weakBuildingPropsComponent.lock())
+        if (buildingPropsComponent)
         {
             baseTxIndex = getBaseTxIndex(buildingPropsComponent->getBuildingType());
         }
@@ -34,8 +34,8 @@ namespace Rival {
         }
 
         // Update txIndex in SpriteComponent
-        weakSpriteComponent = entity->getComponent<SpriteComponent>(SpriteComponent::key);
-        if (auto spriteComponent = weakSpriteComponent.lock())
+        SpriteComponent* spriteComponent = entity->requireComponent<SpriteComponent>(SpriteComponent::key);
+        if (spriteComponent)
         {
             int newTxIndex = baseTxIndex + static_cast<int>(variant);
             spriteComponent->setTxIndex(newTxIndex);

@@ -18,7 +18,7 @@ namespace Rival {
 
     void FacingComponent::onEntitySpawned(Scenario*)
     {
-        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
         if (auto movementComponent = weakMovementComponent.lock())
         {
             movementComponent->addListener(this);
@@ -27,7 +27,6 @@ namespace Rival {
 
     void FacingComponent::onDelete()
     {
-        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
         if (auto movementComponent = weakMovementComponent.lock())
         {
             movementComponent->removeListener(this);

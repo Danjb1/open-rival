@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -158,10 +159,84 @@ namespace Rival {
         /**
          * Returns a pointer to the EntityComponent with the given key (mutable version).
          *
+         * This is not safe for long-term storage; the weak/shared pointer versions should be used instead.
+         *
+         * Returns nullptr if no matching EntityComponent is found.
+         */
+        template <class T>
+        T* getComponent(const std::string key)
+        {
+            auto findResult = components.find(key);
+            if (findResult == components.end())
+            {
+                return nullptr;
+            }
+            return static_cast<T*>((findResult->second).get());
+        }
+
+        /**
+         * Returns a pointer to the EntityComponent with the given key (read-only version).
+         *
+         * This is not safe for long-term storage; the weak/shared pointer versions should be used instead.
+         *
+         * Returns nullptr if no matching EntityComponent is found.
+         */
+        template <class T>
+        const T* getComponent(const std::string key) const
+        {
+            const auto findResult = components.find(key);
+            if (findResult == components.end())
+            {
+                return nullptr;
+            }
+            return static_cast<T*>((findResult->second).get());
+        }
+
+        /**
+         * Returns a shared pointer to the EntityComponent with the given key (mutable version).
+         *
+         * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
+         * needs to be kept alive.
+         *
+         * Returns an empty shared_ptr if no matching EntityComponent is found.
+         */
+        template <class T>
+        std::shared_ptr<T> getComponentShared(const std::string key)
+        {
+            auto findResult = components.find(key);
+            if (findResult == components.end())
+            {
+                return std::shared_ptr<T>();
+            }
+            return std::dynamic_pointer_cast<T>(findResult->second);
+        }
+
+        /**
+         * Returns a shared pointer to the EntityComponent with the given key (read-only version).
+         *
+         * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
+         * needs to be kept alive.
+         *
+         * Returns an empty shared_ptr if no matching EntityComponent is found.
+         */
+        template <class T>
+        std::shared_ptr<const T> getComponentShared(const std::string key) const
+        {
+            const auto findResult = components.find(key);
+            if (findResult == components.end())
+            {
+                return std::shared_ptr<T>();
+            }
+            return std::dynamic_pointer_cast<const T>(findResult->second);
+        }
+
+        /**
+         * Returns a weak pointer to the EntityComponent with the given key (mutable version).
+         *
          * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        std::weak_ptr<T> getComponent(const std::string key)
+        std::weak_ptr<T> getComponentWeak(const std::string key)
         {
             auto findResult = components.find(key);
             if (findResult == components.end())
@@ -172,12 +247,12 @@ namespace Rival {
         }
 
         /**
-         * Returns a pointer to the EntityComponent with the given key (read-only version).
+         * Returns a weak pointer to the EntityComponent with the given key (read-only version).
          *
          * Returns an empty weak_ptr if no matching EntityComponent is found.
          */
         template <class T>
-        std::weak_ptr<const T> getComponent(const std::string key) const
+        std::weak_ptr<const T> getComponentWeak(const std::string key) const
         {
             const auto findResult = components.find(key);
             if (findResult == components.end())
@@ -185,6 +260,90 @@ namespace Rival {
                 return std::weak_ptr<T>();
             }
             return std::dynamic_pointer_cast<const T>(findResult->second);
+        }
+
+        /**
+         * Returns the result of `getComponent`, and verifies that it is valid.
+         */
+        template <class T>
+        T* requireComponent(const std::string key)
+        {
+            auto result = getComponent<T>(key);
+            if (!result)
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
+        }
+
+        /**
+         * Returns the result of `getComponent`, and verifies that it is valid.
+         */
+        template <class T>
+        const T* requireComponent(const std::string key) const
+        {
+            auto result = getComponent<T>(key);
+            if (!result)
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
+        }
+
+        /**
+         * Returns the result of `getComponentShared`, and verifies that it is valid.
+         */
+        template <class T>
+        std::shared_ptr<T> requireComponentShared(const std::string key)
+        {
+            auto result = getComponentShared<T>(key);
+            if (!result)
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
+        }
+
+        /**
+         * Returns the result of `getComponentShared`, and verifies that it is valid.
+         */
+        template <class T>
+        std::shared_ptr<const T> requireComponentShared(const std::string key) const
+        {
+            auto result = getComponentShared<const T>(key);
+            if (!result)
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
+        }
+
+        /**
+         * Returns the result of `getComponentWeak`, and verifies that it is valid.
+         */
+        template <class T>
+        std::weak_ptr<T> requireComponentWeak(const std::string key)
+        {
+            auto result = getComponentWeak<T>(key);
+            if (!result.lock())
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
+        }
+
+        /**
+         * Returns the result of `getComponentWeak`, and verifies that it is valid.
+         */
+        template <class T>
+        std::weak_ptr<const T> requireComponentWeak(const std::string key) const
+        {
+            auto result = getComponentWeak<const T>(key);
+            if (!result.lock())
+            {
+                std::cerr << "No component found with key: " << key << '\n';
+            }
+            return result;
         }
 
     protected:
