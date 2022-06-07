@@ -37,10 +37,9 @@ namespace Rival {
 
         void renderEntity(Entity& entity, int delta) const;
 
-        bool needsUpdate(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent) const;
+        bool needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const;
 
-        void
-        sendDataToGpu(const Entity& entity, const std::shared_ptr<SpriteComponent> spriteComponent, int delta) const;
+        void sendDataToGpu(const Entity& entity, const SpriteComponent& spriteComponent, int delta) const;
 
         std::array<float, numLerpDimensions> getLerpOffset(const Entity& entity, int delta) const;
     };

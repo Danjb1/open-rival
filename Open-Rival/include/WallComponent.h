@@ -52,8 +52,6 @@ namespace Rival {
         static const int baseTxIndexPalisade = 32;
         static const int baseTxIndexGrate = 48;
 
-        std::weak_ptr<SpriteComponent> weakSpriteComponent;
-
         WallVariant variant;
 
         int getBaseTxIndex(Building::Type buildingType) const;

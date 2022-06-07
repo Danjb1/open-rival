@@ -6,11 +6,10 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Component Safety
+### Component Improvements
 
-- Add a "require" mechanism when retrieving components (fail fast)
+- `Entity::attach` takes a `unique_ptr`, should take `shared_ptr`
 - Ensure `onDelete` is never called before `onEntitySpawned`
-- Use `getComponent<const T>` variants where possible
 
 ### Formatting and Libraries
 

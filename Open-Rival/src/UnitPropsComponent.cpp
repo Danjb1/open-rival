@@ -17,7 +17,7 @@ namespace Rival {
 
     void UnitPropsComponent::onEntitySpawned(Scenario*)
     {
-        weakMovementComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
         if (auto movementComponent = weakMovementComponent.lock())
         {
             movementComponent->addListener(this);

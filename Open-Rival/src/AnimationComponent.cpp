@@ -23,15 +23,15 @@ namespace Rival {
 
     void AnimationComponent::onEntitySpawned(Scenario*)
     {
-        weakUnitPropsComponent = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+        weakUnitPropsComponent = entity->getComponentWeak<UnitPropsComponent>(UnitPropsComponent::key);
         if (auto unitPropsComponent = weakUnitPropsComponent.lock())
         {
             unitPropsComponent->addStateListener(this);
         }
 
-        weakSpriteComponent = entity->getComponent<SpriteComponent>(SpriteComponent::key);
+        weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 
-        weakFacingComponent = entity->getComponent<FacingComponent>(FacingComponent::key);
+        weakFacingComponent = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
         if (auto facingComponent = weakFacingComponent.lock())
         {
             facingComponent->setListener(this);
