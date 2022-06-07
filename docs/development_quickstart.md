@@ -70,7 +70,7 @@ These should be placed in the project directory (`Open-Rival`):
 
 ## Build
 
-After installing the above dependencies, build the solution using Microsoft Visual Studio (tested with Community Edition 2019).
+After installing the above dependencies, build the solution using Microsoft Visual Studio (tested with Community Edition 2022).
 
 ## Extract Resources
 
