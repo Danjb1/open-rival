@@ -11,28 +11,70 @@
 
 namespace Rival {
 
+    /* clang-format off */
     const std::map<std::uint8_t, char> ScenarioReader::alphabet = {
-        { std::uint8_t(0x12), 'b' }, { std::uint8_t(0x13), 'c' },  { std::uint8_t(0x15), 'a' },
-        { std::uint8_t(0x16), 'f' }, { std::uint8_t(0x17), 'g' },  { std::uint8_t(0x18), 'd' },
-        { std::uint8_t(0x19), 'e' }, { std::uint8_t(0x1A), 'j' },  { std::uint8_t(0x1B), 'k' },
-        { std::uint8_t(0x1C), 'h' }, { std::uint8_t(0x1D), 'i' },  { std::uint8_t(0x1E), 'n' },
-        { std::uint8_t(0x1F), 'o' }, { std::uint8_t(0x20), 'l' },  { std::uint8_t(0x21), 'm' },
-        { std::uint8_t(0x22), 'r' }, { std::uint8_t(0x23), 's' },  { std::uint8_t(0x24), 'p' },
-        { std::uint8_t(0x26), 'v' }, { std::uint8_t(0x27), 'w' },  { std::uint8_t(0x28), 't' },
-        { std::uint8_t(0x29), 'u' }, { std::uint8_t(0x2A), 'z' },  { std::uint8_t(0x2C), 'x' },
-        { std::uint8_t(0x2D), 'y' }, { std::uint8_t(0x32), 'B' },  { std::uint8_t(0x33), 'C' },
-        { std::uint8_t(0x35), 'A' }, { std::uint8_t(0x36), 'F' },  { std::uint8_t(0x37), 'G' },
-        { std::uint8_t(0x38), 'D' }, { std::uint8_t(0x39), 'E' },  { std::uint8_t(0x3A), 'J' },
-        { std::uint8_t(0x3B), 'K' }, { std::uint8_t(0x3C), 'H' },  { std::uint8_t(0x3D), 'I' },
-        { std::uint8_t(0x3E), 'N' }, { std::uint8_t(0x3F), 'O' },  { std::uint8_t(0x40), 'L' },
-        { std::uint8_t(0x41), 'M' }, { std::uint8_t(0x42), 'R' },  { std::uint8_t(0x43), 'S' },
-        { std::uint8_t(0x44), 'P' }, { std::uint8_t(0x46), 'V' },  { std::uint8_t(0x47), 'W' },
-        { std::uint8_t(0x48), 'T' }, { std::uint8_t(0x49), 'U' },  { std::uint8_t(0x4A), 'Z' },
-        { std::uint8_t(0x4C), 'X' }, { std::uint8_t(0x4D), 'Y' },  { std::uint8_t(0x52), '"' },
-        { std::uint8_t(0x54), ' ' }, { std::uint8_t(0x56), '&' },  { std::uint8_t(0x60), ',' },
-        { std::uint8_t(0x61), '-' }, { std::uint8_t(0x62), '2' },  { std::uint8_t(0x63), '3' },
-        { std::uint8_t(0x71), '=' }, { std::uint8_t(0x81), '\r' }, { std::uint8_t(0x7A), '\n' }
+        { std::uint8_t(0x12), 'b' },
+        { std::uint8_t(0x13), 'c' },
+        { std::uint8_t(0x15), 'a' },
+        { std::uint8_t(0x16), 'f' },
+        { std::uint8_t(0x17), 'g' },
+        { std::uint8_t(0x18), 'd' },
+        { std::uint8_t(0x19), 'e' },
+        { std::uint8_t(0x1A), 'j' },
+        { std::uint8_t(0x1B), 'k' },
+        { std::uint8_t(0x1C), 'h' },
+        { std::uint8_t(0x1D), 'i' },
+        { std::uint8_t(0x1E), 'n' },
+        { std::uint8_t(0x1F), 'o' },
+        { std::uint8_t(0x20), 'l' },
+        { std::uint8_t(0x21), 'm' },
+        { std::uint8_t(0x22), 'r' },
+        { std::uint8_t(0x23), 's' },
+        { std::uint8_t(0x24), 'p' },
+        { std::uint8_t(0x26), 'v' },
+        { std::uint8_t(0x27), 'w' },
+        { std::uint8_t(0x28), 't' },
+        { std::uint8_t(0x29), 'u' },
+        { std::uint8_t(0x2A), 'z' },
+        { std::uint8_t(0x2C), 'x' },
+        { std::uint8_t(0x2D), 'y' },
+        { std::uint8_t(0x32), 'B' },
+        { std::uint8_t(0x33), 'C' },
+        { std::uint8_t(0x35), 'A' },
+        { std::uint8_t(0x36), 'F' },
+        { std::uint8_t(0x37), 'G' },
+        { std::uint8_t(0x38), 'D' },
+        { std::uint8_t(0x39), 'E' },
+        { std::uint8_t(0x3A), 'J' },
+        { std::uint8_t(0x3B), 'K' },
+        { std::uint8_t(0x3C), 'H' },
+        { std::uint8_t(0x3D), 'I' },
+        { std::uint8_t(0x3E), 'N' },
+        { std::uint8_t(0x3F), 'O' },
+        { std::uint8_t(0x40), 'L' },
+        { std::uint8_t(0x41), 'M' },
+        { std::uint8_t(0x42), 'R' },
+        { std::uint8_t(0x43), 'S' },
+        { std::uint8_t(0x44), 'P' },
+        { std::uint8_t(0x46), 'V' },
+        { std::uint8_t(0x47), 'W' },
+        { std::uint8_t(0x48), 'T' },
+        { std::uint8_t(0x49), 'U' },
+        { std::uint8_t(0x4A), 'Z' },
+        { std::uint8_t(0x4C), 'X' },
+        { std::uint8_t(0x4D), 'Y' },
+        { std::uint8_t(0x52), '"' },
+        { std::uint8_t(0x54), ' ' },
+        { std::uint8_t(0x56), '&' },
+        { std::uint8_t(0x60), ',' },
+        { std::uint8_t(0x61), '-' },
+        { std::uint8_t(0x62), '2' },
+        { std::uint8_t(0x63), '3' },
+        { std::uint8_t(0x71), '=' },
+        { std::uint8_t(0x81), '\r' },
+        { std::uint8_t(0x7A), '\n' }
     };
+    /* clang-format on */
 
     ///////////////////////////////////////////////////////////////////////////
     // Entry points
@@ -1045,7 +1087,10 @@ namespace Rival {
     {
         // little endian
         return std::uint32_t(
-                data[offset + 3] << 24 | data[offset + 2] << 16 | data[offset + 1] << 8 | data[offset + 0]);
+                data[offset + 3] << 24    //
+                | data[offset + 2] << 16  //
+                | data[offset + 1] << 8   //
+                | data[offset + 0]);
     }
 
     std::string ScenarioReader::readString(size_t length)
@@ -1132,7 +1177,14 @@ namespace Rival {
     void ScenarioReader::printOffset() const
     {
         // Switch to hex, print the value, and switch back
-        std::cout << "Offset: 0x" << std::setw(4) << std::setfill('0') << std::hex << pos << '\n' << std::dec;
+        std::cout                     //
+                << "Offset: 0x"       //
+                << std::setw(4)       //
+                << std::setfill('0')  //
+                << std::hex           //
+                << pos                //
+                << '\n'               //
+                << std::dec;
     }
 
     void ScenarioReader::printSection(std::string title) const

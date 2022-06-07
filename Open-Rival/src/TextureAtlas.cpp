@@ -45,7 +45,12 @@ namespace Rival {
         const float ty1 = 1 - (y / txHeight);
         const float ty2 = 1 - ((y + height) / txHeight);
 
-        return { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
+        return {
+            tx1, ty1,  //
+            tx2, ty1,  //
+            tx2, ty2,  //
+            tx1, ty2   //
+        };
     }
 
     const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName)

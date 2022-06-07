@@ -42,7 +42,12 @@ namespace Rival { namespace GameInterface {
         float x2 = x1 + pos.width;
         float y2 = y1 + pos.height;
         float z = 0;
-        std::vector<GLfloat> thisVertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
+        std::vector<GLfloat> thisVertexData = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
 
         // Determine texture co-ordinates
         std::vector<GLfloat> thisTexCoords = texAtlas.getTexCoords(imageKey);

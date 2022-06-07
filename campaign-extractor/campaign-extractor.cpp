@@ -16,7 +16,10 @@ namespace Rival { namespace Setup {
     {
         // little endian
         return std::uint32_t(
-                data[offset + 3] << 24 | data[offset + 2] << 16 | data[offset + 1] << 8 | data[offset + 0]);
+                data[offset + 3] << 24    //
+                | data[offset + 2] << 16  //
+                | data[offset + 1] << 8   //
+                | data[offset + 0]);
     }
 
     void extractCampaign(std::string filename)
@@ -40,8 +43,13 @@ namespace Rival { namespace Setup {
 
             // Determine the output filename
             std::ostringstream outputFilename;
-            outputFilename << filename.substr(0, filename.length() - 4) << "-" << std::setw(2) << std::setfill('0')
-                           << (i + 1) << ".sco";
+            outputFilename                                        //
+                    << filename.substr(0, filename.length() - 4)  //
+                    << "-"                                        //
+                    << std::setw(2)                               //
+                    << std::setfill('0')                          //
+                    << (i + 1)                                    //
+                    << ".sco";
 
             // Prepare to write to a new file
             std::ofstream output(outputFilename.str(), std::ios::binary);

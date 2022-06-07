@@ -18,16 +18,14 @@ namespace Rival {
     MapBorderRenderer::MapBorderRenderer(
             Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture)
         : paletteTexture(paletteTexture)
-        ,
         // This is calculated as follows:
         //  - 1 segment per edge tile
         //  - Minus 4 (since the corners are duplicated by each edge)
         //  - Plus 2 (some overlap at the bottom corners is actually required
         //      to prevent gaps in maps with an odd height)
-        maxSegmentsToRender(2 * (mapWidth + mapHeight) - 2)
+        , maxSegmentsToRender(2 * (mapWidth + mapHeight) - 2)
         , renderable { spritesheet, maxSegmentsToRender }
     {
-
         // The map border never changes, so we set the buffers here and never
         // touch them again.
 
@@ -155,7 +153,12 @@ namespace Rival {
         float x2 = x1 + width;
         float y2 = y1 + height;
         float z = RenderUtils::zMapBorder;
-        std::vector<GLfloat> thisVertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
+        std::vector<GLfloat> thisVertexData = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
 
         // Determine texture co-ordinates
         std::vector<GLfloat> thisTexCoords = renderable.spritesheet.getTexCoords(txIndex);

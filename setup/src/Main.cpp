@@ -33,7 +33,12 @@ void createOutputDirectories()
 {
     std::wcout << "Creating output directories\n";
     std::vector<std::string> directories = {
-        "setup\\images", "setup\\images\\game", "setup\\images\\ui", "res\\sound", "res\\textures", "res\\video",
+        "setup\\images",        //
+        "setup\\images\\game",  //
+        "setup\\images\\ui",    //
+        "res\\sound",           //
+        "res\\textures",        //
+        "res\\video"            //
     };
     for (auto const& dir : directories)
     {
@@ -164,7 +169,9 @@ int main(int argc, char* argv[])
         try
         {
             gameDir = StringUtils::toUtf8(Registry::RegGetString(
-                    HKEY_CURRENT_USER, L"Software\\Titus Games\\Rival Realms", L"Game Directory"));
+                    HKEY_CURRENT_USER,                       //
+                    L"Software\\Titus Games\\Rival Realms",  //
+                    L"Game Directory"));
             std::cout << "Found game at: " << gameDir << "\n";
         }
         catch (const Registry::RegistryError& e)

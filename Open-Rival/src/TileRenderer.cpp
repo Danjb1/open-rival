@@ -134,7 +134,12 @@ namespace Rival {
                 float x2 = x1 + width;
                 float y2 = y1 + height;
                 float z = RenderUtils::zTiles;
-                std::vector<GLfloat> thisVertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
+                std::vector<GLfloat> thisVertexData = {
+                    x1, y1, z,  //
+                    x2, y1, z,  //
+                    x2, y2, z,  //
+                    x1, y2, z   //
+                };
 
                 // Determine texture co-ordinates
                 std::vector<GLfloat> thisTexCoords = renderable.spritesheet.getTexCoords(txIndex);
