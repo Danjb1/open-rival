@@ -29,7 +29,12 @@ namespace Rival {
         float y1 = -1.0f;
         float x2 = 1.0f;
         float y2 = 1.0f;
-        std::vector<GLfloat> vertexData = { x1, y1, x2, y1, x2, y2, x1, y2 };
+        std::vector<GLfloat> vertexData = {
+            x1, y1,  //
+            x2, y1,  //
+            x2, y2,  //
+            x1, y2   //
+        };
 
         // Initialize position buffer - this should never change
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
@@ -81,7 +86,12 @@ namespace Rival {
         float ty1 = 0.0f;
         float tx2 = static_cast<float>(srcWidth) / fbo.getWidth();
         float ty2 = static_cast<float>(srcHeight) / fbo.getHeight();
-        std::vector<GLfloat> texCoords = { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
+        std::vector<GLfloat> texCoords = {
+            tx1, ty1,  //
+            tx2, ty1,  //
+            tx2, ty2,  //
+            tx1, ty2   //
+        };
 
         // Upload tex co-ord data
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);

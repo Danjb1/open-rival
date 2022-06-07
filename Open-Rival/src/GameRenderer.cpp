@@ -33,21 +33,19 @@ namespace Rival {
         , res(res)
         , gameFbo(framebufferWidth, framebufferHeight, true)
         , gameFboRenderer(gameFbo)
-        ,
-
-        tileRenderer(res.getTileSpritesheet(scenario.isWilderness()), res.getPalette())
-        ,
-
-        // Hardcode the race for now
-        mapBorderRenderer(
-                Race::Human, scenario.getWidth(), scenario.getHeight(), res.getMapBorderSpritesheet(), res.getPalette())
-        ,
-
-        entityRenderer(res.getPalette())
-        ,
-
-        // Hardcode the race for now
-        uiRenderer(Race::Human, res)
+        , tileRenderer(res.getTileSpritesheet(scenario.isWilderness()), res.getPalette())
+        , mapBorderRenderer(
+                  // Hardcode the race for now
+                  Race::Human,
+                  scenario.getWidth(),
+                  scenario.getHeight(),
+                  res.getMapBorderSpritesheet(),
+                  res.getPalette())
+        , entityRenderer(res.getPalette())
+        , uiRenderer(
+                  // Hardcode the race for now
+                  Race::Human,
+                  res)
     {
     }
 

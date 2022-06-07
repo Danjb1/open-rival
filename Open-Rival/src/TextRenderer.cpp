@@ -108,7 +108,12 @@ namespace Rival {
                     float x2 = x1 + width;
                     float y2 = y1 + height;
                     float z = 0.0f;
-                    std::vector<GLfloat> newVertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
+                    std::vector<GLfloat> newVertexData = {
+                        x1, y1, z,  //
+                        x2, y1, z,  //
+                        x2, y2, z,  //
+                        x1, y2, z   //
+                    };
                     vertexData.insert(vertexData.end(), newVertexData.begin(), newVertexData.end());
 
                     // Determine texture co-ordinates
@@ -116,7 +121,12 @@ namespace Rival {
                     float ty1 = charData->txCoords[1];
                     float tx2 = charData->txCoords[2];
                     float ty2 = charData->txCoords[3];
-                    std::vector<GLfloat> newTexCoords = { tx1, ty1, tx2, ty1, tx2, ty2, tx1, ty2 };
+                    std::vector<GLfloat> newTexCoords = {
+                        tx1, ty1,  //
+                        tx2, ty1,  //
+                        tx2, ty2,  //
+                        tx1, ty2   //
+                    };
                     texCoords.insert(texCoords.end(), newTexCoords.begin(), newTexCoords.end());
 
                     // Determine colors

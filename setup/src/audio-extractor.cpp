@@ -95,7 +95,12 @@ namespace Rival { namespace Setup {
 
             // Write the data to a new file
             std::ostringstream filename;
-            filename << outputDir << "\\" << std::setw(3) << std::setfill('0') << numFiles << ext;
+            filename << outputDir          //
+                     << "\\"               //
+                     << std::setw(3)       //
+                     << std::setfill('0')  //
+                     << numFiles           //
+                     << ext;
             std::ofstream output(filename.str(), std::ios::binary);
             if (!output.is_open())
             {

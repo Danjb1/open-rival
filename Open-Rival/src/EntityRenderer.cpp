@@ -118,7 +118,12 @@ namespace Rival {
         float y2 = y1 + height;
 
         float z = RenderUtils::getEntityZ(pos.x, pos.y);
-        std::vector<GLfloat> vertexData = { x1, y1, z, x2, y1, z, x2, y2, z, x1, y2, z };
+        std::vector<GLfloat> vertexData = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
 
         // Determine texture co-ordinates
         const SpriteRenderable& renderable = spriteComponent->getRenderable();

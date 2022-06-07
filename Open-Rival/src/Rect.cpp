@@ -22,12 +22,18 @@ namespace Rival {
 
     bool Rect::contains(int px, int py) const
     {
-        return px >= x && px < x + width && py >= y && py < y + height;
+        return px >= x             //
+                && px < x + width  //
+                && py >= y         //
+                && py < y + height;
     }
 
     bool Rect::contains(float px, float py) const
     {
-        return px >= x && px < x + width && py >= y && py < y + height;
+        return px >= x             //
+                && px < x + width  //
+                && py >= y         //
+                && py < y + height;
     }
 
 }  // namespace Rival

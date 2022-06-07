@@ -32,7 +32,11 @@ namespace Rival { namespace PathUtils {
     void initDefaultFontDirs()
     {
         std::string localAppData = getLocalAppData();
-        defaultFontDirs = { "res\\fonts\\", "C:\\Windows\\Fonts\\", localAppData + "Microsoft\\Windows\\Fonts\\" };
+        defaultFontDirs = {
+            "res\\fonts\\",                               //
+            "C:\\Windows\\Fonts\\",                       //
+            localAppData + "Microsoft\\Windows\\Fonts\\"  //
+        };
     }
 
     std::vector<std::string> getDefaultFontDirs()
