@@ -181,6 +181,15 @@
     <ClCompile Include="..\Open-Rival\src\MapUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\Animations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\UnitPropsComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MovementComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\catch2\catch.h">

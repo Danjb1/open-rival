@@ -15,7 +15,10 @@
 
 namespace Rival {
 
-    EntityFactory::EntityFactory(const Resources& res) : res(res) {}
+    EntityFactory::EntityFactory(const Resources& res)
+        : res(res)
+    {
+    }
 
     std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const
     {

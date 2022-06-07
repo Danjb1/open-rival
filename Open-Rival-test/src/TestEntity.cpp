@@ -15,7 +15,13 @@ public:
     bool entitySpawned;
     int& updateCount;
 
-    ExampleEntityComponent(int& updateCount) : EntityComponent("example_key"), updateCount(updateCount) {}
+    ExampleEntityComponent(int& updateCount)
+        : EntityComponent("example_key")
+        , attached(false)
+        , entitySpawned(false)
+        , updateCount(updateCount)
+    {
+    }
 
     void onAttach(Entity* e) override
     {
@@ -45,7 +51,7 @@ SCENARIO("Entities can have components attached to them", "[entity]")
         {
             int updateCount = 0;
             e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
-            ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
+            auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
 
             THEN("the component is attached to the Entity")
             {
@@ -75,7 +81,7 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
 
             THEN("the component receives a callback")
             {
-                ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
+                auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
                 REQUIRE(component->entitySpawned);
             }
         }
@@ -97,14 +103,14 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
             THEN("the component receives a callback")
             {
-                ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
+                auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
                 REQUIRE(component->updateCount == 1);
             }
         }
 
         AND_GIVEN("A component is deleted")
         {
-            ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
+            auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
             component->markForDeletion();
 
             WHEN("the Entity is updated")
@@ -118,7 +124,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
                 AND_THEN("the deleted component is removed from the Entity")
                 {
-                    component = e.getComponent<ExampleEntityComponent>("example_key");
+                    auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
                     REQUIRE(component == nullptr);
                 }
             }
@@ -137,7 +143,7 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 
         WHEN("retrieving the component by its key")
         {
-            ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
+            auto component = e.getComponent<ExampleEntityComponent>("example_key").lock();
 
             THEN("the component is returned")
             {
@@ -147,7 +153,7 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 
         AND_WHEN("trying to retrieve a non-existent component")
         {
-            ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("no_such_key");
+            auto component = e.getComponent<ExampleEntityComponent>("no_such_key").lock();
 
             THEN("the a nullptr is returned")
             {

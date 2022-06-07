@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Open-Rival\src\AnimationComponent.cpp" />
+    <ClCompile Include="..\Open-Rival\src\Animations.cpp" />
     <ClCompile Include="..\Open-Rival\src\Application.cpp" />
     <ClCompile Include="..\Open-Rival\src\Building.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="..\Open-Rival\src\MidiFile.cpp" />
     <ClCompile Include="..\Open-Rival\src\MousePicker.cpp" />
     <ClCompile Include="..\Open-Rival\src\MouseUtils.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MovementComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -51,6 +53,7 @@
     <ClCompile Include="..\Open-Rival\src\State.cpp" />
     <ClCompile Include="..\Open-Rival\src\TextureAtlas.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
+    <ClCompile Include="..\Open-Rival\src\UnitPropsComponent.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\gl\glew.cpp" />

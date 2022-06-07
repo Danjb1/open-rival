@@ -9,7 +9,11 @@
 
 namespace Rival {
 
-    MenuTextRenderer::MenuTextRenderer(const Window& window) : window(&window), textRenderer() {}
+    MenuTextRenderer::MenuTextRenderer(const Window& window)
+        : window(&window)
+        , textRenderer()
+    {
+    }
 
     void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const
     {

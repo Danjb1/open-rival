@@ -16,7 +16,10 @@
 
 namespace Rival {
 
-    EntityRenderer::EntityRenderer(const Texture& paletteTexture) : paletteTexture(paletteTexture) {}
+    EntityRenderer::EntityRenderer(const Texture& paletteTexture)
+        : paletteTexture(paletteTexture)
+    {
+    }
 
     void
     EntityRenderer::render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const

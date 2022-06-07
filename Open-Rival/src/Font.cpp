@@ -66,7 +66,10 @@ namespace Rival {
         FT_Done_Face(face);
     }
 
-    FontLoadError::FontLoadError(const char* message) : std::runtime_error(message) {}
+    FontLoadError::FontLoadError(const char* message)
+        : std::runtime_error(message)
+    {
+    }
 
     Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
     {

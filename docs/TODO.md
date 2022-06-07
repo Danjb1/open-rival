@@ -8,7 +8,6 @@
 
 ### Component Safety
 
-- Test project no longer compiles
 - Add a "require" mechanism when retrieving components (fail fast)
 - Ensure `onDelete` is never called before `onEntitySpawned`
 - Use `getComponent<const T>` variants where possible

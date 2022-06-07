@@ -10,7 +10,11 @@ namespace Rival {
 
     const std::string FacingComponent::key = "facing";
 
-    FacingComponent::FacingComponent(Facing initialFacing) : EntityComponent(key), facing(initialFacing) {}
+    FacingComponent::FacingComponent(Facing initialFacing)
+        : EntityComponent(key)
+        , facing(initialFacing)
+    {
+    }
 
     void FacingComponent::onEntitySpawned(Scenario*)
     {

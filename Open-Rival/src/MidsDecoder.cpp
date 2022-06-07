@@ -152,7 +152,7 @@ namespace Rival {
                         }
                         track.add_event(midi_event(
                                 current_timestamp,
-                                (midi_event::event_type) (event_code - 8),
+                                (midi_event::event_type)(event_code - 8),
                                 event & 0x0F,
                                 buffer,
                                 bytes_to_write));

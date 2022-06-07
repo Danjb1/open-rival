@@ -8,7 +8,12 @@
 
 namespace Rival {
 
-    Texture::Texture(const GLuint id, int width, int height) : id(id), width(width), height(height) {}
+    Texture::Texture(const GLuint id, int width, int height)
+        : id(id)
+        , width(width)
+        , height(height)
+    {
+    }
 
     const GLuint Texture::getId() const
     {

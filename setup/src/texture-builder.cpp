@@ -52,7 +52,13 @@ namespace Rival { namespace Setup {
     // Rect class
     ///////////////////////////////////////////////////////////////////////////
 
-    Rect::Rect(int x, int y, int width, int height) : x(x), y(y), width(width), height(height) {}
+    Rect::Rect(int x, int y, int width, int height)
+        : x(x)
+        , y(y)
+        , width(width)
+        , height(height)
+    {
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // TextureAtlasBuilder class
@@ -61,7 +67,11 @@ namespace Rival { namespace Setup {
     /**
      * Creates an empty TextureAtlasBuilder.
      */
-    TextureAtlasBuilder::TextureAtlasBuilder() : texWidth(0), texHeight(0) {}
+    TextureAtlasBuilder::TextureAtlasBuilder()
+        : texWidth(0)
+        , texHeight(0)
+    {
+    }
 
     /**
      * Adds an image to the texture being constructed.

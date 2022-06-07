@@ -40,7 +40,7 @@ BreakInheritanceList: BeforeComma
 BreakStringLiterals: 'true'
 ColumnLimit: '120'
 CompactNamespaces: 'true'
-ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 ConstructorInitializerIndentWidth: '4'
 ContinuationIndentWidth: '8'
 Cpp11BracedListStyle: 'false'

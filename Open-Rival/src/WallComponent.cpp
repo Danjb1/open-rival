@@ -10,7 +10,11 @@ namespace Rival {
 
     const std::string WallComponent::key = "wall";
 
-    WallComponent::WallComponent(WallVariant variant) : EntityComponent(key), variant(variant) {}
+    WallComponent::WallComponent(WallVariant variant)
+        : EntityComponent(key)
+        , variant(variant)
+    {
+    }
 
     void WallComponent::onEntitySpawned(Scenario*)
     {
