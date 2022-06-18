@@ -25,22 +25,22 @@
 
 namespace Rival { namespace Setup {
 
-    // Largest image in "IMAGES.DAT" is 128 x 128
-    const int maxWidth = 128;
-    const int maxHeight = 128;
+// Largest image in "IMAGES.DAT" is 128 x 128
+const int maxWidth = 128;
+const int maxHeight = 128;
 
-    // Size of pixel data, in bytes
-    const int imageSize = maxWidth * maxHeight;
+// Size of pixel data, in bytes
+const int imageSize = maxWidth * maxHeight;
 
-    // 4 byte header: number of images in file
-    const int headerSize = 4;
+// 4 byte header: number of images in file
+const int headerSize = 4;
 
-    // Team colors to use when rendering
-    // (these 6 colors correspond to a single team)
-    std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
+// Team colors to use when rendering
+// (these 6 colors correspond to a single team)
+std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
 
-    // Pixel value corresponding to transparency
-    int transparentColor = 0xff;
+// Pixel value corresponding to transparency
+int transparentColor = 0xff;
 
 // Formatter does not play nice with our preprocessor directives and ASM code
 /* clang-format off */

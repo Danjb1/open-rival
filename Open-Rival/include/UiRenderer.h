@@ -1,5 +1,4 @@
-#ifndef UI_RENDERER_H
-#define UI_RENDERER_H
+#pragma once
 
 #include "AtlasRenderable.h"
 #include "GameInterface.h"
@@ -9,39 +8,33 @@
 
 namespace Rival {
 
-    class UiRenderer
-    {
-    public:
-        UiRenderer::UiRenderer(const Race& race, const Resources& res);
+class UiRenderer
+{
+public:
+    UiRenderer::UiRenderer(const Race& race, const Resources& res);
 
-        void renderUi();
+    void renderUi();
 
-    private:
-        static const int maxUiImages = 6;
+private:
+    static constexpr int maxUiImages = 6;
 
-        const Resources& res;
+    const Resources& res;
 
-        int numUiImages;
-        AtlasRenderable mainUiRenderable;
+    int numUiImages;
+    AtlasRenderable mainUiRenderable;
 
-        GameInterface::UiImage minimapLeftBorder;
-        GameInterface::UiImage minimapTopBorder;
-        GameInterface::UiImage minimapBottomBorder;
-        GameInterface::UiImage mainPanel;
-        GameInterface::UiImage inventoryOverlay;
-        GameInterface::UiImage statsPanel;
+    GameInterface::UiImage minimapLeftBorder;
+    GameInterface::UiImage minimapTopBorder;
+    GameInterface::UiImage minimapBottomBorder;
+    GameInterface::UiImage mainPanel;
+    GameInterface::UiImage inventoryOverlay;
+    GameInterface::UiImage statsPanel;
 
-        bool needsUpdate() const;
+    bool needsUpdate() const;
 
-        void sendDataToGpu();
+    void sendDataToGpu();
 
-        void addMainPanelToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
-
-        void addStatsPanelToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
-
-        bool isInventoryVisible() const;
-    };
+    bool isInventoryVisible() const;
+};
 
 }  // namespace Rival
-
-#endif  // UI_RENDERER_H

@@ -6,107 +6,99 @@
 
 #include "MapUtils.h"
 #include "MathUtils.h"
+#include "World.h"
 
 namespace Rival {
 
-    const float Camera::zoomInterval = 0.1f;
-    const float Camera::zoomMin = 0.5f;
-    const float Camera::zoomMax = 2.0f;
+Camera::Camera(float x, float y, float width, float height, World& world)
+    : defaultWidth(width)
+    , defaultHeight(height)
+    , world(world)
+{
 
-    const int Camera::tileWidth = 2;
-    const int Camera::tileHeight = 1;
+    centreOnPoint(x, y);
+}
 
-    const float Camera::bottomEdgePadding = tileHeight / 2.0f;
+void Camera::centreOnPoint(float newX, float newY)
+{
+    // Keep within the bounds of the map
+    float cameraWidth = getWidth();
+    float cameraHeight = getHeight();
+    float minX = cameraWidth / 2;
+    float minY = cameraHeight / 2;
 
-    Camera::Camera(float x, float y, float width, float height, Scenario& scenario)
-        : defaultWidth(width)
-        , defaultHeight(height)
-        , scenario(scenario)
+    // Find the furthest point visible to the camera
+    int lastTileIndexX = world.getWidth() - 1;
+    int lastTileIndexY = world.getHeight() - 1;
+    int rightEdge = lastTileIndexX + tileWidth;
+    float bottomEdge = lastTileIndexY + tileHeight + bottomEdgePadding;
+    float maxX = rightEdge - (cameraWidth / 2);
+    float maxY = bottomEdge - (cameraHeight / 2);
+
+    x = MathUtils::clampf(newX, minX, maxX);
+    y = MathUtils::clampf(newY, minY, maxY);
+}
+
+void Camera::centreOnTile(int tileX, int tileY)
+{
+    float offsetY = 0;
+    if (MapUtils::isLowerTile(tileX))
     {
-
-        centreOnPoint(x, y);
+        // Tile co-ordinates zigzag up and down within a row
+        offsetY = (tileHeight / 2.0f);
     }
 
-    void Camera::centreOnPoint(float newX, float newY)
-    {
-        // Keep within the bounds of the map
-        float cameraWidth = getWidth();
-        float cameraHeight = getHeight();
-        float minX = cameraWidth / 2;
-        float minY = cameraHeight / 2;
+    centreOnPoint(tileX + (tileWidth / 2.0f), tileY + (tileHeight / 2.0f) + offsetY);
+}
 
-        // Find the furthest point visible to the camera
-        int lastTileIndexX = scenario.getWidth() - 1;
-        int lastTileIndexY = scenario.getHeight() - 1;
-        int rightEdge = lastTileIndexX + tileWidth;
-        float bottomEdge = lastTileIndexY + tileHeight + bottomEdgePadding;
-        float maxX = rightEdge - (cameraWidth / 2);
-        float maxY = bottomEdge - (cameraHeight / 2);
+void Camera::translate(float dx, float dy)
+{
+    centreOnPoint(x + dx, y + dy);
+}
 
-        x = MathUtils::clampf(newX, minX, maxX);
-        y = MathUtils::clampf(newY, minY, maxY);
-    }
+float Camera::getWidth() const
+{
+    return defaultWidth / zoom;
+}
 
-    void Camera::centreOnTile(int tileX, int tileY)
-    {
-        float offsetY = 0;
-        if (MapUtils::isLowerTile(tileX))
-        {
-            // Tile co-ordinates zigzag up and down within a row
-            offsetY = (tileHeight / 2.0f);
-        }
+float Camera::getHeight() const
+{
+    return defaultHeight / zoom;
+}
 
-        centreOnPoint(tileX + (tileWidth / 2.0f), tileY + (tileHeight / 2.0f) + offsetY);
-    }
+float Camera::getLeft() const
+{
+    return x - getWidth() / 2;
+}
 
-    void Camera::translate(float dx, float dy)
-    {
-        centreOnPoint(x + dx, y + dy);
-    }
+float Camera::getTop() const
+{
+    return y - getHeight() / 2;
+}
 
-    float Camera::getWidth() const
-    {
-        return defaultWidth / zoom;
-    }
+float Camera::getRight() const
+{
+    return x + getWidth() / 2;
+}
 
-    float Camera::getHeight() const
-    {
-        return defaultHeight / zoom;
-    }
+float Camera::getBottom() const
+{
+    return y + getHeight() / 2;
+}
 
-    float Camera::getLeft() const
-    {
-        return x - getWidth() / 2;
-    }
+void Camera::modZoom(float interval)
+{
+    zoom += interval;
+    zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
 
-    float Camera::getTop() const
-    {
-        return y - getHeight() / 2;
-    }
+    // We call `centreOnPoint` here to perform a bounds check, since the
+    // size of the visible region has now changed
+    centreOnPoint(x, y);
+}
 
-    float Camera::getRight() const
-    {
-        return x + getWidth() / 2;
-    }
-
-    float Camera::getBottom() const
-    {
-        return y + getHeight() / 2;
-    }
-
-    void Camera::modZoom(float interval)
-    {
-        zoom += interval;
-        zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
-
-        // We call `centreOnPoint` here to perform a bounds check, since the
-        // size of the visible region has now changed
-        centreOnPoint(x, y);
-    }
-
-    bool Camera::contains(float px, float py) const
-    {
-        return px > getLeft() && px < getRight() && py > getTop() && py < getBottom();
-    }
+bool Camera::contains(float px, float py) const
+{
+    return px > getLeft() && px < getRight() && py > getTop() && py < getBottom();
+}
 
 }  // namespace Rival

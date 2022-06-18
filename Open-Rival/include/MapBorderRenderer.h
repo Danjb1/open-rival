@@ -1,5 +1,4 @@
-#ifndef MAP_BORDER_RENDERER_H
-#define MAP_BORDER_RENDERER_H
+#pragma once
 
 #include <gl/glew.h>
 
@@ -14,69 +13,62 @@
 
 namespace Rival {
 
-    class MapBorderRenderer
-    {
+class MapBorderRenderer
+{
 
-    public:
-        MapBorderRenderer(
-                Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture);
+public:
+    MapBorderRenderer(
+            Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture);
 
-        void
-        createLeftEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
+    void
+    createLeftEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
 
-        void
-        createTopEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth);
+    void createTopEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth);
 
-        void createRightEdge(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int raceOffset,
-                int mapWidth,
-                int mapHeight);
+    void createRightEdge(
+            std::vector<GLfloat>& positions,
+            std::vector<GLfloat>& texCoords,
+            int raceOffset,
+            int mapWidth,
+            int mapHeight);
 
-        void createBottomEdge(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int raceOffset,
-                int mapWidth,
-                int mapHeight);
+    void createBottomEdge(
+            std::vector<GLfloat>& positions,
+            std::vector<GLfloat>& texCoords,
+            int raceOffset,
+            int mapWidth,
+            int mapHeight);
 
-        void createCorners(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int raceOffset,
-                int mapWidth,
-                int mapHeight);
+    void createCorners(
+            std::vector<GLfloat>& positions,
+            std::vector<GLfloat>& texCoords,
+            int raceOffset,
+            int mapWidth,
+            int mapHeight);
 
-        void addDataToBuffers(
-                std::vector<GLfloat>& positions,
-                std::vector<GLfloat>& texCoords,
-                int txIndex,
-                float tileX,
-                float tileY);
+    void addDataToBuffers(
+            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int txIndex, float tileX, float tileY);
 
-        void render() const;
+    void render() const;
 
-    private:
-        static const int txIndexTop = 0;
-        static const int txIndexRight = 1;
-        static const int txIndexBottom = 2;
-        static const int txIndexLeft = 3;
-        static const int txIndexTopLeft = 4;
-        static const int txIndexTopRight = 5;
-        static const int txIndexBottomRight = 6;
-        static const int txIndexBottomLeft = 7;
+private:
+    static constexpr int txIndexTop = 0;
+    static constexpr int txIndexRight = 1;
+    static constexpr int txIndexBottom = 2;
+    static constexpr int txIndexLeft = 3;
+    static constexpr int txIndexTopLeft = 4;
+    static constexpr int txIndexTopRight = 5;
+    static constexpr int txIndexBottomRight = 6;
+    static constexpr int txIndexBottomLeft = 7;
 
-        const Texture& paletteTexture;
+    const Texture& paletteTexture;
 
-        // The maximum number of border segments we can render
-        int maxSegmentsToRender;
+    // The maximum number of border segments we can render
+    int maxSegmentsToRender;
 
-        SpriteRenderable renderable;
+    SpriteRenderable renderable;
 
-        int numSegments = 0;
-    };
+    int numSegments = 0;
+};
 
 }  // namespace Rival
-
-#endif  // MAP_BORDER_RENDERER_H

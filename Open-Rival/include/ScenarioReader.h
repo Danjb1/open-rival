@@ -1,184 +1,181 @@
-#ifndef SCENARIO_READER_H
-#define SCENARIO_READER_H
+#pragma once
 
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
-#include "Scenario.h"
 #include "ScenarioData.h"
 #include "Unit.h"
 
 namespace Rival {
 
-    class ScenarioReader
-    {
+class ScenarioReader
+{
 
-    public:
-        ScenarioReader(const std::string filename);
+public:
+    ScenarioReader(const std::string filename);
 
-        ScenarioData readScenario();
+    ScenarioData readScenario();
 
-        ScenarioData readCampaignScenario(int levelIndex);
+    ScenarioData readCampaignScenario(int levelIndex);
 
-    private:
-        static const std::map<std::uint8_t, char> alphabet;
+private:
+    static const std::unordered_map<std::uint8_t, char> alphabet;
 
-        static const int numBytesShort = 2;
-        static const int numBytesInt = 4;
+    static constexpr int numBytesShort = 2;
+    static constexpr int numBytesInt = 4;
 
-        static const int bytesPerTile = 6;
+    static constexpr int bytesPerTile = 6;
 
-        std::vector<unsigned char> data;
-        size_t pos = 0;
+    std::vector<unsigned char> data;
+    size_t pos = 0;
 
-        ///////////////////////////////////////////////////////////////////////
-        // Parsing
-        ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    // Parsing
+    ///////////////////////////////////////////////////////////////////////
 
-        ScenarioData parseScenario(bool expectEof);
+    ScenarioData parseScenario(bool expectEof);
 
-        ScenarioHeader parseHeader();
+    ScenarioHeader parseHeader();
 
-        PlayerProperties parsePlayerProperties();
+    PlayerProperties parsePlayerProperties();
 
-        TroopDefaults parseTroopDefaults();
+    TroopDefaults parseTroopDefaults();
 
-        bool doesUpgradeHaveAmount(int i) const;
+    bool doesUpgradeHaveAmount(int i) const;
 
-        UpgradeProperties parseUpgradeProperties(bool readAmount);
+    UpgradeProperties parseUpgradeProperties(bool readAmount);
 
-        ProductionCost parseProductionCost();
+    ProductionCost parseProductionCost();
 
-        WeaponDefaults parseWeaponDefaults();
+    WeaponDefaults parseWeaponDefaults();
 
-        AvailableBuildings parseAvailableBuildings();
+    AvailableBuildings parseAvailableBuildings();
 
-        HireTroopsRestrictions parseHireTroopsRestrictions();
+    HireTroopsRestrictions parseHireTroopsRestrictions();
 
-        AiSetting parseAiSetting();
+    AiSetting parseAiSetting();
 
-        std::vector<TilePlacement> parseTiles(int width, int height);
+    std::vector<TilePlacement> parseTiles(int width, int height);
 
-        TilePlacement parseTile();
+    TilePlacement parseTile();
 
-        std::vector<ObjectPlacement> parseObjects();
+    std::vector<ObjectPlacement> parseObjects();
 
-        ObjectPlacement parseObject();
+    ObjectPlacement parseObject();
 
-        std::vector<BuildingPlacement> parseBuildings();
+    std::vector<BuildingPlacement> parseBuildings();
 
-        BuildingPlacement parseBuilding();
+    BuildingPlacement parseBuilding();
 
-        std::vector<UnitPlacement> parseUnits();
+    std::vector<UnitPlacement> parseUnits();
 
-        UnitPlacement parseUnit();
+    UnitPlacement parseUnit();
 
-        std::vector<ChestPlacement> parseChests();
+    std::vector<ChestPlacement> parseChests();
 
-        ChestPlacement parseChest();
+    ChestPlacement parseChest();
 
-        std::vector<InfoPointPlacement> parseInfoPoints();
+    std::vector<InfoPointPlacement> parseInfoPoints();
 
-        InfoPointPlacement parseInfoPoint();
+    InfoPointPlacement parseInfoPoint();
 
-        std::vector<TrapPlacement> parseTraps();
+    std::vector<TrapPlacement> parseTraps();
 
-        TrapPlacement parseTrap();
+    TrapPlacement parseTrap();
 
-        std::vector<GoalLocation> parseGoalLocations();
+    std::vector<GoalLocation> parseGoalLocations();
 
-        GoalLocation parseGoalLocation();
+    GoalLocation parseGoalLocation();
 
-        std::vector<Goal> parseGoals();
+    std::vector<Goal> parseGoals();
 
-        Goal parseGoal();
+    Goal parseGoal();
 
-        CampaignText parseCampaignText();
+    CampaignText parseCampaignText();
 
-        ///////////////////////////////////////////////////////////////////////
-        // Token Extraction
-        ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    // Token Extraction
+    ///////////////////////////////////////////////////////////////////////
 
-        std::uint8_t readByte();
+    std::uint8_t readByte();
 
-        std::uint8_t readByte(size_t offset) const;
+    std::uint8_t readByte(size_t offset) const;
 
-        std::uint8_t readRivalByte();
+    std::uint8_t readRivalByte();
 
-        std::uint8_t readRivalByte(size_t offset) const;
+    std::uint8_t readRivalByte(size_t offset) const;
 
-        std::uint8_t fixRivalByte(std::uint8_t val) const;
+    std::uint8_t fixRivalByte(std::uint8_t val) const;
 
-        std::uint16_t readRivalShort();
+    std::uint16_t readRivalShort();
 
-        std::uint16_t readRivalShort(size_t offset) const;
+    std::uint16_t readRivalShort(size_t offset) const;
 
-        bool readBool();
+    bool readBool();
 
-        bool readBool(size_t offset) const;
+    bool readBool(size_t offset) const;
 
-        std::uint16_t readShort();
+    std::uint16_t readShort();
 
-        std::uint16_t readShort(size_t offset) const;
+    std::uint16_t readShort(size_t offset) const;
 
-        std::uint32_t readInt();
+    std::uint32_t readInt();
 
-        std::uint32_t readInt(size_t offset) const;
+    std::uint32_t readInt(size_t offset) const;
 
-        std::string readString(size_t length);
+    std::string readString(size_t length);
 
-        std::string readString(size_t offset, size_t length) const;
+    std::string readString(size_t offset, size_t length) const;
 
-        std::string readRivalString(size_t length);
+    std::string readRivalString(size_t length);
 
-        std::string readRivalString(size_t offset, size_t length) const;
+    std::string readRivalString(size_t offset, size_t length) const;
 
-        char getRivalChar(std::uint8_t c) const;
+    char getRivalChar(std::uint8_t c) const;
 
-        void skip(const size_t n, bool print);
+    void skip(const size_t n, bool print);
 
-        ///////////////////////////////////////////////////////////////////////
-        // Printing
-        ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    // Printing
+    ///////////////////////////////////////////////////////////////////////
 
-        void printOffset() const;
+    void printOffset() const;
 
-        void printSection(std::string title) const;
+    void printSection(std::string title) const;
 
-        void printNext(const size_t n) const;
+    void printNext(const size_t n) const;
 
-        void print(const ScenarioHeader& hdr) const;
+    void print(const ScenarioHeader& hdr) const;
 
-        void print(const PlayerProperties& props) const;
+    void print(const PlayerProperties& props) const;
 
-        void print(const TroopDefaults& troop) const;
+    void print(const TroopDefaults& troop) const;
 
-        void print(const UpgradeProperties& upgrade) const;
+    void print(const UpgradeProperties& upgrade) const;
 
-        void print(const ProductionCost& unitCost) const;
+    void print(const ProductionCost& unitCost) const;
 
-        void print(const WeaponDefaults& wpn) const;
+    void print(const WeaponDefaults& wpn) const;
 
-        void print(const AvailableBuildings& bldg) const;
+    void print(const AvailableBuildings& bldg) const;
 
-        void print(const HireTroopsRestrictions& restrictions) const;
+    void print(const HireTroopsRestrictions& restrictions) const;
 
-        void print(const AiSetting& setting) const;
+    void print(const AiSetting& setting) const;
 
-        void print(const ObjectPlacement& obj) const;
+    void print(const ObjectPlacement& obj) const;
 
-        void print(const BuildingPlacement& bldg) const;
+    void print(const BuildingPlacement& bldg) const;
 
-        void print(const UnitPlacement& unit) const;
+    void print(const UnitPlacement& unit) const;
 
-        void print(const TrapPlacement& trap) const;
+    void print(const TrapPlacement& trap) const;
 
-        void print(const GoalLocation& trap) const;
+    void print(const GoalLocation& trap) const;
 
-        void print(const CampaignText& text) const;
-    };
+    void print(const CampaignText& text) const;
+};
 
 }  // namespace Rival
-
-#endif  // SCENARIO_READER_H

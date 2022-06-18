@@ -1,5 +1,4 @@
-#ifndef ENUM_UTILS_H
-#define ENUM_UTILS_H
+#pragma once
 
 #include <type_traits>
 
@@ -49,5 +48,3 @@
         a = static_cast<TEnum>(static_cast<TUnder>(a) ^ static_cast<TUnder>(b));                                       \
         return a;                                                                                                      \
     }
-
-#endif  // ENUM_UTILS_H

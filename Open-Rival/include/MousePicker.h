@@ -1,79 +1,77 @@
-#ifndef MOUSE_PICKER_H
-#define MOUSE_PICKER_H
+#pragma once
 
 #include <memory>
 #include <utility>
 
-#include "Camera.h"
-#include "Entity.h"
-#include "Rect.h"
 #include "RenderUtils.h"
-#include "Unit.h"
 
 namespace Rival {
 
-    /**
-     * Class responsible for determining what is under the mouse.
-     *
-     * Currently this works by reverse-engineering the rendering process and
-     * calculating what was rendered at the mouse's position.
-     *
-     * As an alternative, we could use this strategy:
-     * https://www.kamremake.com/devblog/unit-picking/
-     *
-     * This would be much simpler to understand and maintain, but it would
-     * require everything to be rendered twice (once to a texture, using a
-     * special mouse-picking shader that encodes information about the rendered
-     * game world).
-     */
-    class MousePicker
-    {
+class Camera;
+class Entity;
+class Rect;
+class World;
 
-    public:
-        MousePicker(Camera& camera, Rect& viewport, Scenario& scenario);
+/**
+ * Class responsible for determining what is under the mouse.
+ *
+ * Currently this works by reverse-engineering the rendering process and
+ * calculating what was rendered at the mouse's position.
+ *
+ * As an alternative, we could use this strategy:
+ * https://www.kamremake.com/devblog/unit-picking/
+ *
+ * This would be much simpler to understand and maintain, but it would
+ * require everything to be rendered twice (once to a texture, using a
+ * special mouse-picking shader that encodes information about the rendered
+ * game world).
+ */
+class MousePicker
+{
 
-        void handleMouse();
+public:
+    MousePicker(Camera& camera, Rect& viewport, World& world);
 
-        int getTileX() const;
+    void handleMouse();
 
-        int getTileY() const;
+    int getTileX() const;
 
-        int getEntityId() const;
+    int getTileY() const;
 
-    private:
-        // Offset of a Unit's hitbox, measured from the top-left corner of the
-        // containing tile to the bottom-left of the hitbox, in px
-        static const int unitHitboxOffsetX = 20;
-        static const int unitHitboxOffsetY = 25;
+    int getEntityId() const;
 
-        // Size of a Unit's hitbox
-        static const int unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
-        static const int unitHitboxHeight = 40;
+private:
+    // Offset of a Unit's hitbox, measured from the top-left corner of the
+    // containing tile to the bottom-left of the hitbox, in px
+    static constexpr int unitHitboxOffsetX = 20;
+    static constexpr int unitHitboxOffsetY = 25;
 
-        Camera& camera;
+    // Size of a Unit's hitbox
+    static constexpr int unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
+    static constexpr int unitHitboxHeight = 40;
 
-        Rect& viewport;
+    Camera& camera;
 
-        int mapWidth;
+    Rect& viewport;
 
-        int mapHeight;
+    int mapWidth;
 
-        std::pair<int, int> tile;
+    int mapHeight;
 
-        int entityId;
+    std::pair<int, int> tile;
 
-        Scenario& scenario;
+    int entityId;
 
-        float getMouseInCameraX(float normalizedMouseX);
-        float getMouseInCameraY(float normalizedMouseY);
+    World& world;
 
-        std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
+    float getMouseInCameraX(float normalizedMouseX);
+    float getMouseInCameraY(float normalizedMouseY);
 
-        void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
+    std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
 
-        bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
-    };
+    void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
+
+    bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
+};
 
 }  // namespace Rival
-
-#endif  // MOUSE_PICKER_H

@@ -12,7 +12,7 @@ SCENARIO("Camera should stay in bounds", "[camera]")
 
     GIVEN("A camera looking at some point in a scenario")
     {
-        Scenario scenario(50, 50, false);
+        World scenario(50, 50, false);
         Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
 
         WHEN("moving the camera left")
@@ -62,7 +62,7 @@ SCENARIO("Camera should point at the centre of a tile", "[camera]")
 
     GIVEN("A camera looking at some point in a scenario")
     {
-        Scenario scenario(50, 50, false);
+        World scenario(50, 50, false);
         Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
 
         WHEN("centering the camera on a tile in an even-numbered column")
@@ -104,7 +104,7 @@ SCENARIO("Camera should be the correct size", "[camera]")
 
     GIVEN("A camera looking at some point in a scenario")
     {
-        Scenario scenario(50, 50, false);
+        World scenario(50, 50, false);
         Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
 
         WHEN("getting the camera size")

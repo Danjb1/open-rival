@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#pragma once
 
 #include <gl/glew.h>
 
@@ -9,54 +8,52 @@
 
 namespace Rival {
 
-    struct TextureProperties
-    {
-        /**
-         * Minification filter.
-         *
-         * Generally, we have to stick to GL_NEAREST since we use indexed
-         * textures, so interpolation between colors is impossible.
-         */
-        GLint minFilter = GL_NEAREST;
+struct TextureProperties
+{
+    /**
+     * Minification filter.
+     *
+     * Generally, we have to stick to GL_NEAREST since we use indexed
+     * textures, so interpolation between colors is impossible.
+     */
+    GLint minFilter = GL_NEAREST;
 
-        /**
-         * Magnification filter.
-         *
-         * Generally, we have to stick to GL_NEAREST since we use indexed
-         * textures, so interpolation between colors is impossible.
-         */
-        GLint magFilter = GL_NEAREST;
+    /**
+     * Magnification filter.
+     *
+     * Generally, we have to stick to GL_NEAREST since we use indexed
+     * textures, so interpolation between colors is impossible.
+     */
+    GLint magFilter = GL_NEAREST;
 
-        /**
-         * Texture wrapping mode.
-         */
-        GLint wrapMode = GL_CLAMP_TO_EDGE;
-    };
+    /**
+     * Texture wrapping mode.
+     */
+    GLint wrapMode = GL_CLAMP_TO_EDGE;
+};
 
-    class Texture
-    {
+class Texture
+{
 
-    public:
-        Texture(const GLuint id, int width, int height);
+public:
+    Texture(const GLuint id, int width, int height);
 
-        const GLuint getId() const;
+    const GLuint getId() const;
 
-        const int getWidth() const;
+    const int getWidth() const;
 
-        const int getHeight() const;
+    const int getHeight() const;
 
-        static const Texture loadTexture(const std::string filename);
+    static const Texture loadTexture(const std::string filename);
 
-        static const Texture wrap(const Image img, TextureProperties props);
+    static const Texture wrap(const Image img, TextureProperties props);
 
-    private:
-        const GLuint id;
+private:
+    const GLuint id;
 
-        const int width;
+    const int width;
 
-        const int height;
-    };
+    const int height;
+};
 
 }  // namespace Rival
-
-#endif  // TEXTURE_H

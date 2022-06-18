@@ -10,61 +10,61 @@
 
 namespace Rival {
 
-    /**
-     * Component that controls the animation and facing of a SpriteComponent.
-     */
-    class AnimationComponent
-        : public EntityComponent
-        , public UnitStateListener
-        , public FacingListener
-    {
+/**
+ * Component that controls the animation and facing of a SpriteComponent.
+ */
+class AnimationComponent
+    : public EntityComponent
+    , public UnitStateListener
+    , public FacingListener
+{
 
-    public:
-        AnimationComponent(const Animations::Animation animation);
+public:
+    AnimationComponent(const Animations::Animation animation);
 
-        // Begin EntityComponent override
-        virtual void onEntitySpawned(Scenario* scenario) override;
-        virtual void onDelete() override;
-        virtual void update() override;
-        // End EntityComponent override
+    // Begin EntityComponent override
+    virtual void onEntitySpawned(World* world) override;
+    virtual void onDelete() override;
+    virtual void update() override;
+    // End EntityComponent override
 
-        // Begin UnitStateListener override
-        virtual void onUnitStateChanged(const UnitState newState) override;
-        // End UnitStateListener override
+    // Begin UnitStateListener override
+    virtual void onUnitStateChanged(const UnitState newState) override;
+    // End UnitStateListener override
 
-        // Begin FacingListener override
-        void facingChanged(Facing newFacing) override;
-        // End FacingListener override
+    // Begin FacingListener override
+    void facingChanged(Facing newFacing) override;
+    // End FacingListener override
 
-        void setAnimation(Animations::Animation newAnimation);
+    void setAnimation(Animations::Animation newAnimation);
 
-        int getCurrentSpriteIndex() const;
+    int getCurrentSpriteIndex() const;
 
-    private:
-        void setCurrentAnimFrame(int newAnimFrame);
+private:
+    void setCurrentAnimFrame(int newAnimFrame);
 
-        void refreshSpriteComponent() const;
+    void refreshSpriteComponent() const;
 
-        void advanceFrame(int numAnimFrames, int msPerAnimFrame);
+    void advanceFrame(int numAnimFrames, int msPerAnimFrame);
 
-        int getNumAnimFrames() const;
+    int getNumAnimFrames() const;
 
-        int getMsPerAnimFrame() const;
+    int getMsPerAnimFrame() const;
 
-        int getFacingOffset() const;
+    int getFacingOffset() const;
 
-    public:
-        static const std::string key;
+public:
+    static const std::string key;
 
-    private:
-        std::weak_ptr<UnitPropsComponent> weakUnitPropsComponent;
-        std::weak_ptr<SpriteComponent> weakSpriteComponent;
-        std::weak_ptr<FacingComponent> weakFacingComponent;
+private:
+    std::weak_ptr<UnitPropsComponent> weakUnitPropsComponent;
+    std::weak_ptr<SpriteComponent> weakSpriteComponent;
+    std::weak_ptr<FacingComponent> weakFacingComponent;
 
-        Animations::Animation animation;
+    Animations::Animation animation;
 
-        int currentAnimFrame;
+    int currentAnimFrame;
 
-        int msPassedCurrentAnimFrame;
-    };
+    int msPassedCurrentAnimFrame;
+};
 }  // namespace Rival

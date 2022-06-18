@@ -6,10 +6,17 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Component Improvements
+### Refactoring
 
-- `Entity::attach` takes a `unique_ptr`, should take `shared_ptr`
-- Ensure `onDelete` is never called before `onEntitySpawned`
+- Add weak/shared/raw mechanism for Entity retrieval
+- Don't use `const` for member variables
+- List methods before fields in classes
+    - Separate fields using a new public/private heading
+- Pass small interfaces around instead of complex objects
+    - e.g. Resources should extend TextureStore, AudioStore, etc.
+- Prefer forward-declarations to includes, to reduce compile times
+- Always initialize member variables (e.g. add ctors to structs in ScenarioData.h)
+    - Prefer default member initialization
 
 ### Formatting and Libraries
 
@@ -31,7 +38,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Iterators may break if an Entity is added from inside the loop
 - Game will crash if no config file exists
 
 <!----------------------------------------------------------------------------->
@@ -258,10 +264,17 @@
 ## Unit Tests
 <!----------------------------------------------------------------------------->
 
+### General
+
 - Write a tool to automatically generate `Open-Rival-test.proj`
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
 - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
+
+### Entity/Component Lifecycle
+
+- Test that EntityComponents get deleted when an Entity is deleted
+- Test requestAddEntity + addPendingEntities
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt
@@ -324,7 +337,7 @@
 ### Design
 
 - Static objects (e.g. mountains) need not use an AnimationComponent
-- Differentiate between components that need to be ticked and those that don't
+- Differentiate between components that need to be ticked and those that don't (optimisation)
 - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed
 
 ### Refactoring
@@ -332,23 +345,15 @@
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
-- Move constants from header files to CPP files?
 - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset
 - Use a common file reading mechanism in audio-extractor
 - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
-- Don't use `const` for member variables?
 - Avoid reference member variables (prefer pointers)?
 - Avoid static methods
     - Use a namespace for public methods
     - Put private methods in a `.cpp` file
-- List methods before fields in classes
-    - Separate fields using a new public/private heading
-- Pass small interfaces around instead of complex objects
-    - e.g. Resources should extend TextureStore, AudioStore, etc.
-- Prefer forward-declarations to includes, to reduce compile times
 - EntityFactory should use maps instead of switch statements
-- Use #pragma once?
 - Improve error handling (ensures, etc.)
     - Pointer access and map access is fragile
-- Always initialize properties
+- Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities

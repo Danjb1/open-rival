@@ -102,7 +102,7 @@ IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'
 Language: Cpp
 MaxEmptyLinesToKeep: '1'
-NamespaceIndentation: All
+NamespaceIndentation: None
 PointerAlignment: Left
 SortIncludes: 'true'
 SpaceAfterCStyleCast: 'true'

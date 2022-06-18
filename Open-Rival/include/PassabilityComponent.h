@@ -1,31 +1,29 @@
-#ifndef PASSABILITY_COMPONENT_H
-#define PASSABILITY_COMPONENT_H
+#pragma once
 
 #include "EntityComponent.h"
-#include "Scenario.h"
 #include "Tile.h"
 
 namespace Rival {
 
-    /**
-     * Component that affects the passability of an entity's tile.
-     */
-    class PassabilityComponent : public EntityComponent
-    {
+class World;
 
-    public:
-        static const std::string key;
+/**
+ * Component that affects the passability of an entity's tile.
+ */
+class PassabilityComponent : public EntityComponent
+{
 
-        PassabilityComponent(TilePassability passability);
+public:
+    static const std::string key;
 
-        void onEntitySpawned(Scenario* scenario) override;
+    PassabilityComponent(TilePassability passability);
 
-        TilePassability getPassability() const;
+    void onEntitySpawned(World* world) override;
 
-    private:
-        TilePassability passability;
-    };
+    TilePassability getPassability() const;
+
+private:
+    TilePassability passability;
+};
 
 }  // namespace Rival
-
-#endif  // PASSABILITY_COMPONENT_H

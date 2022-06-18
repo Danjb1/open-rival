@@ -1,71 +1,68 @@
-#ifndef WALKER_COMPONENT_H
-#define WALKER_COMPONENT_H
+#pragma once
 
 #include "MovementComponent.h"
 #include "Pathfinding.h"
 
 namespace Rival {
 
-    /**
-     * PassabilityChecker that treats empty ground tiles as traversable.
-     */
-    class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker
-    {
-        bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
-    };
+/**
+ * PassabilityChecker that treats empty ground tiles as traversable.
+ */
+class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker
+{
+    bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
+};
+
+/**
+ * Component that allows an entity to walk around the map.
+ *
+ * Note that during movement, entities are considered to occupy their
+ * original tile until they have fully moved into the new tile.
+ */
+class WalkerComponent : public MovementComponent
+{
+
+public:
+    WalkerComponent();
+
+    // Begin EntityComponent override
+    void update() override;
+    // End EntityComponent override
 
     /**
-     * Component that allows an entity to walk around the map.
-     *
-     * Note that during movement, entities are considered to occupy their
-     * original tile until they have fully moved into the new tile.
+     * Sets the current route.
      */
-    class WalkerComponent : public MovementComponent
+    void setRoute(Pathfinding::Route route);
+
+    /**
+     * Gets the current route.
+     */
+    const Pathfinding::Route getRoute() const
     {
+        return route;
+    }
 
-    public:
-        WalkerComponent();
+    /**
+     * Gets the movement that's currently in progress.
+     */
+    const Movement& getMovement() const
+    {
+        return movement;
+    }
 
-        // Begin EntityComponent override
-        void update() override;
-        // End EntityComponent override
+private:
+    void prepareNextMovement();
+    void completeMovement();
 
-        /**
-         * Sets the current route.
-         */
-        void setRoute(Pathfinding::Route route);
+private:
+    static WalkerPassabilityChecker passabilityChecker;
 
-        /**
-         * Gets the current route.
-         */
-        const Pathfinding::Route getRoute() const
-        {
-            return route;
-        }
+    Pathfinding::Route route;
 
-        /**
-         * Gets the movement that's currently in progress.
-         */
-        const Movement& getMovement() const
-        {
-            return movement;
-        }
+    Movement movement;
 
-    private:
-        void prepareNextMovement();
-        void completeMovement();
-
-    private:
-        static WalkerPassabilityChecker passabilityChecker;
-
-        Pathfinding::Route route;
-
-        Movement movement;
-
-        // TMP: This should depend on the unit's speed
-        int ticksPerMove = 30;
-    };
+    // TMP: This should depend on the unit's speed
+    int ticksPerMove = 30;
+};
 
 }  // namespace Rival
-
-#endif  // WALKER_COMPONENT_H

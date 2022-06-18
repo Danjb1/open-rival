@@ -10,77 +10,77 @@
 
 namespace Rival {
 
-    struct MapNode;
+struct MapNode;
 
-    enum class UnitState : std::uint8_t
+enum class UnitState : std::uint8_t
+{
+    Idle,
+    Moving,
+    Attacking
+};
+
+/**
+ * Interface used to listen to unit state changes.
+ */
+class UnitStateListener
+{
+public:
+    virtual void onUnitStateChanged(const UnitState newState) = 0;
+};
+
+/**
+ * Component containing basic unit properties.
+ */
+class UnitPropsComponent
+    : public EntityComponent
+    , public MovementListener
+{
+
+public:
+    UnitPropsComponent(Unit::Type type);
+
+    // Begin EntityComponent override
+    virtual void onEntitySpawned(World* scenario) override;
+    virtual void onDelete() override;
+    // End EntityComponent override
+
+    // Begin MovementListener override
+    virtual void onUnitMoveStart(const MapNode* nextNode) override;
+    virtual void onUnitJourneyEnd() override;
+    // End MovementListener override
+
+    void addStateListener(UnitStateListener* listener);
+    void removeStateListener(UnitStateListener* listener);
+
+    Unit::Type getUnitType() const
     {
-        Idle,
-        Moving,
-        Attacking
-    };
+        return type;
+    }
 
     /**
-     * Interface used to listen to unit state changes.
+     * Gets the unit's current state.
      */
-    class UnitStateListener
+    UnitState getState() const
     {
-    public:
-        virtual void onUnitStateChanged(const UnitState newState) = 0;
-    };
+        return state;
+    }
 
     /**
-     * Component containing basic unit properties.
+     * Sets this Entity's state.
      */
-    class UnitPropsComponent
-        : public EntityComponent
-        , public MovementListener
-    {
+    void setState(UnitState state);
 
-    public:
-        UnitPropsComponent(Unit::Type type);
+public:
+    static const std::string key;
 
-        // Begin EntityComponent override
-        virtual void onEntitySpawned(Scenario* scenario) override;
-        virtual void onDelete() override;
-        // End EntityComponent override
+private:
+    std::unordered_set<UnitStateListener*> stateListeners;
 
-        // Begin MovementListener override
-        virtual void onUnitMoveStart(const MapNode* nextNode) override;
-        virtual void onUnitJourneyEnd() override;
-        // End MovementListener override
+    std::weak_ptr<MovementComponent> weakMovementComponent;
 
-        void addStateListener(UnitStateListener* listener);
-        void removeStateListener(UnitStateListener* listener);
+    Unit::Type type = Unit::Type::Invalid;
 
-        Unit::Type getUnitType() const
-        {
-            return type;
-        }
-
-        /**
-         * Gets the unit's current state.
-         */
-        UnitState getState() const
-        {
-            return state;
-        }
-
-        /**
-         * Sets this Entity's state.
-         */
-        void setState(UnitState state);
-
-    public:
-        static const std::string key;
-
-    private:
-        std::unordered_set<UnitStateListener*> stateListeners;
-
-        std::weak_ptr<MovementComponent> weakMovementComponent;
-
-        Unit::Type type = Unit::Type::Invalid;
-
-        UnitState state = UnitState::Idle;
-    };
+    UnitState state = UnitState::Idle;
+};
 
 }  // namespace Rival

@@ -1,14 +1,11 @@
-#ifndef TIMER_UTILS_H
-#define TIMER_UTILS_H
+#pragma once
 
 #include <chrono>
 
 namespace Rival { namespace TimerUtils {
 
-    static const int fps = 60;
+static constexpr int fps = 60;
 
-    static const int timeStepMs = 1000 / fps;
+static constexpr int timeStepMs = 1000 / fps;
 
 }}  // namespace Rival::TimerUtils
-
-#endif  // TIMER_UTILS_H

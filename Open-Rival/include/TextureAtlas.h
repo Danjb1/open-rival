@@ -1,9 +1,8 @@
-#ifndef TEXTURE_ATLAS_H
-#define TEXTURE_ATLAS_H
+#pragma once
 
 #include <gl/glew.h>
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "Rect.h"
@@ -11,25 +10,23 @@
 
 namespace Rival {
 
-    class TextureAtlas
-    {
+class TextureAtlas
+{
 
-    public:
-        Texture texture;
+public:
+    Texture texture;
 
-        TextureAtlas(Texture texture, std::map<std::string, Rect> imagePlacements);
+    TextureAtlas(Texture texture, std::unordered_map<std::string, Rect> imagePlacements);
 
-        const int getImageWidth(std::string key) const;
-        const int getImageHeight(std::string key) const;
+    const int getImageWidth(std::string key) const;
+    const int getImageHeight(std::string key) const;
 
-        const std::vector<GLfloat> getTexCoords(std::string key) const;
+    const std::vector<GLfloat> getTexCoords(std::string key) const;
 
-        static const TextureAtlas loadTextureAtlas(const std::string filename);
+    static const TextureAtlas loadTextureAtlas(const std::string filename);
 
-    private:
-        std::map<std::string, Rect> imagePlacements;
-    };
+private:
+    std::unordered_map<std::string, Rect> imagePlacements;
+};
 
 }  // namespace Rival
-
-#endif  // TEXTURE_ATLAS_H

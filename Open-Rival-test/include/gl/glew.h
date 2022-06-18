@@ -1,6 +1,4 @@
-#ifndef __GLEW_H__
-#define __GLEW_H__
-#define __GLEW_H__
+#pragma once
 
 #include <cstddef>
 
@@ -43,11 +41,7 @@ GLuint glCreateProgram();
 
 GLuint glCreateShader(GLenum shaderType);
 
-void glShaderSource(
-        GLuint shader,
-        GLsizei count,
-        const GLchar** string,
-        const GLint* length);
+void glShaderSource(GLuint shader, GLsizei count, const GLchar** string, const GLint* length);
 
 void glCompileShader(GLuint shader);
 
@@ -63,17 +57,9 @@ GLboolean glIsProgram(GLuint program);
 
 GLboolean glIsShader(GLuint shader);
 
-void glGetProgramInfoLog(
-        GLuint program,
-        GLsizei maxLength,
-        GLsizei* length,
-        GLchar* infoLog);
+void glGetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 
-void glGetShaderInfoLog(
-        GLuint shader,
-        GLsizei maxLength,
-        GLsizei* length,
-        GLchar* infoLog);
+void glGetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 
 GLint glGetUniformLocation(GLuint program, const GLchar* name);
 
@@ -87,22 +73,11 @@ void glGenBuffers(GLsizei n, GLuint* buffers);
 
 void glBindBuffer(GLenum target, GLuint buffer);
 
-void glBufferData(
-        GLenum target,
-        GLsizeiptr size,
-        const void* data,
-        GLenum usage);
+void glBufferData(GLenum target, GLsizeiptr size, const void* data, GLenum usage);
 
 void glVertexAttribPointer(
-        GLuint index,
-        GLint size,
-        GLenum type,
-        GLboolean normalized,
-        GLsizei stride,
-        const void* pointer);
+        GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* pointer);
 
 void glEnableVertexAttribArray(GLuint index);
 
 void glPixelStorei(GLenum pname, GLint param);
-
-#endif  // __GLEW_H__

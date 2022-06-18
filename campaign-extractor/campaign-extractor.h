@@ -1,12 +1,9 @@
-#ifndef FILE_UTILS_H
-#define FILE_UTILS_H
+#pragma once
 
 #include <string>
 
 namespace Rival { namespace Setup {
 
-    void extractCampaign(std::string filename);
+void extractCampaign(std::string filename);
 
 }}  // namespace Rival::Setup
-
-#endif  // FILE_UTILS_H

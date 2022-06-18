@@ -4,30 +4,30 @@
 
 namespace Rival { namespace MathUtils {
 
-    int clampi(int val, int min, int max)
+int clampi(int val, int min, int max)
+{
+    if (val < min)
     {
-        if (val < min)
-        {
-            return min;
-        }
-        else if (val > max)
-        {
-            return max;
-        }
-        return val;
+        return min;
     }
+    else if (val > max)
+    {
+        return max;
+    }
+    return val;
+}
 
-    float clampf(float val, float min, float max)
+float clampf(float val, float min, float max)
+{
+    if (val < min)
     {
-        if (val < min)
-        {
-            return min;
-        }
-        else if (val > max)
-        {
-            return max;
-        }
-        return val;
+        return min;
     }
+    else if (val > max)
+    {
+        return max;
+    }
+    return val;
+}
 
 }}  // namespace Rival::MathUtils

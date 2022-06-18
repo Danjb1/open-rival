@@ -1,104 +1,101 @@
-#ifndef CAMERA_H
-#define CAMERA_H
-
-#include "Scenario.h"
+#pragma once
 
 namespace Rival {
 
+class World;
+
+/**
+ * The camera uses its own co-ordinate system ("camera units"):
+ *
+ *     1 camera unit = 32 scaled px
+ *
+ * where 1 scaled px is equivalent to the size of a rendered pixel.
+ *
+ * This is necessary because the game world is not a continuous space; the
+ * tiles zigzag up and down, so the conversion between tile co-ordinates
+ * and pixel positioning is not straightforward. If we tried to position
+ * the camera in tile space, it would bob up and down while panning left
+ * and right!
+ */
+class Camera
+{
+
+public:
+    // Size of a tile, in camera co-ordinates
+    static constexpr int tileWidth = 2;
+    static constexpr int tileHeight = 1;
+
+    // Zoom behaviour
+    static constexpr float zoomInterval = 0.1f;
+    static constexpr float zoomMin = 0.5f;
+    static constexpr float zoomMax = 2.0f;
+
+    Camera(float x, float y, float width, float height, World& world);
+
+    void centreOnPoint(float x, float y);
+
+    void centreOnTile(int x, int y);
+
     /**
-     * The camera uses its own co-ordinate system ("camera units"):
+     * Moves the camera by some distance, in camera units.
      *
-     *     1 camera unit = 32 scaled px
-     *
-     * where 1 scaled px is equivalent to the size of a rendered pixel.
-     *
-     * This is necessary because the game world is not a continuous space; the
-     * tiles zigzag up and down, so the conversion between tile co-ordinates
-     * and pixel positioning is not straightforward. If we tried to position
-     * the camera in tile space, it would bob up and down while panning left
-     * and right!
+     * Translating the camera by (1, 1) is equivalent to moving it by 1 row
+     * and 1 column; each tile actually measures 2 camera units, but the
+     * columns overlap.
      */
-    class Camera
+    void translate(float dx, float dy);
+
+    float getX() const
     {
+        return x;
+    }
 
-    public:
-        // Size of a tile, in camera co-ordinates
-        static const int tileWidth;
-        static const int tileHeight;
+    float getY() const
+    {
+        return y;
+    }
 
-        // Zoom behaviour
-        static const float zoomInterval;
-        static const float zoomMin;
-        static const float zoomMax;
+    float getWidth() const;
 
-        Camera(float x, float y, float width, float height, Scenario& scenario);
+    float getHeight() const;
 
-        void centreOnPoint(float x, float y);
+    float getLeft() const;
 
-        void centreOnTile(int x, int y);
+    float getTop() const;
 
-        /**
-         * Moves the camera by some distance, in camera units.
-         *
-         * Translating the camera by (1, 1) is equivalent to moving it by 1 row
-         * and 1 column; each tile actually measures 2 camera units, but the
-         * columns overlap.
-         */
-        void translate(float dx, float dy);
+    float getRight() const;
 
-        float getX() const
-        {
-            return x;
-        }
+    float getBottom() const;
 
-        float getY() const
-        {
-            return y;
-        }
+    float getZoom() const
+    {
+        return zoom;
+    }
 
-        float getWidth() const;
+    void modZoom(float zoomInterval);
 
-        float getHeight() const;
+    bool contains(float px, float py) const;
 
-        float getLeft() const;
+private:
+    // Extra distance the camera is allowed to travel at the bottom of the
+    // map. This is necessary because a row of tiles actually spans more
+    // than 1 tile height due to their zigzagging y-positioning.
+    static constexpr float bottomEdgePadding = tileHeight / 2.0f;
 
-        float getTop() const;
+    // The point at the centre of the camera, in camera units
+    float x;
+    float y;
 
-        float getRight() const;
+    // The size of the visible region, in camera units, at the default zoom
+    // level.
+    // The public-facing getters always take into account the zoom level.
+    float defaultWidth;
+    float defaultHeight;
 
-        float getBottom() const;
+    // Zoom level (render scale)
+    float zoom = 1.0f;
 
-        float getZoom() const
-        {
-            return zoom;
-        }
-
-        void modZoom(float zoomInterval);
-
-        bool contains(float px, float py) const;
-
-    private:
-        // Extra distance the camera is allowed to travel at the bottom of the
-        // map. This is necessary because a row of tiles actually spans more
-        // than 1 tile height due to their zigzagging y-positioning.
-        static const float bottomEdgePadding;
-
-        // The point at the centre of the camera, in camera units
-        float x;
-        float y;
-
-        // The size of the visible region, in camera units, at the default zoom
-        // level.
-        // The public-facing getters always take into account the zoom level.
-        float defaultWidth;
-        float defaultHeight;
-
-        // Zoom level (render scale)
-        float zoom = 1.0f;
-
-        Scenario& scenario;
-    };
+    World& world;
+};
 
 }  // namespace Rival
-
-#endif  // CAMERA_H

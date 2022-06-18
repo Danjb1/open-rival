@@ -1,5 +1,4 @@
-#ifndef INTERFACE_EXTRACTOR_H
-#define INTERFACE_EXTRACTOR_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -10,20 +9,18 @@
 
 namespace Rival { namespace Setup {
 
-    class InterfaceExtractor
-    {
-    public:
-        InterfaceExtractor(std::string inputFile);
+class InterfaceExtractor
+{
+public:
+    InterfaceExtractor(std::string inputFile);
 
-        void extractImages(std::string outputDir);
+    void extractImages(std::string outputDir);
 
-    private:
-        int index;
-        Rival::BinaryFileReader reader;
+private:
+    int index;
+    Rival::BinaryFileReader reader;
 
-        void extractImage(const std::string& outputDir, const Palette::Palette& palette);
-    };
+    void extractImage(const std::string& outputDir, const Palette::Palette& palette);
+};
 
 }}  // namespace Rival::Setup
-
-#endif  // INTERFACE_EXTRACTOR_H

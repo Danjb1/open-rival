@@ -4,29 +4,29 @@
 
 namespace Rival {
 
-    const std::string MovementComponent::key = "movement";
+const std::string MovementComponent::key = "movement";
 
-    MovementComponent::MovementComponent()
-        : EntityComponent(key)
-    {
-    }
+MovementComponent::MovementComponent()
+    : EntityComponent(key)
+{
+}
 
-    void MovementComponent::addListener(MovementListener* listener)
+void MovementComponent::addListener(MovementListener* listener)
+{
+    if (!listener)
     {
-        if (!listener)
-        {
-            return;
-        }
-        listeners.emplace(listener);
+        return;
     }
+    listeners.emplace(listener);
+}
 
-    void MovementComponent::removeListener(MovementListener* listener)
+void MovementComponent::removeListener(MovementListener* listener)
+{
+    if (!listener)
     {
-        if (!listener)
-        {
-            return;
-        }
-        listeners.erase(listener);
+        return;
     }
+    listeners.erase(listener);
+}
 
 }  // namespace Rival

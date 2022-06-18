@@ -1,5 +1,4 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
 #include <memory>
 
@@ -13,73 +12,71 @@ using json = nlohmann::json;
 
 namespace Rival {
 
-    class Application
+class Application
+{
+
+public:
+    bool vsyncEnabled;
+
+    Application(Window& window, json& cfg);
+
+    /**
+     * Runs the Application until the user exits.
+     */
+    void start(std::unique_ptr<State> state);
+
+    void pollEvents();
+
+    void requestExit()
     {
+        exiting = true;
+    }
 
-    public:
-        bool vsyncEnabled;
+    void setState(std::unique_ptr<State> newState)
+    {
+        nextState = std::move(newState);
+    }
 
-        Application(Window& window, json& cfg);
+    const Window& getWindow() const
+    {
+        return window;
+    }
 
-        /**
-         * Runs the Application until the user exits.
-         */
-        void start(std::unique_ptr<State> state);
+    AudioSystem& getAudioSystem()
+    {
+        return audioSystem;
+    }
 
-        void pollEvents();
+    Resources& getResources()
+    {
+        return res;
+    }
 
-        void requestExit()
-        {
-            exiting = true;
-        }
+    State& getState()
+    {
+        return *state;
+    }
 
-        void setState(std::unique_ptr<State> newState)
-        {
-            nextState = std::move(newState);
-        }
+private:
+    /**
+     * Minimum time that we will consider sleeping for.
+     *
+     * If the next frame is due sooner than this then we will just
+     * busy-wait, to reduce the risk of oversleeping.
+     */
+    static constexpr int minSleepTime = 2;
 
-        const Window& getWindow() const
-        {
-            return window;
-        }
+    bool exiting { false };
 
-        AudioSystem& getAudioSystem()
-        {
-            return audioSystem;
-        }
+    Window& window;
+    json& cfg;
+    AudioSystem audioSystem;
+    Resources res;
 
-        Resources& getResources()
-        {
-            return res;
-        }
+    std::unique_ptr<State> state;
+    std::unique_ptr<State> nextState;
 
-        State& getState()
-        {
-            return *state;
-        }
-
-    private:
-        /**
-         * Minimum time that we will consider sleeping for.
-         *
-         * If the next frame is due sooner than this then we will just
-         * busy-wait, to reduce the risk of oversleeping.
-         */
-        static const int minSleepTime = 2;
-
-        bool exiting { false };
-
-        Window& window;
-        json& cfg;
-        AudioSystem audioSystem;
-        Resources res;
-
-        std::unique_ptr<State> state;
-        std::unique_ptr<State> nextState;
-
-        void makeNextStateActive();
-    };
+    void makeNextStateActive();
+};
 
 }  // namespace Rival
-
-#endif  // APPLICATION_H

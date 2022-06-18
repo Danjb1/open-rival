@@ -10,11 +10,11 @@
 
 namespace Rival {
 
-    Font::Font(Texture texture, std::map<char, CharData> chars, int defaultSize)
-        : texture(texture)
-        , chars(chars)
-        , defaultSize(defaultSize)
-    {
-    }
+Font::Font(Texture texture, std::unordered_map<char, CharData> chars, int defaultSize)
+    : texture(texture)
+    , chars(chars)
+    , defaultSize(defaultSize)
+{
+}
 
 }  // namespace Rival

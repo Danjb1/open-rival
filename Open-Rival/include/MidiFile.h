@@ -1,5 +1,4 @@
-#ifndef MIDI_FILE_H
-#define MIDI_FILE_H
+#pragma once
 
 #include <vector>
 
@@ -7,20 +6,18 @@
 
 namespace Rival {
 
-    class MidiFile
-    {
-    public:
-        MidiFile() {}
-        MidiFile(midi_container midiContainer);
+class MidiFile
+{
+public:
+    MidiFile() {}
+    MidiFile(midi_container midiContainer);
 
-        bool isEmpty() const;
+    bool isEmpty() const;
 
-        const std::vector<midi_stream_event>& getEvents() const;
+    const std::vector<midi_stream_event>& getEvents() const;
 
-    private:
-        std::vector<midi_stream_event> events;
-    };
+private:
+    std::vector<midi_stream_event> events;
+};
 
 }  // namespace Rival
-
-#endif  // MIDI_FILE_H
