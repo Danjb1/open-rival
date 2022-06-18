@@ -10,6 +10,7 @@
 #include <gl/glew.h>
 
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -17,11 +18,11 @@
 #include "AudioUtils.h"
 #include "FileUtils.h"
 #include "GameState.h"
-#include "Scenario.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
 #include "Window.h"
+#include "World.h"
 #include "json.h"
 
 using json = nlohmann::json;
@@ -147,10 +148,10 @@ int main()
         ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         EntityFactory entityFactory(app.getResources());
-        std::unique_ptr<Scenario> scenario = scenarioBuilder.build(entityFactory);
+        std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
         // Create our initial state
-        std::unique_ptr<State> initialState = std::make_unique<GameState>(app, std::move(scenario));
+        std::unique_ptr<State> initialState = std::make_unique<GameState>(app, std::move(world));
 
         // Run the game!
         app.start(std::move(initialState));

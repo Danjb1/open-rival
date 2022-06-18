@@ -47,7 +47,7 @@ Uint32 SDL_GetMouseState(int* x, int* y)
 }
 
 namespace MockSDL {
-    int ticks = 0;
-    int mouseX = 0;
-    int mouseY = 0;
+int ticks = 0;
+int mouseX = 0;
+int mouseY = 0;
 }  // namespace MockSDL

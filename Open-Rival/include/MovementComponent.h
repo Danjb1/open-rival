@@ -6,52 +6,52 @@
 
 namespace Rival {
 
-    struct MapNode;
+struct MapNode;
+
+/**
+ * Represents a movement between 2 tiles.
+ */
+struct Movement
+{
+    /**
+     * Time spent moving so far, in ms.
+     */
+    int timeElapsed;
 
     /**
-     * Represents a movement between 2 tiles.
+     * Total time required to complete the movement, in ms.
      */
-    struct Movement
-    {
-        /**
-         * Time spent moving so far, in ms.
-         */
-        int timeElapsed;
+    int timeRequired;
+};
 
-        /**
-         * Total time required to complete the movement, in ms.
-         */
-        int timeRequired;
-    };
+/**
+ * Interface used to listen to movements.
+ */
+class MovementListener
+{
+public:
+    virtual void onUnitMoveStart(const MapNode* nextNode) = 0;
+    virtual void onUnitJourneyEnd() = 0;
+};
 
-    /**
-     * Interface used to listen to movements.
-     */
-    class MovementListener
-    {
-    public:
-        virtual void onUnitMoveStart(const MapNode* nextNode) = 0;
-        virtual void onUnitJourneyEnd() = 0;
-    };
+/**
+ * Base class for a component that allows entities to move between tiles.
+ */
+class MovementComponent : public EntityComponent
+{
 
-    /**
-     * Base class for a component that allows entities to move between tiles.
-     */
-    class MovementComponent : public EntityComponent
-    {
+public:
+    MovementComponent();
+    virtual ~MovementComponent() = default;
 
-    public:
-        MovementComponent();
-        virtual ~MovementComponent() = default;
+    void addListener(MovementListener* listener);
+    void removeListener(MovementListener* listener);
 
-        void addListener(MovementListener* listener);
-        void removeListener(MovementListener* listener);
+public:
+    static const std::string key;
 
-    public:
-        static const std::string key;
-
-    protected:
-        std::unordered_set<MovementListener*> listeners;
-    };
+protected:
+    std::unordered_set<MovementListener*> listeners;
+};
 
 }  // namespace Rival

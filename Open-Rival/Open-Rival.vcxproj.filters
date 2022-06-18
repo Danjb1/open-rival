@@ -46,7 +46,7 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenario.cpp">
+    <ClCompile Include="src\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Tile.cpp">
@@ -264,7 +264,7 @@
     <ClInclude Include="include\Camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scenario.h">
+    <ClInclude Include="include\World.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Tile.h">

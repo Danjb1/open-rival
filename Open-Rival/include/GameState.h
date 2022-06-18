@@ -1,81 +1,79 @@
-#ifndef RIVAL_H
-#define RIVAL_H
+#pragma once
 
 #include <SDL.h>
 
 #include <iostream>
 #include <memory>
 
-#include "Application.h"
 #include "Camera.h"
 #include "Font.h"  // TMP
 #include "GameRenderer.h"
 #include "MenuTextRenderer.h"  // TMP
 #include "MousePicker.h"
 #include "Rect.h"
-#include "Scenario.h"
 #include "State.h"
 #include "TextRenderable.h"  // TMP
+#include "World.h"
 
 namespace Rival {
 
-    class GameState : public State
+class Application;
+
+class GameState : public State
+{
+
+public:
+    GameState(Application& app, std::unique_ptr<World> world);
+
+    // Begin State override
+    void onLoad() override;
+    void keyDown(const SDL_Keycode keyCode) override;
+    void mouseUp(const SDL_MouseButtonEvent evt) override;
+    void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
+    void render(int delta) override;
+    void update() override;
+    // End State override
+
+    World& getScenario()
     {
+        return *world;
+    }
 
-    public:
-        GameState(Application& app, std::unique_ptr<Scenario> scenario);
+private:
+    /**
+     * The current World.
+     */
+    std::unique_ptr<World> world;
 
-        // Begin State override
-        void onLoad() override;
-        void keyDown(const SDL_Keycode keyCode) override;
-        void mouseUp(const SDL_MouseButtonEvent evt) override;
-        void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
-        void render(int delta) override;
-        void update() override;
-        // End State override
+    /**
+     * The rectangle on the screen to which the game is rendered (pixels).
+     */
+    Rect viewport;
 
-        Scenario& getScenario()
-        {
-            return *scenario;
-        }
+    /**
+     * The camera that defines the area of the game world to render.
+     */
+    Camera camera;
 
-    private:
-        /**
-         * The current Scenario.
-         */
-        std::unique_ptr<Scenario> scenario;
+    /**
+     * Object used to find what's under the mouse.
+     */
+    MousePicker mousePicker;
 
-        /**
-         * The rectangle on the screen to which the game is rendered (pixels).
-         */
-        Rect viewport;
+    /**
+     * Object that renders the game.
+     */
+    GameRenderer gameRenderer;
 
-        /**
-         * The camera that defines the area of the game world to render.
-         */
-        Camera camera;
+    // TMP
+    std::unique_ptr<TextRenderable> text1;
+    std::unique_ptr<TextRenderable> text2;
+    std::vector<TextRenderable*> texts;
+    MenuTextRenderer textRenderer;
 
-        /**
-         * Object used to find what's under the mouse.
-         */
-        MousePicker mousePicker;
-
-        /**
-         * Object that renders the game.
-         */
-        GameRenderer gameRenderer;
-
-        // TMP
-        std::unique_ptr<TextRenderable> text1;
-        std::unique_ptr<TextRenderable> text2;
-        std::vector<TextRenderable*> texts;
-        MenuTextRenderer textRenderer;
-
-        void earlyUpdateEntities() const;
-        void updateEntities() const;
-        void respondToMouseInput();
-    };
+    void earlyUpdateEntities() const;
+    void updateEntities() const;
+    void respondToMouseInput();
+};
 
 }  // namespace Rival
-
-#endif  // RIVAL_H

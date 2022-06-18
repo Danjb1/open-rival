@@ -1,5 +1,4 @@
-#ifndef SHADER_UTILS_H
-#define SHADER_UTILS_H
+#pragma once
 
 #include <gl/glew.h>
 
@@ -7,12 +6,10 @@
 
 namespace Rival { namespace ShaderUtils {
 
-    std::string readShaderSource(const char* filename);
+std::string readShaderSource(const char* filename);
 
-    void printProgramLog(const GLuint program);
+void printProgramLog(const GLuint program);
 
-    void printShaderLog(const GLuint shader);
+void printShaderLog(const GLuint shader);
 
 }}  // namespace Rival::ShaderUtils
-
-#endif  // SHADER_UTILS_H

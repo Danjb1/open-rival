@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <SDL.h>
 
@@ -8,44 +7,42 @@
 
 namespace Rival {
 
-    class Window
-    {
+class Window
+{
 
-    public:
-        Window(int width, int height, const char* title);
+public:
+    Window(int width, int height, const char* title);
 
-        ~Window();
+    ~Window();
 
-        // Disable moving / copying
-        Window(const Window& other) = delete;
-        Window(Window&& other) = delete;
-        Window& operator=(const Window& other) = delete;
-        Window& operator=(Window&& other) = delete;
+    // Disable moving / copying
+    Window(const Window& other) = delete;
+    Window(Window&& other) = delete;
+    Window& operator=(const Window& other) = delete;
+    Window& operator=(Window&& other) = delete;
 
-        void swapBuffers() const;
+    void swapBuffers() const;
 
-        void setIcon(SDL_Surface* surface);
+    void setIcon(SDL_Surface* surface);
 
-        int getWidth() const;
+    int getWidth() const;
 
-        int getHeight() const;
+    int getHeight() const;
 
-        double getAspectRatio() const;
+    double getAspectRatio() const;
 
-    private:
-        SDL_Window* sdlWindow;
+private:
+    SDL_Window* sdlWindow;
 
-        SDL_GLContext glContext;
+    SDL_GLContext glContext;
 
-        const int width;
+    const int width;
 
-        const int height;
+    const int height;
 
-        const double aspectRatio;
+    const double aspectRatio;
 
-        const char* title;
-    };
+    const char* title;
+};
 
 }  // namespace Rival
-
-#endif  // WINDOW_H

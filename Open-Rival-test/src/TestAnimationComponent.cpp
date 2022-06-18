@@ -20,9 +20,9 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
 
     GIVEN("An entity with an AnimationComponent, with a single-frame animation")
     {
-        Entity e(1, 1);
-        e.attach(std::make_unique<SpriteComponent>(spritesheet));
-        e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 3, TimerUtils::timeStepMs }));
+        Entity e(EntityType::Unit, 1, 1);
+        e.attach(std::make_shared<SpriteComponent>(spritesheet));
+        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 3, TimerUtils::timeStepMs }));
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
         AnimationComponent* animComponent = e.requireComponent<AnimationComponent>(AnimationComponent::key);
@@ -58,10 +58,10 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
     GIVEN("An entity with an AnimationComponent, where each frame of the animation lasts 1.5 * the time step")
     {
-        Entity e(1, 1);
-        e.attach(std::make_unique<SpriteComponent>(spritesheet));
+        Entity e(EntityType::Unit, 1, 1);
+        e.attach(std::make_shared<SpriteComponent>(spritesheet));
         int msPerFrame = static_cast<int>(1.5f * TimerUtils::timeStepMs);
-        e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 5, msPerFrame }));
+        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 5, msPerFrame }));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
@@ -114,9 +114,9 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
 
     GIVEN("An entity with an AnimationComponent, and a 2-frame animation")
     {
-        Entity e(1, 1);
-        e.attach(std::make_unique<SpriteComponent>(spritesheet));
-        e.attach(std::make_unique<AnimationComponent>(Animations::Animation { 3, 4, TimerUtils::timeStepMs }));
+        Entity e(EntityType::Unit, 1, 1);
+        e.attach(std::make_shared<SpriteComponent>(spritesheet));
+        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 4, TimerUtils::timeStepMs }));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);

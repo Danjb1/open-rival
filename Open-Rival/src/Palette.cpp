@@ -4,9 +4,9 @@
 
 namespace Rival { namespace Palette {
 
-    // The palette used in-game.
-    // The last color (index 0xff) is used for transparent areas.
-    /* clang-format off */
+// The palette used in-game.
+// The last color (index 0xff) is used for transparent areas.
+/* clang-format off */
     extern Palette paletteGame = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
@@ -191,6 +191,6 @@ namespace Rival { namespace Palette {
         0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
         0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffffff,
     };
-    /* clang-format on */
+/* clang-format on */
 
 }}  // namespace Rival::Palette

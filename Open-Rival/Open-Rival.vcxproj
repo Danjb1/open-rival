@@ -65,7 +65,7 @@
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\GameState.cpp" />
     <ClCompile Include="src\RtMidi.cpp" />
-    <ClCompile Include="src\Scenario.cpp" />
+    <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
     <ClCompile Include="src\ScenarioReader.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
@@ -141,7 +141,7 @@
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\RtMidi.h" />
-    <ClInclude Include="include\Scenario.h" />
+    <ClInclude Include="include\World.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
     <ClInclude Include="include\ScenarioData.h" />
     <ClInclude Include="include\ScenarioReader.h" />

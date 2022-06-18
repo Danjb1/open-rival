@@ -4,63 +4,76 @@
 
 namespace Rival {
 
-    Entity::Entity(int width, int height)
-        : width(width)
-        , height(height)
-        , pos({ -1, -1 })
-        , scenario(nullptr)
-        , deleted(false)
-        , moved(true)
-        , id(-1)
+Entity::Entity(EntityType type, int width, int height)
+    : type(type)
+    , width(width)
+    , height(height)
+    , pos({ -1, -1 })
+    , world(nullptr)
+    , deleted(false)
+    , moved(true)
+    , id(-1)
+{
+}
+
+void Entity::attach(std::shared_ptr<EntityComponent> component)
+{
+    component->onAttach(this);
+    components.insert({ component->getKey(), std::move(component) });
+}
+
+void Entity::onSpawn(World* newScenario, int newId, MapNode newPos)
+{
+    world = newScenario;
+    id = newId;
+    pos = newPos;
+
+    for (auto const& kv : components)
     {
+        const auto& component = kv.second;
+        component->onEntitySpawned(world);
     }
+}
 
-    void Entity::attach(std::unique_ptr<EntityComponent> component)
+void Entity::earlyUpdate()
+{
+    moved = false;
+}
+
+void Entity::update()
+{
+    for (auto it = components.cbegin(); it != components.cend();)
     {
-        component->onAttach(this);
-        components.insert({ component->getKey(), std::move(component) });
-    }
-
-    void Entity::onSpawn(Scenario* newScenario, int newId, MapNode newPos)
-    {
-        scenario = newScenario;
-        id = newId;
-        pos = newPos;
-
-        for (auto const& kv : components)
+        const auto& component = it->second;
+        if (component->isDeleted())
         {
-            const auto& component = kv.second;
-            component->onEntitySpawned(scenario);
+            // Clean up deleted components
+            component->onDelete();
+            it = components.erase(it);
+            continue;
         }
-    }
 
-    void Entity::earlyUpdate()
+        component->update();
+        ++it;
+    }
+}
+
+void Entity::onDelete()
+{
+    // Delete all components
+    for (auto const& kv : components)
     {
-        moved = false;
+        const auto& component = kv.second;
+        component->onDelete();
     }
 
-    void Entity::update()
-    {
-        for (auto it = components.cbegin(); it != components.cend();)
-        {
-            const auto& component = it->second;
-            if (component->isDeleted())
-            {
-                // Clean up deleted components
-                component->onDelete();
-                it = components.erase(it);
-                continue;
-            }
+    components.clear();
+}
 
-            component->update();
-            ++it;
-        }
-    }
-
-    void Entity::setPos(MapNode newPos)
-    {
-        pos = newPos;
-        moved = true;
-    }
+void Entity::setPos(MapNode newPos)
+{
+    pos = newPos;
+    moved = true;
+}
 
 }  // namespace Rival

@@ -1,9 +1,8 @@
-#ifndef TEXTURE_BUILDER_H
-#define TEXTURE_BUILDER_H
+#pragma once
 
 #include <filesystem>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "Image.h"
@@ -13,88 +12,86 @@ namespace fs = std::filesystem;
 
 namespace Rival { namespace Setup {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // NamedImage class
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// NamedImage class
+///////////////////////////////////////////////////////////////////////////////
 
-    class NamedImage
+class NamedImage
+{
+public:
+    std::string name;
+    Image image;
+
+    // Wraps an Image by moving it into this NamedImage
+    NamedImage(const std::string name, Image&& image)
+        : name(name)
+        , image(std::move(image))
     {
-    public:
-        std::string name;
-        Image image;
+    }
+};
 
-        // Wraps an Image by moving it into this NamedImage
-        NamedImage(const std::string name, Image&& image)
-            : name(name)
-            , image(std::move(image))
-        {
-        }
-    };
+///////////////////////////////////////////////////////////////////////////////
+// Rect class
+///////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // Rect class
-    ///////////////////////////////////////////////////////////////////////////////
+class Rect
+{
 
-    class Rect
-    {
+public:
+    int x;
+    int y;
+    int width;
+    int height;
 
-    public:
-        int x;
-        int y;
-        int width;
-        int height;
+    Rect(int x, int y, int width, int height);
+};
 
-        Rect(int x, int y, int width, int height);
-    };
+///////////////////////////////////////////////////////////////////////////////
+// TextureAtlasBuilder class
+///////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // TextureAtlasBuilder class
-    ///////////////////////////////////////////////////////////////////////////////
+class TextureAtlasBuilder
+{
 
-    class TextureAtlasBuilder
-    {
+public:
+    std::unordered_map<std::string, const NamedImage*> imagesByKey;
+    std::unordered_map<std::string, Rect> imagePlacements;
+    std::vector<Rect> emptyRects;
+    int texWidth;
+    int texHeight;
 
-    public:
-        std::map<std::string, const NamedImage*> imagesByKey;
-        std::map<std::string, Rect> imagePlacements;
-        std::vector<Rect> emptyRects;
-        int texWidth;
-        int texHeight;
+    TextureAtlasBuilder();
 
-        TextureAtlasBuilder();
+    void addImage(const NamedImage& img);
 
-        void addImage(const NamedImage& img);
+private:
+    Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
 
-    private:
-        Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
+    int findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight);
 
-        int findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight);
+    int expandTextureToFitRect(const int reqWidth, const int reqHeight);
+};
 
-        int expandTextureToFitRect(const int reqWidth, const int reqHeight);
-    };
+///////////////////////////////////////////////////////////////////////////////
+// End of classes
+///////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // End of classes
-    ///////////////////////////////////////////////////////////////////////////////
+void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode);
 
-    void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode);
+void readPalette(Palette::Palette& palette, const std::string filename);
 
-    void readPalette(Palette::Palette& palette, const std::string filename);
+std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode);
 
-    std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode);
+void createTextureAtlas(
+        const std::string& imageDir,
+        fs::path definitionFilename,
+        std::vector<NamedImage>& images,
+        const Palette::Palette& palette);
 
-    void createTextureAtlas(
-            const std::string& imageDir,
-            fs::path definitionFilename,
-            std::vector<NamedImage>& images,
-            const Palette::Palette& palette);
-
-    void createSpritesheetTexture(
-            const std::string& imageDir,
-            fs::path definitionFilename,
-            const std::vector<NamedImage>& sprites,
-            const Palette::Palette& palette);
+void createSpritesheetTexture(
+        const std::string& imageDir,
+        fs::path definitionFilename,
+        const std::vector<NamedImage>& sprites,
+        const Palette::Palette& palette);
 
 }}  // namespace Rival::Setup
-
-#endif  // TEXTURE_BUILDER_H

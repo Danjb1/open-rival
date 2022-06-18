@@ -29,7 +29,7 @@ public:
         attached = true;
     }
 
-    void onEntitySpawned(Scenario* scenario) override
+    void onEntitySpawned(World* scenario) override
     {
         entitySpawned = true;
     }
@@ -45,12 +45,12 @@ SCENARIO("Entities can have components attached to them", "[entity]")
 
     GIVEN("An Entity")
     {
-        Entity e(1, 1);
+        Entity e(EntityType::Unit, 1, 1);
 
         WHEN("attaching a component to the Entity")
         {
             int updateCount = 0;
-            e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
+            e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
             const ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
 
             THEN("the component is attached to the Entity")
@@ -71,9 +71,9 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
 
     GIVEN("An Entity with a component")
     {
-        Entity e(1, 1);
+        Entity e(EntityType::Unit, 1, 1);
         int updateCount = 0;
-        e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
+        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is spawned")
         {
@@ -93,9 +93,9 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
     GIVEN("An Entity with a component")
     {
-        Entity e(1, 1);
+        Entity e(EntityType::Unit, 1, 1);
         int updateCount = 0;
-        e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
+        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is updated")
         {
@@ -137,9 +137,9 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 
     GIVEN("An Entity with a component")
     {
-        Entity e(1, 1);
+        Entity e(EntityType::Unit, 1, 1);
         int updateCount = 0;
-        e.attach(std::make_unique<ExampleEntityComponent>(updateCount));
+        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("retrieving the component by its key")
         {

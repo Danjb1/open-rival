@@ -1,5 +1,4 @@
-#ifndef AUDIO_UTILS_H
-#define AUDIO_UTILS_H
+#pragma once
 
 #include <AL/alc.h>
 
@@ -8,12 +7,10 @@
 
 namespace Rival { namespace AudioUtils {
 
-    void initAL();
+void initAL();
 
-    void destroyAL();
+void destroyAL();
 
-    void playSound(const SoundSource& source);
+void playSound(const SoundSource& source);
 
 }}  // namespace Rival::AudioUtils
-
-#endif  // AUDIO_UTILS_H

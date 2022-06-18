@@ -1,5 +1,4 @@
-#ifndef SPRITE_COMPONENT_H
-#define SPRITE_COMPONENT_H
+#pragma once
 
 #include <map>
 
@@ -9,37 +8,35 @@
 
 namespace Rival {
 
-    /**
-     * Component that links an Entity to a Renderable.
-     *
-     * This ensures that all graphical resources are released automatically
-     * when an Entity is destroyed.
-     *
-     * Note that this does not contain any logic to set the txIndex; that must
-     * be handled elsewhere.
-     */
-    class SpriteComponent : public EntityComponent
-    {
+/**
+ * Component that links an Entity to a Renderable.
+ *
+ * This ensures that all graphical resources are released automatically
+ * when an Entity is destroyed.
+ *
+ * Note that this does not contain any logic to set the txIndex; that must
+ * be handled elsewhere.
+ */
+class SpriteComponent : public EntityComponent
+{
 
-    public:
-        static const std::string key;
+public:
+    static const std::string key;
 
-        mutable bool dirty;
+    mutable bool dirty;
 
-        SpriteComponent(const Spritesheet& spritesheet);
+    SpriteComponent(const Spritesheet& spritesheet);
 
-        const SpriteRenderable& getRenderable() const;
+    const SpriteRenderable& getRenderable() const;
 
-        int getTxIndex() const;
+    int getTxIndex() const;
 
-        void setTxIndex(int txIndex);
+    void setTxIndex(int txIndex);
 
-    private:
-        const SpriteRenderable renderable;
+private:
+    const SpriteRenderable renderable;
 
-        int txIndex;
-    };
+    int txIndex;
+};
 
 }  // namespace Rival
-
-#endif  // SPRITE_COMPONENT_H

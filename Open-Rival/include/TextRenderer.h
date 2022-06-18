@@ -1,5 +1,4 @@
-#ifndef TEXT_RENDERER_H
-#define TEXT_RENDERER_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -7,30 +6,28 @@
 
 namespace Rival {
 
-    class TextRenderer
-    {
+class TextRenderer
+{
 
-    public:
-        /**
-         * Renders a single TextRenderable.
-         *
-         * If the TextRenderable contains any unsupported characters, they will
-         * be skipped.
-         */
-        void render(const TextRenderable& textRenderable) const;
+public:
+    /**
+     * Renders a single TextRenderable.
+     *
+     * If the TextRenderable contains any unsupported characters, they will
+     * be skipped.
+     */
+    void render(const TextRenderable& textRenderable) const;
 
-    private:
-        GLuint vao;
-        GLuint positionVbo;
-        GLuint texCoordVbo;
-        GLuint ibo;
+private:
+    GLuint vao;
+    GLuint positionVbo;
+    GLuint texCoordVbo;
+    GLuint ibo;
 
-        int indicesPerSprite;
+    int indicesPerSprite;
 
-        bool needsUpdate(const TextRenderable& textRenderable) const;
-        void sendDataToGpu(const TextRenderable& textRenderable) const;
-    };
+    bool needsUpdate(const TextRenderable& textRenderable) const;
+    void sendDataToGpu(const TextRenderable& textRenderable) const;
+};
 
 }  // namespace Rival
-
-#endif  // TEXT_RENDERER_H

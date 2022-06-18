@@ -1,5 +1,4 @@
-#ifndef RACE_H
-#define RACE_H
+#pragma once
 
 enum class Race : std::uint8_t
 {
@@ -7,5 +6,3 @@ enum class Race : std::uint8_t
     Elf,
     Greenskin
 };
-
-#endif  // RACE_H

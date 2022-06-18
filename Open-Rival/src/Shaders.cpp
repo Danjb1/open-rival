@@ -9,229 +9,228 @@
 
 namespace Rival { namespace Shaders {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Shader
-    ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+// Shader
+///////////////////////////////////////////////////////////////////////////
 
-    bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const
+bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const
+{
+    if (attributeLoc == -1)
     {
-        if (attributeLoc == -1)
-        {
-            std::cout << "Could not locate vertex attribute " << attributeName << " for shader " << getName() << "\n";
-            return false;
-        }
-        return true;
+        std::cout << "Could not locate vertex attribute " << attributeName << " for shader " << getName() << "\n";
+        return false;
+    }
+    return true;
+}
+
+bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const
+{
+    if (uniformLoc == -1)
+    {
+        std::cout << "Could not locate uniform " << uniformLoc << " for shader " << getName() << "\n";
+        return false;
+    }
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////
+// IndexedTextureShader
+///////////////////////////////////////////////////////////////////////////
+
+IndexedTextureShader indexedTextureShader;
+
+void IndexedTextureShader::init()
+{
+
+    GLuint programId = createShader("res\\shaders\\gameWorld.vert", "res\\shaders\\gameWorld.frag");
+
+    indexedTextureShader = IndexedTextureShader();
+    indexedTextureShader.programId = programId;
+    indexedTextureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    indexedTextureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+    indexedTextureShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+    indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+    indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
+
+    if (!indexedTextureShader.isValid())
+    {
+        throw std::runtime_error("Failed to create IndexedTextureShader");
+    }
+}
+
+bool IndexedTextureShader::isValid() const
+{
+    // Validate program ID
+    if (programId == 0)
+    {
+        printf("Could not generate program ID\n");
+        return false;
     }
 
-    bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const
+    // Validate vertex attributes / uniforms
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+            && validateUniform(texUnitUniformLoc, "tex") && validateUniform(paletteTexUnitUniformLoc, "palette");
+}
+
+///////////////////////////////////////////////////////////////////////////
+// FontShader
+///////////////////////////////////////////////////////////////////////////
+
+FontShader fontShader;
+
+void FontShader::init()
+{
+
+    GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
+
+    fontShader = FontShader();
+    fontShader.programId = programId;
+    fontShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    fontShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+    fontShader.colorAttribLoc = glGetAttribLocation(programId, "in_color");
+    fontShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+    fontShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+
+    if (!fontShader.isValid())
     {
-        if (uniformLoc == -1)
-        {
-            std::cout << "Could not locate uniform " << uniformLoc << " for shader " << getName() << "\n";
-            return false;
-        }
-        return true;
+        throw std::runtime_error("Failed to create FontShader");
+    }
+}
+
+bool FontShader::isValid() const
+{
+    // Validate program ID
+    if (programId == 0)
+    {
+        printf("Could not generate program ID\n");
+        return false;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // IndexedTextureShader
-    ///////////////////////////////////////////////////////////////////////////
+    // Validate vertex attributes / uniforms
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+            && validateVertexAttribute(colorAttribLoc, "in_color")
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+            && validateUniform(texUnitUniformLoc, "tex");
+}
 
-    IndexedTextureShader indexedTextureShader;
+///////////////////////////////////////////////////////////////////////////
+// ScreenShader
+///////////////////////////////////////////////////////////////////////////
 
-    void IndexedTextureShader::init()
+ScreenShader screenShader;
+
+void ScreenShader::init()
+{
+
+    GLuint programId = createShader("res\\shaders\\screen.vert", "res\\shaders\\screen.frag");
+
+    screenShader = ScreenShader();
+    screenShader.programId = programId;
+    screenShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    screenShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+    screenShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+
+    if (!screenShader.isValid())
     {
+        throw std::runtime_error("Failed to create ScreenShader");
+    }
+}
 
-        GLuint programId = createShader("res\\shaders\\gameWorld.vert", "res\\shaders\\gameWorld.frag");
-
-        indexedTextureShader = IndexedTextureShader();
-        indexedTextureShader.programId = programId;
-        indexedTextureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
-        indexedTextureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
-        indexedTextureShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
-        indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
-        indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
-
-        if (!indexedTextureShader.isValid())
-        {
-            throw std::runtime_error("Failed to create IndexedTextureShader");
-        }
+bool ScreenShader::isValid() const
+{
+    // Validate program ID
+    if (programId == 0)
+    {
+        printf("Could not generate program ID\n");
+        return false;
     }
 
-    bool IndexedTextureShader::isValid() const
-    {
-        // Validate program ID
-        if (programId == 0)
-        {
-            printf("Could not generate program ID\n");
-            return false;
-        }
+    // Validate vertex attributes / uniforms
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords") && validateUniform(texUnitUniformLoc, "tex");
+}
 
-        // Validate vertex attributes / uniforms
-        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-                && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
-                && validateUniform(texUnitUniformLoc, "tex") && validateUniform(paletteTexUnitUniformLoc, "palette");
+///////////////////////////////////////////////////////////////////////////
+// Generic methods
+///////////////////////////////////////////////////////////////////////////
+
+void initializeShaders()
+{
+    IndexedTextureShader::init();
+    FontShader::init();
+    ScreenShader::init();
+}
+
+GLuint createShader(const char* vertShader, const char* fragShader)
+{
+
+    GLuint programId = glCreateProgram();
+
+    // Create vertex shader
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    // Read / set vertex source
+    std::string vertexShaderSource = ShaderUtils::readShaderSource(vertShader);
+    const char* vertexShaderSource2 = vertexShaderSource.c_str();
+    glShaderSource(vertexShader, 1, &vertexShaderSource2, nullptr);
+
+    // Compile vertex source
+    glCompileShader(vertexShader);
+
+    // Check vertex shader for errors
+    GLint vShaderCompiled = GL_FALSE;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
+    if (vShaderCompiled != GL_TRUE)
+    {
+        printf("Unable to compile vertex shader %d!\n", vertexShader);
+        ShaderUtils::printShaderLog(vertexShader);
+        return 0;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // FontShader
-    ///////////////////////////////////////////////////////////////////////////
+    // Attach vertex shader to program
+    glAttachShader(programId, vertexShader);
 
-    FontShader fontShader;
+    // Create fragment shader
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    void FontShader::init()
+    // Read / set fragment source
+    std::string fragmentShaderSource = ShaderUtils::readShaderSource(fragShader);
+    const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource2, nullptr);
+
+    // Compile fragment source
+    glCompileShader(fragmentShader);
+
+    // Check fragment shader for errors
+    GLint fShaderCompiled = GL_FALSE;
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
+    if (fShaderCompiled != GL_TRUE)
     {
-
-        GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
-
-        fontShader = FontShader();
-        fontShader.programId = programId;
-        fontShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
-        fontShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
-        fontShader.colorAttribLoc = glGetAttribLocation(programId, "in_color");
-        fontShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
-        fontShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
-
-        if (!fontShader.isValid())
-        {
-            throw std::runtime_error("Failed to create FontShader");
-        }
+        printf("Unable to compile fragment shader %d!\n", fragmentShader);
+        ShaderUtils::printShaderLog(fragmentShader);
+        return 0;
     }
 
-    bool FontShader::isValid() const
-    {
-        // Validate program ID
-        if (programId == 0)
-        {
-            printf("Could not generate program ID\n");
-            return false;
-        }
+    // Attach fragment shader to program
+    glAttachShader(programId, fragmentShader);
 
-        // Validate vertex attributes / uniforms
-        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-                && validateVertexAttribute(colorAttribLoc, "in_color")
-                && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
-                && validateUniform(texUnitUniformLoc, "tex");
+    // Link program
+    glLinkProgram(programId);
+
+    // Check for errors
+    GLint programSuccess = GL_TRUE;
+    glGetProgramiv(programId, GL_LINK_STATUS, &programSuccess);
+    if (programSuccess != GL_TRUE)
+    {
+        printf("Error linking program %d!\n", programId);
+        ShaderUtils::printProgramLog(programId);
+        return 0;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // ScreenShader
-    ///////////////////////////////////////////////////////////////////////////
-
-    ScreenShader screenShader;
-
-    void ScreenShader::init()
-    {
-
-        GLuint programId = createShader("res\\shaders\\screen.vert", "res\\shaders\\screen.frag");
-
-        screenShader = ScreenShader();
-        screenShader.programId = programId;
-        screenShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
-        screenShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
-        screenShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
-
-        if (!screenShader.isValid())
-        {
-            throw std::runtime_error("Failed to create ScreenShader");
-        }
-    }
-
-    bool ScreenShader::isValid() const
-    {
-        // Validate program ID
-        if (programId == 0)
-        {
-            printf("Could not generate program ID\n");
-            return false;
-        }
-
-        // Validate vertex attributes / uniforms
-        return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-                && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-                && validateUniform(texUnitUniformLoc, "tex");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Generic methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    void initializeShaders()
-    {
-        IndexedTextureShader::init();
-        FontShader::init();
-        ScreenShader::init();
-    }
-
-    GLuint createShader(const char* vertShader, const char* fragShader)
-    {
-
-        GLuint programId = glCreateProgram();
-
-        // Create vertex shader
-        GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-        // Read / set vertex source
-        std::string vertexShaderSource = ShaderUtils::readShaderSource(vertShader);
-        const char* vertexShaderSource2 = vertexShaderSource.c_str();
-        glShaderSource(vertexShader, 1, &vertexShaderSource2, nullptr);
-
-        // Compile vertex source
-        glCompileShader(vertexShader);
-
-        // Check vertex shader for errors
-        GLint vShaderCompiled = GL_FALSE;
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
-        if (vShaderCompiled != GL_TRUE)
-        {
-            printf("Unable to compile vertex shader %d!\n", vertexShader);
-            ShaderUtils::printShaderLog(vertexShader);
-            return 0;
-        }
-
-        // Attach vertex shader to program
-        glAttachShader(programId, vertexShader);
-
-        // Create fragment shader
-        GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-        // Read / set fragment source
-        std::string fragmentShaderSource = ShaderUtils::readShaderSource(fragShader);
-        const char* fragmentShaderSource2 = fragmentShaderSource.c_str();
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource2, nullptr);
-
-        // Compile fragment source
-        glCompileShader(fragmentShader);
-
-        // Check fragment shader for errors
-        GLint fShaderCompiled = GL_FALSE;
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
-        if (fShaderCompiled != GL_TRUE)
-        {
-            printf("Unable to compile fragment shader %d!\n", fragmentShader);
-            ShaderUtils::printShaderLog(fragmentShader);
-            return 0;
-        }
-
-        // Attach fragment shader to program
-        glAttachShader(programId, fragmentShader);
-
-        // Link program
-        glLinkProgram(programId);
-
-        // Check for errors
-        GLint programSuccess = GL_TRUE;
-        glGetProgramiv(programId, GL_LINK_STATUS, &programSuccess);
-        if (programSuccess != GL_TRUE)
-        {
-            printf("Error linking program %d!\n", programId);
-            ShaderUtils::printProgramLog(programId);
-            return 0;
-        }
-
-        return programId;
-    }
+    return programId;
+}
 
 }}  // namespace Rival::Shaders

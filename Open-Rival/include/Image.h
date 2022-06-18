@@ -1,5 +1,4 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#pragma once
 
 #include <cstdint>
 #include <fstream>
@@ -9,73 +8,71 @@
 
 namespace Rival {
 
-    struct ImageProperties
+struct ImageProperties
+{
+    /**
+     * Stride used to separate rows of the image within the data buffer.
+     *
+     * If this is set to -1, the image width is used instead.
+     */
+    int stride = -1;
+};
+
+class Image
+{
+
+public:
+    static Image readImage(const std::string filename);
+
+    /**
+     * Creates an Image by copying some existing data.
+     */
+    static Image createEmpty(int width, int height, std::uint8_t bgColor, ImageProperties props = {});
+
+    /**
+     * Creates an Image by copying some existing data.
+     */
+    static Image createByCopy(int width, int height, std::vector<std::uint8_t>& data, ImageProperties props = {});
+
+    /**
+     * Creates an Image by taking ownership of some existing data.
+     */
+    static Image createByMove(int width, int height, std::vector<std::uint8_t>&& data, ImageProperties props = {});
+
+    int getWidth() const
     {
-        /**
-         * Stride used to separate rows of the image within the data buffer.
-         *
-         * If this is set to -1, the image width is used instead.
-         */
-        int stride = -1;
+        return width;
+    }
+
+    int getHeight() const
+    {
+        return height;
+    }
+
+    int getStride() const;
+
+    std::vector<std::uint8_t>& getEditableData()
+    {
+        return data;
     };
 
-    class Image
+    const std::vector<std::uint8_t>& getData() const
     {
-
-    public:
-        static Image readImage(const std::string filename);
-
-        /**
-         * Creates an Image by copying some existing data.
-         */
-        static Image createEmpty(int width, int height, std::uint8_t bgColor, ImageProperties props = {});
-
-        /**
-         * Creates an Image by copying some existing data.
-         */
-        static Image createByCopy(int width, int height, std::vector<std::uint8_t>& data, ImageProperties props = {});
-
-        /**
-         * Creates an Image by taking ownership of some existing data.
-         */
-        static Image createByMove(int width, int height, std::vector<std::uint8_t>&& data, ImageProperties props = {});
-
-        int getWidth() const
-        {
-            return width;
-        }
-
-        int getHeight() const
-        {
-            return height;
-        }
-
-        int getStride() const;
-
-        std::vector<std::uint8_t>& getEditableData()
-        {
-            return data;
-        };
-
-        const std::vector<std::uint8_t>& getData() const
-        {
-            return data;
-        };
-
-        /**
-         * Copies pixels from one image into another.
-         */
-        static void copyImage(const Image& src, Image& dst, const int dstX, const int dstY);
-
-    private:
-        int width;
-        int height;
-        ImageProperties props;
-        std::vector<std::uint8_t> data;
-
-        Image(int width, int height, std::vector<std::uint8_t> data, ImageProperties props);
+        return data;
     };
+
+    /**
+     * Copies pixels from one image into another.
+     */
+    static void copyImage(const Image& src, Image& dst, const int dstX, const int dstY);
+
+private:
+    int width;
+    int height;
+    ImageProperties props;
+    std::vector<std::uint8_t> data;
+
+    Image(int width, int height, std::vector<std::uint8_t> data, ImageProperties props);
+};
 
 }  // namespace Rival
-
-#endif  // IMAGE_H

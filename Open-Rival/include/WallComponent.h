@@ -8,53 +8,53 @@
 
 namespace Rival {
 
-    // We have 16 wall variants.
-    // The underlying int value corresponds to the wall's texture index.
-    enum class WallVariant : std::uint8_t
-    {
-        A,
-        B,
-        C,
-        D,
-        E,
-        F,
-        G,
-        H,
-        I,
-        J,
-        K,
-        L,
-        M,
-        N,
-        O,
-        P
-    };
+// We have 16 wall variants.
+// The underlying int value corresponds to the wall's texture index.
+enum class WallVariant : std::uint8_t
+{
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L,
+    M,
+    N,
+    O,
+    P
+};
 
-    /**
-     * Component containing data required by wall segments.
-     */
-    class WallComponent : public EntityComponent
-    {
+/**
+ * Component containing data required by wall segments.
+ */
+class WallComponent : public EntityComponent
+{
 
-    public:
-        static const std::string key;
+public:
+    static const std::string key;
 
-        WallComponent(WallVariant variant);
+    WallComponent(WallVariant variant);
 
-        void onEntitySpawned(Scenario* scenario) override;
+    void onEntitySpawned(World* scenario) override;
 
-        WallVariant getVariant() const;
+    WallVariant getVariant() const;
 
-    private:
-        static const int baseTxIndexElf = 48;
-        static const int baseTxIndexGreenskin = 33;
-        static const int baseTxIndexHuman = 42;
-        static const int baseTxIndexPalisade = 32;
-        static const int baseTxIndexGrate = 48;
+private:
+    static constexpr int baseTxIndexElf = 48;
+    static constexpr int baseTxIndexGreenskin = 33;
+    static constexpr int baseTxIndexHuman = 42;
+    static constexpr int baseTxIndexPalisade = 32;
+    static constexpr int baseTxIndexGrate = 48;
 
-        WallVariant variant;
+    WallVariant variant;
 
-        int getBaseTxIndex(Building::Type buildingType) const;
-    };
+    int getBaseTxIndex(Building::Type buildingType) const;
+};
 
 }  // namespace Rival

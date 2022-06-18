@@ -1,56 +1,53 @@
-#ifndef FRAME_BUFFER_H
-#define FRAME_BUFFER_H
+#pragma once
 
 #include <gl/glew.h>
 
 namespace Rival {
 
-    class Framebuffer
+class Framebuffer
+{
+
+public:
+    Framebuffer(int width, int height, bool useDepth);
+    ~Framebuffer();
+
+    // Prevent moving or copying (rule of 5)
+    Framebuffer(const Framebuffer& other) = delete;
+    Framebuffer(Framebuffer&& other) = delete;
+    Framebuffer& operator=(const Framebuffer& other) = delete;
+    Framebuffer& operator=(Framebuffer&& other) = delete;
+
+    GLuint getId() const
     {
+        return id;
+    }
 
-    public:
-        Framebuffer(int width, int height, bool useDepth);
-        ~Framebuffer();
+    GLuint getTextureId() const
+    {
+        return textureId;
+    }
 
-        // Prevent moving or copying (rule of 5)
-        Framebuffer(const Framebuffer& other) = delete;
-        Framebuffer(Framebuffer&& other) = delete;
-        Framebuffer& operator=(const Framebuffer& other) = delete;
-        Framebuffer& operator=(Framebuffer&& other) = delete;
+    int getWidth() const
+    {
+        return width;
+    }
 
-        GLuint getId() const
-        {
-            return id;
-        }
+    int getHeight() const
+    {
+        return height;
+    }
 
-        GLuint getTextureId() const
-        {
-            return textureId;
-        }
+private:
+    GLuint id;
 
-        int getWidth() const
-        {
-            return width;
-        }
+    GLuint textureId;
+    GLuint depthRenderBufferId;
 
-        int getHeight() const
-        {
-            return height;
-        }
+    int width;
 
-    private:
-        GLuint id;
+    int height;
 
-        GLuint textureId;
-        GLuint depthRenderBufferId;
-
-        int width;
-
-        int height;
-
-        void addDepthBuffer();
-    };
+    void addDepthBuffer();
+};
 
 }  // namespace Rival
-
-#endif  // FRAME_BUFFER_H

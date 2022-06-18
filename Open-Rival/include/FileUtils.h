@@ -1,5 +1,4 @@
-#ifndef FILE_UTILS_H
-#define FILE_UTILS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -11,12 +10,10 @@ using json = nlohmann::json;
 
 namespace Rival { namespace FileUtils {
 
-    std::vector<std::uint8_t> readBinaryFile(std::string filename);
+std::vector<std::uint8_t> readBinaryFile(std::string filename);
 
-    std::string readTextFile(std::string filename);
+std::string readTextFile(std::string filename);
 
-    json readJsonFile(std::string filename);
+json readJsonFile(std::string filename);
 
 }}  // namespace Rival::FileUtils
-
-#endif  // FILE_UTILS_H

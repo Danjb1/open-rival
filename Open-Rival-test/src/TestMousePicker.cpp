@@ -8,7 +8,7 @@
 #include "MockSDL.h"
 #include "MousePicker.h"
 #include "RenderUtils.h"
-#include "Scenario.h"
+#include "World.h"
 
 using namespace Rival;
 
@@ -16,7 +16,7 @@ const int viewportWidth = 800;
 const int viewportHeight = 600;
 const float aspectRatio = static_cast<float>(viewportWidth) / viewportHeight;
 Rect viewport(0, 0, viewportWidth, viewportHeight);
-Scenario scenario(50, 50, false);
+World scenario(50, 50, false);
 
 /**
  * These tests can be a little difficult to understand.
@@ -307,7 +307,7 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
 
     // Add a Unit
-    std::shared_ptr<Entity> unit = std::make_shared<Entity>(1, 1);
+    std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, 1, 1);
     scenario.addEntity(std::move(unit), 4, 4);
 
     // Create a pixel-perfect Camera
