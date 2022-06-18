@@ -1,10 +1,11 @@
 #pragma once
 
+#include <gl/glew.h>
 #include <glm/glm.hpp>
 
-#include "TextRenderable.h"
-
 namespace Rival {
+
+class TextRenderable;
 
 class TextRenderer
 {

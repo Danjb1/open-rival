@@ -7,11 +7,16 @@
 #include <algorithm>  // min
 #include <vector>
 
+#include "Camera.h"
+#include "Entity.h"
 #include "MapUtils.h"
 #include "Palette.h"
 #include "Pathfinding.h"
 #include "RenderUtils.h"
 #include "Shaders.h"
+#include "SpriteComponent.h"
+#include "Spritesheet.h"
+#include "Texture.h"
 #include "WalkerComponent.h"
 
 namespace Rival {
@@ -21,7 +26,7 @@ EntityRenderer::EntityRenderer(const Texture& paletteTexture)
 {
 }
 
-void EntityRenderer::render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const
+void EntityRenderer::render(const Camera& camera, EntityList entities, int delta) const
 {
     for (auto const& e : entities)
     {
@@ -54,7 +59,7 @@ bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera)
     return camera.contains(x1, y1) || camera.contains(x2, y1) || camera.contains(x2, y2) || camera.contains(x1, y2);
 }
 
-void EntityRenderer::renderEntity(Entity& entity, int delta) const
+void EntityRenderer::renderEntity(const Entity& entity, int delta) const
 {
     // Get this Entity's SpriteComponent
     const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);

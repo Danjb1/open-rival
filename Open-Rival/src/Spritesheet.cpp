@@ -2,6 +2,8 @@
 
 #include "Spritesheet.h"
 
+#include "Texture.h"
+
 namespace Rival {
 
 Spritesheet::Spritesheet(const Texture& texture, int width, int height)

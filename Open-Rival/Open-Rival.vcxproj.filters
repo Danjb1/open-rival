@@ -495,11 +495,11 @@
     <ClInclude Include="include\EnumUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Main.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\MovementComponent.h">
       <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EntityUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

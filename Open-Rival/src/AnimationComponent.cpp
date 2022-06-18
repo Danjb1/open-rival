@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "Entity.h"
+#include "SpriteComponent.h"
 #include "TimerUtils.h"
 #include "Unit.h"
 #include "World.h"

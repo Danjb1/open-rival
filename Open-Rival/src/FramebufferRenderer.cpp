@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include "Framebuffer.h"
 #include "RenderUtils.h"
 #include "Shaders.h"
 

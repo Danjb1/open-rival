@@ -26,7 +26,7 @@ void WalkerComponent::update()
     // TMP: plan a route
     if (entity->getId() == 1 && route.isEmpty())
     {
-        route = Pathfinding::findPath(entity->getPos(), { 4, 3 }, *entity->getScenario(), passabilityChecker);
+        route = Pathfinding::findPath(entity->getPos(), { 4, 3 }, *entity->getWorld(), passabilityChecker);
 
         if (!route.isEmpty())
         {

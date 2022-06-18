@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Entity.h"
+#include "EntityUtils.h"
 #include "MapUtils.h"
 #include "Tile.h"
 
@@ -100,20 +101,55 @@ public:
     void removeEntity(std::shared_ptr<Entity> entity);
 
     /**
-     * Returns a read-only list of all entities currently present in the world.
+     * Gets a list of all entities currently present in the world (mutable version).
      */
-    const std::vector<std::shared_ptr<Entity>> getEntities() const;
+    const MutableEntityList getMutableEntities() const;
 
     /**
-     * Gets an entity by its ID.
-     *
-     * We use shared_ptrs here because we sometimes need to maintain a
-     * reference to an entity even when it is removed from the level, e.g.
-     * for transported units or saving troops.
-     *
-     * If the entity is not found, an empty shared_ptr is returned.
+     * Gets a list of all entities currently present in the world (read-only version).
      */
-    const std::shared_ptr<Entity> getEntity(int id) const;
+    const EntityList getEntities() const;
+
+    /**
+     * Gets a raw pointer to the Entity with the given key (mutable version).
+     *
+     * This is not safe for long-term storage; the weak/shared pointer versions should be used instead.
+     *
+     * Returns nullptr if the Entity is not found.
+     */
+    Entity* getMutableEntity(int id) const;
+
+    /**
+     * Read-only version of `getMutableEntity`.
+     */
+    const Entity* getEntity(int id) const;
+
+    /**
+     * Gets a shared pointer to the Entity with the given key (mutable version).
+     *
+     * The weak pointer version should generally be preferred to avoid memory leaks, unless the Entity explicitly
+     * needs to be kept alive even when it is removed from the level, e.g. for transported units or saving troops.
+     *
+     * Returns an empty shared_ptr if the Entity is not found.
+     */
+    std::shared_ptr<Entity> getMutableEntityShared(int id) const;
+
+    /**
+     * Read-only version of `getMutableEntityShared`.
+     */
+    std::shared_ptr<const Entity> getEntityShared(int id) const;
+
+    /**
+     * Gets a shared pointer to the Entity with the given key (mutable version).
+     *
+     * Returns an empty weak_ptr if the Entity is not found.
+     */
+    std::weak_ptr<Entity> getMutableEntityWeak(int id) const;
+
+    /**
+     * Read-only version of `getMutableEntityWeak`.
+     */
+    std::weak_ptr<const Entity> getEntityWeak(int id) const;
 
     void setPassability(const MapNode& pos, TilePassability passability);
 

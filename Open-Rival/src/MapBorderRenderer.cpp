@@ -12,6 +12,7 @@
 #include "MathUtils.h"
 #include "Palette.h"
 #include "Shaders.h"
+#include "Texture.h"
 
 namespace Rival {
 

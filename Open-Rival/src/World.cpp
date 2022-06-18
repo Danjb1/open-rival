@@ -63,9 +63,9 @@ void World::removeEntity(std::shared_ptr<Entity> entity)
     entities.erase(entity->getId());
 }
 
-const std::vector<std::shared_ptr<Entity>> World::getEntities() const
+const MutableEntityList World::getMutableEntities() const
 {
-    std::vector<std::shared_ptr<Entity>> entityList;
+    MutableEntityList entityList;
     entityList.reserve(entities.size());
 
     for (auto const& entry : entities)
@@ -76,10 +76,61 @@ const std::vector<std::shared_ptr<Entity>> World::getEntities() const
     return entityList;
 }
 
-const std::shared_ptr<Entity> World::getEntity(int id) const
+const EntityList World::getEntities() const
 {
-    auto const iter = entities.find(id);
-    return iter == entities.end() ? std::shared_ptr<Entity>() : iter->second;
+    EntityList entityList;
+    entityList.reserve(entities.size());
+
+    for (auto const& entry : entities)
+    {
+        entityList.push_back(entry.second);
+    }
+
+    return entityList;
+}
+
+Entity* World::getMutableEntity(int id) const
+{
+    auto const findResult = entities.find(id);
+    if (findResult == entities.end())
+    {
+        return nullptr;
+    }
+    return static_cast<Entity*>((findResult->second).get());
+}
+
+const Entity* World::getEntity(int id) const
+{
+    auto const findResult = entities.find(id);
+    if (findResult == entities.end())
+    {
+        return nullptr;
+    }
+    return static_cast<Entity*>((findResult->second).get());
+}
+
+std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
+{
+    auto const findResult = entities.find(id);
+    return findResult == entities.end() ? std::shared_ptr<Entity>() : findResult->second;
+}
+
+std::shared_ptr<const Entity> World::getEntityShared(int id) const
+{
+    auto const findResult = entities.find(id);
+    return findResult == entities.end() ? std::shared_ptr<Entity>() : findResult->second;
+}
+
+std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
+{
+    auto const findResult = entities.find(id);
+    return findResult == entities.end() ? std::weak_ptr<Entity>() : findResult->second;
+}
+
+std::weak_ptr<const Entity> World::getEntityWeak(int id) const
+{
+    auto const findResult = entities.find(id);
+    return findResult == entities.end() ? std::weak_ptr<Entity>() : findResult->second;
 }
 
 void World::setPassability(const MapNode& pos, TilePassability passability)

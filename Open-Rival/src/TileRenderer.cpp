@@ -11,9 +11,12 @@
 #include <algorithm>
 #include <map>
 
+#include "Camera.h"
 #include "MathUtils.h"
 #include "Palette.h"
 #include "Shaders.h"
+#include "Spritesheet.h"
+#include "Texture.h"
 
 namespace Rival {
 

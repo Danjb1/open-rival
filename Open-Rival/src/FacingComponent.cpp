@@ -4,7 +4,6 @@
 
 #include "Entity.h"
 #include "MapUtils.h"
-#include "MovementComponent.h"
 
 namespace Rival {
 

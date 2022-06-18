@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Spritesheet.h"
+#include <gl/glew.h>
 
 namespace Rival {
+
+class Spritesheet;
 
 /**
  * Class that allows one or more Sprites to be rendered from a Spritesheet

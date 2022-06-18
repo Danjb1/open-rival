@@ -5,10 +5,11 @@
 #include "Animations.h"
 #include "EntityComponent.h"
 #include "FacingComponent.h"
-#include "SpriteComponent.h"
 #include "UnitPropsComponent.h"
 
 namespace Rival {
+
+class SpriteComponent;
 
 /**
  * Component that controls the animation and facing of a SpriteComponent.

@@ -34,10 +34,15 @@ public:
     void update() override;
     // End State override
 
-    World& getScenario()
+    World& getWorld()
     {
         return *world;
     }
+
+private:
+    void earlyUpdateEntities() const;
+    void updateEntities() const;
+    void respondToMouseInput();
 
 private:
     /**
@@ -70,10 +75,6 @@ private:
     std::unique_ptr<TextRenderable> text2;
     std::vector<TextRenderable*> texts;
     MenuTextRenderer textRenderer;
-
-    void earlyUpdateEntities() const;
-    void updateEntities() const;
-    void respondToMouseInput();
 };
 
 }  // namespace Rival
