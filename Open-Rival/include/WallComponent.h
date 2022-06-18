@@ -37,13 +37,17 @@ class WallComponent : public EntityComponent
 {
 
 public:
-    static const std::string key;
-
     WallComponent(WallVariant variant);
 
     void onEntitySpawned(World* scenario) override;
 
     WallVariant getVariant() const;
+
+private:
+    int getBaseTxIndex(Building::Type buildingType) const;
+
+public:
+    static const std::string key;
 
 private:
     static constexpr int baseTxIndexElf = 48;
@@ -53,8 +57,6 @@ private:
     static constexpr int baseTxIndexGrate = 48;
 
     WallVariant variant;
-
-    int getBaseTxIndex(Building::Type buildingType) const;
 };
 
 }  // namespace Rival

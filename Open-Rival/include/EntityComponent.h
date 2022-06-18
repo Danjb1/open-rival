@@ -71,14 +71,15 @@ public:
 
 protected:
     /**
-     * The Entity that owns this EntityComponent.
-     */
-    Entity* entity { nullptr };
-
-    /**
      * Callback for when this EntityComponent is deleted.
      */
     virtual void onDelete() {};
+
+protected:
+    /**
+     * The Entity that owns this EntityComponent.
+     */
+    Entity* entity { nullptr };
 
 private:
     /**

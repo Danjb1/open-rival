@@ -6,7 +6,6 @@
 
 #include "Color.h"
 #include "Font.h"
-#include "Spritesheet.h"
 
 namespace Rival {
 
@@ -49,31 +48,7 @@ struct TextProperties
  */
 class TextRenderable
 {
-
 public:
-    static constexpr int numVertexDimensions = 3;    // x, y, z
-    static constexpr int numTexCoordDimensions = 2;  // u, v
-    static constexpr int numColorDimensions = 3;     // r, g, b
-    static constexpr int numVerticesPerChar = 4;
-
-    static constexpr int numLayersWithoutShadow = 1;
-    static constexpr int numLayersWithShadow = 2;
-    static constexpr int shadowLayerIndex = 0;
-    static constexpr float shadowOffsetX = 0.f;
-    static constexpr float shadowOffsetY = 1.f;
-
-    static const Color defaultColor;
-    static const Color highlightColor;
-
-    /*
-     * 6 indices are required to render a quad using GL_TRIANGLES:
-     *  - First triangle: 0-1-2
-     *  - Second triangle: 2-3-0
-     */
-    static constexpr int numIndicesPerChar = 6;
-
-    mutable bool dirty = true;
-
     /**
      * Constructs a TextRenderable to hold a single TextSpan.
      */
@@ -99,18 +74,22 @@ public:
     {
         return vao;
     }
+
     GLuint getPositionVbo() const
     {
         return positionVbo;
     }
+
     GLuint getTexCoordVbo() const
     {
         return texCoordVbo;
     }
+
     GLuint getColorVbo() const
     {
         return colorVbo;
     }
+
     GLuint getIbo() const
     {
         return ibo;
@@ -122,22 +101,27 @@ public:
     {
         return props.font;
     }
+
     std::vector<TextSpan> getTextSpans() const
     {
         return spans;
     }
+
     int getNumVisibleChars() const
     {
         return numVisibleChars;
     }
+
     float getX() const
     {
         return x;
     }
+
     float getY() const
     {
         return y;
     }
+
     float getScale() const
     {
         return props.scale;
@@ -147,6 +131,34 @@ public:
 
     void setTextSpan(TextSpan newSpan);
     void setTextSpans(std::vector<TextSpan> newSpans);
+
+private:
+    void countChars();
+    void init();
+
+public:
+    static constexpr int numVertexDimensions = 3;    // x, y, z
+    static constexpr int numTexCoordDimensions = 2;  // u, v
+    static constexpr int numColorDimensions = 3;     // r, g, b
+    static constexpr int numVerticesPerChar = 4;
+
+    static constexpr int numLayersWithoutShadow = 1;
+    static constexpr int numLayersWithShadow = 2;
+    static constexpr int shadowLayerIndex = 0;
+    static constexpr float shadowOffsetX = 0.f;
+    static constexpr float shadowOffsetY = 1.f;
+
+    static const Color defaultColor;
+    static const Color highlightColor;
+
+    /*
+     * 6 indices are required to render a quad using GL_TRIANGLES:
+     *  - First triangle: 0-1-2
+     *  - Second triangle: 2-3-0
+     */
+    static constexpr int numIndicesPerChar = 6;
+
+    mutable bool dirty = true;
 
 private:
     GLuint vao;
@@ -162,9 +174,6 @@ private:
 
     int numChars;
     int numVisibleChars;
-
-    void countChars();
-    void init();
 };
 
 }  // namespace Rival

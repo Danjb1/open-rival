@@ -3,6 +3,8 @@
 #include "SpriteRenderable.h"
 
 #include "Shaders.h"
+#include "Spritesheet.h"
+#include "Texture.h"
 
 namespace Rival {
 

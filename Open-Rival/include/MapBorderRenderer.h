@@ -4,14 +4,14 @@
 
 #include <vector>
 
-#include "Camera.h"
 #include "Race.h"
 #include "RenderUtils.h"
 #include "SpriteRenderable.h"
 #include "Spritesheet.h"
-#include "Texture.h"
 
 namespace Rival {
+
+class Texture;
 
 class MapBorderRenderer
 {

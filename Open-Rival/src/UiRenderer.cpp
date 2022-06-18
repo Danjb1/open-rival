@@ -5,6 +5,7 @@
 #include <gl/glew.h>
 
 #include "RenderUtils.h"
+#include "Resources.h"
 
 namespace Rival {
 

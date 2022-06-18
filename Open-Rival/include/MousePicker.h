@@ -41,6 +41,16 @@ public:
     int getEntityId() const;
 
 private:
+    float getMouseInCameraX(float normalizedMouseX);
+    float getMouseInCameraY(float normalizedMouseY);
+
+    std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
+
+    void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
+
+    bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
+
+private:
     // Offset of a Unit's hitbox, measured from the top-left corner of the
     // containing tile to the bottom-left of the hitbox, in px
     static constexpr int unitHitboxOffsetX = 20;
@@ -63,15 +73,6 @@ private:
     int entityId;
 
     World& world;
-
-    float getMouseInCameraX(float normalizedMouseX);
-    float getMouseInCameraY(float normalizedMouseY);
-
-    std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
-
-    void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
-
-    bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
 };
 
 }  // namespace Rival

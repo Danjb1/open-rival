@@ -121,7 +121,7 @@ public:
     /**
      * Gets a pointer to the World that holds this Entity.
      */
-    World* getScenario()
+    World* getWorld()
     {
         return world;
     }
@@ -189,7 +189,7 @@ public:
     void setPos(MapNode newPos);
 
     /**
-     * Returns a pointer to the EntityComponent with the given key (mutable version).
+     * Gets a raw pointer to the EntityComponent with the given key (mutable version).
      *
      * This is not safe for long-term storage; the weak/shared pointer versions should be used instead.
      *
@@ -207,7 +207,7 @@ public:
     }
 
     /**
-     * Returns a pointer to the EntityComponent with the given key (read-only version).
+     * Gets a raw pointer to the EntityComponent with the given key (read-only version).
      *
      * This is not safe for long-term storage; the weak/shared pointer versions should be used instead.
      *
@@ -225,7 +225,7 @@ public:
     }
 
     /**
-     * Returns a shared pointer to the EntityComponent with the given key (mutable version).
+     * Gets a shared pointer to the EntityComponent with the given key (mutable version).
      *
      * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
      * needs to be kept alive.
@@ -244,7 +244,7 @@ public:
     }
 
     /**
-     * Returns a shared pointer to the EntityComponent with the given key (read-only version).
+     * Gets a shared pointer to the EntityComponent with the given key (read-only version).
      *
      * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
      * needs to be kept alive.
@@ -263,7 +263,7 @@ public:
     }
 
     /**
-     * Returns a weak pointer to the EntityComponent with the given key (mutable version).
+     * Gets a weak pointer to the EntityComponent with the given key (mutable version).
      *
      * Returns an empty weak_ptr if no matching EntityComponent is found.
      */
@@ -279,7 +279,7 @@ public:
     }
 
     /**
-     * Returns a weak pointer to the EntityComponent with the given key (read-only version).
+     * Gets a weak pointer to the EntityComponent with the given key (read-only version).
      *
      * Returns an empty weak_ptr if no matching EntityComponent is found.
      */

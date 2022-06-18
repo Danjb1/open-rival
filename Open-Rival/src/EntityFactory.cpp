@@ -7,6 +7,7 @@
 #include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
 #include "PassabilityComponent.h"
+#include "Resources.h"
 #include "SpriteComponent.h"
 #include "Tile.h"
 #include "UnitPropsComponent.h"

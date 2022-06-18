@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Framebuffer.h"
+#include <gl/glew.h>
 
 namespace Rival {
+
+class Framebuffer;
 
 /**
  * Class responsible for rendering a framebuffer to the screen.
  */
 class FramebufferRenderer
 {
-
 public:
     FramebufferRenderer(Framebuffer& fbo);
 

@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 
-#include "Texture.h"
-
 namespace Rival {
+
+class Texture;
 
 /**
  * Wrapper around a texture that defines how it divides into individual

@@ -2,8 +2,11 @@
 
 #include "TextRenderer.h"
 
+#include <iostream>
+
 #include "Framebuffer.h"
 #include "RenderUtils.h"
+#include "TextRenderable.h"
 
 namespace Rival {
 

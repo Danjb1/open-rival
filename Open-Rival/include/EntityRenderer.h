@@ -4,19 +4,20 @@
 #include <map>
 #include <string>
 
-#include "Camera.h"
-#include "Entity.h"
-#include "SpriteComponent.h"
-#include "Texture.h"
+#include "EntityUtils.h"
 
 namespace Rival {
+
+class Camera;
+class Entity;
+class SpriteComponent;
+class Texture;
 
 /**
  * Class responsible for rendering Entities.
  */
 class EntityRenderer
 {
-
 public:
     EntityRenderer(const Texture& paletteTexture);
 
@@ -24,7 +25,7 @@ public:
     EntityRenderer(const EntityRenderer&) = delete;
     EntityRenderer& operator=(const EntityRenderer&) = delete;
 
-    void render(const Camera& camera, const std::vector<std::shared_ptr<Entity>> entities, int delta) const;
+    void render(const Camera& camera, EntityList entities, int delta) const;
 
 private:
     static constexpr int numLerpDimensions = 2;
@@ -35,7 +36,7 @@ private:
 
     bool isEntityVisible(const Entity& entity, const Camera& camera) const;
 
-    void renderEntity(Entity& entity, int delta) const;
+    void renderEntity(const Entity& entity, int delta) const;
 
     bool needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const;
 

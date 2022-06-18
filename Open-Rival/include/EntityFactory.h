@@ -5,11 +5,12 @@
 #include "Building.h"
 #include "Entity.h"
 #include "MapUtils.h"
-#include "Resources.h"
 #include "ScenarioData.h"
 #include "Unit.h"
 
 namespace Rival {
+
+class Resources;
 
 class EntityFactory
 {
@@ -38,13 +39,14 @@ public:
     std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
 
 private:
-    const Resources& res;
-
     Building::Type getBuildingType(std::uint8_t buildingType) const;
 
     Unit::Type getUnitType(std::uint8_t unitType) const;
 
     Facing getFacing(std::uint8_t facing) const;
+
+private:
+    const Resources& res;
 };
 
 }  // namespace Rival

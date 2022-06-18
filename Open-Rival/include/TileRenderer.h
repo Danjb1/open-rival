@@ -4,14 +4,15 @@
 
 #include <vector>
 
-#include "Camera.h"
 #include "RenderUtils.h"
 #include "SpriteRenderable.h"
-#include "Spritesheet.h"
-#include "Texture.h"
 #include "Tile.h"
 
 namespace Rival {
+
+class Camera;
+class Texture;
+class Spritesheet;
 
 /**
  * Class responsible for rendering Tiles.

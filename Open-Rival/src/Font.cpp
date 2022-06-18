@@ -11,8 +11,8 @@
 #include <utility>    // std::pair
 
 #include "GLUtils.h"
+#include "Image.h"
 #include "Resources.h"
-#include "Texture.h"
 
 namespace Rival {
 

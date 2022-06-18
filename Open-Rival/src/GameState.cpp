@@ -61,7 +61,7 @@ void GameState::update()
 
 void GameState::earlyUpdateEntities() const
 {
-    auto const& entities = world->getEntities();
+    auto const& entities = world->getMutableEntities();
     for (auto const& e : entities)
     {
         e->earlyUpdate();
@@ -77,7 +77,7 @@ void GameState::updateEntities() const
 {
     std::vector<std::shared_ptr<Entity>> deletedEntities;
 
-    auto const& entities = world->getEntities();
+    auto const& entities = world->getMutableEntities();
     for (auto const& e : entities)
     {
         if (e->isDeleted())

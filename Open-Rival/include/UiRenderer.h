@@ -3,10 +3,10 @@
 #include "AtlasRenderable.h"
 #include "GameInterface.h"
 #include "Race.h"
-#include "Resources.h"
-#include "Window.h"
 
 namespace Rival {
+
+class Resources;
 
 class UiRenderer
 {

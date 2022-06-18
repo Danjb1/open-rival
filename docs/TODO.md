@@ -8,13 +8,8 @@
 
 ### Refactoring
 
-- Add weak/shared/raw mechanism for Entity retrieval
-- Don't use `const` for member variables
-- List methods before fields in classes
-    - Separate fields using a new public/private heading
 - Pass small interfaces around instead of complex objects
     - e.g. Resources should extend TextureStore, AudioStore, etc.
-- Prefer forward-declarations to includes, to reduce compile times
 - Always initialize member variables (e.g. add ctors to structs in ScenarioData.h)
     - Prefer default member initialization
 
@@ -342,6 +337,7 @@
 
 ### Refactoring
 
+- Don't use `const` or references for member variables
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
@@ -349,7 +345,6 @@
     - Add a new class that can read the buffer and maintain some offset
 - Use a common file reading mechanism in audio-extractor
 - Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
-- Avoid reference member variables (prefer pointers)?
 - Avoid static methods
     - Use a namespace for public methods
     - Put private methods in a `.cpp` file
