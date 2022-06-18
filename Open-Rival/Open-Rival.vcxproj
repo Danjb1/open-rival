@@ -142,6 +142,7 @@
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\RtMidi.h" />
+    <ClInclude Include="include\SDLWrapper.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
     <ClInclude Include="include\ScenarioData.h" />

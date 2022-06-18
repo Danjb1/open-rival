@@ -9,36 +9,35 @@
 
 namespace Rival {
 
-UiRenderer::UiRenderer(const Race& race, const Resources& res)
-    : res(res)
+UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
+    : textureStore(textureStore)
     , numUiImages(0)
-    , mainUiRenderable(res.getUiTextureAtlas(), maxUiImages)
-    , minimapLeftBorder(GameInterface::minimapLeftBorder, res.getUiTextureAtlas(), "img_ui_1042.tga")
-    , minimapTopBorder(GameInterface::minimapTopBorder, res.getUiTextureAtlas(), "img_ui_1040.tga")
-    , minimapBottomBorder(GameInterface::minimapBottomBorder, res.getUiTextureAtlas(), "img_ui_1041.tga")
+    , mainUiRenderable(textureStore.getUiTextureAtlas(), maxUiImages)
+    , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1042.tga")
+    , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1040.tga")
+    , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1041.tga")
     , mainPanel(
               GameInterface::mainPanel,
-              res.getUiTextureAtlas(),
+              textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1105.tga" : "img_ui_1039.tga")
     , inventoryOverlay(
               GameInterface::inventoryOverlay,
-              res.getUiTextureAtlas(),
+              textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1112.tga" : "img_ui_1046.tga")
     , statsPanel(
               GameInterface::statsPanel,
-              res.getUiTextureAtlas(),
+              textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga")
 {
 }
 
 void UiRenderer::renderUi()
 {
-
     // Use textures
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mainUiRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, res.getPalette().getId());
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
 
     // Bind vertex array
     glBindVertexArray(mainUiRenderable.getVao());
@@ -65,7 +64,6 @@ bool UiRenderer::needsUpdate() const
 
 void UiRenderer::sendDataToGpu()
 {
-
     // Determine the number of images to render
     bool inventoryVisible = isInventoryVisible();
     numUiImages = inventoryVisible ? maxUiImages - 1 : maxUiImages;

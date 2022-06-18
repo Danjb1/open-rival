@@ -63,40 +63,44 @@ IncludeCategories:
     SortPriority:    -10
     CaseSensitive:   true
   # SDL
-  - Regex:           '^<SDL.*>'
+  - Regex:           '^\"SDLWrapper\.h\"'
     Priority:        1
     SortPriority:    10
+    CaseSensitive:   true
+  - Regex:           '^<SDL.*>'
+    Priority:        1
+    SortPriority:    20
     CaseSensitive:   true
   # GL
   - Regex:           '^<glm?\/.+>'
     Priority:        1
-    SortPriority:    11
+    SortPriority:    30
     CaseSensitive:   true
   # Freetype
   - Regex:           '^<freetype\/.+>'
     Priority:        1
-    SortPriority:    12
+    SortPriority:    40
     CaseSensitive:   true
   - Regex:           '^<ft2build\.h>'
     Priority:        1
-    SortPriority:    13
+    SortPriority:    40
     CaseSensitive:   true
   - Regex:           '^FT_FREETYPE_H'
     Priority:        1
-    SortPriority:    14
+    SortPriority:    41
     CaseSensitive:   true
   # C system headers
   - Regex:           '^<.+\.h>'
     Priority:        2
-    SortPriority:    20
+    SortPriority:    50
   # C++ standard library headers
   - Regex:           '^<.+>'
     Priority:        3
-    SortPriority:    30
+    SortPriority:    60
   # Project files
   - Regex:           '^\".*\"'
     Priority:        4
-    SortPriority:    40
+    SortPriority:    70
 IndentCaseLabels: 'false'
 IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'

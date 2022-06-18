@@ -11,7 +11,7 @@ namespace Rival {
 
 class Camera;
 class Rect;
-class Resources;
+class TextureStore;
 class Window;
 class World;
 
@@ -19,7 +19,11 @@ class GameRenderer
 {
 public:
     GameRenderer(
-            const Window& window, const World& world, const Camera& camera, const Rect& viewport, const Resources& res);
+            const Window& window,
+            const World& world,
+            const Camera& camera,
+            const Rect& viewport,
+            const TextureStore& textureStore);
 
     void render(int delta);
 
@@ -34,7 +38,7 @@ private:
     const World& world;
     const Rect& viewport;
     const Camera& camera;
-    const Resources& res;
+    const TextureStore& textureStore;
 
     /**
      * Framebuffer to which the visible region of the game is rendered at

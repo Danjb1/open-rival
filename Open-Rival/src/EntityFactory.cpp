@@ -16,14 +16,13 @@
 
 namespace Rival {
 
-EntityFactory::EntityFactory(const Resources& res)
-    : res(res)
+EntityFactory::EntityFactory(const TextureStore& textureStore)
+    : textureStore(textureStore)
 {
 }
 
 std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const
 {
-
     // Create Entity
     std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, Unit::width, Unit::height);
 
@@ -39,7 +38,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<FacingComponent>(facing));
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = res.getUnitSpritesheet(unitType);
+    const Spritesheet& spritesheet = textureStore.getUnitSpritesheet(unitType);
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // Add AnimationComponent
@@ -58,7 +57,6 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
 std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const
 {
-
     // Create Entity
     Building::Type buildingType = getBuildingType(buildingPlacement.type);
     int width = Building::getWidth(buildingType);
@@ -72,7 +70,7 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = res.getBuildingSpritesheet(buildingType);
+    const Spritesheet& spritesheet = textureStore.getBuildingSpritesheet(buildingType);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     if (Building::isWall(buildingType))
@@ -97,13 +95,12 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
 
 std::shared_ptr<Entity> EntityFactory::createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const
 {
-
     // Create Entity
     std::shared_ptr<Entity> building =
             std::make_shared<Entity>(EntityType::Wall, Building::wallWidth, Building::wallHeight);
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
+    const Spritesheet& spritesheet = textureStore.getObjectSpritesheet(wilderness);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // Add WallComponent
@@ -118,19 +115,18 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(const BuildingPlacement& b
 
 std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const
 {
-
     // Create Entity
     std::shared_ptr<Entity> obj = std::make_shared<Entity>(EntityType::Decoration, Unit::width, Unit::height);
 
     // Add SpriteComponent
     if (objPlacement.type == 0xAF)
     {
-        const Spritesheet& spritesheet = res.getCommonObjectSpritesheet();
+        const Spritesheet& spritesheet = textureStore.getCommonObjectSpritesheet();
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
     else
     {
-        const Spritesheet& spritesheet = res.getObjectSpritesheet(wilderness);
+        const Spritesheet& spritesheet = textureStore.getObjectSpritesheet(wilderness);
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
 

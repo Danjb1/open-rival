@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-#include <SDL.h>
+#include "SDLWrapper.h"
 
 #include "ConfigUtils.h"
 #include "TimerUtils.h"

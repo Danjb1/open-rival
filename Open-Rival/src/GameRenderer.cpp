@@ -21,27 +21,31 @@
 namespace Rival {
 
 GameRenderer::GameRenderer(
-        const Window& window, const World& world, const Camera& camera, const Rect& viewport, const Resources& res)
+        const Window& window,
+        const World& world,
+        const Camera& camera,
+        const Rect& viewport,
+        const TextureStore& textureStore)
     : window(window)
     , world(world)
     , camera(camera)
     , viewport(viewport)
-    , res(res)
+    , textureStore(textureStore)
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
-    , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
+    , tileRenderer(textureStore.getTileSpritesheet(world.isWilderness()), textureStore.getPalette())
     , mapBorderRenderer(
               // Hardcode the race for now
               Race::Human,
               world.getWidth(),
               world.getHeight(),
-              res.getMapBorderSpritesheet(),
-              res.getPalette())
-    , entityRenderer(res.getPalette())
+              textureStore.getMapBorderSpritesheet(),
+              textureStore.getPalette())
+    , entityRenderer(textureStore.getPalette())
     , uiRenderer(
               // Hardcode the race for now
               Race::Human,
-              res)
+              textureStore)
 {
 }
 

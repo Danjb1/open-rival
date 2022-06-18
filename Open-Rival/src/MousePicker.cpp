@@ -2,7 +2,7 @@
 
 #include "MousePicker.h"
 
-#include <SDL.h>
+#include "SDLWrapper.h"
 
 #include <iostream>
 
@@ -201,8 +201,8 @@ std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCamer
 
 void MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
 {
-    auto& entities = world.getEntities();
-    for (auto e : entities)
+    const auto& entities = world.getEntities();
+    for (const auto& e : entities)
     {
         // We could optimise this by considering only Entities that were
         // rendered in the previous frame.

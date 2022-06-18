@@ -2,7 +2,7 @@
 
 #include "Window.h"
 
-#include <SDL.h>
+#include "SDLWrapper.h"
 
 #include <iostream>
 
