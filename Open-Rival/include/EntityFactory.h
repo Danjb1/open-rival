@@ -10,13 +10,13 @@
 
 namespace Rival {
 
-class Resources;
+class TextureStore;
 
 class EntityFactory
 {
 
 public:
-    EntityFactory(const Resources& res);
+    EntityFactory(const TextureStore& textureStore);
 
     /**
      * Creates a Unit from raw data (e.g. read from a Scenario file).
@@ -46,7 +46,7 @@ private:
     Facing getFacing(std::uint8_t facing) const;
 
 private:
-    const Resources& res;
+    const TextureStore& textureStore;
 };
 
 }  // namespace Rival

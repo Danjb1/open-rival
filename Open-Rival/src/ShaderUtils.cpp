@@ -2,7 +2,7 @@
 
 #include "ShaderUtils.h"
 
-#include <SDL.h>
+#include "SDLWrapper.h"
 
 #include <stdio.h>
 

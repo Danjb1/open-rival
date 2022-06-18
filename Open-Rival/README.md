@@ -22,9 +22,11 @@ See [this guide](/docs/development.md) for more details.
 
 This should be run periodically.
 
+> These scripts can also be found in the [tools](/tools) folder.
+
 #### Quick
 
-    cppcheck --project=Open-Rival.vcxproj "--project-configuration=Release|x64"
+    cppcheck --project=Open-Rival.vcxproj "--project-configuration=Release|Win32"
 
 #### Full
 

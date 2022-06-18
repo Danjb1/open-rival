@@ -501,6 +501,9 @@
     <ClInclude Include="include\EntityUtils.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\SDLWrapper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Open-Rival.rc" />

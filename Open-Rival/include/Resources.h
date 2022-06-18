@@ -1,11 +1,11 @@
 #pragma once
 
 #include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include FT_FREETYPE_H
 
 #include "Building.h"
 #include "Font.h"
@@ -22,16 +22,51 @@ using json = nlohmann::json;
 
 namespace Rival {
 
-class Resources
+/**
+ * Interface providing access to fonts.
+ */
+class FontStore
 {
-
 public:
-    // Directories
-    static const std::string dataDir;
-    static const std::string mapsDir;
-    static const std::string soundDir;
-    static const std::string txDir;
+    virtual const Font& getFontSmall() const = 0;
+    virtual const Font& getFontRegular() const = 0;
+};
 
+/**
+ * Interface providing access to textures.
+ */
+class TextureStore
+{
+public:
+    virtual const Texture& getPalette() const = 0;
+    virtual const Spritesheet& getTileSpritesheet(bool wilderness) const = 0;
+    virtual const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const = 0;
+    virtual const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const = 0;
+    virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
+    virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
+    virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
+    virtual const TextureAtlas& getUiTextureAtlas() const = 0;
+};
+
+/**
+ * Interface providing access to audio.
+ */
+class AudioStore
+{
+public:
+    virtual const WaveFile& getSound(int id) const = 0;
+    virtual const MidiFile& getMidi(int id) const = 0;
+};
+
+/**
+ * Class that holds all of the game's resources.
+ */
+class Resources
+    : public FontStore
+    , public TextureStore
+    , public AudioStore
+{
+public:
     Resources(json& cfg);
     ~Resources();
 
@@ -41,9 +76,7 @@ public:
     Resources& operator=(const Resources& other) = delete;
     Resources& operator=(Resources&& other) = delete;
 
-    // Retrieval
-    const Font& getFontSmall() const;
-    const Font& getFontRegular() const;
+    // Begin TextureStore override
     const Texture& getPalette() const;
     const Spritesheet& getTileSpritesheet(bool wilderness) const;
     const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
@@ -52,8 +85,40 @@ public:
     const Spritesheet& getObjectSpritesheet(bool wilderness) const;
     const Spritesheet& getMapBorderSpritesheet() const;
     const TextureAtlas& getUiTextureAtlas() const;
+    // End TextureStore override
+
+    // Begin FontStore override
+    const Font& getFontSmall() const;
+    const Font& getFontRegular() const;
+    // End FontStore override
+
+    // Begin SoundStore override
     const WaveFile& getSound(int id) const;
     const MidiFile& getMidi(int id) const;
+    // End SoundStore override
+
+private:
+    // Initialization
+    FT_Library initFreeType();
+    Font initFontSmall();
+    Font initFontRegular();
+    std::vector<Texture> loadTextures();
+    std::vector<TextureAtlas> loadTextureAtlases();
+    Texture initPaletteTexture();
+    std::unordered_map<Building::Type, Spritesheet> initBuildingSpritesheets();
+    std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
+    std::vector<Spritesheet> initTileSpritesheets();
+    std::vector<Spritesheet> initObjectSpritesheets();
+    Spritesheet initMapBorderSpritesheet();
+    std::vector<WaveFile> initSounds();
+    std::vector<MidiFile> initMidis();
+
+public:
+    // Directories
+    static const std::string dataDir;
+    static const std::string mapsDir;
+    static const std::string soundDir;
+    static const std::string txDir;
 
 private:
     // Font settings
@@ -103,21 +168,6 @@ private:
 
     // MIDI Files
     std::vector<MidiFile> midis;
-
-    // Initialization
-    FT_Library initFreeType();
-    Font initFontSmall();
-    Font initFontRegular();
-    std::vector<Texture> loadTextures();
-    std::vector<TextureAtlas> loadTextureAtlases();
-    Texture initPaletteTexture();
-    std::unordered_map<Building::Type, Spritesheet> initBuildingSpritesheets();
-    std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
-    std::vector<Spritesheet> initTileSpritesheets();
-    std::vector<Spritesheet> initObjectSpritesheets();
-    Spritesheet initMapBorderSpritesheet();
-    std::vector<WaveFile> initSounds();
-    std::vector<MidiFile> initMidis();
 };
 
 }  // namespace Rival

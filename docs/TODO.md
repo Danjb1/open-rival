@@ -6,13 +6,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Refactoring
-
-- Pass small interfaces around instead of complex objects
-    - e.g. Resources should extend TextureStore, AudioStore, etc.
-- Always initialize member variables (e.g. add ctors to structs in ScenarioData.h)
-    - Prefer default member initialization
-
 ### Formatting and Libraries
 
 - Improve handling of libary files
@@ -20,8 +13,6 @@
     - Move library headers (json, RtMidi) into a separate project or folder?
     - Do not auto-format library subfolders
     - Clearly annotate any changes to library files
-- Suppress warnings from SDL (C26819, C26812)
-- Use CppCheck VS Add-in: https://github.com/VioletGiraffe/cppcheck-vs-addin
 
 ### Data Loading
 
@@ -337,7 +328,8 @@
 
 ### Refactoring
 
-- Don't use `const` or references for member variables
+- Prefer default member initialization to initializer lists
+- Don't use `const` or references for member variables?
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
