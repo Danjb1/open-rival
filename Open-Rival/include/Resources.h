@@ -3,6 +3,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <nlohmann/json.hpp>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -16,7 +18,6 @@
 #include "TextureAtlas.h"
 #include "Unit.h"
 #include "WaveFile.h"
-#include "json.h"
 
 using json = nlohmann::json;
 

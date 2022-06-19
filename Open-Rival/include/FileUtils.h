@@ -1,10 +1,10 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include <cstdint>
 #include <string>
 #include <vector>
-
-#include "json.h"
 
 using json = nlohmann::json;
 

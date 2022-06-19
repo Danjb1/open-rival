@@ -1,9 +1,10 @@
 #pragma once
 
+#include <RtMidi.h>
+
 #include <mutex>
 
 #include "MidiFile.h"
-#include "RtMidi.h"
 
 namespace Rival {
 

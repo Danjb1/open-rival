@@ -64,7 +64,6 @@
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\GameState.cpp" />
-    <ClCompile Include="src\RtMidi.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
     <ClCompile Include="src\ScenarioReader.cpp" />
@@ -117,7 +116,6 @@
     <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\GLUtils.h" />
     <ClInclude Include="include\Image.h" />
-    <ClInclude Include="include\json.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MapUtils.h" />
     <ClInclude Include="include\MathUtils.h" />
@@ -141,7 +139,6 @@
     <ClInclude Include="include\RenderUtils.h" />
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
-    <ClInclude Include="include\RtMidi.h" />
     <ClInclude Include="include\SDLWrapper.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
@@ -245,15 +242,15 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4\include;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;$(ProjectDir)libs\json;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\rtmidi-5.0.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;$(ProjectDir)libs\rtmidi-5.0.0\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>
@@ -274,16 +271,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(ProjectDir)libs\SDL2-2.0.14\include;$(ProjectDir)libs\SDL2_image-2.0.5\include;$(ProjectDir)libs\freetype-2.10.4\include;$(ProjectDir)libs\glew-2.1.0\include;$(ProjectDir)libs\glm-0.9.9.5;$(ProjectDir)libs\json;$(ProjectDir)libs\openal-soft-1.21.0\include;$(ProjectDir)libs\rtmidi-5.0.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>__WINDOWS_MM__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;${ProjectDir)libs\rtmidi-5.0.0\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>

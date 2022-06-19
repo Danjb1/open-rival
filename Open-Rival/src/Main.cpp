@@ -4,6 +4,7 @@
 #include "SDLWrapper.h"
 #include <SDL_image.h>
 #include <gl/glew.h>
+#include <nlohmann/json.hpp>
 
 #include <iostream>
 #include <memory>
@@ -19,7 +20,6 @@
 #include "Shaders.h"
 #include "Window.h"
 #include "World.h"
-#include "json.h"
 
 using json = nlohmann::json;
 

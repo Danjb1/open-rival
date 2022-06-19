@@ -190,9 +190,6 @@
     <ClCompile Include="src\MidsDecoder.cpp">
       <Filter>Source Files\audio\midi</Filter>
     </ClCompile>
-    <ClCompile Include="src\RtMidi.cpp">
-      <Filter>Source Files\audio\midi</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files\application</Filter>
     </ClCompile>
@@ -417,9 +414,6 @@
     <ClInclude Include="include\MidsDecoder.h">
       <Filter>Source Files\audio\midi</Filter>
     </ClInclude>
-    <ClInclude Include="include\RtMidi.h">
-      <Filter>Source Files\audio\midi</Filter>
-    </ClInclude>
     <ClInclude Include="include\Application.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
@@ -440,9 +434,6 @@
     </ClInclude>
     <ClInclude Include="include\SleepUtils.h">
       <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\json.h">
-      <Filter>Source Files\io</Filter>
     </ClInclude>
     <ClInclude Include="include\FileUtils.h">
       <Filter>Source Files\utils</Filter>
