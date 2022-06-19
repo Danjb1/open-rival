@@ -12,6 +12,11 @@ Release/
 /Open-Rival/libs/
 *.dll
 
+# DO include custom RtMidi library project
+!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.sln
+!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj
+!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj.filters
+
 # User preferences
 *.user
 

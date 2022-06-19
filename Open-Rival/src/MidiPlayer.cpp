@@ -2,10 +2,11 @@
 
 #include "MidiPlayer.h"
 
+#include <RtMidi.h>
+
 #include <chrono>
 #include <stdexcept>
 
-#include "RtMidi.h"
 #include "SleepUtils.h"
 
 namespace Rival {

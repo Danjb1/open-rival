@@ -6,14 +6,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Formatting and Libraries
-
-- Improve handling of libary files
-    - Suppress warnings around includes rather than editing library files
-    - Move library headers (json, RtMidi) into a separate project or folder?
-    - Do not auto-format library subfolders
-    - Clearly annotate any changes to library files
-
 ### Data Loading
 
 - Central unit type registry: animations, UI image, etc.
