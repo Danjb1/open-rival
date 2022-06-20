@@ -2,7 +2,9 @@
 
 #include "EntityFactory.h"
 
-#include "AnimationComponent.h"
+#include <stdexcept>
+#include <string>
+
 #include "Animations.h"
 #include "BuildingPropsComponent.h"
 #include "OwnerComponent.h"
@@ -10,14 +12,16 @@
 #include "Resources.h"
 #include "SpriteComponent.h"
 #include "Tile.h"
+#include "UnitAnimationComponent.h"
 #include "UnitPropsComponent.h"
 #include "WalkerComponent.h"
 #include "WallComponent.h"
 
 namespace Rival {
 
-EntityFactory::EntityFactory(const TextureStore& textureStore)
-    : textureStore(textureStore)
+EntityFactory::EntityFactory(const DataStore& dataStore, const TextureStore& textureStore)
+    : dataStore(dataStore)
+    , textureStore(textureStore)
 {
 }
 
@@ -26,8 +30,15 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     // Create Entity
     std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, Unit::width, Unit::height);
 
-    // Add UnitPropsComponent
+    // Find the UnitDef
     const Unit::Type unitType = getUnitType(unitPlacement.type);
+    const UnitDef* unitDef = dataStore.getUnitDef(unitType);
+    if (!unitDef)
+    {
+        throw std::runtime_error("No unit definition found for " + std::to_string(unitPlacement.type));
+    }
+
+    // Add UnitPropsComponent
     unit->attach(std::make_shared<UnitPropsComponent>(unitType));
 
     // Add OwnerComponent
@@ -42,8 +53,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // Add AnimationComponent
-    const Animations::Animation anim = Animations::getUnitAnimation(unitType, Animations::UnitAnimationType::Standing);
-    unit->attach(std::make_shared<AnimationComponent>(anim));
+    unit->attach(std::make_shared<UnitAnimationComponent>(*unitDef));
 
     // Add WalkerComponent
     unit->attach(std::make_shared<WalkerComponent>());
@@ -81,10 +91,10 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     }
     else
     {
-        // Add AnimationComponent
-        const Animations::Animation anim =
-                Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
-        building->attach(std::make_shared<AnimationComponent>(anim));
+        // TODO: Add BuildingAnimationComponent
+        // const Animations::Animation anim =
+        //        Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
+        // building->attach(std::make_shared<AnimationComponent>(anim));
     }
 
     // Add Passability
@@ -130,9 +140,9 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
 
-    // Add AnimationComponent
-    const Animations::Animation anim = Animations::getObjectAnimation(objPlacement.type, objPlacement.variant);
-    obj->attach(std::make_shared<AnimationComponent>(anim));
+    // TODO: Add AnimationComponent
+    // const Animation anim = getObjectAnimation(objPlacement.type, objPlacement.variant);
+    // obj->attach(std::make_shared<AnimationComponent>(anim));
 
     return obj;
 }

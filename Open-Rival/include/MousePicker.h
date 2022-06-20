@@ -32,13 +32,12 @@ class MousePicker
 public:
     MousePicker(Camera& camera, Rect& viewport, World& world);
 
+    void mouseDown();
+    void mouseUp();
     void handleMouse();
 
     int getTileX() const;
-
     int getTileY() const;
-
-    int getEntityId() const;
 
 private:
     float getMouseInCameraX(float normalizedMouseX);
@@ -46,7 +45,7 @@ private:
 
     std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
 
-    void findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
+    std::weak_ptr<Entity> findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
     bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
 
@@ -68,9 +67,9 @@ private:
 
     int mapHeight;
 
-    std::pair<int, int> tile;
+    std::pair<int, int> tileUnderMouse;
 
-    int entityId;
+    std::weak_ptr<Entity> entityUnderMouse;
 
     World& world;
 };

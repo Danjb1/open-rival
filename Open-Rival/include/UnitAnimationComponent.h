@@ -2,26 +2,28 @@
 
 #include <memory>
 
-#include "Animations.h"
 #include "EntityComponent.h"
 #include "FacingComponent.h"
 #include "UnitPropsComponent.h"
 
 namespace Rival {
 
+class DataStore;
 class SpriteComponent;
+class UnitDef;
+struct Animation;
 
 /**
- * Component that controls the animation and facing of a SpriteComponent.
+ * Component that controls the animation and facing of a unit's SpriteComponent.
  */
-class AnimationComponent
+class UnitAnimationComponent
     : public EntityComponent
     , public UnitStateListener
     , public FacingListener
 {
 
 public:
-    AnimationComponent(const Animations::Animation animation);
+    UnitAnimationComponent(const UnitDef& unitDef);
 
     // Begin EntityComponent override
     virtual void onEntitySpawned(World* world) override;
@@ -37,7 +39,7 @@ public:
     void facingChanged(Facing newFacing) override;
     // End FacingListener override
 
-    void setAnimation(Animations::Animation newAnimation);
+    void setAnimation(const Animation* newAnimation);
 
     int getCurrentSpriteIndex() const;
 
@@ -62,10 +64,12 @@ private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<FacingComponent> weakFacingComponent;
 
-    Animations::Animation animation;
+    const UnitDef& unitDef;
 
-    int currentAnimFrame;
+    const Animation* animation;
 
-    int msPassedCurrentAnimFrame;
+    int currentAnimFrame = 0;
+
+    int msPassedCurrentAnimFrame = 0;
 };
 }  // namespace Rival

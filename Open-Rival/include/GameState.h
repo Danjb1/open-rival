@@ -28,8 +28,9 @@ public:
     // Begin State override
     void onLoad() override;
     void keyDown(const SDL_Keycode keyCode) override;
-    void mouseUp(const SDL_MouseButtonEvent evt) override;
-    void mouseWheelMoved(const SDL_MouseWheelEvent evt) override;
+    void mouseDown(const SDL_MouseButtonEvent event) override;
+    void mouseUp(const SDL_MouseButtonEvent event) override;
+    void mouseWheelMoved(const SDL_MouseWheelEvent event) override;
     void render(int delta) override;
     void update() override;
     // End State override

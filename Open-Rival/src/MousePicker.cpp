@@ -12,6 +12,7 @@
 #include "MathUtils.h"
 #include "MouseUtils.h"
 #include "Rect.h"
+#include "UnitPropsComponent.h"
 #include "World.h"
 
 namespace Rival {
@@ -22,16 +23,34 @@ MousePicker::MousePicker(Camera& camera, Rect& viewport, World& world)
     , world(world)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
-    , entityId(-1)
 {
+}
+
+void MousePicker::mouseDown()
+{
+    // TODO: Initiate drag-select
+}
+
+void MousePicker::mouseUp()
+{
+    const auto entity = entityUnderMouse.lock();
+    if (!entity)
+    {
+        return;
+    }
+
+    std::cout << "Clicked on Entity " << entity->getId() << "\n";
+
+    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+    if (unitProps)
+    {
+        Unit::Type unitType = unitProps->getUnitType();
+        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+    }
 }
 
 void MousePicker::handleMouse()
 {
-
-    // Reset selected entity
-    entityId = -1;
-
     // Get the mouse position relative to the window, in pixels
     int mouseX;
     int mouseY;
@@ -57,8 +76,8 @@ void MousePicker::handleMouse()
     float mouseCameraY = getMouseInCameraY(normalizedMouseY);
 
     // Figure out what's under the mouse
-    tile = getTilePos(mouseCameraX, mouseCameraY);
-    findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
+    tileUnderMouse = getTilePos(mouseCameraX, mouseCameraY);
+    entityUnderMouse = findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
 }
 
 float MousePicker::getMouseInCameraX(float normalizedMouseX)
@@ -196,23 +215,23 @@ std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCamer
     tileX = MathUtils::clampi(tileX, 0, mapWidth - 1);
     tileY = MathUtils::clampi(tileY, 0, mapHeight - 1);
 
-    return std::pair<int, int>(tileX, tileY);
+    return { tileX, tileY };
 }
 
-void MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
+std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
 {
-    const auto& entities = world.getEntities();
+    const auto& entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
         // We could optimise this by considering only Entities that were
         // rendered in the previous frame.
         if (isMouseInEntity(*e, mouseInViewportX, mouseInViewportY))
         {
-            entityId = e->getId();
-            std::cout << "Entity " << entityId << " is under cursor\n";
-            break;
+            return e;
         }
     }
+
+    return {};
 }
 
 bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY)
@@ -278,23 +297,20 @@ bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, in
     float unitY1 = unitY2 - (unitHitboxHeight * zoom);
 
     // Finally, see if the mouse is inside the hitbox
-    return mouseInViewportX >= unitX1 && mouseInViewportY >= unitY1 && mouseInViewportX < unitX2
+    return mouseInViewportX >= unitX1      //
+            && mouseInViewportY >= unitY1  //
+            && mouseInViewportX < unitX2   //
             && mouseInViewportY < unitY2;
 }
 
 int MousePicker::getTileX() const
 {
-    return tile.first;
+    return tileUnderMouse.first;
 }
 
 int MousePicker::getTileY() const
 {
-    return tile.second;
-}
-
-int MousePicker::getEntityId() const
-{
-    return entityId;
+    return tileUnderMouse.second;
 }
 
 }  // namespace Rival

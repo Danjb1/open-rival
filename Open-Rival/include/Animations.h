@@ -6,7 +6,7 @@
 #include "Building.h"
 #include "Unit.h"
 
-namespace Rival { namespace Animations {
+namespace Rival {
 
 enum class UnitAnimationType : std::uint8_t
 {
@@ -35,94 +35,9 @@ using UnitAnimationPair = std::pair<Unit::Type, UnitAnimationType>;
 using BuildingAnimationPair = std::pair<Building::Type, BuildingAnimationType>;
 using ObjectVariantPair = std::pair<std::uint8_t, std::uint8_t>;
 
-/**
- * Unit animation definitions.
+/*
+ * Building animation definitions:
  *
- * Providing this data just for Facing::South is sufficient.
- */
-static const std::map<UnitAnimationPair, const Animation> unitAnimationLookup = {
-    { { Unit::Type::Peasant, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Peasant, UnitAnimationType::HoldingBag }, { 8, 8, 60 } },
-    { { Unit::Type::Peasant, UnitAnimationType::Moving }, { 16, 21, 60 } },
-    { { Unit::Type::Peasant, UnitAnimationType::MovingWithBag }, { 64, 69, 60 } },
-    { { Unit::Type::Peasant, UnitAnimationType::Attacking }, { 112, 118, 60 } },
-    { { Unit::Type::Peasant, UnitAnimationType::Dying }, { 16, 21, 60 } },
-
-    { { Unit::Type::Bowman, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Bowman, UnitAnimationType::Moving }, { 8, 15, 60 } },
-    { { Unit::Type::Bowman, UnitAnimationType::Attacking }, { 72, 80, 60 } },
-
-    { { Unit::Type::LightCavalry, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Knight, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Knight, UnitAnimationType::Moving }, { 8, 15, 60 } },
-    { { Unit::Type::Knight, UnitAnimationType::Attacking }, { 72, 79, 60 } },
-
-    { { Unit::Type::FireMaster, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::FireMaster, UnitAnimationType::Moving }, { 8, 13, 60 } },
-    { { Unit::Type::FireMaster, UnitAnimationType::Attacking }, { 55, 58, 60 } },
-
-    { { Unit::Type::Thief, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Ballista, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Ballista, UnitAnimationType::Moving }, { 0, 2, 60 } },
-    { { Unit::Type::Ballista, UnitAnimationType::Attacking }, { 24, 25, 60 } },
-
-    { { Unit::Type::ChariotOfWar, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Wizard, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Wizard, UnitAnimationType::Moving }, { 8, 13, 60 } },
-    { { Unit::Type::Wizard, UnitAnimationType::Attacking }, { 56, 58, 60 } },
-
-    { { Unit::Type::Priest, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::SeaBarge, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Battleship, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::PegasRider, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Zeppelin, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Serf, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::RockThrower, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::HordeRider, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Warlord, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::GnomeBoomer, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Rogue, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Catapult, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::StormTrooper, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::PriestOfDoom, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Necromancer, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::LandingCraft, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::TrollGalley, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Warbat, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Balloon, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Yeoman, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Archer, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Druid, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Centaur, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::DwarfMiner, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Scout, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Bombard, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Arquebusier, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Mage, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Enchanter, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Bark, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Warship, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::SkyRider, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::MagicChopper, UnitAnimationType::Standing }, { 0, 0, 60 } },
-
-    { { Unit::Type::Devil, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Dragon, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Golem, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Gryphon, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Hydra, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::SeaMonster, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Skeleton, UnitAnimationType::Standing }, { 0, 0, 60 } },
-    { { Unit::Type::Snake, UnitAnimationType::Standing }, { 0, 0, 60 } }
-};
-
-/**
- * Building animation definitions.
- */
 static const std::map<BuildingAnimationPair, const Animation> buildingAnimationLookup = {
     // Elf
     { { Building::Type::ElvenKeep, BuildingAnimationType::Constructing }, { 0, 1, 60 } },
@@ -196,11 +111,12 @@ static const std::map<BuildingAnimationPair, const Animation> buildingAnimationL
     { { Building::Type::WatchTower, BuildingAnimationType::Constructing }, { 39, 40, 60 } },
     { { Building::Type::WatchTower, BuildingAnimationType::Built }, { 41, 41, 60 } }
 };
+*/
 
-/**
- * Object animation definitions.
- */
-static const std::map<ObjectVariantPair, const Animation> objectAnimationLookup = {
+/*
+ * Object animation definitions:
+ *
+ static const std::map<ObjectVariantPair, const Animation> objectAnimationLookup = {
     // Trees
     { { std::uint8_t(0x03), std::uint8_t(0) }, { 0, 5, 60 } },
     { { std::uint8_t(0x03), std::uint8_t(1) }, { 6, 11, 60 } },
@@ -229,11 +145,6 @@ static const std::map<ObjectVariantPair, const Animation> objectAnimationLookup 
     { { std::uint8_t(0xAF), std::uint8_t(6) }, { 12, 12, 60 } },  // Stone pillar
     { { std::uint8_t(0xAF), std::uint8_t(7) }, { 13, 13, 60 } },  // Beige rock
 };
+*/
 
-Animation getUnitAnimation(Unit::Type unitType, UnitAnimationType animType);
-
-Animation getBuildingAnimation(Building::Type buildingType, BuildingAnimationType animType);
-
-Animation getObjectAnimation(std::uint8_t type, std::uint8_t variant);
-
-}}  // namespace Rival::Animations
+}  // namespace Rival

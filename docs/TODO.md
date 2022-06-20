@@ -6,11 +6,19 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Data Loading
+### Mouse Handling
 
-- Central unit type registry: animations, UI image, etc.
-    - Data is being loaded from json but should be deserialised into a more useable object
-    - Hardcoded animations should be removed
+- Mouse picking seems slightly off
+    - Doesn't take unit movement into account?
+    - Add option to render hitboxes for debugging
+- Play sounds when selecting units (VoiceComponent?)
+- Only allow selecting units belonging to the current player
+- Show unit name in HUD
+- Clicking on an empty tile dispatches a MoveUnitAction
+- Show a custom cursor when the mouse is over a unit
+- Tidy up UnitDef::fromJson
+- Catch exceptions when parsing unit definitions:
+    [json.exception.out_of_range.403] key 'bad_key' not found
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -145,7 +153,6 @@
 
 ### Sound
 
-- Play sounds when selecting units
 - Play sounds when instructing units to move
 
 ### Music
@@ -320,8 +327,10 @@
 
 ### Refactoring
 
+- Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?
+    - Should Resources always be `const` (e.g. when using `app.getResources()`)?
 - Add "DEBUG" macro variable that performs additional checks if set
     - Ensure `programId` is non-zero when using a shader
 - Sort source files into subfolders?
