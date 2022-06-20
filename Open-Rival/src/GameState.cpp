@@ -131,13 +131,21 @@ void GameState::keyDown(const SDL_Keycode keyCode)
     }
 }
 
-#include <cstdlib>  // TMP (for rand)
+void GameState::mouseDown(const SDL_MouseButtonEvent)
+{
+    mousePicker.mouseDown();
+}
+
 void GameState::mouseUp(const SDL_MouseButtonEvent)
 {
+    /*
     // TMP: play a random sound!
     int soundId = std::rand() % 369;
     const WaveFile& waveFile = res.getSound(soundId);
     app.getAudioSystem().playSound(SoundSource(waveFile));
+    */
+
+    mousePicker.mouseUp();
 }
 
 void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)

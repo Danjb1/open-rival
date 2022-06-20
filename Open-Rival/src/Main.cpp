@@ -86,11 +86,6 @@ void initAL()
     AudioUtils::initAL();
 }
 
-json readUnitData()
-{
-    return FileUtils::readJsonFile(Resources::dataDir + "units.json");
-}
-
 void setWindowIcon(Window& window)
 {
     std::string iconFilename = Resources::txDir + "icon.png";
@@ -134,16 +129,14 @@ int main()
         initGLEW();
         initGL();
 
-        // Read game data
-        json unitData = readUnitData();
-
         // Create our Application
         Application app(*window, cfg);
 
         // Load some scenario
         ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
-        EntityFactory entityFactory(app.getResources());
+        Resources& res = app.getResources();
+        EntityFactory entityFactory(res, res);
         std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
         // Create our initial state

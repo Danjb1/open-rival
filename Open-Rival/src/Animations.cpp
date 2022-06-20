@@ -2,21 +2,8 @@
 
 #include "Animations.h"
 
-namespace Rival { namespace Animations {
+namespace Rival {
 
-Animation getUnitAnimation(Unit::Type unitType, UnitAnimationType animType)
-{
-    return unitAnimationLookup.at({ unitType, animType });
+// Unused
+
 }
-
-Animation getBuildingAnimation(Building::Type buildingType, BuildingAnimationType animType)
-{
-    return buildingAnimationLookup.at({ buildingType, animType });
-}
-
-Animation getObjectAnimation(std::uint8_t type, std::uint8_t variant)
-{
-    return objectAnimationLookup.at({ type, variant });
-}
-
-}}  // namespace Rival::Animations

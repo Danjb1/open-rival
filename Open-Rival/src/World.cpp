@@ -91,46 +91,46 @@ const EntityList World::getEntities() const
 
 Entity* World::getMutableEntity(int id) const
 {
-    auto const findResult = entities.find(id);
-    if (findResult == entities.end())
+    auto const iter = entities.find(id);
+    if (iter == entities.cend())
     {
         return nullptr;
     }
-    return static_cast<Entity*>((findResult->second).get());
+    return (iter->second).get();
 }
 
 const Entity* World::getEntity(int id) const
 {
-    auto const findResult = entities.find(id);
-    if (findResult == entities.end())
+    auto const iter = entities.find(id);
+    if (iter == entities.cend())
     {
         return nullptr;
     }
-    return static_cast<Entity*>((findResult->second).get());
+    return (iter->second).get();
 }
 
 std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
 {
-    auto const findResult = entities.find(id);
-    return findResult == entities.end() ? std::shared_ptr<Entity>() : findResult->second;
+    auto const iter = entities.find(id);
+    return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::shared_ptr<const Entity> World::getEntityShared(int id) const
 {
-    auto const findResult = entities.find(id);
-    return findResult == entities.end() ? std::shared_ptr<Entity>() : findResult->second;
+    auto const iter = entities.find(id);
+    return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
 {
-    auto const findResult = entities.find(id);
-    return findResult == entities.end() ? std::weak_ptr<Entity>() : findResult->second;
+    auto const iter = entities.find(id);
+    return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<const Entity> World::getEntityWeak(int id) const
 {
-    auto const findResult = entities.find(id);
-    return findResult == entities.end() ? std::weak_ptr<Entity>() : findResult->second;
+    auto const iter = entities.find(id);
+    return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
 void World::setPassability(const MapNode& pos, TilePassability passability)

@@ -1,35 +1,31 @@
 #include "pch.h"
 
-#include "AnimationComponent.h"
+#include "UnitAnimationComponent.h"
 
 #include <stdexcept>
 
+#include "Animations.h"
 #include "Entity.h"
+#include "Resources.h"
 #include "SpriteComponent.h"
 #include "TimerUtils.h"
 #include "Unit.h"
+#include "UnitDef.h"
 #include "World.h"
 
 namespace Rival {
 
-const std::string AnimationComponent::key = "animation";
+const std::string UnitAnimationComponent::key = "animation";
 
-AnimationComponent::AnimationComponent(const Animations::Animation animation)
+UnitAnimationComponent::UnitAnimationComponent(const UnitDef& unitDef)
     : EntityComponent(key)
-    , animation(animation)
-    , currentAnimFrame(0)
-    , msPassedCurrentAnimFrame(0)
+    , unitDef(unitDef)
+    , animation(nullptr)
 {
 }
 
-void AnimationComponent::onEntitySpawned(World*)
+void UnitAnimationComponent::onEntitySpawned(World*)
 {
-    weakUnitPropsComponent = entity->getComponentWeak<UnitPropsComponent>(UnitPropsComponent::key);
-    if (auto unitPropsComponent = weakUnitPropsComponent.lock())
-    {
-        unitPropsComponent->addStateListener(this);
-    }
-
     weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 
     weakFacingComponent = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
@@ -38,10 +34,17 @@ void AnimationComponent::onEntitySpawned(World*)
         facingComponent->setListener(this);
     }
 
-    setAnimation(animation);
+    weakUnitPropsComponent = entity->getComponentWeak<UnitPropsComponent>(UnitPropsComponent::key);
+    if (auto unitPropsComponent = weakUnitPropsComponent.lock())
+    {
+        unitPropsComponent->addStateListener(this);
+
+        // Determine animation based on initial state
+        onUnitStateChanged(unitPropsComponent->getState());
+    }
 }
 
-void AnimationComponent::onDelete()
+void UnitAnimationComponent::onDelete()
 {
     if (auto facingComponent = weakFacingComponent.lock())
     {
@@ -49,8 +52,13 @@ void AnimationComponent::onDelete()
     }
 }
 
-void AnimationComponent::update()
+void UnitAnimationComponent::update()
 {
+    if (!animation)
+    {
+        return;
+    }
+
     int numAnimFrames = getNumAnimFrames();
 
     if (numAnimFrames == 1)
@@ -68,7 +76,7 @@ void AnimationComponent::update()
     }
 }
 
-void AnimationComponent::onUnitStateChanged(const UnitState newState)
+void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
 {
     auto unitPropsComponent = weakUnitPropsComponent.lock();
     if (!unitPropsComponent)
@@ -78,36 +86,34 @@ void AnimationComponent::onUnitStateChanged(const UnitState newState)
 
     if (newState == UnitState::Idle)
     {
-        setAnimation(Animations::getUnitAnimation(
-                unitPropsComponent->getUnitType(), Animations::UnitAnimationType::Standing));
+        setAnimation(unitDef.getAnimation(UnitAnimationType::Standing));
     }
     else if (newState == UnitState::Moving)
     {
         // TODO: Peasants may need to play the MovingWithBag animation
-        setAnimation(
-                Animations::getUnitAnimation(unitPropsComponent->getUnitType(), Animations::UnitAnimationType::Moving));
+        setAnimation(unitDef.getAnimation(UnitAnimationType::Moving));
     }
 }
 
-void AnimationComponent::facingChanged(Facing)
+void UnitAnimationComponent::facingChanged(Facing)
 {
     refreshSpriteComponent();
 }
 
-void AnimationComponent::setAnimation(Animations::Animation newAnimation)
+void UnitAnimationComponent::setAnimation(const Animation* newAnimation)
 {
     animation = newAnimation;
     msPassedCurrentAnimFrame = 0;
     setCurrentAnimFrame(0);
 }
 
-void AnimationComponent::setCurrentAnimFrame(int newAnimFrame)
+void UnitAnimationComponent::setCurrentAnimFrame(int newAnimFrame)
 {
     currentAnimFrame = newAnimFrame;
     refreshSpriteComponent();
 }
 
-void AnimationComponent::refreshSpriteComponent() const
+void UnitAnimationComponent::refreshSpriteComponent() const
 {
     auto spriteComponent = weakSpriteComponent.lock();
     if (!spriteComponent)
@@ -120,30 +126,45 @@ void AnimationComponent::refreshSpriteComponent() const
     spriteComponent->setTxIndex(getCurrentSpriteIndex());
 }
 
-void AnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
+void UnitAnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
 {
     int newAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
     setCurrentAnimFrame(newAnimFrame);
     msPassedCurrentAnimFrame -= msPerAnimFrame;
 }
 
-int AnimationComponent::getCurrentSpriteIndex() const
+int UnitAnimationComponent::getCurrentSpriteIndex() const
 {
-    return animation.startIndex + getFacingOffset() + currentAnimFrame;
+    if (!animation)
+    {
+        return 0;
+    }
+
+    return animation->startIndex + getFacingOffset() + currentAnimFrame;
 }
 
-int AnimationComponent::getNumAnimFrames() const
+int UnitAnimationComponent::getNumAnimFrames() const
 {
-    return animation.endIndex - animation.startIndex + 1;
+    if (!animation)
+    {
+        return 0;
+    }
+
+    return animation->endIndex - animation->startIndex + 1;
 }
 
-int AnimationComponent::getMsPerAnimFrame() const
+int UnitAnimationComponent::getMsPerAnimFrame() const
 {
+    if (!animation)
+    {
+        return 0;
+    }
+
     // TODO: This should vary based on a Unit's speed
-    return animation.msPerFrame;
+    return animation->msPerFrame;
 }
 
-int AnimationComponent::getFacingOffset() const
+int UnitAnimationComponent::getFacingOffset() const
 {
     auto facingComponent = weakFacingComponent.lock();
     if (!facingComponent)

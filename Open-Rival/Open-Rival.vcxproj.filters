@@ -145,7 +145,7 @@
     <ClCompile Include="src\BuildingPropsComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
-    <ClCompile Include="src\AnimationComponent.cpp">
+    <ClCompile Include="src\UnitAnimationComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
     <ClCompile Include="src\Animations.cpp">
@@ -255,6 +255,15 @@
     </ClCompile>
     <ClCompile Include="src\MovementComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VoiceComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UnitDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sounds.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,7 +378,7 @@
     <ClInclude Include="include\BuildingPropsComponent.h">
       <Filter>Source Files\entity-components</Filter>
     </ClInclude>
-    <ClInclude Include="include\AnimationComponent.h">
+    <ClInclude Include="include\UnitAnimationComponent.h">
       <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\Animations.h">
@@ -493,6 +502,15 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\SDLWrapper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VoiceComponent.h">
+      <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UnitDef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sounds.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

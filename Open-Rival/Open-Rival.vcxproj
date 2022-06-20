@@ -64,6 +64,9 @@
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\Sounds.cpp" />
+    <ClCompile Include="src\UnitDef.cpp" />
+    <ClCompile Include="src\VoiceComponent.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\ScenarioBuilder.cpp" />
     <ClCompile Include="src\ScenarioReader.cpp" />
@@ -83,7 +86,7 @@
     <ClCompile Include="src\TextureAtlas.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileRenderer.cpp" />
-    <ClCompile Include="src\AnimationComponent.cpp" />
+    <ClCompile Include="src\UnitAnimationComponent.cpp" />
     <ClCompile Include="src\EntityRenderer.cpp" />
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\UiRenderer.cpp" />
@@ -140,6 +143,9 @@
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\SDLWrapper.h" />
+    <ClInclude Include="include\Sounds.h" />
+    <ClInclude Include="include\UnitDef.h" />
+    <ClInclude Include="include\VoiceComponent.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\ScenarioBuilder.h" />
     <ClInclude Include="include\ScenarioData.h" />
@@ -163,7 +169,7 @@
     <ClInclude Include="include\TimerUtils.h" />
     <ClInclude Include="include\UiRenderer.h" />
     <ClInclude Include="include\Unit.h" />
-    <ClInclude Include="include\AnimationComponent.h" />
+    <ClInclude Include="include\UnitAnimationComponent.h" />
     <ClInclude Include="include\Animations.h" />
     <ClInclude Include="include\EntityRenderer.h" />
     <ClInclude Include="include\EntityFactory.h" />

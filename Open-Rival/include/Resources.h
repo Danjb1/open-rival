@@ -17,6 +17,7 @@
 #include "Texture.h"
 #include "TextureAtlas.h"
 #include "Unit.h"
+#include "UnitDef.h"
 #include "WaveFile.h"
 
 using json = nlohmann::json;
@@ -60,12 +61,22 @@ public:
 };
 
 /**
+ * Interface providing access to game data.
+ */
+class DataStore
+{
+public:
+    virtual const UnitDef* getUnitDef(Unit::Type unitType) const = 0;
+};
+
+/**
  * Class that holds all of the game's resources.
  */
 class Resources
     : public FontStore
     , public TextureStore
     , public AudioStore
+    , public DataStore
 {
 public:
     Resources(json& cfg);
@@ -78,25 +89,29 @@ public:
     Resources& operator=(Resources&& other) = delete;
 
     // Begin TextureStore override
-    const Texture& getPalette() const;
-    const Spritesheet& getTileSpritesheet(bool wilderness) const;
-    const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const;
-    const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const;
-    const Spritesheet& getCommonObjectSpritesheet() const;
-    const Spritesheet& getObjectSpritesheet(bool wilderness) const;
-    const Spritesheet& getMapBorderSpritesheet() const;
-    const TextureAtlas& getUiTextureAtlas() const;
+    const Texture& getPalette() const override;
+    const Spritesheet& getTileSpritesheet(bool wilderness) const override;
+    const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const override;
+    const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const override;
+    const Spritesheet& getCommonObjectSpritesheet() const override;
+    const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
+    const Spritesheet& getMapBorderSpritesheet() const override;
+    const TextureAtlas& getUiTextureAtlas() const override;
     // End TextureStore override
 
     // Begin FontStore override
-    const Font& getFontSmall() const;
-    const Font& getFontRegular() const;
+    const Font& getFontSmall() const override;
+    const Font& getFontRegular() const override;
     // End FontStore override
 
     // Begin SoundStore override
-    const WaveFile& getSound(int id) const;
-    const MidiFile& getMidi(int id) const;
+    const WaveFile& getSound(int id) const override;
+    const MidiFile& getMidi(int id) const override;
     // End SoundStore override
+
+    // Begin DataStore override
+    const UnitDef* getUnitDef(Unit::Type unitType) const override;
+    // End DataStore override
 
 private:
     // Initialization
@@ -113,6 +128,7 @@ private:
     Spritesheet initMapBorderSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
+    std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
 
 public:
     // Directories
@@ -143,6 +159,7 @@ private:
     // MIDI constants
     static constexpr int midiStartIndex = 369;
 
+    // Config
     json& cfg;
 
     // Fonts
@@ -169,6 +186,9 @@ private:
 
     // MIDI Files
     std::vector<MidiFile> midis;
+
+    // Data
+    std::unordered_map<Unit::Type, UnitDef> unitDefs;
 };
 
 }  // namespace Rival

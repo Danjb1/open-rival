@@ -198,12 +198,12 @@ public:
     template <class T>
     T* getComponent(const std::string key)
     {
-        auto findResult = components.find(key);
-        if (findResult == components.end())
+        auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return nullptr;
         }
-        return static_cast<T*>((findResult->second).get());
+        return static_cast<T*>((iter->second).get());
     }
 
     /**
@@ -216,12 +216,12 @@ public:
     template <class T>
     const T* getComponent(const std::string key) const
     {
-        const auto findResult = components.find(key);
-        if (findResult == components.end())
+        const auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return nullptr;
         }
-        return static_cast<T*>((findResult->second).get());
+        return static_cast<T*>((iter->second).get());
     }
 
     /**
@@ -235,12 +235,12 @@ public:
     template <class T>
     std::shared_ptr<T> getComponentShared(const std::string key)
     {
-        auto findResult = components.find(key);
-        if (findResult == components.end())
+        auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return std::shared_ptr<T>();
         }
-        return std::dynamic_pointer_cast<T>(findResult->second);
+        return std::dynamic_pointer_cast<T>(iter->second);
     }
 
     /**
@@ -254,12 +254,12 @@ public:
     template <class T>
     std::shared_ptr<const T> getComponentShared(const std::string key) const
     {
-        const auto findResult = components.find(key);
-        if (findResult == components.end())
+        const auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return std::shared_ptr<T>();
         }
-        return std::dynamic_pointer_cast<const T>(findResult->second);
+        return std::dynamic_pointer_cast<const T>(iter->second);
     }
 
     /**
@@ -270,12 +270,12 @@ public:
     template <class T>
     std::weak_ptr<T> getComponentWeak(const std::string key)
     {
-        auto findResult = components.find(key);
-        if (findResult == components.end())
+        auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return std::weak_ptr<T>();
         }
-        return std::dynamic_pointer_cast<T>(findResult->second);
+        return std::dynamic_pointer_cast<T>(iter->second);
     }
 
     /**
@@ -286,12 +286,12 @@ public:
     template <class T>
     std::weak_ptr<const T> getComponentWeak(const std::string key) const
     {
-        const auto findResult = components.find(key);
-        if (findResult == components.end())
+        const auto iter = components.find(key);
+        if (iter == components.cend())
         {
             return std::weak_ptr<T>();
         }
-        return std::dynamic_pointer_cast<const T>(findResult->second);
+        return std::dynamic_pointer_cast<const T>(iter->second);
     }
 
     /**

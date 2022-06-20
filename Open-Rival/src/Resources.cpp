@@ -2,6 +2,9 @@
 
 #include "Resources.h"
 
+#include <stdexcept>
+#include <string>
+
 #include "ConfigUtils.h"
 #include "FileUtils.h"
 #include "MidsDecoder.h"
@@ -34,6 +37,7 @@ Resources::Resources(json& cfg)
     , mapBorderSpritesheet(initMapBorderSpritesheet())
     , sounds(initSounds())
     , midis(initMidis())
+    , unitDefs(initUnitDefs())
 {
 }
 
@@ -320,6 +324,29 @@ std::vector<MidiFile> Resources::initMidis()
     return midisRead;
 }
 
+std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
+{
+    json rawData = FileUtils::readJsonFile(Resources::dataDir + "units.json");
+    json unitList = rawData["units"];
+
+    std::unordered_map<Unit::Type, UnitDef> allUnitDefs;
+    int nextUnitType = 0;
+
+    for (const auto& rawUnitDef : unitList)
+    {
+        if (nextUnitType < 0 || nextUnitType > Unit::lastUnitType)
+        {
+            throw std::runtime_error("Trying to parse invalid unit type: " + std::to_string(nextUnitType));
+        }
+
+        Unit::Type unitType = static_cast<Unit::Type>(nextUnitType);
+        allUnitDefs.insert({ unitType, UnitDef::fromJson(rawUnitDef) });
+        ++nextUnitType;
+    }
+
+    return allUnitDefs;
+}
+
 const Font& Resources::getFontSmall() const
 {
     return fontSmall;
@@ -378,6 +405,12 @@ const WaveFile& Resources::getSound(int id) const
 const MidiFile& Resources::getMidi(int id) const
 {
     return midis.at(id);
+}
+
+const UnitDef* Resources::getUnitDef(Unit::Type unitType) const
+{
+    auto iter = unitDefs.find(unitType);
+    return iter == unitDefs.cend() ? nullptr : &iter->second;
 }
 
 }  // namespace Rival
