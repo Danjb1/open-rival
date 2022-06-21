@@ -138,13 +138,6 @@ void GameState::mouseDown(const SDL_MouseButtonEvent)
 
 void GameState::mouseUp(const SDL_MouseButtonEvent)
 {
-    /*
-    // TMP: play a random sound!
-    int soundId = std::rand() % 369;
-    const WaveFile& waveFile = res.getSound(soundId);
-    app.getAudioSystem().playSound(SoundSource(waveFile));
-    */
-
     mousePicker.mouseUp();
 }
 

@@ -8,7 +8,6 @@
 
 namespace Rival {
 
-class DataStore;
 class SpriteComponent;
 class UnitDef;
 struct Animation;
@@ -72,4 +71,5 @@ private:
 
     int msPassedCurrentAnimFrame = 0;
 };
+
 }  // namespace Rival

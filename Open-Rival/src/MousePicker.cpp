@@ -13,6 +13,7 @@
 #include "MouseUtils.h"
 #include "Rect.h"
 #include "UnitPropsComponent.h"
+#include "VoiceComponent.h"
 #include "World.h"
 
 namespace Rival {
@@ -40,6 +41,12 @@ void MousePicker::mouseUp()
     }
 
     std::cout << "Clicked on Entity " << entity->getId() << "\n";
+
+    VoiceComponent* voice = entity->getComponent<VoiceComponent>(VoiceComponent::key);
+    if (voice)
+    {
+        voice->playSound(UnitSoundType::Select);
+    }
 
     UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
     if (unitProps)
