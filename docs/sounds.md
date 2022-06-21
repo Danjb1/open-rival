@@ -1,337 +1,347 @@
 # Sounds
 
-> Sounds are now indexed from zero, so subtract 1 from each of these values.
-
 ## Buildings
 
- - **001:** Human - Castle
- - **002:** Human - Gold Mill
- - **003:** Human - Archery Range
- - **004:** Human - Armoury
- - **005:** Human - Barracks
- - **006:** Human - Holy Stables
- - **007:** Human - Fire Guild
- - **008:** Human - Temple
- - **009:** Human - Mage Tower
- - **010:** Human - Shipyard
- - **011:** Human - Watch Tower
- - **012:** Human - Wall
- - **013:** Greenskin - Fortress
- - **014:** Greenskin - Hoard Keep
- - **015:** Greenskin - Fort
- - **016:** Greenskin - Blacksmith
- - **017:** Greenskin - Battle Quarters
- - **018:** Greenskin - Black Nest
- - **019:** Greenskin - Weird Workshop
- - **020:** Greenskin - Unholy Chapel
- - **021:** Greenskin - Altar of Doom
- - **022:** Greenskin - Docks
- - **023:** Greenskin - Guard  Tower
- - **024:** Greenskin - Greenskin Wall
- - **025:** Elf - Elven Keep
- - **026:** Elf - Treasury
- - **027:** Elf - Combat Camp
- - **028:** Elf - Arsenal
- - **029:** Elf - Duel Range
- - **030:** Elf - Holy Nest
- - **031:** Elf - Miner Guildhall
- - **032:** Elf - Council of Runes
- - **033:** Elf - Abbey Tower
- - **034:** Elf - Harbour
- - **035:** Elf - Warning Tower
- - **036:** Elf - Tree Wall
+ - **000:** Human - Castle
+ - **001:** Human - Gold Mill
+ - **002:** Human - Archery Range
+ - **003:** Human - Armoury
+ - **004:** Human - Barracks
+ - **005:** Human - Holy Stables
+ - **006:** Human - Fire Guild
+ - **007:** Human - Temple
+ - **008:** Human - Mage Tower
+ - **009:** Human - Shipyard
+ - **010:** Human - Watch Tower
+ - **011:** Human - Wall
+ - **012:** Greenskin - Fortress
+ - **013:** Greenskin - Hoard Keep
+ - **014:** Greenskin - Fort
+ - **015:** Greenskin - Blacksmith
+ - **016:** Greenskin - Battle Quarters
+ - **017:** Greenskin - Black Nest
+ - **018:** Greenskin - Weird Workshop
+ - **019:** Greenskin - Unholy Chapel
+ - **020:** Greenskin - Altar of Doom
+ - **021:** Greenskin - Docks
+ - **022:** Greenskin - Guard  Tower
+ - **023:** Greenskin - Greenskin Wall
+ - **024:** Elf - Elven Keep
+ - **025:** Elf - Treasury
+ - **026:** Elf - Combat Camp
+ - **027:** Elf - Arsenal
+ - **028:** Elf - Duel Range
+ - **039:** Elf - Holy Nest
+ - **030:** Elf - Miner Guildhall
+ - **031:** Elf - Council of Runes
+ - **032:** Elf - Abbey Tower
+ - **033:** Elf - Harbour
+ - **034:** Elf - Warning Tower
+ - **035:** Elf - Tree Wall
 
 ## Voices
 
- - **037:** Human - Ship Sinking
- - **038:** Human - Death
- - **039:** Human - Ship Sinking (duplicate)
- - **040:** Human - Units Under Threat
- - **041:** Human - Buildings Under Threat
- - **042:** Human - Peasant 1
- - **043:** Human - Peasant 2
- - **044:** Human - Peasant 3
- - **045:** Human - Peasant 4
- - **046:** Human - Peasant 5
- - **047:** Human - Peasant 6
- - **048:** Human - Peasant 2 (duplicate)
- - **049:** Human - Bowman 1
- - **050:** Human - Bowman 2
- - **051:** Human - Bowman 3
- - **052:** Human - Bowman 4
- - **053:** Human - Bowman 5
- - **054:** Human - Bowman 6
- - **055:** Human - Light Cavalry 1
- - **056:** Human - Light Cavalry 2
- - **057:** Human - Light Cavalry 3
- - **058:** Human - Light Cavalry 4
- - **059:** Human - Light Cavalry 5
- - **060:** Human - Light Cavalry 6
- - **061:** Human - Knight 1
- - **062:** Human - Knight 2
- - **063:** Human - Knight 3
- - **064:** Human - Knight 4
- - **065:** Human - Knight 5
- - **066:** Human - Knight 6
- - **067:** Human - Fire Master 1
- - **068:** Human - Fire Master 2
- - **069:** Human - Fire Master 3
- - **070:** Human - Fire Master 4
- - **071:** Human - Fire Master 5
- - **072:** Human - Fire Master 6
- - **073:** Human - Thief 1
- - **074:** Human - Thief 2
- - **075:** Human - Thief 3
- - **076:** Human - Thief 4
- - **077:** Human - Thief 5
- - **078:** Human - Thief 6
- - **079:** Human - Ballista 1
- - **080:** Human - Ballista 2
- - **081:** Human - Ballista 3
- - **082:** Human - Ballista 4
- - **083:** Human - Ballista 5
- - **084:** Human - Ballista 6
- - **085:** Human - Chariot of War 1
- - **086:** Human - Chariot of War 2
- - **087:** Human - Chariot of War 3
- - **088:** Human - Chariot of War 4
- - **089:** Human - Chariot of War 5
- - **090:** Human - Chariot of War 6
- - **091:** Human - Wizard 1
- - **092:** Human - Wizard 2
- - **093:** Human - Wizard 3
- - **094:** Human - Wizard 4
- - **095:** Human - Wizard 5
- - **096:** Human - Wizard 6
- - **097:** Human - Priest 1
- - **098:** Human - Priest 2
- - **099:** Human - Priest 3
- - **100:** Human - Priest 4
- - **101:** Human - Priest 5
- - **102:** Human - Priest 6
- - **103:** Human - Sea Barge 1
- - **104:** Human - Sea Barge 2
- - **105:** Human - Sea Barge 3
- - **106:** Human - Sea Barge 4
- - **107:** Human - Sea Barge 5
- - **108:** Human - Sea Barge 6
- - **109:** Human - Battleship 1
- - **110:** Human - Battleship 2
- - **111:** Human - Battleship 3
- - **112:** Human - Battleship 4
- - **113:** Human - Battleship 5
- - **114:** Human - Battleship 6
- - **115:** Human - Pegas Rider 1
- - **116:** Human - Pegas Rider 2
- - **117:** Human - Pegas Rider 3
- - **118:** Human - Pegas Rider 4
- - **119:** Human - Pegas Rider 5
- - **120:** Human - Pegas Rider 6
- - **121:** Human - Zeppelin 1
- - **122:** Human - Zeppelin 2
- - **123:** Human - Zeppelin 3
- - **124:** Human - Zeppelin 4
- - **125:** Human - Zeppelin 5
- - **126:** Human - Zeppelin 6
- - **127:** Greenskin - Death
- - **128:** Greenskin - Ship Sinking
- - **129:** Greenskin - Units Under Threat
- - **130:** Greenskin - Buildings Under Threat
- - **131:** Greenskin - Serf 1
- - **132:** Greenskin - Serf 2
- - **133:** Greenskin - Serf 3
- - **134:** Greenskin - Serf 4
- - **135:** Greenskin - Serf 5
- - **136:** Greenskin - Serf 6
- - **137:** Greenskin - Serf 3 (duplicate)
- - **138:** Greenskin - Rock Thrower 1
- - **139:** Greenskin - Rock Thrower 2
- - **140:** Greenskin - Rock Thrower 3
- - **141:** Greenskin - Rock Thrower 4
- - **142:** Greenskin - Rock Thrower 5
- - **143:** Greenskin - Rock Thrower 6
- - **144:** Greenskin - Horde Rider 1
- - **145:** Greenskin - Horde Rider 2
- - **146:** Greenskin - Horde Rider 3
- - **147:** Greenskin - Horde Rider 4
- - **148:** Greenskin - Horde Rider 5
- - **149:** Greenskin - Horde Rider 6
- - **150:** Greenskin - Warlord 1
- - **151:** Greenskin - Warlord 2
- - **152:** Greenskin - Warlord 3
- - **153:** Greenskin - Warlord 4
- - **154:** Greenskin - Warlord 5
- - **155:** Greenskin - Warlord 6
- - **156:** Greenskin - Gnome Boomer 1
- - **157:** Greenskin - Gnome Boomer 2
- - **158:** Greenskin - Gnome Boomer 3
- - **159:** Greenskin - Gnome Boomer 4
- - **160:** Greenskin - Gnome Boomer 5
- - **161:** Greenskin - Gnome Boomer 6
- - **162:** Greenskin - Rogue 1
- - **163:** Greenskin - Rogue 2
- - **164:** Greenskin - Rogue 3
- - **165:** Greenskin - Rogue 4
- - **166:** Greenskin - Rogue 5
- - **167:** Greenskin - Rogue 6
- - **168:** Greenskin - Catapult 1
- - **169:** Greenskin - Catapult 2
- - **170:** Greenskin - Catapult 3
- - **171:** Greenskin - Catapult 4
- - **172:** Greenskin - Catapult 5
- - **173:** Greenskin - Catapult 6
- - **174:** Greenskin - Storm Trooper 1
- - **175:** Greenskin - Storm Trooper 2
- - **176:** Greenskin - Storm Trooper 3
- - **177:** Greenskin - Storm Trooper 4
- - **178:** Greenskin - Storm Trooper 5
- - **179:** Greenskin - Storm Trooper 6
- - **180:** Greenskin - Necromancer 1
- - **181:** Greenskin - Necromancer 2
- - **182:** Greenskin - Necromancer 3
- - **183:** Greenskin - Necromancer 4
- - **184:** Greenskin - Necromancer 5
- - **185:** Greenskin - Necromancer 6
- - **186:** Greenskin - Priest of Doom 1
- - **187:** Greenskin - Priest of Doom 2
- - **188:** Greenskin - Priest of Doom 3
- - **189:** Greenskin - Priest of Doom 4
- - **190:** Greenskin - Priest of Doom 5
- - **191:** Greenskin - Priest of Doom 6
- - **192:** Greenskin - Landing Craft 1
- - **193:** Greenskin - Landing Craft 2
- - **194:** Greenskin - Landing Craft 3
- - **195:** Greenskin - Landing Craft 4
- - **196:** Greenskin - Landing Craft 5
- - **197:** Greenskin - Landing Craft 6
- - **198:** Greenskin - Troll Galley 1
- - **199:** Greenskin - Troll Galley 2
- - **200:** Greenskin - Troll Galley 3
- - **201:** Greenskin - Troll Galley 4
- - **202:** Greenskin - Troll Galley 5
- - **203:** Greenskin - Troll Galley 6
- - **204:** Greenskin - Warbat 1
- - **205:** Greenskin - Warbat 2
- - **206:** Greenskin - Warbat 3
- - **207:** Greenskin - Warbat 4
- - **208:** Greenskin - Warbat 5
- - **209:** Greenskin - Warbat 6
- - **210:** Greenskin - Balloon 1
- - **211:** Greenskin - Balloon 2
- - **212:** Greenskin - Balloon 3
- - **213:** Greenskin - Balloon 4
- - **214:** Greenskin - Balloon 5
- - **215:** Greenskin - Balloon 6
- - **216:** Elf - Death
- - **217:** Elf - Ship Sinking
- - **218:** Elf - Units Under Threat
- - **219:** Elf - Buildings Under Threat
- - **220:** Elf - Yeoman 1
- - **221:** Elf - Yeoman 2
- - **222:** Elf - Yeoman 3
- - **223:** Elf - Yeoman 4
- - **224:** Elf - Yeoman 5
- - **225:** Elf - Yeoman 6
- - **226:** Elf - Yeoman 1+3?
- - **227:** Elf - Archer 1
- - **228:** Elf - Archer 2
- - **229:** Elf - Archer 3
- - **230:** Elf - Archer 4
- - **231:** Elf - Archer 5
- - **232:** Elf - Archer 6
- - **233:** Elf - Enchanter 1
- - **234:** Elf - Enchanter 2
- - **235:** Elf - Enchanter 3
- - **236:** Elf - Enchanter 4
- - **237:** Elf - Enchanter 5
- - **238:** Elf - Enchanter 6
- - **239:** Elf - Centaur 1
- - **240:** Elf - Centaur 2
- - **241:** Elf - Centaur 3
- - **242:** Elf - Centaur 4
- - **243:** Elf - Centaur 5
- - **244:** Elf - Centaur 6
- - **245:** Elf - Bombard 1
- - **246:** Elf - Bombard 2
- - **247:** Elf - Bombard 3
- - **248:** Elf - Bombard 4
- - **249:** Elf - Bombard 5
- - **250:** Elf - Bombard 6
- - **251:** Elf - Scout 1
- - **252:** Elf - Scout 2
- - **253:** Elf - Scout 3
- - **254:** Elf - Scout 4
- - **255:** Elf - Scout 5
- - **256:** Elf - Scout 6
- - **257:** Elf - Dwarf Miner 1
- - **258:** Elf - Dwarf Miner 2
- - **259:** Elf - Dwarf Miner 3
- - **260:** Elf - Dwarf Miner 4
- - **261:** Elf - Dwarf Miner 5
- - **262:** Elf - Dwarf Miner 6
- - **263:** Elf - Arquebusier 1
- - **264:** Elf - Arquebusier 2
- - **265:** Elf - Arquebusier 3
- - **266:** Elf - Arquebusier 4
- - **267:** Elf - Arquebusier 5
- - **268:** Elf - Arquebusier 6
- - **269:** Elf - Mage 1
- - **270:** Elf - Mage 2
- - **271:** Elf - Mage 3
- - **272:** Elf - Mage 4
- - **273:** Elf - Mage 5
- - **274:** Elf - Mage 6
- - **275:** Elf - Druid 1
- - **276:** Elf - Druid 2
- - **277:** Elf - Druid 3
- - **278:** Elf - Druid 4
- - **279:** Elf - Druid 5
- - **280:** Elf - Druid 6
- - **281:** Elf - Bark 1
- - **282:** Elf - Bark 2
- - **283:** Elf - Bark 3
- - **284:** Elf - Bark 4
- - **285:** Elf - Bark 5
- - **286:** Elf - Bark 6
- - **287:** Elf - Warship 1
- - **288:** Elf - Warship 2
- - **289:** Elf - Warship 3
- - **290:** Elf - Warship 4
- - **291:** Elf - Warship 5
- - **292:** Elf - Warship 6
- - **293:** Elf - Sky Rider 1
- - **294:** Elf - Sky Rider 2
- - **295:** Elf - Sky Rider 3
- - **296:** Elf - Sky Rider 4
- - **297:** Elf - Sky Rider 5
- - **298:** Elf - Sky Rider 6
- - **299:** Elf - Magic Chopper 1
- - **300:** Elf - Magic Chopper 2
- - **301:** Elf - Magic Chopper 3
- - **302:** Elf - Magic Chopper 4
- - **303:** Elf - Magic Chopper 5
- - **304:** Elf - Magic Chopper 6
+For units, the sounds seem to follow this format (offsets from the first sound):
+
+```
+0: Train
+1: Move
+2: Move
+3: Move
+4: Select
+5: Select
+```
+
+ - **036:** Human - Ship Sinking
+ - **037:** Human - Death
+ - **038:** Human - Ship Sinking (duplicate)
+ - **039:** Human - Units Under Threat
+ - **040:** Human - Buildings Under Threat
+ - **041:** Human - Peasant 1
+ - **042:** Human - Peasant 2
+ - **043:** Human - Peasant 3
+ - **044:** Human - Peasant 4
+ - **045:** Human - Peasant 5
+ - **046:** Human - Peasant 6
+ - **047:** Human - Peasant 2 (duplicate)
+ - **048:** Human - Bowman 1
+ - **049:** Human - Bowman 2
+ - **050:** Human - Bowman 3
+ - **051:** Human - Bowman 4
+ - **052:** Human - Bowman 5
+ - **053:** Human - Bowman 6
+ - **054:** Human - Light Cavalry 1
+ - **055:** Human - Light Cavalry 2
+ - **056:** Human - Light Cavalry 3
+ - **057:** Human - Light Cavalry 4
+ - **058:** Human - Light Cavalry 5
+ - **059:** Human - Light Cavalry 6
+ - **060:** Human - Knight 1
+ - **061:** Human - Knight 2
+ - **062:** Human - Knight 3
+ - **063:** Human - Knight 4
+ - **064:** Human - Knight 5
+ - **065:** Human - Knight 6
+ - **066:** Human - Fire Master 1
+ - **067:** Human - Fire Master 2
+ - **068:** Human - Fire Master 3
+ - **069:** Human - Fire Master 4
+ - **070:** Human - Fire Master 5
+ - **071:** Human - Fire Master 6
+ - **072:** Human - Thief 1
+ - **073:** Human - Thief 2
+ - **074:** Human - Thief 3
+ - **075:** Human - Thief 4
+ - **076:** Human - Thief 5
+ - **077:** Human - Thief 6
+ - **078:** Human - Ballista 1
+ - **079:** Human - Ballista 2
+ - **080:** Human - Ballista 3
+ - **081:** Human - Ballista 4
+ - **082:** Human - Ballista 5
+ - **083:** Human - Ballista 6
+ - **084:** Human - Chariot of War 1
+ - **085:** Human - Chariot of War 2
+ - **086:** Human - Chariot of War 3
+ - **087:** Human - Chariot of War 4
+ - **088:** Human - Chariot of War 5
+ - **089:** Human - Chariot of War 6
+ - **090:** Human - Wizard 1
+ - **091:** Human - Wizard 2
+ - **092:** Human - Wizard 3
+ - **093:** Human - Wizard 4
+ - **094:** Human - Wizard 5
+ - **095:** Human - Wizard 6
+ - **096:** Human - Priest 1
+ - **097:** Human - Priest 2
+ - **098:** Human - Priest 3
+ - **099:** Human - Priest 4
+ - **100:** Human - Priest 5
+ - **101:** Human - Priest 6
+ - **102:** Human - Sea Barge 1
+ - **103:** Human - Sea Barge 2
+ - **104:** Human - Sea Barge 3
+ - **105:** Human - Sea Barge 4
+ - **106:** Human - Sea Barge 5
+ - **107:** Human - Sea Barge 6
+ - **108:** Human - Battleship 1
+ - **109:** Human - Battleship 2
+ - **110:** Human - Battleship 3
+ - **111:** Human - Battleship 4
+ - **112:** Human - Battleship 5
+ - **113:** Human - Battleship 6
+ - **114:** Human - Pegas Rider 1
+ - **115:** Human - Pegas Rider 2
+ - **116:** Human - Pegas Rider 3
+ - **117:** Human - Pegas Rider 4
+ - **118:** Human - Pegas Rider 5
+ - **119:** Human - Pegas Rider 6
+ - **120:** Human - Zeppelin 1
+ - **121:** Human - Zeppelin 2
+ - **122:** Human - Zeppelin 3
+ - **123:** Human - Zeppelin 4
+ - **124:** Human - Zeppelin 5
+ - **125:** Human - Zeppelin 6
+ - **126:** Greenskin - Death
+ - **127:** Greenskin - Ship Sinking
+ - **128:** Greenskin - Units Under Threat
+ - **129:** Greenskin - Buildings Under Threat
+ - **130:** Greenskin - Serf 1
+ - **131:** Greenskin - Serf 2
+ - **132:** Greenskin - Serf 3
+ - **133:** Greenskin - Serf 4
+ - **134:** Greenskin - Serf 5
+ - **135:** Greenskin - Serf 6
+ - **136:** Greenskin - Serf 3 (duplicate)
+ - **137:** Greenskin - Rock Thrower 1
+ - **138:** Greenskin - Rock Thrower 2
+ - **139:** Greenskin - Rock Thrower 3
+ - **140:** Greenskin - Rock Thrower 4
+ - **141:** Greenskin - Rock Thrower 5
+ - **142:** Greenskin - Rock Thrower 6
+ - **143:** Greenskin - Horde Rider 1
+ - **144:** Greenskin - Horde Rider 2
+ - **145:** Greenskin - Horde Rider 3
+ - **146:** Greenskin - Horde Rider 4
+ - **147:** Greenskin - Horde Rider 5
+ - **148:** Greenskin - Horde Rider 6
+ - **149:** Greenskin - Warlord 1
+ - **150:** Greenskin - Warlord 2
+ - **151:** Greenskin - Warlord 3
+ - **152:** Greenskin - Warlord 4
+ - **153:** Greenskin - Warlord 5
+ - **154:** Greenskin - Warlord 6
+ - **155:** Greenskin - Gnome Boomer 1
+ - **156:** Greenskin - Gnome Boomer 2
+ - **157:** Greenskin - Gnome Boomer 3
+ - **158:** Greenskin - Gnome Boomer 4
+ - **159:** Greenskin - Gnome Boomer 5
+ - **160:** Greenskin - Gnome Boomer 6
+ - **161:** Greenskin - Rogue 1
+ - **162:** Greenskin - Rogue 2
+ - **163:** Greenskin - Rogue 3
+ - **164:** Greenskin - Rogue 4
+ - **165:** Greenskin - Rogue 5
+ - **166:** Greenskin - Rogue 6
+ - **167:** Greenskin - Catapult 1
+ - **168:** Greenskin - Catapult 2
+ - **169:** Greenskin - Catapult 3
+ - **170:** Greenskin - Catapult 4
+ - **171:** Greenskin - Catapult 5
+ - **172:** Greenskin - Catapult 6
+ - **173:** Greenskin - Storm Trooper 1
+ - **174:** Greenskin - Storm Trooper 2
+ - **175:** Greenskin - Storm Trooper 3
+ - **176:** Greenskin - Storm Trooper 4
+ - **177:** Greenskin - Storm Trooper 5
+ - **178:** Greenskin - Storm Trooper 6
+ - **179:** Greenskin - Necromancer 1
+ - **180:** Greenskin - Necromancer 2
+ - **181:** Greenskin - Necromancer 3
+ - **182:** Greenskin - Necromancer 4
+ - **183:** Greenskin - Necromancer 5
+ - **184:** Greenskin - Necromancer 6
+ - **185:** Greenskin - Priest of Doom 1
+ - **186:** Greenskin - Priest of Doom 2
+ - **187:** Greenskin - Priest of Doom 3
+ - **188:** Greenskin - Priest of Doom 4
+ - **189:** Greenskin - Priest of Doom 5
+ - **190:** Greenskin - Priest of Doom 6
+ - **191:** Greenskin - Landing Craft 1
+ - **192:** Greenskin - Landing Craft 2
+ - **193:** Greenskin - Landing Craft 3
+ - **194:** Greenskin - Landing Craft 4
+ - **195:** Greenskin - Landing Craft 5
+ - **196:** Greenskin - Landing Craft 6
+ - **197:** Greenskin - Troll Galley 1
+ - **198:** Greenskin - Troll Galley 2
+ - **199:** Greenskin - Troll Galley 3
+ - **200:** Greenskin - Troll Galley 4
+ - **201:** Greenskin - Troll Galley 5
+ - **202:** Greenskin - Troll Galley 6
+ - **203:** Greenskin - Warbat 1
+ - **204:** Greenskin - Warbat 2
+ - **205:** Greenskin - Warbat 3
+ - **206:** Greenskin - Warbat 4
+ - **207:** Greenskin - Warbat 5
+ - **208:** Greenskin - Warbat 6
+ - **209:** Greenskin - Balloon 1
+ - **210:** Greenskin - Balloon 2
+ - **211:** Greenskin - Balloon 3
+ - **212** Greenskin - Balloon 4
+ - **213:** Greenskin - Balloon 5
+ - **214:** Greenskin - Balloon 6
+ - **215:** Elf - Death
+ - **216:** Elf - Ship Sinking
+ - **217:** Elf - Units Under Threat
+ - **218:** Elf - Buildings Under Threat
+ - **219:** Elf - Yeoman 1
+ - **220:** Elf - Yeoman 2
+ - **221:** Elf - Yeoman 3
+ - **222:** Elf - Yeoman 4
+ - **223:** Elf - Yeoman 5
+ - **224:** Elf - Yeoman 6
+ - **225:** Elf - Yeoman 1+3?
+ - **226:** Elf - Archer 1
+ - **227:** Elf - Archer 2
+ - **228:** Elf - Archer 3
+ - **229:** Elf - Archer 4
+ - **230:** Elf - Archer 5
+ - **231:** Elf - Archer 6
+ - **232:** Elf - Enchanter 1
+ - **233:** Elf - Enchanter 2
+ - **234:** Elf - Enchanter 3
+ - **235:** Elf - Enchanter 4
+ - **236:** Elf - Enchanter 5
+ - **237:** Elf - Enchanter 6
+ - **238:** Elf - Centaur 1
+ - **239:** Elf - Centaur 2
+ - **240:** Elf - Centaur 3
+ - **241:** Elf - Centaur 4
+ - **242:** Elf - Centaur 5
+ - **243:** Elf - Centaur 6
+ - **244:** Elf - Bombard 1
+ - **245:** Elf - Bombard 2
+ - **246:** Elf - Bombard 3
+ - **247:** Elf - Bombard 4
+ - **248:** Elf - Bombard 5
+ - **249:** Elf - Bombard 6
+ - **250:** Elf - Scout 1
+ - **251:** Elf - Scout 2
+ - **252:** Elf - Scout 3
+ - **253:** Elf - Scout 4
+ - **254:** Elf - Scout 5
+ - **255:** Elf - Scout 6
+ - **256:** Elf - Dwarf Miner 1
+ - **257:** Elf - Dwarf Miner 2
+ - **258:** Elf - Dwarf Miner 3
+ - **259:** Elf - Dwarf Miner 4
+ - **260:** Elf - Dwarf Miner 5
+ - **261:** Elf - Dwarf Miner 6
+ - **262:** Elf - Arquebusier 1
+ - **263:** Elf - Arquebusier 2
+ - **264:** Elf - Arquebusier 3
+ - **265:** Elf - Arquebusier 4
+ - **266:** Elf - Arquebusier 5
+ - **267:** Elf - Arquebusier 6
+ - **268:** Elf - Mage 1
+ - **269:** Elf - Mage 2
+ - **270:** Elf - Mage 3
+ - **271:** Elf - Mage 4
+ - **272:** Elf - Mage 5
+ - **273:** Elf - Mage 6
+ - **274:** Elf - Druid 1
+ - **275:** Elf - Druid 2
+ - **276:** Elf - Druid 3
+ - **277:** Elf - Druid 4
+ - **278:** Elf - Druid 5
+ - **279:** Elf - Druid 6
+ - **280:** Elf - Bark 1
+ - **281:** Elf - Bark 2
+ - **282:** Elf - Bark 3
+ - **283:** Elf - Bark 4
+ - **284:** Elf - Bark 5
+ - **285:** Elf - Bark 6
+ - **286:** Elf - Warship 1
+ - **287:** Elf - Warship 2
+ - **288:** Elf - Warship 3
+ - **289:** Elf - Warship 4
+ - **290:** Elf - Warship 5
+ - **291:** Elf - Warship 6
+ - **292:** Elf - Sky Rider 1
+ - **293:** Elf - Sky Rider 2
+ - **294:** Elf - Sky Rider 3
+ - **295:** Elf - Sky Rider 4
+ - **296:** Elf - Sky Rider 5
+ - **297:** Elf - Sky Rider 6
+ - **298:** Elf - Magic Chopper 1
+ - **299:** Elf - Magic Chopper 2
+ - **300:** Elf - Magic Chopper 3
+ - **301:** Elf - Magic Chopper 4
+ - **302:** Elf - Magic Chopper 5
+ - **303:** Elf - Magic Chopper 6
 
 ## Effects
 
- - **305:** Roar?
- - **306:** Spell 1
- - **307:** Arrow 1
- - **308:** Arrow 2
- - **309:** Arrow 3
- - **310:** Click / Hit 1
- - **311:** Throw Flail
- - **312:** Hit 1
- - **313:** Click / Hit 1 (duplicate)
- - **314:** Click / Hit 2
- - **315:** Bing 1
- - **316:** Bing 2
- - **317:** Button Press
- - **318:** Trap?
- - **319:** Spell?
- - **320:** Ballista Fire?
- - **321:** Magic Hit
- - **322:** Forcefield
+ - **304:** Roar?
+ - **305:** Spell 1
+ - **306:** Arrow 1
+ - **307:** Arrow 2
+ - **308:** Arrow 3
+ - **309:** Click / Hit 1
+ - **310:** Throw Flail
+ - **311:** Hit 1
+ - **312:** Click / Hit 1 (duplicate)
+ - **313:** Click / Hit 2
+ - **314:** Bing 1
+ - **315:** Bing 2
+ - **316:** Button Press
+ - **317:** Trap?
+ - **318:** Spell?
+ - **319:** Ballista Fire?
+ - **320:** Magic Hit
+ - **321:** Forcefield
+ - **322:** Spell?
  - **323:** Spell?
  - **324:** Spell?
  - **325:** Spell?
@@ -344,38 +354,37 @@
  - **332:** Spell?
  - **333:** Spell?
  - **334:** Spell?
- - **335:** Spell?
- - **336:** Spell 1 (duplicate)
+ - **335:** Spell 1 (duplicate)
+ - **336:** Spell?
  - **337:** Spell?
- - **338:** Spell?
- - **339:** Alert
+ - **338:** Alert
+ - **339:** Spell?
  - **340:** Spell?
  - **341:** Spell?
- - **342:** Spell?
- - **343:** Mana Potion
- - **344:** Healing Potion
- - **345:** Spell?
- - **346:** Victory?
+ - **342:** Mana Potion
+ - **343:** Healing Potion
+ - **344:** Spell?
+ - **345:** Victory?
+ - **346:** Spell?
  - **347:** Spell?
  - **348:** Spell?
- - **349:** Spell?
- - **350:** Hit 2
- - **351:** Hit 3
- - **352:** Hit 4
- - **353:** Hit 5
- - **354:** Hit 6
- - **355:** Hit 7
- - **356:** Spell?
- - **357:** Building Construction
+ - **349:** Hit 2
+ - **350:** Hit 3
+ - **351:** Hit 4
+ - **352:** Hit 5
+ - **353:** Hit 6
+ - **354:** Hit 7
+ - **355:** Spell?
+ - **356:** Building Construction
+ - **357:** Building Destruction?
  - **358:** Building Destruction?
  - **359:** Building Destruction?
  - **360:** Building Destruction?
- - **361:** Building Destruction?
- - **362:** Beep
- - **363:** Explosion 1
- - **364:** Explosion 2
- - **365:** Woodcutting 1
- - **366:** Woodcutting 2
- - **367:** Woodcutting 3
- - **368:** Healing Potion (duplicate)
- - **369:** Button Press (duplicate)
+ - **361:** Beep
+ - **362:** Explosion 1
+ - **363:** Explosion 2
+ - **364:** Woodcutting 1
+ - **365:** Woodcutting 2
+ - **366:** Woodcutting 3
+ - **367:** Healing Potion (duplicate)
+ - **368:** Button Press (duplicate)

@@ -8,7 +8,7 @@
 
 ### Mouse Handling
 
-- Knight sounds are not configured in unit data!
+- Don't play another voice clip if the unit is already speaking
 - Mouse picking seems slightly off
     - Doesn't take unit movement into account?
     - Add option to render hitboxes for debugging
