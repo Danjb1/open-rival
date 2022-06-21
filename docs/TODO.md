@@ -8,10 +8,10 @@
 
 ### Mouse Handling
 
+- Knight sounds are not configured in unit data!
 - Mouse picking seems slightly off
     - Doesn't take unit movement into account?
     - Add option to render hitboxes for debugging
-- Play sounds when selecting units (VoiceComponent?)
 - Only allow selecting units belonging to the current player
 - Show unit name in HUD
 - Clicking on an empty tile dispatches a MoveUnitAction

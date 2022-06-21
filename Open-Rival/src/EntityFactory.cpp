@@ -14,14 +14,21 @@
 #include "Tile.h"
 #include "UnitAnimationComponent.h"
 #include "UnitPropsComponent.h"
+#include "VoiceComponent.h"
 #include "WalkerComponent.h"
 #include "WallComponent.h"
 
 namespace Rival {
 
-EntityFactory::EntityFactory(const DataStore& dataStore, const TextureStore& textureStore)
+EntityFactory::EntityFactory(
+        const DataStore& dataStore,
+        const TextureStore& textureStore,
+        const AudioStore& audioStore,
+        AudioSystem& audioSystem)
     : dataStore(dataStore)
     , textureStore(textureStore)
+    , audioStore(audioStore)
+    , audioSystem(audioSystem)
 {
 }
 
@@ -61,6 +68,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     // Add Passability
     // TODO: consider flying units separately
     unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+
+    // Add VoiceComponent
+    unit->attach(std::make_shared<VoiceComponent>(audioStore, audioSystem, *unitDef));
 
     return unit;
 }
