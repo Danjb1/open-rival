@@ -3,6 +3,7 @@
 #include <memory>
 #include <utility>
 
+#include "MapUtils.h"
 #include "RenderUtils.h"
 
 namespace Rival {
@@ -36,18 +37,20 @@ public:
     void mouseUp();
     void handleMouse();
 
-    int getTileX() const;
-    int getTileY() const;
+    MapNode getTilePos() const;
 
 private:
     float getMouseInCameraX(float normalizedMouseX);
     float getMouseInCameraY(float normalizedMouseY);
 
-    std::pair<int, int> getTilePos(float mouseWorldX, float mouseWorldY);
+    MapNode getTilePos(float mouseWorldX, float mouseWorldY);
 
     std::weak_ptr<Entity> findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
     bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
+
+    void entitySelected(std::shared_ptr<Entity> entity);
+    void tileSelected();
 
 private:
     // Offset of a Unit's hitbox, measured from the top-left corner of the
@@ -67,9 +70,10 @@ private:
 
     int mapHeight;
 
-    std::pair<int, int> tileUnderMouse;
+    MapNode tileUnderMouse;
 
-    std::weak_ptr<Entity> entityUnderMouse;
+    std::weak_ptr<Entity> weakEntityUnderMouse;
+    std::weak_ptr<Entity> weakSelectedEntity;
 
     World& world;
 };

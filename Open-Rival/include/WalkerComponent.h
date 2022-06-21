@@ -21,48 +21,11 @@ class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker
  */
 class WalkerComponent : public MovementComponent
 {
-
 public:
     WalkerComponent();
 
-    // Begin EntityComponent override
-    void update() override;
-    // End EntityComponent override
-
-    /**
-     * Sets the current route.
-     */
-    void setRoute(Pathfinding::Route route);
-
-    /**
-     * Gets the current route.
-     */
-    const Pathfinding::Route getRoute() const
-    {
-        return route;
-    }
-
-    /**
-     * Gets the movement that's currently in progress.
-     */
-    const Movement& getMovement() const
-    {
-        return movement;
-    }
-
 private:
-    void prepareNextMovement();
-    void completeMovement();
-
-private:
-    static WalkerPassabilityChecker passabilityChecker;
-
-    Pathfinding::Route route;
-
-    Movement movement;
-
-    // TMP: This should depend on the unit's speed
-    int ticksPerMove = 30;
+    static WalkerPassabilityChecker walkerPassabilityChecker;
 };
 
 }  // namespace Rival
