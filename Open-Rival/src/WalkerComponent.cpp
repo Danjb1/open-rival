@@ -2,100 +2,22 @@
 
 #include "WalkerComponent.h"
 
-#include "Entity.h"
 #include "MapUtils.h"
-#include "TimerUtils.h"
+#include "Tile.h"
 #include "World.h"
 
 namespace Rival {
 
-WalkerPassabilityChecker WalkerComponent::passabilityChecker = WalkerPassabilityChecker();
-
-WalkerComponent::WalkerComponent()
-    : movement({ 0, 0 })
-{
-}
+WalkerPassabilityChecker WalkerComponent::walkerPassabilityChecker = WalkerPassabilityChecker();
 
 bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
 {
     return map.getPassability(node) == TilePassability::Clear;
 }
 
-void WalkerComponent::update()
+WalkerComponent::WalkerComponent()
+    : MovementComponent(&WalkerComponent::walkerPassabilityChecker)
 {
-    // TMP: plan a route
-    if (entity->getId() == 1 && route.isEmpty())
-    {
-        route = Pathfinding::findPath(entity->getPos(), { 4, 3 }, *entity->getWorld(), passabilityChecker);
-
-        if (!route.isEmpty())
-        {
-            prepareNextMovement();
-        }
-    }
-
-    if (route.isEmpty())
-    {
-        return;
-    }
-
-    entity->moved = true;
-
-    // Update movement
-    if (movement.timeElapsed >= movement.timeRequired)
-    {
-        completeMovement();
-    }
-    else
-    {
-        movement.timeElapsed += TimerUtils::timeStepMs;
-    }
-}
-
-void WalkerComponent::setRoute(Pathfinding::Route newRoute)
-{
-    route = newRoute;
-}
-
-/**
- * Called before moving to a new tile.
- */
-void WalkerComponent::prepareNextMovement()
-{
-    if (route.isEmpty())
-    {
-        return;
-    }
-
-    movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
-
-    for (MovementListener* listener : listeners)
-    {
-        listener->onUnitMoveStart(route.peek());
-    }
-}
-
-/**
- * Called after moving to a new tile.
- */
-void WalkerComponent::completeMovement()
-{
-    MapNode node = route.pop();
-    entity->setPos(node);
-
-    movement.timeElapsed = 0;
-
-    if (route.isEmpty())
-    {
-        for (MovementListener* listener : listeners)
-        {
-            listener->onUnitJourneyEnd();
-        }
-    }
-    else
-    {
-        prepareNextMovement();
-    }
 }
 
 }  // namespace Rival

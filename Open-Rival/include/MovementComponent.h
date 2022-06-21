@@ -3,6 +3,7 @@
 #include <unordered_set>
 
 #include "EntityComponent.h"
+#include "Pathfinding.h"
 
 namespace Rival {
 
@@ -41,17 +42,53 @@ class MovementComponent : public EntityComponent
 {
 
 public:
-    MovementComponent();
+    MovementComponent(Pathfinding::PassabilityChecker* passabilityChecker);
     virtual ~MovementComponent() = default;
+
+    // Begin EntityComponent override
+    void update() override;
+    // End EntityComponent override
 
     void addListener(MovementListener* listener);
     void removeListener(MovementListener* listener);
+
+    void moveTo(MapNode node);
+
+    /**
+     * Gets the current route.
+     */
+    const Pathfinding::Route getRoute() const
+    {
+        return route;
+    }
+
+    /**
+     * Gets the movement that's currently in progress.
+     */
+    const Movement& getMovement() const
+    {
+        return movement;
+    }
+
+private:
+    void setRoute(Pathfinding::Route route);
+    void prepareNextMovement();
+    void completeMovement();
 
 public:
     static const std::string key;
 
 protected:
+    Pathfinding::PassabilityChecker* passabilityChecker;
+
     std::unordered_set<MovementListener*> listeners;
+
+    Pathfinding::Route route;
+
+    Movement movement;
+
+    // TMP: This should depend on the unit's speed
+    int ticksPerMove = 30;
 };
 
 }  // namespace Rival

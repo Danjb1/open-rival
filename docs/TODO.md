@@ -8,14 +8,14 @@
 
 ### Mouse Picking
 
-- Mouse picking seems slightly off
-    - Doesn't take unit movement into account?
-    - Can units be selected through walls?
-    - Add option to render hitboxes for debugging
+- Doesn't take unit movement into account
+- Can units be selected through walls?
+- Add option to render hitboxes for debugging
 - Only allow selecting units belonging to the current player
 
 ### Unit Voices
 
+- Play a voice clip when moving a unit
 - Don't play another voice clip if the unit is already speaking
     - Hold onto the SoundSource using a smart pointer
     - Populate the SoundSource with its sourceId in `AudioUtils::playSound`
@@ -33,12 +33,12 @@
 
 ### Movement
 
-- Clicking should plan a route for the selected unit
-    - Specifically, this should issue a MoveCommand that sets the route (Command Pattern?)
-        - GameState should process all pending commands each tick
-        - In single player, commands can be scheduled for the next tick
-        - In multiplayer, commands should be scheduled for 'n' ticks in the future
-    - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
+- We should move by issuing a MoveCommand (Command Pattern?)
+    - GameState should process all pending commands each tick
+    - In single player, commands can be scheduled for the next tick
+    - In multiplayer, commands should be scheduled for 'n' ticks in the future
+- Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
+- If `setRoute` is called during movement, it will probably do Bad Things
 
 ### Data Loading
 

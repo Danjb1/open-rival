@@ -34,25 +34,14 @@ void MousePicker::mouseDown()
 
 void MousePicker::mouseUp()
 {
-    const auto entity = entityUnderMouse.lock();
-    if (!entity)
+    const auto entityUnderMouse = weakEntityUnderMouse.lock();
+    if (entityUnderMouse)
     {
-        return;
+        entitySelected(entityUnderMouse);
     }
-
-    std::cout << "Clicked on Entity " << entity->getId() << "\n";
-
-    VoiceComponent* voice = entity->getComponent<VoiceComponent>(VoiceComponent::key);
-    if (voice)
+    else
     {
-        voice->playSound(UnitSoundType::Select);
-    }
-
-    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
-    if (unitProps)
-    {
-        Unit::Type unitType = unitProps->getUnitType();
-        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+        tileSelected();
     }
 }
 
@@ -84,7 +73,7 @@ void MousePicker::handleMouse()
 
     // Figure out what's under the mouse
     tileUnderMouse = getTilePos(mouseCameraX, mouseCameraY);
-    entityUnderMouse = findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
+    weakEntityUnderMouse = findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
 }
 
 float MousePicker::getMouseInCameraX(float normalizedMouseX)
@@ -97,7 +86,7 @@ float MousePicker::getMouseInCameraY(float normalizedMouseY)
     return camera.getTop() + normalizedMouseY * camera.getHeight();
 }
 
-std::pair<int, int> MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
+MapNode MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
 {
 
     /*
@@ -283,7 +272,7 @@ bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, in
     // into account!
     float zoom = camera.getZoom();
     const MapNode& pos = entity.getPos();
-    float tileX_px = RenderUtils::tileToScaledPx_X(pos.y, zoom);
+    float tileX_px = RenderUtils::tileToScaledPx_X(pos.x, zoom);
     float tileY_px = RenderUtils::tileToScaledPx_Y(pos.x, pos.y, zoom);
 
     // Adjust based on the camera position
@@ -310,14 +299,46 @@ bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, in
             && mouseInViewportY < unitY2;
 }
 
-int MousePicker::getTileX() const
+MapNode MousePicker::getTilePos() const
 {
-    return tileUnderMouse.first;
+    return tileUnderMouse;
 }
 
-int MousePicker::getTileY() const
+void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
 {
-    return tileUnderMouse.second;
+    std::cout << "Clicked on Entity " << entity->getId() << "\n";
+
+    weakSelectedEntity = entity;
+
+    VoiceComponent* voice = entity->getComponent<VoiceComponent>(VoiceComponent::key);
+    if (voice)
+    {
+        voice->playSound(UnitSoundType::Select);
+    }
+
+    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+    if (unitProps)
+    {
+        Unit::Type unitType = unitProps->getUnitType();
+        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+    }
+}
+
+void MousePicker::tileSelected()
+{
+    const auto selectedEntity = weakSelectedEntity.lock();
+    if (!selectedEntity)
+    {
+        return;
+    }
+
+    MovementComponent* moveComponent = selectedEntity->getComponent<MovementComponent>(MovementComponent::key);
+    if (!moveComponent)
+    {
+        return;
+    }
+
+    moveComponent->moveTo(tileUnderMouse);
 }
 
 }  // namespace Rival
