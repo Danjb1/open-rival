@@ -10,6 +10,28 @@ namespace Rival {
 
 const std::string MovementComponent::key = "movement";
 
+void Movement::clear()
+{
+    destination = { -1, -1 };
+    timeElapsed = 0;
+    timeRequired = 0;
+}
+
+bool Movement::isValid() const
+{
+    return timeRequired > 0;
+}
+
+bool Movement::isInProgress() const
+{
+    return isValid() && !isFinished();
+}
+
+bool Movement::isFinished() const
+{
+    return isValid() && timeElapsed >= timeRequired;
+}
+
 MovementComponent::MovementComponent(Pathfinding::PassabilityChecker* passabilityChecker)
     : EntityComponent(key)
     , movement({ 0, 0 })
@@ -19,7 +41,7 @@ MovementComponent::MovementComponent(Pathfinding::PassabilityChecker* passabilit
 
 void MovementComponent::update()
 {
-    if (route.isEmpty())
+    if (route.isEmpty() && !movement.isValid())
     {
         return;
     }
@@ -27,13 +49,13 @@ void MovementComponent::update()
     entity->moved = true;
 
     // Update movement
-    if (movement.timeElapsed >= movement.timeRequired)
+    if (movement.isFinished())
     {
         completeMovement();
     }
     else
     {
-        movement.timeElapsed += TimerUtils::timeStepMs;
+        updateMovement();
     }
 }
 
@@ -57,18 +79,31 @@ void MovementComponent::removeListener(MovementListener* listener)
 
 void MovementComponent::moveTo(MapNode node)
 {
-    auto newRoute = Pathfinding::findPath(entity->getPos(), node, *entity->getWorld(), *passabilityChecker);
+    const MapNode startPos = getStartPosForNextMovement();
+    auto newRoute = Pathfinding::findPath(startPos, node, *entity->getWorld(), *passabilityChecker);
     setRoute(newRoute);
+}
+
+MapNode MovementComponent::getStartPosForNextMovement() const
+{
+    // If we are already moving between tiles, use the tile where we're about to end up
+    return movement.isInProgress() ? movement.destination : entity->getPos();
 }
 
 void MovementComponent::setRoute(Pathfinding::Route newRoute)
 {
     route = newRoute;
 
-    if (!route.isEmpty())
+    if (!movement.isInProgress())
     {
+        // Start the new route immediately
         prepareNextMovement();
     }
+}
+
+void MovementComponent::updateMovement()
+{
+    movement.timeElapsed += TimerUtils::timeStepMs;
 }
 
 /**
@@ -81,11 +116,12 @@ void MovementComponent::prepareNextMovement()
         return;
     }
 
+    movement.destination = route.pop();
     movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
 
     for (MovementListener* listener : listeners)
     {
-        listener->onUnitMoveStart(route.peek());
+        listener->onUnitMoveStart(&movement.destination);
     }
 }
 
@@ -94,16 +130,15 @@ void MovementComponent::prepareNextMovement()
  */
 void MovementComponent::completeMovement()
 {
-    MapNode node = route.pop();
-    entity->setPos(node);
+    entity->setPos(movement.destination);
 
-    movement.timeElapsed = 0;
+    movement.clear();
 
     if (route.isEmpty())
     {
         for (MovementListener* listener : listeners)
         {
-            listener->onUnitJourneyEnd();
+            listener->onUnitStopped();
         }
     }
     else

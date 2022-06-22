@@ -160,31 +160,24 @@ EntityRenderer::getLerpOffset(const Entity& entity, int delta) const
 
     // See if the Entity can move
     // TODO: This needs to work for flying units too
-    const WalkerComponent* walkerComponent = entity.getComponent<WalkerComponent>(WalkerComponent::key);
-    if (!walkerComponent)
+    const MovementComponent* moveComponent = entity.getComponent<MovementComponent>(MovementComponent::key);
+    if (!moveComponent)
     {
         return offset;
     }
 
     // See if the Entity is currently moving
-    const Movement& movement = walkerComponent->getMovement();
-    if (movement.timeElapsed == 0)
+    const Movement& movement = moveComponent->getMovement();
+    if (!movement.isValid())
     {
         return offset;
     }
 
     // Find the MapNode the Entity is moving to
-    const Pathfinding::Route route = walkerComponent->getRoute();
-    const MapNode* nextNode = route.peek();
-    if (!nextNode)
-    {
-        // Should never happen since we've already established the Entity
-        // is moving!
-        return offset;
-    }
+    const MapNode& nextNode = movement.destination;
 
     // Determine the direction of movement
-    Facing dir = MapUtils::getDir(entity.getPos(), *nextNode);
+    Facing dir = MapUtils::getDir(entity.getPos(), nextNode);
 
     // Determine the overall "progress" through the movement (0-1)
     int timeElapsed = movement.timeElapsed + delta;

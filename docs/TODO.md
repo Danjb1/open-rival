@@ -37,7 +37,6 @@
     - In single player, commands can be scheduled for the next tick
     - In multiplayer, commands should be scheduled for 'n' ticks in the future
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
-- If `setRoute` is called during movement, it will probably do Bad Things
 - Units should periodically re-plan their route
 - Units should stop moving if the path becomes blocked
 - Units should modify tile passability as they move
@@ -145,6 +144,7 @@
 
 ### Movement
 
+- Should it be possible to interrupt a movement when an entity is between tiles?
 - Should units "try" to move somewhere even if there is no path?
 - Should we limit the pathfinding logic to 'n' iterations?
 - Support flying units
@@ -279,6 +279,10 @@
 
 - Test that EntityComponents get deleted when an Entity is deleted
 - Test requestAddEntity + addPendingEntities
+
+### Movement
+
+- Test setting a new route before the old one is finished
 
 <!----------------------------------------------------------------------------->
 ## Tech Debt

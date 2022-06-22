@@ -46,7 +46,7 @@ public:
 
     // Begin MovementListener override
     virtual void onUnitMoveStart(const MapNode* nextNode) override;
-    virtual void onUnitJourneyEnd() override;
+    virtual void onUnitStopped() override;
     // End MovementListener override
 
     void addStateListener(UnitStateListener* listener);
