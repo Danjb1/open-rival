@@ -9,13 +9,12 @@
 ### Mouse Picking
 
 - Doesn't take unit movement into account
-- Can units be selected through walls?
-- Add option to render hitboxes for debugging
-- Only allow selecting units belonging to the current player
+- Units can't be sent behind a wall, because it selects the wall instead
+- Only allow moving units belonging to the current player
+- Right-click to deselect
 
 ### Unit Voices
 
-- Play a voice clip when moving a unit
 - Don't play another voice clip if the unit is already speaking
     - Hold onto the SoundSource using a smart pointer
     - Populate the SoundSource with its sourceId in `AudioUtils::playSound`
@@ -39,13 +38,6 @@
     - In multiplayer, commands should be scheduled for 'n' ticks in the future
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - If `setRoute` is called during movement, it will probably do Bad Things
-
-### Data Loading
-
-- Tidy up UnitDef::fromJson
-    - Not all sound / animation types are handled yet
-- Catch exceptions when parsing unit definitions:
-    [json.exception.out_of_range.403] key 'bad_key' not found
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -113,12 +105,18 @@
 - Clients schedule commands at 'n' ticks in the future
 - Each client runs a deterministic simulation of the game by applying commands from all players each tick
 
+### Mouse Picking
+
+- Different units should have different hitboxes sizes
+    - Add option to render hitboxes for debugging
+- Flying units need a hitbox offset
+
 ### Input
 
 - Panning with the mouse at level edges
 - Panning with middle-mouse button (drag)
-- Smooth scrolling with the arrow keys
-- Scroll speed should depend on the zoom level
+- Smooth panning with the arrow keys
+- Panning speed should depend on the zoom level
 - Drag-select
 
 ### Fonts
@@ -173,10 +171,6 @@
     - Water tiles all animate at the same time, so can be handled globally
     - Have the tile renderer look up the current animation frame when drawing water tiles
 
-### Sound
-
-- Play sounds when instructing units to move
-
 ### Music
 
 - Add support for WMA music (or convert to another format)
@@ -211,6 +205,7 @@
 - [x] Camera zooming
 - [ ] Smooth camera panning
 - [ ] Middle-click camera panning
+- [ ] Modern RTS controls (right-click to move)
 - [ ] Easy military drag-select
 - [ ] Rally points
 - [ ] Find idle workers
@@ -293,14 +288,12 @@
 - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
-- Add padding between spritesheet images
+- Add padding between spritesheet images to prevent any texure bleeding
 
 ### Sound
 
-- Initialise 'n' sound sources up-front, and find the next available one
-    when playing a sound
-- Generate a buffer for each WaveFile up front and store them in a map
-    instead of creating a buffer whenever we play a sound
+- Initialise 'n' sound sources up-front, and find the next available one when playing a sound
+- Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 - Delete all sound sources / buffers when exiting
 - Set listener position based on camera
 

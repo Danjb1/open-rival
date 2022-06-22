@@ -24,6 +24,7 @@ MousePicker::MousePicker(Camera& camera, Rect& viewport, World& world)
     , world(world)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
+    , tileUnderMouse({ -1, -1 })
 {
 }
 
@@ -339,6 +340,12 @@ void MousePicker::tileSelected()
     }
 
     moveComponent->moveTo(tileUnderMouse);
+
+    VoiceComponent* voice = selectedEntity->getComponent<VoiceComponent>(VoiceComponent::key);
+    if (voice)
+    {
+        voice->playSound(UnitSoundType::Move);
+    }
 }
 
 }  // namespace Rival
