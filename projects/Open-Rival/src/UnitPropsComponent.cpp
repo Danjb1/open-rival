@@ -37,7 +37,7 @@ void UnitPropsComponent::onUnitMoveStart(const MapNode*)
     setState(UnitState::Moving);
 }
 
-void UnitPropsComponent::onUnitJourneyEnd()
+void UnitPropsComponent::onUnitStopped()
 {
     setState(UnitState::Idle);
 }

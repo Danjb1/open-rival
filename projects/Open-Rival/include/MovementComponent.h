@@ -14,15 +14,22 @@ struct MapNode;
  */
 struct Movement
 {
+    MapNode destination = { -1, -1 };
+
     /**
      * Time spent moving so far, in ms.
      */
-    int timeElapsed;
+    int timeElapsed = 0;
 
     /**
      * Total time required to complete the movement, in ms.
      */
-    int timeRequired;
+    int timeRequired = 0;
+
+    void clear();
+    bool isValid() const;
+    bool isInProgress() const;
+    bool isFinished() const;
 };
 
 /**
@@ -32,7 +39,7 @@ class MovementListener
 {
 public:
     virtual void onUnitMoveStart(const MapNode* nextNode) = 0;
-    virtual void onUnitJourneyEnd() = 0;
+    virtual void onUnitStopped() = 0;
 };
 
 /**
@@ -40,7 +47,6 @@ public:
  */
 class MovementComponent : public EntityComponent
 {
-
 public:
     MovementComponent(Pathfinding::PassabilityChecker* passabilityChecker);
     virtual ~MovementComponent() = default;
@@ -55,14 +61,6 @@ public:
     void moveTo(MapNode node);
 
     /**
-     * Gets the current route.
-     */
-    const Pathfinding::Route getRoute() const
-    {
-        return route;
-    }
-
-    /**
      * Gets the movement that's currently in progress.
      */
     const Movement& getMovement() const
@@ -71,7 +69,9 @@ public:
     }
 
 private:
+    MapNode getStartPosForNextMovement() const;
     void setRoute(Pathfinding::Route route);
+    void updateMovement();
     void prepareNextMovement();
     void completeMovement();
 
