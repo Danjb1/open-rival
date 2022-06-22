@@ -10,35 +10,35 @@ With some difficulty, the [original game](https://www.old-games.com/download/551
 
 This repository contains one Visual Studio solution file, which consists of multiple projects (outlined below). Note that there are some dependencies between the projects, so they cannot be compiled in isolation.
 
-### [Open-Rival](/Open-Rival)
+### [Open-Rival](/projects/Open-Rival)
 
 > Rival Realms remake.
 
-### [Open-Rival-test](/Open-Rival-test)
+### [Open-Rival-test](/projects/Open-Rival-test)
 
 > Unit tests for `Open-Rival`.
 
-### [setup](/setup)
+### [setup](/projects/setup)
 
 > Installer for Open-Rival, that combines the various utilities listed below.
 
-### [audio-extractor](/audio-extractor)
+### [audio-extractor](/projects/audio-extractor)
 
 > Standalone utility to extract the original game's audio.
 
-### [campaign-extractor](/campaign-extractor)
+### [campaign-extractor](/projects/campaign-extractor)
 
 > Standalone utility to extract individual scenarios from campaign files.
 
-### [image-extractor](/image-extractor)
+### [image-extractor](/projects/image-extractor)
 
 > Standalone utility to extract the original game's images.
 
-### [interface-extractor](/interface-extractor)
+### [interface-extractor](/projects/interface-extractor)
 
 > Standalone utility to extract the original game's interface images.
 
-### [texture-builder](/texture-builder)
+### [texture-builder](/projects/texture-builder)
 
 > Standalone utility to combine images into textures.
 

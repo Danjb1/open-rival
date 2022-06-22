@@ -9,13 +9,13 @@ Debug/
 Release/
 
 # Libraries
-/Open-Rival/libs/
+/projects/Open-Rival/libs/
 *.dll
 
 # DO include custom RtMidi library project
-!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.sln
-!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj
-!/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj.filters
+!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.sln
+!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj
+!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj.filters
 
 # User preferences
 *.user
@@ -28,28 +28,29 @@ SOUNDS.DAT
 SORR.BLD
 
 # Extracted data files
-/audio-extractor/output
-/image-extractor/images
-/interface-extractor/images
-/Open-Rival/res/sound
-/Open-Rival/res/textures
-/Open-Rival/res/video
-/setup/res/sound
-/setup/res/textures
-/setup/res/video
-/setup/setup/images
-/texture-builder/definitions
-/texture-builder/images
-/texture-builder/textures
+/projects/audio-extractor/output
+/projects/image-extractor/images
+/projects/interface-extractor/images
+/projects/Open-Rival/res/sound
+/projects/Open-Rival/res/textures
+/projects/Open-Rival/res/video
+/projects/setup/res/sound
+/projects/setup/res/textures
+/projects/setup/res/video
+/projects/setup/setup/images
+/projects/texture-builder/definitions
+/projects/texture-builder/images
+/projects/texture-builder/textures
 
 # Commercial fonts
-/Open-Rival/res/fonts
+/projects/Open-Rival/res/fonts
 
 # Release folder
 /dist/res
 /dist/setup
 /dist/glew32.dll
 /dist/SDL2.dll
+/dist/Open-Rival.exe
 
 # Other
 /misc
