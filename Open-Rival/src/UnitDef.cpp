@@ -2,6 +2,7 @@
 
 #include "UnitDef.h"
 
+#include <tuple>
 #include <utility>
 
 namespace Rival {
@@ -13,43 +14,58 @@ UnitDef UnitDef::fromJson(const json& j)
 
     const auto& rawAnims = j.at("animations");
     std::unordered_map<UnitAnimationType, const Animation> animations;
-
-    auto animIter = rawAnims.find("standing");
-    if (animIter != rawAnims.end())
-    {
-        int startIndex = animIter->at("startIndex");
-        int endIndex = animIter->at("endIndex");
-        int msPerFrame = animIter->at("msPerFrame");
-        const Animation anim = { startIndex, endIndex, msPerFrame };
-        animations.emplace(UnitAnimationType::Standing, anim);
-    }
-
-    animIter = rawAnims.find("moving");
-    if (animIter != rawAnims.end())
-    {
-        int startIndex = animIter->at("startIndex");
-        int endIndex = animIter->at("endIndex");
-        int msPerFrame = animIter->at("msPerFrame");
-        const Animation anim = { startIndex, endIndex, msPerFrame };
-        animations.emplace(UnitAnimationType::Moving, anim);
-    }
-
-    // rawAnims.at("attacking");
+    tryReadAnimation(rawAnims, "standing", UnitAnimationType::Standing, animations);
+    tryReadAnimation(rawAnims, "holdingBag", UnitAnimationType::HoldingBag, animations);
+    tryReadAnimation(rawAnims, "moving", UnitAnimationType::Moving, animations);
+    tryReadAnimation(rawAnims, "movingWithBag", UnitAnimationType::MovingWithBag, animations);
+    tryReadAnimation(rawAnims, "attacking", UnitAnimationType::Attacking, animations);
+    tryReadAnimation(rawAnims, "dying", UnitAnimationType::Dying, animations);
 
     const auto& rawSounds = j.at("sounds");
     std::unordered_map<UnitSoundType, const SoundBank> soundBanks;
-
-    auto soundIter = rawSounds.find("select");
-    if (soundIter != rawSounds.end())
-    {
-        const std::vector<int> soundIds = *soundIter;
-        soundBanks.emplace(UnitSoundType::Select, soundIds);
-    }
-
-    // rawSounds.at("train");
-    // rawSounds.at("move");
+    tryReadSoundBank(rawSounds, "select", UnitSoundType::Select, soundBanks);
+    tryReadSoundBank(rawSounds, "train", UnitSoundType::Train, soundBanks);
+    tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, soundBanks);
 
     return { name, portraitId, animations, soundBanks };
+}
+
+void UnitDef::tryReadAnimation(
+        const json& rawAnims,
+        const std::string& key,
+        UnitAnimationType animType,
+        std::unordered_map<UnitAnimationType, const Animation>& animations)
+{
+    auto iter = rawAnims.find(key);
+    if (iter == rawAnims.end())
+    {
+        // Animation not found
+        return;
+    }
+
+    int startIndex = iter->at("startIndex");
+    int endIndex = iter->at("endIndex");
+    int msPerFrame = iter->at("msPerFrame");
+    animations.emplace(
+            std::piecewise_construct,
+            std::forward_as_tuple(animType),
+            std::forward_as_tuple(startIndex, endIndex, msPerFrame));
+}
+
+void UnitDef::tryReadSoundBank(
+        const json& rawSounds,
+        const std::string& key,
+        UnitSoundType soundType,
+        std::unordered_map<UnitSoundType, const SoundBank>& soundBanks)
+{
+    auto iter = rawSounds.find(key);
+    if (iter == rawSounds.end())
+    {
+        // SoundBank not found
+        return;
+    }
+
+    soundBanks.emplace(soundType, *iter);
 }
 
 UnitDef::UnitDef(

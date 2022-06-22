@@ -18,6 +18,18 @@ class UnitDef
 public:
     static UnitDef fromJson(const json& j);
 
+    static void tryReadAnimation(
+            const json& rawAnims,
+            const std::string& key,
+            UnitAnimationType animType,
+            std::unordered_map<UnitAnimationType, const Animation>& animations);
+
+    static void tryReadSoundBank(
+            const json& rawSounds,
+            const std::string& key,
+            UnitSoundType soundType,
+            std::unordered_map<UnitSoundType, const SoundBank>& soundBanks);
+
     UnitDef(std::string name,
             int portraitId,
             std::unordered_map<UnitAnimationType, const Animation> animations,

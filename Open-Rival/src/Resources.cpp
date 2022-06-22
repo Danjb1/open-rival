@@ -2,6 +2,7 @@
 
 #include "Resources.h"
 
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -340,7 +341,17 @@ std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
         }
 
         Unit::Type unitType = static_cast<Unit::Type>(nextUnitType);
-        allUnitDefs.insert({ unitType, UnitDef::fromJson(rawUnitDef) });
+
+        try
+        {
+            allUnitDefs.insert({ unitType, UnitDef::fromJson(rawUnitDef) });
+        }
+        catch (const json::exception&)
+        {
+            std::cout << "Error parsing unit definition: " << std::to_string(nextUnitType) << "\n";
+            throw;
+        }
+
         ++nextUnitType;
     }
 

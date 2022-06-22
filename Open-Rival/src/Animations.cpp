@@ -4,6 +4,11 @@
 
 namespace Rival {
 
-// Unused
-
+Animation::Animation(int startIndex, int endIndex, int msPerFrame)
+    : startIndex(startIndex)
+    , endIndex(endIndex)
+    , msPerFrame(msPerFrame)
+{
 }
+
+}  // namespace Rival

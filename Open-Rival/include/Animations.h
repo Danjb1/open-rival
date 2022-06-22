@@ -29,6 +29,8 @@ struct Animation
     int startIndex;
     int endIndex;
     int msPerFrame;
+
+    Animation(int startIndex, int endIndex, int msPerFrame);
 };
 
 using UnitAnimationPair = std::pair<Unit::Type, UnitAnimationType>;
