@@ -38,6 +38,10 @@
     - In multiplayer, commands should be scheduled for 'n' ticks in the future
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - If `setRoute` is called during movement, it will probably do Bad Things
+- Units should periodically re-plan their route
+- Units should stop moving if the path becomes blocked
+- Units should modify tile passability as they move
+- Units should take longer to move horizontally than diagonally or vertically
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -141,9 +145,6 @@
 
 ### Movement
 
-- Units should periodically re-plan their route
-- Units should stop moving if the path becomes blocked
-- Units should modify tile passability as they move
 - Should units "try" to move somewhere even if there is no path?
 - Should we limit the pathfinding logic to 'n' iterations?
 - Support flying units
@@ -261,6 +262,7 @@
 - Use a dependency manager
 - Add script to build from command line
 - Add script to run tests from command line
+- Use a separate .gitignore file for each project folder
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests

@@ -11,8 +11,8 @@ Script to create a blank .cpp and .h file for Open-Rival.
 import re
 import sys
 
-SRC_DIR = '../Open-Rival/src/'
-HDR_DIR = '../Open-Rival/include/'
+SRC_DIR = '../projects/Open-Rival/src/'
+HDR_DIR = '../projects/Open-Rival/include/'
 
 def camelCaseToSnakeCase(name):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).upper()

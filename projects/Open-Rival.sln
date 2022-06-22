@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open-Rival", "Open-Rival\Open-Rival.vcxproj", "{AE6B3FDA-A900-4013-82C7-110DA7895525}"
 EndProject
@@ -20,7 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8AC912AD-969E-4C54-94C6-28C2D73A4790}"
 	ProjectSection(SolutionItems) = preProject
 		.clang-format = .clang-format
-		docs\TODO.md = docs\TODO.md
+		..\docs\TODO.md = ..\docs\TODO.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open-Rival-test", "Open-Rival-test\Open-Rival-test.vcxproj", "{D1F5ED16-00DF-401C-9573-9A1349B3E53B}"
