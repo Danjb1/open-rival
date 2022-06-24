@@ -18,7 +18,7 @@ const Rect minimapBottomBorder(0, uiPosY + 205, 210, 5);
 
 const Rect mainPanel(static_cast<int>(minimapTopBorder.x + minimapTopBorder.width), uiPosY, 425, uiHeight);
 
-const Rect inventoryOverlay(static_cast<int>(mainPanel.x) + 30, static_cast<int>(mainPanel.y) + 71, 211, 47);
+const Rect hideInventoryOverlay(static_cast<int>(mainPanel.x) + 30, static_cast<int>(mainPanel.y) + 71, 211, 47);
 
 const Rect statsPanel(static_cast<int>(mainPanel.x + mainPanel.width), uiPosY, 160, uiHeight);
 
@@ -35,7 +35,6 @@ UiImage::UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string image
 
 void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const
 {
-
     // Define vertex positions
     float x1 = pos.x;
     float y1 = pos.y;

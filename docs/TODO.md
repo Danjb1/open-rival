@@ -32,6 +32,8 @@
 
 ### Movement
 
+- Interrupting a movement sometimes causes jankiness
+    - This may happen when you issue a new route when a movement has JUST finished
 - We should move by issuing a MoveCommand (Command Pattern?)
     - GameState should process all pending commands each tick
     - In single player, commands can be scheduled for the next tick
@@ -40,7 +42,19 @@
 - Units should periodically re-plan their route
 - Units should stop moving if the path becomes blocked
 - Units should modify tile passability as they move
+    - Currently the Knight's starting tile remains impassable
 - Units should take longer to move horizontally than diagonally or vertically
+
+### Rendering Oddities
+
+- The way we render framebuffers is strange
+    - Why not flip the texture co-ordinates, instead of flipping the viewport?
+- Why do we not need to flip tex co-ords when rendering a texture atlas (for the UI)?
+
+### Setup
+
+- Some setup projects may be broken by recent dependency changes
+- Setup program should log output to a file (run the script via a BAT file?)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -64,8 +78,6 @@
 ### Data Loading
 
 - Some bytes of `Interfac.dat` are still unknown
-    - These are probably not too important but some may relate to cursor offsets
-    - Currently some cursor images are strangely offset and will need fixing
 - Pack interface images into textures
 - Finish parsing Goals
 - Finish parsing Chests (contents)
@@ -221,6 +233,7 @@
 
 ### Menus
 
+- [ ] Animated cursors
 - [ ] Rank explanations
 - [ ] Campaign map select
 - [ ] Revamped Save / Hire Troops UI
@@ -262,6 +275,7 @@
 - Use a dependency manager
 - Add script to build from command line
 - Add script to run tests from command line
+- Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
 - Use a separate .gitignore file for each project folder
 
 <!----------------------------------------------------------------------------->

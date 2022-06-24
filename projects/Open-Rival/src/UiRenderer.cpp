@@ -13,21 +13,21 @@ UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
     : textureStore(textureStore)
     , numUiImages(0)
     , mainUiRenderable(textureStore.getUiTextureAtlas(), maxUiImages)
-    , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1042.tga")
-    , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1040.tga")
-    , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1041.tga")
+    , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1060.tga")
+    , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1058.tga")
+    , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1059.tga")
     , mainPanel(
               GameInterface::mainPanel,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1105.tga" : "img_ui_1039.tga")
-    , inventoryOverlay(
-              GameInterface::inventoryOverlay,
+              race == Race::Greenskin ? "img_ui_1123.tga" : "img_ui_1057.tga")
+    , hideInventoryOverlay(
+              GameInterface::hideInventoryOverlay,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1112.tga" : "img_ui_1046.tga")
+              race == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
     , statsPanel(
               GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1118.tga" : "img_ui_1052.tga")
+              race == Race::Greenskin ? "img_ui_1136.tga" : "img_ui_1070.tga")
 {
 }
 
@@ -84,8 +84,7 @@ void UiRenderer::sendDataToGpu()
     mainPanel.addToBuffers(positions, texCoords);
     if (!inventoryVisible)
     {
-        // When rendered, this hides the inventory
-        inventoryOverlay.addToBuffers(positions, texCoords);
+        hideInventoryOverlay.addToBuffers(positions, texCoords);
     }
     statsPanel.addToBuffers(positions, texCoords);
 

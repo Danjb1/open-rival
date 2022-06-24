@@ -26,7 +26,7 @@ extern const Rect minimapLeftBorder;
 extern const Rect minimapTopBorder;
 extern const Rect minimapBottomBorder;
 extern const Rect mainPanel;
-extern const Rect inventoryOverlay;
+extern const Rect hideInventoryOverlay;
 extern const Rect statsPanel;
 
 ///////////////////////////////////////////////////////////////////////////

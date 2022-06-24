@@ -56,6 +56,7 @@ private:
     MapBorderRenderer mapBorderRenderer;
     UiRenderer uiRenderer;
 
+    void renderGameViaFramebuffer(int delta) const;
     void renderGame(int viewportWidth, int viewportHeight, int delta) const;
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();

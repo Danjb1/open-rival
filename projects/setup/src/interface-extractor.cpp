@@ -6,9 +6,8 @@
 
 #include "interface-extractor.h"
 
-#include <iostream>
+#include <stdexcept>
 
-#include "FileUtils.h"
 #include "setup-utils.h"
 
 namespace Rival { namespace Setup {
@@ -20,7 +19,6 @@ const int offsetTitle = 0x2131;
 const int offsetInGameMenu = 0x1685AE4;
 const int offsetPostgameMenu = 0x16F85A9;
 const int offsetCursors = 0x1932F0A;
-const int offsetMoreCursors = 0x1935CDE;
 const int offsetHireTroops = 0x1938DBB;
 
 InterfaceExtractor::InterfaceExtractor(std::string inputFile)
@@ -114,47 +112,89 @@ void InterfaceExtractor::extractImages(std::string outputDir)
     }
 
     // Cursors
-    // TODO: We skip a lot of bytes in this section. These are probably
-    // offsets related to the cursor hotspots (some of them are offset
-    // strangely), or the number of frames in an animated cursor.
+    // TODO: We skip a lot of bytes in this section. These may be related to
+    // the number of frames in an animated cursor, or possibly they are just
+    // there to align the data somehow. Without deciphering this reason, it is
+    // not feasible to wrap these in a single loop.
     reader.setPos(offsetCursors);
-    for (int i = 0; i < 10; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-        reader.skip(2);
-    }
-    reader.setPos(offsetMoreCursors);
-    for (int i = 0; i < 4; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        reader.skip(2);
-        extractImage(outputDir, Palette::paletteGame);
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-    }
+    extractImage(outputDir, Palette::paletteGame);
     reader.skip(2);
-    for (int i = 0; i < 4; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-    }
+    extractImage(outputDir, Palette::paletteGame);
     reader.skip(2);
     extractImage(outputDir, Palette::paletteGame);
     reader.skip(2);
     extractImage(outputDir, Palette::paletteGame);
-    for (int i = 0; i < 3; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-    }
     reader.skip(2);
-    for (int i = 0; i < 4; i++)
-    {
-        extractImage(outputDir, Palette::paletteGame);
-    }
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    reader.skip(2);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
+    extractImage(outputDir, Palette::paletteGame);
 
     // Game icons
     reader.setPos(offsetHireTroops);
@@ -166,7 +206,6 @@ void InterfaceExtractor::extractImages(std::string outputDir)
 
 void InterfaceExtractor::extractImage(const std::string& outputDir, const Palette::Palette& palette)
 {
-
     // Read dimensions
     std::uint16_t w = reader.readShort();
     std::uint16_t h = reader.readShort();

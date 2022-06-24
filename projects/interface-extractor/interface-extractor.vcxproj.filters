@@ -20,9 +20,6 @@
     <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Open-Rival\include\FileUtils.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\setup\include\interface-extractor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -44,9 +41,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\setup\src\setup-utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\FileUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp">
