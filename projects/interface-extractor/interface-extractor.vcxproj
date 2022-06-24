@@ -154,7 +154,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h" />
-    <ClInclude Include="..\Open-Rival\include\FileUtils.h" />
     <ClInclude Include="..\Open-Rival\include\Image.h" />
     <ClInclude Include="..\Open-Rival\include\Palette.h" />
     <ClInclude Include="..\setup\include\setup-utils.h" />
@@ -163,7 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp" />
-    <ClCompile Include="..\Open-Rival\src\FileUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\Image.cpp" />
     <ClCompile Include="..\Open-Rival\src\Palette.cpp" />
     <ClCompile Include="..\setup\src\setup-utils.cpp" />

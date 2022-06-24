@@ -34,7 +34,7 @@ private:
     GameInterface::UiImage minimapTopBorder;
     GameInterface::UiImage minimapBottomBorder;
     GameInterface::UiImage mainPanel;
-    GameInterface::UiImage inventoryOverlay;
+    GameInterface::UiImage hideInventoryOverlay;
     GameInterface::UiImage statsPanel;
 };
 

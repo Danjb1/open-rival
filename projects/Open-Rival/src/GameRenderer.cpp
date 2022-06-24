@@ -51,6 +51,12 @@ GameRenderer::GameRenderer(
 
 void GameRenderer::render(int delta)
 {
+    renderGameViaFramebuffer(delta);
+    renderUi();
+}
+
+void GameRenderer::renderGameViaFramebuffer(int delta) const
+{
     // Render to our framebuffer.
     // Here the viewport specifies the region of the framebuffer texture
     // that we render onto, in pixels. We use the camera size here; if the
@@ -73,14 +79,10 @@ void GameRenderer::render(int delta)
             static_cast<int>(viewport.width),
             static_cast<int>(viewport.height));
     renderFramebuffer(canvasWidth, canvasHeight);
-
-    // Render the UI to the screen
-    renderUi();
 }
 
 void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) const
 {
-
     // Clear framebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -111,7 +113,6 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) 
 
 void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
 {
-
     // Clear screen
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -134,7 +135,6 @@ void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
 
 void GameRenderer::renderUi()
 {
-
     // Disable depth testing since we can trivially manage the rendering
     // order ourselves
     glDisable(GL_DEPTH_TEST);

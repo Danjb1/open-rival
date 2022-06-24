@@ -26,7 +26,6 @@ const int TextureAtlas::getImageHeight(std::string key) const
 
 const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
 {
-
     // Find the location of the image with the given key
     const Rect& imagePlacement = imagePlacements.at(key);
 
@@ -40,10 +39,8 @@ const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
 
     const float tx1 = x / txWidth;
     const float tx2 = (x + width) / txWidth;
-
-    // Subtract from 1 to account for the bottom-left OpenGL origin
-    const float ty1 = 1 - (y / txHeight);
-    const float ty2 = 1 - ((y + height) / txHeight);
+    const float ty1 = y / txHeight;
+    const float ty2 = (y + height) / txHeight;
 
     return {
         tx1, ty1,  //
