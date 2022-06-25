@@ -24,7 +24,7 @@ void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables
     glUseProgram(Shaders::fontShader.programId);
 
     // Project to menu
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuProjection(window->getAspectRatio());
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
 
     // Set uniform values
     glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);

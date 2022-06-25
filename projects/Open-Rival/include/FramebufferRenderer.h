@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gl/glew.h>
+#include <glm/mat4x4.hpp>
 
 namespace Rival {
 
@@ -22,6 +23,12 @@ public:
      * occurs.
      */
     void render(int srcWidth, int srcHeight) const;
+
+private:
+    static const glm::mat4 createViewProjectionMatrix();
+
+public:
+    static const glm::mat4 viewProjectionMatrix;
 
 private:
     static constexpr int numVertexDimensions = 2;    // x, y

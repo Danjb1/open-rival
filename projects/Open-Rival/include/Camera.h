@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 namespace Rival {
 
 class World;
@@ -35,14 +37,9 @@ public:
      */
     void translate(float dx, float dy);
 
-    float getX() const
+    const glm::vec2& getPosition() const
     {
-        return x;
-    }
-
-    float getY() const
-    {
-        return y;
+        return position;
     }
 
     float getWidth() const;
@@ -82,12 +79,10 @@ private:
     // than 1 tile height due to their zigzagging y-positioning.
     static constexpr float bottomEdgePadding = tileHeight / 2.0f;
 
-    // The point at the centre of the camera, in camera units
-    float x;
-    float y;
+    // The camera position, in camera units.
+    glm::vec2 position { 0, 0 };
 
-    // The size of the visible region, in camera units, at the default zoom
-    // level.
+    // The size of the visible region, in camera units, at the default zoom level.
     // The public-facing getters always take into account the zoom level.
     float defaultWidth;
     float defaultHeight;

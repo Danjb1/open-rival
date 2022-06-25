@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
 
+#include "Camera.h"
 #include "MapUtils.h"
 #include "Spritesheet.h"
 
@@ -58,7 +59,7 @@ float cameraToPx_X(float x)
 {
     // Same as tileToPx_X, above, but using floats, since the camera can be
     // "between" tiles.
-    return x * (tileWidthPx / 2);
+    return x * static_cast<float>(tileWidthPx / 2);
 }
 
 float cameraToPx_Y(float y)
@@ -125,103 +126,60 @@ int getMenuWidth(double aspectRatio)
     return static_cast<int>(menuHeight * aspectRatio);
 }
 
-glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight)
+glm::mat4 createViewMatrix(float cameraX, float cameraY)
 {
-    // Determine view matrix.
-    //
-    // Our vertices are positioned using this co-ordinate system:
+    // This assumes our vertices are positioned using this co-ordinate system:
     //  - +x points right
     //  - +y points down
     //  - +z points out of the screen
-    //
+    return glm::lookAt(
+            glm::vec3(cameraX, cameraY, RenderUtils::cameraZ),  // camera position
+            glm::vec3(cameraX, cameraY, 0.f),                   // look at
+            upVector                                            // camera up
+    );
+}
+
+glm::mat4 createProjectionMatrix(float width, float height)
+{
+    float left = -width / 2.0f;
+    float top = height / 2.0f;
+    float right = width / 2.0f;
+    float bottom = -height / 2.0f;
+    float near = RenderUtils::nearPlane;
+    float far = RenderUtils::farPlane;
+    return glm::ortho(left, right, bottom, top, near, far);
+}
+
+glm::mat4 createGameViewProjectionMatrix(const Camera& camera, int viewportWidth, int viewportHeight)
+{
     // The camera co-ordinates are in camera units, but our vertices are
     // positioned using pixels. Therefore we need to convert the camera
     // co-ordinates to pixels, too.
-    float cameraX = RenderUtils::cameraToPx_X(camera.getX());
-    float cameraY = RenderUtils::cameraToPx_Y(camera.getY());
-    float cameraZ = RenderUtils::zCamera;
-    glm::mat4 view = glm::lookAt(
-            glm::vec3(cameraX, cameraY, cameraZ),  // camera position
-            glm::vec3(cameraX, cameraY, 0.f),      // look at
-            glm::vec3(0.f, -1.f, 0.f)              // up vector
-    );
+    const glm::vec2& cameraPos = camera.getPosition();
+    float cameraX = RenderUtils::cameraToPx_X(cameraPos.x);
+    float cameraY = RenderUtils::cameraToPx_Y(cameraPos.y);
+    glm::mat4 view = createViewMatrix(cameraX, cameraY);
 
-    // Determine projection matrix.
     // The projection size must match the viewport size *exactly* in order
     // to achieve pixel-perfect rendering. Any differences here could
     // result in seams between tiles.
-    float left = -viewportWidth / 2.0f;
-    float top = viewportHeight / 2.0f;
-    float right = viewportWidth / 2.0f;
-    float bottom = -viewportHeight / 2.0f;
-    float near = RenderUtils::nearPlane;
-    float far = RenderUtils::farPlane;
-    glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
+    glm::mat4 projection =
+            createProjectionMatrix(static_cast<float>(viewportWidth), static_cast<float>(viewportHeight));
 
     // Combine matrices
     return projection * view;
 }
 
-glm::mat4 createFramebufferProjection()
+glm::mat4 createMenuViewProjectionMatrix(double aspectRatio)
 {
-    // Determine view matrix.
-    //
-    // Our vertices are positioned using this co-ordinate system:
-    //  - +x points right
-    //  - +y points down
-    //  - +z points out of the screen
-    //
-    // We position our camera to look at the centre of the framebuffer.
-    float cameraX = 0.5f;
-    float cameraY = 0.5f;
-    float cameraZ = RenderUtils::zCamera;
-    glm::mat4 view = glm::lookAt(
-            glm::vec3(cameraX, cameraY, cameraZ),  // camera position
-            glm::vec3(cameraX, cameraY, 0.f),      // look at
-            glm::vec3(0.f, -1.f, 0.f)              // up vector
-    );
-
-    // Determine projection matrix
-    float left = -0.5f;
-    float top = 0.5f;
-    float right = 0.5f;
-    float bottom = -0.5f;
-    float near = RenderUtils::nearPlane;
-    float far = RenderUtils::farPlane;
-    glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
-
-    // Combine matrices
-    return projection * view;
-}
-
-glm::mat4 createMenuProjection(double aspectRatio)
-{
-    // Determine view matrix.
-    //
-    // Our vertices are positioned using this co-ordinate system:
-    //  - +x points right
-    //  - +y points down
-    //  - +z points out of the screen
-    //
-    // We position our camera to look at the centre of the menu.
+    // We position our camera to look at the centre of the menu
     int menuWidth = RenderUtils::getMenuWidth(aspectRatio);
     float cameraX = menuWidth / 2.0f;
     float cameraY = menuHeight / 2.0f;
-    float cameraZ = RenderUtils::zCamera;
-    glm::mat4 view = glm::lookAt(
-            glm::vec3(cameraX, cameraY, cameraZ),  // camera position
-            glm::vec3(cameraX, cameraY, 0.f),      // look at
-            glm::vec3(0.f, -1.f, 0.f)              // up vector
-    );
+    glm::mat4 view = createViewMatrix(cameraX, cameraY);
 
     // Determine projection matrix
-    float left = -menuWidth / 2.0f;
-    float top = menuHeight / 2.0f;
-    float right = menuWidth / 2.0f;
-    float bottom = -menuHeight / 2.0f;
-    float near = RenderUtils::nearPlane;
-    float far = RenderUtils::farPlane;
-    glm::mat4 projection = glm::ortho(left, right, bottom, top, near, far);
+    glm::mat4 projection = createProjectionMatrix(static_cast<float>(menuWidth), static_cast<float>(menuHeight));
 
     // Combine matrices
     return projection * view;
