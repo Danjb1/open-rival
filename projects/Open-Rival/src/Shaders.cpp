@@ -42,7 +42,7 @@ IndexedTextureShader indexedTextureShader;
 void IndexedTextureShader::init()
 {
 
-    GLuint programId = createShader("res\\shaders\\gameWorld.vert", "res\\shaders\\gameWorld.frag");
+    GLuint programId = createShader("res\\shaders\\indexed_texture.vert", "res\\shaders\\indexed_texture.frag");
 
     indexedTextureShader = IndexedTextureShader();
     indexedTextureShader.programId = programId;
@@ -117,29 +117,30 @@ bool FontShader::isValid() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-// ScreenShader
+// TextureShader
 ///////////////////////////////////////////////////////////////////////////
 
-ScreenShader screenShader;
+TextureShader textureShader;
 
-void ScreenShader::init()
+void TextureShader::init()
 {
 
-    GLuint programId = createShader("res\\shaders\\screen.vert", "res\\shaders\\screen.frag");
+    GLuint programId = createShader("res\\shaders\\texture.vert", "res\\shaders\\texture.frag");
 
-    screenShader = ScreenShader();
-    screenShader.programId = programId;
-    screenShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
-    screenShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
-    screenShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+    textureShader = TextureShader();
+    textureShader.programId = programId;
+    textureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    textureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+    textureShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+    textureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
 
-    if (!screenShader.isValid())
+    if (!textureShader.isValid())
     {
-        throw std::runtime_error("Failed to create ScreenShader");
+        throw std::runtime_error("Failed to create TextureShader");
     }
 }
 
-bool ScreenShader::isValid() const
+bool TextureShader::isValid() const
 {
     // Validate program ID
     if (programId == 0)
@@ -150,7 +151,9 @@ bool ScreenShader::isValid() const
 
     // Validate vertex attributes / uniforms
     return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords") && validateUniform(texUnitUniformLoc, "tex");
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+            && validateUniform(texUnitUniformLoc, "tex");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -161,7 +164,7 @@ void initializeShaders()
 {
     IndexedTextureShader::init();
     FontShader::init();
-    ScreenShader::init();
+    TextureShader::init();
 }
 
 GLuint createShader(const char* vertShader, const char* fragShader)

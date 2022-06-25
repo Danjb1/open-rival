@@ -27,8 +27,8 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 // IndexedTextureShader:
-// Renders a texture using a view-projection matrix and an accompanying
-// palette texture for color lookups.
+// Renders an indexed texture, using an accompanying palette texture for
+// color lookups.
 ///////////////////////////////////////////////////////////////////////////
 
 class IndexedTextureShader : public Shader
@@ -61,8 +61,7 @@ extern IndexedTextureShader indexedTextureShader;
 
 ///////////////////////////////////////////////////////////////////////////
 // FontShader:
-// Renders a single-channel texture as an alpha channel, using a
-// view-projection matrix and a color buffer.
+// Renders a single-channel font texture in a custom color.
 ///////////////////////////////////////////////////////////////////////////
 
 class FontShader : public Shader
@@ -94,14 +93,17 @@ public:
 extern FontShader fontShader;
 
 ///////////////////////////////////////////////////////////////////////////
-// ScreenShader:
-// Just renders a texture without applying any transformations.
+// TextureShader:
+// Renders a texture in 2D space (no depth).
 ///////////////////////////////////////////////////////////////////////////
 
-class ScreenShader : public Shader
+class TextureShader : public Shader
 {
 public:
     GLuint programId;
+
+    // Vertex shader uniform locations
+    GLint viewProjMatrixUniformLoc;
 
     // Vertex shader attribute locations
     GLint vertexAttribLoc;
@@ -116,11 +118,11 @@ public:
 
     std::string getName() const override
     {
-        return "ScreenShader";
+        return "TextureShader";
     }
 };
 
-extern ScreenShader screenShader;
+extern TextureShader textureShader;
 
 ///////////////////////////////////////////////////////////////////////////
 // Generic methods

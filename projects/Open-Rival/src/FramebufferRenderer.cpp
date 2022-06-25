@@ -15,7 +15,6 @@ namespace Rival {
 FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
     : fbo(fbo)
 {
-
     // Generate VAO
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -25,11 +24,11 @@ FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
     glGenBuffers(1, &texCoordVbo);
     glGenBuffers(1, &ibo);
 
-    // Define a quad that fills the entire viewport
-    float x1 = -1.0f;
-    float y1 = -1.0f;
-    float x2 = 1.0f;
-    float y2 = 1.0f;
+    // Define a basic quad from (0,0) to (1,1)
+    const float x1 = 0.0f;
+    const float y1 = 0.0f;
+    const float x2 = 1.0f;
+    const float y2 = 1.0f;
     std::vector<GLfloat> vertexData = {
         x1, y1,  //
         x2, y1,  //
@@ -61,7 +60,7 @@ FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
     glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_DYNAMIC_DRAW);
 
     // Initialize index buffer - this should never need to change
-    std::vector<GLuint> indexData = { 3, 2, 1, 0 };
+    std::vector<GLuint> indexData = { 0, 1, 2, 3 };
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData.size() * sizeof(GLuint), indexData.data(), GL_STATIC_DRAW);
 
@@ -72,7 +71,6 @@ FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
 
 void FramebufferRenderer::render(int srcWidth, int srcHeight) const
 {
-
     // Bind vertex array
     glBindVertexArray(vao);
 
@@ -81,12 +79,12 @@ void FramebufferRenderer::render(int srcWidth, int srcHeight) const
     glBindTexture(GL_TEXTURE_2D, fbo.getTextureId());
 
     // Define the portion of the texture to be sampled.
-    // We can always start from (0, 0) since the camera position has
-    // already been taken into account during the initial rendering.
-    float tx1 = 0.0f;
-    float ty1 = 0.0f;
-    float tx2 = static_cast<float>(srcWidth) / fbo.getWidth();
-    float ty2 = static_cast<float>(srcHeight) / fbo.getHeight();
+    // We flip ty1 and ty2 because OpenGL expects the texture origin to be in the bottom-left, but we render to the
+    // framebuffer using a top-elft origin.
+    const float tx1 = 0.f;
+    const float ty1 = static_cast<float>(srcHeight) / fbo.getHeight();
+    const float tx2 = static_cast<float>(srcWidth) / fbo.getWidth();
+    const float ty2 = 0.f;
     std::vector<GLfloat> texCoords = {
         tx1, ty1,  //
         tx2, ty1,  //

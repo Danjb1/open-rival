@@ -120,11 +120,15 @@ void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
     // directly to the screen
     glDisable(GL_DEPTH_TEST);
 
-    // Use screen shader
-    glUseProgram(Shaders::screenShader.programId);
+    // Use texture shader
+    glUseProgram(Shaders::textureShader.programId);
+
+    // Project to the framebuffer
+    glm::mat4 viewProjMatrix = RenderUtils::createFramebufferProjection();
 
     // Set uniform values
-    glUniform1i(Shaders::screenShader.texUnitUniformLoc, 0);
+    glUniformMatrix4fv(Shaders::textureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1i(Shaders::textureShader.texUnitUniformLoc, 0);
 
     // Render framebuffer to screen.
     // At a zoom level of 1, this will result in pixel-perfect rendering.
