@@ -15,7 +15,6 @@ Camera::Camera(float x, float y, float width, float height, World& world)
     , defaultHeight(height)
     , world(world)
 {
-
     centreOnPoint(x, y);
 }
 
@@ -35,8 +34,8 @@ void Camera::centreOnPoint(float newX, float newY)
     float maxX = rightEdge - (cameraWidth / 2);
     float maxY = bottomEdge - (cameraHeight / 2);
 
-    x = MathUtils::clampf(newX, minX, maxX);
-    y = MathUtils::clampf(newY, minY, maxY);
+    position.x = MathUtils::clampf(newX, minX, maxX);
+    position.y = MathUtils::clampf(newY, minY, maxY);
 }
 
 void Camera::centreOnTile(int tileX, int tileY)
@@ -53,7 +52,7 @@ void Camera::centreOnTile(int tileX, int tileY)
 
 void Camera::translate(float dx, float dy)
 {
-    centreOnPoint(x + dx, y + dy);
+    centreOnPoint(position.x + dx, position.y + dy);
 }
 
 float Camera::getWidth() const
@@ -68,32 +67,31 @@ float Camera::getHeight() const
 
 float Camera::getLeft() const
 {
-    return x - getWidth() / 2;
+    return position.x - getWidth() / 2;
 }
 
 float Camera::getTop() const
 {
-    return y - getHeight() / 2;
+    return position.y - getHeight() / 2;
 }
 
 float Camera::getRight() const
 {
-    return x + getWidth() / 2;
+    return position.x + getWidth() / 2;
 }
 
 float Camera::getBottom() const
 {
-    return y + getHeight() / 2;
+    return position.y + getHeight() / 2;
 }
 
 void Camera::modZoom(float interval)
 {
-    zoom += interval;
-    zoom = MathUtils::clampf(zoom, zoomMin, zoomMax);
+    zoom = MathUtils::clampf(zoom + interval, zoomMin, zoomMax);
 
     // We call `centreOnPoint` here to perform a bounds check, since the
     // size of the visible region has now changed
-    centreOnPoint(x, y);
+    centreOnPoint(position.x, position.y);
 }
 
 bool Camera::contains(float px, float py) const

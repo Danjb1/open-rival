@@ -52,10 +52,7 @@
     - Texture origins and sampling
     - Facings
     - Ortho projections (top/bottom parameters in particular)
-- Extract common vectors (e.g. up vector) to constants
-    - Camera position can be stored as a vector directly
 - Rebuild spritesheets to check they're still correct
-- Reduce duplication
 
 ### Setup
 
@@ -159,6 +156,8 @@
 - Respect unit color
 - Respect Gold tile variants
 - Fog of war
+- Some vertex/index data can be made into constants instead of member variables
+    - Even the menu view-projection matrix can probably be reused each frame
 
 ### Movement
 

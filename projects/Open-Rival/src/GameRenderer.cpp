@@ -93,8 +93,8 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) 
     // Use indexed texture shader
     glUseProgram(Shaders::indexedTextureShader.programId);
 
-    // Project to game world
-    glm::mat4 viewProjMatrix = RenderUtils::createGameProjection(camera, viewportWidth, viewportHeight);
+    // Determine our view-projection matrix
+    glm::mat4 viewProjMatrix = RenderUtils::createGameViewProjectionMatrix(camera, viewportWidth, viewportHeight);
 
     // Set uniform values
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
@@ -123,11 +123,12 @@ void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
     // Use texture shader
     glUseProgram(Shaders::textureShader.programId);
 
-    // Project to the framebuffer
-    glm::mat4 viewProjMatrix = RenderUtils::createFramebufferProjection();
-
     // Set uniform values
-    glUniformMatrix4fv(Shaders::textureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniformMatrix4fv(
+            Shaders::textureShader.viewProjMatrixUniformLoc,
+            1,
+            GL_FALSE,
+            &FramebufferRenderer::viewProjectionMatrix[0][0]);
     glUniform1i(Shaders::textureShader.texUnitUniformLoc, 0);
 
     // Render framebuffer to screen.
@@ -146,8 +147,8 @@ void GameRenderer::renderUi()
     // Use indexed texture shader
     glUseProgram(Shaders::indexedTextureShader.programId);
 
-    // Project to menu
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuProjection(window.getAspectRatio());
+    // Determine our view-projection matrix
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window.getAspectRatio());
 
     // Set uniform values
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);

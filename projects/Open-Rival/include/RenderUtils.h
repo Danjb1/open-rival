@@ -1,11 +1,11 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 
 #include <cmath>
 
 #include "Camera.h"
-#include "Window.h"
 
 namespace Rival { namespace RenderUtils {
 
@@ -41,10 +41,8 @@ static constexpr int maxTilesX = 210;
 static constexpr int maxTilesY = 134;
 
 // Camera z-position.
-// We position our camera such that it looks into the screen.
-// All z co-ordinates should therefore be positive; higher values
-// represent greater depth.
-static constexpr float zCamera = -1.0f;
+// Our camera points along positive z.
+static constexpr float cameraZ = -1.0f;
 
 // Camera near plane.
 // This is the minimum distance from the camera that we can render.
@@ -52,7 +50,7 @@ static constexpr float nearPlane = 1.0f;
 
 // Z-positions used in rendering.
 // Lower values are nearer to the camera and will be rendered on top.
-static constexpr float zStart = zCamera + nearPlane;
+static constexpr float zStart = cameraZ + nearPlane;
 static constexpr float zMapBorder = zStart;
 static constexpr float zFog = zMapBorder + 1.f;
 static constexpr float zEntityNearest = zFog + 1.f;
@@ -63,6 +61,10 @@ static constexpr float zTiles = zEntityFurthest + 1.f;
 // This is the maximum distance from the camera that we can render.
 // We calculate this such that we can handle all required depth values.
 static const float farPlane = nearPlane + abs(zTiles + 1.f);
+
+// Camera up vector.
+// Our game world uses a top-left origin, so +y is down.
+static constexpr glm::vec3 upVector { 0.f, -1.f, 0.f };
 
 /**
  * Gets the x-position at which a tile with the given x co-ordinate
@@ -148,18 +150,23 @@ int getCanvasHeight(float cameraHeight);
 int getMenuWidth(const double aspectRatio);
 
 /**
- * Creates a view-projection matrix for rendering to the game world.
+ * Creates a view matrix focused on the given point.
  */
-glm::mat4 createGameProjection(const Camera& camera, int viewportWidth, int viewportHeight);
+glm::mat4 createViewMatrix(float cameraX, float cameraY);
 
 /**
- * Creates a view-projection matrix for rendering a framebuffer.
+ * Creates a projection matrix using the given dimensions.
  */
-glm::mat4 createFramebufferProjection();
+glm::mat4 createProjectionMatrix(float width, float height);
+
+/**
+ * Creates a view-projection matrix for rendering to the game world.
+ */
+glm::mat4 createGameViewProjectionMatrix(const Camera& camera, int viewportWidth, int viewportHeight);
 
 /**
  * Creates a view-projection matrix for rendering to a menu.
  */
-glm::mat4 createMenuProjection(double aspectRatio);
+glm::mat4 createMenuViewProjectionMatrix(double aspectRatio);
 
 }}  // namespace Rival::RenderUtils

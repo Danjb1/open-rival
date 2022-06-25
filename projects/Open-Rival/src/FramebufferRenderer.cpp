@@ -12,6 +12,16 @@
 
 namespace Rival {
 
+const glm::mat4 FramebufferRenderer::viewProjectionMatrix = createViewProjectionMatrix();
+
+const glm::mat4 FramebufferRenderer::createViewProjectionMatrix()
+{
+    // Our view-projection matrix is always the same because our framebuffers use identical vertices
+    glm::mat4 view = RenderUtils::createViewMatrix(0.5f, 0.5f);
+    glm::mat4 projection = RenderUtils::createProjectionMatrix(1.f, 1.f);
+    return projection * view;
+}
+
 FramebufferRenderer::FramebufferRenderer(Framebuffer& fbo)
     : fbo(fbo)
 {
