@@ -45,11 +45,17 @@
     - Currently the Knight's starting tile remains impassable
 - Units should take longer to move horizontally than diagonally or vertically
 
-### Rendering Oddities
+### Rendering
 
-- The way we render framebuffers is strange
-    - Why not flip the texture co-ordinates, instead of flipping the viewport?
-- Why do we not need to flip tex co-ords when rendering a texture atlas (for the UI)?
+- Improve documentation:
+    - Co-ordinate systems
+    - Texture origins and sampling
+    - Facings
+    - Ortho projections (top/bottom parameters in particular)
+- Extract common vectors (e.g. up vector) to constants
+    - Camera position can be stored as a vector directly
+- Rebuild spritesheets to check they're still correct
+- Reduce duplication
 
 ### Setup
 
@@ -350,9 +356,9 @@
     - Build a palette for each team color dynamically
     - Render units using their correct colors (unit colors, not team colors!)
 - Framebuffer size calculations should use RenderUtils
-- Why does FramebufferRendering require a different winding order to other renderers?
 - Extract common code from SpriteRenderable and AtlasRenderable
 - Use string constants to access images within a texture atlas
+- Font shader could accept 2d vertices since z is always 0
 
 ### Design
 
