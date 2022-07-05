@@ -74,7 +74,7 @@ void Image::copyImage(const Image& src, Image& dst, const int dstX, const int ds
 {
 
     const std::vector<std::uint8_t>& srcData = src.getData();
-    std::vector<std::uint8_t>& dstData = dst.getEditableData();
+    std::vector<std::uint8_t>& dstData = dst.getMutableData();
 
     for (int y = 0; y < src.getHeight(); y++)
     {

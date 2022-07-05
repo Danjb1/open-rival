@@ -18,9 +18,13 @@ struct ImageProperties
     int stride = -1;
 };
 
+/**
+ * An image consisting of 1 byte per pixel.
+ *
+ * Normally, we use these values as a lookup into a separate palette texture, since the game only uses 256 colors.
+ */
 class Image
 {
-
 public:
     static Image readImage(const std::string filename);
 
@@ -51,7 +55,7 @@ public:
 
     int getStride() const;
 
-    std::vector<std::uint8_t>& getEditableData()
+    std::vector<std::uint8_t>& getMutableData()
     {
         return data;
     };
