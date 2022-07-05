@@ -45,15 +45,6 @@
     - Currently the Knight's starting tile remains impassable
 - Units should take longer to move horizontally than diagonally or vertically
 
-### Rendering
-
-- Improve documentation:
-    - Co-ordinate systems
-    - Texture origins and sampling
-    - Facings
-    - Ortho projections (top/bottom parameters in particular)
-- Rebuild spritesheets to check they're still correct
-
 ### Setup
 
 - Some setup projects may be broken by recent dependency changes

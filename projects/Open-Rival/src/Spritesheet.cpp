@@ -24,10 +24,8 @@ const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
 
     const float tx1 = x * width / txWidth;
     const float tx2 = (x + 1) * width / txWidth;
-
-    // Subtract from 1 to account for the bottom-left OpenGL origin
-    const float ty1 = 1.f - (y * height / txHeight);
-    const float ty2 = 1.f - ((y + 1) * height / txHeight);
+    const float ty1 = y * height / txHeight;
+    const float ty2 = (y + 1) * height / txHeight;
 
     return {
         tx1, ty1,  //

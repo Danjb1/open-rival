@@ -44,6 +44,12 @@ int nextPowerOf2(int v)
 
 /**
  * Writes an image to disk.
+ *
+ * Our images are saved using a top-left origin, which means that the first byte of the data on disk is the top-left
+ * corner of the image. Conveniently, this means that when we send the data to OpenGL (which expects the first byte to
+ * be the bottom-left corner), the image gets flipped to suit the OpenGL origin. This means that we don't need to do any
+ * funky transformations when generating texture co-ordinates; we can still use (0, 0) to refer to the top-left corner
+ * of the image (since OpenGL will be looking at the bottom-left corner of an upside-down image).
  */
 void writeImage(Image& image, const Palette::Palette& palette, const std::string filename)
 {
