@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <string>
 
 #include "EntityComponent.h"
 #include "SpriteRenderable.h"

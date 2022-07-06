@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "MovementComponent.h"
 #include "Pathfinding.h"
 

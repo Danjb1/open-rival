@@ -2,6 +2,7 @@
 
 #include <cstdint>  // uint8_t
 #include <memory>
+#include <string>
 #include <unordered_set>
 
 #include "EntityComponent.h"

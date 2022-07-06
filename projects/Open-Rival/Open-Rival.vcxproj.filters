@@ -265,6 +265,9 @@
     <ClCompile Include="src\Sounds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MouseHandlerComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h">
@@ -512,6 +515,9 @@
     </ClInclude>
     <ClInclude Include="include\Sounds.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MouseHandlerComponent.h">
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

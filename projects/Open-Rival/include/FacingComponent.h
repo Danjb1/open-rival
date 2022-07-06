@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "EntityComponent.h"
 #include "MapUtils.h"
 #include "MovementComponent.h"

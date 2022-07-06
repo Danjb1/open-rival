@@ -36,23 +36,11 @@ int tileToPx_Y(int x, int y)
     return renderPos;
 }
 
-float tileToScaledPx_X(int x, float zoomLevel)
+float pxToScaledPx_X(int x, float zoomLevel)
 {
     // Same as tileToPx_X, above, but with a zoom level applied
     float scaledTileWidth = tileWidthPx * zoomLevel;
     return x * (scaledTileWidth / 2);
-}
-
-float tileToScaledPx_Y(int x, int y, float zoomLevel)
-{
-    // Same as tileToPx_Y, above, but with a zoom level applied
-    float scaledTileHeight = tileHeightPx * zoomLevel;
-    float renderPos = y * scaledTileHeight;
-    if (MapUtils::isLowerTile(x))
-    {
-        renderPos += (scaledTileHeight / 2);
-    }
-    return renderPos;
 }
 
 float cameraToPx_X(float x)

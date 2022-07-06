@@ -48,6 +48,7 @@
     <ClCompile Include="src\MidiFile.cpp" />
     <ClCompile Include="src\MidiPlayer.cpp" />
     <ClCompile Include="src\MidsDecoder.cpp" />
+    <ClCompile Include="src\MouseHandlerComponent.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\MovementComponent.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="include\MidiFile.h" />
     <ClInclude Include="include\MidiPlayer.h" />
     <ClInclude Include="include\MidsDecoder.h" />
+    <ClInclude Include="include\MouseHandlerComponent.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\MovementComponent.h" />

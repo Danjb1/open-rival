@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "EntityComponent.h"
 #include "Sounds.h"
