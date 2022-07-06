@@ -47,21 +47,10 @@ private:
 
     std::weak_ptr<Entity> findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
 
-    bool isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY);
-
     void entitySelected(std::shared_ptr<Entity> entity);
     void tileSelected();
 
 private:
-    // Offset of a Unit's hitbox, measured from the top-left corner of the
-    // containing tile to the bottom-left of the hitbox, in px
-    static constexpr int unitHitboxOffsetX = 20;
-    static constexpr int unitHitboxOffsetY = 25;
-
-    // Size of a Unit's hitbox
-    static constexpr int unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
-    static constexpr int unitHitboxHeight = 40;
-
     Camera& camera;
 
     Rect& viewport;

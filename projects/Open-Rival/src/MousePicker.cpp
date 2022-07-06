@@ -10,6 +10,7 @@
 #include "Entity.h"
 #include "MapUtils.h"
 #include "MathUtils.h"
+#include "MouseHandlerComponent.h"
 #include "MouseUtils.h"
 #include "Rect.h"
 #include "UnitPropsComponent.h"
@@ -217,87 +218,37 @@ MapNode MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
 
 std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
 {
+    // First, undo the camera zoom to find the mouse position in a
+    // pixel-perfect game world. This means all of our subsequent calculations
+    // do not need to worry about scaling.
+    float zoom = camera.getZoom();
+    float mouseInWorldX = mouseInViewportX / zoom;
+    float mouseInWorldY = mouseInViewportY / zoom;
+
+    // Find the camera position, in pixels
+    float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
+    float cameraY_px = RenderUtils::cameraToPx_Y(camera.getTop());
+
+    // TODO: We could optimise this by considering only Entities that
+    // were rendered in the previous frame.
     const auto& entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
-        // We could optimise this by considering only Entities that were
-        // rendered in the previous frame.
-        if (isMouseInEntity(*e, mouseInViewportX, mouseInViewportY))
+        const MouseHandlerComponent* mouseHandlerComponent =
+                e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
+        if (!mouseHandlerComponent)
+        {
+            continue;
+        }
+
+        const Rect hitbox = mouseHandlerComponent->getHitbox(cameraX_px, cameraY_px);
+        if (hitbox.contains(mouseInWorldX, mouseInWorldY))
         {
             return e;
         }
     }
 
     return {};
-}
-
-bool MousePicker::isMouseInEntity(const Entity& entity, int mouseInViewportX, int mouseInViewportY)
-{
-
-    /*
-     * Entities are always rendered at a fixed pixel offset from the tile
-     * they occupy. Thus, if we can figure out the rendered position of
-     * this tile sprite (A), we can figure out the rendered position of the
-     * entity (B).
-     *
-     *               B=======+
-     *               |       |
-     *      A--------|       |--------+
-     *      |        |       |        |
-     *      |      # |       | #      |
-     *      |   #    |       |    #   |
-     *      |<       +=======+       >|
-     *      |   #                 #   |
-     *      |      #           #      |
-     *      |         #     #         |
-     *      |            #            |
-     *      |                         |
-     *      |                         |
-     *      +-------------------------+
-     *
-     * Note that the rendered tile position that we calculate is the
-     * position BEFORE viewport scaling. If the game is not rendered in a
-     * pixel-perfect manner (i.e. if the camera size, in pixels, does not
-     * match the viewport), then this will not work correctly.
-     *
-     * For now, we assume all entities take up only one tile, so this won't
-     * work properly for buildings.
-     */
-
-    // Find the rendered position of the top-left corner of the entity's
-    // tile. This is measured in scaled px, which takes into account the
-    // zoom level used during rendering.
-    //
-    // IMPORTANT: Any subsequent operations affecting this position must
-    // use the same units; that is, we have to always take the zoom level
-    // into account!
-    float zoom = camera.getZoom();
-    const MapNode& pos = entity.getPos();
-    float tileX_px = RenderUtils::tileToScaledPx_X(pos.x, zoom);
-    float tileY_px = RenderUtils::tileToScaledPx_Y(pos.x, pos.y, zoom);
-
-    // Adjust based on the camera position
-    // (as the camera pans right, tiles are rendered further to the left!)
-    tileX_px -= RenderUtils::cameraToPx_X(camera.getLeft()) * zoom;
-    tileY_px -= RenderUtils::cameraToPx_Y(camera.getTop()) * zoom;
-
-    // Find the bottom-left corner of the entity's hitbox. This is the
-    // easiest corner to find, since it is always a fixed offset from the
-    // containing tile, regardless of the height of the entity (except
-    // perhaps for flying units!).
-    float unitX1 = tileX_px + (unitHitboxOffsetX * zoom);
-    float unitY2 = tileY_px + (unitHitboxOffsetY * zoom);
-
-    // Now find the opposite corner based on the hitbox size
-    // TMP: For now we use a fixed height for all entities
-    float unitX2 = unitX1 + (unitHitboxWidth * zoom);
-    float unitY1 = unitY2 - (unitHitboxHeight * zoom);
-
-    // Finally, see if the mouse is inside the hitbox
-    return mouseInViewportX >= unitX1      //
-            && mouseInViewportY >= unitY1  //
-            && mouseInViewportX < unitX2   //
-            && mouseInViewportY < unitY2;
 }
 
 MapNode MousePicker::getTilePos() const

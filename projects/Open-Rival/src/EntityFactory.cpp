@@ -7,6 +7,7 @@
 
 #include "Animations.h"
 #include "BuildingPropsComponent.h"
+#include "MouseHandlerComponent.h"
 #include "OwnerComponent.h"
 #include "PassabilityComponent.h"
 #include "Resources.h"
@@ -71,6 +72,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
     // Add VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(audioStore, audioSystem, *unitDef));
+
+    // Add MouseHandlerComponent
+    unit->attach(std::make_shared<MouseHandlerComponent>());
 
     return unit;
 }
