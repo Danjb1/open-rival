@@ -3,28 +3,41 @@
 #include <string>
 
 #include "EntityComponent.h"
+#include "MovementComponent.h"
 #include "Rect.h"
 #include "RenderUtils.h"
 
 namespace Rival {
 
 class Camera;
+class SpriteComponent;
+class VoiceComponent;
 struct MapNode;
 
 /**
  * Component that allows an Entity to respond to mouse input.
  */
-class MouseHandlerComponent : public EntityComponent
+class MouseHandlerComponent
+    : public EntityComponent
+    , public MovementListener
 {
 public:
     MouseHandlerComponent();
 
+    // Begin EntityComponent override
+    virtual void onEntitySpawned(World* world) override;
+    virtual void onDelete() override;
+    // End EntityComponent override
+
+    // Begin MovementComponent override
+    virtual void onUnitMoveStart(const MapNode* nextNode) override;
+    virtual void onUnitStopped() override;
+    // End MovementComponent override
+
     /**
-     * Gets the Entity's hitbox in the rendered game world, in pixels, using the given camera position.
-     *
-     * This does not take into account the camera zoom, that is, it assumes a pixel-perfect game world.
+     * Gets the Entity's hitbox, in pixels, assuming a pixel-perfect game world.
      */
-    Rect getHitbox(float cameraX_px, float cameraY_px) const;
+    Rect getHitbox();
 
     /**
      * Determines if this Entity can be selected.
@@ -48,6 +61,9 @@ public:
     }
     */
 
+private:
+    Rect createHitbox() const;
+
 public:
     static const std::string key;
 
@@ -60,6 +76,15 @@ private:
     // Size of a Unit's hitbox
     static constexpr float unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
     static constexpr float unitHitboxHeight = 40.f;
+
+    std::weak_ptr<MovementComponent> weakMovementComponent;
+    std::weak_ptr<SpriteComponent> weakSpriteComponent;
+    std::weak_ptr<VoiceComponent> weakVoiceComponent;
+
+    Rect hitbox;
+
+    bool dirty = true;
+    bool moving = true;
 };
 
 }  // namespace Rival

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 #include <map>
 #include <string>
 
@@ -25,6 +27,7 @@ public:
     static const std::string key;
 
     mutable bool dirty;
+    mutable glm::vec2 lastLerpOffset;
 
     SpriteComponent(const Spritesheet& spritesheet);
 

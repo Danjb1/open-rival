@@ -108,9 +108,10 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
     x1 += static_cast<float>(RenderUtils::entityDrawOffsetX);
     y1 += static_cast<float>(RenderUtils::entityDrawOffsetY);
 
-    std::array<float, numLerpDimensions> lerpOffset = getLerpOffset(entity, delta);
-    x1 += lerpOffset[lerpIdxX];
-    y1 += lerpOffset[lerpIdxY];
+    glm::vec2 lerpOffset = getLerpOffset(entity, delta);
+    spriteComponent.lastLerpOffset = lerpOffset;
+    x1 += lerpOffset.x;
+    y1 += lerpOffset.y;
 
     float width = static_cast<float>(RenderUtils::entityWidthPx);
     float height = static_cast<float>(RenderUtils::entityHeightPx);
@@ -153,10 +154,9 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
  * Due to the way tiles overlap, diagonal moves only actually span half a
  * tile, in terms of pixels.
  */
-std::array<float, EntityRenderer::numLerpDimensions>
-EntityRenderer::getLerpOffset(const Entity& entity, int delta) const
+glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
 {
-    std::array<float, numLerpDimensions> offset = { 0, 0 };
+    glm::vec2 offset = { 0, 0 };
 
     // See if the Entity can move
     // TODO: This needs to work for flying units too
@@ -186,37 +186,37 @@ EntityRenderer::getLerpOffset(const Entity& entity, int delta) const
     // Determine x-offset
     if (dir == Facing::East)
     {
-        offset[lerpIdxX] = progress * RenderUtils::tileWidthPx;
+        offset.x = progress * RenderUtils::tileWidthPx;
     }
     else if (dir == Facing::West)
     {
-        offset[lerpIdxX] = -progress * RenderUtils::tileWidthPx;
+        offset.x = -progress * RenderUtils::tileWidthPx;
     }
     else if (dir == Facing::NorthEast || dir == Facing::SouthEast)
     {
-        offset[lerpIdxX] = progress * 0.5f * RenderUtils::tileWidthPx;
+        offset.x = progress * 0.5f * RenderUtils::tileWidthPx;
     }
     else if (dir == Facing::NorthWest || dir == Facing::SouthWest)
     {
-        offset[lerpIdxX] = -progress * 0.5f * RenderUtils::tileWidthPx;
+        offset.x = -progress * 0.5f * RenderUtils::tileWidthPx;
     }
 
     // Determine y-offset
     if (dir == Facing::North)
     {
-        offset[lerpIdxY] = -progress * RenderUtils::tileHeightPx;
+        offset.y = -progress * RenderUtils::tileHeightPx;
     }
     else if (dir == Facing::South)
     {
-        offset[lerpIdxY] = progress * RenderUtils::tileHeightPx;
+        offset.y = progress * RenderUtils::tileHeightPx;
     }
     else if (dir == Facing::NorthEast || dir == Facing::NorthWest)
     {
-        offset[lerpIdxY] = -progress * 0.5f * RenderUtils::tileHeightPx;
+        offset.y = -progress * 0.5f * RenderUtils::tileHeightPx;
     }
     else if (dir == Facing::SouthEast || dir == Facing::SouthWest)
     {
-        offset[lerpIdxY] = progress * 0.5f * RenderUtils::tileHeightPx;
+        offset.y = progress * 0.5f * RenderUtils::tileHeightPx;
     }
 
     return offset;

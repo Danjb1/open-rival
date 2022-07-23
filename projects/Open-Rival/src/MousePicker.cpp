@@ -4,6 +4,7 @@
 
 #include "SDLWrapper.h"
 
+#include <cstdint>
 #include <iostream>
 
 #include "Camera.h"
@@ -13,8 +14,6 @@
 #include "MouseHandlerComponent.h"
 #include "MouseUtils.h"
 #include "Rect.h"
-#include "UnitPropsComponent.h"
-#include "VoiceComponent.h"
 #include "World.h"
 
 namespace Rival {
@@ -34,16 +33,23 @@ void MousePicker::mouseDown()
     // TODO: Initiate drag-select
 }
 
-void MousePicker::mouseUp()
+void MousePicker::mouseUp(std::uint8_t button)
 {
-    const auto entityUnderMouse = weakEntityUnderMouse.lock();
-    if (entityUnderMouse)
+    if (button == SDL_BUTTON_LEFT)
     {
-        entitySelected(entityUnderMouse);
+        const auto entityUnderMouse = weakEntityUnderMouse.lock();
+        if (entityUnderMouse)
+        {
+            entitySelected(entityUnderMouse);
+        }
+        else
+        {
+            tileSelected();
+        }
     }
-    else
+    else if (button == SDL_BUTTON_RIGHT)
     {
-        tileSelected();
+        deselect();
     }
 }
 
@@ -218,30 +224,28 @@ MapNode MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
 
 std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
 {
-    // First, undo the camera zoom to find the mouse position in a
-    // pixel-perfect game world. This means all of our subsequent calculations
-    // do not need to worry about scaling.
-    float zoom = camera.getZoom();
-    float mouseInWorldX = mouseInViewportX / zoom;
-    float mouseInWorldY = mouseInViewportY / zoom;
-
     // Find the camera position, in pixels
     float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
     float cameraY_px = RenderUtils::cameraToPx_Y(camera.getTop());
+
+    // Find the mouse position in the world by reversing the camera transform
+    float zoom = camera.getZoom();
+    float mouseInWorldX = (mouseInViewportX / zoom) - cameraX_px;
+    float mouseInWorldY = (mouseInViewportY / zoom) - cameraY_px;
 
     // TODO: We could optimise this by considering only Entities that
     // were rendered in the previous frame.
     const auto& entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
-        const MouseHandlerComponent* mouseHandlerComponent =
+        MouseHandlerComponent* mouseHandlerComponent =
                 e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
         if (!mouseHandlerComponent)
         {
             continue;
         }
 
-        const Rect hitbox = mouseHandlerComponent->getHitbox(cameraX_px, cameraY_px);
+        const Rect hitbox = mouseHandlerComponent->getHitbox();
         if (hitbox.contains(mouseInWorldX, mouseInWorldY))
         {
             return e;
@@ -258,45 +262,28 @@ MapNode MousePicker::getTilePos() const
 
 void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
 {
-    std::cout << "Clicked on Entity " << entity->getId() << "\n";
-
-    weakSelectedEntity = entity;
-
-    VoiceComponent* voice = entity->getComponent<VoiceComponent>(VoiceComponent::key);
-    if (voice)
+    if (const auto mouseHandlerComponent = entity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
     {
-        voice->playSound(UnitSoundType::Select);
-    }
-
-    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
-    if (unitProps)
-    {
-        Unit::Type unitType = unitProps->getUnitType();
-        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+        currentSelection.weakSelectedEntity = entity;
+        mouseHandlerComponent->onSelect();
     }
 }
 
 void MousePicker::tileSelected()
 {
-    const auto selectedEntity = weakSelectedEntity.lock();
-    if (!selectedEntity)
+    if (const auto selectedEntity = currentSelection.weakSelectedEntity.lock())
     {
-        return;
+        if (const auto mouseHandlerComponent =
+                    selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+        {
+            mouseHandlerComponent->onTileClicked(tileUnderMouse);
+        }
     }
+}
 
-    MovementComponent* moveComponent = selectedEntity->getComponent<MovementComponent>(MovementComponent::key);
-    if (!moveComponent)
-    {
-        return;
-    }
-
-    moveComponent->moveTo(tileUnderMouse);
-
-    VoiceComponent* voice = selectedEntity->getComponent<VoiceComponent>(VoiceComponent::key);
-    if (voice)
-    {
-        voice->playSound(UnitSoundType::Move);
-    }
+void MousePicker::deselect()
+{
+    currentSelection.weakSelectedEntity = {};
 }
 
 }  // namespace Rival

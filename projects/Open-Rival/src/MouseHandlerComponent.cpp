@@ -2,7 +2,13 @@
 
 #include "MouseHandlerComponent.h"
 
+#include <glm/vec2.hpp>
+
 #include "Entity.h"
+#include "EntityRenderer.h"
+#include "SpriteComponent.h"
+#include "UnitPropsComponent.h"
+#include "VoiceComponent.h"
 
 namespace Rival {
 
@@ -13,7 +19,101 @@ MouseHandlerComponent::MouseHandlerComponent()
 {
 }
 
-Rect MouseHandlerComponent::getHitbox(float cameraX_px, float cameraY_px) const
+void MouseHandlerComponent::onEntitySpawned(World*)
+{
+    weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
+    if (auto movementComponent = weakMovementComponent.lock())
+    {
+        movementComponent->addListener(this);
+    }
+
+    weakSpriteComponent = entity->getComponentWeak<SpriteComponent>(SpriteComponent::key);
+    weakVoiceComponent = entity->getComponentWeak<VoiceComponent>(VoiceComponent::key);
+}
+
+void MouseHandlerComponent::onDelete()
+{
+    if (auto movementComponent = weakMovementComponent.lock())
+    {
+        movementComponent->removeListener(this);
+    }
+}
+
+void MouseHandlerComponent::onUnitMoveStart(const MapNode*)
+{
+    dirty = true;
+    moving = true;
+}
+
+void MouseHandlerComponent::onUnitStopped()
+{
+    moving = false;
+}
+
+Rect MouseHandlerComponent::getHitbox()
+{
+    if (dirty || moving)
+    {
+        hitbox = createHitbox();
+        dirty = false;
+    }
+
+    return hitbox;
+}
+
+bool MouseHandlerComponent::isSelectable() const
+{
+    // TODO: return false for walls, etc.
+    return true;
+}
+
+void MouseHandlerComponent::onSelect()
+{
+    // TODO: Depends on state and entity type
+    //
+    // For enemy units or when in attack mode:
+    // - Attack (depending on selection)
+    //
+    // For chests:
+    // - Move there (depending on selection)
+
+    std::cout << "Clicked on Entity " << entity->getId() << "\n";
+
+    const auto voiceComponent = weakVoiceComponent.lock();
+    if (voiceComponent)
+    {
+        voiceComponent->playSound(UnitSoundType::Select);
+    }
+
+    /*
+    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+    if (unitProps)
+    {
+        Unit::Type unitType = unitProps->getUnitType();
+        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+    }
+    */
+}
+
+void MouseHandlerComponent::onTileClicked(const MapNode& tile)
+{
+    // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
+    // TODO: What about when a group is selected?
+
+    auto moveComponent = weakMovementComponent.lock();
+    if (moveComponent)
+    {
+        moveComponent->moveTo(tile);
+    }
+
+    const auto voiceComponent = weakVoiceComponent.lock();
+    if (voiceComponent)
+    {
+        voiceComponent->playSound(UnitSoundType::Move);
+    }
+}
+
+Rect MouseHandlerComponent::createHitbox() const
 {
     /*
      * Entities are always rendered at a fixed pixel offset from the tile
@@ -51,11 +151,6 @@ Rect MouseHandlerComponent::getHitbox(float cameraX_px, float cameraY_px) const
     float tileX_px = static_cast<float>(RenderUtils::tileToPx_X(pos.x));
     float tileY_px = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y));
 
-    // Adjust based on the camera position
-    // (as the camera pans right, tiles are rendered further to the left!)
-    tileX_px -= cameraX_px;
-    tileY_px -= cameraY_px;
-
     // Find the bottom-left corner of the entity's hitbox. This is the
     // easiest corner to find, since it is always a fixed offset from the
     // containing tile, regardless of the height of the entity (except
@@ -63,49 +158,22 @@ Rect MouseHandlerComponent::getHitbox(float cameraX_px, float cameraY_px) const
     float x1 = tileX_px + (unitHitboxOffsetX);
     float y2 = tileY_px + (unitHitboxOffsetY);
 
-    /*
-    if (movement.isInProgress())
-    {
-        // Reverse-engineer the rendering code here.
-        // If we know the position at the start and destination, and we
-        // know the progress (0-1), finding the current position is trivial
-        // TODO: Introduce methods to reduce duplication
-        float progress = movement.getProgress();
-        x += progress * dirX;
-        y += progress * dirY;
-    }
-    */
-
-    // Now we can trivially find the entity bounds
+    // Now we can find the top-left corner
     // TMP: For now we use a fixed height for all entities
     float y1 = y2 - unitHitboxHeight;
+
+    // Add the last lerp offset that was used to render the entity
+    if (moving)
+    {
+        if (auto spriteComponent = weakSpriteComponent.lock())
+        {
+            glm::vec2 lerpOffset = spriteComponent->lastLerpOffset;
+            x1 += lerpOffset.x;
+            y1 += lerpOffset.y;
+        }
+    }
+
     return { x1, y1, unitHitboxWidth, unitHitboxHeight };
-}
-
-bool MouseHandlerComponent::isSelectable() const
-{
-    // TODO: return false for walls, etc.
-    return true;
-}
-
-void MouseHandlerComponent::onSelect()
-{
-    // TODO: Depends on state and entity type
-    //
-    // For friendly units:
-    // - Play voice
-    //
-    // For enemy units or when in attack mode:
-    // - Attack (depending on selection)
-    //
-    // For chests:
-    // - Move there (depending on selection)
-}
-
-void MouseHandlerComponent::onTileClicked(const MapNode&)
-{
-    // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
-    // TODO: What about when a group is selected?
 }
 
 }  // namespace Rival
