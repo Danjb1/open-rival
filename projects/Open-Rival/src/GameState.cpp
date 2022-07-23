@@ -136,9 +136,9 @@ void GameState::mouseDown(const SDL_MouseButtonEvent)
     mousePicker.mouseDown();
 }
 
-void GameState::mouseUp(const SDL_MouseButtonEvent)
+void GameState::mouseUp(const SDL_MouseButtonEvent evt)
 {
-    mousePicker.mouseUp();
+    mousePicker.mouseUp(evt.button);
 }
 
 void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)

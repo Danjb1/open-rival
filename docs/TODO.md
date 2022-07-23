@@ -8,11 +8,8 @@
 
 ### Mouse Picking
 
-- Doesn't take unit movement into account
-- Use MouseHandlerComponent to respond to clicks instead of putting logic in MousePicker
 - Units can't be sent behind a wall, because it selects the wall instead
 - Only allow moving units belonging to the current player
-- Right-click to deselect
 
 ### Unit Voices
 

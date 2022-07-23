@@ -14,6 +14,14 @@ class Rect;
 class World;
 
 /**
+ * An entity or group that has been selected.
+ */
+struct Selection
+{
+    std::weak_ptr<Entity> weakSelectedEntity;
+};
+
+/**
  * Class responsible for determining what is under the mouse.
  *
  * Currently this works by reverse-engineering the rendering process and
@@ -34,7 +42,7 @@ public:
     MousePicker(Camera& camera, Rect& viewport, World& world);
 
     void mouseDown();
-    void mouseUp();
+    void mouseUp(std::uint8_t button);
     void handleMouse();
 
     MapNode getTilePos() const;
@@ -49,8 +57,11 @@ private:
 
     void entitySelected(std::shared_ptr<Entity> entity);
     void tileSelected();
+    void deselect();
 
 private:
+    World& world;
+
     Camera& camera;
 
     Rect& viewport;
@@ -62,9 +73,8 @@ private:
     MapNode tileUnderMouse;
 
     std::weak_ptr<Entity> weakEntityUnderMouse;
-    std::weak_ptr<Entity> weakSelectedEntity;
 
-    World& world;
+    Selection currentSelection;
 };
 
 }  // namespace Rival
