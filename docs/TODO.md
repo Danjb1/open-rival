@@ -18,8 +18,6 @@
 
 ### Movement
 
-- Interrupting a movement sometimes causes jankiness
-    - This may happen when you issue a new route when a movement has JUST finished
 - We should move by issuing a MoveCommand (Command Pattern?)
     - GameState should process all pending commands each tick
     - In single player, commands can be scheduled for the next tick
@@ -27,9 +25,11 @@
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Units should periodically re-plan their route
 - Units should stop moving if the path becomes blocked
-- Units should modify tile passability as they move
-    - Currently the Knight's starting tile remains impassable
-- Units should take longer to move horizontally than diagonally or vertically
+- We should update a unit's position to the new tile when they are more than halfway through a movement
+- We should mark a tile as "pending blocked" when a unit is moving into it
+- We should mark a tile as "pending clear" when a unit is moving out of it
+    - Units should be able to pathfind through tiles that are "pending clear"
+- We should allow a unit to change direction mid-movement if a new command is issued
 
 ### Setup
 

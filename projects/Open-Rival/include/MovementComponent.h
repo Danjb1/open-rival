@@ -49,7 +49,9 @@ public:
 class MovementComponent : public EntityComponent
 {
 public:
-    MovementComponent(Pathfinding::PassabilityChecker* passabilityChecker);
+    MovementComponent(
+            const Pathfinding::PassabilityChecker& passabilityChecker,
+            Pathfinding::PassabilityUpdater& passabilityUpdater);
     virtual ~MovementComponent() = default;
 
     // Begin EntityComponent override
@@ -73,14 +75,15 @@ private:
     MapNode getStartPosForNextMovement() const;
     void setRoute(Pathfinding::Route route);
     void updateMovement();
-    void prepareNextMovement();
+    bool prepareNextMovement();
     void completeMovement();
 
 public:
     static const std::string key;
 
 protected:
-    Pathfinding::PassabilityChecker* passabilityChecker;
+    const Pathfinding::PassabilityChecker& passabilityChecker;
+    Pathfinding::PassabilityUpdater& passabilityUpdater;
 
     std::unordered_set<MovementListener*> listeners;
 
@@ -90,6 +93,9 @@ protected:
 
     // TMP: This should depend on the unit's speed
     int ticksPerMove = 30;
+
+private:
+    static constexpr float horizontalMoveTimeMultiplier = 1.5f;
 };
 
 }  // namespace Rival

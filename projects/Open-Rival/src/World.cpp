@@ -133,14 +133,24 @@ std::weak_ptr<const Entity> World::getEntityWeak(int id) const
     return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
-void World::setPassability(const MapNode& pos, TilePassability passability)
+int Rival::World::getWidth() const
 {
-    tilePassability[pos.y * width + pos.x] = passability;
+    return width;
+}
+
+int Rival::World::getHeight() const
+{
+    return height;
 }
 
 TilePassability World::getPassability(const MapNode& pos) const
 {
     return tilePassability[pos.y * width + pos.x];
+}
+
+void World::setPassability(const MapNode& pos, TilePassability passability)
+{
+    tilePassability[pos.y * width + pos.x] = passability;
 }
 
 }  // namespace Rival

@@ -126,7 +126,6 @@ void AudioSystem::playNextSound()
         soundQueue.pop();
 
         playedSounds.emplace(sourceId, sound);
-        std::cout << "sounds = " << playedSounds.size() << "\n";
     }
 }
 

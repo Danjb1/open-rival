@@ -14,12 +14,21 @@ namespace Rival {
 class Entity;
 
 /**
- * Interface exposing map data for pathfinding.
+ * Interface exposing read-only map data for pathfinding.
  */
 class PathfindingMap : public MapBounds
 {
 public:
     virtual TilePassability getPassability(const MapNode& pos) const = 0;
+};
+
+/**
+ * Interface exposing writable map data for pathfinding.
+ */
+class WritablePathfindingMap : public PathfindingMap
+{
+public:
+    virtual void setPassability(const MapNode& pos, TilePassability newPassability) = 0;
 };
 
 /**
@@ -37,28 +46,18 @@ struct PendingEntity
  *
  * Contains map data and entities.
  */
-class World : public PathfindingMap
+class World : public WritablePathfindingMap
 {
-
 public:
     World(int width, int height, bool wilderness);
     World(int width, int height, bool wilderness, std::vector<Tile> tiles);
 
-    // Begin PathfindingMap override
-
-    int getWidth() const override
-    {
-        return width;
-    }
-
-    int getHeight() const override
-    {
-        return height;
-    }
-
+    // Begin WritablePathfindingMap override
+    int getWidth() const override;
+    int getHeight() const override;
     TilePassability getPassability(const MapNode& pos) const override;
-
-    // End PathfindingMap override
+    void setPassability(const MapNode& pos, TilePassability newPassability) override;
+    // End WritablePathfindingMap override
 
     const std::vector<Tile>& getTiles() const
     {
@@ -150,8 +149,6 @@ public:
      * Read-only version of `getMutableEntityWeak`.
      */
     std::weak_ptr<const Entity> getEntityWeak(int id) const;
-
-    void setPassability(const MapNode& pos, TilePassability passability);
 
 private:
     const int width;

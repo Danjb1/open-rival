@@ -10,9 +10,18 @@ namespace Rival {
 /**
  * PassabilityChecker that treats empty ground tiles as traversable.
  */
-class WalkerPassabilityChecker : public Pathfinding::PassabilityChecker
+class WalkerPassability
+    : public Pathfinding::PassabilityChecker
+    , public Pathfinding::PassabilityUpdater
 {
+    // Begin PassabilityChecker override
     bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
+    // End PassabilityChecker override
+
+    // Begin PassabilityUpdater override
+    void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) override;
+    void onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node) override;
+    // End PassabilityUpdater override
 };
 
 /**
@@ -27,7 +36,7 @@ public:
     WalkerComponent();
 
 private:
-    static WalkerPassabilityChecker walkerPassabilityChecker;
+    static WalkerPassability walkerPassability;
 };
 
 }  // namespace Rival
