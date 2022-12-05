@@ -6,13 +6,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Unit Voices
-
-- Don't play another voice clip if the unit is already speaking
-    - Hold onto the SoundSource using a smart pointer
-    - Populate the SoundSource with its sourceId in `AudioUtils::playSound`
-    - Add a method to check if a sound is playing using its sourceId
-
 ### HUD
 
 - Show selected unit name in HUD

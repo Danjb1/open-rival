@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AL/alc.h>
+#include <AL/al.h>
 
 #include "SoundSource.h"
 #include "WaveFile.h"
@@ -11,6 +11,6 @@ void initAL();
 
 void destroyAL();
 
-void playSound(const SoundSource& source);
+ALuint playSound(const SoundSource& source);
 
 }}  // namespace Rival::AudioUtils

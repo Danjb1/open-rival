@@ -2,13 +2,13 @@
 
 #include <vector>
 
+#include "Unit.h"
 #include "WaveFile.h"
 
 namespace Rival {
 
-class SoundSource
+struct SoundSource
 {
-public:
     const WaveFile& waveFile;
     float pitch { 1.0f };
     float gain { 1.0f };
@@ -16,6 +16,11 @@ public:
     std::vector<float> velocity { 0, 0, 0 };
     bool looping { false };
     bool positionRelativeToListener { true };
+
+    /**
+     * Unit type that generated the sound, if applicable.
+     */
+    Unit::Type unitType = Unit::Type::Invalid;
 
     /**
      * Creates a new SoundSource positioned at the listener.

@@ -2,7 +2,7 @@
 
 #include "AudioUtils.h"
 
-#include <AL/al.h>
+#include <AL/alc.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -90,7 +90,7 @@ ALenum getAudioFormat(const WavHeader& waveHeader)
             + std::to_string(waveHeader.bitsPerSample) + " bps");
 }
 
-void playSound(const SoundSource& source)
+ALuint playSound(const SoundSource& source)
 {
     // Generate buffer
     ALuint buffer;
@@ -123,6 +123,8 @@ void playSound(const SoundSource& source)
     // Start playing sound
     alSourcePlay(sourceId);
     checkPlaySoundALError(source.waveFile);
+
+    return sourceId;
 }
 
 }}  // namespace Rival::AudioUtils
