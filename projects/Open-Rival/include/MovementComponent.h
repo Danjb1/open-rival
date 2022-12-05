@@ -77,6 +77,7 @@ private:
     void updateMovement();
     bool prepareNextMovement();
     void completeMovement();
+    void onStop();
 
 public:
     static const std::string key;

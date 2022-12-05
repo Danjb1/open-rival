@@ -24,12 +24,6 @@
     - In multiplayer, commands should be scheduled for 'n' ticks in the future
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Units should periodically re-plan their route
-- Units should stop moving if the path becomes blocked
-- We should update a unit's position to the new tile when they are more than halfway through a movement
-- We should mark a tile as "pending blocked" when a unit is moving into it
-- We should mark a tile as "pending clear" when a unit is moving out of it
-    - Units should be able to pathfind through tiles that are "pending clear"
-- We should allow a unit to change direction mid-movement if a new command is issued
 
 ### Setup
 

@@ -29,44 +29,54 @@ enum class TilePassability : std::uint16_t
     Clear = 0,
 
     /**
-     * Flag set when a ground unit occupies a tile.
+     * Flag set when a ground (or sea) unit occupies a tile.
      */
     GroundUnit = 1 << 1,
 
     /**
+     * Flag set when a ground (or sea) unit is moving out of a tile.
+     */
+    GroundUnitLeaving = 1 << 2,
+
+    /**
      * Flag set when a flying unit occupies a tile.
      */
-    FlyingUnit = 1 << 2,
+    FlyingUnit = 1 << 3,
+
+    /**
+     * Flag set when a flying unit is moving into a tile.
+     */
+    FlyingUnitLeaving = 1 << 4,
 
     /**
      * Flag set when a building occupies a tile.
      */
-    Building = 1 << 3,
+    Building = 1 << 5,
 
     /**
      * Flag set when a tree occupies a tile.
      */
-    Tree = 1 << 4,
+    Tree = 1 << 6,
 
     /**
      * Flag set when a soft mountain occupies a tile.
      */
-    SoftMountain = 1 << 5,
+    SoftMountain = 1 << 7,
 
     /**
      * Flag set when some other obstacle occupies a tile.
      */
-    Blocked = 1 << 6,
+    Blocked = 1 << 8,
 
     /**
      * Flag set when a tile contains water.
      */
-    Water = 1 << 7,
+    Water = 1 << 9,
 
     /**
      * Flag set when a tile contains a coastline.
      */
-    Coastline = 1 << 8
+    Coastline = 1 << 10
 };
 MAKE_ENUM_FLAGS(TilePassability)
 
