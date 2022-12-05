@@ -97,7 +97,6 @@ bool EntityRenderer::needsUpdate(const Entity& entity, const SpriteComponent& sp
 
 void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& spriteComponent, int delta) const
 {
-
     // Determine the frame of the texture to be rendered
     int txIndex = spriteComponent.getTxIndex();
 

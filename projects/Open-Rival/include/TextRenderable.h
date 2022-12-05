@@ -64,6 +64,9 @@ public:
      */
     TextRenderable(int maxChars, TextProperties props, float x, float y);
 
+    /** Deletes a TextRenderable. */
+    ~TextRenderable();
+
     // Disable moving / copying
     TextRenderable(const TextRenderable& other) = delete;
     TextRenderable(TextRenderable&& other) = delete;

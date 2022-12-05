@@ -38,7 +38,7 @@ This may be desirable to make the timing of actions in the game more fine-graine
 
 **If this is too low** the game may feel less fluid.
 
-### Framerate
+### Refresh Rate (Framerate)
 
 This is the rate at which the display is refreshed. If we implement interpolation correctly, then this also governs how smoothly entities can move across the map.
 
@@ -53,3 +53,27 @@ Since we are using the lockstep model, it makes sense to use a relay server. In 
 A client can also play the role of the relay server, to remove the need for a dedicated server.
 
 Since the game logic is running directly on the client, this also makes single-player games much simpler to implement. They can work in exactly the same way as multiplayer, but commands can be executed in the tick immediately after they are issued.
+
+## Protocol
+
+For a lockstep model, TCP makes sense because *all* packets require reliable, in-order delivery.
+
+However, UDP still offers a few advantages...
+
+1. NAT traversal / hole punching is easier, should we want to establish direct connections between clients. Although we are using a relay server, this is likely to be running on a client machine, so hole punching could still be valuable.
+
+    > More info [here](https://tailscale.com/blog/how-nat-traversal-works/).
+
+2. Although we require reliable, in-order delivery, there are some tricks we could use with UDP to add tolerance for dropped packets and thus increase reliability. For example, if a player is not issuing any commands, we could send packets that look like this:
+
+        Packet #46: No commands issued for 1 tick
+        Packet #47: No commands issued for 2 ticks
+        Packet #48: No commands issued for 3 ticks
+
+    This way, as long as Packet #48 is received, we can still continue with the game, even if Packets #46 and #47 are lost.
+
+    > This is arguably a premature optimisation, but nonetheless warrants consideration due to the importance of the decision of which protocol to use.
+
+If we opt for UDP, we should use a library to provide support for reliable messaging, as this is a non-trivial problem and there are established "reliable UDP" protocols that ought to be followed.
+
+In either case, we should add a layer of abstraction to separate the networking internals from the game logic, so that we can change our mind later on if needs be.

@@ -233,6 +233,12 @@ GLuint createShader(const char* vertShader, const char* fragShader)
         return 0;
     }
 
+    // Individual shader objects are no longer needed
+    glDetachShader(programId, vertexShader);
+    glDetachShader(programId, fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
     return programId;
 }
 

@@ -271,6 +271,8 @@
 - Add script to run tests from command line
 - Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
 - Use a separate .gitignore file for each project folder
+- Commit upscaled video files (using Git LFS?)
+- Consider linking with static libraries (instead of using DLLs)
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -348,10 +350,10 @@
 - Use string constants to access images within a texture atlas
 - Font shader could accept 2d vertices since z is always 0
 
-### Design
+### Optimisation
 
 - Static objects (e.g. mountains) need not use an AnimationComponent
-- Differentiate between components that need to be ticked and those that don't (optimisation)
+- Differentiate between components that need to be ticked and those that don't
 - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed
 
 ### Refactoring
@@ -376,3 +378,4 @@
 - Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities
 - Use vectors in MousePicker instead of separate x/y variables
 - Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
+- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
