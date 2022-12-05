@@ -17,6 +17,7 @@ namespace Pathfinding {
 class PassabilityChecker
 {
 public:
+    virtual bool isNodePathable(const PathfindingMap& map, const MapNode& node) const = 0;
     virtual bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const = 0;
 };
 
@@ -26,6 +27,8 @@ public:
 class PassabilityUpdater
 {
 public:
+    virtual void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node) = 0;
     virtual void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) = 0;
     virtual void onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node) = 0;
 };

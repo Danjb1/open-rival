@@ -43,7 +43,7 @@ MovementComponent::MovementComponent(
 
 void MovementComponent::update()
 {
-    // Prepare the next movement if we are stationary
+    // Prepare the next movement if we are not currently moving between tiles
     if (!movement.isValid())
     {
         if (!prepareNextMovement())
@@ -107,11 +107,24 @@ void MovementComponent::updateMovement()
  */
 bool MovementComponent::prepareNextMovement()
 {
+    // Check if we have a route planned
     if (route.isEmpty())
     {
         return false;
     }
 
+    // Verify that the destination tile is traversable
+    World* world = entity->getWorld();
+    if (!passabilityChecker.isNodeTraversable(*world, *route.peek()))
+    {
+        // Destination tile is either temporarily or permanently blocked.
+        // TODO: If we know that the tile will become available again (e.g. if a unit is leaving the tile), then wait.
+        //   Otherwise, re-plan our route.
+        onStop();
+        return false;
+    }
+
+    // Configure the new movement
     movement.destination = route.pop();
     movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
 
@@ -121,6 +134,10 @@ bool MovementComponent::prepareNextMovement()
     {
         movement.timeRequired = static_cast<int>(movement.timeRequired * horizontalMoveTimeMultiplier);
     }
+
+    // Update tile passability
+    passabilityUpdater.onUnitLeavingTile(*world, entity->getPos());
+    passabilityUpdater.onUnitEnteringTile(*world, movement.destination);
 
     // Inform listeners
     for (MovementListener* listener : listeners)
@@ -141,16 +158,25 @@ void MovementComponent::completeMovement()
     passabilityUpdater.onUnitLeftTile(*world, entity->getPos());
     passabilityUpdater.onUnitEnteredTile(*world, movement.destination);
 
+    // Update entity position
+    // TODO: Set the unit's position to the new tile once they are more than halfway through the movement?
     entity->setPos(movement.destination);
+
     movement.clear();
 
     if (route.isEmpty())
     {
-        // Reached end of route - inform listeners
-        for (MovementListener* listener : listeners)
-        {
-            listener->onUnitStopped();
-        }
+        // Reached end of route
+        onStop();
+    }
+}
+
+void MovementComponent::onStop()
+{
+    // Inform listeners
+    for (MovementListener* listener : listeners)
+    {
+        listener->onUnitStopped();
     }
 }
 

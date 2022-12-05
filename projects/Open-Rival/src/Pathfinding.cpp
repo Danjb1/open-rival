@@ -247,7 +247,7 @@ std::vector<MapNode> Pathfinder::findNeighbors(const MapNode& node) const
     // Filter out non-traversable neighbors
     std::vector<MapNode> validNeighbors;
     std::copy_if(allNeighbors.begin(), allNeighbors.end(), std::back_inserter(validNeighbors), [this](MapNode n) {
-        return this->passabilityChecker.isNodeTraversable(this->map, n);
+        return this->passabilityChecker.isNodePathable(this->map, n);
     });
 
     return validNeighbors;
