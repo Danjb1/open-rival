@@ -6,6 +6,7 @@
 
 #include "Entity.h"
 #include "EntityRenderer.h"
+#include "OwnerComponent.h"
 #include "SpriteComponent.h"
 #include "UnitPropsComponent.h"
 #include "VoiceComponent.h"
@@ -27,6 +28,7 @@ void MouseHandlerComponent::onEntitySpawned(World*)
         movementComponent->addListener(this);
     }
 
+    weakOwnerComponent = entity->getComponentWeak<OwnerComponent>(OwnerComponent::key);
     weakSpriteComponent = entity->getComponentWeak<SpriteComponent>(SpriteComponent::key);
     weakVoiceComponent = entity->getComponentWeak<VoiceComponent>(VoiceComponent::key);
 }
@@ -67,7 +69,7 @@ bool MouseHandlerComponent::isSelectable() const
     return true;
 }
 
-void MouseHandlerComponent::onSelect()
+void MouseHandlerComponent::onSelect(const PlayerStore& playerStore)
 {
     // TODO: Depends on state and entity type
     //
@@ -79,10 +81,18 @@ void MouseHandlerComponent::onSelect()
 
     std::cout << "Clicked on Entity " << entity->getId() << "\n";
 
-    const auto voiceComponent = weakVoiceComponent.lock();
-    if (voiceComponent)
+    // Play a sound if the unit belongs to the local player
+    if (const auto ownerComponent = weakOwnerComponent.lock())
     {
-        voiceComponent->playSound(UnitSoundType::Select);
+        int playerId = ownerComponent->getPlayerId();
+        if (playerStore.isLocalPlayer(playerId))
+        {
+            const auto voiceComponent = weakVoiceComponent.lock();
+            if (voiceComponent)
+            {
+                voiceComponent->playSound(UnitSoundType::Select);
+            }
+        }
     }
 
     /*
@@ -95,19 +105,27 @@ void MouseHandlerComponent::onSelect()
     */
 }
 
-void MouseHandlerComponent::onTileClicked(const MapNode& tile)
+void MouseHandlerComponent::onTileClicked(const PlayerStore& playerStore, const MapNode& tile)
 {
     // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
     // TODO: What about when a group is selected?
 
-    auto moveComponent = weakMovementComponent.lock();
-    if (moveComponent)
+    if (const auto ownerComponent = weakOwnerComponent.lock())
+    {
+        int playerId = ownerComponent->getPlayerId();
+        if (!playerStore.isLocalPlayer(playerId))
+        {
+            // Other players' units cannot be controlled
+            return;
+        }
+    }
+
+    if (auto moveComponent = weakMovementComponent.lock())
     {
         moveComponent->moveTo(tile);
     }
 
-    const auto voiceComponent = weakVoiceComponent.lock();
-    if (voiceComponent)
+    if (const auto voiceComponent = weakVoiceComponent.lock())
     {
         voiceComponent->playSound(UnitSoundType::Move);
     }

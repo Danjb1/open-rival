@@ -13,9 +13,6 @@ namespace Rival {
 WaveFile::WaveFile(std::string filename)
     : filename(filename)
 {
-
-    std::cout << "Loading: " << filename << "\n";
-
     // Open file and check size
     std::streamoff remainSize;
     std::ifstream in(filename, std::ios::in | std::ios::binary | std::ios::ate);

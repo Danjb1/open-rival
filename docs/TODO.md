@@ -6,11 +6,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### Mouse Picking
-
-- Units can't be sent behind a wall, because it selects the wall instead
-- Only allow moving units belonging to the current player
-
 ### Unit Voices
 
 - Don't play another voice clip if the unit is already speaking
@@ -352,6 +347,7 @@
 
 ### Optimisation
 
+- Only mouse-pick objects that were rendered last frame
 - Static objects (e.g. mountains) need not use an AnimationComponent
 - Differentiate between components that need to be ticked and those that don't
 - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed

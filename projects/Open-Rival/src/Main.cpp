@@ -10,6 +10,9 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <tuple>  // std::forward_as_tuple
+#include <unordered_map>
+#include <utility>  // std::piecewise_construct
 
 #include "Application.h"
 #include "AudioUtils.h"
@@ -139,8 +142,15 @@ int main()
         EntityFactory entityFactory(res, res, res, app.getAudioSystem());
         std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
+        // Initialize players
+        std::unordered_map<int, PlayerState> playerStates;
+        playerStates.emplace(
+                std::piecewise_construct,
+                std::forward_as_tuple(0),
+                std::forward_as_tuple(Race::Human, /* gold = */ 100, /* wood = */ 100, /* food = */ 100));
+
         // Create our initial state
-        std::unique_ptr<State> initialState = std::make_unique<GameState>(app, std::move(world));
+        std::unique_ptr<State> initialState = std::make_unique<GameState>(app, std::move(world), playerStates);
 
         // Run the game!
         app.start(std::move(initialState));

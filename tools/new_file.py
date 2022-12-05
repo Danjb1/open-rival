@@ -2,10 +2,10 @@
 Script to create a blank .cpp and .h file for Open-Rival.
 
     USAGE:
-      python new-file.py [filename]
+      python new_file.py [filename]
 
     EXAMPLE:
-      python new-file.py Rect
+      python new_file.py Rect
 '''
 
 import re

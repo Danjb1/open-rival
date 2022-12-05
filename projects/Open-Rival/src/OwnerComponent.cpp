@@ -6,15 +6,10 @@ namespace Rival {
 
 const std::string OwnerComponent::key = "owner";
 
-OwnerComponent::OwnerComponent(int player)
+OwnerComponent::OwnerComponent(int playerId)
     : EntityComponent(key)
-    , player(player)
+    , playerId(playerId)
 {
-}
-
-int OwnerComponent::getPlayer() const
-{
-    return player;
 }
 
 }  // namespace Rival
