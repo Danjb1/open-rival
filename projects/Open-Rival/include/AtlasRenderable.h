@@ -34,6 +34,9 @@ public:
     AtlasRenderable& operator=(const AtlasRenderable& other) = delete;
     AtlasRenderable& operator=(AtlasRenderable&& other) = delete;
 
+    /** Deletes an AtlasRenderable. */
+    ~AtlasRenderable();
+
     GLuint getVao() const
     {
         return vao;

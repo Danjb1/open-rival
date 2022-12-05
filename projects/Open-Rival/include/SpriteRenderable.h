@@ -30,6 +30,9 @@ public:
      */
     SpriteRenderable(const Spritesheet& spritesheet, int maxSprites);
 
+    /** Deletes a SpriteRenderable. */
+    ~SpriteRenderable();
+
     // Disable moving / copying
     SpriteRenderable(const SpriteRenderable& other) = delete;
     SpriteRenderable(SpriteRenderable&& other) = delete;

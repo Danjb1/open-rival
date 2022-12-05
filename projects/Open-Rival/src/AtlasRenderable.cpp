@@ -82,4 +82,25 @@ AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites)
     glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
 }
 
+AtlasRenderable::~AtlasRenderable()
+{
+    if (!vao)
+    {
+        return;
+    }
+
+    // Clean up
+    glBindVertexArray(vao);
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glDeleteBuffers(1, &positionVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glDeleteBuffers(1, &texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, ibo);
+        glDeleteBuffers(1, &ibo);
+    }
+    glDeleteVertexArrays(1, &vao);
+    glBindVertexArray(0);
+}
+
 }  // namespace Rival

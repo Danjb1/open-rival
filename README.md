@@ -50,11 +50,12 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 
 ## Links
 
- - [Discord Server](https://discord.gg/R7E4KWT)
- - [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
- - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
- - [2016] [Let's Play](https://youtu.be/bSefVvZnxKs)
- - [2019] [Multiplayer Gameplay & Set-up Guide](https://youtu.be/KzTm1MCKrLI)
- - [2019] [Gameplay](https://youtu.be/3VcExo3szcc)
- - [2020] [Gameplay](https://youtu.be/3dcCDnHEAzc)
- - [2021] [Let's Play](https://youtube.com/playlist?list=PLFl3jwQIfR7-yusWQIiqZ-5LarDx-ixdS)
+- [Discord Server](https://discord.gg/R7E4KWT)
+- [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
+- [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
+- [2016] [Let's Play](https://youtu.be/bSefVvZnxKs)
+- [2019] [Multiplayer Gameplay & Set-up Guide](https://youtu.be/KzTm1MCKrLI)
+- [2019] [Gameplay](https://youtu.be/3VcExo3szcc)
+- [2020] [Gameplay](https://youtu.be/3dcCDnHEAzc)
+- [2021] [Let's Play](https://youtube.com/playlist?list=PLFl3jwQIfR7-yusWQIiqZ-5LarDx-ixdS)
+- [Upscaled Cutscenes](https://www.youtube.com/playlist?list=PLfJwVz0VSvZmUPemMtnYGT56MHwnnXZ9o)

@@ -43,6 +43,29 @@ TextRenderable::TextRenderable(int maxChars, TextProperties props, float x, floa
     init();
 }
 
+TextRenderable::~TextRenderable()
+{
+    if (!vao)
+    {
+        return;
+    }
+
+    // Clean up
+    glBindVertexArray(vao);
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glDeleteBuffers(1, &positionVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glDeleteBuffers(1, &texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+        glDeleteBuffers(1, &colorVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, ibo);
+        glDeleteBuffers(1, &ibo);
+    }
+    glDeleteVertexArrays(1, &vao);
+    glBindVertexArray(0);
+}
+
 void TextRenderable::init()
 {
     // Generate VAO

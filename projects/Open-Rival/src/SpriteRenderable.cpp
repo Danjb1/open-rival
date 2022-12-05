@@ -2,6 +2,8 @@
 
 #include "SpriteRenderable.h"
 
+#include <vector>
+
 #include "Shaders.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -11,7 +13,6 @@ namespace Rival {
 SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprites)
     : spritesheet(spritesheet)
 {
-
     // Generate VAO
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -56,7 +57,6 @@ SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprite
     indexData.reserve(maxSprites * indicesPerSprite);
     for (int i = 0; i < maxSprites; i++)
     {
-
         unsigned int startIndex = i * numVerticesPerSprite;
 
         if (drawMode == GL_TRIANGLE_FAN)
@@ -83,6 +83,27 @@ SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprite
     // Enable vertex attributes
     glEnableVertexAttribArray(Shaders::vertexAttribIndex);
     glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
+}
+
+SpriteRenderable::~SpriteRenderable()
+{
+    if (!vao)
+    {
+        return;
+    }
+
+    // Clean up
+    glBindVertexArray(vao);
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glDeleteBuffers(1, &positionVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glDeleteBuffers(1, &texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, ibo);
+        glDeleteBuffers(1, &ibo);
+    }
+    glDeleteVertexArrays(1, &vao);
+    glBindVertexArray(0);
 }
 
 GLuint SpriteRenderable::getVao() const
