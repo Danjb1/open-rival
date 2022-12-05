@@ -1,9 +1,12 @@
 #pragma once
 
+#include <AL/al.h>
+
 #include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <unordered_map>
 
 #include "MidiFile.h"
 #include "MidiPlayer.h"
@@ -115,6 +118,21 @@ public:
      */
     void playSound(SoundSource source);
 
+    /**
+     * Determines if the given sound source is currently playing.
+     */
+    bool isSoundPlaying(ALuint sourceId) const;
+
+    /**
+     * Gets the most recently played sounds.
+     *
+     * Note that these sounds may already have finished playing.
+     */
+    std::unordered_map<ALuint, SoundSource> getPlayedSounds() const
+    {
+        return playedSounds;
+    }
+
 private:
     /**
      * Flag set when sound playback is enabled.
@@ -125,6 +143,11 @@ private:
      * Queue of sounds waiting to be played.
      */
     std::queue<SoundSource> soundQueue;
+
+    /**
+     * Map of sounds that are currently playing.
+     */
+    std::unordered_map<ALuint, SoundSource> playedSounds;
 
     /**
      * Background thread used to play sound files.
@@ -172,6 +195,8 @@ private:
      * Stops all sounds that are playing.
      */
     void stopAllSounds();
+
+    void cleanUpPlayedSounds();
 };
 
 }  // namespace Rival

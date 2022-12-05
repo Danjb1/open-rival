@@ -122,8 +122,11 @@ void AudioSystem::playNextSound()
     if (soundQueue.size() > 0)
     {
         SoundSource& sound = soundQueue.front();
-        AudioUtils::playSound(sound);
+        ALint sourceId = AudioUtils::playSound(sound);
         soundQueue.pop();
+
+        playedSounds.emplace(sourceId, sound);
+        std::cout << "sounds = " << playedSounds.size() << "\n";
     }
 }
 
@@ -174,6 +177,9 @@ void AudioSystem::stopAllSounds()
 
 void AudioSystem::playSound(SoundSource source)
 {
+    // Periodically clean up sounds that have finished
+    cleanUpPlayedSounds();
+
     const std::scoped_lock<std::mutex> lock(soundQueueMutex);
 
     // Add the sound to the queue
@@ -181,6 +187,29 @@ void AudioSystem::playSound(SoundSource source)
 
     // Notify our sound thread of the new sound
     soundReadyCondition.notify_one();
+}
+
+void AudioSystem::cleanUpPlayedSounds()
+{
+    for (auto it = playedSounds.cbegin(); it != playedSounds.cend(); /* no increment */)
+    {
+        ALuint sourceId = it->first;
+        if (isSoundPlaying(sourceId))
+        {
+            ++it;
+        }
+        else
+        {
+            it = playedSounds.erase(it);
+        }
+    }
+}
+
+bool AudioSystem::isSoundPlaying(ALuint sourceId) const
+{
+    ALint state;
+    alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+    return state == AL_PLAYING;
 }
 
 }  // namespace Rival
