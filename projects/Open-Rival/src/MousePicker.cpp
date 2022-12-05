@@ -18,10 +18,11 @@
 
 namespace Rival {
 
-MousePicker::MousePicker(Camera& camera, Rect& viewport, World& world)
+MousePicker::MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore)
     : camera(camera)
     , viewport(viewport)
     , world(world)
+    , playerStore(playerStore)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
     , tileUnderMouse({ -1, -1 })
@@ -230,11 +231,10 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
 
     // Find the mouse position in the world by reversing the camera transform
     float zoom = camera.getZoom();
-    float mouseInWorldX = (mouseInViewportX / zoom) - cameraX_px;
-    float mouseInWorldY = (mouseInViewportY / zoom) - cameraY_px;
+    float mouseInWorldX = (mouseInViewportX / zoom) + cameraX_px;
+    float mouseInWorldY = (mouseInViewportY / zoom) + cameraY_px;
 
-    // TODO: We could optimise this by considering only Entities that
-    // were rendered in the previous frame.
+    // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
     const auto& entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
@@ -265,7 +265,7 @@ void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
     if (const auto mouseHandlerComponent = entity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
     {
         currentSelection.weakSelectedEntity = entity;
-        mouseHandlerComponent->onSelect();
+        mouseHandlerComponent->onSelect(playerStore);
     }
 }
 
@@ -276,7 +276,7 @@ void MousePicker::tileSelected()
         if (const auto mouseHandlerComponent =
                     selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onTileClicked(tileUnderMouse);
+            mouseHandlerComponent->onTileClicked(playerStore, tileUnderMouse);
         }
     }
 }

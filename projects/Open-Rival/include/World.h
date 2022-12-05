@@ -165,4 +165,13 @@ private:
     std::unordered_map<int, std::shared_ptr<Entity>> entities;
 };
 
+/**
+ * Interface providing access to the world.
+ */
+class WorldStore
+{
+public:
+    virtual World& getWorld() = 0;
+};
+
 }  // namespace Rival

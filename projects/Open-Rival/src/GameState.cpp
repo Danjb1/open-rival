@@ -16,20 +16,21 @@
 
 namespace Rival {
 
-GameState::GameState(Application& app, std::unique_ptr<World> scenarioToMove)
+GameState::GameState(
+        Application& app, std::unique_ptr<World> scenarioToMove, std::unordered_map<int, PlayerState>& playerStates)
     : State(app)
     , world(std::move(scenarioToMove))
+    , playerStates(playerStates)
     , viewport(0, 0, window.getWidth(), window.getHeight() - GameInterface::uiHeight)
     , camera(0.0f,
              0.0f,
              RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
              *world)
-    , mousePicker(camera, viewport, *world)
-    , gameRenderer(window, *world, camera, viewport, res)
+    , mousePicker(camera, viewport, *world, *this)
+    , gameRenderer(window, *world, getLocalPlayerState(), camera, viewport, res)
     , textRenderer(window)
 {
-
     // TMP
     std::vector<TextSpan> spans1 = { { "Hello ", TextRenderable::defaultColor },
                                      { "world", TextRenderable::highlightColor } };
@@ -207,6 +208,33 @@ void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
     {
         camera.translate(-relativeMouseX, -relativeMouseY);
     }
+}
+
+World& GameState::getWorld()
+{
+    return *world;
+}
+
+PlayerState& GameState::getLocalPlayerState() const
+{
+    auto result = playerStates.find(localPlayerId);
+    if (result == playerStates.end())
+    {
+        throw std::runtime_error("No local player state found!");
+    }
+
+    return result->second;
+}
+
+PlayerState* GameState::getPlayerState(int playerId) const
+{
+    auto result = playerStates.find(playerId);
+    return result == playerStates.end() ? nullptr : &result->second;
+}
+
+bool GameState::isLocalPlayer(int playerId) const
+{
+    return playerId == localPlayerId;
 }
 
 }  // namespace Rival

@@ -11,6 +11,7 @@
 #pragma warning(pop)
 
 #include "Camera.h"
+#include "PlayerState.h"
 #include "Rect.h"
 #include "RenderUtils.h"
 #include "Resources.h"
@@ -23,6 +24,7 @@ namespace Rival {
 GameRenderer::GameRenderer(
         const Window& window,
         const World& world,
+        const PlayerState& playerState,
         const Camera& camera,
         const Rect& viewport,
         const TextureStore& textureStore)
@@ -35,17 +37,13 @@ GameRenderer::GameRenderer(
     , gameFboRenderer(gameFbo)
     , tileRenderer(textureStore.getTileSpritesheet(world.isWilderness()), textureStore.getPalette())
     , mapBorderRenderer(
-              // Hardcode the race for now
-              Race::Human,
+              playerState.getRace(),
               world.getWidth(),
               world.getHeight(),
               textureStore.getMapBorderSpritesheet(),
               textureStore.getPalette())
     , entityRenderer(textureStore.getPalette())
-    , uiRenderer(
-              // Hardcode the race for now
-              Race::Human,
-              textureStore)
+    , uiRenderer(playerState.getRace(), textureStore)
 {
 }
 

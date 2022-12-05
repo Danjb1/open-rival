@@ -11,8 +11,6 @@ namespace Rival {
 
 Image Image::readImage(const std::string filename)
 {
-    std::cout << "Loading: " << filename << "\n";
-
     BinaryFileReader reader(filename);
 
     // Color map specification

@@ -5,6 +5,7 @@
 #include "Building.h"
 #include "Entity.h"
 #include "MapUtils.h"
+#include "PlayerState.h"
 #include "ScenarioData.h"
 #include "Unit.h"
 
@@ -17,7 +18,6 @@ class TextureStore;
 
 class EntityFactory
 {
-
 public:
     EntityFactory(
             const DataStore& dataStore,

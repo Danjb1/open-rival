@@ -10,6 +10,7 @@
 namespace Rival {
 
 class Camera;
+class PlayerState;
 class Rect;
 class TextureStore;
 class Window;
@@ -21,6 +22,7 @@ public:
     GameRenderer(
             const Window& window,
             const World& world,
+            const PlayerState& playerState,
             const Camera& camera,
             const Rect& viewport,
             const TextureStore& textureStore);

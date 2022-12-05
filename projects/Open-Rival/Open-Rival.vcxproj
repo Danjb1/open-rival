@@ -61,6 +61,7 @@
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\PlayerState.cpp" />
     <ClCompile Include="src\Rect.cpp" />
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="include\Pathfinding.h" />
     <ClInclude Include="include\PathUtils.h" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\PlayerState.h" />
     <ClInclude Include="include\Race.h" />
     <ClInclude Include="include\Rect.h" />
     <ClInclude Include="include\RenderUtils.h" />

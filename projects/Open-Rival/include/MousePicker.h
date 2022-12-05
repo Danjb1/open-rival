@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "MapUtils.h"
+#include "PlayerState.h"
 #include "RenderUtils.h"
 
 namespace Rival {
@@ -39,7 +40,7 @@ class MousePicker
 {
 
 public:
-    MousePicker(Camera& camera, Rect& viewport, World& world);
+    MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore);
 
     void mouseDown();
     void mouseUp(std::uint8_t button);
@@ -65,6 +66,8 @@ private:
     Camera& camera;
 
     Rect& viewport;
+
+    PlayerStore& playerStore;
 
     int mapWidth;
 

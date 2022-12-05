@@ -15,12 +15,15 @@ class OwnerComponent : public EntityComponent
 public:
     static const std::string key;
 
-    OwnerComponent(int player);
+    OwnerComponent(int playerId);
 
-    int getPlayer() const;
+    int getPlayerId() const
+    {
+        return playerId;
+    }
 
 private:
-    int player;
+    int playerId;
 };
 
 }  // namespace Rival

@@ -4,12 +4,14 @@
 
 #include <iostream>
 #include <memory>
+#include <unordered_map>
 
 #include "Camera.h"
 #include "Font.h"  // TMP
 #include "GameRenderer.h"
 #include "MenuTextRenderer.h"  // TMP
 #include "MousePicker.h"
+#include "PlayerState.h"
 #include "Rect.h"
 #include "State.h"
 #include "TextRenderable.h"  // TMP
@@ -19,11 +21,17 @@ namespace Rival {
 
 class Application;
 
-class GameState : public State
+/**
+ * Application state active when in-game.
+ */
+class GameState
+    : public State
+    , public PlayerStore
+    , public WorldStore
 {
 
 public:
-    GameState(Application& app, std::unique_ptr<World> world);
+    GameState(Application& app, std::unique_ptr<World> world, std::unordered_map<int, PlayerState>& playerStates);
 
     // Begin State override
     void onLoad() override;
@@ -35,10 +43,15 @@ public:
     void update() override;
     // End State override
 
-    World& getWorld()
-    {
-        return *world;
-    }
+    // Begin WorldStore override
+    World& getWorld() override;
+    // End WorldStore override
+
+    // Begin PlayerStore override
+    PlayerState& getLocalPlayerState() const override;
+    PlayerState* getPlayerState(int playerId) const override;
+    bool isLocalPlayer(int playerId) const override;
+    // End PlayerStore override
 
 private:
     void earlyUpdateEntities() const;
@@ -46,6 +59,18 @@ private:
     void respondToMouseInput();
 
 private:
+    /**
+     * Map of player ID -> player state.
+     */
+    std::unordered_map<int, PlayerState>& playerStates;
+
+    /**
+     * Player ID of the local player.
+     *
+     * Later, we will be allocated a player ID by the server.
+     */
+    int localPlayerId = 0;
+
     /**
      * The current World.
      */

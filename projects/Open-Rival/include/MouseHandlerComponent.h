@@ -4,12 +4,14 @@
 
 #include "EntityComponent.h"
 #include "MovementComponent.h"
+#include "PlayerState.h"
 #include "Rect.h"
 #include "RenderUtils.h"
 
 namespace Rival {
 
 class Camera;
+class OwnerComponent;
 class SpriteComponent;
 class VoiceComponent;
 struct MapNode;
@@ -47,12 +49,12 @@ public:
     /**
      * Called when this Entity is selected.
      */
-    void onSelect();
+    void onSelect(const PlayerStore& playerStore);
 
     /**
      * Called when a tile is clicked, with this Entity selected.
      */
-    void onTileClicked(const MapNode& tilePos);
+    void onTileClicked(const PlayerStore& playerStore, const MapNode& tilePos);
 
     /*
     Cursor getHoverCursor()
@@ -78,6 +80,7 @@ private:
     static constexpr float unitHitboxHeight = 40.f;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
+    std::weak_ptr<OwnerComponent> weakOwnerComponent;
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<VoiceComponent> weakVoiceComponent;
 

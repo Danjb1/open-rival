@@ -57,8 +57,6 @@ const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName
     std::string atlasName = resourceName + ".atlas";
     std::unordered_map<std::string, Rect> imagePlacements;
 
-    std::cout << "Loading: " << atlasName << "\n";
-
     std::ifstream reader(atlasName);
     if (!reader)
     {
