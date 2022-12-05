@@ -7,6 +7,7 @@
 namespace Rival {
 
 class PathfindingMap;
+class WritablePathfindingMap;
 
 namespace Pathfinding {
 
@@ -17,6 +18,16 @@ class PassabilityChecker
 {
 public:
     virtual bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const = 0;
+};
+
+/**
+ * Interface used to modify passability in response to movement.
+ */
+class PassabilityUpdater
+{
+public:
+    virtual void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node) = 0;
 };
 
 /**

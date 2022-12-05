@@ -32,31 +32,28 @@ bool Movement::isFinished() const
     return isValid() && timeElapsed >= timeRequired;
 }
 
-MovementComponent::MovementComponent(Pathfinding::PassabilityChecker* passabilityChecker)
+MovementComponent::MovementComponent(
+        const Pathfinding::PassabilityChecker& passabilityChecker, Pathfinding::PassabilityUpdater& passabilityUpdater)
     : EntityComponent(key)
     , movement({ 0, 0 })
     , passabilityChecker(passabilityChecker)
+    , passabilityUpdater(passabilityUpdater)
 {
 }
 
 void MovementComponent::update()
 {
-    if (route.isEmpty() && !movement.isValid())
+    // Prepare the next movement if we are stationary
+    if (!movement.isValid())
     {
-        return;
+        if (!prepareNextMovement())
+        {
+            return;
+        }
     }
 
+    updateMovement();
     entity->moved = true;
-
-    // Update movement
-    if (movement.isFinished())
-    {
-        completeMovement();
-    }
-    else
-    {
-        updateMovement();
-    }
 }
 
 void MovementComponent::addListener(MovementListener* listener)
@@ -80,7 +77,7 @@ void MovementComponent::removeListener(MovementListener* listener)
 void MovementComponent::moveTo(MapNode node)
 {
     const MapNode startPos = getStartPosForNextMovement();
-    auto newRoute = Pathfinding::findPath(startPos, node, *entity->getWorld(), *passabilityChecker);
+    auto newRoute = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker);
     setRoute(newRoute);
 }
 
@@ -93,36 +90,45 @@ MapNode MovementComponent::getStartPosForNextMovement() const
 void MovementComponent::setRoute(Pathfinding::Route newRoute)
 {
     route = newRoute;
-
-    if (!movement.isInProgress())
-    {
-        // Start the new route immediately
-        prepareNextMovement();
-    }
 }
 
 void MovementComponent::updateMovement()
 {
     movement.timeElapsed += TimerUtils::timeStepMs;
+
+    if (movement.isFinished())
+    {
+        completeMovement();
+    }
 }
 
 /**
  * Called before moving to a new tile.
  */
-void MovementComponent::prepareNextMovement()
+bool MovementComponent::prepareNextMovement()
 {
     if (route.isEmpty())
     {
-        return;
+        return false;
     }
 
     movement.destination = route.pop();
     movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
 
+    // Horizontal movements should take longer because the distance is greater
+    Facing facing = MapUtils::getDir(entity->getPos(), movement.destination);
+    if (facing == Facing::East || facing == Facing::West)
+    {
+        movement.timeRequired = static_cast<int>(movement.timeRequired * horizontalMoveTimeMultiplier);
+    }
+
+    // Inform listeners
     for (MovementListener* listener : listeners)
     {
         listener->onUnitMoveStart(&movement.destination);
     }
+
+    return true;
 }
 
 /**
@@ -130,20 +136,21 @@ void MovementComponent::prepareNextMovement()
  */
 void MovementComponent::completeMovement()
 {
-    entity->setPos(movement.destination);
+    // Update tile passability
+    World* world = entity->getWorld();
+    passabilityUpdater.onUnitLeftTile(*world, entity->getPos());
+    passabilityUpdater.onUnitEnteredTile(*world, movement.destination);
 
+    entity->setPos(movement.destination);
     movement.clear();
 
     if (route.isEmpty())
     {
+        // Reached end of route - inform listeners
         for (MovementListener* listener : listeners)
         {
             listener->onUnitStopped();
         }
-    }
-    else
-    {
-        prepareNextMovement();
     }
 }
 

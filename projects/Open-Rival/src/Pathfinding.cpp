@@ -61,6 +61,8 @@ public:
     }
 
 private:
+    static constexpr float horizontalMoveCostMultiplier = 1.5f;
+
     /**
      * The starting node.
      */
@@ -298,7 +300,7 @@ float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
      * so.
      */
     Facing dir = MapUtils::getDir(from, to);
-    return (dir == Facing::East || dir == Facing::West) ? 1.5f : 1.f;
+    return (dir == Facing::East || dir == Facing::West) ? horizontalMoveCostMultiplier : 1.f;
 }
 
 /**

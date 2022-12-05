@@ -8,15 +8,25 @@
 
 namespace Rival {
 
-WalkerPassabilityChecker WalkerComponent::walkerPassabilityChecker = WalkerPassabilityChecker();
+WalkerPassability WalkerComponent::walkerPassability = WalkerPassability();
 
-bool WalkerPassabilityChecker::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
+bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
 {
     return map.getPassability(node) == TilePassability::Clear;
 }
 
+void WalkerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
+{
+    map.setPassability(node, TilePassability::Clear);
+}
+
+void WalkerPassability::onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node)
+{
+    map.setPassability(node, TilePassability::Blocked);
+}
+
 WalkerComponent::WalkerComponent()
-    : MovementComponent(&WalkerComponent::walkerPassabilityChecker)
+    : MovementComponent(WalkerComponent::walkerPassability, WalkerComponent::walkerPassability)
 {
 }
 
