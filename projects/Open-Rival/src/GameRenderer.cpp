@@ -27,12 +27,14 @@ GameRenderer::GameRenderer(
         const PlayerState& playerState,
         const Camera& camera,
         const Rect& viewport,
-        const TextureStore& textureStore)
+        const TextureStore& textureStore,
+        const MousePicker& mousePicker)
     : window(window)
     , world(world)
     , camera(camera)
     , viewport(viewport)
     , textureStore(textureStore)
+    , mousePicker(mousePicker)
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
     , tileRenderer(textureStore.getTileSpritesheet(world.isWilderness()), textureStore.getPalette())
@@ -155,7 +157,7 @@ void GameRenderer::renderUi()
 
     // Render the UI to the screen
     glViewport(0, 0, window.getWidth(), window.getHeight());
-    uiRenderer.renderUi();
+    uiRenderer.renderUi(mousePicker.getSelection());
 }
 
 }  // namespace Rival

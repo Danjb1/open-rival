@@ -28,7 +28,7 @@ GameState::GameState(
              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
              *world)
     , mousePicker(camera, viewport, *world, *this, *this)
-    , gameRenderer(window, *world, getLocalPlayerState(), camera, viewport, res)
+    , gameRenderer(window, *world, getLocalPlayerState(), camera, viewport, res, mousePicker)
     , textRenderer(window)
 {
     // TMP

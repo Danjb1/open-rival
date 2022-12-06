@@ -14,7 +14,6 @@ class Spritesheet;
  */
 class SpriteRenderable
 {
-
 public:
     static constexpr int numVertexDimensions = 3;    // x, y, z
     static constexpr int numTexCoordDimensions = 2;  // u, v

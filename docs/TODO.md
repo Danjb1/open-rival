@@ -9,8 +9,6 @@
 ### HUD
 
 - Show selected unit name in HUD
-- Show selected unit portrait in HUD
-- Show inventory when a unit is selected
 
 ### Custom Cursors
 
@@ -31,6 +29,7 @@
 <!----------------------------------------------------------------------------->
 
 - Game will crash if no config file exists
+- Clicking in the UI will still move the selected unit (to the last valid mouse position)
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -337,6 +336,8 @@
 
 ### Refactoring
 
+- UI rendering is a total mess
+    - Create a hierarchical UiElement class
 - Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?

@@ -8,6 +8,7 @@
 
 #include "ConfigUtils.h"
 #include "FileUtils.h"
+#include "GameInterface.h"
 #include "MidsDecoder.h"
 #include "PathUtils.h"
 #include "RenderUtils.h"
@@ -36,6 +37,7 @@ Resources::Resources(json& cfg)
     , tileSpritesheets(initTileSpritesheets())
     , objectSpritesheets(initObjectSpritesheets())
     , mapBorderSpritesheet(initMapBorderSpritesheet())
+    , portraitSpritesheet(initPortraitSpritesheet())
     , sounds(initSounds())
     , midis(initMidis())
     , unitDefs(initUnitDefs())
@@ -177,7 +179,10 @@ std::vector<Texture> Resources::loadTextures()
                                               // Buildings
                                               "buildings_elf.tga",
                                               "buildings_greenskin.tga",
-                                              "buildings_human.tga"
+                                              "buildings_human.tga",
+
+                                              // UI
+                                              "portraits.tga"
     };
 
     for (auto const& textureName : textureNames)
@@ -284,6 +289,14 @@ std::vector<Spritesheet> Resources::initObjectSpritesheets()
 Spritesheet Resources::initMapBorderSpritesheet()
 {
     return Spritesheet(textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
+}
+
+Spritesheet Resources::initPortraitSpritesheet()
+{
+    return Spritesheet(
+            textures.at(txIndexPortraits),
+            static_cast<int>(GameInterface::portrait.width),
+            static_cast<int>(GameInterface::portrait.height));
 }
 
 std::vector<WaveFile> Resources::initSounds()
@@ -396,6 +409,11 @@ const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const
 const Spritesheet& Resources::getMapBorderSpritesheet() const
 {
     return mapBorderSpritesheet;
+}
+
+const Spritesheet& Resources::getPortraitSpritesheet() const
+{
+    return portraitSpritesheet;
 }
 
 const Texture& Resources::getPalette() const

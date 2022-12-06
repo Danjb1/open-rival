@@ -47,6 +47,7 @@ public:
     virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
     virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
     virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
+    virtual const Spritesheet& getPortraitSpritesheet() const = 0;
     virtual const TextureAtlas& getUiTextureAtlas() const = 0;
 };
 
@@ -96,6 +97,7 @@ public:
     const Spritesheet& getCommonObjectSpritesheet() const override;
     const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
     const Spritesheet& getMapBorderSpritesheet() const override;
+    const Spritesheet& getPortraitSpritesheet() const override;
     const TextureAtlas& getUiTextureAtlas() const override;
     // End TextureStore override
 
@@ -126,6 +128,7 @@ private:
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
     Spritesheet initMapBorderSpritesheet();
+    Spritesheet initPortraitSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
     std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
@@ -144,7 +147,7 @@ private:
     static const std::string defaultFontRegular;
 
     // Resource counts
-    static constexpr int numTextures = 58;
+    static constexpr int numTextures = 62;
     static constexpr int numTextureAtlases = 1;
     static constexpr int numSounds = 369;
     static constexpr int numMidis = 1;  // 13;
@@ -155,6 +158,7 @@ private:
     static constexpr int txIndexObjects = 54;
     static constexpr int txIndexCursors = 57;
     static constexpr int txIndexBuildings = 58;
+    static constexpr int txIndexPortraits = 61;
 
     // MIDI constants
     static constexpr int midiStartIndex = 369;
@@ -177,6 +181,7 @@ private:
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
     Spritesheet mapBorderSpritesheet;
+    Spritesheet portraitSpritesheet;
 
     // Texture Atlases
     std::vector<TextureAtlas> textureAtlases;

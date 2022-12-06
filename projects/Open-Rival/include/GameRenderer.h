@@ -4,6 +4,7 @@
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
+#include "MousePicker.h"
 #include "TileRenderer.h"
 #include "UiRenderer.h"
 
@@ -25,7 +26,8 @@ public:
             const PlayerState& playerState,
             const Camera& camera,
             const Rect& viewport,
-            const TextureStore& textureStore);
+            const TextureStore& textureStore,
+            const MousePicker& mousePicker);
 
     void render(int delta);
 
@@ -41,6 +43,7 @@ private:
     const Rect& viewport;
     const Camera& camera;
     const TextureStore& textureStore;
+    const MousePicker& mousePicker;
 
     /**
      * Framebuffer to which the visible region of the game is rendered at

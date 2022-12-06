@@ -283,6 +283,12 @@
     <ClCompile Include="src\MoveCommand.cpp">
       <Filter>Source Files\commands</Filter>
     </ClCompile>
+    <ClCompile Include="src\InventoryComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PortraitComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -542,6 +548,12 @@
     </ClInclude>
     <ClInclude Include="include\MoveCommand.h">
       <Filter>Source Files\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InventoryComponent.h">
+      <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PortraitComponent.h">
+      <Filter>Source Files\entity-components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

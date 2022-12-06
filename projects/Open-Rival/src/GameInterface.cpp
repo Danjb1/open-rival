@@ -10,16 +10,17 @@ namespace Rival { namespace GameInterface {
 // UI elements
 ///////////////////////////////////////////////////////////////////////////
 
+// Minimap
 const Rect minimapLeftBorder(0, uiPosY, 5, uiHeight);
-
 const Rect minimapTopBorder(static_cast<int>(minimapLeftBorder.x + minimapLeftBorder.width), uiPosY, 210, 5);
-
 const Rect minimapBottomBorder(0, uiPosY + 205, 210, 5);
 
+// Main panel
 const Rect mainPanel(static_cast<int>(minimapTopBorder.x + minimapTopBorder.width), uiPosY, 425, uiHeight);
+const Rect hideInventoryOverlay(static_cast<int>(mainPanel.x) + 31, static_cast<int>(mainPanel.y) + 74, 211, 47);
+const Rect portrait(static_cast<int>(mainPanel.x) + 240, static_cast<int>(mainPanel.y) + 3, 42, 45);
 
-const Rect hideInventoryOverlay(static_cast<int>(mainPanel.x) + 30, static_cast<int>(mainPanel.y) + 71, 211, 47);
-
+// Stats panel
 const Rect statsPanel(static_cast<int>(mainPanel.x + mainPanel.width), uiPosY, 160, uiHeight);
 
 ///////////////////////////////////////////////////////////////////////////
@@ -28,9 +29,21 @@ const Rect statsPanel(static_cast<int>(mainPanel.x + mainPanel.width), uiPosY, 1
 
 UiImage::UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey)
     : pos(pos)
-    , texAtlas(texAtlas)
+    , texAtlas(&texAtlas)
     , imageKey(imageKey)
 {
+}
+
+UiImage::UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex)
+    : pos(pos)
+    , spritesheet(&spritesheet)
+    , spriteIndex(spriteIndex)
+{
+}
+
+void UiImage::setSpriteIndex(int newSpriteIndex)
+{
+    spriteIndex = newSpriteIndex;
 }
 
 void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const
@@ -49,7 +62,15 @@ void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>
     };
 
     // Determine texture co-ordinates
-    std::vector<GLfloat> thisTexCoords = texAtlas.getTexCoords(imageKey);
+    std::vector<GLfloat> thisTexCoords;
+    if (texAtlas)
+    {
+        thisTexCoords = texAtlas->getTexCoords(imageKey);
+    }
+    else
+    {
+        thisTexCoords = spritesheet->getTexCoords(spriteIndex);
+    }
 
     // Copy this data into the main buffers
     positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());
