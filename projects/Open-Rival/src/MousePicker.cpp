@@ -262,6 +262,11 @@ MapNode MousePicker::getTilePos() const
     return tileUnderMouse;
 }
 
+const Selection& MousePicker::getSelection() const
+{
+    return currentSelection;
+}
+
 void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
 {
     if (const auto mouseHandlerComponent = entity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))

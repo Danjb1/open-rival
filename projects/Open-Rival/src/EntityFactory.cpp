@@ -7,9 +7,11 @@
 
 #include "Animations.h"
 #include "BuildingPropsComponent.h"
+#include "InventoryComponent.h"
 #include "MouseHandlerComponent.h"
 #include "OwnerComponent.h"
 #include "PassabilityComponent.h"
+#include "PortraitComponent.h"
 #include "Resources.h"
 #include "SpriteComponent.h"
 #include "Tile.h"
@@ -40,35 +42,41 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
         throw std::runtime_error("No unit definition found for " + std::to_string(unitPlacement.type));
     }
 
-    // Add UnitPropsComponent
+    // UnitPropsComponent
     unit->attach(std::make_shared<UnitPropsComponent>(unitType));
 
-    // Add OwnerComponent
+    // OwnerComponent
     unit->attach(std::make_shared<OwnerComponent>(unitPlacement.player));
 
-    // Add FacingComponent
+    // FacingComponent
     const Facing facing = getFacing(unitPlacement.facing);
     unit->attach(std::make_shared<FacingComponent>(facing));
 
-    // Add SpriteComponent
+    // SpriteComponent
     const Spritesheet& spritesheet = resources.getUnitSpritesheet(unitType);
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
-    // Add AnimationComponent
+    // AnimationComponent
     unit->attach(std::make_shared<UnitAnimationComponent>(*unitDef));
 
-    // Add WalkerComponent
+    // WalkerComponent
     unit->attach(std::make_shared<WalkerComponent>());
 
-    // Add Passability
+    // PassabilityComponent
     // TODO: consider flying units separately
     unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
 
-    // Add VoiceComponent
+    // VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));
 
-    // Add MouseHandlerComponent
+    // MouseHandlerComponent
     unit->attach(std::make_shared<MouseHandlerComponent>());
+
+    // InventoryComponent
+    unit->attach(std::make_shared<InventoryComponent>());
+
+    // PortraitComponent
+    unit->attach(std::make_shared<PortraitComponent>(unitDef->portraitId));
 
     return unit;
 }
@@ -81,31 +89,31 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     int height = Building::getHeight(buildingType);
     std::shared_ptr<Entity> building = std::make_shared<Entity>(EntityType::Building, width, height);
 
-    // Add BuildingPropsComponent
+    // BuildingPropsComponent
     building->attach(std::make_shared<BuildingPropsComponent>(buildingType));
 
-    // Add OwnerComponent
+    // OwnerComponent
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));
 
-    // Add SpriteComponent
+    // SpriteComponent
     const Spritesheet& spritesheet = resources.getBuildingSpritesheet(buildingType);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     if (Building::isWall(buildingType))
     {
-        // Add WallComponent
+        // WallComponent
         WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
         building->attach(std::make_shared<WallComponent>(wallVariant));
     }
     else
     {
-        // TODO: Add BuildingAnimationComponent
+        // TODO: BuildingAnimationComponent
         // const Animations::Animation anim =
         //        Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
         // building->attach(std::make_shared<AnimationComponent>(anim));
     }
 
-    // Add Passability
+    // PassabilityComponent
     building->attach(std::make_shared<PassabilityComponent>(TilePassability::Building));
 
     return building;
@@ -117,15 +125,15 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(const BuildingPlacement& b
     std::shared_ptr<Entity> building =
             std::make_shared<Entity>(EntityType::Wall, Building::wallWidth, Building::wallHeight);
 
-    // Add SpriteComponent
+    // SpriteComponent
     const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
-    // Add WallComponent
+    // WallComponent
     WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
     building->attach(std::make_shared<WallComponent>(wallVariant));
 
-    // Add Passability
+    // PassabilityComponent
     building->attach(std::make_shared<PassabilityComponent>(TilePassability::Building));
 
     return building;
@@ -136,7 +144,7 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     // Create Entity
     std::shared_ptr<Entity> obj = std::make_shared<Entity>(EntityType::Decoration, Unit::width, Unit::height);
 
-    // Add SpriteComponent
+    // SpriteComponent
     if (objPlacement.type == 0xAF)
     {
         const Spritesheet& spritesheet = resources.getCommonObjectSpritesheet();
@@ -148,7 +156,7 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
 
-    // TODO: Add AnimationComponent
+    // TODO: AnimationComponent
     // const Animation anim = getObjectAnimation(objPlacement.type, objPlacement.variant);
     // obj->attach(std::make_shared<AnimationComponent>(anim));
 

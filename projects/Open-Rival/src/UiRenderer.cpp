@@ -4,6 +4,9 @@
 
 #include <gl/glew.h>
 
+#include "InventoryComponent.h"
+#include "MousePicker.h"
+#include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
 
@@ -11,8 +14,8 @@ namespace Rival {
 
 UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
     : textureStore(textureStore)
-    , numUiImages(0)
-    , mainUiRenderable(textureStore.getUiTextureAtlas(), maxUiImages)
+    , mainUiRenderable(textureStore.getUiTextureAtlas(), maxMainUiImages)
+    , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
     , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1060.tga")
     , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1058.tga")
     , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1059.tga")
@@ -24,6 +27,7 @@ UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
               GameInterface::hideInventoryOverlay,
               textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
+    , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
     , statsPanel(
               GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
@@ -31,7 +35,13 @@ UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
 {
 }
 
-void UiRenderer::renderUi()
+void UiRenderer::renderUi(const Selection& selection)
+{
+    renderMainUi(selection);
+    renderPortrait(selection);
+}
+
+void UiRenderer::renderMainUi(const Selection& selection)
 {
     // Use textures
     glActiveTexture(GL_TEXTURE0);
@@ -43,33 +53,40 @@ void UiRenderer::renderUi()
     glBindVertexArray(mainUiRenderable.getVao());
 
     // Update the data on the GPU
-    if (needsUpdate())
+    if (mainUiNeedsUpdate())
     {
-        sendDataToGpu();
+        sendMainUiDataToGpu(selection);
     }
 
     // Render
     glDrawElements(
             mainUiRenderable.getDrawMode(),
-            numUiImages * mainUiRenderable.getIndicesPerSprite(),
+            numMainUiImages * mainUiRenderable.getIndicesPerSprite(),
             GL_UNSIGNED_INT,
             nullptr);
 }
 
-bool UiRenderer::needsUpdate() const
+bool UiRenderer::mainUiNeedsUpdate() const
 {
     // Later, perhaps we can optimise this
     return true;
 }
 
-void UiRenderer::sendDataToGpu()
+void UiRenderer::sendMainUiDataToGpu(const Selection& selection)
 {
-    // Determine the number of images to render
-    bool inventoryVisible = isInventoryVisible();
-    numUiImages = inventoryVisible ? maxUiImages - 1 : maxUiImages;
+    // First we need to know the number of images to render
+    numMainUiImages = defaultNumMainUiImages;
+
+    // Determine if the inventory should be rendered
+    bool inventoryVisible = isInventoryVisible(selection);
+    if (inventoryVisible)
+    {
+        // It's counter-intuitive, but to show the inventory we *don't* draw the overlay
+        --numMainUiImages;
+    }
 
     // Create buffers to hold all our vertex data
-    int numVertices = numUiImages * AtlasRenderable::numVerticesPerSprite;
+    int numVertices = numMainUiImages * AtlasRenderable::numVerticesPerSprite;
     int positionDataSize = numVertices * AtlasRenderable::numVertexDimensions;
     int texCoordDataSize = numVertices * AtlasRenderable::numTexCoordDimensions;
     std::vector<GLfloat> positions;
@@ -99,10 +116,97 @@ void UiRenderer::sendDataToGpu()
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
-bool UiRenderer::isInventoryVisible() const
+bool UiRenderer::isInventoryVisible(const Selection& selection) const
 {
-    // TODO
-    return false;
+    auto selectedEntity = selection.weakSelectedEntity.lock();
+    if (!selectedEntity)
+    {
+        return false;
+    }
+
+    auto inventory = selectedEntity->getComponent<InventoryComponent>(InventoryComponent::key);
+
+    return inventory != nullptr;
+}
+
+void UiRenderer::renderPortrait(const Selection& selection)
+{
+    int portraitId = -1;
+    bool portraitVisible = isPortraitVisible(selection, portraitId);
+    if (!portraitVisible)
+    {
+        return;
+    }
+
+    portrait.setSpriteIndex(portraitId);
+
+    // Use textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, portraitRenderable.getTextureId());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
+
+    // Bind vertex array
+    glBindVertexArray(portraitRenderable.getVao());
+
+    // Update the data on the GPU
+    if (portraitNeedsUpdate())
+    {
+        sendPortraitDataToGpu();
+    }
+
+    // Render
+    glDrawElements(
+            portraitRenderable.getDrawMode(), portraitRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+}
+
+bool UiRenderer::portraitNeedsUpdate() const
+{
+    // Later, perhaps we can optimise this
+    return true;
+}
+
+void UiRenderer::sendPortraitDataToGpu()
+{
+    // Create buffers to hold all our vertex data
+    int numVertices = SpriteRenderable::numVerticesPerSprite;
+    int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
+    int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
+    std::vector<GLfloat> positions;
+    std::vector<GLfloat> texCoords;
+    positions.reserve(positionDataSize);
+    texCoords.reserve(texCoordDataSize);
+
+    // Add data to our buffers
+    portrait.addToBuffers(positions, texCoords);
+
+    // Upload position data
+    glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getPositionVbo());
+    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
+
+    // Upload tex co-ord data
+    glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getTexCoordVbo());
+    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
+}
+
+bool UiRenderer::isPortraitVisible(const Selection& selection, int& outPortraitId) const
+{
+    auto selectedEntity = selection.weakSelectedEntity.lock();
+    if (!selectedEntity)
+    {
+        return false;
+    }
+
+    auto portraitComp = selectedEntity->getComponent<PortraitComponent>(PortraitComponent::key);
+    if (!portraitComp)
+    {
+        return false;
+    }
+
+    outPortraitId = portraitComp->getPortraitId();
+    return true;
 }
 
 }  // namespace Rival

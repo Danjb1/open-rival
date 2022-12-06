@@ -48,6 +48,7 @@ public:
     void handleMouse();
 
     MapNode getTilePos() const;
+    const Selection& getSelection() const;
 
 private:
     float getMouseInCameraX(float normalizedMouseX);
