@@ -44,6 +44,9 @@
     <Filter Include="Source Files\game">
       <UniqueIdentifier>{161c5b4e-7e1d-4451-aac9-1d06210a19df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\commands">
+      <UniqueIdentifier>{7da6f1ed-7b51-43fa-8772-661c1c69311f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -273,6 +276,12 @@
     </ClCompile>
     <ClCompile Include="src\PlayerState.cpp">
       <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameCommand.cpp">
+      <Filter>Source Files\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MoveCommand.cpp">
+      <Filter>Source Files\commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -527,6 +536,12 @@
     </ClInclude>
     <ClInclude Include="include\PlayerState.h">
       <Filter>Source Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameCommand.h">
+      <Filter>Source Files\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MoveCommand.h">
+      <Filter>Source Files\commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

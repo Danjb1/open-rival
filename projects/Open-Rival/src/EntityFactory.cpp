@@ -21,14 +21,8 @@
 
 namespace Rival {
 
-EntityFactory::EntityFactory(
-        const DataStore& dataStore,
-        const TextureStore& textureStore,
-        const AudioStore& audioStore,
-        AudioSystem& audioSystem)
-    : dataStore(dataStore)
-    , textureStore(textureStore)
-    , audioStore(audioStore)
+EntityFactory::EntityFactory(const Resources& resources, AudioSystem& audioSystem)
+    : resources(resources)
     , audioSystem(audioSystem)
 {
 }
@@ -40,7 +34,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
     // Find the UnitDef
     const Unit::Type unitType = getUnitType(unitPlacement.type);
-    const UnitDef* unitDef = dataStore.getUnitDef(unitType);
+    const UnitDef* unitDef = resources.getUnitDef(unitType);
     if (!unitDef)
     {
         throw std::runtime_error("No unit definition found for " + std::to_string(unitPlacement.type));
@@ -57,7 +51,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<FacingComponent>(facing));
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = textureStore.getUnitSpritesheet(unitType);
+    const Spritesheet& spritesheet = resources.getUnitSpritesheet(unitType);
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // Add AnimationComponent
@@ -71,7 +65,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
 
     // Add VoiceComponent
-    unit->attach(std::make_shared<VoiceComponent>(audioStore, audioSystem, *unitDef));
+    unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));
 
     // Add MouseHandlerComponent
     unit->attach(std::make_shared<MouseHandlerComponent>());
@@ -94,7 +88,7 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = textureStore.getBuildingSpritesheet(buildingType);
+    const Spritesheet& spritesheet = resources.getBuildingSpritesheet(buildingType);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     if (Building::isWall(buildingType))
@@ -124,7 +118,7 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(const BuildingPlacement& b
             std::make_shared<Entity>(EntityType::Wall, Building::wallWidth, Building::wallHeight);
 
     // Add SpriteComponent
-    const Spritesheet& spritesheet = textureStore.getObjectSpritesheet(wilderness);
+    const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // Add WallComponent
@@ -145,12 +139,12 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     // Add SpriteComponent
     if (objPlacement.type == 0xAF)
     {
-        const Spritesheet& spritesheet = textureStore.getCommonObjectSpritesheet();
+        const Spritesheet& spritesheet = resources.getCommonObjectSpritesheet();
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
     else
     {
-        const Spritesheet& spritesheet = textureStore.getObjectSpritesheet(wilderness);
+        const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
 

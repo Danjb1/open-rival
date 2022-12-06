@@ -18,11 +18,13 @@
 
 namespace Rival {
 
-MousePicker::MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore)
+MousePicker::MousePicker(
+        Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore, GameCommandInvoker& cmdInvoker)
     : camera(camera)
     , viewport(viewport)
     , world(world)
     , playerStore(playerStore)
+    , cmdInvoker(cmdInvoker)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
     , tileUnderMouse({ -1, -1 })
@@ -276,7 +278,7 @@ void MousePicker::tileSelected()
         if (const auto mouseHandlerComponent =
                     selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onTileClicked(playerStore, tileUnderMouse);
+            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, tileUnderMouse);
         }
     }
 }
