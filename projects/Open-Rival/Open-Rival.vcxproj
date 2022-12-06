@@ -35,6 +35,7 @@
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FramebufferRenderer.cpp" />
+    <ClCompile Include="src\GameCommand.cpp" />
     <ClCompile Include="src\GameInterface.cpp" />
     <ClCompile Include="src\GameRenderer.cpp" />
     <ClCompile Include="src\GLUtils.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="src\MouseHandlerComponent.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\MouseUtils.cpp" />
+    <ClCompile Include="src\MoveCommand.cpp" />
     <ClCompile Include="src\MovementComponent.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
@@ -117,6 +119,7 @@
     <ClInclude Include="include\Font.h" />
     <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\FramebufferRenderer.h" />
+    <ClInclude Include="include\GameCommand.h" />
     <ClInclude Include="include\GameInterface.h" />
     <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\GLUtils.h" />
@@ -132,6 +135,7 @@
     <ClInclude Include="include\MouseHandlerComponent.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\MouseUtils.h" />
+    <ClInclude Include="include\MoveCommand.h" />
     <ClInclude Include="include\MovementComponent.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />

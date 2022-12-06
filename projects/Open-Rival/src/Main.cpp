@@ -139,7 +139,7 @@ int main()
         ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         Resources& res = app.getResources();
-        EntityFactory entityFactory(res, res, res, app.getAudioSystem());
+        EntityFactory entityFactory(res, app.getAudioSystem());
         std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
         // Initialize players

@@ -18,10 +18,6 @@
 
 ### Movement
 
-- We should move by issuing a MoveCommand (Command Pattern?)
-    - GameState should process all pending commands each tick
-    - In single player, commands can be scheduled for the next tick
-    - In multiplayer, commands should be scheduled for 'n' ticks in the future
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Units should periodically re-plan their route
 

@@ -3,6 +3,7 @@
 #include <memory>
 #include <utility>
 
+#include "GameCommand.h"
 #include "MapUtils.h"
 #include "PlayerState.h"
 #include "RenderUtils.h"
@@ -40,7 +41,7 @@ class MousePicker
 {
 
 public:
-    MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore);
+    MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore, GameCommandInvoker& cmdInvoker);
 
     void mouseDown();
     void mouseUp(std::uint8_t button);
@@ -62,19 +63,15 @@ private:
 
 private:
     World& world;
-
     Camera& camera;
-
     Rect& viewport;
-
     PlayerStore& playerStore;
+    GameCommandInvoker& cmdInvoker;
 
     int mapWidth;
-
     int mapHeight;
 
     MapNode tileUnderMouse;
-
     std::weak_ptr<Entity> weakEntityUnderMouse;
 
     Selection currentSelection;

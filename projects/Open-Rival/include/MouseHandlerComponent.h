@@ -3,6 +3,7 @@
 #include <string>
 
 #include "EntityComponent.h"
+#include "GameCommand.h"
 #include "MovementComponent.h"
 #include "PlayerState.h"
 #include "Rect.h"
@@ -54,7 +55,7 @@ public:
     /**
      * Called when a tile is clicked, with this Entity selected.
      */
-    void onTileClicked(const PlayerStore& playerStore, const MapNode& tilePos);
+    void onTileClicked(GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tilePos);
 
     /*
     Cursor getHoverCursor()

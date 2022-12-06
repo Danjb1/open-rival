@@ -8,6 +8,7 @@
 
 #include "Camera.h"
 #include "Font.h"  // TMP
+#include "GameCommand.h"
 #include "GameRenderer.h"
 #include "MenuTextRenderer.h"  // TMP
 #include "MousePicker.h"
@@ -27,7 +28,8 @@ class Application;
 class GameState
     : public State
     , public PlayerStore
-    , public WorldStore
+    , public GameCommandInvoker
+    , public GameCommandContext
 {
 
 public:
@@ -53,10 +55,15 @@ public:
     bool isLocalPlayer(int playerId) const override;
     // End PlayerStore override
 
+    // Begin GameCommandInvoker override
+    void dispatchCommand(std::shared_ptr<GameCommand> command) override;
+    // End GameCommandInvoker override
+
 private:
     void earlyUpdateEntities() const;
     void updateEntities() const;
     void respondToMouseInput();
+    void processCommands();
 
 private:
     /**
@@ -95,6 +102,11 @@ private:
      * Object that renders the game.
      */
     GameRenderer gameRenderer;
+
+    /**
+     * Commands ready to be executed.
+     */
+    std::vector<std::shared_ptr<GameCommand>> pendingCommands;
 
     // TMP
     std::unique_ptr<TextRenderable> text1;

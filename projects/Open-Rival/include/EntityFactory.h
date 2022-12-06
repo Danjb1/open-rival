@@ -4,6 +4,7 @@
 
 #include "Building.h"
 #include "Entity.h"
+#include "GameCommand.h"
 #include "MapUtils.h"
 #include "PlayerState.h"
 #include "ScenarioData.h"
@@ -11,19 +12,13 @@
 
 namespace Rival {
 
-class AudioStore;
 class AudioSystem;
-class DataStore;
-class TextureStore;
+class Resources;
 
 class EntityFactory
 {
 public:
-    EntityFactory(
-            const DataStore& dataStore,
-            const TextureStore& textureStore,
-            const AudioStore& audioStore,
-            AudioSystem& audioSystem);
+    EntityFactory(const Resources& resources, AudioSystem& audioSystem);
 
     /**
      * Creates a Unit from raw data (e.g. read from a Scenario file).
@@ -53,10 +48,7 @@ private:
     Facing getFacing(std::uint8_t facing) const;
 
 private:
-    const AudioStore& audioStore;
-    const DataStore& dataStore;
-    const TextureStore& textureStore;
-
+    const Resources& resources;
     AudioSystem& audioSystem;
 };
 

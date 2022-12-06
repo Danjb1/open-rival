@@ -27,7 +27,7 @@ GameState::GameState(
              RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
              *world)
-    , mousePicker(camera, viewport, *world, *this)
+    , mousePicker(camera, viewport, *world, *this, *this)
     , gameRenderer(window, *world, getLocalPlayerState(), camera, viewport, res)
     , textRenderer(window)
 {
@@ -58,6 +58,7 @@ void GameState::update()
     earlyUpdateEntities();
     respondToMouseInput();
     updateEntities();
+    processCommands();
 }
 
 void GameState::earlyUpdateEntities() const
@@ -235,6 +236,28 @@ PlayerState* GameState::getPlayerState(int playerId) const
 bool GameState::isLocalPlayer(int playerId) const
 {
     return playerId == localPlayerId;
+}
+
+void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
+{
+    if (!command)
+    {
+        std::cerr << "Tried to dispatch invalid command";
+        return;
+    }
+
+    // TODO: In multiplayer, we should schedule commands for 'n' ticks in the future
+    pendingCommands.push_back(command);
+}
+
+void GameState::processCommands()
+{
+    for (auto& cmd : pendingCommands)
+    {
+        cmd->execute(*this);
+    }
+
+    pendingCommands.clear();
 }
 
 }  // namespace Rival

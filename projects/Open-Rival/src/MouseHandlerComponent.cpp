@@ -4,8 +4,11 @@
 
 #include <glm/vec2.hpp>
 
+#include <memory>
+
 #include "Entity.h"
 #include "EntityRenderer.h"
+#include "MoveCommand.h"
 #include "OwnerComponent.h"
 #include "SpriteComponent.h"
 #include "UnitPropsComponent.h"
@@ -105,7 +108,8 @@ void MouseHandlerComponent::onSelect(const PlayerStore& playerStore)
     */
 }
 
-void MouseHandlerComponent::onTileClicked(const PlayerStore& playerStore, const MapNode& tile)
+void MouseHandlerComponent::onTileClicked(
+        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tile)
 {
     // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
     // TODO: What about when a group is selected?
@@ -122,12 +126,12 @@ void MouseHandlerComponent::onTileClicked(const PlayerStore& playerStore, const 
 
     if (auto moveComponent = weakMovementComponent.lock())
     {
-        moveComponent->moveTo(tile);
-    }
+        if (const auto voiceComponent = weakVoiceComponent.lock())
+        {
+            voiceComponent->playSound(UnitSoundType::Move);
+        }
 
-    if (const auto voiceComponent = weakVoiceComponent.lock())
-    {
-        voiceComponent->playSound(UnitSoundType::Move);
+        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entity->getId(), tile));
     }
 }
 
