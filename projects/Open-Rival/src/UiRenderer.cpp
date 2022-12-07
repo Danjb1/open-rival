@@ -56,8 +56,6 @@ void UiRenderer::renderUi(const Selection& selection)
 {
     renderMainUi(selection);
     renderPortrait(selection);
-    renderText(selection);
-    renderCursor();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

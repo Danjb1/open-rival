@@ -20,6 +20,8 @@ public:
             const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window);
 
     void renderUi(const Selection& selection);
+    void renderText(const Selection& selection);
+    void renderCursor();
 
 private:
     void renderMainUi(const Selection& selection);
@@ -32,10 +34,7 @@ private:
     bool portraitNeedsUpdate() const;
     void sendPortraitDataToGpu();
 
-    void renderText(const Selection& selection);
     bool isNameVisible(const Selection& selection, std::string& outName) const;
-
-    void renderCursor();
 
 private:
     // Maximum number of images we can ever render
