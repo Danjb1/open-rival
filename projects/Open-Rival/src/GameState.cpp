@@ -8,6 +8,7 @@
 #include "Application.h"
 #include "GameInterface.h"
 #include "Image.h"
+#include "InputUtils.h"
 #include "MouseUtils.h"
 #include "Palette.h"
 #include "Race.h"
@@ -56,7 +57,7 @@ void GameState::update()
 {
     world->addPendingEntities();
     earlyUpdateEntities();
-    respondToMouseInput();
+    respondToInput();
     updateEntities();
     processCommands();
 }
@@ -70,9 +71,27 @@ void GameState::earlyUpdateEntities() const
     }
 }
 
-void GameState::respondToMouseInput()
+void GameState::respondToInput()
 {
     mousePicker.handleMouse();
+
+    // Move camera
+    if (input.lastDirectionX == Direction::Decreasing)
+    {
+        camera.translate(-0.5f, 0.f);
+    }
+    else if (input.lastDirectionX == Direction::Increasing)
+    {
+        camera.translate(0.5f, 0.f);
+    }
+    if (input.lastDirectionY == Direction::Decreasing)
+    {
+        camera.translate(0.f, -0.35f);
+    }
+    else if (input.lastDirectionY == Direction::Increasing)
+    {
+        camera.translate(0.f, 0.35f);
+    }
 }
 
 void GameState::updateEntities() const
@@ -113,19 +132,44 @@ void GameState::keyDown(const SDL_Keycode keyCode)
     switch (keyCode)
     {
     case SDLK_UP:
-        camera.translate(0.0f, -0.5f);
+        input.lastDirectionY = Direction::Decreasing;
         break;
 
     case SDLK_DOWN:
-        camera.translate(0.0f, 0.5f);
+        input.lastDirectionY = Direction::Increasing;
         break;
 
     case SDLK_LEFT:
-        camera.translate(-0.5f, 0.0f);
+        input.lastDirectionX = Direction::Decreasing;
         break;
 
     case SDLK_RIGHT:
-        camera.translate(0.5f, 0.0f);
+        input.lastDirectionX = Direction::Increasing;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void GameState::keyUp(const SDL_Keycode keyCode)
+{
+    switch (keyCode)
+    {
+    case SDLK_UP:
+        input.lastDirectionY = InputUtils::isKeyDown(SDLK_DOWN) ? Direction::Decreasing : Direction::None;
+        break;
+
+    case SDLK_DOWN:
+        input.lastDirectionY = InputUtils::isKeyDown(SDLK_UP) ? Direction::Increasing : Direction::None;
+        break;
+
+    case SDLK_LEFT:
+        input.lastDirectionX = InputUtils::isKeyDown(SDLK_RIGHT) ? Direction::Decreasing : Direction::None;
+        break;
+
+    case SDLK_RIGHT:
+        input.lastDirectionX = InputUtils::isKeyDown(SDLK_LEFT) ? Direction::Increasing : Direction::None;
         break;
 
     default:

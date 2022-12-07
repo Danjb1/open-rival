@@ -23,6 +23,25 @@ namespace Rival {
 class Application;
 
 /**
+ * Represents an optional direction along a given axis.
+ */
+enum class Direction : std::int8_t
+{
+    Decreasing = -1,
+    None = 0,
+    Increasing = 1
+};
+
+/**
+ * Holds the current player input.
+ */
+struct Input
+{
+    Direction lastDirectionX;
+    Direction lastDirectionY;
+};
+
+/**
  * Application state active when in-game.
  */
 class GameState
@@ -38,6 +57,7 @@ public:
     // Begin State override
     void onLoad() override;
     void keyDown(const SDL_Keycode keyCode) override;
+    void keyUp(const SDL_Keycode keyCode) override;
     void mouseDown(const SDL_MouseButtonEvent event) override;
     void mouseUp(const SDL_MouseButtonEvent event) override;
     void mouseWheelMoved(const SDL_MouseWheelEvent event) override;
@@ -62,7 +82,7 @@ public:
 private:
     void earlyUpdateEntities() const;
     void updateEntities() const;
-    void respondToMouseInput();
+    void respondToInput();
     void processCommands();
 
 private:
@@ -107,6 +127,11 @@ private:
      * Commands ready to be executed.
      */
     std::vector<std::shared_ptr<GameCommand>> pendingCommands;
+
+    /**
+     * The current player input.
+     */
+    Input input;
 
     // TMP
     std::unique_ptr<TextRenderable> text1;
