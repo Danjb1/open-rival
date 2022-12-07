@@ -16,8 +16,10 @@ namespace Rival {
 UiRenderer::UiRenderer(
         const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window)
     : textureStore(textureStore)
+    , window(window)
+
+    // Main UI
     , mainUiRenderable(textureStore.getUiTextureAtlas(), maxMainUiImages)
-    , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
     , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1060.tga")
     , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1058.tga")
     , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1059.tga")
@@ -29,15 +31,24 @@ UiRenderer::UiRenderer(
               GameInterface::hideInventoryOverlay,
               textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
-    , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
-    , nameProperties({ &fontStore.getFontSmall() })
-    , nameRenderable(
-              Unit::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
-    , textRenderer(window)
     , statsPanel(
               GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1136.tga" : "img_ui_1070.tga")
+
+    // Portrait
+    , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
+    , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
+
+    // Text
+    , nameProperties({ &fontStore.getFontSmall() })
+    , nameRenderable(
+              Unit::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
+    , textRenderer(window)
+
+    // Cursor
+    , cursorRenderable(textureStore.getCursorSpritesheet(), 1)
+    , cursorImage(GameInterface::cursor, textureStore.getCursorSpritesheet(), 0)
 {
 }
 
@@ -46,6 +57,7 @@ void UiRenderer::renderUi(const Selection& selection)
     renderMainUi(selection);
     renderPortrait(selection);
     renderText(selection);
+    renderCursor();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,6 +270,64 @@ bool UiRenderer::isNameVisible(const Selection& selection, std::string& outName)
 
     outName = unitProps->getName();
     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Cursor
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void UiRenderer::renderCursor()
+{
+    // Get the mouse position relative to the window, in pixels
+    int mouseX;
+    int mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    // Calculate the mouse position in the range 0-1.
+    // (If the mouse is outside of the window, these values will lie outside the range).
+    float normalizedMouseX = static_cast<float>(mouseX) / window.getWidth();
+    float normalizedMouseY = static_cast<float>(mouseY) / window.getHeight();
+
+    // Set the cursor image position
+    cursorImage.pos.x = normalizedMouseX * RenderUtils::getMenuWidth(window.getAspectRatio());
+    cursorImage.pos.y = normalizedMouseY * RenderUtils::menuHeight;
+
+    // TMP
+    cursorImage.setSpriteIndex(0);
+
+    // Use textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, cursorRenderable.getTextureId());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
+
+    // Bind vertex array
+    glBindVertexArray(cursorRenderable.getVao());
+
+    // Create buffers to hold all our vertex data
+    int numVertices = SpriteRenderable::numVerticesPerSprite;
+    int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
+    int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
+    std::vector<GLfloat> positions;
+    std::vector<GLfloat> texCoords;
+    positions.reserve(positionDataSize);
+    texCoords.reserve(texCoordDataSize);
+
+    // Add data to our buffers
+    cursorImage.addToBuffers(positions, texCoords);
+
+    // Upload position data
+    glBindBuffer(GL_ARRAY_BUFFER, cursorRenderable.getPositionVbo());
+    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
+
+    // Upload tex co-ord data
+    glBindBuffer(GL_ARRAY_BUFFER, cursorRenderable.getTexCoordVbo());
+    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
+
+    // Render
+    glDrawElements(cursorRenderable.getDrawMode(), cursorRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
 }
 
 }  // namespace Rival

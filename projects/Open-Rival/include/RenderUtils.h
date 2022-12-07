@@ -29,7 +29,7 @@ static constexpr int entityDrawOffsetY = -89;
 
 // Size of the camera used for menus.
 // This defines the notion of "menu co-ordinates".
-// We set the height based on the original menu image sizes.
+// This height value is based on the original menu image sizes.
 // The width must be calculated at runtime based on the aspect ratio.
 static constexpr int menuHeight = 600;
 

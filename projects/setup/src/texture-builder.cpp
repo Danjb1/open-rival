@@ -215,7 +215,7 @@ void readPalette(Palette::Palette& palette, const std::string filename)
 
     ifs.seekg(18);
 
-    for (int i = 0; i < Palette::paletteSize; ++i)
+    for (int i = 0; i < Palette::numColors; ++i)
     {
         const std::uint8_t blue = ifs.get();
         const std::uint8_t green = ifs.get();

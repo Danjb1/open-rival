@@ -24,6 +24,7 @@ static constexpr int uiHeight = 144;
 static constexpr int uiPosY = RenderUtils::menuHeight - uiHeight;
 
 // UI element positions, in menu co-ordinates
+extern const Rect cursor;
 extern const Rect minimapLeftBorder;
 extern const Rect minimapTopBorder;
 extern const Rect minimapBottomBorder;
@@ -33,14 +34,13 @@ extern const Rect portrait;
 extern const glm::vec2 selectionName;
 extern const Rect statsPanel;
 
-///////////////////////////////////////////////////////////////////////////
-// UiImage class
-///////////////////////////////////////////////////////////////////////////
-
+/**
+ * A UI image with a position, that can be used to populate an AtlasRenderable or a SpriteRenderable.
+ */
 class UiImage
 {
 public:
-    const Rect pos;
+    Rect pos;
 
     UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey);
 

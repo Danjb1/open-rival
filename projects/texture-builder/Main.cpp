@@ -10,7 +10,6 @@ using namespace Rival::Setup;
 
 int main(int argc, char* argv[])
 {
-
     // Expected:
     // texture-builder.exe [--atlas] DEFINITIONS_DIR
 

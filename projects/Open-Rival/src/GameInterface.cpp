@@ -10,6 +10,9 @@ namespace Rival { namespace GameInterface {
 // UI elements
 ///////////////////////////////////////////////////////////////////////////
 
+// Cursor
+const Rect cursor(0, 0, 32, 32);
+
 // Minimap
 const Rect minimapLeftBorder(0, uiPosY, 5, uiHeight);
 const Rect minimapTopBorder(static_cast<int>(minimapLeftBorder.x + minimapLeftBorder.width), uiPosY, 210, 5);

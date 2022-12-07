@@ -35,6 +35,8 @@ private:
     void renderText(const Selection& selection);
     bool isNameVisible(const Selection& selection, std::string& outName) const;
 
+    void renderCursor();
+
 private:
     // Maximum number of images we can ever render
     static constexpr int maxMainUiImages = 6;
@@ -43,24 +45,31 @@ private:
     static constexpr int defaultNumMainUiImages = maxMainUiImages;
 
     const TextureStore& textureStore;
+    const Window& window;
 
+    // Main UI
     int numMainUiImages = 0;
-    AtlasRenderable mainUiRenderable;
-
-    SpriteRenderable portraitRenderable;
-
-    std::vector<TextRenderable*> textRenderables;
-    TextProperties nameProperties;
-    TextRenderable nameRenderable;
-    MenuTextRenderer textRenderer;
-
     GameInterface::UiImage minimapLeftBorder;
     GameInterface::UiImage minimapTopBorder;
     GameInterface::UiImage minimapBottomBorder;
     GameInterface::UiImage mainPanel;
     GameInterface::UiImage hideInventoryOverlay;
-    GameInterface::UiImage portrait;
     GameInterface::UiImage statsPanel;
+    AtlasRenderable mainUiRenderable;
+
+    // Portrait
+    GameInterface::UiImage portrait;
+    SpriteRenderable portraitRenderable;
+
+    // Text
+    std::vector<TextRenderable*> textRenderables;
+    TextProperties nameProperties;
+    TextRenderable nameRenderable;
+    MenuTextRenderer textRenderer;
+
+    // Cursor
+    GameInterface::UiImage cursorImage;
+    SpriteRenderable cursorRenderable;
 };
 
 }  // namespace Rival

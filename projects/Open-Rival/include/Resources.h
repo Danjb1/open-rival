@@ -46,6 +46,7 @@ public:
     virtual const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const = 0;
     virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
     virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
+    virtual const Spritesheet& getCursorSpritesheet() const = 0;
     virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
     virtual const Spritesheet& getPortraitSpritesheet() const = 0;
     virtual const TextureAtlas& getUiTextureAtlas() const = 0;
@@ -96,6 +97,7 @@ public:
     const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const override;
     const Spritesheet& getCommonObjectSpritesheet() const override;
     const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
+    const Spritesheet& getCursorSpritesheet() const override;
     const Spritesheet& getMapBorderSpritesheet() const override;
     const Spritesheet& getPortraitSpritesheet() const override;
     const TextureAtlas& getUiTextureAtlas() const override;
@@ -127,6 +129,7 @@ private:
     std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
+    Spritesheet initCursorSpritesheet();
     Spritesheet initMapBorderSpritesheet();
     Spritesheet initPortraitSpritesheet();
     std::vector<WaveFile> initSounds();
@@ -180,6 +183,7 @@ private:
     std::unordered_map<Building::Type, Spritesheet> buildingSpritesheets;
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
+    Spritesheet cursorSpritesheet;
     Spritesheet mapBorderSpritesheet;
     Spritesheet portraitSpritesheet;
 
