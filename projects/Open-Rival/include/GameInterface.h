@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gl/glew.h>
+#include <glm/vec2.hpp>
 
 #include <string>
 #include <vector>
@@ -29,6 +30,7 @@ extern const Rect minimapBottomBorder;
 extern const Rect mainPanel;
 extern const Rect hideInventoryOverlay;
 extern const Rect portrait;
+extern const glm::vec2 selectionName;
 extern const Rect statsPanel;
 
 ///////////////////////////////////////////////////////////////////////////

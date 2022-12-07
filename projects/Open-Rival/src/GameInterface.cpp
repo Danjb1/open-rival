@@ -19,6 +19,7 @@ const Rect minimapBottomBorder(0, uiPosY + 205, 210, 5);
 const Rect mainPanel(static_cast<int>(minimapTopBorder.x + minimapTopBorder.width), uiPosY, 425, uiHeight);
 const Rect hideInventoryOverlay(static_cast<int>(mainPanel.x) + 31, static_cast<int>(mainPanel.y) + 74, 211, 47);
 const Rect portrait(static_cast<int>(mainPanel.x) + 240, static_cast<int>(mainPanel.y) + 3, 42, 45);
+const glm::vec2 selectionName(static_cast<int>(portrait.x) + 42, static_cast<int>(portrait.y) + 12);
 
 // Stats panel
 const Rect statsPanel(static_cast<int>(mainPanel.x + mainPanel.width), uiPosY, 160, uiHeight);

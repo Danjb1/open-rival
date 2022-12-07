@@ -9,10 +9,12 @@
 #include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
+#include "UnitPropsComponent.h"
 
 namespace Rival {
 
-UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
+UiRenderer::UiRenderer(
+        const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window)
     : textureStore(textureStore)
     , mainUiRenderable(textureStore.getUiTextureAtlas(), maxMainUiImages)
     , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
@@ -28,6 +30,10 @@ UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore)
               textureStore.getUiTextureAtlas(),
               race == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
     , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
+    , nameProperties({ &fontStore.getFontSmall() })
+    , nameRenderable(
+              Unit::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
+    , textRenderer(window)
     , statsPanel(
               GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
@@ -39,7 +45,12 @@ void UiRenderer::renderUi(const Selection& selection)
 {
     renderMainUi(selection);
     renderPortrait(selection);
+    renderText(selection);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main UI
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void UiRenderer::renderMainUi(const Selection& selection)
 {
@@ -129,6 +140,10 @@ bool UiRenderer::isInventoryVisible(const Selection& selection) const
     return inventory != nullptr;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Portrait
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void UiRenderer::renderPortrait(const Selection& selection)
 {
     int portraitId = -1;
@@ -206,6 +221,42 @@ bool UiRenderer::isPortraitVisible(const Selection& selection, int& outPortraitI
     }
 
     outPortraitId = portraitComp->getPortraitId();
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Text
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void UiRenderer::renderText(const Selection& selection)
+{
+    textRenderables.clear();
+
+    std::string name;
+    if (isNameVisible(selection, name))
+    {
+        nameRenderable.setTextSpan({ name, TextRenderable::defaultColor });
+        textRenderables.push_back(&nameRenderable);
+    }
+
+    textRenderer.render(textRenderables);
+}
+
+bool UiRenderer::isNameVisible(const Selection& selection, std::string& outName) const
+{
+    auto selectedEntity = selection.weakSelectedEntity.lock();
+    if (!selectedEntity)
+    {
+        return false;
+    }
+
+    auto unitProps = selectedEntity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
+    if (!unitProps)
+    {
+        return false;
+    }
+
+    outName = unitProps->getName();
     return true;
 }
 

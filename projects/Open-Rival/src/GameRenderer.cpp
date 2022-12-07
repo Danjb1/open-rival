@@ -27,25 +27,24 @@ GameRenderer::GameRenderer(
         const PlayerState& playerState,
         const Camera& camera,
         const Rect& viewport,
-        const TextureStore& textureStore,
+        const Resources& res,
         const MousePicker& mousePicker)
     : window(window)
     , world(world)
     , camera(camera)
     , viewport(viewport)
-    , textureStore(textureStore)
     , mousePicker(mousePicker)
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
-    , tileRenderer(textureStore.getTileSpritesheet(world.isWilderness()), textureStore.getPalette())
+    , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
     , mapBorderRenderer(
               playerState.getRace(),
               world.getWidth(),
               world.getHeight(),
-              textureStore.getMapBorderSpritesheet(),
-              textureStore.getPalette())
-    , entityRenderer(textureStore.getPalette())
-    , uiRenderer(playerState.getRace(), textureStore)
+              res.getMapBorderSpritesheet(),
+              res.getPalette())
+    , entityRenderer(res.getPalette())
+    , uiRenderer(playerState.getRace(), res, res, window)
 {
 }
 

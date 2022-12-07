@@ -8,7 +8,6 @@
 
 ### Movement Milestone
 
-- Show selected unit name in HUD
 - Show a custom cursor when the mouse is over a unit
 - Add all unit voices and portraits
 - Support flying units

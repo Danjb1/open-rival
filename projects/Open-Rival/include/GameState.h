@@ -7,15 +7,12 @@
 #include <unordered_map>
 
 #include "Camera.h"
-#include "Font.h"  // TMP
 #include "GameCommand.h"
 #include "GameRenderer.h"
-#include "MenuTextRenderer.h"  // TMP
 #include "MousePicker.h"
 #include "PlayerState.h"
 #include "Rect.h"
 #include "State.h"
-#include "TextRenderable.h"  // TMP
 #include "World.h"
 
 namespace Rival {
@@ -132,12 +129,6 @@ private:
      * The current player input.
      */
     Input input;
-
-    // TMP
-    std::unique_ptr<TextRenderable> text1;
-    std::unique_ptr<TextRenderable> text2;
-    std::vector<TextRenderable*> texts;
-    MenuTextRenderer textRenderer;
 };
 
 }  // namespace Rival

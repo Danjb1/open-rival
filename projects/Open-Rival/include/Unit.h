@@ -69,6 +69,9 @@ enum class Type : std::uint8_t
 static const int firstUnitType = static_cast<int>(Type::Ballista);
 static const int lastUnitType = static_cast<int>(Type::Snake);
 
+// TODO: This applies to Buildings as well - should be moved to somewhere common
+static const int maxNameLength = 12;
+
 // Size, in tiles
 static constexpr int width = 1;
 static constexpr int height = 1;

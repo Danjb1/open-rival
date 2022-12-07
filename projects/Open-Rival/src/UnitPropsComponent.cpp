@@ -9,9 +9,11 @@ namespace Rival {
 
 const std::string UnitPropsComponent::key = "unit_props";
 
-UnitPropsComponent::UnitPropsComponent(Unit::Type type)
+UnitPropsComponent::UnitPropsComponent(Unit::Type type, std::string name, bool isNameUnique)
     : EntityComponent(key)
     , type(type)
+    , name(name)
+    , isNameUnique(isNameUnique)
 {
 }
 

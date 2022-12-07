@@ -2,18 +2,22 @@
 
 #include "AtlasRenderable.h"
 #include "GameInterface.h"
+#include "MenuTextRenderer.h"
 #include "Race.h"
 #include "SpriteRenderable.h"
+#include "Window.h"
 
 namespace Rival {
 
+class FontStore;
 class TextureStore;
 struct Selection;
 
 class UiRenderer
 {
 public:
-    UiRenderer::UiRenderer(const Race& race, const TextureStore& textureStore);
+    UiRenderer::UiRenderer(
+            const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window);
 
     void renderUi(const Selection& selection);
 
@@ -28,6 +32,9 @@ private:
     bool portraitNeedsUpdate() const;
     void sendPortraitDataToGpu();
 
+    void renderText(const Selection& selection);
+    bool isNameVisible(const Selection& selection, std::string& outName) const;
+
 private:
     // Maximum number of images we can ever render
     static constexpr int maxMainUiImages = 6;
@@ -39,7 +46,13 @@ private:
 
     int numMainUiImages = 0;
     AtlasRenderable mainUiRenderable;
+
     SpriteRenderable portraitRenderable;
+
+    std::vector<TextRenderable*> textRenderables;
+    TextProperties nameProperties;
+    TextRenderable nameRenderable;
+    MenuTextRenderer textRenderer;
 
     GameInterface::UiImage minimapLeftBorder;
     GameInterface::UiImage minimapTopBorder;

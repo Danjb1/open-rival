@@ -13,7 +13,7 @@ namespace Rival {
 class Camera;
 class PlayerState;
 class Rect;
-class TextureStore;
+class Resources;
 class Window;
 class World;
 
@@ -26,7 +26,7 @@ public:
             const PlayerState& playerState,
             const Camera& camera,
             const Rect& viewport,
-            const TextureStore& textureStore,
+            const Resources& res,
             const MousePicker& mousePicker);
 
     void render(int delta);
@@ -42,7 +42,6 @@ private:
     const World& world;
     const Rect& viewport;
     const Camera& camera;
-    const TextureStore& textureStore;
     const MousePicker& mousePicker;
 
     /**
