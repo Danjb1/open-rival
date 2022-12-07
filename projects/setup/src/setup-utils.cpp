@@ -92,9 +92,8 @@ void writeImage(Image& image, const Palette::Palette& palette, const std::string
     out.put(8 | 1 << 5);
 
     // Color map data
-    for (int i = 0; i < Palette::paletteSize; ++i)
+    for (int i = 0; i < Palette::numColors; ++i)
     {
-
         const std::uint32_t col = palette[i];
         const std::uint8_t red = (uint8_t) ((col & 0xFF000000) >> 24);
         const std::uint8_t green = (uint8_t) ((col & 0x00FF0000) >> 16);

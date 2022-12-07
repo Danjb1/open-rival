@@ -15,10 +15,7 @@ namespace Rival {
 
 class Application
 {
-
 public:
-    bool vsyncEnabled;
-
     Application(Window& window, json& cfg);
 
     /**
@@ -59,6 +56,12 @@ public:
     }
 
 private:
+    void makeNextStateActive();
+
+public:
+    bool vsyncEnabled;
+
+private:
     /**
      * Minimum time that we will consider sleeping for.
      *
@@ -76,8 +79,6 @@ private:
 
     std::unique_ptr<State> state;
     std::unique_ptr<State> nextState;
-
-    void makeNextStateActive();
 };
 
 }  // namespace Rival

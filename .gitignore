@@ -1,5 +1,6 @@
 # Visual Studio settings
 .vs
+*.args.json
 
 # System files
 Thumbs.db

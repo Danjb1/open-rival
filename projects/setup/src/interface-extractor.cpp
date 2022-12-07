@@ -253,7 +253,7 @@ void InterfaceExtractor::extractImage(const std::string& outputDir, const Palett
                     throw std::runtime_error("Invalid image format");
                 }
                 int paletteIndex = reader.readByte();
-                if (paletteIndex >= Palette::paletteSize)
+                if (paletteIndex >= Palette::numColors)
                 {
                     throw std::runtime_error("Invalid palette reference");
                 }
