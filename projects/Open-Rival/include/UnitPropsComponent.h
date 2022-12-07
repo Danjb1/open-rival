@@ -38,7 +38,7 @@ class UnitPropsComponent
 {
 
 public:
-    UnitPropsComponent(Unit::Type type);
+    UnitPropsComponent(Unit::Type type, std::string name, bool isNameUnique);
 
     // Begin EntityComponent override
     virtual void onEntitySpawned(World* scenario) override;
@@ -58,6 +58,11 @@ public:
         return type;
     }
 
+    const std::string& getName() const
+    {
+        return name;
+    }
+
     /**
      * Gets the unit's current state.
      */
@@ -75,6 +80,9 @@ public:
     static const std::string key;
 
 private:
+    std::string name;
+    bool isNameUnique;
+
     std::unordered_set<UnitStateListener*> stateListeners;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;

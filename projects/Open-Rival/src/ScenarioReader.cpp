@@ -777,7 +777,7 @@ UnitPlacement ScenarioReader::parseUnit()
     unit.prisoner = readBool();
     unit.goldCost = readShort();
     unit.woodCost = readShort();
-    unit.name = readString(12);
+    unit.name = readString(Unit::maxNameLength);
     skip(13, false);
     unit.upgrade1Enabled = readBool();
     unit.upgrade2Enabled = readBool();
@@ -1102,7 +1102,6 @@ std::string ScenarioReader::readString(size_t length)
 
 std::string ScenarioReader::readString(size_t offset, size_t length) const
 {
-
     std::vector<char> chars(length);
     for (size_t i = 0; i < length; ++i)
     {

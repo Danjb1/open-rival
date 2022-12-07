@@ -43,7 +43,19 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     }
 
     // UnitPropsComponent
-    unit->attach(std::make_shared<UnitPropsComponent>(unitType));
+    std::string name;
+    bool isNameUnique;
+    if (isNameEmpty(unitPlacement.name))
+    {
+        name = unitDef->name;
+        isNameUnique = false;
+    }
+    else
+    {
+        name = unitPlacement.name;
+        isNameUnique = true;
+    }
+    unit->attach(std::make_shared<UnitPropsComponent>(unitType, name, isNameUnique));
 
     // OwnerComponent
     unit->attach(std::make_shared<OwnerComponent>(unitPlacement.player));
@@ -314,6 +326,11 @@ Unit::Type EntityFactory::getUnitType(std::uint8_t unitType) const
     default:
         throw std::runtime_error("Unknown unit type: " + std::to_string(unitType));
     }
+}
+
+bool EntityFactory::isNameEmpty(const std::string& name) const
+{
+    return name[0] == '\0';
 }
 
 Facing EntityFactory::getFacing(std::uint8_t facing) const
