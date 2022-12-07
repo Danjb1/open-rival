@@ -10,8 +10,10 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "MapUtils.h"
+#include "OwnerComponent.h"
 #include "Palette.h"
 #include "Pathfinding.h"
+#include "PlayerState.h"
 #include "RenderUtils.h"
 #include "Shaders.h"
 #include "SpriteComponent.h"
@@ -69,6 +71,16 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     {
         return;
     }
+
+    // Determine palette based on owner
+    int paletteIndex = 0;
+    const auto owner = entity.getComponent<OwnerComponent>(OwnerComponent::key);
+    if (owner)
+    {
+        paletteIndex = owner->getPlayerId();
+    }
+    float paletteTxy = static_cast<float>(paletteIndex) / PlayerStore::maxPlayers;
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxy);
 
     // Use textures
     const SpriteRenderable& renderable = spriteComponent->getRenderable();

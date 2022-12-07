@@ -29,6 +29,11 @@ public:
     virtual void keyDown(const SDL_Keycode) {};
 
     /**
+     * Handles keyUp events.
+     */
+    virtual void keyUp(const SDL_Keycode) {};
+
+    /**
      * Handles mouse down events.
      */
     virtual void mouseDown(const SDL_MouseButtonEvent) {}

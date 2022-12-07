@@ -2,6 +2,7 @@
 
 uniform sampler2D tex;
 uniform sampler2D palette;
+uniform float palette_txy;
 
 in vec2 tex_coords;
 
@@ -12,5 +13,5 @@ void main() {
     if (palette_idx.r == 1) {
         discard;
     }
-    frag_color = texture(palette, vec2(palette_idx.r, 0));
+    frag_color = texture(palette, vec2(palette_idx.r, palette_txy));
 }

@@ -6,23 +6,17 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-### HUD
+### Movement Milestone
 
 - Show selected unit name in HUD
-
-### Custom Cursors
-
 - Show a custom cursor when the mouse is over a unit
-
-### Movement
-
-- Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
-- Units should periodically re-plan their route
-
-### Setup
-
-- Some setup projects may be broken by recent dependency changes
-- Setup program should log output to a file (run the script via a BAT file?)
+- Add all unit voices and portraits
+- Support flying units
+- Support seafaring units
+- Drag-select
+- Build and release!
+    - Setup programs may be broken by recent dependency changes
+    - Setup program should log output to a file (run the script via a BAT file?)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -78,6 +72,7 @@
 
 ### Multiplayer
 
+- Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Write server code that can forward messages between clients
     - This should exist in a standalone project so that the server can be run independently
     - Open-Rival should import this so that one player can act as a host
@@ -101,7 +96,6 @@
 - Panning with middle-mouse button (drag)
 - Smooth panning with the arrow keys
 - Panning speed should depend on the zoom level
-- Drag-select
 
 ### Fonts
 
@@ -119,7 +113,6 @@
 - Render minimap
 - Render info points
 - Render chests
-- Respect unit color
 - Respect Gold tile variants
 - Fog of war
 - Some vertex/index data can be made into constants instead of member variables
@@ -127,11 +120,9 @@
 
 ### Movement
 
-- Should it be possible to interrupt a movement when an entity is between tiles?
+- Units should periodically re-plan their route
 - Should units "try" to move somewhere even if there is no path?
 - Should we limit the pathfinding logic to 'n' iterations?
-- Support flying units
-- Support seafaring units
 
 ### Animations
 

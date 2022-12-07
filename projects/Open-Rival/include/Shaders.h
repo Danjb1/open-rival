@@ -20,6 +20,8 @@ static constexpr GLint colorAttribIndex = 2;
 class Shader
 {
 public:
+    GLuint programId = 0;
+
     virtual std::string getName() const = 0;
     bool validateVertexAttribute(GLint attributeLoc, std::string attributeName) const;
     bool validateUniform(GLint uniformLoc, std::string uniformName) const;
@@ -34,18 +36,17 @@ public:
 class IndexedTextureShader : public Shader
 {
 public:
-    GLuint programId;
-
     // Vertex shader uniform locations
-    GLint viewProjMatrixUniformLoc;
+    GLint viewProjMatrixUniformLoc = -1;
 
     // Vertex shader attribute locations
-    GLint vertexAttribLoc;
-    GLint texCoordAttribLoc;
+    GLint vertexAttribLoc = -1;
+    GLint texCoordAttribLoc = -1;
 
     // Fragment shader uniform locations
-    GLint texUnitUniformLoc;
-    GLint paletteTexUnitUniformLoc;
+    GLint texUnitUniformLoc = -1;
+    GLint paletteTexUnitUniformLoc = -1;
+    GLint paletteTxYUnitUniformLoc = -1;
 
     static void init();
 
@@ -67,18 +68,16 @@ extern IndexedTextureShader indexedTextureShader;
 class FontShader : public Shader
 {
 public:
-    GLuint programId;
-
     // Vertex shader uniform locations
-    GLint viewProjMatrixUniformLoc;
+    GLint viewProjMatrixUniformLoc = -1;
 
     // Vertex shader attribute locations
-    GLint vertexAttribLoc;
-    GLint texCoordAttribLoc;
-    GLint colorAttribLoc;
+    GLint vertexAttribLoc = -1;
+    GLint texCoordAttribLoc = -1;
+    GLint colorAttribLoc = -1;
 
     // Fragment shader uniform locations
-    GLint texUnitUniformLoc;
+    GLint texUnitUniformLoc = -1;
 
     static void init();
 
@@ -100,17 +99,15 @@ extern FontShader fontShader;
 class TextureShader : public Shader
 {
 public:
-    GLuint programId;
-
     // Vertex shader uniform locations
-    GLint viewProjMatrixUniformLoc;
+    GLint viewProjMatrixUniformLoc = -1;
 
     // Vertex shader attribute locations
-    GLint vertexAttribLoc;
-    GLint texCoordAttribLoc;
+    GLint vertexAttribLoc = -1;
+    GLint texCoordAttribLoc = -1;
 
     // Fragment shader uniform locations
-    GLint texUnitUniformLoc;
+    GLint texUnitUniformLoc = -1;
 
     static void init();
 

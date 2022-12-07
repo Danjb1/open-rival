@@ -30,7 +30,7 @@ Image Image::readImage(const std::string filename)
     /*uint8_t imageDescriptor = */ reader.readByte();
 
     // Color palette
-    reader.skip(Palette::paletteBytes);
+    reader.skip(Palette::numBytesSinglePalette);
 
     // Pixel data
     std::vector<std::uint8_t> data(width * height);

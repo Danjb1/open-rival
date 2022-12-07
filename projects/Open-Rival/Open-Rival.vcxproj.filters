@@ -289,6 +289,9 @@
     <ClCompile Include="src\PortraitComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
+    <ClCompile Include="src\InputUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -554,6 +557,9 @@
     </ClInclude>
     <ClInclude Include="include\PortraitComponent.h">
       <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InputUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
