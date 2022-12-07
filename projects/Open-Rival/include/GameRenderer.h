@@ -32,6 +32,14 @@ public:
     void render(int delta);
 
 private:
+    void renderGameViaFramebuffer(int delta) const;
+    void renderGame(int viewportWidth, int viewportHeight, int delta) const;
+    void renderFramebuffer(int srcWidth, int srcHeight) const;
+    void renderUi();
+    void renderText();
+    void renderCursor();
+
+private:
     // Framebuffer size, in pixels.
     // This is our canvas; we can never render more pixels than this.
     // We divide by 2 because our tiles overlap (see RenderUtils).
@@ -59,11 +67,6 @@ private:
     TileRenderer tileRenderer;
     MapBorderRenderer mapBorderRenderer;
     UiRenderer uiRenderer;
-
-    void renderGameViaFramebuffer(int delta) const;
-    void renderGame(int viewportWidth, int viewportHeight, int delta) const;
-    void renderFramebuffer(int srcWidth, int srcHeight) const;
-    void renderUi();
 };
 
 }  // namespace Rival

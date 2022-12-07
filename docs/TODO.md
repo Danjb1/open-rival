@@ -8,6 +8,7 @@
 
 ### Movement Milestone
 
+- Animate cursor
 - Show a custom cursor when the mouse is over a unit
 - Add all unit voices and portraits
 - Support flying units
@@ -23,6 +24,7 @@
 
 - Game will crash if no config file exists
 - Clicking in the UI will still move the selected unit (to the last valid mouse position)
+- Zooming in does not zoom towards the cursor as much as it should
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -30,7 +32,6 @@
 
 ### General
 
-- Custom cursors
 - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls

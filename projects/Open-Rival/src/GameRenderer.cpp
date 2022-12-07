@@ -52,6 +52,8 @@ void GameRenderer::render(int delta)
 {
     renderGameViaFramebuffer(delta);
     renderUi();
+    renderText();
+    renderCursor();
 }
 
 void GameRenderer::renderGameViaFramebuffer(int delta) const
@@ -139,8 +141,7 @@ void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
 
 void GameRenderer::renderUi()
 {
-    // Disable depth testing since we can trivially manage the rendering
-    // order ourselves
+    // Disable depth testing since we can trivially manage the rendering order ourselves
     glDisable(GL_DEPTH_TEST);
 
     // Use indexed texture shader
@@ -157,6 +158,38 @@ void GameRenderer::renderUi()
     // Render the UI to the screen
     glViewport(0, 0, window.getWidth(), window.getHeight());
     uiRenderer.renderUi(mousePicker.getSelection());
+}
+
+void GameRenderer::renderText()
+{
+    // Disable depth testing since text is always on top
+    glDisable(GL_DEPTH_TEST);
+
+    // Render the UI to the screen
+    // (the MenuTextRenderer takes care of the shader, projection, etc.)
+    glViewport(0, 0, window.getWidth(), window.getHeight());
+    uiRenderer.renderText(mousePicker.getSelection());
+}
+
+void GameRenderer::renderCursor()
+{
+    // Disable depth testing since the cursor is always on top
+    glDisable(GL_DEPTH_TEST);
+
+    // Use indexed texture shader
+    glUseProgram(Shaders::indexedTextureShader.programId);
+
+    // Determine our view-projection matrix
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window.getAspectRatio());
+
+    // Set uniform values
+    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
+    glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+
+    // Render the cursor to the screen
+    glViewport(0, 0, window.getWidth(), window.getHeight());
+    uiRenderer.renderCursor();
 }
 
 }  // namespace Rival
