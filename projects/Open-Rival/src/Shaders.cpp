@@ -51,6 +51,7 @@ void IndexedTextureShader::init()
     indexedTextureShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
     indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
     indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
+    indexedTextureShader.paletteTxYUnitUniformLoc = glGetUniformLocation(programId, "palette_txy");
 
     if (!indexedTextureShader.isValid())
     {
@@ -68,10 +69,12 @@ bool IndexedTextureShader::isValid() const
     }
 
     // Validate vertex attributes / uniforms
-    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
-            && validateUniform(texUnitUniformLoc, "tex") && validateUniform(paletteTexUnitUniformLoc, "palette");
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")              //
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")    //
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")  //
+            && validateUniform(texUnitUniformLoc, "tex")                      //
+            && validateUniform(paletteTexUnitUniformLoc, "palette")           //
+            && validateUniform(paletteTexUnitUniformLoc, "paletteTxY");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -109,10 +112,10 @@ bool FontShader::isValid() const
     }
 
     // Validate vertex attributes / uniforms
-    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-            && validateVertexAttribute(colorAttribLoc, "in_color")
-            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")              //
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")    //
+            && validateVertexAttribute(colorAttribLoc, "in_color")            //
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")  //
             && validateUniform(texUnitUniformLoc, "tex");
 }
 
@@ -150,9 +153,9 @@ bool TextureShader::isValid() const
     }
 
     // Validate vertex attributes / uniforms
-    return validateVertexAttribute(vertexAttribLoc, "in_vertex")
-            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")
-            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")              //
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")    //
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")  //
             && validateUniform(texUnitUniformLoc, "tex");
 }
 

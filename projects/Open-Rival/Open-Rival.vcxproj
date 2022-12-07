@@ -40,6 +40,7 @@
     <ClCompile Include="src\GameRenderer.cpp" />
     <ClCompile Include="src\GLUtils.cpp" />
     <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\InputUtils.cpp" />
     <ClCompile Include="src\InventoryComponent.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="include\GameRenderer.h" />
     <ClInclude Include="include\GLUtils.h" />
     <ClInclude Include="include\Image.h" />
+    <ClInclude Include="include\InputUtils.h" />
     <ClInclude Include="include\InventoryComponent.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MapUtils.h" />

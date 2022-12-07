@@ -4,7 +4,6 @@ namespace Rival { namespace Unit {
 
 enum class Type : std::uint8_t
 {
-
     // Human
     Ballista,
     Battleship,

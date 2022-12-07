@@ -3,18 +3,28 @@
 #include <array>
 #include <cstdint>
 
+#include "PlayerState.h"
+
 namespace Rival { namespace Palette {
 
 // Number of colors in the palette
-const int paletteSize = 256;
+const int numColors = 256;
 
-// Number of channels per color of the palette
-const int paletteChannels = 4;
+// Number of channels per color of the palette (RGBA)
+const int numChannels = 4;
 
-// Number of bytes required to store the palette
-const int paletteBytes = paletteSize * paletteChannels;
+// Number of bytes required for a single palette
+const int numBytesSinglePalette = numColors * numChannels;
 
-using Palette = std::array<std::uint32_t, paletteSize>;
+// Number of bytes required for all palettes (1 per player)
+const int numBytesCombinedPalettes = numBytesSinglePalette * PlayerStore::maxPlayers;
+
+// Player color info
+const int numColorsPerPlayer = 6;
+const int p1ColorsIndex = 160;
+const int p2ColorsIndex = p1ColorsIndex + numColorsPerPlayer;
+
+using Palette = std::array<std::uint32_t, numBytesSinglePalette>;
 
 extern Palette paletteGame;
 extern Palette paletteTitle;

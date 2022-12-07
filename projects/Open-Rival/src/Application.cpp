@@ -123,6 +123,10 @@ void Application::pollEvents()
         {
             state->keyDown(e.key.keysym.sym);
         }
+        else if (e.type == SDL_KEYUP)
+        {
+            state->keyUp(e.key.keysym.sym);
+        }
         else if (e.type == SDL_MOUSEBUTTONDOWN)
         {
             state->mouseDown(e.button);

@@ -120,7 +120,6 @@ int main()
 
     try
     {
-
         // Initialization that does not require an OpenGL context
         json cfg = readConfig();
         initSDL();
