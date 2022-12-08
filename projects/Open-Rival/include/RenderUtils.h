@@ -27,6 +27,14 @@ static constexpr int entityHeightPx = 128;
 static constexpr int entityDrawOffsetX = -33;
 static constexpr int entityDrawOffsetY = -89;
 
+// Size of the hitbox sprites, in pixels.
+static constexpr int hitboxSpriteWidthPx = 16;
+static constexpr int hitboxSpriteHeightPx = 16;
+
+// Size of the cursor sprites, in pixels.
+static constexpr int cursorWidthPx = 32;
+static constexpr int cursorHeightPx = 32;
+
 // Size of the camera used for menus.
 // This defines the notion of "menu co-ordinates".
 // This height value is based on the original menu image sizes.
@@ -52,7 +60,8 @@ static constexpr float nearPlane = 1.0f;
 // Lower values are nearer to the camera and will be rendered on top.
 static constexpr float zStart = cameraZ + nearPlane;
 static constexpr float zMapBorder = zStart;
-static constexpr float zFog = zMapBorder + 1.f;
+static constexpr float zHitbox = zMapBorder + 1;
+static constexpr float zFog = zHitbox + 1.f;
 static constexpr float zEntityNearest = zFog + 1.f;
 static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
 static constexpr float zTiles = zEntityFurthest + 1.f;

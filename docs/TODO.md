@@ -9,7 +9,6 @@
 ### Movement Milestone
 
 - Animate cursor
-- Render entity hitbox on hover
 - Add all unit voices and portraits
 - Support flying units
 - Support seafaring units
@@ -324,6 +323,7 @@
 - Static objects (e.g. mountains) need not use an AnimationComponent
 - Differentiate between components that need to be ticked and those that don't
 - Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed
+- Hitbox buffers should not need to be recreated every tick
 
 ### Refactoring
 
@@ -350,3 +350,7 @@
 - Use vectors in MousePicker instead of separate x/y variables
 - Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
+- Replace `Resources::get*Spritesheet` with a generic method that takes an enum parameter
+- Rendering code is super messy
+    - Create a utility method to construct a vertex array from x1,x2,y1,y2,z positions
+    - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code

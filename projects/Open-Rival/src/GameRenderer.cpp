@@ -25,7 +25,7 @@ namespace Rival {
 GameRenderer::GameRenderer(
         const Window& window,
         const World& world,
-        const PlayerState& playerState,
+        const PlayerStore& playerStore,
         const Camera& camera,
         const Rect& viewport,
         const Resources& res,
@@ -38,13 +38,13 @@ GameRenderer::GameRenderer(
     , gameFboRenderer(gameFbo)
     , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
     , mapBorderRenderer(
-              playerState.getRace(),
+              playerStore.getLocalPlayerState().getRace(),
               world.getWidth(),
               world.getHeight(),
               res.getMapBorderSpritesheet(),
               res.getPalette())
-    , entityRenderer(res.getPalette())
-    , uiRenderer(playerState.getRace(), res, res, window, playerContext)
+    , entityRenderer(res, playerContext)
+    , uiRenderer(playerStore, res, res, window, playerContext)
 {
 }
 

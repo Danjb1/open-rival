@@ -49,6 +49,7 @@ public:
     virtual const Spritesheet& getCursorSpritesheet() const = 0;
     virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
     virtual const Spritesheet& getPortraitSpritesheet() const = 0;
+    virtual const Spritesheet& getHitboxSpritesheet() const = 0;
     virtual const TextureAtlas& getUiTextureAtlas() const = 0;
 };
 
@@ -100,6 +101,7 @@ public:
     const Spritesheet& getCursorSpritesheet() const override;
     const Spritesheet& getMapBorderSpritesheet() const override;
     const Spritesheet& getPortraitSpritesheet() const override;
+    const Spritesheet& getHitboxSpritesheet() const override;
     const TextureAtlas& getUiTextureAtlas() const override;
     // End TextureStore override
 
@@ -132,6 +134,7 @@ private:
     Spritesheet initCursorSpritesheet();
     Spritesheet initMapBorderSpritesheet();
     Spritesheet initPortraitSpritesheet();
+    Spritesheet initHitboxSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
     std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
@@ -149,12 +152,6 @@ private:
     static const std::string defaultFontSmall;
     static const std::string defaultFontRegular;
 
-    // Resource counts
-    static constexpr int numTextures = 62;
-    static constexpr int numTextureAtlases = 1;
-    static constexpr int numSounds = 369;
-    static constexpr int numMidis = 1;  // 13;
-
     // Texture constants
     static constexpr int txIndexUnits = 0;
     static constexpr int txIndexTiles = 50;
@@ -162,6 +159,13 @@ private:
     static constexpr int txIndexCursors = 57;
     static constexpr int txIndexBuildings = 58;
     static constexpr int txIndexPortraits = 61;
+    static constexpr int txIndexHitbox = 62;
+
+    // Resource counts
+    static constexpr int numTextures = txIndexHitbox + 1;
+    static constexpr int numTextureAtlases = 1;
+    static constexpr int numSounds = 369;
+    static constexpr int numMidis = 1;  // 13;
 
     // MIDI constants
     static constexpr int midiStartIndex = 369;
@@ -186,6 +190,7 @@ private:
     Spritesheet cursorSpritesheet;
     Spritesheet mapBorderSpritesheet;
     Spritesheet portraitSpritesheet;
+    Spritesheet hitboxSpritesheet;
 
     // Texture Atlases
     std::vector<TextureAtlas> textureAtlases;

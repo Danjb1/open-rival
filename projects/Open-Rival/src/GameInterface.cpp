@@ -11,7 +11,7 @@ namespace Rival { namespace GameInterface {
 ///////////////////////////////////////////////////////////////////////////
 
 // Cursor
-const Rect cursor(0, 0, 32, 32);
+const Rect cursor(0, 0, RenderUtils::cursorWidthPx, RenderUtils::cursorHeightPx);
 
 // Minimap
 const Rect minimapLeftBorder(0, uiPosY, 5, uiHeight);

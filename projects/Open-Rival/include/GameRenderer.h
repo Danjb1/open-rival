@@ -23,7 +23,7 @@ public:
     GameRenderer(
             const Window& window,
             const World& world,
-            const PlayerState& playerState,
+            const PlayerStore& playerStore,
             const Camera& camera,
             const Rect& viewport,
             const Resources& res,

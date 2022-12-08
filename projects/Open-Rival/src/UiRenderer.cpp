@@ -7,6 +7,7 @@
 #include "Cursor.h"
 #include "InventoryComponent.h"
 #include "PlayerContext.h"
+#include "PlayerState.h"
 #include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
@@ -15,13 +16,14 @@
 namespace Rival {
 
 UiRenderer::UiRenderer(
-        const Race& race,
+        const PlayerStore& playerStore,
         const TextureStore& textureStore,
         const FontStore& fontStore,
         const Window& window,
         const PlayerContext& playerContext)
     : textureStore(textureStore)
     , window(window)
+    , playerStore(playerStore)
     , playerContext(playerContext)
 
     // Main UI
@@ -32,15 +34,15 @@ UiRenderer::UiRenderer(
     , mainPanel(
               GameInterface::mainPanel,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1123.tga" : "img_ui_1057.tga")
+              playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1123.tga" : "img_ui_1057.tga")
     , hideInventoryOverlay(
               GameInterface::hideInventoryOverlay,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
+              playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
     , statsPanel(
               GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
-              race == Race::Greenskin ? "img_ui_1136.tga" : "img_ui_1070.tga")
+              playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1136.tga" : "img_ui_1070.tga")
 
     // Portrait
     , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
@@ -282,7 +284,7 @@ bool UiRenderer::isNameVisible(std::string& outName) const
 
 void UiRenderer::renderCursor()
 {
-    CursorDef cursorDef = Cursor::getCurrentCursor(playerContext);
+    CursorDef cursorDef = Cursor::getCurrentCursor(playerStore, playerContext);
 
     // Get the mouse position relative to the window, in pixels
     int mouseX;
@@ -298,7 +300,11 @@ void UiRenderer::renderCursor()
     cursorImage.pos.x = normalizedMouseX * RenderUtils::getMenuWidth(window.getAspectRatio());
     cursorImage.pos.y = normalizedMouseY * RenderUtils::menuHeight;
 
-    // TMP
+    // Offset the image based on the cursor hotspot
+    cursorImage.pos.x -= cursorDef.hotspotX * RenderUtils::cursorWidthPx;
+    cursorImage.pos.y -= cursorDef.hotspotY * RenderUtils::cursorHeightPx;
+
+    // TMP: This needs to animate
     cursorImage.setSpriteIndex(cursorDef.startIndex);
 
     // Use textures

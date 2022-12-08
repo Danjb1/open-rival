@@ -10,11 +10,14 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "MapUtils.h"
+#include "MouseHandlerComponent.h"
 #include "OwnerComponent.h"
 #include "Palette.h"
 #include "Pathfinding.h"
+#include "PlayerContext.h"
 #include "PlayerState.h"
 #include "RenderUtils.h"
+#include "Resources.h"
 #include "Shaders.h"
 #include "SpriteComponent.h"
 #include "Spritesheet.h"
@@ -23,8 +26,10 @@
 
 namespace Rival {
 
-EntityRenderer::EntityRenderer(const Texture& paletteTexture)
-    : paletteTexture(paletteTexture)
+EntityRenderer::EntityRenderer(const TextureStore& textureStore, const PlayerContext& playerContext)
+    : paletteTexture(textureStore.getPalette())
+    , hitboxRenderable(textureStore.getHitboxSpritesheet(), numHitboxSprites)
+    , playerContext(playerContext)
 {
 }
 
@@ -100,6 +105,12 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
 
     // Render
     glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+
+    // Render hitbox
+    if (isEntityUnderMouse(entity))
+    {
+        renderHitbox(entity);
+    }
 }
 
 bool EntityRenderer::needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const
@@ -231,6 +242,138 @@ glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
     }
 
     return offset;
+}
+
+bool EntityRenderer::isEntityUnderMouse(const Entity& entity) const
+{
+    if (const auto& entityUnderMouse = playerContext.weakEntityUnderMouse.lock())
+    {
+        return entity.getId() == entityUnderMouse->getId();
+    }
+
+    return false;
+}
+
+void EntityRenderer::renderHitbox(const Entity& entity) const
+{
+    const MouseHandlerComponent* mouseHandler = entity.getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
+    if (!mouseHandler)
+    {
+        std::cerr << "Could not find MouseHandlerComponent for entity under mouse\n";
+        return;
+    }
+
+    const Rect& hitbox = mouseHandler->getHitbox();
+
+    // Use textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, hitboxRenderable.getTextureId());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+
+    // Bind vertex array
+    glBindVertexArray(hitboxRenderable.getVao());
+
+    // Prepare data for GPU
+    std::vector<GLfloat> positions;
+    positions.reserve(
+            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numVertexDimensions * numHitboxSprites);
+    std::vector<GLfloat> texCoords;
+    texCoords.reserve(
+            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numTexCoordDimensions * numHitboxSprites);
+
+    // Top-left corner
+    {
+        float x1 = hitbox.x;
+        float y1 = hitbox.y;
+        float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
+        float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
+        float z = RenderUtils::zHitbox;
+        std::vector<GLfloat> newPositions = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
+        positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
+
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(0);
+        texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
+    }
+
+    // Top-right corner
+    {
+        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteWidthPx;
+        float y1 = hitbox.y;
+        float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
+        float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
+        float z = RenderUtils::zHitbox;
+        std::vector<GLfloat> newPositions = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
+        positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
+
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(1);
+        texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
+    }
+
+    // Bottom-right corner
+    {
+        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteWidthPx;
+        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteHeightPx;
+        float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
+        float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
+        float z = RenderUtils::zHitbox;
+        std::vector<GLfloat> newPositions = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
+        positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
+
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(2);
+        texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
+    }
+
+    // Bottom-left corner
+    {
+        float x1 = hitbox.x;
+        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteHeightPx;
+        float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
+        float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
+        float z = RenderUtils::zHitbox;
+        std::vector<GLfloat> newPositions = {
+            x1, y1, z,  //
+            x2, y1, z,  //
+            x2, y2, z,  //
+            x1, y2, z   //
+        };
+        positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
+
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(3);
+        texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
+    }
+
+    // Upload position data
+    glBindBuffer(GL_ARRAY_BUFFER, hitboxRenderable.getPositionVbo());
+    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
+
+    // Upload tex co-ord data
+    glBindBuffer(GL_ARRAY_BUFFER, hitboxRenderable.getTexCoordVbo());
+    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
+
+    // Render
+    glDrawElements(
+            hitboxRenderable.getDrawMode(),
+            hitboxRenderable.getIndicesPerSprite() * numHitboxSprites,
+            GL_UNSIGNED_INT,
+            nullptr);
 }
 
 }  // namespace Rival
