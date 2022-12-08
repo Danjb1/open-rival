@@ -37,4 +37,4 @@ Source: **MOVIES directory**
 
 Source: **.SCO files**
 
- - Format [under analysis](/docs/MAPS.md).
+ - Format [under analysis](/docs/research/maps.md).

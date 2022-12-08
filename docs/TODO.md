@@ -1,14 +1,9 @@
 # To Do
 
-> Also see [milestones](/docs/milestones.md).
-
 <!----------------------------------------------------------------------------->
-## WIP
-<!----------------------------------------------------------------------------->
-
 ### Movement Milestone
+<!----------------------------------------------------------------------------->
 
-- Animate cursor
 - Add all unit voices and portraits
 - Support flying units
 - Support seafaring units
@@ -16,6 +11,18 @@
 - Build and release!
     - Setup programs may be broken by recent dependency changes
     - Setup program should log output to a file (run the script via a BAT file?)
+
+<!----------------------------------------------------------------------------->
+### Multiplayer Milestone
+<!----------------------------------------------------------------------------->
+
+- A dedicated server can accept multiple players
+    - For now, the map and the number of players can be hardcoded
+- Clients can connect to the dedicated server
+    - For now, the server IP can be hardcoded
+- The game should only start when all players have joined
+- Player actions are transmitted via the server
+- Players can see the movements of other players
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -240,6 +247,8 @@
 - Use a separate .gitignore file for each project folder
 - Commit upscaled video files (using Git LFS?)
 - Consider linking with static libraries (instead of using DLLs)
+- Consider moving some docs to GitHub wiki
+- Create a CMake file to generate the solution?
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -354,3 +363,4 @@
 - Rendering code is super messy
     - Create a utility method to construct a vertex array from x1,x2,y1,y2,z positions
     - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code
+- Create a CursorRenderer to hold all the cursor rendering logic
