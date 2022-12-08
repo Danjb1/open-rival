@@ -280,7 +280,7 @@ Players allied in pairs:
 
 Starting at offset 0x817B (immediately before the checksum).
 
-Uses character values from *[alphabet.md](/docs/alphabet.md)*
+Uses character values from *[alphabet.md](/docs/research/alphabet.md)*
 
 If the first byte is 0x74, then there is no campaign text, and the subsequent values are simply `74 74 74 74 74`.
 
