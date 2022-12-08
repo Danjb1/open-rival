@@ -37,7 +37,7 @@ private:
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();
-    void renderCursor();
+    void renderCursor(int delta);
 
 private:
     // Framebuffer size, in pixels.
