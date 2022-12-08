@@ -164,6 +164,8 @@ void TextRenderable::setTextSpan(TextSpan newSpan)
 void TextRenderable::setTextSpans(std::vector<TextSpan> newSpans)
 {
     spans = newSpans;
+    countChars();
+    dirty = true;
 }
 
 }  // namespace Rival

@@ -138,7 +138,7 @@ int main()
         Application app(*window, cfg);
 
         // Load some scenario
-        ScenarioReader reader(Resources::mapsDir + "test_pathfinding.sco");
+        ScenarioReader reader(Resources::mapsDir + "test_all.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         Resources& res = app.getResources();
         EntityFactory entityFactory(res, app.getAudioSystem());

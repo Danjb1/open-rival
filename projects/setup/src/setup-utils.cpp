@@ -23,26 +23,6 @@ bool createDirectory(const std::string dirName)
 }
 
 /**
- * Rounds a number up to the nearest power of 2.
- *
- * See:
- * http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
- */
-int nextPowerOf2(int v)
-{
-
-    v--;
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    v++;
-
-    return v;
-}
-
-/**
  * Writes an image to disk.
  *
  * Our images are saved using a top-left origin, which means that the first byte of the data on disk is the top-left
@@ -53,7 +33,6 @@ int nextPowerOf2(int v)
  */
 void writeImage(Image& image, const Palette::Palette& palette, const std::string filename)
 {
-
     // Open file for writing
     std::ofstream out;
     out.open(filename, std::ios::out | std::ios::binary);

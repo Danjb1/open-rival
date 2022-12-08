@@ -30,6 +30,12 @@ private:
     // Height of one image within the texture
     const int height;
 
+    // Width of one image - plus its padding - within the texture
+    const int paddedWidth;
+
+    // Height of one image - plus its padding - within the texture
+    const int paddedHeight;
+
     // Number of columns in the texture
     const int xSize;
 

@@ -4,11 +4,14 @@
 ### Movement Milestone
 <!----------------------------------------------------------------------------->
 
-- Add all unit voices and portraits
+- Add all unit animations
 - Support flying units
 - Support seafaring units
+- Fix buildings not rendering correctly
 - Drag-select
+- Allow a custom level to be specified (in config or a command line parameter)
 - Build and release!
+    - Document known issues
     - Setup programs may be broken by recent dependency changes
     - Setup program should log output to a file (run the script via a BAT file?)
 
@@ -31,7 +34,8 @@
 - Game will crash if no config file exists
 - Clicking in the UI will still move the selected unit (to the last valid mouse position)
 - Zooming in does not zoom towards the cursor as much as it should
-- Unit hitboxes are not quite positioned correctly
+- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
+- Tiles covered by the map border should not be passable
 
 <!----------------------------------------------------------------------------->
 ## Features

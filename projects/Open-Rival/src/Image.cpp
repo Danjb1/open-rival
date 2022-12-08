@@ -70,7 +70,6 @@ int Image::getStride() const
 
 void Image::copyImage(const Image& src, Image& dst, const int dstX, const int dstY)
 {
-
     const std::vector<std::uint8_t>& srcData = src.getData();
     std::vector<std::uint8_t>& dstData = dst.getMutableData();
 
