@@ -161,6 +161,7 @@
     <ClInclude Include="..\Open-Rival\include\BinaryFileReader.h" />
     <ClInclude Include="..\Open-Rival\include\FileUtils.h" />
     <ClInclude Include="..\Open-Rival\include\Image.h" />
+    <ClInclude Include="..\Open-Rival\include\MathUtils.h" />
     <ClInclude Include="..\Open-Rival\include\Palette.h" />
     <ClInclude Include="..\Open-Rival\include\StringUtils.h" />
     <ClInclude Include="include\audio-extractor.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="..\Open-Rival\src\BinaryFileReader.cpp" />
     <ClCompile Include="..\Open-Rival\src\FileUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\Image.cpp" />
+    <ClCompile Include="..\Open-Rival\src\MathUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\Palette.cpp" />
     <ClCompile Include="..\Open-Rival\src\StringUtils.cpp" />
     <ClCompile Include="src\audio-extractor.cpp" />

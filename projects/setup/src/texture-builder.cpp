@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+#include "MathUtils.h"
 #include "setup-utils.h"
 
 namespace fs = std::filesystem;
@@ -100,7 +101,6 @@ void TextureAtlasBuilder::addImage(const NamedImage& namedImage)
  */
 Rect TextureAtlasBuilder::findOrMakeEmptyRect(const int reqWidth, const int reqHeight)
 {
-
     // Find the smallest rectangle that fits our required size
     std::sort(emptyRects.begin(), emptyRects.end(), compareRectsSmallestFirst);
     int rectIndex = findRectBiggerThan(emptyRects, reqWidth, reqHeight);
@@ -164,7 +164,6 @@ int TextureAtlasBuilder::findRectBiggerThan(const std::vector<Rect>& rects, cons
  */
 int TextureAtlasBuilder::expandTextureToFitRect(const int reqWidth, const int reqHeight)
 {
-
     // Remember the previous texture size
     int prevWidth = texWidth;
     int prevHeight = texHeight;
@@ -233,7 +232,6 @@ void readPalette(Palette::Palette& palette, const std::string filename)
  */
 void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
 {
-
     // Open the file for writing
     std::ofstream atlasFile;
     atlasFile.open(filename);
@@ -257,7 +255,6 @@ void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
 
 std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode)
 {
-
     std::ifstream file(path);
     std::string line;
 
@@ -330,8 +327,8 @@ void createTextureAtlas(
     }
 
     // Create the texture
-    int texWidth = nextPowerOf2(builder.texWidth);
-    int texHeight = nextPowerOf2(builder.texHeight);
+    int texWidth = MathUtils::nextPowerOf2(builder.texWidth);
+    int texHeight = MathUtils::nextPowerOf2(builder.texHeight);
     std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
     Image texture = Image::createEmpty(texWidth, texHeight, '\xff');
 
@@ -360,17 +357,21 @@ void createSpritesheetTexture(
         const std::vector<NamedImage>& sprites,
         const Palette::Palette& palette)
 {
-
     // For a spritesheet, all images are the same size
     const Image& anySprite = sprites[0].image;
     int spriteWidth = anySprite.getWidth();
     int spriteHeight = anySprite.getHeight();
 
+    // We need the sprites to be powers of 2 so that they fill the texture width exactly.
+    // Most sprites are already powers of 2 so this will have no effect.
+    int paddedSpriteWidth = MathUtils::nextPowerOf2(spriteWidth);
+    int paddedSpriteHeight = MathUtils::nextPowerOf2(spriteHeight);
+
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
     // we find a suitable size with minimal wasted space
-    int tmpWidth = nextPowerOf2(spriteWidth * sprites.size());
-    int tmpHeight = spriteHeight;
+    int tmpWidth = MathUtils::nextPowerOf2(paddedSpriteWidth * sprites.size());
+    int tmpHeight = paddedSpriteWidth;
     int dataSize = tmpWidth * tmpHeight;
     int best = dataSize;
     int txWidth = tmpWidth;
@@ -378,7 +379,6 @@ void createSpritesheetTexture(
 
     while (tmpWidth > 256)
     {
-
         tmpWidth /= 2;
         tmpHeight *= 2;
 
@@ -401,7 +401,6 @@ void createSpritesheetTexture(
 
     // Create an empty texture
     Image texture = Image::createEmpty(txWidth, txHeight, '\xff');
-
     int x = 0;
     int y = 0;
 
@@ -411,12 +410,12 @@ void createSpritesheetTexture(
         const Image& sprite = namedImage.image;
         Image::copyImage(sprite, texture, x, y);
 
-        x += sprite.getWidth();
+        x += paddedSpriteWidth;
 
         if (x >= texture.getWidth())
         {
             x = 0;
-            y += sprite.getHeight();
+            y += paddedSpriteHeight;
         }
     }
 
@@ -427,11 +426,9 @@ void createSpritesheetTexture(
 
 void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode)
 {
-
     // Process each definition file in the given directory
     for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir))
     {
-
         if (entry.is_directory())
         {
             continue;

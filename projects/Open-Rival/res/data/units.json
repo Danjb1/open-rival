@@ -44,16 +44,19 @@
         }
       },
       "name": "Battleship",
-      "portrait": 0,
+      "portrait": 47,
       "sounds": {
         "move": [
-          0
+          109,
+          110,
+          111
         ],
         "select": [
-          0
+          112,
+          113
         ],
         "train": [
-          0
+          108
         ]
       }
     },
@@ -76,16 +79,19 @@
         }
       },
       "name": "Bowman",
-      "portrait": 0,
+      "portrait": 37,
       "sounds": {
         "move": [
-          0
+          49,
+          50,
+          51
         ],
         "select": [
-          0
+          52,
+          53
         ],
         "train": [
-          0
+          48
         ]
       }
     },
@@ -98,16 +104,19 @@
         }
       },
       "name": "Chariot of War",
-      "portrait": 0,
+      "portrait": 43,
       "sounds": {
         "move": [
-          0
+          85,
+          86,
+          87
         ],
         "select": [
-          0
+          88,
+          89
         ],
         "train": [
-          0
+          84
         ]
       }
     },
@@ -130,16 +139,19 @@
         }
       },
       "name": "Fire Master",
-      "portrait": 0,
+      "portrait": 40,
       "sounds": {
         "move": [
-          0
+          67,
+          68,
+          69
         ],
         "select": [
-          0
+          70,
+          71
         ],
         "train": [
-          0
+          66
         ]
       }
     },
@@ -187,16 +199,19 @@
         }
       },
       "name": "Light Cavalry",
-      "portrait": 0,
+      "portrait": 38,
       "sounds": {
         "move": [
-          0
+          55,
+          56,
+          57
         ],
         "select": [
-          0
+          58,
+          59
         ],
         "train": [
-          0
+          54
         ]
       }
     },
@@ -234,16 +249,19 @@
         }
       },
       "name": "Peasant",
-      "portrait": 0,
+      "portrait": 36,
       "sounds": {
         "move": [
-          0
+          42,
+          43,
+          44
         ],
         "select": [
-          0
+          45,
+          46
         ],
         "train": [
-          0
+          41
         ]
       }
     },
@@ -256,16 +274,19 @@
         }
       },
       "name": "Pegas Rider",
-      "portrait": 0,
+      "portrait": 48,
       "sounds": {
         "move": [
-          0
+          115,
+          116,
+          117
         ],
         "select": [
-          0
+          118,
+          119
         ],
         "train": [
-          0
+          114
         ]
       }
     },
@@ -278,16 +299,19 @@
         }
       },
       "name": "Priest",
-      "portrait": 0,
+      "portrait": 45,
       "sounds": {
         "move": [
-          0
+          97,
+          98,
+          99
         ],
         "select": [
-          0
+          100,
+          101
         ],
         "train": [
-          0
+          96
         ]
       }
     },
@@ -300,16 +324,19 @@
         }
       },
       "name": "Sea Barge",
-      "portrait": 0,
+      "portrait": 46,
       "sounds": {
         "move": [
-          0
+          103,
+          104,
+          105
         ],
         "select": [
-          0
+          106,
+          107
         ],
         "train": [
-          0
+          102
         ]
       }
     },
@@ -322,16 +349,19 @@
         }
       },
       "name": "Thief",
-      "portrait": 0,
+      "portrait": 41,
       "sounds": {
         "move": [
-          0
+          73,
+          74,
+          75
         ],
         "select": [
-          0
+          76,
+          77
         ],
         "train": [
-          0
+          72
         ]
       }
     },
@@ -354,16 +384,19 @@
         }
       },
       "name": "Wizard",
-      "portrait": 0,
+      "portrait": 44,
       "sounds": {
         "move": [
-          0
+          91,
+          92,
+          93
         ],
         "select": [
-          0
+          94,
+          95
         ],
         "train": [
-          0
+          90
         ]
       }
     },
@@ -376,16 +409,19 @@
         }
       },
       "name": "Zeppelin",
-      "portrait": 0,
+      "portrait": 49,
       "sounds": {
         "move": [
-          0
+          121,
+          122,
+          123
         ],
         "select": [
-          0
+          124,
+          125
         ],
         "train": [
-          0
+          120
         ]
       }
     },
@@ -398,16 +434,19 @@
         }
       },
       "name": "Balloon",
-      "portrait": 0,
+      "portrait": 63,
       "sounds": {
         "move": [
-          0
+          210,
+          211,
+          212
         ],
         "select": [
-          0
+          213,
+          214
         ],
         "train": [
-          0
+          209
         ]
       }
     },
@@ -420,16 +459,19 @@
         }
       },
       "name": "Catapult",
-      "portrait": 0,
+      "portrait": 56,
       "sounds": {
         "move": [
-          0
+          168,
+          169,
+          170
         ],
         "select": [
-          0
+          171,
+          172
         ],
         "train": [
-          0
+          167
         ]
       }
     },
@@ -442,16 +484,19 @@
         }
       },
       "name": "Gnome Boomer",
-      "portrait": 0,
+      "portrait": 55,
       "sounds": {
         "move": [
-          0
+          156,
+          157,
+          158
         ],
         "select": [
-          0
+          159,
+          160
         ],
         "train": [
-          0
+          155
         ]
       }
     },
@@ -464,16 +509,19 @@
         }
       },
       "name": "Horde Rider",
-      "portrait": 0,
+      "portrait": 52,
       "sounds": {
         "move": [
-          0
+          144,
+          145,
+          146
         ],
         "select": [
-          0
+          147,
+          148
         ],
         "train": [
-          0
+          143
         ]
       }
     },
@@ -486,16 +534,19 @@
         }
       },
       "name": "Landing Craft",
-      "portrait": 0,
+      "portrait": 60,
       "sounds": {
         "move": [
-          0
+          192,
+          193,
+          194
         ],
         "select": [
-          0
+          195,
+          196
         ],
         "train": [
-          0
+          191
         ]
       }
     },
@@ -508,16 +559,19 @@
         }
       },
       "name": "Necromancer",
-      "portrait": 0,
+      "portrait": 59,
       "sounds": {
         "move": [
-          0
+          180,
+          181,
+          182
         ],
         "select": [
-          0
+          183,
+          184
         ],
         "train": [
-          0
+          179
         ]
       }
     },
@@ -530,16 +584,19 @@
         }
       },
       "name": "Priest of Doom",
-      "portrait": 0,
+      "portrait": 58,
       "sounds": {
         "move": [
-          0
+          186,
+          187,
+          188
         ],
         "select": [
-          0
+          189,
+          190
         ],
         "train": [
-          0
+          185
         ]
       }
     },
@@ -552,16 +609,19 @@
         }
       },
       "name": "Rock Thrower",
-      "portrait": 0,
+      "portrait": 51,
       "sounds": {
         "move": [
-          0
+          138,
+          139,
+          140
         ],
         "select": [
-          0
+          141,
+          142
         ],
         "train": [
-          0
+          137
         ]
       }
     },
@@ -574,16 +634,19 @@
         }
       },
       "name": "Rogue",
-      "portrait": 0,
+      "portrait": 54,
       "sounds": {
         "move": [
-          0
+          162,
+          163,
+          164
         ],
         "select": [
-          0
+          165,
+          166
         ],
         "train": [
-          0
+          161
         ]
       }
     },
@@ -596,16 +659,19 @@
         }
       },
       "name": "Serf",
-      "portrait": 0,
+      "portrait": 50,
       "sounds": {
         "move": [
-          0
+          131,
+          132,
+          133
         ],
         "select": [
-          0
+          134,
+          135
         ],
         "train": [
-          0
+          130
         ]
       }
     },
@@ -618,16 +684,19 @@
         }
       },
       "name": "Storm Trooper",
-      "portrait": 0,
+      "portrait": 57,
       "sounds": {
         "move": [
-          0
+          174,
+          175,
+          176
         ],
         "select": [
-          0
+          177,
+          178
         ],
         "train": [
-          0
+          173
         ]
       }
     },
@@ -640,16 +709,19 @@
         }
       },
       "name": "Troll Galley",
-      "portrait": 0,
+      "portrait": 61,
       "sounds": {
         "move": [
-          0
+          198,
+          199,
+          200
         ],
         "select": [
-          0
+          201,
+          202
         ],
         "train": [
-          0
+          197
         ]
       }
     },
@@ -662,16 +734,19 @@
         }
       },
       "name": "Warbat",
-      "portrait": 0,
+      "portrait": 62,
       "sounds": {
         "move": [
-          0
+          204,
+          205,
+          206
         ],
         "select": [
-          0
+          207,
+          208
         ],
         "train": [
-          0
+          203
         ]
       }
     },
@@ -684,16 +759,19 @@
         }
       },
       "name": "Warlord",
-      "portrait": 0,
+      "portrait": 53,
       "sounds": {
         "move": [
-          0
+          150,
+          151,
+          152
         ],
         "select": [
-          0
+          153,
+          154
         ],
         "train": [
-          0
+          149
         ]
       }
     },
@@ -706,16 +784,19 @@
         }
       },
       "name": "Archer",
-      "portrait": 0,
+      "portrait": 65,
       "sounds": {
         "move": [
-          0
+          227,
+          228,
+          229
         ],
         "select": [
-          0
+          230,
+          231
         ],
         "train": [
-          0
+          226
         ]
       }
     },
@@ -728,16 +809,19 @@
         }
       },
       "name": "Arquebusier",
-      "portrait": 0,
+      "portrait": 71,
       "sounds": {
         "move": [
-          0
+          263,
+          264,
+          265
         ],
         "select": [
-          0
+          266,
+          267
         ],
         "train": [
-          0
+          262
         ]
       }
     },
@@ -750,16 +834,19 @@
         }
       },
       "name": "Bark",
-      "portrait": 0,
+      "portrait": 74,
       "sounds": {
         "move": [
-          0
+          281,
+          282,
+          283
         ],
         "select": [
-          0
+          284,
+          285
         ],
         "train": [
-          0
+          280
         ]
       }
     },
@@ -772,16 +859,19 @@
         }
       },
       "name": "Bombard",
-      "portrait": 0,
+      "portrait": 70,
       "sounds": {
         "move": [
-          0
+          245,
+          246,
+          247
         ],
         "select": [
-          0
+          248,
+          249
         ],
         "train": [
-          0
+          244
         ]
       }
     },
@@ -794,16 +884,19 @@
         }
       },
       "name": "Centaur",
-      "portrait": 0,
+      "portrait": 67,
       "sounds": {
         "move": [
-          0
+          239,
+          240,
+          241
         ],
         "select": [
-          0
+          242,
+          243
         ],
         "train": [
-          0
+          238
         ]
       }
     },
@@ -816,16 +909,19 @@
         }
       },
       "name": "Druid",
-      "portrait": 0,
+      "portrait": 66,
       "sounds": {
         "move": [
-          0
+          275,
+          276,
+          277
         ],
         "select": [
-          0
+          278,
+          279
         ],
         "train": [
-          0
+          274
         ]
       }
     },
@@ -838,16 +934,19 @@
         }
       },
       "name": "Dwarf Miner",
-      "portrait": 0,
+      "portrait": 68,
       "sounds": {
         "move": [
-          0
+          257,
+          258,
+          259
         ],
         "select": [
-          0
+          260,
+          261
         ],
         "train": [
-          0
+          256
         ]
       }
     },
@@ -860,16 +959,19 @@
         }
       },
       "name": "Enchanter",
-      "portrait": 0,
+      "portrait": 73,
       "sounds": {
         "move": [
-          0
+          233,
+          234,
+          235
         ],
         "select": [
-          0
+          236,
+          237
         ],
         "train": [
-          0
+          232
         ]
       }
     },
@@ -882,16 +984,19 @@
         }
       },
       "name": "Mage",
-      "portrait": 0,
+      "portrait": 72,
       "sounds": {
         "move": [
-          0
+          269,
+          270,
+          271
         ],
         "select": [
-          0
+          272,
+          273
         ],
         "train": [
-          0
+          268
         ]
       }
     },
@@ -904,16 +1009,19 @@
         }
       },
       "name": "Magic Chopper",
-      "portrait": 0,
+      "portrait": 77,
       "sounds": {
         "move": [
-          0
+          299,
+          300,
+          301
         ],
         "select": [
-          0
+          302,
+          303
         ],
         "train": [
-          0
+          298
         ]
       }
     },
@@ -926,16 +1034,19 @@
         }
       },
       "name": "Scout",
-      "portrait": 0,
+      "portrait": 69,
       "sounds": {
         "move": [
-          0
+          251,
+          252,
+          253
         ],
         "select": [
-          0
+          254,
+          255
         ],
         "train": [
-          0
+          250
         ]
       }
     },
@@ -948,16 +1059,19 @@
         }
       },
       "name": "Sky Rider",
-      "portrait": 0,
+      "portrait": 76,
       "sounds": {
         "move": [
-          0
+          293,
+          294,
+          295
         ],
         "select": [
-          0
+          296,
+          297
         ],
         "train": [
-          0
+          292
         ]
       }
     },
@@ -970,16 +1084,19 @@
         }
       },
       "name": "Warship",
-      "portrait": 0,
+      "portrait": 75,
       "sounds": {
         "move": [
-          0
+          287,
+          288,
+          289
         ],
         "select": [
-          0
+          290,
+          291
         ],
         "train": [
-          0
+          286
         ]
       }
     },
@@ -992,16 +1109,19 @@
         }
       },
       "name": "Yeoman",
-      "portrait": 0,
+      "portrait": 64,
       "sounds": {
         "move": [
-          0
+          220,
+          221,
+          222
         ],
         "select": [
-          0
+          223,
+          224
         ],
         "train": [
-          0
+          219
         ]
       }
     },
@@ -1014,14 +1134,8 @@
         }
       },
       "name": "Devil",
-      "portrait": 0,
+      "portrait": 94,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1033,14 +1147,8 @@
         }
       },
       "name": "Dragon",
-      "portrait": 0,
+      "portrait": 102,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1052,14 +1160,8 @@
         }
       },
       "name": "Golem",
-      "portrait": 0,
+      "portrait": 91,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1071,14 +1173,8 @@
         }
       },
       "name": "Gryphon",
-      "portrait": 0,
+      "portrait": 85,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1090,14 +1186,8 @@
         }
       },
       "name": "Hydra",
-      "portrait": 0,
+      "portrait": 88,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1109,14 +1199,8 @@
         }
       },
       "name": "Sea Monster",
-      "portrait": 0,
+      "portrait": 78,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1128,14 +1212,8 @@
         }
       },
       "name": "Skeleton",
-      "portrait": 0,
+      "portrait": 98,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     },
     {
@@ -1147,14 +1225,8 @@
         }
       },
       "name": "Snake",
-      "portrait": 0,
+      "portrait": 81,
       "sounds": {
-        "move": [
-          0
-        ],
-        "select": [
-          0
-        ]
       }
     }
   ]

@@ -2,6 +2,7 @@
 
 #include "Spritesheet.h"
 
+#include "MathUtils.h"
 #include "Texture.h"
 
 namespace Rival {
@@ -10,8 +11,10 @@ Spritesheet::Spritesheet(const Texture& texture, int width, int height)
     : texture(texture)
     , width(width)
     , height(height)
-    , xSize(texture.getWidth() / width)
-    , ySize(texture.getHeight() / height)
+    , paddedWidth(MathUtils::nextPowerOf2(width))
+    , paddedHeight(MathUtils::nextPowerOf2(height))
+    , xSize(texture.getWidth() / paddedWidth)
+    , ySize(texture.getHeight() / paddedHeight)
 {
 }
 
@@ -22,10 +25,10 @@ const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
     const float txWidth = static_cast<float>(texture.getWidth());
     const float txHeight = static_cast<float>(texture.getHeight());
 
-    const float tx1 = x * width / txWidth;
-    const float tx2 = (x + 1) * width / txWidth;
-    const float ty1 = y * height / txHeight;
-    const float ty2 = (y + 1) * height / txHeight;
+    const float tx1 = x * paddedWidth / txWidth;
+    const float tx2 = (x * paddedWidth + width) / txWidth;
+    const float ty1 = y * paddedHeight / txHeight;
+    const float ty2 = (y * paddedHeight + height) / txHeight;
 
     return {
         tx1, ty1,  //

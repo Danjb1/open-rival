@@ -13,8 +13,8 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
     // A direct move east or west actually moves 2 tiles.
     bool hasNorth = node.y > 0;
     bool hasSouth = node.y < area.getHeight() - 1;
-    bool hasEast = node.x > 1;
-    bool hasWest = node.x < area.getWidth() - eastWestTileSpan;
+    bool hasEast = node.x < area.getWidth() - eastWestTileSpan;
+    bool hasWest = node.x >= eastWestTileSpan;
 
     // Find all valid neighbors
     if (hasNorth)
