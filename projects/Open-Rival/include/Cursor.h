@@ -12,6 +12,17 @@ public:
     int endIndex;
     float hotspotX;
     float hotspotY;
+
+    bool operator==(const CursorDef& other) const
+    {
+        // We can assume that 2 CursorDefs with the same startIndex are, in fact, the same cursor
+        return startIndex == other.startIndex;
+    }
+
+    bool operator!=(const CursorDef& other) const
+    {
+        return !(*this == other);
+    }
 };
 
 namespace Cursor {

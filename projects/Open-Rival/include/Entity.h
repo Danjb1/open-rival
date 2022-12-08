@@ -378,6 +378,16 @@ public:
         return result;
     }
 
+    bool operator==(const Entity& other) const
+    {
+        return id == other.id;
+    }
+
+    bool operator!=(const Entity& other) const
+    {
+        return !(*this == other);
+    }
+
 public:
     /**
      * Flag set if this Entity has moved in the current frame.

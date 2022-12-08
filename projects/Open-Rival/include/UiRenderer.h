@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AtlasRenderable.h"
+#include "Cursor.h"
 #include "GameInterface.h"
 #include "MenuTextRenderer.h"
 #include "Race.h"
@@ -26,7 +27,7 @@ public:
 
     void renderUi();
     void renderText();
-    void renderCursor();
+    void renderCursor(int delta);
 
 private:
     void renderMainUi();
@@ -41,12 +42,17 @@ private:
 
     bool isNameVisible(std::string& outName) const;
 
+    int animateCursor(const CursorDef cursorDef, int delta);
+
 private:
     // Maximum number of images we can ever render
     static constexpr int maxMainUiImages = 6;
 
     // Number of images to render when nothing is selected
     static constexpr int defaultNumMainUiImages = maxMainUiImages;
+
+    // Determines the speed of the cursor animation
+    static constexpr int msPerCursorFrame = 60;
 
     const PlayerStore& playerStore;
     const TextureStore& textureStore;
@@ -76,6 +82,8 @@ private:
     // Cursor
     GameInterface::UiImage cursorImage;
     SpriteRenderable cursorRenderable;
+    CursorDef prevCursor = Cursor::arrow;
+    int cursorAnimTime = 0;
 };
 
 }  // namespace Rival

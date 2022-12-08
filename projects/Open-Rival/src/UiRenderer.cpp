@@ -4,7 +4,6 @@
 
 #include <gl/glew.h>
 
-#include "Cursor.h"
 #include "InventoryComponent.h"
 #include "PlayerContext.h"
 #include "PlayerState.h"
@@ -282,8 +281,9 @@ bool UiRenderer::isNameVisible(std::string& outName) const
 // Cursor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderCursor()
+void UiRenderer::renderCursor(int delta)
 {
+    // Determine the appropriate cursor (and animate!)
     CursorDef cursorDef = Cursor::getCurrentCursor(playerStore, playerContext);
 
     // Get the mouse position relative to the window, in pixels
@@ -304,8 +304,9 @@ void UiRenderer::renderCursor()
     cursorImage.pos.x -= cursorDef.hotspotX * RenderUtils::cursorWidthPx;
     cursorImage.pos.y -= cursorDef.hotspotY * RenderUtils::cursorHeightPx;
 
-    // TMP: This needs to animate
-    cursorImage.setSpriteIndex(cursorDef.startIndex);
+    // Animate
+    int spriteIndex = animateCursor(cursorDef, delta);
+    cursorImage.setSpriteIndex(spriteIndex);
 
     // Use textures
     glActiveTexture(GL_TEXTURE0);
@@ -340,6 +341,36 @@ void UiRenderer::renderCursor()
 
     // Render
     glDrawElements(cursorRenderable.getDrawMode(), cursorRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+}
+
+int UiRenderer::animateCursor(const CursorDef cursorDef, int delta)
+{
+    if (cursorDef == prevCursor)
+    {
+        // Cursor has not changed since the last frame
+        if (cursorDef.startIndex == cursorDef.endIndex)
+        {
+            // Static cursor
+            return cursorDef.startIndex;
+        }
+        else
+        {
+            // Animated cursor
+            cursorAnimTime += delta;
+
+            int numFrames = cursorDef.endIndex - cursorDef.startIndex;
+            int totalAnimTime = msPerCursorFrame * numFrames;
+            int relativeAnimTime = cursorAnimTime % totalAnimTime;
+            int relativeIndex = relativeAnimTime / msPerCursorFrame;
+
+            return cursorDef.startIndex + relativeIndex;
+        }
+    }
+
+    // Cursor has changed
+    prevCursor = cursorDef;
+    cursorAnimTime = 0;
+    return cursorDef.startIndex;
 }
 
 }  // namespace Rival

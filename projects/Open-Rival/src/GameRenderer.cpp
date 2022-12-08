@@ -53,7 +53,7 @@ void GameRenderer::render(int delta)
     renderGameViaFramebuffer(delta);
     renderUi();
     renderText();
-    renderCursor();
+    renderCursor(delta);
 }
 
 void GameRenderer::renderGameViaFramebuffer(int delta) const
@@ -171,7 +171,7 @@ void GameRenderer::renderText()
     uiRenderer.renderText();
 }
 
-void GameRenderer::renderCursor()
+void GameRenderer::renderCursor(int delta)
 {
     // Disable depth testing since the cursor is always on top
     glDisable(GL_DEPTH_TEST);
@@ -189,7 +189,7 @@ void GameRenderer::renderCursor()
 
     // Render the cursor to the screen
     glViewport(0, 0, window.getWidth(), window.getHeight());
-    uiRenderer.renderCursor();
+    uiRenderer.renderCursor(delta);
 }
 
 }  // namespace Rival
