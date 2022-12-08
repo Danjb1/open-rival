@@ -61,7 +61,6 @@ MapBorderRenderer::MapBorderRenderer(
 
 void MapBorderRenderer::render() const
 {
-
     // Use textures
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
@@ -118,7 +117,6 @@ void MapBorderRenderer::createBottomEdge(
 void MapBorderRenderer::createCorners(
         std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth, int mapHeight)
 {
-
     addDataToBuffers(positions, texCoords, raceOffset + txIndexTopLeft, 0, 0);
     addDataToBuffers(positions, texCoords, raceOffset + txIndexTopRight, mapWidth - 1.0f, 0);
     addDataToBuffers(positions, texCoords, raceOffset + txIndexBottomRight, mapWidth - 1.0f, mapHeight - 0.5f);
@@ -130,7 +128,6 @@ void MapBorderRenderer::createCorners(
 void MapBorderRenderer::addDataToBuffers(
         std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int txIndex, float tileX, float tileY)
 {
-
     // Define vertex positions
     float width = static_cast<float>(RenderUtils::tileSpriteWidthPx);
     float height = static_cast<float>(RenderUtils::tileSpriteHeightPx);

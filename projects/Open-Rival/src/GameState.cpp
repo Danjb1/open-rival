@@ -29,7 +29,7 @@ GameState::GameState(
              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
              *world)
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
-    , gameRenderer(window, *world, getLocalPlayerState(), camera, viewport, res, playerContext)
+    , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
 {
 }
 

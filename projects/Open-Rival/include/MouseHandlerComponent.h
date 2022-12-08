@@ -40,7 +40,7 @@ public:
     /**
      * Gets the Entity's hitbox, in pixels, assuming a pixel-perfect game world.
      */
-    Rect getHitbox();
+    const Rect& getHitbox() const;
 
     /**
      * Determines if this Entity can be selected.
@@ -57,15 +57,8 @@ public:
      */
     void onTileClicked(GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tilePos);
 
-    /*
-    Cursor getHoverCursor()
-    {
-        // TODO: Depends on state and entity type
-    }
-    */
-
 private:
-    Rect createHitbox() const;
+    const Rect createHitbox() const;
 
 public:
     static const std::string key;
@@ -85,9 +78,9 @@ private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<VoiceComponent> weakVoiceComponent;
 
-    Rect hitbox;
+    mutable Rect hitbox;
 
-    bool dirty = true;
+    mutable bool dirty = true;
     bool moving = true;
 };
 

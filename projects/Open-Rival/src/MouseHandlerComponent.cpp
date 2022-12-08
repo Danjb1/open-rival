@@ -55,7 +55,7 @@ void MouseHandlerComponent::onUnitStopped()
     moving = false;
 }
 
-Rect MouseHandlerComponent::getHitbox()
+const Rect& MouseHandlerComponent::getHitbox() const
 {
     if (dirty || moving)
     {
@@ -135,7 +135,7 @@ void MouseHandlerComponent::onTileClicked(
     }
 }
 
-Rect MouseHandlerComponent::createHitbox() const
+const Rect MouseHandlerComponent::createHitbox() const
 {
     /*
      * Entities are always rendered at a fixed pixel offset from the tile

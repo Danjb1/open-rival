@@ -255,7 +255,7 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
             continue;
         }
 
-        const Rect hitbox = mouseHandlerComponent->getHitbox();
+        const Rect& hitbox = mouseHandlerComponent->getHitbox();
         if (hitbox.contains(mouseInWorldX, mouseInWorldY))
         {
             return e;

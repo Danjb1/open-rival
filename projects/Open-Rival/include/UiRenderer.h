@@ -10,6 +10,7 @@
 namespace Rival {
 
 class FontStore;
+class PlayerStore;
 class TextureStore;
 struct PlayerContext;
 
@@ -17,7 +18,7 @@ class UiRenderer
 {
 public:
     UiRenderer::UiRenderer(
-            const Race& race,
+            const PlayerStore& playerStore,
             const TextureStore& textureStore,
             const FontStore& fontStore,
             const Window& window,
@@ -47,6 +48,7 @@ private:
     // Number of images to render when nothing is selected
     static constexpr int defaultNumMainUiImages = maxMainUiImages;
 
+    const PlayerStore& playerStore;
     const TextureStore& textureStore;
     const Window& window;
     const PlayerContext& playerContext;

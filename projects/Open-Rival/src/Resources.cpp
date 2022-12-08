@@ -39,6 +39,7 @@ Resources::Resources(json& cfg)
     , cursorSpritesheet(initCursorSpritesheet())
     , mapBorderSpritesheet(initMapBorderSpritesheet())
     , portraitSpritesheet(initPortraitSpritesheet())
+    , hitboxSpritesheet(initHitboxSpritesheet())
     , sounds(initSounds())
     , midis(initMidis())
     , unitDefs(initUnitDefs())
@@ -185,6 +186,9 @@ std::vector<Texture> Resources::loadTextures()
 
         // UI
         "portraits.tga",
+
+        // Hitbox
+        "hitbox.tga",
     };
 
     for (auto const& textureName : textureNames)
@@ -297,8 +301,8 @@ Spritesheet Resources::initCursorSpritesheet()
 {
     return Spritesheet(
             textures.at(txIndexCursors),
-            static_cast<int>(GameInterface::cursor.width),
-            static_cast<int>(GameInterface::cursor.height));
+            static_cast<int>(RenderUtils::cursorWidthPx),
+            static_cast<int>(RenderUtils::cursorHeightPx));
 }
 
 Spritesheet Resources::initPortraitSpritesheet()
@@ -307,6 +311,11 @@ Spritesheet Resources::initPortraitSpritesheet()
             textures.at(txIndexPortraits),
             static_cast<int>(GameInterface::portrait.width),
             static_cast<int>(GameInterface::portrait.height));
+}
+
+Spritesheet Resources::initHitboxSpritesheet()
+{
+    return Spritesheet(textures.at(txIndexHitbox), RenderUtils::hitboxSpriteWidthPx, RenderUtils::hitboxSpriteHeightPx);
 }
 
 std::vector<WaveFile> Resources::initSounds()
@@ -429,6 +438,11 @@ const Spritesheet& Resources::getMapBorderSpritesheet() const
 const Spritesheet& Resources::getPortraitSpritesheet() const
 {
     return portraitSpritesheet;
+}
+
+const Spritesheet& Resources::getHitboxSpritesheet() const
+{
+    return hitboxSpritesheet;
 }
 
 const Texture& Resources::getPalette() const
