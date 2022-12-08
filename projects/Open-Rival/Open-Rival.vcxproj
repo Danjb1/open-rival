@@ -28,6 +28,7 @@
     <ClCompile Include="src\BuildingPropsComponent.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\Cursor.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
     <ClCompile Include="src\FacingComponent.cpp" />
@@ -65,6 +66,7 @@
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\PlayerContext.cpp" />
     <ClCompile Include="src\PlayerState.cpp" />
     <ClCompile Include="src\PortraitComponent.cpp" />
     <ClCompile Include="src\Rect.cpp" />
@@ -113,6 +115,7 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\ConfigUtils.h" />
+    <ClInclude Include="include\Cursor.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
     <ClInclude Include="include\EntityUtils.h" />
@@ -149,6 +152,7 @@
     <ClInclude Include="include\Pathfinding.h" />
     <ClInclude Include="include\PathUtils.h" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\PlayerContext.h" />
     <ClInclude Include="include\PlayerState.h" />
     <ClInclude Include="include\PortraitComponent.h" />
     <ClInclude Include="include\Race.h" />

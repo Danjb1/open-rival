@@ -9,25 +9,33 @@
 
 #include "Camera.h"
 #include "Entity.h"
+#include "GameCommand.h"
 #include "MapUtils.h"
 #include "MathUtils.h"
 #include "MouseHandlerComponent.h"
 #include "MouseUtils.h"
+#include "PlayerContext.h"
+#include "PlayerState.h"
 #include "Rect.h"
 #include "World.h"
 
 namespace Rival {
 
 MousePicker::MousePicker(
-        Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore, GameCommandInvoker& cmdInvoker)
+        Camera& camera,
+        Rect& viewport,
+        World& world,
+        PlayerContext& playerContext,
+        PlayerStore& playerStore,
+        GameCommandInvoker& cmdInvoker)
     : camera(camera)
     , viewport(viewport)
     , world(world)
+    , playerContext(playerContext)
     , playerStore(playerStore)
     , cmdInvoker(cmdInvoker)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
-    , tileUnderMouse({ -1, -1 })
 {
 }
 
@@ -40,7 +48,7 @@ void MousePicker::mouseUp(std::uint8_t button)
 {
     if (button == SDL_BUTTON_LEFT)
     {
-        const auto entityUnderMouse = weakEntityUnderMouse.lock();
+        const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();
         if (entityUnderMouse)
         {
             entitySelected(entityUnderMouse);
@@ -83,8 +91,8 @@ void MousePicker::handleMouse()
     float mouseCameraY = getMouseInCameraY(normalizedMouseY);
 
     // Figure out what's under the mouse
-    tileUnderMouse = getTilePos(mouseCameraX, mouseCameraY);
-    weakEntityUnderMouse = findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
+    playerContext.tileUnderMouse = getTilePos(mouseCameraX, mouseCameraY);
+    playerContext.weakEntityUnderMouse = findEntityUnderMouse(mouseInViewportX, mouseInViewportY);
 }
 
 float MousePicker::getMouseInCameraX(float normalizedMouseX)
@@ -257,40 +265,30 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     return {};
 }
 
-MapNode MousePicker::getTilePos() const
-{
-    return tileUnderMouse;
-}
-
-const Selection& MousePicker::getSelection() const
-{
-    return currentSelection;
-}
-
 void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
 {
     if (const auto mouseHandlerComponent = entity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
     {
-        currentSelection.weakSelectedEntity = entity;
+        playerContext.weakSelectedEntity = entity;
         mouseHandlerComponent->onSelect(playerStore);
     }
 }
 
 void MousePicker::tileSelected()
 {
-    if (const auto selectedEntity = currentSelection.weakSelectedEntity.lock())
+    if (const auto selectedEntity = playerContext.weakSelectedEntity.lock())
     {
         if (const auto mouseHandlerComponent =
                     selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, tileUnderMouse);
+            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, playerContext.tileUnderMouse);
         }
     }
 }
 
 void MousePicker::deselect()
 {
-    currentSelection.weakSelectedEntity = {};
+    playerContext.weakSelectedEntity = {};
 }
 
 }  // namespace Rival

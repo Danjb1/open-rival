@@ -11,30 +11,34 @@ namespace Rival {
 
 class FontStore;
 class TextureStore;
-struct Selection;
+struct PlayerContext;
 
 class UiRenderer
 {
 public:
     UiRenderer::UiRenderer(
-            const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window);
+            const Race& race,
+            const TextureStore& textureStore,
+            const FontStore& fontStore,
+            const Window& window,
+            const PlayerContext& playerContext);
 
-    void renderUi(const Selection& selection);
-    void renderText(const Selection& selection);
+    void renderUi();
+    void renderText();
     void renderCursor();
 
 private:
-    void renderMainUi(const Selection& selection);
+    void renderMainUi();
     bool mainUiNeedsUpdate() const;
-    void sendMainUiDataToGpu(const Selection& selection);
-    bool isInventoryVisible(const Selection& selection) const;
+    void sendMainUiDataToGpu();
+    bool isInventoryVisible() const;
 
-    void renderPortrait(const Selection& selection);
-    bool isPortraitVisible(const Selection& selection, int& outPortraitId) const;
+    void renderPortrait();
+    bool isPortraitVisible(int& outPortraitId) const;
     bool portraitNeedsUpdate() const;
     void sendPortraitDataToGpu();
 
-    bool isNameVisible(const Selection& selection, std::string& outName) const;
+    bool isNameVisible(std::string& outName) const;
 
 private:
     // Maximum number of images we can ever render
@@ -45,6 +49,7 @@ private:
 
     const TextureStore& textureStore;
     const Window& window;
+    const PlayerContext& playerContext;
 
     // Main UI
     int numMainUiImages = 0;

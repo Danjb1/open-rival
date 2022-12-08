@@ -3,25 +3,18 @@
 #include <memory>
 #include <utility>
 
-#include "GameCommand.h"
 #include "MapUtils.h"
-#include "PlayerState.h"
 #include "RenderUtils.h"
 
 namespace Rival {
 
 class Camera;
+class GameCommandInvoker;
 class Entity;
+class PlayerStore;
 class Rect;
 class World;
-
-/**
- * An entity or group that has been selected.
- */
-struct Selection
-{
-    std::weak_ptr<Entity> weakSelectedEntity;
-};
+struct PlayerContext;
 
 /**
  * Class responsible for determining what is under the mouse.
@@ -41,14 +34,17 @@ class MousePicker
 {
 
 public:
-    MousePicker(Camera& camera, Rect& viewport, World& world, PlayerStore& playerStore, GameCommandInvoker& cmdInvoker);
+    MousePicker(
+            Camera& camera,
+            Rect& viewport,
+            World& world,
+            PlayerContext& playerContext,
+            PlayerStore& playerStore,
+            GameCommandInvoker& cmdInvoker);
 
     void mouseDown();
     void mouseUp(std::uint8_t button);
     void handleMouse();
-
-    MapNode getTilePos() const;
-    const Selection& getSelection() const;
 
 private:
     float getMouseInCameraX(float normalizedMouseX);
@@ -66,16 +62,12 @@ private:
     World& world;
     Camera& camera;
     Rect& viewport;
+    PlayerContext& playerContext;
     PlayerStore& playerStore;
     GameCommandInvoker& cmdInvoker;
 
     int mapWidth;
     int mapHeight;
-
-    MapNode tileUnderMouse;
-    std::weak_ptr<Entity> weakEntityUnderMouse;
-
-    Selection currentSelection;
 };
 
 }  // namespace Rival

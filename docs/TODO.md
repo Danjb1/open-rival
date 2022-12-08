@@ -9,7 +9,7 @@
 ### Movement Milestone
 
 - Animate cursor
-- Show a custom cursor when the mouse is over a unit
+- Render entity hitbox on hover
 - Add all unit voices and portraits
 - Support flying units
 - Support seafaring units
@@ -25,6 +25,7 @@
 - Game will crash if no config file exists
 - Clicking in the UI will still move the selected unit (to the last valid mouse position)
 - Zooming in does not zoom towards the cursor as much as it should
+- Unit hitboxes are not quite positioned correctly
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -87,7 +88,6 @@
 ### Mouse Picking
 
 - Different units should have different hitboxes sizes
-    - Add option to render hitboxes for debugging
 - Flying units need a hitbox offset
 
 ### Input

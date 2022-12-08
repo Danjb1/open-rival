@@ -11,6 +11,7 @@
 #pragma warning(pop)
 
 #include "Camera.h"
+#include "PlayerContext.h"
 #include "PlayerState.h"
 #include "Rect.h"
 #include "RenderUtils.h"
@@ -28,12 +29,11 @@ GameRenderer::GameRenderer(
         const Camera& camera,
         const Rect& viewport,
         const Resources& res,
-        const MousePicker& mousePicker)
+        const PlayerContext& playerContext)
     : window(window)
     , world(world)
     , camera(camera)
     , viewport(viewport)
-    , mousePicker(mousePicker)
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
     , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
@@ -44,7 +44,7 @@ GameRenderer::GameRenderer(
               res.getMapBorderSpritesheet(),
               res.getPalette())
     , entityRenderer(res.getPalette())
-    , uiRenderer(playerState.getRace(), res, res, window)
+    , uiRenderer(playerState.getRace(), res, res, window, playerContext)
 {
 }
 
@@ -157,7 +157,7 @@ void GameRenderer::renderUi()
 
     // Render the UI to the screen
     glViewport(0, 0, window.getWidth(), window.getHeight());
-    uiRenderer.renderUi(mousePicker.getSelection());
+    uiRenderer.renderUi();
 }
 
 void GameRenderer::renderText()
@@ -168,7 +168,7 @@ void GameRenderer::renderText()
     // Render the UI to the screen
     // (the MenuTextRenderer takes care of the shader, projection, etc.)
     glViewport(0, 0, window.getWidth(), window.getHeight());
-    uiRenderer.renderText(mousePicker.getSelection());
+    uiRenderer.renderText();
 }
 
 void GameRenderer::renderCursor()
