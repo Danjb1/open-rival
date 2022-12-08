@@ -4,6 +4,9 @@
 
 namespace Rival {
 
+/**
+ * Game data relating to a player (human or AI).
+ */
 class PlayerState
 {
 public:

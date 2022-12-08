@@ -10,6 +10,7 @@
 #include "GameCommand.h"
 #include "GameRenderer.h"
 #include "MousePicker.h"
+#include "PlayerContext.h"
 #include "PlayerState.h"
 #include "Rect.h"
 #include "State.h"
@@ -89,13 +90,6 @@ private:
     std::unordered_map<int, PlayerState>& playerStates;
 
     /**
-     * Player ID of the local player.
-     *
-     * Later, we will be allocated a player ID by the server.
-     */
-    int localPlayerId = 0;
-
-    /**
      * The current World.
      */
     std::unique_ptr<World> world;
@@ -109,6 +103,11 @@ private:
      * The camera that defines the area of the game world to render.
      */
     Camera camera;
+
+    /**
+     * Local player context.
+     */
+    PlayerContext playerContext;
 
     /**
      * Object used to find what's under the mouse.
@@ -129,6 +128,13 @@ private:
      * The current player input.
      */
     Input input;
+
+    /**
+     * Player ID of the local player.
+     *
+     * Later, we will be allocated a player ID by the server.
+     */
+    int localPlayerId = 0;
 };
 
 }  // namespace Rival

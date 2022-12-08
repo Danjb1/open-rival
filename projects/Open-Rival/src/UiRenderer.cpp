@@ -4,8 +4,9 @@
 
 #include <gl/glew.h>
 
+#include "Cursor.h"
 #include "InventoryComponent.h"
-#include "MousePicker.h"
+#include "PlayerContext.h"
 #include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
@@ -14,9 +15,14 @@
 namespace Rival {
 
 UiRenderer::UiRenderer(
-        const Race& race, const TextureStore& textureStore, const FontStore& fontStore, const Window& window)
+        const Race& race,
+        const TextureStore& textureStore,
+        const FontStore& fontStore,
+        const Window& window,
+        const PlayerContext& playerContext)
     : textureStore(textureStore)
     , window(window)
+    , playerContext(playerContext)
 
     // Main UI
     , mainUiRenderable(textureStore.getUiTextureAtlas(), maxMainUiImages)
@@ -52,17 +58,17 @@ UiRenderer::UiRenderer(
 {
 }
 
-void UiRenderer::renderUi(const Selection& selection)
+void UiRenderer::renderUi()
 {
-    renderMainUi(selection);
-    renderPortrait(selection);
+    renderMainUi();
+    renderPortrait();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main UI
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderMainUi(const Selection& selection)
+void UiRenderer::renderMainUi()
 {
     // Use textures
     glActiveTexture(GL_TEXTURE0);
@@ -76,7 +82,7 @@ void UiRenderer::renderMainUi(const Selection& selection)
     // Update the data on the GPU
     if (mainUiNeedsUpdate())
     {
-        sendMainUiDataToGpu(selection);
+        sendMainUiDataToGpu();
     }
 
     // Render
@@ -93,13 +99,13 @@ bool UiRenderer::mainUiNeedsUpdate() const
     return true;
 }
 
-void UiRenderer::sendMainUiDataToGpu(const Selection& selection)
+void UiRenderer::sendMainUiDataToGpu()
 {
     // First we need to know the number of images to render
     numMainUiImages = defaultNumMainUiImages;
 
     // Determine if the inventory should be rendered
-    bool inventoryVisible = isInventoryVisible(selection);
+    bool inventoryVisible = isInventoryVisible();
     if (inventoryVisible)
     {
         // It's counter-intuitive, but to show the inventory we *don't* draw the overlay
@@ -137,9 +143,9 @@ void UiRenderer::sendMainUiDataToGpu(const Selection& selection)
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
-bool UiRenderer::isInventoryVisible(const Selection& selection) const
+bool UiRenderer::isInventoryVisible() const
 {
-    auto selectedEntity = selection.weakSelectedEntity.lock();
+    auto selectedEntity = playerContext.weakSelectedEntity.lock();
     if (!selectedEntity)
     {
         return false;
@@ -154,10 +160,10 @@ bool UiRenderer::isInventoryVisible(const Selection& selection) const
 // Portrait
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderPortrait(const Selection& selection)
+void UiRenderer::renderPortrait()
 {
     int portraitId = -1;
-    bool portraitVisible = isPortraitVisible(selection, portraitId);
+    bool portraitVisible = isPortraitVisible(portraitId);
     if (!portraitVisible)
     {
         return;
@@ -216,9 +222,9 @@ void UiRenderer::sendPortraitDataToGpu()
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
-bool UiRenderer::isPortraitVisible(const Selection& selection, int& outPortraitId) const
+bool UiRenderer::isPortraitVisible(int& outPortraitId) const
 {
-    auto selectedEntity = selection.weakSelectedEntity.lock();
+    auto selectedEntity = playerContext.weakSelectedEntity.lock();
     if (!selectedEntity)
     {
         return false;
@@ -238,12 +244,12 @@ bool UiRenderer::isPortraitVisible(const Selection& selection, int& outPortraitI
 // Text
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderText(const Selection& selection)
+void UiRenderer::renderText()
 {
     textRenderables.clear();
 
     std::string name;
-    if (isNameVisible(selection, name))
+    if (isNameVisible(name))
     {
         nameRenderable.setTextSpan({ name, TextRenderable::defaultColor });
         textRenderables.push_back(&nameRenderable);
@@ -252,9 +258,9 @@ void UiRenderer::renderText(const Selection& selection)
     textRenderer.render(textRenderables);
 }
 
-bool UiRenderer::isNameVisible(const Selection& selection, std::string& outName) const
+bool UiRenderer::isNameVisible(std::string& outName) const
 {
-    auto selectedEntity = selection.weakSelectedEntity.lock();
+    auto selectedEntity = playerContext.weakSelectedEntity.lock();
     if (!selectedEntity)
     {
         return false;
@@ -276,6 +282,8 @@ bool UiRenderer::isNameVisible(const Selection& selection, std::string& outName)
 
 void UiRenderer::renderCursor()
 {
+    CursorDef cursorDef = Cursor::getCurrentCursor(playerContext);
+
     // Get the mouse position relative to the window, in pixels
     int mouseX;
     int mouseY;
@@ -291,7 +299,7 @@ void UiRenderer::renderCursor()
     cursorImage.pos.y = normalizedMouseY * RenderUtils::menuHeight;
 
     // TMP
-    cursorImage.setSpriteIndex(0);
+    cursorImage.setSpriteIndex(cursorDef.startIndex);
 
     // Use textures
     glActiveTexture(GL_TEXTURE0);

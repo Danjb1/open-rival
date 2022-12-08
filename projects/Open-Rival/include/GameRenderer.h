@@ -4,7 +4,6 @@
 #include "Framebuffer.h"
 #include "FramebufferRenderer.h"
 #include "MapBorderRenderer.h"
-#include "MousePicker.h"
 #include "TileRenderer.h"
 #include "UiRenderer.h"
 
@@ -16,6 +15,7 @@ class Rect;
 class Resources;
 class Window;
 class World;
+struct PlayerContext;
 
 class GameRenderer
 {
@@ -27,7 +27,7 @@ public:
             const Camera& camera,
             const Rect& viewport,
             const Resources& res,
-            const MousePicker& mousePicker);
+            const PlayerContext& playerContext);
 
     void render(int delta);
 
@@ -50,7 +50,6 @@ private:
     const World& world;
     const Rect& viewport;
     const Camera& camera;
-    const MousePicker& mousePicker;
 
     /**
      * Framebuffer to which the visible region of the game is rendered at
