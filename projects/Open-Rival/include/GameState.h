@@ -35,8 +35,8 @@ enum class Direction : std::int8_t
  */
 struct Input
 {
-    Direction lastDirectionX;
-    Direction lastDirectionY;
+    Direction lastDirectionX = Direction::None;
+    Direction lastDirectionY = Direction::None;
 };
 
 /**
@@ -127,14 +127,14 @@ private:
     /**
      * The current player input.
      */
-    Input input;
+    Input input = {};
 
     /**
      * Player ID of the local player.
      *
      * Later, we will be allocated a player ID by the server.
      */
-    int localPlayerId = 0;
+    int localPlayerId = 2;
 };
 
 }  // namespace Rival

@@ -44,9 +44,6 @@ private:
 
 /**
  * Component that allows an entity to walk around the map.
- *
- * Note that during movement, entities are considered to occupy their
- * original tile until they have fully moved into the new tile.
  */
 class WalkerComponent : public MovementComponent
 {

@@ -159,7 +159,8 @@ void MovementComponent::completeMovement()
     passabilityUpdater.onUnitEnteredTile(*world, movement.destination);
 
     // Update entity position
-    // TODO: Set the unit's position to the new tile once they are more than halfway through the movement?
+    // TODO: Currently, during movement, entities are considered to occupy their original tile until they have fully
+    // moved into the new tile. We may want to move the unit to the new tile once they are halfway through the movement.
     entity->setPos(movement.destination);
 
     movement.clear();

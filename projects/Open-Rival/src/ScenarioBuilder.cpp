@@ -18,7 +18,6 @@ ScenarioBuilder::ScenarioBuilder(ScenarioData data)
 
 std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory)
 {
-
     // Initialize Tiles
     int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
     std::vector<Tile> tiles;
@@ -42,12 +41,12 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
     {
         if (buildingPlacement.type == 0xAB)
         {
-            // Palisade (not supported yet)
+            // Palisade
             addPalisade(scenario.get(), buildingPlacement, entityFactory);
         }
         else if (buildingPlacement.type == 0xAC)
         {
-            // Grate (not supported yet)
+            // Grate
             continue;
         }
         else if (buildingPlacement.type == 0xAD)

@@ -8,12 +8,14 @@
 #include "Animations.h"
 #include "BuildingAnimationComponent.h"
 #include "BuildingPropsComponent.h"
+#include "FlyerComponent.h"
 #include "InventoryComponent.h"
 #include "MouseHandlerComponent.h"
 #include "OwnerComponent.h"
 #include "PassabilityComponent.h"
 #include "PortraitComponent.h"
 #include "Resources.h"
+#include "SeafarerComponent.h"
 #include "SpriteComponent.h"
 #include "Tile.h"
 #include "UnitAnimationComponent.h"
@@ -72,12 +74,22 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     // UnitAnimationComponent
     unit->attach(std::make_shared<UnitAnimationComponent>(*unitDef));
 
-    // WalkerComponent
-    unit->attach(std::make_shared<WalkerComponent>());
-
-    // PassabilityComponent
-    // TODO: consider flying units separately
-    unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+    // MovementComponent
+    if (unitDef->movementMode == MovementMode::Flying)
+    {
+        unit->attach(std::make_shared<PassabilityComponent>(TilePassability::FlyingUnit));
+        unit->attach(std::make_shared<FlyerComponent>());
+    }
+    else if (unitDef->movementMode == MovementMode::Seafaring)
+    {
+        unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+        unit->attach(std::make_shared<SeafarerComponent>());
+    }
+    else
+    {
+        unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+        unit->attach(std::make_shared<WalkerComponent>());
+    }
 
     // VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));

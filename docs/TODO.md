@@ -4,11 +4,8 @@
 ### Movement Milestone
 <!----------------------------------------------------------------------------->
 
-- Support flying units
-- Support seafaring units
 - Drag-select
 - Allow a custom level to be specified (in config or a command line parameter)
-- Respect player race
 - Build and release!
     - Document known issues
     - Setup programs may be broken by recent dependency changes
@@ -36,6 +33,7 @@
 - Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
 - Tiles covered by the map border should not be passable
 - Some animations need attention (e.g. Snake)
+- Flying units need a higher z-position so that they appear on top of units below them
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -104,7 +102,7 @@
 
 - Panning with the mouse at level edges
 - Panning with middle-mouse button (drag)
-- Smooth panning with the arrow keys
+- Smooth panning with the arrow keys (using acceleration)
 - Panning speed should depend on the zoom level
 
 ### Fonts
@@ -119,24 +117,28 @@
 
 - Respect unit color (if set)
 - Render interface
-    - Render resource icons
+    - Resource icons
+    - Resource counts
+    - Unit ID
+    - Unit stats
 - Render minimap
 - Render info points
 - Render chests
 - Respect Gold tile variants
 - Fog of war
+- Boats should bob when stationary
 
 ### Movement
 
 - Units should periodically re-plan their route
-- Should units "try" to move somewhere even if there is no path?
-- Should we limit the pathfinding logic to 'n' iterations?
+    - In particular, when the next tile in their path is blocked
+- Units should "try" to move somewhere even if there is no path
+- Should we limit the pathfinding logic to 'n' iterations? (probably)
+- Show "star" effect when sending troops somewhere
 
 ### Animations
 
-- Check all Animation data; some values are incorrect
-- Flying units should animate on the spot
-- Check move / attack animations
+- Attack animations are missing in units.json
 - Death animations require special facing logic!
 - Trees should not all animate in-sync
 - Gold tile animations
@@ -332,6 +334,9 @@
 - Create a CursorRenderer to hold all the cursor rendering logic
 - Reduce duplication between Unit/BuildingAnimationComponent
 - Reduce duplication between Unit/BuildingDef
+- Use building definitions instead of hardcoded logic for building properties: `getWidth`, `getHeight`, `isWall`
+- UnitDef exposes some properties as public, which could be dangerous
+- PassabilityComponent for units is only used to set the initial passability; after that, we rely on the MovementComponent
 
 ### Rendering
 

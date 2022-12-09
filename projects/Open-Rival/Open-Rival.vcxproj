@@ -31,6 +31,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Cursor.cpp" />
+    <ClCompile Include="src\FlyerComponent.cpp" />
     <ClCompile Include="src\JsonUtils.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
@@ -76,6 +77,7 @@
     <ClCompile Include="src\RenderUtils.cpp" />
     <ClCompile Include="src\Resources.cpp" />
     <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\SeafarerComponent.cpp" />
     <ClCompile Include="src\Sounds.cpp" />
     <ClCompile Include="src\UnitDef.cpp" />
     <ClCompile Include="src\VoiceComponent.cpp" />
@@ -121,6 +123,7 @@
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Cursor.h" />
+    <ClInclude Include="include\FlyerComponent.h" />
     <ClInclude Include="include\JsonUtils.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponent.h" />
@@ -167,6 +170,7 @@
     <ClInclude Include="include\Resources.h" />
     <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\SDLWrapper.h" />
+    <ClInclude Include="include\SeafarerComponent.h" />
     <ClInclude Include="include\Sounds.h" />
     <ClInclude Include="include\UnitDef.h" />
     <ClInclude Include="include\VoiceComponent.h" />

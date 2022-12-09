@@ -139,6 +139,12 @@ std::deque<MapNode> Pathfinder::findPath()
         return {};
     }
 
+    if (!passabilityChecker.isNodePathable(map, goal))
+    {
+        // Destination is unreachable
+        return {};
+    }
+
     discoveredNodes.push_back({ start, 0 });
     costToNode[start] = 0;
 
