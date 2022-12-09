@@ -15,10 +15,11 @@ UnitDef UnitDef::fromJson(const json& j)
     const auto& rawAnims = j.at("animations");
     std::unordered_map<UnitAnimationType, const Animation> animations;
     tryReadAnimation(rawAnims, "standing", UnitAnimationType::Standing, animations);
-    tryReadAnimation(rawAnims, "holdingBag", UnitAnimationType::HoldingBag, animations);
+    tryReadAnimation(rawAnims, "standingWithBag", UnitAnimationType::StandingWithBag, animations);
     tryReadAnimation(rawAnims, "moving", UnitAnimationType::Moving, animations);
     tryReadAnimation(rawAnims, "movingWithBag", UnitAnimationType::MovingWithBag, animations);
     tryReadAnimation(rawAnims, "attacking", UnitAnimationType::Attacking, animations);
+    tryReadAnimation(rawAnims, "harvesting", UnitAnimationType::Harvesting, animations);
     tryReadAnimation(rawAnims, "dying", UnitAnimationType::Dying, animations);
 
     const auto& rawSounds = j.at("sounds");
@@ -45,11 +46,13 @@ void UnitDef::tryReadAnimation(
 
     int startIndex = iter->at("startIndex");
     int endIndex = iter->at("endIndex");
-    int msPerFrame = iter->at("msPerFrame");
+    int msPerFrame = getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
+    int facingStride = getOrDefault(iter, "facingStride", 0);
+
     animations.emplace(
             std::piecewise_construct,
             std::forward_as_tuple(animType),
-            std::forward_as_tuple(startIndex, endIndex, msPerFrame));
+            std::forward_as_tuple(startIndex, endIndex, msPerFrame, facingStride));
 }
 
 void UnitDef::tryReadSoundBank(

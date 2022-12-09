@@ -45,15 +45,11 @@ public:
 
 private:
     void setCurrentAnimFrame(int newAnimFrame);
-
     void refreshSpriteComponent() const;
-
     void advanceFrame(int numAnimFrames, int msPerAnimFrame);
-
     int getNumAnimFrames() const;
-
     int getMsPerAnimFrame() const;
-
+    int getFacingStride() const;
     int getFacingOffset() const;
 
 public:
