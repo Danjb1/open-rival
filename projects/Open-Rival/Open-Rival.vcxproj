@@ -320,6 +320,8 @@
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;$(ProjectDir)libs\rtmidi-5.0.0\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
