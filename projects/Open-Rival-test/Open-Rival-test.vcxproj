@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Open-Rival\src\AnimationComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\Animations.cpp" />
     <ClCompile Include="..\Open-Rival\src\Application.cpp" />
     <ClCompile Include="..\Open-Rival\src\Building.cpp" />
+    <ClCompile Include="..\Open-Rival\src\BuildingAnimationComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\Camera.cpp" />
     <ClCompile Include="..\Open-Rival\src\Entity.cpp" />
     <ClCompile Include="..\Open-Rival\src\EntityComponent.cpp" />
@@ -37,14 +37,11 @@
     <ClCompile Include="..\Open-Rival\src\MovementComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Rect.cpp" />
     <ClCompile Include="..\Open-Rival\src\RenderUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\RtMidi.cpp" />
-    <ClCompile Include="..\Open-Rival\src\Scenario.cpp" />
     <ClCompile Include="..\Open-Rival\src\Shaders.cpp" />
     <ClCompile Include="..\Open-Rival\src\ShaderUtils.cpp" />
     <ClCompile Include="..\Open-Rival\src\SpriteComponent.cpp" />
@@ -53,7 +50,9 @@
     <ClCompile Include="..\Open-Rival\src\State.cpp" />
     <ClCompile Include="..\Open-Rival\src\TextureAtlas.cpp" />
     <ClCompile Include="..\Open-Rival\src\Tile.cpp" />
+    <ClCompile Include="..\Open-Rival\src\UnitAnimationComponent.cpp" />
     <ClCompile Include="..\Open-Rival\src\UnitPropsComponent.cpp" />
+    <ClCompile Include="..\Open-Rival\src\World.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\gl\glew.cpp" />
@@ -148,10 +147,11 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\SDL2-2.0.14\include;..\Open-Rival\libs\SDL2_image-2.0.5\include;..\Open-Rival\libs\freetype-2.10.4\include;..\Open-Rival\libs\openal-soft-1.21.0\include;..\Open-Rival\libs\glew-2.1.0\include;..\Open-Rival\libs\glm-0.9.9.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\SDL2-2.0.14\include;..\Open-Rival\libs\SDL2_image-2.0.5\include;..\Open-Rival\libs\freetype-2.10.4\include;..\Open-Rival\libs\glew-2.1.0\include;..\Open-Rival\libs\glm-0.9.9.5;..\Open-Rival\libs\json;..\Open-Rival\libs\openal-soft-1.21.0\include;..\Open-Rival\libs\rtmidi-5.0.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -175,8 +175,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -185,6 +184,9 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>include;..\Open-Rival\include;..\Open-Rival\libs\SDL2-2.0.14\include;..\Open-Rival\libs\SDL2_image-2.0.5\include;..\Open-Rival\libs\freetype-2.10.4\include;..\Open-Rival\libs\glew-2.1.0\include;..\Open-Rival\libs\glm-0.9.9.5;..\Open-Rival\libs\json;..\Open-Rival\libs\openal-soft-1.21.0\include;..\Open-Rival\libs\rtmidi-5.0.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
