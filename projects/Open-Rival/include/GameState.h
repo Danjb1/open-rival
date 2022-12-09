@@ -134,7 +134,7 @@ private:
      *
      * Later, we will be allocated a player ID by the server.
      */
-    int localPlayerId = 2;
+    int localPlayerId = 0;
 };
 
 }  // namespace Rival

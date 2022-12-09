@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
 - Drag-select
-- Allow a custom level to be specified (in config or a command line parameter)
 - Build and release!
     - Document known issues
     - Setup programs may be broken by recent dependency changes
@@ -337,6 +336,7 @@
 - Use building definitions instead of hardcoded logic for building properties: `getWidth`, `getHeight`, `isWall`
 - UnitDef exposes some properties as public, which could be dangerous
 - PassabilityComponent for units is only used to set the initial passability; after that, we rely on the MovementComponent
+- Replace ConfigUtils with JsonUtils
 
 ### Rendering
 
