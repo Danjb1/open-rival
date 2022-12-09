@@ -28,7 +28,7 @@ void TextRenderer::render(const TextRenderable& textRenderable) const
     // Render
     int numVisibleChars = textRenderable.getNumVisibleChars();
     int numLayers = textRenderable.getNumLayers();
-    GLsizei numIndices = numVisibleChars * numLayers * textRenderable.getNumVisibleChars();
+    GLsizei numIndices = numVisibleChars * numLayers * TextRenderable::numIndicesPerChar;
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -39,7 +39,6 @@ bool TextRenderer::needsUpdate(const TextRenderable& textRenderable) const
 
 void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
 {
-
     std::vector<TextSpan> spans = textRenderable.getTextSpans();
     const Font* font = textRenderable.getFont();
     float scale = textRenderable.getScale() * font->getDefaultSize() / Font::fontHeight;

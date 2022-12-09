@@ -42,6 +42,9 @@ void EntityRenderer::render(const Camera& camera, EntityList entities, int delta
             renderEntity(*e, delta);
         }
     }
+
+    // Restore the default palette
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, 0);
 }
 
 bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const

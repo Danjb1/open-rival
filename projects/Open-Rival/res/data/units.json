@@ -4,17 +4,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
-          "startIndex": 0
+          "startIndex": 0,
+          "facingStride": 3
         },
         "moving": {
           "endIndex": 2,
-          "msPerFrame": 60,
           "startIndex": 0
         },
         "attacking": {
           "endIndex": 25,
-          "msPerFrame": 60,
           "startIndex": 24
         }
       },
@@ -39,8 +37,16 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 4
+        },
+        "moving": {
+          "endIndex": 3,
           "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 33,
+          "startIndex": 32
         }
       },
       "name": "Battleship",
@@ -64,17 +70,14 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         },
         "moving": {
           "endIndex": 15,
-          "msPerFrame": 60,
           "startIndex": 8
         },
         "attacking": {
           "endIndex": 80,
-          "msPerFrame": 60,
           "startIndex": 72
         }
       },
@@ -99,7 +102,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 3
+        },
+        "moving": {
+          "endIndex": 2,
           "startIndex": 0
         }
       },
@@ -124,17 +131,14 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         },
         "moving": {
           "endIndex": 13,
-          "msPerFrame": 60,
           "startIndex": 8
         },
         "attacking": {
           "endIndex": 58,
-          "msPerFrame": 60,
           "startIndex": 55
         }
       },
@@ -159,17 +163,14 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         },
         "moving": {
           "endIndex": 15,
-          "msPerFrame": 60,
           "startIndex": 8
         },
         "attacking": {
           "endIndex": 79,
-          "msPerFrame": 60,
           "startIndex": 72
         }
       },
@@ -194,8 +195,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Light Cavalry",
@@ -219,33 +223,27 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         },
-        "animType_1": {
+        "standingWithBag": {
           "endIndex": 8,
-          "msPerFrame": 60,
           "startIndex": 8
         },
         "moving": {
           "endIndex": 21,
-          "msPerFrame": 60,
           "startIndex": 16
         },
-        "animType_3": {
+        "movingWithBag": {
           "endIndex": 69,
-          "msPerFrame": 60,
           "startIndex": 64
         },
         "attacking": {
           "endIndex": 118,
-          "msPerFrame": 60,
           "startIndex": 112
         },
-        "animType_5": {
-          "endIndex": 21,
-          "msPerFrame": 60,
-          "startIndex": 16
+        "harvesting": {
+          "endIndex": 115,
+          "startIndex": 112
         }
       },
       "name": "Peasant",
@@ -268,9 +266,16 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 7,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 7,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 74,
+          "startIndex": 64
         }
       },
       "name": "Pegas Rider",
@@ -294,8 +299,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Priest",
@@ -319,8 +327,16 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 4
+        },
+        "moving": {
+          "endIndex": 3,
           "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 33,
+          "startIndex": 32
         }
       },
       "name": "Sea Barge",
@@ -344,8 +360,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Thief",
@@ -369,17 +388,14 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         },
         "moving": {
           "endIndex": 13,
-          "msPerFrame": 60,
           "startIndex": 8
         },
         "attacking": {
           "endIndex": 58,
-          "msPerFrame": 60,
           "startIndex": 56
         }
       },
@@ -404,7 +420,10 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 0,
           "startIndex": 0
         }
       },
@@ -429,7 +448,10 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 0,
           "startIndex": 0
         }
       },
@@ -454,8 +476,16 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 3
+        },
+        "moving": {
+          "endIndex": 2,
           "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 26,
+          "startIndex": 25
         }
       },
       "name": "Catapult",
@@ -479,8 +509,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Gnome Boomer",
@@ -504,8 +537,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Horde Rider",
@@ -529,8 +565,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 0,
+          "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 9,
+          "startIndex": 8
         }
       },
       "name": "Landing Craft",
@@ -554,8 +597,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Necromancer",
@@ -579,8 +625,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Priest of Doom",
@@ -604,8 +653,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Rock Thrower",
@@ -629,7 +681,6 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
         }
       },
@@ -654,8 +705,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Serf",
@@ -679,8 +733,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Storm Trooper",
@@ -704,8 +761,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 0,
+          "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 9,
+          "startIndex": 8
         }
       },
       "name": "Troll Galley",
@@ -728,9 +792,16 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 3,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 19,
+          "startIndex": 16
+        },
+        "attacking": {
+          "endIndex": 32,
+          "startIndex": 32
         }
       },
       "name": "Warbat",
@@ -754,8 +825,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Warlord",
@@ -779,8 +853,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Archer",
@@ -804,8 +881,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Arquebusier",
@@ -829,8 +909,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 0,
+          "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 9,
+          "startIndex": 8
         }
       },
       "name": "Bark",
@@ -854,7 +941,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 3
+        },
+        "moving": {
+          "endIndex": 2,
           "startIndex": 0
         }
       },
@@ -879,8 +970,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 15,
+          "startIndex": 8
         }
       },
       "name": "Centaur",
@@ -904,8 +998,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Druid",
@@ -929,8 +1026,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Dwarf Miner",
@@ -954,8 +1054,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Enchanter",
@@ -979,8 +1082,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Mage",
@@ -1003,8 +1109,11 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 2,
+          "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 2,
           "startIndex": 0
         }
       },
@@ -1029,8 +1138,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Scout",
@@ -1053,9 +1165,16 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 7,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 7,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 65,
+          "startIndex": 64
         }
       },
       "name": "Sky Rider",
@@ -1079,8 +1198,16 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
+          "startIndex": 0,
+          "facingStride": 3
+        },
+        "moving": {
+          "endIndex": 2,
           "startIndex": 0
+        },
+        "dying": {
+          "endIndex": 25,
+          "startIndex": 24
         }
       },
       "name": "Warship",
@@ -1104,8 +1231,27 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "standingWithBag": {
+          "endIndex": 8,
+          "startIndex": 8
+        },
+        "moving": {
+          "endIndex": 23,
+          "startIndex": 16
+        },
+        "movingWithBag": {
+          "endIndex": 87,
+          "startIndex": 80
+        },
+        "harvesting": {
+          "endIndex": 147,
+          "startIndex": 144
+        },
+        "dying": {
+          "endIndex": 178,
+          "startIndex": 176
         }
       },
       "name": "Yeoman",
@@ -1129,8 +1275,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Devil",
@@ -1142,8 +1291,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Dragon",
@@ -1155,8 +1307,11 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Golem",
@@ -1167,9 +1322,16 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 3,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 3,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 35,
+          "startIndex": 32
         }
       },
       "name": "Gryphon",
@@ -1181,8 +1343,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 11,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 42,
+          "startIndex": 40
         }
       },
       "name": "Hydra",
@@ -1194,8 +1363,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 1,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 18,
+          "startIndex": 16
         }
       },
       "name": "Sea Monster",
@@ -1207,8 +1383,15 @@
       "animations": {
         "standing": {
           "endIndex": 0,
-          "msPerFrame": 60,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 74,
+          "startIndex": 72
         }
       },
       "name": "Skeleton",
@@ -1219,9 +1402,16 @@
     {
       "animations": {
         "standing": {
-          "endIndex": 0,
-          "msPerFrame": 60,
+          "endIndex": 3,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 3,
+          "startIndex": 0
+        },
+        "attacking": {
+          "endIndex": 19,
+          "startIndex": 16
         }
       },
       "name": "Snake",

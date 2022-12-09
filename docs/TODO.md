@@ -4,12 +4,12 @@
 ### Movement Milestone
 <!----------------------------------------------------------------------------->
 
-- Add all unit animations
 - Support flying units
 - Support seafaring units
 - Fix buildings not rendering correctly
 - Drag-select
 - Allow a custom level to be specified (in config or a command line parameter)
+- Respect player race
 - Build and release!
     - Document known issues
     - Setup programs may be broken by recent dependency changes
@@ -36,6 +36,7 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
 - Tiles covered by the map border should not be passable
+- Some animations need attention (e.g. Snake)
 
 <!----------------------------------------------------------------------------->
 ## Features

@@ -18,6 +18,16 @@ class UnitDef
 public:
     static UnitDef fromJson(const json& j);
 
+    UnitDef(std::string name,
+            int portraitId,
+            std::unordered_map<UnitAnimationType, const Animation> animations,
+            std::unordered_map<UnitSoundType, const SoundBank> soundBanks);
+
+    const Animation* getAnimation(UnitAnimationType animType) const;
+
+    const SoundBank* getSoundBank(UnitSoundType soundType) const;
+
+private:
     static void tryReadAnimation(
             const json& rawAnims,
             const std::string& key,
@@ -30,14 +40,12 @@ public:
             UnitSoundType soundType,
             std::unordered_map<UnitSoundType, const SoundBank>& soundBanks);
 
-    UnitDef(std::string name,
-            int portraitId,
-            std::unordered_map<UnitAnimationType, const Animation> animations,
-            std::unordered_map<UnitSoundType, const SoundBank> soundBanks);
-
-    const Animation* getAnimation(UnitAnimationType animType) const;
-
-    const SoundBank* getSoundBank(UnitSoundType soundType) const;
+    template <class Iterator, class ValueType>
+    static const ValueType getOrDefault(const Iterator& iter, const std::string& key, ValueType defaultValue)
+    {
+        auto result = iter->find(key);
+        return result == iter->end() ? defaultValue : *result;
+    }
 
 public:
     /**

@@ -155,13 +155,13 @@ int UnitAnimationComponent::getNumAnimFrames() const
 
 int UnitAnimationComponent::getMsPerAnimFrame() const
 {
-    if (!animation)
-    {
-        return 0;
-    }
-
     // TODO: This should vary based on a Unit's speed
-    return animation->msPerFrame;
+    return animation ? animation->msPerFrame : 0;
+}
+
+int UnitAnimationComponent::getFacingStride() const
+{
+    return animation ? animation->facingStride : 0;
 }
 
 int UnitAnimationComponent::getFacingOffset() const
@@ -172,9 +172,10 @@ int UnitAnimationComponent::getFacingOffset() const
         return 0;
     }
 
-    int numAnimFrames = getNumAnimFrames();
+    int facingStride = getFacingStride();
+    int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
     int facingIndex = static_cast<int>(facingComponent->getFacing()) - static_cast<int>(Facing::South);
-    return facingIndex * numAnimFrames;
+    return facingIndex * stride;
 }
 
 }  // namespace Rival

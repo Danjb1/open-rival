@@ -11,10 +11,11 @@ namespace Rival {
 enum class UnitAnimationType : std::uint8_t
 {
     Standing,
-    HoldingBag,
+    StandingWithBag,
     Moving,
     MovingWithBag,
     Attacking,
+    Harvesting,
     Dying
 };
 
@@ -26,11 +27,21 @@ enum class BuildingAnimationType : std::uint8_t
 
 struct Animation
 {
+    static constexpr int defaultMsPerFrame = 60;
+
+    /** First sprite index of the aniamtion. */
     int startIndex;
+
+    /** Last sprite index of the aniamtion. */
     int endIndex;
+
+    /** How long to show each sprite index, in milliseconds. */
     int msPerFrame;
 
-    Animation(int startIndex, int endIndex, int msPerFrame);
+    /** Sprite index offset between different facings. */
+    int facingStride;
+
+    Animation(int startIndex, int endIndex, int msPerFrame, int facingStride);
 };
 
 using UnitAnimationPair = std::pair<Unit::Type, UnitAnimationType>;
