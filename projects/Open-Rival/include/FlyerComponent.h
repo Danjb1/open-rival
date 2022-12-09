@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "MovementComponent.h"
 #include "Pathfinding.h"
 #include "Tile.h"
@@ -9,9 +7,9 @@
 namespace Rival {
 
 /**
- * PassabilityChecker that treats empty ground tiles as traversable.
+ * PassabilityChecker that treats all tiles as traversable unless occupied by another flyer.
  */
-class WalkerPassability
+class FlyerPassability
     : public Pathfinding::PassabilityChecker
     , public Pathfinding::PassabilityUpdater
 {
@@ -29,29 +27,22 @@ public:
     // End PassabilityUpdater override
 
 private:
-    static constexpr TilePassability unpathableFlags =  //
-            TilePassability::Blocked                    //
-            | TilePassability::Building                 //
-            | TilePassability::Coastline                //
-            | TilePassability::GroundUnit               //
-            | TilePassability::SoftMountain             //
-            | TilePassability::Tree                     //
-            | TilePassability::Water;
+    static constexpr TilePassability unpathableFlags = TilePassability::FlyingUnit;
 
     // We have to wait for a unit to leave before we can move into their tile
-    static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::GroundUnitLeaving;
+    static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::FlyingUnitLeaving;
 };
 
 /**
- * Component that allows an entity to walk around the map.
+ * Component that allows an entity to fly around the map.
  */
-class WalkerComponent : public MovementComponent
+class FlyerComponent : public MovementComponent
 {
 public:
-    WalkerComponent();
+    FlyerComponent();
 
 private:
-    static WalkerPassability walkerPassability;
+    static FlyerPassability flyerPassability;
 };
 
 }  // namespace Rival

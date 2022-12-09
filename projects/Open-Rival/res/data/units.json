@@ -49,6 +49,7 @@
           "startIndex": 32
         }
       },
+      "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
       "sounds": {
@@ -278,6 +279,7 @@
           "startIndex": 64
         }
       },
+      "movement": "flying",
       "name": "Pegas Rider",
       "portrait": 48,
       "sounds": {
@@ -339,6 +341,7 @@
           "startIndex": 32
         }
       },
+      "movement": "seafaring",
       "name": "Sea Barge",
       "portrait": 46,
       "sounds": {
@@ -427,6 +430,7 @@
           "startIndex": 0
         }
       },
+      "movement": "flying",
       "name": "Zeppelin",
       "portrait": 49,
       "sounds": {
@@ -455,6 +459,7 @@
           "startIndex": 0
         }
       },
+      "movement": "flying",
       "name": "Balloon",
       "portrait": 63,
       "sounds": {
@@ -517,7 +522,7 @@
         }
       },
       "name": "Gnome Boomer",
-      "portrait": 55,
+      "portrait": 54,
       "sounds": {
         "move": [
           156,
@@ -576,6 +581,7 @@
           "startIndex": 8
         }
       },
+      "movement": "seafaring",
       "name": "Landing Craft",
       "portrait": 60,
       "sounds": {
@@ -682,10 +688,14 @@
         "standing": {
           "endIndex": 0,
           "startIndex": 0
+        },
+        "moving": {
+          "endIndex": 13,
+          "startIndex": 8
         }
       },
       "name": "Rogue",
-      "portrait": 54,
+      "portrait": 55,
       "sounds": {
         "move": [
           162,
@@ -707,9 +717,25 @@
           "endIndex": 0,
           "startIndex": 0
         },
-        "moving": {
-          "endIndex": 13,
+        "standingWithBag": {
+          "endIndex": 8,
           "startIndex": 8
+        },
+        "moving": {
+          "endIndex": 21,
+          "startIndex": 16
+        },
+        "movingWithBag": {
+          "endIndex": 69,
+          "startIndex": 64
+        },
+        "attacking": {
+          "endIndex": 118,
+          "startIndex": 112
+        },
+        "harvesting": {
+          "endIndex": 115,
+          "startIndex": 112
         }
       },
       "name": "Serf",
@@ -772,6 +798,7 @@
           "startIndex": 8
         }
       },
+      "movement": "seafaring",
       "name": "Troll Galley",
       "portrait": 61,
       "sounds": {
@@ -796,14 +823,15 @@
           "startIndex": 0
         },
         "moving": {
-          "endIndex": 19,
-          "startIndex": 16
+          "endIndex": 3,
+          "startIndex": 0
         },
         "attacking": {
           "endIndex": 32,
           "startIndex": 32
         }
       },
+      "movement": "flying",
       "name": "Warbat",
       "portrait": 62,
       "sounds": {
@@ -920,6 +948,7 @@
           "startIndex": 8
         }
       },
+      "movement": "seafaring",
       "name": "Bark",
       "portrait": 74,
       "sounds": {
@@ -1117,6 +1146,7 @@
           "startIndex": 0
         }
       },
+      "movement": "flying",
       "name": "Magic Chopper",
       "portrait": 77,
       "sounds": {
@@ -1177,6 +1207,7 @@
           "startIndex": 64
         }
       },
+      "movement": "flying",
       "name": "Sky Rider",
       "portrait": 76,
       "sounds": {
@@ -1210,6 +1241,7 @@
           "startIndex": 24
         }
       },
+      "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,
       "sounds": {
@@ -1334,6 +1366,7 @@
           "startIndex": 32
         }
       },
+      "movement": "flying",
       "name": "Gryphon",
       "portrait": 85,
       "sounds": {
@@ -1374,6 +1407,7 @@
           "startIndex": 16
         }
       },
+      "movement": "seafaring",
       "name": "Sea Monster",
       "portrait": 78,
       "sounds": {
@@ -1414,6 +1448,7 @@
           "startIndex": 16
         }
       },
+      "movement": "flying",
       "name": "Snake",
       "portrait": 81,
       "sounds": {

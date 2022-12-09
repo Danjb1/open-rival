@@ -143,6 +143,7 @@ int main()
         std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
         // Initialize players
+        // TODO: Read this from the Scenario
         std::unordered_map<int, PlayerState> playerStates;
         playerStates.emplace(
                 std::piecewise_construct,

@@ -151,6 +151,9 @@ public:
     std::weak_ptr<const Entity> getEntityWeak(int id) const;
 
 private:
+    std::vector<TilePassability> createPassability() const;
+
+private:
     const int width;
     const int height;
     bool wilderness;

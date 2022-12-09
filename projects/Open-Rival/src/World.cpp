@@ -24,9 +24,33 @@ World::World(int width, int height, bool wilderness, std::vector<Tile> tiles)
     , height(height)
     , wilderness(wilderness)
     , tiles(tiles)
-    , tilePassability(std::vector<TilePassability>(width * height, TilePassability::Clear))
+    , tilePassability(createPassability())
     , nextId(0)
 {
+}
+
+std::vector<TilePassability> World::createPassability() const
+{
+    std::vector<TilePassability> passability;
+    passability.reserve(tiles.size());
+
+    for (const auto& tile : tiles)
+    {
+        if (tile.type == TileType::Water)
+        {
+            passability.push_back(TilePassability::Water);
+        }
+        else if (tile.type == TileType::Coastline)
+        {
+            passability.push_back(TilePassability::Coastline);
+        }
+        else
+        {
+            passability.push_back(TilePassability::Clear);
+        }
+    }
+
+    return passability;
 }
 
 Tile World::getTile(int x, int y) const

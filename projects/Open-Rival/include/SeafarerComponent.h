@@ -11,7 +11,7 @@ namespace Rival {
 /**
  * PassabilityChecker that treats empty ground tiles as traversable.
  */
-class WalkerPassability
+class SeafarerPassability
     : public Pathfinding::PassabilityChecker
     , public Pathfinding::PassabilityUpdater
 {
@@ -29,29 +29,25 @@ public:
     // End PassabilityUpdater override
 
 private:
-    static constexpr TilePassability unpathableFlags =  //
-            TilePassability::Blocked                    //
-            | TilePassability::Building                 //
-            | TilePassability::Coastline                //
-            | TilePassability::GroundUnit               //
-            | TilePassability::SoftMountain             //
-            | TilePassability::Tree                     //
-            | TilePassability::Water;
+    bool isWater(TilePassability passability) const;
+
+private:
+    static constexpr TilePassability unpathableFlags = TilePassability::GroundUnit;
 
     // We have to wait for a unit to leave before we can move into their tile
     static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::GroundUnitLeaving;
 };
 
 /**
- * Component that allows an entity to walk around the map.
+ * Component that allows an entity to move on water.
  */
-class WalkerComponent : public MovementComponent
+class SeafarerComponent : public MovementComponent
 {
 public:
-    WalkerComponent();
+    SeafarerComponent();
 
 private:
-    static WalkerPassability walkerPassability;
+    static SeafarerPassability seafarerPassability;
 };
 
 }  // namespace Rival

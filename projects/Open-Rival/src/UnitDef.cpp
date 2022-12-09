@@ -9,9 +9,13 @@ namespace Rival {
 
 UnitDef UnitDef::fromJson(const json& j)
 {
+    // Basic properties
     std::string name = j.at("name");
     int portraitId = j.at("portrait");
+    std::string movementModeStr = j.value("movement", "ground");
+    MovementMode movementMode = getMovementMode(movementModeStr);
 
+    // Animations
     const auto& rawAnims = j.at("animations");
     std::unordered_map<UnitAnimationType, const Animation> animations;
     tryReadAnimation(rawAnims, "standing", UnitAnimationType::Standing, animations);
@@ -22,13 +26,14 @@ UnitDef UnitDef::fromJson(const json& j)
     tryReadAnimation(rawAnims, "harvesting", UnitAnimationType::Harvesting, animations);
     tryReadAnimation(rawAnims, "dying", UnitAnimationType::Dying, animations);
 
+    // Sounds
     const auto& rawSounds = j.at("sounds");
     std::unordered_map<UnitSoundType, const SoundBank> soundBanks;
     tryReadSoundBank(rawSounds, "select", UnitSoundType::Select, soundBanks);
     tryReadSoundBank(rawSounds, "train", UnitSoundType::Train, soundBanks);
     tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, soundBanks);
 
-    return { name, portraitId, animations, soundBanks };
+    return { name, portraitId, movementMode, animations, soundBanks };
 }
 
 void UnitDef::tryReadAnimation(
@@ -71,13 +76,31 @@ void UnitDef::tryReadSoundBank(
     soundBanks.emplace(soundType, *iter);
 }
 
+MovementMode UnitDef::getMovementMode(const std::string& s)
+{
+    if (s == "flying")
+    {
+        return MovementMode::Flying;
+    }
+    else if (s == "seafaring")
+    {
+        return MovementMode::Seafaring;
+    }
+    else
+    {
+        return MovementMode::Walking;
+    }
+}
+
 UnitDef::UnitDef(
         std::string name,
         int portraitId,
+        MovementMode movementMode,
         std::unordered_map<UnitAnimationType, const Animation> animations,
         std::unordered_map<UnitSoundType, const SoundBank> soundBanks)
     : name(name)
     , portraitId(portraitId)
+    , movementMode(movementMode)
     , animations(animations)
     , soundBanks(soundBanks)
 {

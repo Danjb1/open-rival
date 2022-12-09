@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -10,6 +11,13 @@
 
 namespace Rival {
 
+enum class MovementMode : std::uint8_t
+{
+    Walking,
+    Seafaring,
+    Flying
+};
+
 class UnitDef
 {
 public:
@@ -17,6 +25,7 @@ public:
 
     UnitDef(std::string name,
             int portraitId,
+            MovementMode movementMode,
             std::unordered_map<UnitAnimationType, const Animation> animations,
             std::unordered_map<UnitSoundType, const SoundBank> soundBanks);
 
@@ -37,6 +46,8 @@ private:
             UnitSoundType soundType,
             std::unordered_map<UnitSoundType, const SoundBank>& soundBanks);
 
+    static MovementMode getMovementMode(const std::string& s);
+
 public:
     /**
      * The default name for this unit type.
@@ -47,6 +58,11 @@ public:
      * ID of this unit's portrait image.
      */
     int portraitId = 0;
+
+    /**
+     * How this unit moves around the map.
+     */
+    MovementMode movementMode;
 
 private:
     /**
