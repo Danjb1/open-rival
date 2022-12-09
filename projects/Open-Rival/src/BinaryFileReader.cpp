@@ -37,7 +37,7 @@ std::uint8_t BinaryFileReader::readByte()
 
 std::uint16_t BinaryFileReader::readShort()
 {
-    std::uint16_t val;
+    std::uint16_t val = 0;
     in.read(reinterpret_cast<char*>(&val), sizeof(val));
     return val;
 }

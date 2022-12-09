@@ -28,6 +28,9 @@
     <ClInclude Include="..\Open-Rival\include\Palette.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Open-Rival\include\MathUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\setup\src\setup-utils.cpp">
@@ -49,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Palette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\MathUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

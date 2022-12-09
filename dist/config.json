@@ -1,4 +1,5 @@
 {
-  "midiEnabled": false,
+  "levelName": "test.sco",
+  "midiEnabled": true,
   "soundEnabled": true
 }

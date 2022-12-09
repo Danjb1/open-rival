@@ -4,11 +4,17 @@
 ### Next Up...
 <!----------------------------------------------------------------------------->
 
+- Test project fails to build :(
+    - Write a tool to automatically generate `Open-Rival-test.proj`
+        - Copy all includes from Open-Rival
+        - Copy all source files from Open-Rival (except those we have stubbed)
+
 - Display a rectangle while drag-select is active
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
 - Zooming in does not zoom towards the cursor as much as it should
+- Selected units should flash orange
 - Allow buildings to be selected
 
 <!----------------------------------------------------------------------------->
@@ -39,7 +45,7 @@
 - Logging mechanism
     - Log important events to file
     - Replace cout / cerr with logger calls
-    - texture-builder is particularly noisy
+    - texture-builder is particularly noisy (for atlas files)
 - Add support for [Unicode filenames](http://utf8everywhere.org/)
 
 ### Data Loading
@@ -249,6 +255,9 @@
 - Consider linking with static libraries (instead of using DLLs)
 - Consider moving some docs to GitHub wiki
 - Create a CMake file to generate the solution?
+- Linking against OpenAL soft binary distribution requires `/SAFESEH:NO` linker option
+    - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
+- Setup program should log output to a file (run the script via a BAT file?)
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -256,9 +265,6 @@
 
 ### General
 
-- Write a tool to automatically generate `Open-Rival-test.proj`
-    - Copy all includes from Open-Rival
-    - Copy all source files from Open-Rival (except those we have stubbed)
 - Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
 
 ### Entity/Component Lifecycle

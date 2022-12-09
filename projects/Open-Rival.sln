@@ -96,7 +96,6 @@ Global
 		{D1F5ED16-00DF-401C-9573-9A1349B3E53B}.Release|x64.ActiveCfg = Release|x64
 		{D1F5ED16-00DF-401C-9573-9A1349B3E53B}.Release|x64.Build.0 = Release|x64
 		{D1F5ED16-00DF-401C-9573-9A1349B3E53B}.Release|x86.ActiveCfg = Release|Win32
-		{D1F5ED16-00DF-401C-9573-9A1349B3E53B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

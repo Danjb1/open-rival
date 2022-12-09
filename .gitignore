@@ -49,9 +49,8 @@ SORR.BLD
 # Release folder
 /dist/res
 /dist/setup
-/dist/glew32.dll
-/dist/SDL2.dll
 /dist/Open-Rival.exe
+/dist/setup.exe
 
 # Other
 /misc

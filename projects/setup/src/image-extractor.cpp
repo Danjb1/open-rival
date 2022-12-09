@@ -20,6 +20,7 @@
 
 #include "FileUtils.h"
 #include "Image.h"
+#include "MathUtils.h"
 #include "Palette.h"
 #include "setup-utils.h"
 
@@ -216,7 +217,7 @@ int transparentColor = 0xff;
             }
 
             // Round image dimensions to nearest power of 2
-            w = h = nextPowerOf2(w);
+            w = h = MathUtils::nextPowerOf2(w);
 
             // Save the rendered image to disk
             std::string filename = outputDir

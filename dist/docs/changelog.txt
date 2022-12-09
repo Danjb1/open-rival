@@ -3,24 +3,24 @@ Changelog
 ================================================================================
 
 v0.2.0 (Movement demo)
-- Add custom cursors
-- Allow zooming with the mouse wheel
-- Allow selecting and moving individual units
-- Play voice clips when selecting or moving units
-- Show hitbox when hovering over a unit
-- Display selected unit name and portrait in the UI
-- Display (empty) inventory when a unit is selected
-- Render units in their team's colour
-- Render palisade
-- Render map borders
-- Add support for MIDI music
-- Improve scrolling with the keyboard
-- Load settings from a config file
-- Fix seams occasionally showing between tiles
+- Game now loads a level from a config file
+- Added MIDI playback
+- Added custom cursors
+- Added zooming with the mouse wheel
+- Added selecting and moving units
+- Voice clips are played when selecting or moving units
+- Hitbox is now displayed when hovering over a unit
+- Selected unit name and portrait is now displayed in the UI
+- Inventory (empty) is now displayed when a unit is selected
+- Units are now rendered in their team color
+- Palisade is now rendered
+- Map borders are now rendered
+- Improved scrolling with the keyboard
+- Fixed seams occasionally showing between tiles
 
 v0.1.0 (Initial release)
-- Loads and renders a sample level (terrain and units)
-- image-extractor utility
-- texture-builder utility
-- campaign-extractor utility
-- audio-extractor utility
+- Game loads and renders a sample level (terrain and units)
+- Added `image-extractor` utility
+- Added `texture-builder` utility
+- Added `campaign-extractor` utility
+- Added `audio-extractor` utility

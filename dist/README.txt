@@ -1,37 +1,71 @@
+           _____                       ______ _            _ 
+          |  _  |                      | ___ (_)          | |
+          | | | |_ __   ___ _ __ ______| |_/ /___   ____ _| |
+          | | | | '_ \ / _ \ '_ \______|    /| \ \ / / _` | |
+          \ \_/ / |_) |  __/ | | |     | |\ \| |\ V / (_| | |
+           \___/| .__/ \___|_| |_|     \_| \_|_| \_/ \__,_|_|
+                | |                                          
+                |_|                                    v0.2.0
+                       
+            by Danjb (admin@danjb.com)
+            https://github.com/Danjb1/open-rival
+
+>>>> Thank you for downloading Open-Rival and supporting this classic game! <<<<
+
 ================================================================================
-Open-Rival v0.2.0
-  by Danjb (admin@danjb.com)
+Contents
 ================================================================================
 
---------------------------------------------------------------------------------
-Introduction
---------------------------------------------------------------------------------
+1. Getting Started
+2. Known Issues
+3. Settings
 
-Thank you for downloading Open-Rival and supporting this classic game!
-
-Website: https://github.com/Danjb1/open-rival
-
---------------------------------------------------------------------------------
-Setup
---------------------------------------------------------------------------------
+================================================================================
+1. Getting Started
+================================================================================
 
 The assets are not provided, and must be extracted from the original game.
 
-Run "setup.exe" to perform this extraction.
+Run `setup.exe` to perform this extraction.
+
+This will attempt to locate the original game on your system. If this fails, you
+can also specify the game directory manually by running from the command line,
+e.g.
+
+    setup.exe -d "C:\rivalrealms"
+
+Once setup is complete, launch `Open-Rival.exe` to run the game!
+
+By default this will load a test map, but any map from the original game can be
+loaded (see below).
+
+================================================================================
+2. Known Issues
+================================================================================
+
+Thank you for your patience during these early stages of development!
+
+- (Not implemented) No visual effect is displayed when issuing a move command.
+- (Not implemented) Buildings cannot be selected.
+- (Not implemented) Selected units do not flash orange.
+- (Not implemented) No rectangle is displayed when drag-select is held.
+- (Not implemented) Some objects (e.g. chests) are not yet loaded.
+- (Not implemented) Unit hitboxes are not accurate.
+- (Bug) Flying units sometimes appear behind units they should be in front of.
+- (Bug) Units can walk too close to the edge of the map.
+- (Bug) Portrait backgrounds should be black instead of transparent.
+- (Bug) Cursor position should have a greater impact on zooming.
+- (Bug) Some animations look a little off (e.g. Snake).
+
+================================================================================
+3. Settings
+================================================================================
+
+Some settings can be configured by editing `config.json`.
 
 --------------------------------------------------------------------------------
-Run
+Audio
 --------------------------------------------------------------------------------
-
-Launch "Open-Rival.exe" to run the game!
-
---------------------------------------------------------------------------------
-Settings
---------------------------------------------------------------------------------
-
-Some settings can be configured by editing "config.json".
-
-AUDIO:
 
 => midiEnabled
 
@@ -41,7 +75,9 @@ AUDIO:
 
     Whether or not sound effects should be played (true/false).
 
-FONTS:
+--------------------------------------------------------------------------------
+Fonts
+--------------------------------------------------------------------------------
 
 => fontDirs
 
@@ -91,3 +127,15 @@ FONTS:
     Example:
 
         "fontRegularSize": 16
+
+--------------------------------------------------------------------------------
+Gameplay
+--------------------------------------------------------------------------------
+
+=> levelName
+
+    Name of the level to load (should be placed in the `res/maps` directory).
+
+    Example:
+
+        "levelToLoad": "my_map.sco"

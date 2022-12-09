@@ -73,9 +73,6 @@
     <ClCompile Include="..\Open-Rival\src\MathUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\Scenario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Open-Rival\src\Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -111,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="src\TestAnimationComponent.cpp">
       <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Open-Rival\src\AnimationComponent.cpp">
-      <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\MouseUtils.cpp">
       <Filter>Source Files\utils</Filter>
@@ -189,6 +183,15 @@
     </ClCompile>
     <ClCompile Include="..\Open-Rival\src\MovementComponent.cpp">
       <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\BuildingAnimationComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\UnitAnimationComponent.cpp">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Open-Rival\src\World.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
