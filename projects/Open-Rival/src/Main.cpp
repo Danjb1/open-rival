@@ -15,6 +15,7 @@
 
 #include "Application.h"
 #include "AudioUtils.h"
+#include "ConfigUtils.h"
 #include "FileUtils.h"
 #include "GameState.h"
 #include "JsonUtils.h"
@@ -119,16 +120,33 @@ int main()
 {
     int exitCode = 0;
 
+    // Launch!
     try
     {
-        // Initialization that does not require an OpenGL context
+        /*
+         * Initialization that does not require an OpenGL context
+         */
+
         json cfg = readConfig();
+
+        // Verify that we have a valid level
+        const std::string levelName = ConfigUtils::get(cfg, "levelName", std::string());
+        if (levelName.empty())
+        {
+            std::cerr << "No level name found in config.json\n";
+            return 1;
+        }
+        ScenarioReader reader(Resources::mapsDir + levelName);
+
         initSDL();
         initAL();
 
         std::unique_ptr<Window> window = createWindow();
 
-        // Initialization that requires an OpenGL context
+        /*
+         * Initialization that requires an OpenGL context
+         */
+
         initGLEW();
         initGL();
 
@@ -136,7 +154,6 @@ int main()
         Application app(*window, cfg);
 
         // Load some scenario
-        ScenarioReader reader(Resources::mapsDir + "test_all.sco");
         ScenarioBuilder scenarioBuilder(reader.readScenario());
         Resources& res = app.getResources();
         EntityFactory entityFactory(res, app.getAudioSystem());
