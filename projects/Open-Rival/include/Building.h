@@ -48,6 +48,9 @@ enum class Type : std::uint8_t
     Shipyard,
     WatchTower,
     Wall,
+
+    // Other
+    Invalid
 };
 
 static constexpr int firstElfBuildingType = static_cast<int>(Type::ElvenKeep);
@@ -56,6 +59,9 @@ static constexpr int firstGreenskinBuildingType = static_cast<int>(Type::Fortres
 static constexpr int lastGreenskinBuildingType = static_cast<int>(Type::GreenskinWall);
 static constexpr int firstHumanBuildingType = static_cast<int>(Type::Castle);
 static constexpr int lastHumanBuildingType = static_cast<int>(Type::Wall);
+
+static const int firstBuildingType = firstElfBuildingType;
+static const int lastBuildingType = lastHumanBuildingType;
 
 static constexpr int defaultWidth = 3;
 static constexpr int defaultHeight = 2;

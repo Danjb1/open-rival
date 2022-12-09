@@ -43,6 +43,7 @@ Resources::Resources(json& cfg)
     , sounds(initSounds())
     , midis(initMidis())
     , unitDefs(initUnitDefs())
+    , buildingDefs(initBuildingDefs())
 {
 }
 
@@ -390,6 +391,39 @@ std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
     return allUnitDefs;
 }
 
+std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const
+{
+    json rawData = FileUtils::readJsonFile(Resources::dataDir + "buildings.json");
+    json buildingList = rawData["buildings"];
+
+    std::unordered_map<Building::Type, BuildingDef> allBuildingDefs;
+    int nextBuildingType = 0;
+
+    for (const auto& rawBuildingDef : buildingList)
+    {
+        if (nextBuildingType < 0 || nextBuildingType > Building::lastBuildingType)
+        {
+            throw std::runtime_error("Trying to parse invalid building type: " + std::to_string(nextBuildingType));
+        }
+
+        Building::Type unitType = static_cast<Building::Type>(nextBuildingType);
+
+        try
+        {
+            allBuildingDefs.insert({ unitType, BuildingDef::fromJson(rawBuildingDef) });
+        }
+        catch (const json::exception&)
+        {
+            std::cout << "Error parsing building definition: " << std::to_string(nextBuildingType) << "\n";
+            throw;
+        }
+
+        ++nextBuildingType;
+    }
+
+    return allBuildingDefs;
+}
+
 const Font& Resources::getFontSmall() const
 {
     return fontSmall;
@@ -469,6 +503,12 @@ const UnitDef* Resources::getUnitDef(Unit::Type unitType) const
 {
     auto iter = unitDefs.find(unitType);
     return iter == unitDefs.cend() ? nullptr : &iter->second;
+}
+
+const BuildingDef* Resources::getBuildingDef(Building::Type buildingType) const
+{
+    auto iter = buildingDefs.find(buildingType);
+    return iter == buildingDefs.cend() ? nullptr : &iter->second;
 }
 
 }  // namespace Rival

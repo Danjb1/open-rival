@@ -4,7 +4,6 @@
 #include "SDLWrapper.h"
 #include <SDL_image.h>
 #include <gl/glew.h>
-#include <nlohmann/json.hpp>
 
 #include <iostream>
 #include <memory>
@@ -18,13 +17,12 @@
 #include "AudioUtils.h"
 #include "FileUtils.h"
 #include "GameState.h"
+#include "JsonUtils.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
 #include "Window.h"
 #include "World.h"
-
-using json = nlohmann::json;
 
 using namespace Rival;
 

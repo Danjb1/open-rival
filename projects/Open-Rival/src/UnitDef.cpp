@@ -46,8 +46,8 @@ void UnitDef::tryReadAnimation(
 
     int startIndex = iter->at("startIndex");
     int endIndex = iter->at("endIndex");
-    int msPerFrame = getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
-    int facingStride = getOrDefault(iter, "facingStride", 0);
+    int msPerFrame = JsonUtils::getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
+    int facingStride = JsonUtils::getOrDefault(iter, "facingStride", 0);
 
     animations.emplace(
             std::piecewise_construct,

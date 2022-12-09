@@ -6,7 +6,7 @@ int main() {
 
     json j;
 
-    for (uint8_t unitType = 0; unitType < Unit::lastUnitType; ++unitType) {
+    for (uint8_t unitType = 0; unitType <= Unit::lastUnitType; ++unitType) {
 
         json thisUnit;
         thisUnit["name"] = "unit_" + std::to_string(unitType);

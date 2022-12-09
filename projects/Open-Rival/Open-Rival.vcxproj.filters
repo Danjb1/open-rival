@@ -298,6 +298,15 @@
     <ClCompile Include="src\PlayerContext.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
+    <ClCompile Include="src\BuildingAnimationComponent.cpp">
+      <Filter>Source Files\entity-components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BuildingDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JsonUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -572,6 +581,15 @@
     </ClInclude>
     <ClInclude Include="include\PlayerContext.h">
       <Filter>Source Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BuildingAnimationComponent.h">
+      <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BuildingDef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JsonUtils.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,12 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
-
 #include <memory>
 
 #include "AudioSystem.h"
+#include "JsonUtils.h"
 #include "Resources.h"
 #include "State.h"
 #include "Window.h"
-
-using json = nlohmann::json;
 
 namespace Rival {
 

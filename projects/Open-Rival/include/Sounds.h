@@ -12,6 +12,11 @@ enum class UnitSoundType : std::uint8_t
     Move
 };
 
+enum class BuildingSoundType : std::uint8_t
+{
+    Select
+};
+
 class SoundBank
 {
 public:

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Animations.h"
+#include "BuildingAnimationComponent.h"
 #include "BuildingPropsComponent.h"
 #include "InventoryComponent.h"
 #include "MouseHandlerComponent.h"
@@ -68,7 +69,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     const Spritesheet& spritesheet = resources.getUnitSpritesheet(unitType);
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
-    // AnimationComponent
+    // UnitAnimationComponent
     unit->attach(std::make_shared<UnitAnimationComponent>(*unitDef));
 
     // WalkerComponent
@@ -96,10 +97,17 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const
 {
     // Create Entity
-    Building::Type buildingType = getBuildingType(buildingPlacement.type);
-    int width = Building::getWidth(buildingType);
-    int height = Building::getHeight(buildingType);
+    const Building::Type buildingType = getBuildingType(buildingPlacement.type);
+    const int width = Building::getWidth(buildingType);
+    const int height = Building::getHeight(buildingType);
     std::shared_ptr<Entity> building = std::make_shared<Entity>(EntityType::Building, width, height);
+
+    // Find the BuildingDef
+    const BuildingDef* buildingDef = resources.getBuildingDef(buildingType);
+    if (!buildingDef)
+    {
+        throw std::runtime_error("No building definition found for " + std::to_string(buildingPlacement.type));
+    }
 
     // BuildingPropsComponent
     building->attach(std::make_shared<BuildingPropsComponent>(buildingType));
@@ -119,10 +127,8 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     }
     else
     {
-        // TODO: BuildingAnimationComponent
-        // const Animations::Animation anim =
-        //        Animations::getBuildingAnimation(buildingType, Animations::BuildingAnimationType::Built);
-        // building->attach(std::make_shared<AnimationComponent>(anim));
+        // BuildingAnimationComponent
+        building->attach(std::make_shared<BuildingAnimationComponent>(*buildingDef));
     }
 
     // PassabilityComponent
