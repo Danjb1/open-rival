@@ -1,15 +1,12 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
-
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "Animations.h"
+#include "JsonUtils.h"
 #include "Sounds.h"
-
-using json = nlohmann::json;
 
 namespace Rival {
 
@@ -39,13 +36,6 @@ private:
             const std::string& key,
             UnitSoundType soundType,
             std::unordered_map<UnitSoundType, const SoundBank>& soundBanks);
-
-    template <class Iterator, class ValueType>
-    static const ValueType getOrDefault(const Iterator& iter, const std::string& key, ValueType defaultValue)
-    {
-        auto result = iter->find(key);
-        return result == iter->end() ? defaultValue : *result;
-    }
 
 public:
     /**

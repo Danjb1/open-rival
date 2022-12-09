@@ -15,7 +15,7 @@
 
 namespace Rival {
 
-const std::string UnitAnimationComponent::key = "animation";
+const std::string UnitAnimationComponent::key = "unitAnimation";
 
 UnitAnimationComponent::UnitAnimationComponent(const UnitDef& unitDef)
     : EntityComponent(key)

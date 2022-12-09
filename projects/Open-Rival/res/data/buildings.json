@@ -1,0 +1,727 @@
+{
+  "buildings": [
+    {
+      "animations": {
+        "building": {
+          "endIndex": 1,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "built": {
+          "endIndex": 2,
+          "msPerFrame": 60,
+          "startIndex": 2
+        }
+      },
+      "name": "Elven Keep",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 4,
+          "msPerFrame": 60,
+          "startIndex": 3
+        },
+        "built": {
+          "endIndex": 11,
+          "msPerFrame": 60,
+          "startIndex": 5
+        }
+      },
+      "name": "Treasury",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 13,
+          "msPerFrame": 60,
+          "startIndex": 12
+        },
+        "built": {
+          "endIndex": 14,
+          "msPerFrame": 60,
+          "startIndex": 14
+        }
+      },
+      "name": "Combat Camp",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 16,
+          "msPerFrame": 60,
+          "startIndex": 15
+        },
+        "built": {
+          "endIndex": 17,
+          "msPerFrame": 60,
+          "startIndex": 17
+        }
+      },
+      "name": "Arsenal",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 19,
+          "msPerFrame": 60,
+          "startIndex": 18
+        },
+        "built": {
+          "endIndex": 20,
+          "msPerFrame": 60,
+          "startIndex": 20
+        }
+      },
+      "name": "Duel Range",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 22,
+          "msPerFrame": 60,
+          "startIndex": 21
+        },
+        "built": {
+          "endIndex": 23,
+          "msPerFrame": 60,
+          "startIndex": 23
+        }
+      },
+      "name": "Holy Nest",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 25,
+          "msPerFrame": 60,
+          "startIndex": 24
+        },
+        "built": {
+          "endIndex": 26,
+          "msPerFrame": 60,
+          "startIndex": 26
+        }
+      },
+      "name": "Miner Guildhall",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 28,
+          "msPerFrame": 60,
+          "startIndex": 27
+        },
+        "built": {
+          "endIndex": 29,
+          "msPerFrame": 60,
+          "startIndex": 29
+        }
+      },
+      "name": "Abbey Tower",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 31,
+          "msPerFrame": 60,
+          "startIndex": 30
+        },
+        "built": {
+          "endIndex": 41,
+          "msPerFrame": 60,
+          "startIndex": 32
+        }
+      },
+      "name": "Council Of Runes",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 43,
+          "msPerFrame": 60,
+          "startIndex": 42
+        },
+        "built": {
+          "endIndex": 44,
+          "msPerFrame": 60,
+          "startIndex": 44
+        }
+      },
+      "name": "Harbour",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 46,
+          "msPerFrame": 60,
+          "startIndex": 45
+        },
+        "built": {
+          "endIndex": 47,
+          "msPerFrame": 60,
+          "startIndex": 47
+        }
+      },
+      "name": "Warning Tower",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {},
+      "name": "Tree Wall",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 1,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "built": {
+          "endIndex": 2,
+          "msPerFrame": 60,
+          "startIndex": 2
+        }
+      },
+      "name": "Fortress",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 4,
+          "msPerFrame": 60,
+          "startIndex": 3
+        },
+        "built": {
+          "endIndex": 5,
+          "msPerFrame": 60,
+          "startIndex": 5
+        }
+      },
+      "name": "Hoard Keep",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 7,
+          "msPerFrame": 60,
+          "startIndex": 6
+        },
+        "built": {
+          "endIndex": 8,
+          "msPerFrame": 60,
+          "startIndex": 8
+        }
+      },
+      "name": "Fort",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 10,
+          "msPerFrame": 60,
+          "startIndex": 9
+        },
+        "built": {
+          "endIndex": 11,
+          "msPerFrame": 60,
+          "startIndex": 11
+        }
+      },
+      "name": "Blacksmith",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 13,
+          "msPerFrame": 60,
+          "startIndex": 12
+        },
+        "built": {
+          "endIndex": 14,
+          "msPerFrame": 60,
+          "startIndex": 14
+        }
+      },
+      "name": "Battle Quarters",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 16,
+          "msPerFrame": 60,
+          "startIndex": 15
+        },
+        "built": {
+          "endIndex": 17,
+          "msPerFrame": 60,
+          "startIndex": 17
+        }
+      },
+      "name": "Black Nest",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 19,
+          "msPerFrame": 60,
+          "startIndex": 18
+        },
+        "built": {
+          "endIndex": 20,
+          "msPerFrame": 60,
+          "startIndex": 20
+        }
+      },
+      "name": "Weird Workshop",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 22,
+          "msPerFrame": 60,
+          "startIndex": 21
+        },
+        "built": {
+          "endIndex": 23,
+          "msPerFrame": 60,
+          "startIndex": 23
+        }
+      },
+      "name": "Unholy Chapel",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 25,
+          "msPerFrame": 60,
+          "startIndex": 24
+        },
+        "built": {
+          "endIndex": 26,
+          "msPerFrame": 60,
+          "startIndex": 26
+        }
+      },
+      "name": "Altar Of Doom",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 28,
+          "msPerFrame": 60,
+          "startIndex": 27
+        },
+        "built": {
+          "endIndex": 29,
+          "msPerFrame": 60,
+          "startIndex": 29
+        }
+      },
+      "name": "Docks",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 31,
+          "msPerFrame": 60,
+          "startIndex": 30
+        },
+        "built": {
+          "endIndex": 32,
+          "msPerFrame": 60,
+          "startIndex": 32
+        }
+      },
+      "name": "Guard Tower",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {},
+      "name": "Greenskin Wall",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 1,
+          "msPerFrame": 60,
+          "startIndex": 0
+        },
+        "built": {
+          "endIndex": 2,
+          "msPerFrame": 60,
+          "startIndex": 2
+        }
+      },
+      "name": "Castle",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 4,
+          "msPerFrame": 60,
+          "startIndex": 3
+        },
+        "built": {
+          "endIndex": 5,
+          "msPerFrame": 60,
+          "startIndex": 5
+        }
+      },
+      "name": "Gold Mill",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 7,
+          "msPerFrame": 60,
+          "startIndex": 6
+        },
+        "built": {
+          "endIndex": 8,
+          "msPerFrame": 60,
+          "startIndex": 8
+        }
+      },
+      "name": "Archery Range",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 10,
+          "msPerFrame": 60,
+          "startIndex": 9
+        },
+        "built": {
+          "endIndex": 11,
+          "msPerFrame": 60,
+          "startIndex": 11
+        }
+      },
+      "name": "Armoury",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 13,
+          "msPerFrame": 60,
+          "startIndex": 12
+        },
+        "built": {
+          "endIndex": 14,
+          "msPerFrame": 60,
+          "startIndex": 14
+        }
+      },
+      "name": "Barracks",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 16,
+          "msPerFrame": 60,
+          "startIndex": 15
+        },
+        "built": {
+          "endIndex": 17,
+          "msPerFrame": 60,
+          "startIndex": 17
+        }
+      },
+      "name": "Holy Stables",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 19,
+          "msPerFrame": 60,
+          "startIndex": 18
+        },
+        "built": {
+          "endIndex": 20,
+          "msPerFrame": 60,
+          "startIndex": 20
+        }
+      },
+      "name": "Fire Guild",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 22,
+          "msPerFrame": 60,
+          "startIndex": 21
+        },
+        "built": {
+          "endIndex": 32,
+          "msPerFrame": 60,
+          "startIndex": 23
+        }
+      },
+      "name": "Temple",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 34,
+          "msPerFrame": 60,
+          "startIndex": 33
+        },
+        "built": {
+          "endIndex": 35,
+          "msPerFrame": 60,
+          "startIndex": 35
+        }
+      },
+      "name": "Mage Tower",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 37,
+          "msPerFrame": 60,
+          "startIndex": 36
+        },
+        "built": {
+          "endIndex": 38,
+          "msPerFrame": 60,
+          "startIndex": 38
+        }
+      },
+      "name": "Shipyard",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {
+        "building": {
+          "endIndex": 40,
+          "msPerFrame": 60,
+          "startIndex": 39
+        },
+        "built": {
+          "endIndex": 41,
+          "msPerFrame": 60,
+          "startIndex": 41
+        }
+      },
+      "name": "Watch Tower",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    },
+    {
+      "animations": {},
+      "name": "Wall",
+      "portrait": 0,
+      "sounds": {
+        "select": [
+          0
+        ]
+      }
+    }
+  ]
+}

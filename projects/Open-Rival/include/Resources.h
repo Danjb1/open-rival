@@ -3,14 +3,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <nlohmann/json.hpp>
-
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "Building.h"
+#include "BuildingDef.h"
 #include "Font.h"
+#include "JsonUtils.h"
 #include "MidiFile.h"
 #include "PaletteUtils.h"
 #include "Spritesheet.h"
@@ -19,8 +19,6 @@
 #include "Unit.h"
 #include "UnitDef.h"
 #include "WaveFile.h"
-
-using json = nlohmann::json;
 
 namespace Rival {
 
@@ -70,6 +68,7 @@ class DataStore
 {
 public:
     virtual const UnitDef* getUnitDef(Unit::Type unitType) const = 0;
+    virtual const BuildingDef* getBuildingDef(Building::Type buildingType) const = 0;
 };
 
 /**
@@ -117,6 +116,7 @@ public:
 
     // Begin DataStore override
     const UnitDef* getUnitDef(Unit::Type unitType) const override;
+    const BuildingDef* getBuildingDef(Building::Type buildingType) const override;
     // End DataStore override
 
 private:
@@ -138,6 +138,7 @@ private:
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
     std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
+    std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const;
 
 public:
     // Directories
@@ -203,6 +204,7 @@ private:
 
     // Data
     std::unordered_map<Unit::Type, UnitDef> unitDefs;
+    std::unordered_map<Building::Type, BuildingDef> buildingDefs;
 };
 
 }  // namespace Rival

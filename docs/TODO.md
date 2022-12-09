@@ -6,7 +6,6 @@
 
 - Support flying units
 - Support seafaring units
-- Fix buildings not rendering correctly
 - Drag-select
 - Allow a custom level to be specified (in config or a command line parameter)
 - Respect player race
@@ -118,7 +117,7 @@
 
 ### Rendering
 
-- Render units "between" logical frames based on delta values
+- Respect unit color (if set)
 - Render interface
     - Render resource icons
 - Render minimap
@@ -126,8 +125,6 @@
 - Render chests
 - Respect Gold tile variants
 - Fog of war
-- Some vertex/index data can be made into constants instead of member variables
-    - Even the menu view-projection matrix can probably be reused each frame
 
 ### Movement
 
@@ -160,6 +157,7 @@
 ### Music
 
 - Add support for WMA music (or convert to another format)
+    - [OGG support](https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/)
 
 ### Menus
 
@@ -287,28 +285,66 @@
     - Could combine them all into one texture
 - Add padding between spritesheet images to prevent any texure bleeding
 
-### Sound
+### Fonts
 
-- Initialise 'n' sound sources up-front, and find the next available one when playing a sound
-- Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
-- Delete all sound sources / buffers when exiting
-- Set listener position based on camera
+- How do we calculate the font size correctly?
+    - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
 
-### Music (WMA / other)
+### Game Loop
 
-- Convert WMA to OGG
-- Load OGG files
-- Add support for [playing OGG files](https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/)
+- Use high-precision timers instead of `SDL_Delay`
 
 ### Music (MIDI)
 
 - Defer loading MIDI files until needed to speed up initial load time
 - Use high-precision timers for MIDI playback
 
-### Fonts
+### Optimisation
 
-- How do we calculate the font size correctly?
-    - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
+- Only mouse-pick objects that were rendered last frame
+- Static objects (e.g. mountains) need not use an AnimationComponent
+- Differentiate between components that need to be ticked and those that don't
+- Scenario should maintain a list of entities as well as a map, instead of rebuilding the list whenever it's needed
+- Hitbox buffers should not need to be recreated every tick
+- EntityFactory should use maps instead of switch statements
+
+### Refactoring
+
+- Use some kind of "magic enum" library for enum-to-string functionality
+- Prefer default member initialization to initializer lists
+- Don't use `const` or references for member variables?
+    - Should Resources always be `const` (e.g. when using `app.getResources()`)?
+- Sort source files into subfolders?
+- Remove BinaryFileReader in favour of FileUtils::readBinaryFile
+    - Add a new class that can read the buffer and maintain some offset
+- Use a common file reading mechanism in audio-extractor
+- Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
+- Avoid static methods
+    - Use a namespace for public methods
+    - Put private methods in a `.cpp` file
+- Improve error handling (ensures, etc.)
+    - Pointer access and map access is fragile
+- Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities
+- Use vectors in MousePicker instead of separate x/y variables
+- Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
+- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
+- Replace `Resources::get*Spritesheet` with a generic method that takes an enum parameter
+- Create a CursorRenderer to hold all the cursor rendering logic
+- Reduce duplication between Unit/BuildingAnimationComponent
+- Reduce duplication between Unit/BuildingDef
+
+### Rendering
+
+- Framebuffer size calculations should use RenderUtils
+- Extract common code from SpriteRenderable and AtlasRenderable
+- Use string constants to access images within a texture atlas
+- Font shader could accept 2d vertices since z is always 0
+- Some vertex/index data can be made into constants instead of member variables
+    - Even the menu view-projection matrix can probably be reused each frame
+- In debug mode, check `programId` is non-zero when using a shader
+- Rendering code is super messy
+    - Create a utility method to construct a vertex array from x1,x2,y1,y2,z positions
+    - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code
 
 ### ScenarioReader
 
@@ -320,52 +356,13 @@
         auto scenario = buildScenario(scenario_desc);
     - These could live inside a common namespace (e.g. ScenarioUtils)
 
-### Rendering
+### Sound
 
-- Improve palette generation
-    - Separate team colors into their own arrays
-    - Build a palette for each team color dynamically
-    - Render units using their correct colors (unit colors, not team colors!)
-- Framebuffer size calculations should use RenderUtils
-- Extract common code from SpriteRenderable and AtlasRenderable
-- Use string constants to access images within a texture atlas
-- Font shader could accept 2d vertices since z is always 0
+- Initialise 'n' sound sources up-front, and find the next available one when playing a sound
+- Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
+- Delete all sound sources / buffers when exiting
 
-### Optimisation
-
-- Only mouse-pick objects that were rendered last frame
-- Static objects (e.g. mountains) need not use an AnimationComponent
-- Differentiate between components that need to be ticked and those that don't
-- Scenario should maintain a list of entities as well as the map, instead of rebuilding the list whenever it's needed
-- Hitbox buffers should not need to be recreated every tick
-
-### Refactoring
+### UI
 
 - UI rendering is a total mess
     - Create a hierarchical UiElement class
-- Use some kind of "magic enum" library for enum-to-string functionality
-- Prefer default member initialization to initializer lists
-- Don't use `const` or references for member variables?
-    - Should Resources always be `const` (e.g. when using `app.getResources()`)?
-- Add "DEBUG" macro variable that performs additional checks if set
-    - Ensure `programId` is non-zero when using a shader
-- Sort source files into subfolders?
-- Remove BinaryFileReader in favour of FileUtils::readBinaryFile
-    - Add a new class that can read the buffer and maintain some offset
-- Use a common file reading mechanism in audio-extractor
-- Use RAII to handle setting / resetting of OpenGL flags (see GLUtils::PackAlignment)
-- Avoid static methods
-    - Use a namespace for public methods
-    - Put private methods in a `.cpp` file
-- EntityFactory should use maps instead of switch statements
-- Improve error handling (ensures, etc.)
-    - Pointer access and map access is fragile
-- Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities
-- Use vectors in MousePicker instead of separate x/y variables
-- Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
-- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
-- Replace `Resources::get*Spritesheet` with a generic method that takes an enum parameter
-- Rendering code is super messy
-    - Create a utility method to construct a vertex array from x1,x2,y1,y2,z positions
-    - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code
-- Create a CursorRenderer to hold all the cursor rendering logic
