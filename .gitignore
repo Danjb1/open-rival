@@ -51,6 +51,7 @@ SORR.BLD
 /dist/setup
 /dist/Open-Rival.exe
 /dist/setup.exe
+/dist/*.zip
 
 # Other
 /misc
