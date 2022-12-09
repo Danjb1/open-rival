@@ -159,9 +159,9 @@ void GameState::keyUp(const SDL_Keycode keyCode)
     }
 }
 
-void GameState::mouseDown(const SDL_MouseButtonEvent)
+void GameState::mouseDown(const SDL_MouseButtonEvent evt)
 {
-    mousePicker.mouseDown();
+    mousePicker.mouseDown(evt.button);
 }
 
 void GameState::mouseUp(const SDL_MouseButtonEvent evt)

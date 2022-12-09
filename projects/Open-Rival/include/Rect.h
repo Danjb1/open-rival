@@ -12,6 +12,7 @@ public:
 
     bool contains(int x, int y) const;
     bool contains(float x, float y) const;
+    bool intersects(Rect other) const;
 
 public:
     float x = 0.f;

@@ -11,7 +11,9 @@ namespace Rival {
 
 CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
-    const auto selectedEntity = playerContext.weakSelectedEntity.lock();
+    // We only care about 1 of the selected Entities, doesn't matter which
+    const auto selectedEntity =
+            playerContext.weakSelectedEntities.empty() ? nullptr : playerContext.weakSelectedEntities[0].lock();
     const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();
 
     if (entityUnderMouse)

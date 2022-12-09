@@ -54,6 +54,9 @@ private:
     // Determines the speed of the cursor animation
     static constexpr int msPerCursorFrame = 60;
 
+    // TMP: Portrait to show when multiple units are selected
+    static constexpr int multiSelectionPortraitId = 108;
+
     const PlayerStore& playerStore;
     const TextureStore& textureStore;
     const Window& window;

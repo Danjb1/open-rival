@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Entity.h"
+#include "EntityUtils.h"
 #include "MapUtils.h"
 
 namespace Rival {
@@ -14,7 +15,7 @@ struct PlayerContext
 {
     MapNode tileUnderMouse { -1, -1 };
     std::weak_ptr<Entity> weakEntityUnderMouse;
-    std::weak_ptr<Entity> weakSelectedEntity;
+    WeakMutableEntityList weakSelectedEntities;
 };
 
 }  // namespace Rival

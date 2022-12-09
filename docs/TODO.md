@@ -1,14 +1,15 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-### Movement Milestone
+### Next Up...
 <!----------------------------------------------------------------------------->
 
-- Drag-select
-- Build and release!
-    - Document known issues
-    - Setup programs may be broken by recent dependency changes
-    - Setup program should log output to a file (run the script via a BAT file?)
+- Display a rectangle while drag-select is active
+- Flying units need a higher z-position so that they appear on top of units below them
+- Tiles covered by the map border should not be passable
+- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
+- Zooming in does not zoom towards the cursor as much as it should
+- Allow buildings to be selected
 
 <!----------------------------------------------------------------------------->
 ### Multiplayer Milestone
@@ -27,12 +28,7 @@
 <!----------------------------------------------------------------------------->
 
 - Game will crash if no config file exists
-- Clicking in the UI will still move the selected unit (to the last valid mouse position)
-- Zooming in does not zoom towards the cursor as much as it should
-- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
-- Tiles covered by the map border should not be passable
 - Some animations need attention (e.g. Snake)
-- Flying units need a higher z-position so that they appear on top of units below them
 
 <!----------------------------------------------------------------------------->
 ## Features

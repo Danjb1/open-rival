@@ -4,7 +4,9 @@
 
 #include "SDLWrapper.h"
 
+#include <algorithm>  // min, max
 #include <cstdint>
+#include <cstdlib>  // abs
 #include <iostream>
 
 #include "Camera.h"
@@ -14,12 +16,21 @@
 #include "MathUtils.h"
 #include "MouseHandlerComponent.h"
 #include "MouseUtils.h"
+#include "OwnerComponent.h"
 #include "PlayerContext.h"
 #include "PlayerState.h"
 #include "Rect.h"
 #include "World.h"
 
 namespace Rival {
+
+void DragSelect::reset()
+{
+    startX = -1;
+    startY = -1;
+    endX = -1;
+    endY = -1;
+}
 
 MousePicker::MousePicker(
         Camera& camera,
@@ -39,19 +50,61 @@ MousePicker::MousePicker(
 {
 }
 
-void MousePicker::mouseDown()
+void MousePicker::mouseDown(std::uint8_t button)
 {
-    // TODO: Initiate drag-select
+    if (button != SDL_BUTTON_LEFT)
+    {
+        return;
+    }
+
+    // Get the mouse position relative to the window, in pixels
+    int mouseX;
+    int mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    // Abort if the mouse is outside the viewport
+    if (!viewport.contains(mouseX, mouseY))
+    {
+        return;
+    }
+
+    // Start drag-select
+    dragSelect.startX = mouseX;
+    dragSelect.startY = mouseY;
+    dragSelect.endX = mouseX;
+    dragSelect.endY = mouseY;
 }
 
 void MousePicker::mouseUp(std::uint8_t button)
 {
     if (button == SDL_BUTTON_LEFT)
     {
-        const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();
-        if (entityUnderMouse)
+        // Drag-select
+        if (isDragSelectValid())
         {
-            entitySelected(entityUnderMouse);
+            processDragSelectArea();
+            dragSelect.reset();
+            return;
+        }
+
+        dragSelect.reset();
+
+        // Get the mouse position relative to the window, in pixels
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        // Abort if the mouse is outside the viewport
+        if (!viewport.contains(mouseX, mouseY))
+        {
+            return;
+        }
+
+        // Single click
+        if (const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock())
+        {
+            WeakMutableEntityList entityAsList = { playerContext.weakEntityUnderMouse };
+            selectEntities(entityAsList);
         }
         else
         {
@@ -70,6 +123,17 @@ void MousePicker::handleMouse()
     int mouseX;
     int mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
+
+    // Drag-select
+    if (isDragSelectActive())
+    {
+        // Don't allow the drag-select area to extend outside the viewport
+        dragSelect.endX =
+                std::clamp(mouseX, static_cast<int>(viewport.x), static_cast<int>(viewport.x + viewport.width));
+        dragSelect.endY =
+                std::clamp(mouseY, static_cast<int>(viewport.y), static_cast<int>(viewport.y + viewport.height));
+        return;
+    }
 
     // Abort if the mouse is outside the viewport
     if (!viewport.contains(mouseX, mouseY))
@@ -233,7 +297,7 @@ MapNode MousePicker::getTilePos(float mouseCameraX, float mouseCameraY)
     return { tileX, tileY };
 }
 
-std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY)
+std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY) const
 {
     // Find the camera position, in pixels
     float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
@@ -265,30 +329,125 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     return {};
 }
 
-void MousePicker::entitySelected(std::shared_ptr<Entity> entity)
+WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) const
 {
-    if (const auto mouseHandlerComponent = entity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+    WeakMutableEntityList entitiesInArea;
+
+    // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
+    const auto& entities = world.getMutableEntities();
+    for (const auto& e : entities)
     {
-        playerContext.weakSelectedEntity = entity;
-        mouseHandlerComponent->onSelect(playerStore);
+        const auto& mouseHandlerComponent = e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
+        if (!mouseHandlerComponent)
+        {
+            continue;
+        }
+
+        const auto& owner = e->getComponent<OwnerComponent>(OwnerComponent::key);
+        if (!owner || !playerStore.isLocalPlayer(owner->getPlayerId()))
+        {
+            // Only locally-owned entities can be selected by drag-select
+            continue;
+        }
+
+        const Rect& hitbox = mouseHandlerComponent->getHitbox();
+        if (area.intersects(hitbox))
+        {
+            entitiesInArea.push_back(e);
+        }
+    }
+
+    return entitiesInArea;
+}
+
+void MousePicker::selectEntities(WeakMutableEntityList& entities)
+{
+    playerContext.weakSelectedEntities = entities;
+    bool isLeader = true;
+
+    for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
+    {
+        const auto& selectedEntity = weakSelectedEntity.lock();
+        if (!selectedEntity)
+        {
+            // Selected entity no longer exists (should never happen since they've just been selected!)
+            continue;
+        }
+
+        if (const auto mouseHandlerComponent =
+                    selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+        {
+            mouseHandlerComponent->onSelect(playerStore, isLeader);
+        }
+
+        // TMP: For now, the first unit in the selection is the leader
+        isLeader = false;
     }
 }
 
 void MousePicker::tileSelected()
 {
-    if (const auto selectedEntity = playerContext.weakSelectedEntity.lock())
+    bool isLeader = true;
+
+    for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
     {
-        if (const auto mouseHandlerComponent =
+        const auto& selectedEntity = weakSelectedEntity.lock();
+        if (!selectedEntity)
+        {
+            // Selected entity no longer exists
+            continue;
+        }
+
+        if (const auto& mouseHandlerComponent =
                     selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, playerContext.tileUnderMouse);
+            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, playerContext.tileUnderMouse, isLeader);
         }
+
+        // TMP: For now, the first unit in the selection is the leader
+        isLeader = false;
     }
 }
 
 void MousePicker::deselect()
 {
-    playerContext.weakSelectedEntity = {};
+    playerContext.weakSelectedEntities.clear();
+}
+
+bool MousePicker::isDragSelectActive() const
+{
+    return dragSelect.startX >= 0;
+}
+
+bool MousePicker::isDragSelectValid() const
+{
+    return std::abs(dragSelect.endX - dragSelect.startX) > minDragSelectSize  //
+            && std::abs(dragSelect.endY - dragSelect.startY) > minDragSelectSize;
+}
+
+void MousePicker::processDragSelectArea()
+{
+    // Normalize the drag-select area
+    int startX = std::min(dragSelect.startX, dragSelect.endX);
+    int startY = std::min(dragSelect.startY, dragSelect.endY);
+    int endX = std::max(dragSelect.startX, dragSelect.endX);
+    int endY = std::max(dragSelect.startY, dragSelect.endY);
+
+    // Find the camera position, in pixels
+    float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
+    float cameraY_px = RenderUtils::cameraToPx_Y(camera.getTop());
+
+    // Convert drag-select area to world units by reversing the camera transform
+    float zoom = camera.getZoom();
+    float startXWorld = (startX / zoom) + cameraX_px;
+    float startYWorld = (startY / zoom) + cameraY_px;
+    float endXWorld = (endX / zoom) + cameraX_px;
+    float endYWorld = (endY / zoom) + cameraY_px;
+
+    float width = endXWorld - startXWorld;
+    float height = endYWorld - startYWorld;
+    auto entitiesInArea = findEntitiesForDragSelect({ startXWorld, startYWorld, width, height });
+    selectEntities(entitiesInArea);
 }
 
 }  // namespace Rival
