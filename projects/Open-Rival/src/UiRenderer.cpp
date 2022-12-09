@@ -146,7 +146,13 @@ void UiRenderer::sendMainUiDataToGpu()
 
 bool UiRenderer::isInventoryVisible() const
 {
-    auto selectedEntity = playerContext.weakSelectedEntity.lock();
+    if (playerContext.weakSelectedEntities.size() != 1)
+    {
+        // We can only show the inventory if 1 exactly unit is selected
+        return false;
+    }
+
+    auto selectedEntity = playerContext.weakSelectedEntities[0].lock();
     if (!selectedEntity)
     {
         return false;
@@ -225,7 +231,19 @@ void UiRenderer::sendPortraitDataToGpu()
 
 bool UiRenderer::isPortraitVisible(int& outPortraitId) const
 {
-    auto selectedEntity = playerContext.weakSelectedEntity.lock();
+    if (playerContext.weakSelectedEntities.empty())
+    {
+        // No selection
+        return false;
+    }
+
+    if (playerContext.weakSelectedEntities.size() > 1)
+    {
+        outPortraitId = multiSelectionPortraitId;
+        return true;
+    }
+
+    auto selectedEntity = playerContext.weakSelectedEntities[0].lock();
     if (!selectedEntity)
     {
         return false;
@@ -261,7 +279,20 @@ void UiRenderer::renderText()
 
 bool UiRenderer::isNameVisible(std::string& outName) const
 {
-    auto selectedEntity = playerContext.weakSelectedEntity.lock();
+    if (playerContext.weakSelectedEntities.empty())
+    {
+        // No selection
+        return false;
+    }
+
+    if (playerContext.weakSelectedEntities.size() > 1)
+    {
+        // TMP
+        outName = "Selection";
+        return true;
+    }
+
+    auto selectedEntity = playerContext.weakSelectedEntities[0].lock();
     if (!selectedEntity)
     {
         return false;

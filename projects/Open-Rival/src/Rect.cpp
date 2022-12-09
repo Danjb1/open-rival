@@ -36,4 +36,13 @@ bool Rect::contains(float px, float py) const
             && py < y + height;
 }
 
+bool Rect::intersects(Rect other) const
+{
+    // See: https://medium.com/@jessgillan/algorithm-practice-rectangle-intersection-7821411fd114
+    return x <= (other.x + other.width)       //
+            && (x + width) >= other.x         //
+            && y <= (other.y + other.height)  //
+            && (y + height) >= other.y;
+}
+
 }  // namespace Rival

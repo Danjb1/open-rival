@@ -30,7 +30,7 @@ public:
     EntityRenderer(const EntityRenderer&) = delete;
     EntityRenderer& operator=(const EntityRenderer&) = delete;
 
-    void render(const Camera& camera, EntityList entities, int delta) const;
+    void render(const Camera& camera, SharedEntityList entities, int delta) const;
 
     static glm::vec2 getLerpOffset(const Entity& entity, int delta);
 

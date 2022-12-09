@@ -87,9 +87,9 @@ void World::removeEntity(std::shared_ptr<Entity> entity)
     entities.erase(entity->getId());
 }
 
-const MutableEntityList World::getMutableEntities() const
+const SharedMutableEntityList World::getMutableEntities() const
 {
-    MutableEntityList entityList;
+    SharedMutableEntityList entityList;
     entityList.reserve(entities.size());
 
     for (auto const& entry : entities)
@@ -100,9 +100,9 @@ const MutableEntityList World::getMutableEntities() const
     return entityList;
 }
 
-const EntityList World::getEntities() const
+const SharedEntityList World::getEntities() const
 {
-    EntityList entityList;
+    SharedEntityList entityList;
     entityList.reserve(entities.size());
 
     for (auto const& entry : entities)

@@ -102,12 +102,12 @@ public:
     /**
      * Gets a list of all entities currently present in the world (mutable version).
      */
-    const MutableEntityList getMutableEntities() const;
+    const SharedMutableEntityList getMutableEntities() const;
 
     /**
      * Gets a list of all entities currently present in the world (read-only version).
      */
-    const EntityList getEntities() const;
+    const SharedEntityList getEntities() const;
 
     /**
      * Gets a raw pointer to the Entity with the given key (mutable version).

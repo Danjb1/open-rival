@@ -1,20 +1,33 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <utility>
 
+#include "EntityUtils.h"
 #include "MapUtils.h"
 #include "RenderUtils.h"
 
 namespace Rival {
 
 class Camera;
-class GameCommandInvoker;
 class Entity;
+class GameCommandInvoker;
 class PlayerStore;
 class Rect;
 class World;
 struct PlayerContext;
+
+struct DragSelect
+{
+    // Mouse positions during drag-select, in window co-ordinates
+    int startX = -1;
+    int startY = -1;
+    int endX = -1;
+    int endY = -1;
+
+    void reset();
+};
 
 /**
  * Class responsible for determining what is under the mouse.
@@ -32,7 +45,6 @@ struct PlayerContext;
  */
 class MousePicker
 {
-
 public:
     MousePicker(
             Camera& camera,
@@ -42,7 +54,7 @@ public:
             PlayerStore& playerStore,
             GameCommandInvoker& cmdInvoker);
 
-    void mouseDown();
+    void mouseDown(std::uint8_t button);
     void mouseUp(std::uint8_t button);
     void handleMouse();
 
@@ -52,13 +64,21 @@ private:
 
     MapNode getTilePos(float mouseWorldX, float mouseWorldY);
 
-    std::weak_ptr<Entity> findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY);
+    std::weak_ptr<Entity> findEntityUnderMouse(int mouseInViewportX, int mouseInViewportY) const;
+    WeakMutableEntityList findEntitiesForDragSelect(const Rect& area) const;
 
-    void entitySelected(std::shared_ptr<Entity> entity);
+    void selectEntities(WeakMutableEntityList& entities);
     void tileSelected();
     void deselect();
 
+    bool isDragSelectActive() const;
+    bool isDragSelectValid() const;
+    void processDragSelectArea();
+
 private:
+    /** Minimum size of one side of the drag-select area before it will be considered valid. */
+    static constexpr int minDragSelectSize = 8;
+
     World& world;
     Camera& camera;
     Rect& viewport;
@@ -68,6 +88,8 @@ private:
 
     int mapWidth;
     int mapHeight;
+
+    DragSelect dragSelect = {};
 };
 
 }  // namespace Rival

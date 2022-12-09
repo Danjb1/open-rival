@@ -72,7 +72,7 @@ bool MouseHandlerComponent::isSelectable() const
     return true;
 }
 
-void MouseHandlerComponent::onSelect(const PlayerStore& playerStore)
+void MouseHandlerComponent::onSelect(const PlayerStore& playerStore, bool isLeader)
 {
     // TODO: Depends on state and entity type
     //
@@ -84,51 +84,49 @@ void MouseHandlerComponent::onSelect(const PlayerStore& playerStore)
 
     std::cout << "Clicked on Entity " << entity->getId() << "\n";
 
-    // Play a sound if the unit belongs to the local player
-    if (const auto ownerComponent = weakOwnerComponent.lock())
+    // Check owner
+    const auto ownerComponent = weakOwnerComponent.lock();
+    if (!ownerComponent || !playerStore.isLocalPlayer(ownerComponent->getPlayerId()))
     {
-        int playerId = ownerComponent->getPlayerId();
-        if (playerStore.isLocalPlayer(playerId))
-        {
-            const auto voiceComponent = weakVoiceComponent.lock();
-            if (voiceComponent)
-            {
-                voiceComponent->playSound(UnitSoundType::Select);
-            }
-        }
+        // Other players' units cannot be controlled
+        return;
     }
 
-    /*
-    UnitPropsComponent* unitProps = entity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
-    if (unitProps)
+    // Leader should play a sound
+    if (isLeader)
     {
-        Unit::Type unitType = unitProps->getUnitType();
-        std::cout << "Entity type = " << static_cast<int>(unitType) << "\n";
+        const auto voiceComponent = weakVoiceComponent.lock();
+        if (voiceComponent)
+        {
+            voiceComponent->playSound(UnitSoundType::Select);
+        }
     }
-    */
 }
 
 void MouseHandlerComponent::onTileClicked(
-        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tile)
+        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tile, bool isLeader)
 {
     // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
     // TODO: What about when a group is selected?
 
-    if (const auto ownerComponent = weakOwnerComponent.lock())
+    // Check owner
+    const auto ownerComponent = weakOwnerComponent.lock();
+    if (!ownerComponent || !playerStore.isLocalPlayer(ownerComponent->getPlayerId()))
     {
-        int playerId = ownerComponent->getPlayerId();
-        if (!playerStore.isLocalPlayer(playerId))
-        {
-            // Other players' units cannot be controlled
-            return;
-        }
+        // Other players' units cannot be controlled
+        return;
     }
 
+    // Move to tile
     if (auto moveComponent = weakMovementComponent.lock())
     {
-        if (const auto voiceComponent = weakVoiceComponent.lock())
+        if (isLeader)
         {
-            voiceComponent->playSound(UnitSoundType::Move);
+            // Leader should play a sound
+            if (const auto voiceComponent = weakVoiceComponent.lock())
+            {
+                voiceComponent->playSound(UnitSoundType::Move);
+            }
         }
 
         cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entity->getId(), tile));

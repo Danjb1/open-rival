@@ -50,12 +50,13 @@ public:
     /**
      * Called when this Entity is selected.
      */
-    void onSelect(const PlayerStore& playerStore);
+    void onSelect(const PlayerStore& playerStore, bool isLeader);
 
     /**
      * Called when a tile is clicked, with this Entity selected.
      */
-    void onTileClicked(GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tilePos);
+    void onTileClicked(
+            GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tilePos, bool isLeader);
 
 private:
     const Rect createHitbox() const;

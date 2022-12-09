@@ -33,7 +33,7 @@ EntityRenderer::EntityRenderer(const TextureStore& textureStore, const PlayerCon
 {
 }
 
-void EntityRenderer::render(const Camera& camera, EntityList entities, int delta) const
+void EntityRenderer::render(const Camera& camera, SharedEntityList entities, int delta) const
 {
     for (auto const& e : entities)
     {
