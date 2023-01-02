@@ -76,11 +76,12 @@ private:
 // End of classes
 ///////////////////////////////////////////////////////////////////////////////
 
-void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode);
+void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir);
 
 void readPalette(Palette::Palette& palette, const std::string filename);
 
-std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode);
+std::vector<NamedImage>
+readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding);
 
 void createTextureAtlas(
         const std::string& imageDir,
@@ -92,6 +93,7 @@ void createSpritesheetTexture(
         const std::string& imageDir,
         fs::path definitionFilename,
         const std::vector<NamedImage>& sprites,
-        const Palette::Palette& palette);
+        const Palette::Palette& palette,
+        int padding);
 
 }}  // namespace Rival::Setup

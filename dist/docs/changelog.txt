@@ -2,6 +2,9 @@
 Changelog
 ================================================================================
 
+v0.3.0
+- Fix texture bleeding at some zoom levels
+
 v0.2.0 (Movement demo)
 - Game now loads a level from a config file
 - Added MIDI playback

@@ -19,7 +19,7 @@ namespace fs = std::filesystem;
 namespace Rival { namespace Setup {
 
 // A border between images prevents texture bleeding
-const int borderSize = 1;  // px
+const int atlasPadding = 1;  // px
 
 const int maxTextureSize = 2048;
 
@@ -80,8 +80,8 @@ TextureAtlasBuilder::TextureAtlasBuilder()
 void TextureAtlasBuilder::addImage(const NamedImage& namedImage)
 {
     // Add some padding around the image
-    int imageWidth = namedImage.image.getWidth() + 2 * borderSize;
-    int imageHeight = namedImage.image.getHeight() + 2 * borderSize;
+    int imageWidth = namedImage.image.getWidth() + 2 * atlasPadding;
+    int imageHeight = namedImage.image.getHeight() + 2 * atlasPadding;
 
     // Store this image by its key for later retrieval
     imagesByKey.insert(std::make_pair(namedImage.name, &namedImage));
@@ -246,14 +246,15 @@ void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
         const std::string& key = kv.first;
         const Rect& target = kv.second;
         const Image& img = builder.imagesByKey.at(key)->image;
-        atlasFile << key << " " << target.x + borderSize << " " << target.y + borderSize << " "
-                  << target.width - (2 * borderSize) << " " << target.height - (2 * borderSize) << "\n";
+        atlasFile << key << " " << target.x + atlasPadding << " " << target.y + atlasPadding << " "
+                  << target.width - (2 * atlasPadding) << " " << target.height - (2 * atlasPadding) << "\n";
     }
 
     atlasFile.close();
 }
 
-std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir, fs::path path, bool atlasMode)
+std::vector<NamedImage>
+readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding)
 {
     std::ifstream file(path);
     std::string line;
@@ -262,6 +263,28 @@ std::vector<NamedImage> readImagesFromDefinitionFile(const std::string& imageDir
     int spriteHeight = -1;
 
     std::vector<NamedImage> sprites;
+
+    // Read metadata
+    bool atlasMode = false;
+    int padding = 0;
+    std::getline(file, line);
+    if (line == "atlas")
+    {
+        atlasMode = true;
+    }
+    else if (line.rfind("spritesheet", 0) == 0)
+    {
+        auto pos = line.find(" ", 0);
+        if (pos != std::string::npos)
+        {
+            line.erase(0, pos);
+            padding = std::stoi(line);
+        }
+    }
+
+    // Pass metadata values back to the caller
+    outAtlasMode = atlasMode;
+    outPadding = padding;
 
     // Load all sprites from the definition file
     while (std::getline(file, line))
@@ -339,7 +362,7 @@ void createTextureAtlas(
         const Rect& target = kv.second;
         const Image& img = builder.imagesByKey.at(key)->image;
         std::cout << "Copying " << key << " to " << target.x << ", " << target.y << "\n";
-        Image::copyImage(img, texture, target.x + borderSize, target.y + borderSize);
+        Image::copyImage(img, texture, target.x + atlasPadding, target.y + atlasPadding);
     }
 
     // Save the final texture
@@ -355,17 +378,16 @@ void createSpritesheetTexture(
         const std::string& outputDir,
         fs::path definitionFilename,
         const std::vector<NamedImage>& sprites,
-        const Palette::Palette& palette)
+        const Palette::Palette& palette,
+        int padding)
 {
     // For a spritesheet, all images are the same size
     const Image& anySprite = sprites[0].image;
     int spriteWidth = anySprite.getWidth();
     int spriteHeight = anySprite.getHeight();
 
-    // We need the sprites to be powers of 2 so that they fill the texture width exactly.
-    // Most sprites are already powers of 2 so this will have no effect.
-    int paddedSpriteWidth = MathUtils::nextPowerOf2(spriteWidth);
-    int paddedSpriteHeight = MathUtils::nextPowerOf2(spriteHeight);
+    int paddedSpriteWidth = spriteWidth + 2 * padding;
+    int paddedSpriteHeight = spriteHeight + 2 * padding;
 
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
@@ -408,12 +430,14 @@ void createSpritesheetTexture(
     for (auto const& namedImage : sprites)
     {
         const Image& sprite = namedImage.image;
-        Image::copyImage(sprite, texture, x, y);
+        Image::copyImage(sprite, texture, x + padding, y + padding);
 
         x += paddedSpriteWidth;
 
-        if (x >= texture.getWidth())
+        int remainingWidth = texture.getWidth() - x;
+        if (remainingWidth < paddedSpriteWidth)
         {
+            // Start a new row
             x = 0;
             y += paddedSpriteHeight;
         }
@@ -424,7 +448,7 @@ void createSpritesheetTexture(
     writeImage(texture, palette, filename);
 }
 
-void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir, bool atlasMode)
+void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir)
 {
     // Process each definition file in the given directory
     for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir))
@@ -440,7 +464,9 @@ void buildTextures(std::string definitionsDir, std::string imageDir, std::string
             std::cout << "Processing: " << path.filename() << "\n";
 
             // Read images
-            std::vector<NamedImage> images = readImagesFromDefinitionFile(imageDir, path, atlasMode);
+            bool atlasMode = false;
+            int padding = 0;
+            std::vector<NamedImage> images = readDefinitionFile(imageDir, path, /* out */ atlasMode, /* out */ padding);
 
             // Read palette from the first image
             Palette::Palette palette { 0 };
@@ -453,7 +479,7 @@ void buildTextures(std::string definitionsDir, std::string imageDir, std::string
             }
             else
             {
-                createSpritesheetTexture(outputDir, path.filename(), images, palette);
+                createSpritesheetTexture(outputDir, path.filename(), images, palette, padding);
             }
         }
         catch (const std::runtime_error& e)

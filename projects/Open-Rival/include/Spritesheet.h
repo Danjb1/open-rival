@@ -10,18 +10,18 @@ namespace Rival {
 class Texture;
 
 /**
- * Wrapper around a texture that defines how it divides into individual
- * images.
+ * Wrapper around a texture that defines how it divides into individual images.
  */
 class Spritesheet
 {
 
 public:
-    const Texture& texture;
-
-    Spritesheet(const Texture&, int width, int height);
+    Spritesheet(const Texture&, int width, int height, int padding);
 
     const std::vector<GLfloat> getTexCoords(int index) const;
+
+public:
+    const Texture& texture;
 
 private:
     // Width of one image within the texture
@@ -29,6 +29,9 @@ private:
 
     // Height of one image within the texture
     const int height;
+
+    // Padding around each image within the texture
+    const int padding;
 
     // Width of one image - plus its padding - within the texture
     const int paddedWidth;
