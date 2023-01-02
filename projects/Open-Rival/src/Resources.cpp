@@ -232,7 +232,7 @@ std::unordered_map<Building::Type, Spritesheet> Resources::initBuildingSpriteshe
                     std::piecewise_construct,
                     std::forward_as_tuple(static_cast<Building::Type>(it)),
                     std::forward_as_tuple(
-                            textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx));
+                            textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
         }
     };
 
@@ -247,7 +247,6 @@ std::unordered_map<Building::Type, Spritesheet> Resources::initBuildingSpriteshe
 
 std::unordered_map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
 {
-
     std::unordered_map<Unit::Type, Spritesheet> spritesheets;
     int nextIndex = txIndexUnits;
 
@@ -256,7 +255,8 @@ std::unordered_map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
         spritesheets.emplace(
                 std::piecewise_construct,
                 std::forward_as_tuple(static_cast<Unit::Type>(it)),
-                std::forward_as_tuple(textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx));
+                std::forward_as_tuple(
+                        textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
         nextIndex++;
     }
 
@@ -272,7 +272,7 @@ std::vector<Spritesheet> Resources::initTileSpritesheets()
     // 2 = Fog
     for (int i = txIndexTiles; i < txIndexTiles + 3; i++)
     {
-        spritesheets.emplace_back(textures.at(i), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
+        spritesheets.emplace_back(textures.at(i), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx, 1);
     }
 
     return spritesheets;
@@ -287,7 +287,7 @@ std::vector<Spritesheet> Resources::initObjectSpritesheets()
     // 2 = Wilderness
     for (int i = txIndexObjects; i < txIndexObjects + 3; i++)
     {
-        spritesheets.emplace_back(textures.at(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx);
+        spritesheets.emplace_back(textures.at(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0);
     }
 
     return spritesheets;
@@ -295,7 +295,8 @@ std::vector<Spritesheet> Resources::initObjectSpritesheets()
 
 Spritesheet Resources::initMapBorderSpritesheet()
 {
-    return Spritesheet(textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx);
+    return Spritesheet(
+            textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx, 1);
 }
 
 Spritesheet Resources::initCursorSpritesheet()
@@ -303,7 +304,8 @@ Spritesheet Resources::initCursorSpritesheet()
     return Spritesheet(
             textures.at(txIndexCursors),
             static_cast<int>(RenderUtils::cursorWidthPx),
-            static_cast<int>(RenderUtils::cursorHeightPx));
+            static_cast<int>(RenderUtils::cursorHeightPx),
+            0);
 }
 
 Spritesheet Resources::initPortraitSpritesheet()
@@ -311,12 +313,14 @@ Spritesheet Resources::initPortraitSpritesheet()
     return Spritesheet(
             textures.at(txIndexPortraits),
             static_cast<int>(GameInterface::portrait.width),
-            static_cast<int>(GameInterface::portrait.height));
+            static_cast<int>(GameInterface::portrait.height),
+            1);
 }
 
 Spritesheet Resources::initHitboxSpritesheet()
 {
-    return Spritesheet(textures.at(txIndexHitbox), RenderUtils::hitboxSpriteWidthPx, RenderUtils::hitboxSpriteHeightPx);
+    return Spritesheet(
+            textures.at(txIndexHitbox), RenderUtils::hitboxSpriteWidthPx, RenderUtils::hitboxSpriteHeightPx, 0);
 }
 
 std::vector<WaveFile> Resources::initSounds()

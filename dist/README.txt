@@ -24,6 +24,10 @@ Contents
 1. Getting Started
 ================================================================================
 
+--------------------------------------------------------------------------------
+Setup
+--------------------------------------------------------------------------------
+
 The assets are not provided, and must be extracted from the original game.
 
 Run `setup.exe` to perform this extraction.
@@ -33,6 +37,16 @@ can also specify the game directory manually by running from the command line,
 e.g.
 
     setup.exe -d "C:\rivalrealms"
+
+--------------------------------------------------------------------------------
+Fonts
+--------------------------------------------------------------------------------
+
+TODO
+
+--------------------------------------------------------------------------------
+Playing the Game
+--------------------------------------------------------------------------------
 
 Once setup is complete, launch `Open-Rival.exe` to run the game!
 
@@ -83,6 +97,9 @@ Fonts
 
     An array of directories that should be searched when looking for font files.
     They will be searched in the order listed.
+
+    By default, the examples directories shown here are used (adapted to your
+    user).
 
     Example:
 

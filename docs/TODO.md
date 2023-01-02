@@ -4,16 +4,25 @@
 ### Next Up...
 <!----------------------------------------------------------------------------->
 
+Tests:
+
 - Test project fails to build :(
     - Write a tool to automatically generate `Open-Rival-test.proj`
         - Copy all includes from Open-Rival
         - Copy all source files from Open-Rival (except those we have stubbed)
 
-- Display a rectangle while drag-select is active
+Bugs:
+
+- Sometimes units that were part of a drag-select can no longer be selected
+- "Vehicles" should not have an inventory
+- Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
-- Zooming in does not zoom towards the cursor as much as it should
+
+Features:
+
+- Display a rectangle while drag-select is active
 - Selected units should flash orange
 - Allow buildings to be selected
 

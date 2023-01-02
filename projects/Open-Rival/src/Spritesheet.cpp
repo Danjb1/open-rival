@@ -7,12 +7,13 @@
 
 namespace Rival {
 
-Spritesheet::Spritesheet(const Texture& texture, int width, int height)
+Spritesheet::Spritesheet(const Texture& texture, int width, int height, int padding)
     : texture(texture)
     , width(width)
     , height(height)
-    , paddedWidth(MathUtils::nextPowerOf2(width))
-    , paddedHeight(MathUtils::nextPowerOf2(height))
+    , padding(padding)
+    , paddedWidth(width + 2 * padding)
+    , paddedHeight(height + 2 * padding)
     , xSize(texture.getWidth() / paddedWidth)
     , ySize(texture.getHeight() / paddedHeight)
 {
@@ -25,10 +26,13 @@ const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
     const float txWidth = static_cast<float>(texture.getWidth());
     const float txHeight = static_cast<float>(texture.getHeight());
 
-    const float tx1 = x * paddedWidth / txWidth;
-    const float tx2 = (x * paddedWidth + width) / txWidth;
-    const float ty1 = y * paddedHeight / txHeight;
-    const float ty2 = (y * paddedHeight + height) / txHeight;
+    const float srcX = static_cast<float>(x * paddedWidth + padding);
+    const float srcY = static_cast<float>(y * paddedHeight + padding);
+
+    const float tx1 = srcX / txWidth;
+    const float tx2 = (srcX + width) / txWidth;
+    const float ty1 = srcY / txHeight;
+    const float ty2 = (srcY + height) / txHeight;
 
     return {
         tx1, ty1,  //
