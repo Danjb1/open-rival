@@ -4,31 +4,13 @@
 ### Next Up...
 <!----------------------------------------------------------------------------->
 
-Tests:
-
-- Test project fails to build :(
-    - Write a tool to automatically generate `Open-Rival-test.proj`
-        - Copy all includes from Open-Rival
-        - Copy all source files from Open-Rival (except those we have stubbed)
-
-Bugs:
-
-- Sometimes units that were part of a drag-select can no longer be selected
-- "Vehicles" should not have an inventory
-- Zooming in does not zoom towards the cursor as much as it should
-- Flying units need a higher z-position so that they appear on top of units below them
-- Tiles covered by the map border should not be passable
-- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
-
-Features:
+Selection:
 
 - Display a rectangle while drag-select is active
 - Selected units should flash orange
 - Allow buildings to be selected
 
-<!----------------------------------------------------------------------------->
-### Multiplayer Milestone
-<!----------------------------------------------------------------------------->
+Multiplayer:
 
 - A dedicated server can accept multiple players
     - For now, the map and the number of players can be hardcoded
@@ -44,6 +26,22 @@ Features:
 
 - Game will crash if no config file exists
 - Some animations need attention (e.g. Snake)
+- Sometimes units that were part of a drag-select can no longer be selected
+- "Vehicles" should not have an inventory
+- Zooming in does not zoom towards the cursor as much as it should
+- Flying units need a higher z-position so that they appear on top of units below them
+- Tiles covered by the map border should not be passable
+- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
+- Units should be able to start moving into a tile if its occupant is already moving out (?)
+    - What if the occupant is slower than we are?
+- Units can walk through buildings
+
+Tests:
+
+- Test project fails to build :(
+    - Write a tool to automatically generate `Open-Rival-test.proj`
+        - Copy all includes from Open-Rival
+        - Copy all source files from Open-Rival (except those we have stubbed)
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -302,14 +300,9 @@ Features:
 - How do we calculate the font size correctly?
     - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
 
-### Game Loop
-
-- Use high-precision timers instead of `SDL_Delay`
-
 ### Music (MIDI)
 
 - Defer loading MIDI files until needed to speed up initial load time
-- Use high-precision timers for MIDI playback
 
 ### Optimisation
 

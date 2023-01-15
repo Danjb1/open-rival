@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Resources.h"
 #include "SpriteComponent.h"
-#include "TimerUtils.h"
+#include "TimeUtils.h"
 #include "Unit.h"
 #include "UnitDef.h"
 #include "World.h"
@@ -67,7 +67,7 @@ void UnitAnimationComponent::update()
         return;
     }
 
-    msPassedCurrentAnimFrame += TimerUtils::timeStepMs;
+    msPassedCurrentAnimFrame += TimeUtils::timeStepMs;
 
     int msPerAnimFrame = getMsPerAnimFrame();
     if (msPassedCurrentAnimFrame >= msPerAnimFrame)

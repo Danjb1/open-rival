@@ -3,7 +3,7 @@
 #include "MovementComponent.h"
 
 #include "Entity.h"
-#include "TimerUtils.h"
+#include "TimeUtils.h"
 #include "World.h"
 
 namespace Rival {
@@ -94,7 +94,7 @@ void MovementComponent::setRoute(Pathfinding::Route newRoute)
 
 void MovementComponent::updateMovement()
 {
-    movement.timeElapsed += TimerUtils::timeStepMs;
+    movement.timeElapsed += TimeUtils::timeStepMs;
 
     if (movement.isFinished())
     {
@@ -126,7 +126,7 @@ bool MovementComponent::prepareNextMovement()
 
     // Configure the new movement
     movement.destination = route.pop();
-    movement.timeRequired = ticksPerMove * TimerUtils::timeStepMs;
+    movement.timeRequired = ticksPerMove * TimeUtils::timeStepMs;
 
     // Horizontal movements should take longer because the distance is greater
     Facing facing = MapUtils::getDir(entity->getPos(), movement.destination);

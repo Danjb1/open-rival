@@ -80,6 +80,7 @@
     <ClCompile Include="src\GameState.cpp" />
     <ClCompile Include="src\SeafarerComponent.cpp" />
     <ClCompile Include="src\Sounds.cpp" />
+    <ClCompile Include="src\TimeUtils.cpp" />
     <ClCompile Include="src\UnitDef.cpp" />
     <ClCompile Include="src\VoiceComponent.cpp" />
     <ClCompile Include="src\World.cpp" />
@@ -87,7 +88,6 @@
     <ClCompile Include="src\ScenarioReader.cpp" />
     <ClCompile Include="src\Shaders.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
-    <ClCompile Include="src\SleepUtils.cpp" />
     <ClCompile Include="src\SoundSource.cpp" />
     <ClCompile Include="src\SpriteComponent.cpp" />
     <ClCompile Include="src\Spritesheet.cpp" />
@@ -173,6 +173,7 @@
     <ClInclude Include="include\SDLWrapper.h" />
     <ClInclude Include="include\SeafarerComponent.h" />
     <ClInclude Include="include\Sounds.h" />
+    <ClInclude Include="include\TimeUtils.h" />
     <ClInclude Include="include\UnitDef.h" />
     <ClInclude Include="include\VoiceComponent.h" />
     <ClInclude Include="include\World.h" />
@@ -181,7 +182,6 @@
     <ClInclude Include="include\ScenarioReader.h" />
     <ClInclude Include="include\Shaders.h" />
     <ClInclude Include="include\ShaderUtils.h" />
-    <ClInclude Include="include\SleepUtils.h" />
     <ClInclude Include="include\SoundSource.h" />
     <ClInclude Include="include\SpriteComponent.h" />
     <ClInclude Include="include\Spritesheet.h" />
@@ -195,7 +195,6 @@
     <ClInclude Include="include\TextureAtlas.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\TileRenderer.h" />
-    <ClInclude Include="include\TimerUtils.h" />
     <ClInclude Include="include\UiRenderer.h" />
     <ClInclude Include="include\Unit.h" />
     <ClInclude Include="include\UnitAnimationComponent.h" />
@@ -214,6 +213,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\icons\rival.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\platform\unix\UnixTimeUtils.cpp" />
+    <ClCompile Include="src\platform\win32\WindowsTimeUtils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

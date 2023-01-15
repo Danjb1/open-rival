@@ -39,7 +39,6 @@ Note that the project is set up for **32-bit x86 platforms**.
     - A Visual Studio project is [supplied](Open-Rival/libs/rtmidi-5.0.0) for this purpose
     - See [this guide](https://www.music.mcgill.ca/~gary/rtmidi/index.html#compiling) for more information on compiling the library
         - On Windows, this requires the `__WINDOWS_MM__` preprocessor definition and the `winmm.lib` library
-- On Windows, this uses the built-in [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 
 #### [SDL2](https://www.libsdl.org/download-2.0.php)
 
@@ -50,6 +49,11 @@ Note that the project is set up for **32-bit x86 platforms**.
 
 - **Used for:** PNG image loading
 - [Install guide](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/windows/msvc2019/index.php)
+
+#### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
+
+- **Used for:** High-precision timers, MIDI playback
+- This library is included by default on Windows machines
 
 ### Directory Structure
 

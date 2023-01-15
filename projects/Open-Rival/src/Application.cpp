@@ -5,7 +5,7 @@
 #include "SDLWrapper.h"
 
 #include "ConfigUtils.h"
-#include "TimerUtils.h"
+#include "TimeUtils.h"
 
 namespace Rival {
 
@@ -36,12 +36,13 @@ void Application::start(std::unique_ptr<State> initialState)
 {
     setState(std::move(initialState));
 
-    Uint32 nextUpdateDue = SDL_GetTicks();
+    // Create a high-precision timer
+    TimeUtils::PrecisionTimer timer;
 
     // Game loop
+    Uint32 nextUpdateDue = SDL_GetTicks();
     while (!exiting)
     {
-
         // Switch to the next State, if set
         if (nextState.get())
         {
@@ -75,7 +76,7 @@ void Application::start(std::unique_ptr<State> initialState)
             while (nextUpdateDue <= frameStartTime)
             {
                 state->update();
-                nextUpdateDue += TimerUtils::timeStepMs;
+                nextUpdateDue += TimeUtils::timeStepMs;
             }
 
             // Calculate our delta time for rendering. This is the number of
@@ -83,7 +84,7 @@ void Application::start(std::unique_ptr<State> initialState)
             // updated. This enables us to accurately extrapolate unit
             // positions between logical movements.
             Uint32 now = SDL_GetTicks();
-            Uint32 lastUpdate = nextUpdateDue - TimerUtils::timeStepMs;
+            Uint32 lastUpdate = nextUpdateDue - TimeUtils::timeStepMs;
             Uint32 delta = now - lastUpdate;
 
             // Render the game, once per iteration. With vsync enabled, this
@@ -104,7 +105,7 @@ void Application::start(std::unique_ptr<State> initialState)
             Uint32 sleepTime = nextUpdateDue - frameStartTime;
             if (sleepTime >= minSleepTime)
             {
-                SDL_Delay(sleepTime);
+                timer.wait(sleepTime);
             }
         }
     }

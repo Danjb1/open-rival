@@ -47,6 +47,15 @@
     <Filter Include="Source Files\commands">
       <UniqueIdentifier>{7da6f1ed-7b51-43fa-8772-661c1c69311f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\platform">
+      <UniqueIdentifier>{be1d1fec-356b-4a16-acab-f83db883fd30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\platform\unix">
+      <UniqueIdentifier>{e899cd0d-3185-4a32-92f8-5e65ed04f9d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\platform\win32">
+      <UniqueIdentifier>{26165829-cd84-4782-989e-4ae76ab112f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -199,9 +208,6 @@
     <ClCompile Include="src\SoundSource.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\SleepUtils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\FileUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -313,6 +319,15 @@
     <ClCompile Include="src\SeafarerComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
+    <ClCompile Include="src\TimeUtils.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\win32\WindowsTimeUtils.cpp">
+      <Filter>Source Files\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\unix\UnixTimeUtils.cpp">
+      <Filter>Source Files\platform\unix</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -371,9 +386,6 @@
     </ClInclude>
     <ClInclude Include="include\Race.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TimerUtils.h">
-      <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\Building.h">
       <Filter>Source Files</Filter>
@@ -473,9 +485,6 @@
     </ClInclude>
     <ClInclude Include="include\SoundSource.h">
       <Filter>Source Files\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SleepUtils.h">
-      <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\FileUtils.h">
       <Filter>Source Files\utils</Filter>
@@ -602,6 +611,9 @@
     </ClInclude>
     <ClInclude Include="include\SeafarerComponent.h">
       <Filter>Source Files\entity-components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TimeUtils.h">
+      <Filter>Source Files\platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
