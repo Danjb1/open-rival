@@ -52,7 +52,7 @@ public:
      * Updates the logic.
      *
      * It is assumed that a fixed amount of time has elapsed between calls
-     * to this method, equal to TimerUtils::timeStepMs.
+     * to this method, equal to TimeUtils::timeStepMs.
      */
     virtual void update() = 0;
 

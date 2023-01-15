@@ -52,21 +52,30 @@ IncludeBlocks: Regroup
 # - Adjacent includes with the same Priority are then grouped
 # - The header file directly corresponding to a .cpp file gets Priority 0
 IncludeCategories:
-  # Precompiled headers
+  # Precompiled headers ========================================================
   - Regex:           '^\"pch\.h\"'
     Priority:        -1
     SortPriority:    -20
     CaseSensitive:   true
-  # Testing framework
+  # Testing framework ==========================================================
   - Regex:           '^\"catch2\/.*\"'
     Priority:        -1
     SortPriority:    -10
     CaseSensitive:   true
-  # Libraries
+  # Windows ====================================================================
+  - Regex:           '^<windows\.h>'
+    Priority:        1
+    SortPriority:    10
+    CaseSensitive:   true
+  - Regex:           '^<winsock2\.h>'
+    Priority:        1
+    SortPriority:    11
+    CaseSensitive:   true
+  # Libraries ==================================================================
   ## SDL
   - Regex:           '^\"SDLWrapper\.h\"'
     Priority:        1
-    SortPriority:    10
+    SortPriority:    20
     CaseSensitive:   true
   - Regex:           '^<SDL.*>'
     Priority:        1
@@ -75,38 +84,38 @@ IncludeCategories:
   ## GL
   - Regex:           '^<glm?\/.+>'
     Priority:        1
-    SortPriority:    20
+    SortPriority:    30
     CaseSensitive:   true
   ## Freetype
   - Regex:           '^<freetype\/.+>'
     Priority:        1
-    SortPriority:    30
+    SortPriority:    40
     CaseSensitive:   true
   - Regex:           '^<ft2build\.h>'
     Priority:        1
-    SortPriority:    31
+    SortPriority:    41
     CaseSensitive:   true
   - Regex:           '^FT_FREETYPE_H'
     Priority:        1
-    SortPriority:    32
+    SortPriority:    42
     CaseSensitive:   true
   ## RtMidi
   - Regex:           '^<RtMidi\.h>'
     Priority:        1
-    SortPriority:    40
+    SortPriority:    50
   ## json
   - Regex:           '^<nlohmann\/.+>'
     Priority:        1
-    SortPriority:    50
-  # C system headers
+    SortPriority:    60
+  # C system headers ===========================================================
   - Regex:           '^<.+\.h>'
     Priority:        2
     SortPriority:    100
-  # C++ standard library headers
+  # C++ standard library headers ===============================================
   - Regex:           '^<.+>'
     Priority:        3
     SortPriority:    110
-  # Project files
+  # Project files ==============================================================
   - Regex:           '^\".*\"'
     Priority:        4
     SortPriority:    120

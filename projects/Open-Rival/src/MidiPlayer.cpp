@@ -2,12 +2,13 @@
 
 #include "MidiPlayer.h"
 
+#include "SDLWrapper.h"
 #include <RtMidi.h>
 
 #include <chrono>
 #include <stdexcept>
 
-#include "SleepUtils.h"
+#include "TimeUtils.h"
 
 namespace Rival {
 
@@ -59,11 +60,13 @@ void MidiPlayer::play(MidiFile file)
 
     stopped = false;
 
-    std::chrono::milliseconds startTime =
-            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-
     const std::vector<midi_stream_event>& events = file.getEvents();
 
+    // Create a high-precision timer
+    TimeUtils::PrecisionTimer timer;
+
+    // Play the file until completion
+    Uint32 startTime = SDL_GetTicks();
     for (auto const& evt : events)
     {
         if (stopped)
@@ -89,14 +92,15 @@ void MidiPlayer::play(MidiFile file)
             message.push_back((eventValue >> 16) & 0xFF);
         }
 
+        // Calculate how long we need to wait
+        Uint32 currentTime = SDL_GetTicks();
+        Uint32 timeElapsed = currentTime - startTime;
+        int timeUntilMessage = static_cast<int>(evt.m_timestamp - timeElapsed);
+
         // Wait until the message is due
-        std::chrono::milliseconds currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch());
-        auto timeElapsed = currentTime - startTime;
-        auto timeUntilMessage = evt.m_timestamp - timeElapsed.count();
         if (timeUntilMessage > 0)
         {
-            SleepUtils::sleep(static_cast<int>(timeUntilMessage));
+            timer.wait(static_cast<Uint32>(timeUntilMessage));
         }
 
         // Send the message to our MIDI output
