@@ -11,6 +11,9 @@
 
 #include <timeapi.h>
 
+#include <chrono>
+#include <thread>
+
 namespace Rival { namespace TimeUtils {
 
 bool nanosleep(HANDLE timer, LONGLONG ns)
@@ -74,6 +77,9 @@ void PrecisionTimer::sleep(long ns)
     {
         return;
     }
+
+    // Default cross-platform sleep, if all else fails
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
 }}  // namespace Rival::TimeUtils

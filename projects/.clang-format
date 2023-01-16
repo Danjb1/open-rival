@@ -79,7 +79,7 @@ IncludeCategories:
     CaseSensitive:   true
   - Regex:           '^<SDL.*>'
     Priority:        1
-    SortPriority:    11
+    SortPriority:    21
     CaseSensitive:   true
   ## GL
   - Regex:           '^<glm?\/.+>'
@@ -116,9 +116,12 @@ IncludeCategories:
     Priority:        3
     SortPriority:    110
   # Project files ==============================================================
-  - Regex:           '^\".*\"'
+  - Regex:           '^\".*\/.*\"'
     Priority:        4
     SortPriority:    120
+  - Regex:           '^\".*\"'
+    Priority:        4
+    SortPriority:    121
 IndentCaseLabels: 'false'
 IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'

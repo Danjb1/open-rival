@@ -55,6 +55,11 @@ Note that the project is set up for **32-bit x86 platforms**.
 - **Used for:** High-precision timers, MIDI playback
 - This library is included by default on Windows machines
 
+#### [Winsock](https://learn.microsoft.com/en-us/windows/win32/winsock/about-winsock)
+
+- **Used for:** Networking
+- This library is included by default on Windows machines
+
 ### Directory Structure
 
 These dependencies should be placed in the `libs` folder like so:
@@ -114,6 +119,7 @@ SDL2.lib
 SDL2main.lib
 SDL2_image.lib
 winmm.lib
+Ws2_32.lib
 ```
 
 ### DLL Files

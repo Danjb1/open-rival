@@ -1,6 +1,5 @@
 #include "pch.h"
 
-#define SDL_MAIN_HANDLED
 #include "SDLWrapper.h"
 #include <SDL_image.h>
 #include <gl/glew.h>
@@ -13,6 +12,7 @@
 #include <unordered_map>
 #include <utility>  // std::piecewise_construct
 
+#include "net/NetUtils.h"
 #include "Application.h"
 #include "AudioUtils.h"
 #include "ConfigUtils.h"
@@ -140,6 +140,7 @@ int main()
 
         initSDL();
         initAL();
+        NetUtils::initNetworking();
 
         std::unique_ptr<Window> window = createWindow();
 

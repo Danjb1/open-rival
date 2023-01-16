@@ -56,6 +56,9 @@
     <Filter Include="Source Files\platform\win32">
       <UniqueIdentifier>{26165829-cd84-4782-989e-4ae76ab112f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{6396a8e6-a82b-4ea1-9419-d7144e1ee3e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -319,14 +322,23 @@
     <ClCompile Include="src\SeafarerComponent.cpp">
       <Filter>Source Files\entity-components</Filter>
     </ClCompile>
-    <ClCompile Include="src\TimeUtils.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
     <ClCompile Include="src\platform\win32\WindowsTimeUtils.cpp">
       <Filter>Source Files\platform\win32</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\unix\UnixTimeUtils.cpp">
       <Filter>Source Files\platform\unix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\win32\WindowsSocket.cpp">
+      <Filter>Source Files\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TimeUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\Socket.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\WindowsNetUtils.cpp">
+      <Filter>Source Files\platform\win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -613,7 +625,13 @@
       <Filter>Source Files\entity-components</Filter>
     </ClInclude>
     <ClInclude Include="include\TimeUtils.h">
-      <Filter>Source Files\platform</Filter>
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\Socket.h">
+      <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\NetUtils.h">
+      <Filter>Source Files\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
