@@ -61,6 +61,8 @@
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\MoveCommand.cpp" />
     <ClCompile Include="src\MovementComponent.cpp" />
+    <ClCompile Include="src\net\Socket.cpp" />
+    <ClCompile Include="src\net\WindowsNetUtils.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\PaletteUtils.cpp" />
@@ -71,6 +73,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\platform\win32\WindowsSocket.cpp" />
     <ClCompile Include="src\PlayerContext.cpp" />
     <ClCompile Include="src\PlayerState.cpp" />
     <ClCompile Include="src\PortraitComponent.cpp" />
@@ -155,6 +158,8 @@
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\MoveCommand.h" />
     <ClInclude Include="include\MovementComponent.h" />
+    <ClInclude Include="include\net\NetUtils.h" />
+    <ClInclude Include="include\net\Socket.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\PaletteUtils.h" />
@@ -286,7 +291,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;$(ProjectDir)libs\rtmidi-5.0.0\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -319,7 +324,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glew32.lib;glu32.lib;OpenAL32.lib;opengl32.lib;RtMidi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SDL2-2.0.14\lib\x86;$(ProjectDir)libs\SDL2_image-2.0.5\lib\x86;$(ProjectDir)libs\freetype-2.10.4\release dll\win32;$(ProjectDir)libs\glew-2.1.0\lib\Release\Win32;$(ProjectDir)libs\openal-soft-1.21.0\libs\Win32;$(ProjectDir)libs\rtmidi-5.0.0\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>

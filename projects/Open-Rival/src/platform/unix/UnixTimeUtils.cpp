@@ -8,9 +8,13 @@
 
 namespace Rival { namespace TimeUtils {
 
-void sleep(int ms)
+PrecisionTimer::PrecisionTimer() {}
+
+PrecisionTimer::~PrecisionTimer() {}
+
+void PrecisionTimer::sleep(long ns)
 {
-    usleep((unsigned long) (milliseconds * 1000.0));
+    usleep(ns);
 }
 
 }}  // namespace Rival::TimeUtils
