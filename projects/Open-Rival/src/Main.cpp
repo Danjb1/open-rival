@@ -13,6 +13,7 @@
 #include <utility>  // std::piecewise_construct
 
 #include "net/NetUtils.h"
+#include "net/Socket.h"
 #include "Application.h"
 #include "AudioUtils.h"
 #include "ConfigUtils.h"
@@ -109,6 +110,7 @@ std::unique_ptr<Window> createWindow()
 
 void exit()
 {
+    NetUtils::destroyNetworking();
     AudioUtils::destroyAL();
     SDL_Quit();
 }
@@ -140,7 +142,13 @@ int main()
 
         initSDL();
         initAL();
+
         NetUtils::initNetworking();
+        bool host = true;  // TMP
+        if (host)
+        {
+            Socket serverSocket = Socket::createServer(28039);
+        }
 
         std::unique_ptr<Window> window = createWindow();
 

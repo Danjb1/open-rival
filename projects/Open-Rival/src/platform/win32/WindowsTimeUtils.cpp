@@ -2,7 +2,9 @@
 
 #ifdef _WIN32
 
+// These comments...
 #include "TimeUtils.h"
+// ... prevent the auto-formatter from moving the include
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
