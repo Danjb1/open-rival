@@ -12,10 +12,8 @@ Selection:
 
 Multiplayer:
 
-- A dedicated server can accept multiple players
-    - For now, the map and the number of players can be hardcoded
-- Clients can connect to the dedicated server
-    - For now, the server IP can be hardcoded
+- Create standalone project to run dedicated server
+- Clients can connect to the server
 - The game should only start when all players have joined
 - Player actions are transmitted via the server
 - Players can see the movements of other players
@@ -265,6 +263,7 @@ Tests:
 - Linking against OpenAL soft binary distribution requires `/SAFESEH:NO` linker option
     - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
 - Setup program should log output to a file (run the script via a BAT file?)
+- Amend `create_file` script to support subfolders
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests

@@ -13,6 +13,7 @@
 #include <utility>  // std::piecewise_construct
 
 #include "net/NetUtils.h"
+#include "net/Server.h"
 #include "net/Socket.h"
 #include "Application.h"
 #include "AudioUtils.h"
@@ -145,9 +146,15 @@ int main()
 
         NetUtils::initNetworking();
         bool host = true;  // TMP
+        int port = 28039;
         if (host)
         {
-            Socket serverSocket = Socket::createServer(28039);
+            // Start the server
+            Server server(port, PlayerStore::maxPlayers);
+            server.start();
+
+            // Connect to the server ourselves!
+            Socket socket = Socket::createClient("localhost", port);
         }
 
         std::unique_ptr<Window> window = createWindow();
