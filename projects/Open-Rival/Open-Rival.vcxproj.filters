@@ -340,6 +340,12 @@
     <ClCompile Include="src\net\WindowsNetUtils.cpp">
       <Filter>Source Files\platform\win32</Filter>
     </ClCompile>
+    <ClCompile Include="src\net\Server.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\Connection.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -631,6 +637,12 @@
       <Filter>Source Files\net</Filter>
     </ClInclude>
     <ClInclude Include="include\net\NetUtils.h">
+      <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\Server.h">
+      <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\Connection.h">
       <Filter>Source Files\net</Filter>
     </ClInclude>
   </ItemGroup>

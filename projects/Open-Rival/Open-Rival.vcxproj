@@ -61,6 +61,8 @@
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\MoveCommand.cpp" />
     <ClCompile Include="src\MovementComponent.cpp" />
+    <ClCompile Include="src\net\Connection.cpp" />
+    <ClCompile Include="src\net\Server.cpp" />
     <ClCompile Include="src\net\Socket.cpp" />
     <ClCompile Include="src\net\WindowsNetUtils.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
@@ -158,7 +160,9 @@
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\MoveCommand.h" />
     <ClInclude Include="include\MovementComponent.h" />
+    <ClInclude Include="include\net\Connection.h" />
     <ClInclude Include="include\net\NetUtils.h" />
+    <ClInclude Include="include\net\Server.h" />
     <ClInclude Include="include\net\Socket.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
