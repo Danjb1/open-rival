@@ -4,6 +4,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -88,10 +89,11 @@ public:
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
-    static Font loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
+    static std::unique_ptr<Font>
+    loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
 
 private:
-    static Font loadFont(FT_Library& ft, std::string filename, int defaultSize);
+    static std::unique_ptr<Font> loadFont(FT_Library& ft, std::string filename, int defaultSize);
 
     static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
     static inline int makePrintable(unsigned char c);

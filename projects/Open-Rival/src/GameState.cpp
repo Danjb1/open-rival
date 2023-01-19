@@ -6,6 +6,7 @@
 #include <stdexcept>
 
 #include "Application.h"
+#include "ApplicationContext.h"
 #include "GameInterface.h"
 #include "Image.h"
 #include "InputUtils.h"
@@ -22,7 +23,7 @@ GameState::GameState(
     : State(app)
     , world(std::move(scenarioToMove))
     , playerStates(playerStates)
-    , viewport(0, 0, window.getWidth(), window.getHeight() - GameInterface::uiHeight)
+    , viewport(0, 0, window->getWidth(), window->getHeight() - GameInterface::uiHeight)
     , camera(0.0f,
              0.0f,
              RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
@@ -35,7 +36,7 @@ GameState::GameState(
 
 void GameState::onLoad()
 {
-    app.getAudioSystem().playMidi(res.getMidi(0));
+    app.getContext().getAudioSystem().playMidi(res.getMidi(0));
 }
 
 void GameState::update()

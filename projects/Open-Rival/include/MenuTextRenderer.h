@@ -14,7 +14,7 @@ namespace Rival {
 class MenuTextRenderer
 {
 public:
-    MenuTextRenderer::MenuTextRenderer(const Window& window);
+    MenuTextRenderer::MenuTextRenderer(const Window* window);
 
     void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const;
 

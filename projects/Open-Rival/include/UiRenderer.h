@@ -22,7 +22,7 @@ public:
             const PlayerStore& playerStore,
             const TextureStore& textureStore,
             const FontStore& fontStore,
-            const Window& window,
+            const Window* window,
             const PlayerContext& playerContext);
 
     void renderUi();
@@ -59,7 +59,7 @@ private:
 
     const PlayerStore& playerStore;
     const TextureStore& textureStore;
-    const Window& window;
+    const Window* window;
     const PlayerContext& playerContext;
 
     // Main UI

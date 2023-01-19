@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\ApplicationContext.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\AudioUtils.cpp" />
     <ClCompile Include="src\BinaryFileReader.cpp" />
@@ -118,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\ApplicationContext.h" />
     <ClInclude Include="include\AudioSystem.h" />
     <ClInclude Include="include\AudioUtils.h" />
     <ClInclude Include="include\BinaryFileReader.h" />

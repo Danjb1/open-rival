@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "ApplicationContext.h"
 #include "ConfigUtils.h"
 #include "FileUtils.h"
 #include "GameInterface.h"
@@ -24,34 +25,13 @@ const std::vector<std::string> Resources::defaultFontDirs = PathUtils::getDefaul
 const std::string Resources::defaultFontSmall = "serife.fon";
 const std::string Resources::defaultFontRegular = "Procopius Regular.ttf";
 
-Resources::Resources(json& cfg)
-    : cfg(cfg)
-    , freeTypeLib(initFreeType())
-    , fontSmall(initFontSmall())
-    , fontRegular(initFontRegular())
-    , textures(loadTextures())
-    , textureAtlases(loadTextureAtlases())
-    , paletteTexture(initPaletteTexture())
-    , unitSpritesheets(initUnitSpritesheets())
-    , buildingSpritesheets(initBuildingSpritesheets())
-    , tileSpritesheets(initTileSpritesheets())
-    , objectSpritesheets(initObjectSpritesheets())
-    , cursorSpritesheet(initCursorSpritesheet())
-    , mapBorderSpritesheet(initMapBorderSpritesheet())
-    , portraitSpritesheet(initPortraitSpritesheet())
-    , hitboxSpritesheet(initHitboxSpritesheet())
-    , sounds(initSounds())
-    , midis(initMidis())
-    , unitDefs(initUnitDefs())
-    , buildingDefs(initBuildingDefs())
+Resources::Resources(ApplicationContext& context)
+    : context(context)
 {
 }
 
 Resources::~Resources()
 {
-    // Clean up FreeType library
-    FT_Done_FreeType(freeTypeLib);
-
     // Delete game Textures
     for (const Texture& texture : textures)
     {
@@ -61,45 +41,58 @@ Resources::~Resources()
 
     // Delete palette Texture
     {
-        const GLuint texId = paletteTexture.getId();
+        const GLuint texId = paletteTexture->getId();
         glDeleteTextures(1, &texId);
     }
 
     // Delete Font Textures
     {
-        const GLuint texId = fontSmall.getTexture().getId();
+        const GLuint texId = fontSmall->getTexture().getId();
         glDeleteTextures(1, &texId);
     }
     {
-        const GLuint texId = fontRegular.getTexture().getId();
+        const GLuint texId = fontRegular->getTexture().getId();
         glDeleteTextures(1, &texId);
     }
 }
 
-FT_Library Resources::initFreeType()
+void Resources::init()
 {
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft))
-    {
-        throw std::runtime_error("Failed to initialize FreeType library");
-    }
-    return ft;
+    fontSmall = initFontSmall();
+    fontRegular = initFontRegular();
+    textures = loadTextures();
+    textureAtlases = loadTextureAtlases();
+    paletteTexture = initPaletteTexture();
+    unitSpritesheets = initUnitSpritesheets();
+    buildingSpritesheets = initBuildingSpritesheets();
+    tileSpritesheets = initTileSpritesheets();
+    objectSpritesheets = initObjectSpritesheets();
+    cursorSpritesheet = initCursorSpritesheet();
+    mapBorderSpritesheet = initMapBorderSpritesheet();
+    portraitSpritesheet = initPortraitSpritesheet();
+    hitboxSpritesheet = std::move(initHitboxSpritesheet());
+    sounds = initSounds();
+    midis = initMidis();
+    unitDefs = initUnitDefs();
+    buildingDefs = initBuildingDefs();
 }
 
-Font Resources::initFontSmall()
+std::unique_ptr<Font> Resources::initFontSmall()
 {
+    const json& cfg = context.getConfig();
     std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
     std::string fontName = ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
     int fontSize = ConfigUtils::get(cfg, "fontSmallSize", 32);
-    return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
+    return Font::loadFont(context.getFontLibrary(), fontDirs, fontName, fontSize);
 }
 
-Font Resources::initFontRegular()
+std::unique_ptr<Font> Resources::initFontRegular()
 {
+    const json& cfg = context.getConfig();
     std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
     std::string fontName = ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
     int fontSize = ConfigUtils::get(cfg, "fontRegularSize", 16);
-    return Font::loadFont(freeTypeLib, fontDirs, fontName, fontSize);
+    return Font::loadFont(context.getFontLibrary(), fontDirs, fontName, fontSize);
 }
 
 std::vector<Texture> Resources::loadTextures()
@@ -215,7 +208,7 @@ std::vector<TextureAtlas> Resources::loadTextureAtlases()
     return texAtlasList;
 }
 
-Texture Resources::initPaletteTexture()
+std::unique_ptr<Texture> Resources::initPaletteTexture()
 {
     return PaletteUtils::createPaletteTexture();
 }
@@ -293,33 +286,33 @@ std::vector<Spritesheet> Resources::initObjectSpritesheets()
     return spritesheets;
 }
 
-Spritesheet Resources::initMapBorderSpritesheet()
+std::unique_ptr<Spritesheet> Resources::initMapBorderSpritesheet()
 {
-    return Spritesheet(
+    return std::make_unique<Spritesheet>(
             textures.at(txIndexTiles + 3), RenderUtils::tileSpriteWidthPx, RenderUtils::tileSpriteHeightPx, 1);
 }
 
-Spritesheet Resources::initCursorSpritesheet()
+std::unique_ptr<Spritesheet> Resources::initCursorSpritesheet()
 {
-    return Spritesheet(
+    return std::make_unique<Spritesheet>(
             textures.at(txIndexCursors),
             static_cast<int>(RenderUtils::cursorWidthPx),
             static_cast<int>(RenderUtils::cursorHeightPx),
             0);
 }
 
-Spritesheet Resources::initPortraitSpritesheet()
+std::unique_ptr<Spritesheet> Resources::initPortraitSpritesheet()
 {
-    return Spritesheet(
+    return std::make_unique<Spritesheet>(
             textures.at(txIndexPortraits),
             static_cast<int>(GameInterface::portrait.width),
             static_cast<int>(GameInterface::portrait.height),
             1);
 }
 
-Spritesheet Resources::initHitboxSpritesheet()
+std::unique_ptr<Spritesheet> Resources::initHitboxSpritesheet()
 {
-    return Spritesheet(
+    return std::make_unique<Spritesheet>(
             textures.at(txIndexHitbox), RenderUtils::hitboxSpriteWidthPx, RenderUtils::hitboxSpriteHeightPx, 0);
 }
 
@@ -430,12 +423,12 @@ std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() co
 
 const Font& Resources::getFontSmall() const
 {
-    return fontSmall;
+    return *fontSmall;
 }
 
 const Font& Resources::getFontRegular() const
 {
-    return fontRegular;
+    return *fontRegular;
 }
 
 const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const
@@ -465,27 +458,27 @@ const Spritesheet& Resources::getObjectSpritesheet(bool wilderness) const
 
 const Spritesheet& Resources::getCursorSpritesheet() const
 {
-    return cursorSpritesheet;
+    return *cursorSpritesheet;
 }
 
 const Spritesheet& Resources::getMapBorderSpritesheet() const
 {
-    return mapBorderSpritesheet;
+    return *mapBorderSpritesheet;
 }
 
 const Spritesheet& Resources::getPortraitSpritesheet() const
 {
-    return portraitSpritesheet;
+    return *portraitSpritesheet;
 }
 
 const Spritesheet& Resources::getHitboxSpritesheet() const
 {
-    return hitboxSpritesheet;
+    return *hitboxSpritesheet;
 }
 
 const Texture& Resources::getPalette() const
 {
-    return paletteTexture;
+    return *paletteTexture;
 }
 
 const TextureAtlas& Resources::getUiTextureAtlas() const

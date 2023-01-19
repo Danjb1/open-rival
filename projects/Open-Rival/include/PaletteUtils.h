@@ -1,9 +1,14 @@
 #pragma once
 
-#include "Texture.h"
+#include <memory>
 
-namespace Rival { namespace PaletteUtils {
+namespace Rival {
 
-Texture createPaletteTexture();
+class Texture;
 
-}}  // namespace Rival::PaletteUtils
+namespace PaletteUtils {
+
+std::unique_ptr<Texture> createPaletteTexture();
+
+}
+}  // namespace Rival

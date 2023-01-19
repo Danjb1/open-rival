@@ -36,6 +36,17 @@ Window::Window(int width, int height, const char* title)
         std::cerr << "OpenGL context could not be created!\n";
         throw std::runtime_error(SDL_GetError());
     }
+
+    // Try to enable vsync.
+    // Note that vsync may already be enabled by default!
+    if (SDL_GL_SetSwapInterval(1) == 0)
+    {
+        vsyncEnabled = true;
+    }
+    else
+    {
+        std::cerr << "Unable to enable vsync! SDL Error: " << SDL_GetError() << "\n";
+    }
 }
 
 Window::~Window()
@@ -52,21 +63,6 @@ void Window::swapBuffers() const
 void Window::setIcon(SDL_Surface* surface)
 {
     SDL_SetWindowIcon(sdlWindow, surface);
-}
-
-int Window::getWidth() const
-{
-    return width;
-}
-
-int Window::getHeight() const
-{
-    return height;
-}
-
-double Window::getAspectRatio() const
-{
-    return aspectRatio;
 }
 
 }  // namespace Rival

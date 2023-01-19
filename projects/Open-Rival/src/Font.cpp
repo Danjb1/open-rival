@@ -70,7 +70,8 @@ FontLoadError::FontLoadError(const char* message)
 {
 }
 
-Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
+std::unique_ptr<Font>
+Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
 {
     for (std::string fontDir : fontDirs)
     {
@@ -88,7 +89,7 @@ Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::stri
     throw std::runtime_error("Failed to load font: " + filename);
 }
 
-Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
+std::unique_ptr<Font> Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
 {
     FontFace faceWrapper(ft, filename);
     FT_Face& face = faceWrapper.face;
@@ -202,7 +203,7 @@ Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
     TextureProperties props = createTextureProperties(face);
     Texture tex = Texture::wrap(std::move(fontBitmap), props);
 
-    return Font(tex, chars, defaultSize);
+    return std::make_unique<Font>(tex, chars, defaultSize);
 }
 
 /**
