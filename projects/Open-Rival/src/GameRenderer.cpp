@@ -23,7 +23,7 @@
 namespace Rival {
 
 GameRenderer::GameRenderer(
-        const Window& window,
+        const Window* window,
         const World& world,
         const PlayerStore& playerStore,
         const Camera& camera,
@@ -76,7 +76,7 @@ void GameRenderer::renderGameViaFramebuffer(int delta) const
     glViewport(
             static_cast<int>(viewport.x),
             // Adjust for OpenGL origin
-            static_cast<int>(window.getHeight() - (viewport.y + viewport.height)),
+            static_cast<int>(window->getHeight() - (viewport.y + viewport.height)),
             static_cast<int>(viewport.width),
             static_cast<int>(viewport.height));
     renderFramebuffer(canvasWidth, canvasHeight);
@@ -148,7 +148,7 @@ void GameRenderer::renderUi()
     glUseProgram(Shaders::indexedTextureShader.programId);
 
     // Determine our view-projection matrix
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window.getAspectRatio());
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
 
     // Set uniform values
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
@@ -156,7 +156,7 @@ void GameRenderer::renderUi()
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 
     // Render the UI to the screen
-    glViewport(0, 0, window.getWidth(), window.getHeight());
+    glViewport(0, 0, window->getWidth(), window->getHeight());
     uiRenderer.renderUi();
 }
 
@@ -167,7 +167,7 @@ void GameRenderer::renderText()
 
     // Render the UI to the screen
     // (the MenuTextRenderer takes care of the shader, projection, etc.)
-    glViewport(0, 0, window.getWidth(), window.getHeight());
+    glViewport(0, 0, window->getWidth(), window->getHeight());
     uiRenderer.renderText();
 }
 
@@ -180,7 +180,7 @@ void GameRenderer::renderCursor(int delta)
     glUseProgram(Shaders::indexedTextureShader.programId);
 
     // Determine our view-projection matrix
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window.getAspectRatio());
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
 
     // Set uniform values
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
@@ -188,7 +188,7 @@ void GameRenderer::renderCursor(int delta)
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
 
     // Render the cursor to the screen
-    glViewport(0, 0, window.getWidth(), window.getHeight());
+    glViewport(0, 0, window->getWidth(), window->getHeight());
     uiRenderer.renderCursor(delta);
 }
 

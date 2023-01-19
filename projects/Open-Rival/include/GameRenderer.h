@@ -21,7 +21,7 @@ class GameRenderer
 {
 public:
     GameRenderer(
-            const Window& window,
+            const Window* window,
             const World& world,
             const PlayerStore& playerStore,
             const Camera& camera,
@@ -46,7 +46,7 @@ private:
     static constexpr int framebufferWidth = RenderUtils::tileWidthPx * RenderUtils::maxTilesX / 2;
     static constexpr int framebufferHeight = RenderUtils::tileHeightPx * RenderUtils::maxTilesY / 2;
 
-    const Window& window;
+    const Window* window;
     const World& world;
     const Rect& viewport;
     const Camera& camera;

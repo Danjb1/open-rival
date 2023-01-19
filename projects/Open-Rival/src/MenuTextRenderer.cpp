@@ -9,8 +9,8 @@
 
 namespace Rival {
 
-MenuTextRenderer::MenuTextRenderer(const Window& window)
-    : window(&window)
+MenuTextRenderer::MenuTextRenderer(const Window* window)
+    : window(window)
     , textRenderer()
 {
 }

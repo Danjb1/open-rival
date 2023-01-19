@@ -311,6 +311,7 @@ Tests:
 - Scenario should maintain a list of entities as well as a map, instead of rebuilding the list whenever it's needed
 - Hitbox buffers should not need to be recreated every tick
 - EntityFactory should use maps instead of switch statements
+- Prefer stack allocation to smart pointers?
 
 ### Refactoring
 

@@ -1,13 +1,15 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <thread>
 #include <unordered_map>
 
 #include "net/Connection.h"
-#include "net/Socket.h"
 
 namespace Rival {
+
+class Socket;
 
 enum class ServerState : std::uint8_t
 {
@@ -29,7 +31,7 @@ private:
     int requestPlayerId();
 
 private:
-    Socket serverSocket;
+    std::unique_ptr<Socket> serverSocket;
     ServerState state = ServerState::Lobby;
     std::thread acceptThread;
 

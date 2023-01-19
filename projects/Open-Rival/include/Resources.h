@@ -1,8 +1,6 @@
 #pragma once
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -10,7 +8,6 @@
 #include "Building.h"
 #include "BuildingDef.h"
 #include "Font.h"
-#include "JsonUtils.h"
 #include "MidiFile.h"
 #include "PaletteUtils.h"
 #include "Spritesheet.h"
@@ -21,6 +18,8 @@
 #include "WaveFile.h"
 
 namespace Rival {
+
+class ApplicationContext;
 
 /**
  * Interface providing access to fonts.
@@ -81,7 +80,7 @@ class Resources
     , public DataStore
 {
 public:
-    Resources(json& cfg);
+    Resources(ApplicationContext& context);
     ~Resources();
 
     // Prevent moving or copying (rule of 5)
@@ -89,6 +88,8 @@ public:
     Resources(Resources&& other) = delete;
     Resources& operator=(const Resources& other) = delete;
     Resources& operator=(Resources&& other) = delete;
+
+    void init();
 
     // Begin TextureStore override
     const Texture& getPalette() const override;
@@ -121,20 +122,19 @@ public:
 
 private:
     // Initialization
-    FT_Library initFreeType();
-    Font initFontSmall();
-    Font initFontRegular();
+    std::unique_ptr<Font> initFontSmall();
+    std::unique_ptr<Font> initFontRegular();
     std::vector<Texture> loadTextures();
     std::vector<TextureAtlas> loadTextureAtlases();
-    Texture initPaletteTexture();
+    std::unique_ptr<Texture> initPaletteTexture();
     std::unordered_map<Building::Type, Spritesheet> initBuildingSpritesheets();
     std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
-    Spritesheet initCursorSpritesheet();
-    Spritesheet initMapBorderSpritesheet();
-    Spritesheet initPortraitSpritesheet();
-    Spritesheet initHitboxSpritesheet();
+    std::unique_ptr<Spritesheet> initCursorSpritesheet();
+    std::unique_ptr<Spritesheet> initMapBorderSpritesheet();
+    std::unique_ptr<Spritesheet> initPortraitSpritesheet();
+    std::unique_ptr<Spritesheet> initHitboxSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
     std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
@@ -171,27 +171,25 @@ private:
     // MIDI constants
     static constexpr int midiStartIndex = 369;
 
-    // Config
-    json& cfg;
+    ApplicationContext& context;
 
     // Fonts
-    FT_Library freeTypeLib;
-    Font fontSmall;
-    Font fontRegular;
+    std::unique_ptr<Font> fontSmall;
+    std::unique_ptr<Font> fontRegular;
 
     // Loaded textures
     std::vector<Texture> textures;
-    Texture paletteTexture;
+    std::unique_ptr<Texture> paletteTexture;
 
     // Spritesheets
     std::unordered_map<Unit::Type, Spritesheet> unitSpritesheets;
     std::unordered_map<Building::Type, Spritesheet> buildingSpritesheets;
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
-    Spritesheet cursorSpritesheet;
-    Spritesheet mapBorderSpritesheet;
-    Spritesheet portraitSpritesheet;
-    Spritesheet hitboxSpritesheet;
+    std::unique_ptr<Spritesheet> cursorSpritesheet;
+    std::unique_ptr<Spritesheet> mapBorderSpritesheet;
+    std::unique_ptr<Spritesheet> portraitSpritesheet;
+    std::unique_ptr<Spritesheet> hitboxSpritesheet;
 
     // Texture Atlases
     std::vector<TextureAtlas> textureAtlases;

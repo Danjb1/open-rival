@@ -2,18 +2,22 @@
 
 #include <memory>
 
-#include "AudioSystem.h"
-#include "JsonUtils.h"
-#include "Resources.h"
-#include "State.h"
-#include "Window.h"
+#include "net/Connection.h"
+#include "net/Server.h"
 
 namespace Rival {
 
+class ApplicationContext;
+class Socket;
+class State;
+
+/**
+ * Runs the game loop and switches between states.
+ */
 class Application
 {
 public:
-    Application(Window& window, json& cfg);
+    Application(ApplicationContext& context);
 
     /**
      * Runs the Application until the user exits.
@@ -32,19 +36,9 @@ public:
         nextState = std::move(newState);
     }
 
-    const Window& getWindow() const
+    ApplicationContext& getContext()
     {
-        return window;
-    }
-
-    AudioSystem& getAudioSystem()
-    {
-        return audioSystem;
-    }
-
-    Resources& getResources()
-    {
-        return res;
+        return context;
     }
 
     State& getState()
@@ -52,30 +46,21 @@ public:
         return *state;
     }
 
+    /** Starts a server and connects to it. */
+    void Application::startServer(int port);
+
 private:
     void makeNextStateActive();
 
-public:
-    bool vsyncEnabled;
-
 private:
-    /**
-     * Minimum time that we will consider sleeping for.
-     *
-     * If the next frame is due sooner than this then we will just
-     * busy-wait, to reduce the risk of oversleeping.
-     */
-    static constexpr int minSleepTime = 2;
-
     bool exiting { false };
 
-    Window& window;
-    json& cfg;
-    AudioSystem audioSystem;
-    Resources res;
-
+    ApplicationContext& context;
     std::unique_ptr<State> state;
     std::unique_ptr<State> nextState;
+
+    std::unique_ptr<Server> server;
+    std::unique_ptr<Connection> connection;
 };
 
 }  // namespace Rival

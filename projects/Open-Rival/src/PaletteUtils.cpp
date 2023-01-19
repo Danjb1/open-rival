@@ -8,10 +8,11 @@
 #include <cstdint>
 
 #include "Palette.h"
+#include "Texture.h"
 
 namespace Rival { namespace PaletteUtils {
 
-Texture createPaletteTexture()
+std::unique_ptr<Texture> createPaletteTexture()
 {
     std::array<std::uint8_t, Palette::numBytesCombinedPalettes> data { 0 };
 
@@ -57,7 +58,7 @@ Texture createPaletteTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    return Texture(textureId, texWidth, texHeight);
+    return std::make_unique<Texture>(textureId, texWidth, texHeight);
 }
 
 }}  // namespace Rival::PaletteUtils

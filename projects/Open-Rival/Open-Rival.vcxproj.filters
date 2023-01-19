@@ -346,6 +346,9 @@
     <ClCompile Include="src\net\Connection.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
+    <ClCompile Include="src\ApplicationContext.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -644,6 +647,9 @@
     </ClInclude>
     <ClInclude Include="include\net\Connection.h">
       <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ApplicationContext.h">
+      <Filter>Source Files\application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

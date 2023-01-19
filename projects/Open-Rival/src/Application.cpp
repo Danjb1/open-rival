@@ -4,39 +4,29 @@
 
 #include "SDLWrapper.h"
 
+#include <memory>
+
+#include "net/Socket.h"
+#include "ApplicationContext.h"
 #include "ConfigUtils.h"
+#include "PlayerState.h"
+#include "State.h"
 #include "TimeUtils.h"
 
 namespace Rival {
 
-Application::Application(Window& window, json& cfg)
-    : window(window)
-    , cfg(cfg)
-    , res(cfg)
+Application::Application(ApplicationContext& context)
+    : context(context)
 {
-
-    // Try to enable vsync.
-    // Note that vsync may already be enabled by default!
-    if (SDL_GL_SetSwapInterval(1) == 0)
-    {
-        vsyncEnabled = true;
-    }
-    else
-    {
-        printf("Unable to enable vsync! SDL Error: %s\n", SDL_GetError());
-        vsyncEnabled = false;
-    }
-
-    // Set up the audio system
-    audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
-    audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
 }
 
 void Application::start(std::unique_ptr<State> initialState)
 {
     setState(std::move(initialState));
 
-    // Create a high-precision timer
+    Window* window = context.getWindow();
+    const bool vsyncEnabled = window->isVsyncEnabled();
+
     TimeUtils::PrecisionTimer timer;
 
     // Game loop
@@ -96,14 +86,14 @@ void Application::start(std::unique_ptr<State> initialState)
             // Update the window with our newly-rendered game.
             // If vsync is enabled, this will block execution until the
             // next swap interval.
-            window.swapBuffers();
+            window->swapBuffers();
         }
         else
         {
             // Next update is not yet due (frameStartTime < nextUpdateDue),
             // so let's sleep (unless the next update is imminent!)
             Uint32 sleepTime = nextUpdateDue - frameStartTime;
-            if (sleepTime >= minSleepTime)
+            if (sleepTime >= TimeUtils::minSleepTime)
             {
                 timer.wait(sleepTime);
             }
@@ -147,6 +137,16 @@ void Application::makeNextStateActive()
 {
     state = std::move(nextState);
     state->onLoad();
+}
+
+void Application::startServer(int port)
+{
+    server = std::make_unique<Server>(port, PlayerStore::maxPlayers);
+    server->start();
+
+    // Connect to the server ourselves!
+    std::unique_ptr<Socket> socket = Socket::createClient("localhost", port);
+    connection = std::make_unique<Connection>(std::move(socket));
 }
 
 }  // namespace Rival

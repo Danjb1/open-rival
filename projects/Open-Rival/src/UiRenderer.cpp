@@ -18,7 +18,7 @@ UiRenderer::UiRenderer(
         const PlayerStore& playerStore,
         const TextureStore& textureStore,
         const FontStore& fontStore,
-        const Window& window,
+        const Window* window,
         const PlayerContext& playerContext)
     : textureStore(textureStore)
     , window(window)
@@ -324,11 +324,11 @@ void UiRenderer::renderCursor(int delta)
 
     // Calculate the mouse position in the range 0-1.
     // (If the mouse is outside of the window, these values will lie outside the range).
-    float normalizedMouseX = static_cast<float>(mouseX) / window.getWidth();
-    float normalizedMouseY = static_cast<float>(mouseY) / window.getHeight();
+    float normalizedMouseX = static_cast<float>(mouseX) / window->getWidth();
+    float normalizedMouseY = static_cast<float>(mouseY) / window->getHeight();
 
     // Set the cursor image position
-    cursorImage.pos.x = normalizedMouseX * RenderUtils::getMenuWidth(window.getAspectRatio());
+    cursorImage.pos.x = normalizedMouseX * RenderUtils::getMenuWidth(window->getAspectRatio());
     cursorImage.pos.y = normalizedMouseY * RenderUtils::menuHeight;
 
     // Offset the image based on the cursor hotspot

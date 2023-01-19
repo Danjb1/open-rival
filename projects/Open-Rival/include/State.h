@@ -63,7 +63,7 @@ public:
 
 protected:
     Application& app;
-    const Window& window;
+    Window* window;
     Resources& res;
 };
 

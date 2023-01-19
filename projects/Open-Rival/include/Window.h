@@ -25,24 +25,35 @@ public:
 
     void setIcon(SDL_Surface* surface);
 
-    int getWidth() const;
+    int getWidth() const
+    {
+        return width;
+    }
 
-    int getHeight() const;
+    int getHeight() const
+    {
+        return height;
+    }
 
-    double getAspectRatio() const;
+    double getAspectRatio() const
+    {
+        return aspectRatio;
+    }
+
+    bool isVsyncEnabled() const
+    {
+        return vsyncEnabled;
+    }
 
 private:
     SDL_Window* sdlWindow;
-
     SDL_GLContext glContext;
 
     const int width;
-
     const int height;
-
     const double aspectRatio;
-
     const char* title;
+    bool vsyncEnabled { false };
 };
 
 }  // namespace Rival

@@ -22,14 +22,12 @@ enum class SocketState : std::uint8_t
 
 class Socket
 {
-private:
-    Socket(const std::string& address, int port, bool server);
-
 public:
-    static Socket createServer(int port);
-    static Socket createClient(const std::string& address, int port);
-    static std::shared_ptr<Socket> wrap(SOCKET rawSocket);
+    static std::unique_ptr<Socket> createServer(int port);
+    static std::unique_ptr<Socket> createClient(const std::string& address, int port);
+    static std::unique_ptr<Socket> wrap(SOCKET rawSocket);
 
+    Socket(const std::string& address, int port, bool server);
     Socket(SOCKET rawSocket);
     ~Socket();
 

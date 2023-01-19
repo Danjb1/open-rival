@@ -4,9 +4,19 @@
 
 namespace Rival { namespace TimeUtils {
 
+/** Desired FPS for the game logic. */
 static constexpr int fps = 60;
 
+/** Approximate time for each frame, in milliseconds. */
 static constexpr int timeStepMs = 1000 / fps;
+
+/**
+ * Minimum time that we will consider sleeping for.
+ *
+ * If the next frame is due sooner than this then we will just
+ * busy-wait, to reduce the risk of oversleeping.
+ */
+static constexpr int minSleepTime = 2;
 
 /**
  * Allows for high-precision sleep timers.
