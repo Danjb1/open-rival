@@ -17,7 +17,11 @@
 namespace Rival {
 
 MapBorderRenderer::MapBorderRenderer(
-        Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture)
+        Race race,
+        int mapWidth,
+        int mapHeight,
+        const Spritesheet& spritesheet,
+        std::shared_ptr<const Texture> paletteTexture)
     : paletteTexture(paletteTexture)
     // This is calculated as follows:
     //  - 1 segment per edge tile
@@ -65,7 +69,7 @@ void MapBorderRenderer::render() const
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
     glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
-    glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Bind vertex array
     glBindVertexArray(renderable.getVao());

@@ -4,14 +4,14 @@
 
 namespace Rival {
 
-Connection::Connection(std::shared_ptr<Socket> destination)
-    : destination(destination)
+Connection::Connection(Socket destination)
+    : destination(std::move(destination))
 {
 }
 
 void Connection::close()
 {
-    destination->close();
+    destination.close();
 }
 
 }  // namespace Rival

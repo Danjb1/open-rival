@@ -15,6 +15,25 @@ Texture::Texture(const GLuint id, int width, int height)
 {
 }
 
+Texture::Texture(Texture&& other) noexcept
+    : id(other.id)
+    , width(other.width)
+    , height(other.height)
+{
+    // Reset the source object so its destructor is harmless
+    other.id = 0;
+}
+
+Texture ::~Texture()
+{
+    if (id == 0)
+    {
+        return;
+    }
+
+    glDeleteTextures(1, &id);
+}
+
 const GLuint Texture::getId() const
 {
     return id;
@@ -30,13 +49,13 @@ const int Texture::getHeight() const
     return height;
 }
 
-const Texture Texture::loadTexture(const std::string filename)
+std::shared_ptr<const Texture> Texture::loadTexture(const std::string filename)
 {
     TextureProperties props;  // use defaults
     return wrap(Image::readImage(filename), props);
 }
 
-const Texture Texture::wrap(const Image img, const TextureProperties props)
+std::shared_ptr<const Texture> Texture::wrap(const Image img, const TextureProperties props)
 {
     // Generate texture
     GLuint textureId = 0;
@@ -71,7 +90,7 @@ const Texture Texture::wrap(const Image img, const TextureProperties props)
         throw std::runtime_error("Failed to load texture");
     }
 
-    return Texture(textureId, img.getWidth(), img.getHeight());
+    return std::make_shared<const Texture>(textureId, img.getWidth(), img.getHeight());
 }
 
 }  // namespace Rival

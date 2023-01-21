@@ -31,7 +31,7 @@ private:
     int requestPlayerId();
 
 private:
-    std::unique_ptr<Socket> serverSocket;
+    Socket serverSocket;
     ServerState state = ServerState::Lobby;
     std::thread acceptThread;
 

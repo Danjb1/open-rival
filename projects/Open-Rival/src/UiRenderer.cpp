@@ -75,7 +75,7 @@ void UiRenderer::renderMainUi()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mainUiRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
     // Bind vertex array
     glBindVertexArray(mainUiRenderable.getVao());
@@ -182,7 +182,7 @@ void UiRenderer::renderPortrait()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, portraitRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
     // Bind vertex array
     glBindVertexArray(portraitRenderable.getVao());
@@ -343,7 +343,7 @@ void UiRenderer::renderCursor(int delta)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cursorRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette().getId());
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
     // Bind vertex array
     glBindVertexArray(cursorRenderable.getVao());

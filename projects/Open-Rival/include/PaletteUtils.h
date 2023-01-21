@@ -8,7 +8,7 @@ class Texture;
 
 namespace PaletteUtils {
 
-std::unique_ptr<Texture> createPaletteTexture();
+std::shared_ptr<const Texture> createPaletteTexture();
 
 }
 }  // namespace Rival

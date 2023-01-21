@@ -8,8 +8,9 @@
 
 namespace Rival {
 
-TextureAtlas::TextureAtlas(Texture texture, std::unordered_map<std::string, Rect> imagePlacements)
-    : texture(std::move(texture))
+TextureAtlas::TextureAtlas(
+        std::shared_ptr<const Texture> texture, std::unordered_map<std::string, Rect> imagePlacements)
+    : texture(texture)
     , imagePlacements(imagePlacements)
 {
 }
@@ -34,8 +35,8 @@ const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
     const float y = imagePlacement.y;
     const float width = imagePlacement.width;
     const float height = imagePlacement.height;
-    const float txWidth = static_cast<float>(texture.getWidth());
-    const float txHeight = static_cast<float>(texture.getHeight());
+    const float txWidth = static_cast<float>(texture->getWidth());
+    const float txHeight = static_cast<float>(texture->getHeight());
 
     const float tx1 = x / txWidth;
     const float tx2 = (x + width) / txWidth;
@@ -50,9 +51,8 @@ const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
     };
 }
 
-const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName)
+std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::string resourceName)
 {
-
     std::string textureName = resourceName + ".tga";
     std::string atlasName = resourceName + ".atlas";
     std::unordered_map<std::string, Rect> imagePlacements;
@@ -89,7 +89,7 @@ const TextureAtlas TextureAtlas::loadTextureAtlas(const std::string resourceName
 
     reader.close();
 
-    return TextureAtlas(Texture::loadTexture(textureName), imagePlacements);
+    return std::make_shared<const TextureAtlas>(Texture::loadTexture(textureName), imagePlacements);
 }
 
 }  // namespace Rival

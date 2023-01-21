@@ -12,11 +12,16 @@ Selection:
 
 Multiplayer:
 
-- Create standalone project to run dedicated server
-- Clients can connect to the server
+- Rethink how Sockets/Connections are passed around - maybe it makes sense to use shared_ptrs after all
+- Read host/join options from command-line
+- Packet class that can be serialized / deserialized
+- Connections should receive incoming packets and put them in a queue
+- Server should get notified of incoming packets, and forward them to other players
+- GameState should process queued packets at the start of each tick
+- GameState should send issued commands to the server at the end of each tick
+- In multiplayer, commands need to be scheduled for a future tick
 - The game should only start when all players have joined
-- Player actions are transmitted via the server
-- Players can see the movements of other players
+- Create standalone project to run dedicated server
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -311,7 +316,6 @@ Tests:
 - Scenario should maintain a list of entities as well as a map, instead of rebuilding the list whenever it's needed
 - Hitbox buffers should not need to be recreated every tick
 - EntityFactory should use maps instead of switch statements
-- Prefer stack allocation to smart pointers?
 
 ### Refactoring
 
@@ -341,6 +345,9 @@ Tests:
 - UnitDef exposes some properties as public, which could be dangerous
 - PassabilityComponent for units is only used to set the initial passability; after that, we rely on the MovementComponent
 - Replace ConfigUtils with JsonUtils
+- Improve enums: https://stackoverflow.com/review/suggested-edits/33596043
+- Copy/move constructors should use `noexcept`
+- Allow non-copyable classes to be moved (check uses of "= delete")
 
 ### Rendering
 

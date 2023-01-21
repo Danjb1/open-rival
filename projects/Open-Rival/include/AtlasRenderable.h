@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "TextureAtlas.h"
 
 namespace Rival {
@@ -12,13 +14,10 @@ namespace Rival {
  */
 class AtlasRenderable
 {
-
 public:
     static constexpr int numVertexDimensions = 3;    // x, y, z
     static constexpr int numTexCoordDimensions = 2;  // u, v
     static constexpr int numVerticesPerSprite = 4;
-
-    const TextureAtlas& texAtlas;
 
     /**
      * Constructs an AtlasRenderable.
@@ -26,16 +25,14 @@ public:
      * @param texAtlas
      * @param maxSprites The maximum number of Sprites that can be drawn.
      */
-    AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites);
+    AtlasRenderable(std::shared_ptr<const TextureAtlas> texAtlas, int maxSprites);
+    ~AtlasRenderable();
 
-    // Disable moving / copying
+    // Allow moving but prevent copying and move-assignment
     AtlasRenderable(const AtlasRenderable& other) = delete;
-    AtlasRenderable(AtlasRenderable&& other) = delete;
+    AtlasRenderable(AtlasRenderable&& other) noexcept;
     AtlasRenderable& operator=(const AtlasRenderable& other) = delete;
     AtlasRenderable& operator=(AtlasRenderable&& other) = delete;
-
-    /** Deletes an AtlasRenderable. */
-    ~AtlasRenderable();
 
     GLuint getVao() const
     {
@@ -59,7 +56,7 @@ public:
 
     GLuint getTextureId() const
     {
-        return texAtlas.texture.getId();
+        return texAtlas->texture->getId();
     }
 
     GLenum getDrawMode() const
@@ -72,23 +69,10 @@ public:
         return indicesPerSprite;
     }
 
+public:
+    std::shared_ptr<const TextureAtlas> texAtlas;
+
 private:
-    /*
-     * 4 indices are required to render a quad using GL_TRIANGLE_FAN:
-     *     0------1
-     *     | \    |
-     *     |   \  |
-     *     3----- 2
-     */
-    static constexpr int numIndicesForTriangleFan = 4;
-
-    /*
-     * 6 indices are required to render a quad using GL_TRIANGLES:
-     *  - First triangle: 0-1-2
-     *  - Second triangle: 2-3-0
-     */
-    static constexpr int numIndicesForTriangles = 6;
-
     GLuint vao;
     GLuint positionVbo;
     GLuint texCoordVbo;

@@ -12,7 +12,7 @@
 
 namespace Rival { namespace PaletteUtils {
 
-std::unique_ptr<Texture> createPaletteTexture()
+std::shared_ptr<const Texture> createPaletteTexture()
 {
     std::array<std::uint8_t, Palette::numBytesCombinedPalettes> data { 0 };
 
@@ -58,7 +58,7 @@ std::unique_ptr<Texture> createPaletteTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    return std::make_unique<Texture>(textureId, texWidth, texHeight);
+    return std::make_shared<const Texture>(textureId, texWidth, texHeight);
 }
 
 }}  // namespace Rival::PaletteUtils

@@ -33,8 +33,8 @@ const std::string winFontFormat = "Windows FNT";
 const std::string Font::supportedChars = " !\"#$%&'()*+,-./1234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                          "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
-Font::Font(Texture texture, std::unordered_map<char, CharData> chars, int defaultSize)
-    : texture(texture)
+Font::Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, CharData> chars, int defaultSize)
+    : texture(std::move(texture))
     , chars(chars)
     , defaultSize(defaultSize)
 {
@@ -70,8 +70,7 @@ FontLoadError::FontLoadError(const char* message)
 {
 }
 
-std::unique_ptr<Font>
-Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
+Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
 {
     for (std::string fontDir : fontDirs)
     {
@@ -89,7 +88,7 @@ Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fi
     throw std::runtime_error("Failed to load font: " + filename);
 }
 
-std::unique_ptr<Font> Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
+Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
 {
     FontFace faceWrapper(ft, filename);
     FT_Face& face = faceWrapper.face;
@@ -201,9 +200,9 @@ std::unique_ptr<Font> Font::loadFont(FT_Library& ft, std::string filename, int d
 
     // Generate texture to hold this font
     TextureProperties props = createTextureProperties(face);
-    Texture tex = Texture::wrap(std::move(fontBitmap), props);
+    std::shared_ptr<const Texture> tex = Texture::wrap(std::move(fontBitmap), props);
 
-    return std::make_unique<Font>(tex, chars, defaultSize);
+    return { tex, chars, defaultSize };
 }
 
 /**

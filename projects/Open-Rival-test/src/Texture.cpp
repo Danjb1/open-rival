@@ -2,6 +2,8 @@
 
 #include "Texture.h"
 
+#include <memory>
+
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
@@ -32,9 +34,9 @@ const int Texture::getHeight() const
     return height;
 }
 
-const Texture Texture::loadTexture(const std::string filename)
+const std::shared_ptr<const Texture> Texture::loadTexture(const std::string filename)
 {
-    return Texture(0, 0, 0);
+    return std::make_shared<const Texture>(0, 0, 0);
 }
 
 }  // namespace Rival

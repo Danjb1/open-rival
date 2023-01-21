@@ -25,15 +25,10 @@ namespace Rival {
 
 ApplicationContext::ApplicationContext()
     : cfg(readConfig())
-    , res(*this)
+    , window((initSDL(), createWindow()))
+    , res((initGLEW(), initGL(), initFonts(), *this))
 {
-    initSDL();
-    window = createWindow();
     initAudio();
-    initGLEW();
-    initGL();
-    initFonts();
-    res.init();
     NetUtils::initNetworking();
 }
 

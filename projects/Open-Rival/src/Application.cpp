@@ -5,6 +5,7 @@
 #include "SDLWrapper.h"
 
 #include <memory>
+#include <utility>  // std::in_place
 
 #include "net/Socket.h"
 #include "ApplicationContext.h"
@@ -49,6 +50,8 @@ void Application::start(std::unique_ptr<State> initialState)
         // Is the next update due?
         if (vsyncEnabled || nextUpdateDue <= frameStartTime)
         {
+            // Handle incoming packets
+            pollNetwork();
 
             // Handle events on the queue
             pollEvents();
@@ -101,6 +104,14 @@ void Application::start(std::unique_ptr<State> initialState)
     }
 }
 
+void Application::pollNetwork()
+{
+    if (!connection)
+    {
+        return;
+    }
+}
+
 void Application::pollEvents()
 {
     SDL_Event e;
@@ -141,12 +152,16 @@ void Application::makeNextStateActive()
 
 void Application::startServer(int port)
 {
-    server = std::make_unique<Server>(port, PlayerStore::maxPlayers);
+    server.emplace(port, PlayerStore::maxPlayers);
     server->start();
 
     // Connect to the server ourselves!
-    std::unique_ptr<Socket> socket = Socket::createClient("localhost", port);
-    connection = std::make_unique<Connection>(std::move(socket));
+    connectToServer("localhost", port);
+}
+
+void Application::connectToServer(const std::string& address, int port)
+{
+    connection.emplace(Socket::createClient(address, port));
 }
 
 }  // namespace Rival

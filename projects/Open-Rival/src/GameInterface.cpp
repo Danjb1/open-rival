@@ -31,9 +31,9 @@ const Rect statsPanel(static_cast<int>(mainPanel.x + mainPanel.width), uiPosY, 1
 // UiImage class
 ///////////////////////////////////////////////////////////////////////////
 
-UiImage::UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey)
+UiImage::UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const std::string imageKey)
     : pos(pos)
-    , texAtlas(&texAtlas)
+    , texAtlas(texAtlas)
     , imageKey(imageKey)
 {
 }

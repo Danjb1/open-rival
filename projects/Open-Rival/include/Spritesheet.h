@@ -3,6 +3,7 @@
 #include <gl/glew.h>
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 namespace Rival {
@@ -14,14 +15,13 @@ class Texture;
  */
 class Spritesheet
 {
-
 public:
-    Spritesheet(const Texture&, int width, int height, int padding);
+    Spritesheet(std::shared_ptr<const Texture> texture, int width, int height, int padding);
 
     const std::vector<GLfloat> getTexCoords(int index) const;
 
 public:
-    const Texture& texture;
+    std::shared_ptr<const Texture> texture;
 
 private:
     // Width of one image within the texture

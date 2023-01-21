@@ -2,6 +2,8 @@
 
 #include "net/Server.h"
 
+#include <utility>  // make_pair
+
 #include "net/Socket.h"
 
 namespace Rival {
@@ -22,7 +24,7 @@ Server::~Server()
     }
 
     // Kill server
-    serverSocket->close();
+    serverSocket.close();
     acceptThread.join();
 }
 
@@ -33,12 +35,13 @@ void Server::start()
 
 void Server::acceptThreadLoop()
 {
-    while (!serverSocket->isClosed() && connectedPlayers.size() < static_cast<size_t>(maxPlayers))
+    while (!serverSocket.isClosed() && connectedPlayers.size() < static_cast<size_t>(maxPlayers))
     {
-        std::shared_ptr<Socket> newPlayer = serverSocket->accept();
-        if (newPlayer)
+        Socket newPlayer = serverSocket.accept();
+        if (newPlayer.isValid())
         {
-            connectedPlayers.insert({ requestPlayerId(), newPlayer });
+            Connection newPlayerConnection(std::move(newPlayer));
+            connectedPlayers.insert(std::make_pair(requestPlayerId(), std::move(newPlayerConnection)));
         }
     }
 }

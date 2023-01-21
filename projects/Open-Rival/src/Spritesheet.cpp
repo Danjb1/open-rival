@@ -7,15 +7,15 @@
 
 namespace Rival {
 
-Spritesheet::Spritesheet(const Texture& texture, int width, int height, int padding)
+Spritesheet::Spritesheet(std::shared_ptr<const Texture> texture, int width, int height, int padding)
     : texture(texture)
     , width(width)
     , height(height)
     , padding(padding)
     , paddedWidth(width + 2 * padding)
     , paddedHeight(height + 2 * padding)
-    , xSize(texture.getWidth() / paddedWidth)
-    , ySize(texture.getHeight() / paddedHeight)
+    , xSize(texture->getWidth() / paddedWidth)
+    , ySize(texture->getHeight() / paddedHeight)
 {
 }
 
@@ -23,8 +23,8 @@ const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
 {
     const int x = index % xSize;
     const int y = index / xSize;
-    const float txWidth = static_cast<float>(texture.getWidth());
-    const float txHeight = static_cast<float>(texture.getHeight());
+    const float txWidth = static_cast<float>(texture->getWidth());
+    const float txHeight = static_cast<float>(texture->getHeight());
 
     const float srcX = static_cast<float>(x * paddedWidth + padding);
     const float srcY = static_cast<float>(y * paddedHeight + padding);

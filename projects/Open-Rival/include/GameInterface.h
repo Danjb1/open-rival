@@ -42,7 +42,7 @@ class UiImage
 public:
     Rect pos;
 
-    UiImage(Rect pos, const TextureAtlas& texAtlas, const std::string imageKey);
+    UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const std::string imageKey);
 
     UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex);
 
@@ -51,7 +51,7 @@ public:
     void addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
 
 private:
-    const TextureAtlas* texAtlas = nullptr;
+    std::shared_ptr<const TextureAtlas> texAtlas;
     const std::string imageKey;
 
     const Spritesheet* spritesheet = nullptr;

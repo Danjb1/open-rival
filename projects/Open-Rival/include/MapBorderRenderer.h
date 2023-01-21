@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 
+#include <memory>
 #include <vector>
 
 #include "Race.h"
@@ -18,7 +19,11 @@ class MapBorderRenderer
 
 public:
     MapBorderRenderer(
-            Race race, int mapWidth, int mapHeight, const Spritesheet& spritesheet, const Texture& paletteTexture);
+            Race race,
+            int mapWidth,
+            int mapHeight,
+            const Spritesheet& spritesheet,
+            std::shared_ptr<const Texture> paletteTexture);
 
     void
     createLeftEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
@@ -61,7 +66,7 @@ private:
     static constexpr int txIndexBottomRight = 6;
     static constexpr int txIndexBottomLeft = 7;
 
-    const Texture& paletteTexture;
+    std::shared_ptr<const Texture> paletteTexture;
 
     // The maximum number of border segments we can render
     int maxSegmentsToRender;

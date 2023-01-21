@@ -2,11 +2,12 @@
 
 #include "AtlasRenderable.h"
 
+#include "GLUtils.h"
 #include "Shaders.h"
 
 namespace Rival {
 
-AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites)
+AtlasRenderable::AtlasRenderable(std::shared_ptr<const TextureAtlas> texAtlas, int maxSprites)
     : texAtlas(texAtlas)
 {
     // Generate VAO
@@ -22,7 +23,8 @@ AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites)
     drawMode = (maxSprites == 1) ? GL_TRIANGLE_FAN : GL_TRIANGLES;
 
     // Determine the number of indices per sprite
-    indicesPerSprite = (drawMode == GL_TRIANGLE_FAN) ? numIndicesForTriangleFan : numIndicesForTriangles;
+    indicesPerSprite =
+            (drawMode == GL_TRIANGLE_FAN) ? GLUtils::numIndicesForTriangleFan : GLUtils::numIndicesForTriangles;
 
     // Initialize position buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
@@ -80,6 +82,19 @@ AtlasRenderable::AtlasRenderable(const TextureAtlas& texAtlas, int maxSprites)
     // Enable vertex attributes
     glEnableVertexAttribArray(Shaders::vertexAttribIndex);
     glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
+}
+
+AtlasRenderable::AtlasRenderable(AtlasRenderable&& other) noexcept
+    : vao(other.vao)
+    , positionVbo(other.positionVbo)
+    , texCoordVbo(other.texCoordVbo)
+    , ibo(other.ibo)
+    , drawMode(other.drawMode)
+    , indicesPerSprite(other.indicesPerSprite)
+    , texAtlas(other.texAtlas)
+{
+    // Reset the source object so its destructor is harmless
+    other.vao = 0;
 }
 
 AtlasRenderable::~AtlasRenderable()
