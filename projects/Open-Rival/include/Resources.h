@@ -37,7 +37,7 @@ public:
 class TextureStore
 {
 public:
-    virtual const Texture& getPalette() const = 0;
+    virtual std::shared_ptr<const Texture> getPalette() const = 0;
     virtual const Spritesheet& getTileSpritesheet(bool wilderness) const = 0;
     virtual const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const = 0;
     virtual const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const = 0;
@@ -47,7 +47,7 @@ public:
     virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
     virtual const Spritesheet& getPortraitSpritesheet() const = 0;
     virtual const Spritesheet& getHitboxSpritesheet() const = 0;
-    virtual const TextureAtlas& getUiTextureAtlas() const = 0;
+    virtual std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const = 0;
 };
 
 /**
@@ -81,18 +81,9 @@ class Resources
 {
 public:
     Resources(ApplicationContext& context);
-    ~Resources();
-
-    // Prevent moving or copying (rule of 5)
-    Resources(const Resources& other) = delete;
-    Resources(Resources&& other) = delete;
-    Resources& operator=(const Resources& other) = delete;
-    Resources& operator=(Resources&& other) = delete;
-
-    void init();
 
     // Begin TextureStore override
-    const Texture& getPalette() const override;
+    std::shared_ptr<const Texture> getPalette() const override;
     const Spritesheet& getTileSpritesheet(bool wilderness) const override;
     const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const override;
     const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const override;
@@ -102,7 +93,7 @@ public:
     const Spritesheet& getMapBorderSpritesheet() const override;
     const Spritesheet& getPortraitSpritesheet() const override;
     const Spritesheet& getHitboxSpritesheet() const override;
-    const TextureAtlas& getUiTextureAtlas() const override;
+    std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const override;
     // End TextureStore override
 
     // Begin FontStore override
@@ -122,19 +113,19 @@ public:
 
 private:
     // Initialization
-    std::unique_ptr<Font> initFontSmall();
-    std::unique_ptr<Font> initFontRegular();
-    std::vector<Texture> loadTextures();
-    std::vector<TextureAtlas> loadTextureAtlases();
-    std::unique_ptr<Texture> initPaletteTexture();
+    Font initFontSmall();
+    Font initFontRegular();
+    std::vector<std::shared_ptr<const Texture>> loadTextures();
+    std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases();
+    std::shared_ptr<const Texture> initPaletteTexture();
     std::unordered_map<Building::Type, Spritesheet> initBuildingSpritesheets();
     std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
-    std::unique_ptr<Spritesheet> initCursorSpritesheet();
-    std::unique_ptr<Spritesheet> initMapBorderSpritesheet();
-    std::unique_ptr<Spritesheet> initPortraitSpritesheet();
-    std::unique_ptr<Spritesheet> initHitboxSpritesheet();
+    Spritesheet initCursorSpritesheet();
+    Spritesheet initMapBorderSpritesheet();
+    Spritesheet initPortraitSpritesheet();
+    Spritesheet initHitboxSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
     std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
@@ -174,25 +165,25 @@ private:
     ApplicationContext& context;
 
     // Fonts
-    std::unique_ptr<Font> fontSmall;
-    std::unique_ptr<Font> fontRegular;
+    Font fontSmall;
+    Font fontRegular;
 
     // Loaded textures
-    std::vector<Texture> textures;
-    std::unique_ptr<Texture> paletteTexture;
+    std::vector<std::shared_ptr<const Texture>> textures;
+    std::shared_ptr<const Texture> paletteTexture;
 
     // Spritesheets
     std::unordered_map<Unit::Type, Spritesheet> unitSpritesheets;
     std::unordered_map<Building::Type, Spritesheet> buildingSpritesheets;
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
-    std::unique_ptr<Spritesheet> cursorSpritesheet;
-    std::unique_ptr<Spritesheet> mapBorderSpritesheet;
-    std::unique_ptr<Spritesheet> portraitSpritesheet;
-    std::unique_ptr<Spritesheet> hitboxSpritesheet;
+    Spritesheet cursorSpritesheet;
+    Spritesheet mapBorderSpritesheet;
+    Spritesheet portraitSpritesheet;
+    Spritesheet hitboxSpritesheet;
 
     // Texture Atlases
-    std::vector<TextureAtlas> textureAtlases;
+    std::vector<std::shared_ptr<const TextureAtlas>> textureAtlases;
 
     // Wave Files
     std::vector<WaveFile> sounds;

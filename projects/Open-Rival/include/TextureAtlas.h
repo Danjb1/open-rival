@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -14,16 +15,17 @@ class TextureAtlas
 {
 
 public:
-    Texture texture;
-
-    TextureAtlas(Texture texture, std::unordered_map<std::string, Rect> imagePlacements);
+    TextureAtlas(std::shared_ptr<const Texture> texture, std::unordered_map<std::string, Rect> imagePlacements);
 
     const int getImageWidth(std::string key) const;
     const int getImageHeight(std::string key) const;
 
     const std::vector<GLfloat> getTexCoords(std::string key) const;
 
-    static const TextureAtlas loadTextureAtlas(const std::string filename);
+    static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string filename);
+
+public:
+    std::shared_ptr<const Texture> texture;
 
 private:
     std::unordered_map<std::string, Rect> imagePlacements;

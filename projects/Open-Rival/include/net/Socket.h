@@ -23,34 +23,36 @@ enum class SocketState : std::uint8_t
 class Socket
 {
 public:
-    static std::unique_ptr<Socket> createServer(int port);
-    static std::unique_ptr<Socket> createClient(const std::string& address, int port);
-    static std::unique_ptr<Socket> wrap(SOCKET rawSocket);
+    static Socket createServer(int port);
+    static Socket createClient(const std::string& address, int port);
+    static Socket wrap(SOCKET rawSocket);
 
-    Socket(const std::string& address, int port, bool server);
-    Socket(SOCKET rawSocket);
     ~Socket();
 
-    // Disable moving / copying
+    // Allow moving but prevent copying and move-assignment
     Socket(const Socket& other) = delete;
-    Socket(Socket&& other) = delete;
+    Socket(Socket&& other) noexcept;
     Socket& operator=(const Socket& other) = delete;
     Socket& operator=(Socket&& other) = delete;
 
     /** Blocking call that waits for a new connection. */
-    std::shared_ptr<Socket> accept();
+    Socket accept();
 
     /** Closes the socket; forces any blocking calls to return. */
     void close();
 
+    bool isValid() const;
     bool isClosed() const;
 
 private:
+    Socket(const std::string& address, int port, bool server);
+    Socket(SOCKET rawSocket);
+
     void init();
 
 private:
     SOCKET sock;
-    SocketState state = SocketState::Open;
+    SocketState state = SocketState::Closed;
 };
 
 }  // namespace Rival

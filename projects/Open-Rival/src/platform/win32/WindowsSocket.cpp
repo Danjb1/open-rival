@@ -88,6 +88,20 @@ Socket::Socket(const std::string& address, int port, bool server)
             throw std::runtime_error("Failed to connect to server: " + std::to_string(err));
         }
     }
+
+    if (isValid())
+    {
+        state = SocketState::Open;
+    }
+}
+
+Socket::Socket(Socket&& other) noexcept
+    : sock(other.sock)
+    , state(other.state)
+{
+    // Reset the source object so its destructor is harmless
+    other.sock = INVALID_SOCKET;
+    other.state = SocketState::Closed;
 }
 
 void Socket::init()
@@ -99,29 +113,32 @@ void Socket::init()
 
 void Socket::close()
 {
-    if (state != SocketState::Closed)
+    if (state == SocketState::Closed)
     {
-        state = SocketState::Closed;
-        closesocket(sock);
+        return;
     }
+
+    state = SocketState::Closed;
+    closesocket(sock);
 }
 
-std::shared_ptr<Socket> Socket::accept()
+Socket Socket::accept()
 {
     SOCKET clientSocket = INVALID_SOCKET;
 
     clientSocket = ::accept(sock, nullptr, nullptr);
 
-    if (clientSocket == INVALID_SOCKET)
+    if (clientSocket == INVALID_SOCKET && !isClosed())
     {
-        if (!isClosed())
-        {
-            std::cout << "Failed to accept client: " + std::to_string(WSAGetLastError()) << "\n";
-        }
-        return {};
+        std::cout << "Failed to accept client: " + std::to_string(WSAGetLastError()) << "\n";
     }
 
     return Socket::wrap(clientSocket);
+}
+
+bool Socket::isValid() const
+{
+    return sock != INVALID_SOCKET;
 }
 
 }  // namespace Rival

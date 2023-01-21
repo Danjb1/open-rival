@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 
+#include <memory>
 #include <vector>
 
 #include "RenderUtils.h"
@@ -26,14 +27,14 @@ public:
     // The maximum number of tiles we can render at once
     static constexpr int maxTilesToRender = RenderUtils::maxTilesX * RenderUtils::maxTilesY;
 
-    TileRenderer(const Spritesheet& spritesheet, const Texture& paletteTexture);
+    TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const Texture> paletteTexture);
 
     void render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
 
 private:
     SpriteRenderable renderable;
 
-    const Texture& paletteTexture;
+    std::shared_ptr<const Texture> paletteTexture;
 
     bool TileRenderer::needsUpdate() const;
 

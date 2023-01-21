@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <optional>
+#include <string>
 
 #include "net/Connection.h"
 #include "net/Server.h"
@@ -24,6 +26,7 @@ public:
      */
     void start(std::unique_ptr<State> state);
 
+    void pollNetwork();
     void pollEvents();
 
     void requestExit()
@@ -46,8 +49,16 @@ public:
         return *state;
     }
 
+    Connection& getConnection()
+    {
+        return *connection;
+    }
+
     /** Starts a server and connects to it. */
-    void Application::startServer(int port);
+    void startServer(int port);
+
+    /** Connects to a server. */
+    void connectToServer(const std::string& address, int port);
 
 private:
     void makeNextStateActive();
@@ -59,8 +70,8 @@ private:
     std::unique_ptr<State> state;
     std::unique_ptr<State> nextState;
 
-    std::unique_ptr<Server> server;
-    std::unique_ptr<Connection> connection;
+    std::optional<Server> server;
+    std::optional<Connection> connection;
 };
 
 }  // namespace Rival

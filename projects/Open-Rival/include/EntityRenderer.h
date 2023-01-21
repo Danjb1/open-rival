@@ -2,9 +2,7 @@
 
 #include <glm/vec2.hpp>
 
-#include <array>
-#include <map>
-#include <string>
+#include <memory>
 
 #include "EntityUtils.h"
 #include "SpriteRenderable.h"
@@ -45,7 +43,7 @@ private:
 private:
     static constexpr int numHitboxSprites = 4;
 
-    const Texture& paletteTexture;
+    std::shared_ptr<const Texture> paletteTexture;
     const PlayerContext& playerContext;
 
     SpriteRenderable hitboxRenderable;

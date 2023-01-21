@@ -53,14 +53,9 @@ class Font
 {
 public:
     /**
-     * Creates a Font.
-     */
-    Font(Texture texture, std::unordered_map<char, CharData> chars, int defaultSize);
-
-    /**
      * Gets the Texture that backs this Font.
      */
-    const Texture& getTexture() const
+    std::shared_ptr<const Texture> getTexture() const
     {
         return texture;
     }
@@ -89,11 +84,12 @@ public:
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
-    static std::unique_ptr<Font>
-    loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
+    static Font loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
 
 private:
-    static std::unique_ptr<Font> loadFont(FT_Library& ft, std::string filename, int defaultSize);
+    static Font loadFont(FT_Library& ft, std::string filename, int defaultSize);
+
+    Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, CharData> chars, int defaultSize);
 
     static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
     static inline int makePrintable(unsigned char c);
@@ -130,7 +126,7 @@ private:
     /**
      * Texture containing rendered bitmap characters.
      */
-    Texture texture;
+    std::shared_ptr<const Texture> texture;
 
     /**
      * Data for each character in the font.

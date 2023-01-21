@@ -95,7 +95,7 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Bind vertex array
     glBindVertexArray(renderable.getVao());
@@ -272,7 +272,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, hitboxRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Bind vertex array
     glBindVertexArray(hitboxRenderable.getVao());

@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "GLUtils.h"
 #include "Shaders.h"
 #include "Spritesheet.h"
 #include "Texture.h"
@@ -26,7 +27,8 @@ SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprite
     drawMode = (maxSprites == 1) ? GL_TRIANGLE_FAN : GL_TRIANGLES;
 
     // Determine the number of indices per sprite
-    indicesPerSprite = (drawMode == GL_TRIANGLE_FAN) ? numIndicesForTriangleFan : numIndicesForTriangles;
+    indicesPerSprite =
+            (drawMode == GL_TRIANGLE_FAN) ? GLUtils::numIndicesForTriangleFan : GLUtils::numIndicesForTriangles;
 
     // Initialize position buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
@@ -128,7 +130,7 @@ GLuint SpriteRenderable::getIbo() const
 
 GLuint SpriteRenderable::getTextureId() const
 {
-    return spritesheet.texture.getId();
+    return spritesheet.texture->getId();
 }
 
 GLenum SpriteRenderable::getDrawMode() const

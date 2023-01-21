@@ -10,13 +10,13 @@ namespace Rival {
 class Connection
 {
 public:
-    Connection(std::shared_ptr<Socket> destination);
+    Connection(Socket destination);
 
     /** Closes this connection. */
     void close();
 
 private:
-    std::shared_ptr<Socket> destination;
+    Socket destination;
 };
 
 }  // namespace Rival

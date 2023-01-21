@@ -34,9 +34,15 @@ struct TextureProperties
 
 class Texture
 {
-
 public:
     Texture(const GLuint id, int width, int height);
+    ~Texture();
+
+    // Allow moving but prevent copying and move-assignment
+    Texture(const Texture& other) = delete;
+    Texture(Texture&& other) noexcept;
+    Texture& operator=(const Texture& other) = delete;
+    Texture& operator=(Texture&& other) = delete;
 
     const GLuint getId() const;
 
@@ -44,16 +50,14 @@ public:
 
     const int getHeight() const;
 
-    static const Texture loadTexture(const std::string filename);
+    static std::shared_ptr<const Texture> loadTexture(const std::string filename);
 
-    static const Texture wrap(const Image img, TextureProperties props);
+    static std::shared_ptr<const Texture> wrap(const Image img, TextureProperties props);
 
 private:
-    const GLuint id;
-
-    const int width;
-
-    const int height;
+    GLuint id;
+    int width;
+    int height;
 };
 
 }  // namespace Rival

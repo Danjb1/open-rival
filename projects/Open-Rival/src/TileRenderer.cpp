@@ -20,7 +20,7 @@
 
 namespace Rival {
 
-TileRenderer::TileRenderer(const Spritesheet& spritesheet, const Texture& paletteTexture)
+TileRenderer::TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const Texture> paletteTexture)
     : paletteTexture(paletteTexture)
     , renderable { spritesheet, maxTilesToRender }
 {
@@ -39,7 +39,7 @@ void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, 
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
     glActiveTexture(GL_TEXTURE0 + 1);  // Texture unit 1
-    glBindTexture(GL_TEXTURE_2D, paletteTexture.getId());
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Bind vertex array
     glBindVertexArray(renderable.getVao());

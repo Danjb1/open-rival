@@ -148,7 +148,7 @@ void TextRenderable::countChars()
 
 GLuint TextRenderable::getTextureId() const
 {
-    return props.font->getTexture().getId();
+    return props.font->getTexture()->getId();
 }
 
 int TextRenderable::getNumLayers() const

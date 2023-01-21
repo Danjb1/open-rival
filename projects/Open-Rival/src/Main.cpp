@@ -60,11 +60,18 @@ int main()
         Application app(context);
 
         // Host a game
-        bool host = true;  // TMP
-        int port = 28039;  // TMP
+        // TMP: These variables should be read from the command line
+        bool host = true;
+        const std::string address = "localhost";
+        bool join = false;
+        int port = 28039;
         if (host)
         {
             app.startServer(port);
+        }
+        else if (join)
+        {
+            app.connectToServer(address, port);
         }
 
         std::unique_ptr<State> initialState = createGameState(app);
