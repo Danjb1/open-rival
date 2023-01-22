@@ -5,7 +5,7 @@
 #include "SDLWrapper.h"
 
 #include <memory>
-#include <utility>  // std::in_place
+#include <utility>  // std::in_place, std::move
 
 #include "net/Socket.h"
 #include "ApplicationContext.h"
@@ -152,7 +152,9 @@ void Application::makeNextStateActive()
 
 void Application::startServer(int port)
 {
-    server.emplace(port, PlayerStore::maxPlayers);
+    initNetworking();
+
+    server.emplace(port, PlayerStore::maxPlayers, packetFactory);
     server->start();
 
     // Connect to the server ourselves!
@@ -161,7 +163,17 @@ void Application::startServer(int port)
 
 void Application::connectToServer(const std::string& address, int port)
 {
-    connection.emplace(Socket::createClient(address, port));
+    initNetworking();
+
+    connection.emplace(Socket::createClient(address, port), packetFactory);
+}
+
+void Application::initNetworking()
+{
+    if (!packetFactory)
+    {
+        packetFactory = std::make_shared<PacketFactory>();
+    }
 }
 
 }  // namespace Rival

@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>  // std::move
 
 #include "net/Connection.h"
 #include "net/Server.h"
@@ -62,6 +63,7 @@ public:
 
 private:
     void makeNextStateActive();
+    void initNetworking();
 
 private:
     bool exiting { false };
@@ -72,6 +74,7 @@ private:
 
     std::optional<Server> server;
     std::optional<Connection> connection;
+    std::shared_ptr<PacketFactory> packetFactory;
 };
 
 }  // namespace Rival

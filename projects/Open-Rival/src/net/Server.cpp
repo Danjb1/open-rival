@@ -2,15 +2,16 @@
 
 #include "net/Server.h"
 
-#include <utility>  // make_pair
+#include <utility>  // std::make_pair, std::move
 
 #include "net/Socket.h"
 
 namespace Rival {
 
-Server::Server(int port, int maxPlayers)
+Server::Server(int port, int maxPlayers, std::shared_ptr<PacketFactory> packetFactory)
     : serverSocket(Socket::createServer(port))
     , maxPlayers(maxPlayers)
+    , packetFactory(packetFactory)
     , state(ServerState::Lobby)
 {
 }
@@ -20,7 +21,7 @@ Server::~Server()
     // Close connections
     for (auto& entry : connectedPlayers)
     {
-        entry.second.close();
+        entry.second->close();
     }
 
     // Kill server
@@ -40,7 +41,8 @@ void Server::acceptThreadLoop()
         Socket newPlayer = serverSocket.accept();
         if (newPlayer.isValid())
         {
-            Connection newPlayerConnection(std::move(newPlayer));
+            std::unique_ptr<Connection> newPlayerConnection =
+                    std::make_unique<Connection>(std::move(newPlayer), packetFactory);
             connectedPlayers.insert(std::make_pair(requestPlayerId(), std::move(newPlayerConnection)));
         }
     }

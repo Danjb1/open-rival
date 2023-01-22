@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 // Ideally we would not have any platform-specific stuff here,
 // but this seems unavoidable since we need to know the underlying type!
@@ -20,6 +21,11 @@ enum class SocketState : std::uint8_t
     Closed
 };
 
+/**
+ * Wrapper class for a native socket.
+ *
+ * Implementation details are platform-specific.
+ */
 class Socket
 {
 public:
@@ -39,10 +45,19 @@ public:
     Socket accept();
 
     /** Closes the socket; forces any blocking calls to return. */
-    void close();
+    void close() noexcept;
 
+    /** Determines if this socket is valid. */
     bool isValid() const;
+
+    /** Determines if this socket is closed. */
     bool isClosed() const;
+
+    /** Sends data on this socket. */
+    void send(std::vector<char>& buffer);
+
+    /** Blocking call that waits for data to arrive and adds it to the given buffer. */
+    void receive(std::vector<char>& buffer);
 
 private:
     Socket(const std::string& address, int port, bool server);

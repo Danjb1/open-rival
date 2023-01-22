@@ -6,7 +6,7 @@
 #include <string>
 #include <tuple>  // std::forward_as_tuple
 #include <unordered_map>
-#include <utility>  // std::piecewise_construct
+#include <utility>  // std::move, std::piecewise_construct
 
 #include "Application.h"
 #include "ApplicationContext.h"
