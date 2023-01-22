@@ -12,15 +12,14 @@ Selection:
 
 Multiplayer:
 
-- Rethink how Sockets/Connections are passed around - maybe it makes sense to use shared_ptrs after all
 - Read host/join options from command-line
-- Packet class that can be serialized / deserialized
-- Connections should receive incoming packets and put them in a queue
+- Register packet types with PacketFactory and allow it to deserialize based on a packet ID
 - Server should get notified of incoming packets, and forward them to other players
 - GameState should process queued packets at the start of each tick
 - GameState should send issued commands to the server at the end of each tick
 - In multiplayer, commands need to be scheduled for a future tick
 - The game should only start when all players have joined
+- Ensure connections close gracefully if an error occurs
 - Create standalone project to run dedicated server
 
 <!----------------------------------------------------------------------------->

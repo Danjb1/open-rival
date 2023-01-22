@@ -19,7 +19,7 @@ Entity::Entity(EntityType type, int width, int height)
 void Entity::attach(std::shared_ptr<EntityComponent> component)
 {
     component->onAttach(this);
-    components.insert({ component->getKey(), std::move(component) });
+    components.insert({ component->getKey(), component });
 }
 
 void Entity::onSpawn(World* newScenario, int newId, MapNode newPos)

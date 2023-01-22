@@ -8,7 +8,7 @@
 
 #include <algorithm>  // std::max
 #include <stdexcept>  // std::runtime_error, std::out_of_range
-#include <utility>    // std::pair
+#include <utility>    // std::move, std::pair
 
 #include "GLUtils.h"
 #include "Image.h"

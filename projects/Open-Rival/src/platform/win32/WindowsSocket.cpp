@@ -111,7 +111,7 @@ void Socket::init()
     setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char*) (&socketOptionValue), sizeof(BOOL));
 }
 
-void Socket::close()
+void Socket::close() noexcept
 {
     if (state == SocketState::Closed)
     {
@@ -139,6 +139,35 @@ Socket Socket::accept()
 bool Socket::isValid() const
 {
     return sock != INVALID_SOCKET;
+}
+
+void Socket::send(std::vector<char>& buffer)
+{
+    int result = ::send(sock, buffer.data(), buffer.size(), 0);
+    if (result == SOCKET_ERROR)
+    {
+        throw std::runtime_error("Failed to send on socket: " + std::to_string(WSAGetLastError()));
+    }
+}
+
+void Socket::receive(std::vector<char>& buffer)
+{
+    // Receive until the peer shuts down the connection
+    int result = recv(sock, buffer.data(), buffer.capacity(), 0);
+    if (result > 0)
+    {
+        // Set the buffer size to the number of bytes read
+        buffer.resize(result);
+    }
+    else if (result == 0)
+    {
+        // Connection has been gracefully closed
+        close();
+    }
+    else if (!isClosed())
+    {
+        throw std::runtime_error("Failed to read from socket: " + std::to_string(WSAGetLastError()));
+    }
 }
 
 }  // namespace Rival

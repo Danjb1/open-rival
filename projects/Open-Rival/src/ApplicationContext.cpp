@@ -10,6 +10,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>  // std::move
 
 #include "net/NetUtils.h"
 #include "AudioUtils.h"

@@ -4,6 +4,7 @@
 
 #include <map>
 #include <stdexcept>
+#include <utility>  // std::move
 
 #include "Application.h"
 #include "ApplicationContext.h"

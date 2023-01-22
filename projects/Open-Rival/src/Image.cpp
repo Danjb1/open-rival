@@ -3,6 +3,7 @@
 #include "Image.h"
 
 #include <iostream>
+#include <utility>  // std::move
 
 #include "BinaryFileReader.h"
 #include "Palette.h"
