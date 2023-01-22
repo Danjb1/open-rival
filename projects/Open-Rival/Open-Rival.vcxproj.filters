@@ -361,6 +361,9 @@
     <ClCompile Include="include\net\packets\AnonymousPacket.cpp">
       <Filter>Source Files\net\packets</Filter>
     </ClCompile>
+    <ClCompile Include="src\ProgramOptions.cpp">
+      <Filter>Source Files\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -671,6 +674,9 @@
     </ClInclude>
     <ClInclude Include="include\net\packets\AnonymousPacket.h">
       <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ProgramOptions.h">
+      <Filter>Source Files\application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

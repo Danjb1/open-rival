@@ -13,6 +13,7 @@
 #include "ConfigUtils.h"
 #include "GameState.h"
 #include "PlayerState.h"
+#include "ProgramOptions.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "World.h"
@@ -50,8 +51,16 @@ std::unique_ptr<State> createGameState(Application& app)
 /**
  * Entry point for the application.
  */
-int main()
+int main(int argc, char* argv[])
 {
+    // Parse command-line parameters
+    ProgramOptions options(argc, argv);
+    if (options.hasError())
+    {
+        std::cerr << options.getError() << "\n";
+        return -1;
+    }
+
     int exitCode = 0;
 
     try
@@ -59,19 +68,15 @@ int main()
         ApplicationContext context;
         Application app(context);
 
-        // Host a game
-        // TMP: These variables should be read from the command line
-        bool host = true;
-        const std::string address = "localhost";
-        bool join = false;
-        int port = 28039;
-        if (host)
+        // Host or join a game;
+        // eventually this will be handled by the lobby
+        if (options.isHost())
         {
-            app.startServer(port);
+            app.startServer(options.getPort());
         }
-        else if (join)
+        else if (options.isClient())
         {
-            app.connectToServer(address, port);
+            app.connectToServer(options.getHostAddress(), options.getPort());
         }
 
         std::unique_ptr<State> initialState = createGameState(app);
