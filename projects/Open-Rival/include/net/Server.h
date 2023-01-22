@@ -20,11 +20,15 @@ enum class ServerState : std::uint8_t
 /**
  * Relay server that forwards received packets to every other client.
  */
-class Server
+class Server : public ConnectionListener
 {
 public:
     Server(int port, int maxPlayers);
     ~Server();
+
+    // Begin ConnectionListener override
+    void onPacketReceived(Connection& connection, std::shared_ptr<const Packet> packet) override;
+    // End ConnectionListener override
 
     /** Starts accepting connections in a separate thread. */
     void start();

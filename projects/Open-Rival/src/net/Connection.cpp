@@ -6,9 +6,10 @@
 
 namespace Rival {
 
-Connection::Connection(Socket socket, std::shared_ptr<PacketFactory> packetFactory)
+Connection::Connection(Socket socket, std::shared_ptr<PacketFactory> packetFactory, ConnectionListener* listener)
     : socket(std::move(socket))
     , packetFactory(packetFactory)
+    , listener(listener)
     , receiveThread(&Connection::receiveThreadLoop, this)
 {
     sendBuffer.reserve(bufferSize);
@@ -19,6 +20,16 @@ Connection::~Connection()
 {
     close();
     receiveThread.join();
+}
+
+bool Connection::operator==(const Connection& other) const
+{
+    return socket == other.socket;
+}
+
+bool Connection::operator!=(const Connection& other) const
+{
+    return !(*this == other);
 }
 
 void Connection::close() noexcept
@@ -37,9 +48,17 @@ void Connection::receiveThreadLoop()
         std::shared_ptr<const Packet> packet =
                 packetFactory ? packetFactory->deserialize(recvBuffer) : std::make_shared<AnonymousPacket>(recvBuffer);
 
+        if (packet)
         {
-            std::scoped_lock lock(receivedPacketsMutex);
-            receivedPackets.push_back(packet);
+            if (listener)
+            {
+                listener->onPacketReceived(*this, packet);
+            }
+            else
+            {
+                std::scoped_lock lock(receivedPacketsMutex);
+                receivedPackets.push_back(packet);
+            }
         }
 
         recvBuffer.clear();

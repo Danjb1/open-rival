@@ -28,6 +28,21 @@ Server::~Server()
     acceptThread.join();
 }
 
+void Server::onPacketReceived(Connection& connection, std::shared_ptr<const Packet> packet)
+{
+    for (const auto& entry : connectedPlayers)
+    {
+        const std::unique_ptr<Connection>& otherConnection = entry.second;
+        if (connection == *otherConnection)
+        {
+            // Don't send packets back to the sender
+            continue;
+        }
+
+        otherConnection->send(*packet);
+    }
+}
+
 void Server::start()
 {
     acceptThread = std::thread(&Server::acceptThreadLoop, this);
@@ -40,8 +55,7 @@ void Server::acceptThreadLoop()
         Socket newPlayer = serverSocket.accept();
         if (newPlayer.isValid())
         {
-            std::unique_ptr<Connection> newPlayerConnection =
-                    std::make_unique<Connection>(std::move(newPlayer), nullptr);
+            auto newPlayerConnection = std::make_unique<Connection>(std::move(newPlayer), nullptr, this);
             connectedPlayers.insert(std::make_pair(requestPlayerId(), std::move(newPlayerConnection)));
         }
     }

@@ -30,6 +30,16 @@ Socket::~Socket()
     close();
 }
 
+bool Socket::operator==(const Socket& other) const
+{
+    return sock == other.sock;
+}
+
+bool Socket::operator!=(const Socket& other) const
+{
+    return !(*this == other);
+}
+
 bool Socket::isClosed() const
 {
     return state == SocketState::Closed;

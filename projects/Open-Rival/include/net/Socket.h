@@ -35,6 +35,9 @@ public:
 
     ~Socket();
 
+    bool Socket::operator==(const Socket& other) const;
+    bool Socket::operator!=(const Socket& other) const;
+
     // Allow moving but prevent copying and move-assignment
     Socket(const Socket& other) = delete;
     Socket(Socket&& other) noexcept;
