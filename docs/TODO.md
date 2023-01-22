@@ -12,7 +12,6 @@ Selection:
 
 Multiplayer:
 
-- Crash on exit after a successful connection
 - Register packet types with PacketFactory and allow it to deserialize based on a packet ID
 - GameState should process queued packets at the start of each tick
 - GameState should send issued commands to the server at the end of each tick
