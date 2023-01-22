@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\net\packets\AnonymousPacket.cpp" />
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\ApplicationContext.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="include\net\NetUtils.h" />
     <ClInclude Include="include\net\Packet.h" />
     <ClInclude Include="include\net\PacketFactory.h" />
+    <ClInclude Include="include\net\packets\AnonymousPacket.h" />
     <ClInclude Include="include\net\Server.h" />
     <ClInclude Include="include\net\Socket.h" />
     <ClInclude Include="include\OwnerComponent.h" />

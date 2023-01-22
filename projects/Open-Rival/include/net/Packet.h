@@ -10,6 +10,8 @@ namespace Rival {
 class Packet
 {
 public:
+    virtual ~Packet() {}
+
     /** Serializes this packet to the given buffer. */
     virtual void serialize(std::vector<char>& buffer) const = 0;
 

@@ -8,10 +8,9 @@
 
 namespace Rival {
 
-Server::Server(int port, int maxPlayers, std::shared_ptr<PacketFactory> packetFactory)
+Server::Server(int port, int maxPlayers)
     : serverSocket(Socket::createServer(port))
     , maxPlayers(maxPlayers)
-    , packetFactory(packetFactory)
     , state(ServerState::Lobby)
 {
 }
@@ -42,7 +41,7 @@ void Server::acceptThreadLoop()
         if (newPlayer.isValid())
         {
             std::unique_ptr<Connection> newPlayerConnection =
-                    std::make_unique<Connection>(std::move(newPlayer), packetFactory);
+                    std::make_unique<Connection>(std::move(newPlayer), nullptr);
             connectedPlayers.insert(std::make_pair(requestPlayerId(), std::move(newPlayerConnection)));
         }
     }

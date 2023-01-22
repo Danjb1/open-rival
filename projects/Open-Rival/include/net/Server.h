@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 #include "net/Connection.h"
-#include "net/PacketFactory.h"
 
 namespace Rival {
 
@@ -18,10 +17,13 @@ enum class ServerState : std::uint8_t
     Game
 };
 
+/**
+ * Relay server that forwards received packets to every other client.
+ */
 class Server
 {
 public:
-    Server(int port, int maxPlayers, std::shared_ptr<PacketFactory> packetFactory);
+    Server(int port, int maxPlayers);
     ~Server();
 
     /** Starts accepting connections in a separate thread. */
@@ -33,7 +35,6 @@ private:
 
 private:
     Socket serverSocket;
-    std::shared_ptr<PacketFactory> packetFactory;
     ServerState state = ServerState::Lobby;
     std::thread acceptThread;
 
