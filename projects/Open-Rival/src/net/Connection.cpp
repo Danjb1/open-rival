@@ -2,6 +2,8 @@
 
 #include "net/Connection.h"
 
+#include "net/packets/AnonymousPacket.h"
+
 namespace Rival {
 
 Connection::Connection(Socket socket, std::shared_ptr<PacketFactory> packetFactory)
@@ -30,7 +32,10 @@ void Connection::receiveThreadLoop()
     {
         socket.receive(recvBuffer);
 
-        std::shared_ptr<const Packet> packet = packetFactory->deserialize(recvBuffer);
+        // If this Connection has no packet factory, just wrap the buffers in generic packets. These are used by the
+        // relay server, which doesn't care about their contents.
+        std::shared_ptr<const Packet> packet =
+                packetFactory ? packetFactory->deserialize(recvBuffer) : std::make_shared<AnonymousPacket>(recvBuffer);
 
         {
             std::scoped_lock lock(receivedPacketsMutex);

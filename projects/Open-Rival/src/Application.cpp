@@ -154,7 +154,7 @@ void Application::startServer(int port)
 {
     initNetworking();
 
-    server.emplace(port, PlayerStore::maxPlayers, packetFactory);
+    server.emplace(port, PlayerStore::maxPlayers);
     server->start();
 
     // Connect to the server ourselves!
