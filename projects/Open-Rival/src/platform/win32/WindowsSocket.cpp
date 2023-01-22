@@ -166,7 +166,9 @@ void Socket::receive(std::vector<char>& buffer)
     }
     else if (!isClosed())
     {
-        throw std::runtime_error("Failed to read from socket: " + std::to_string(WSAGetLastError()));
+        // Socket read error; socket is still open on our side but may have been closed by the other side
+        std::cerr << "Failed to read from socket: " << std::to_string(WSAGetLastError()) << "\n";
+        close();
     }
 }
 
