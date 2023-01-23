@@ -27,7 +27,6 @@ public:
      */
     void start(std::unique_ptr<State> state);
 
-    void pollNetwork();
     void pollEvents();
 
     void requestExit()
@@ -50,9 +49,9 @@ public:
         return *state;
     }
 
-    Connection& getConnection()
+    std::optional<Connection>& getConnection()
     {
-        return *connection;
+        return connection;
     }
 
     /** Starts a server and connects to it. */
@@ -63,7 +62,6 @@ public:
 
 private:
     void makeNextStateActive();
-    void initNetworking();
 
 private:
     bool exiting { false };

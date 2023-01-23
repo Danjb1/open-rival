@@ -13,13 +13,8 @@ Selection:
 Multiplayer:
 
 - Register packet types with PacketFactory and allow it to deserialize based on a packet ID
-- GameState should process queued packets at the start of each tick
-- GameState should send issued commands to the server at the end of each tick
-- In multiplayer, commands need to be scheduled for a future tick
-- The game should only start when all players have joined
-- Ensure connections close gracefully if an error occurs
-- Call `shutdown` on sockets before closing
-- Create standalone project to run dedicated server
+- Process received packets (extract commands and schedule)
+- GameState should send issued commands to the server
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -90,17 +85,9 @@ Tests:
 
 ### Multiplayer
 
+- The game should only start when all players have joined
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
-- Write server code that can forward messages between clients
-    - This should exist in a standalone project so that the server can be run independently
-    - Open-Rival should import this so that one player can act as a host
-- Clients should connect to server using TCP
-- Use a lock-step model
-    - See [multiplayer notes](/docs/multiplayer.md)
-    - https://www.informit.com/articles/article.aspx?p=2461064&seqNum=3
-    - https://gafferongames.com/post/what_every_programmer_needs_to_know_about_game_networking/
-- Clients schedule commands at 'n' ticks in the future
-- Each client runs a deterministic simulation of the game by applying commands from all players each tick
+- Create standalone project to run dedicated server
 
 ### Mouse Picking
 

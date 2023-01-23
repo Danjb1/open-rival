@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <utility>  // std::move
 
+#include "net/Connection.h"
 #include "Application.h"
 #include "ApplicationContext.h"
 #include "GameInterface.h"
@@ -16,6 +17,7 @@
 #include "Race.h"
 #include "RenderUtils.h"
 #include "Spritesheet.h"
+#include "TimeUtils.h"
 
 namespace Rival {
 
@@ -42,11 +44,32 @@ void GameState::onLoad()
 
 void GameState::update()
 {
+    pollNetwork();
     world->addPendingEntities();
     earlyUpdateEntities();
     respondToInput();
     updateEntities();
     processCommands();
+    ++currentTick;
+}
+
+void GameState::pollNetwork()
+{
+    std::optional<Connection>& connection = app.getConnection();
+    if (!connection || connection->isClosed())
+    {
+        return;
+    }
+
+    /*
+    const auto& receivedPackets = connection->getReceivedPackets();
+    for (const auto& packet : receivedPackets)
+    {
+        // TODO: Process packet
+        //  - extract commands
+        //  - schedule commands as needed
+    }
+    */
 }
 
 void GameState::earlyUpdateEntities() const
@@ -274,18 +297,49 @@ void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
         return;
     }
 
-    // TODO: In multiplayer, we should schedule commands for 'n' ticks in the future
-    pendingCommands.push_back(command);
+    // In multiplayer, schedule commands for 'n' ticks in the future
+    int relevantTick = isNetGame() ? currentTick + TimeUtils::netCommandDelay : currentTick;
+
+    // Schedule our command
+    auto findResult = pendingCommands.find(relevantTick);
+    if (findResult == pendingCommands.end())
+    {
+        // No commands are scheduled for this tick yet
+        pendingCommands.insert({ relevantTick, { command } });
+    }
+    else
+    {
+        // Add our command to the commands already scheduled for this tick
+        std::vector<std::shared_ptr<GameCommand>>& commandsDue = findResult->second;
+        commandsDue.push_back(command);
+    }
+
+    // Send command to the server
+    // CommandPacket packet(command);
+    // app.getConnection()->send(packet);
 }
 
 void GameState::processCommands()
 {
-    for (auto& cmd : pendingCommands)
+    auto findResult = pendingCommands.find(currentTick);
+    if (findResult == pendingCommands.end())
+    {
+        // No commands due
+        return;
+    }
+
+    std::vector<std::shared_ptr<GameCommand>>& commandsDue = findResult->second;
+    for (auto& cmd : commandsDue)
     {
         cmd->execute(*this);
     }
 
-    pendingCommands.clear();
+    pendingCommands.erase(currentTick);
+}
+
+bool GameState::isNetGame() const
+{
+    return app.getConnection().has_value();
 }
 
 }  // namespace Rival
