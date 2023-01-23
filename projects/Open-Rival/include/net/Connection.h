@@ -36,11 +36,10 @@ public:
     bool Connection::operator==(const Connection& other) const;
     bool Connection::operator!=(const Connection& other) const;
 
-    /** Starts receiving packets. */
-    void start();
-
     /** Closes this connection. */
     void close() noexcept;
+
+    bool isClosed() const;
 
     /** Sends a packet on this connection. */
     void send(const Packet& packet);

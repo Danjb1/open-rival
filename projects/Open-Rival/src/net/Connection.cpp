@@ -37,6 +37,11 @@ void Connection::close() noexcept
     socket.close();
 }
 
+bool Connection::isClosed() const
+{
+    return socket.isClosed();
+}
+
 void Connection::receiveThreadLoop()
 {
     while (!socket.isClosed())

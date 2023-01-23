@@ -18,6 +18,9 @@ static constexpr int timeStepMs = 1000 / fps;
  */
 static constexpr int minSleepTime = 2;
 
+/** Number of ticks in the future that commands are scheduled for in a network game. */
+static constexpr int netCommandDelay = 20;
+
 /**
  * Allows for high-precision sleep timers.
  *

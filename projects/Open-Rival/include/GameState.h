@@ -78,10 +78,12 @@ public:
     // End GameCommandInvoker override
 
 private:
+    void pollNetwork();
     void earlyUpdateEntities() const;
     void updateEntities() const;
     void respondToInput();
     void processCommands();
+    bool isNetGame() const;
 
 private:
     /**
@@ -120,9 +122,9 @@ private:
     GameRenderer gameRenderer;
 
     /**
-     * Commands ready to be executed.
+     * Commands ready to be executed, indexed by the tick number when they are due.
      */
-    std::vector<std::shared_ptr<GameCommand>> pendingCommands;
+    std::unordered_map<int, std::vector<std::shared_ptr<GameCommand>>> pendingCommands;
 
     /**
      * The current player input.
@@ -135,6 +137,11 @@ private:
      * Later, we will be allocated a player ID by the server.
      */
     int localPlayerId = 0;
+
+    /**
+     * Tick number, incremented with each update.
+     */
+    int currentTick = 0;
 };
 
 }  // namespace Rival

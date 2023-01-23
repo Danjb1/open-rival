@@ -50,9 +50,6 @@ void Application::start(std::unique_ptr<State> initialState)
         // Is the next update due?
         if (vsyncEnabled || nextUpdateDue <= frameStartTime)
         {
-            // Handle incoming packets
-            pollNetwork();
-
             // Handle events on the queue
             pollEvents();
 
@@ -104,14 +101,6 @@ void Application::start(std::unique_ptr<State> initialState)
     }
 }
 
-void Application::pollNetwork()
-{
-    if (!connection)
-    {
-        return;
-    }
-}
-
 void Application::pollEvents()
 {
     SDL_Event e;
@@ -152,8 +141,6 @@ void Application::makeNextStateActive()
 
 void Application::startServer(int port)
 {
-    initNetworking();
-
     server.emplace(port, PlayerStore::maxPlayers);
     server->start();
 
@@ -163,17 +150,11 @@ void Application::startServer(int port)
 
 void Application::connectToServer(const std::string& address, int port)
 {
-    initNetworking();
-
-    connection.emplace(Socket::createClient(address, port), packetFactory);
-}
-
-void Application::initNetworking()
-{
     if (!packetFactory)
     {
         packetFactory = std::make_shared<PacketFactory>();
     }
+    connection.emplace(Socket::createClient(address, port), packetFactory);
 }
 
 }  // namespace Rival
