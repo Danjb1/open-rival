@@ -62,6 +62,9 @@
     <Filter Include="Source Files\net\packets">
       <UniqueIdentifier>{4407f81e-64f0-4c57-bab8-d6c444d59544}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\net\packet-handlers">
+      <UniqueIdentifier>{03136e4e-6513-4300-845b-ba37e3364063}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -352,17 +355,26 @@
     <ClCompile Include="src\ApplicationContext.cpp">
       <Filter>Source Files\application</Filter>
     </ClCompile>
-    <ClCompile Include="src\net\Packet.cpp">
-      <Filter>Source Files\net</Filter>
-    </ClCompile>
     <ClCompile Include="src\net\PacketFactory.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
-    <ClCompile Include="include\net\packets\AnonymousPacket.cpp">
-      <Filter>Source Files\net\packets</Filter>
-    </ClCompile>
     <ClCompile Include="src\ProgramOptions.cpp">
       <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\AnonymousPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\PacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\Packet.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\GameCommandPacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\GameCommandPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -666,9 +678,6 @@
     <ClInclude Include="include\ApplicationContext.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
-    <ClInclude Include="include\net\Packet.h">
-      <Filter>Source Files\net</Filter>
-    </ClInclude>
     <ClInclude Include="include\net\PacketFactory.h">
       <Filter>Source Files\net</Filter>
     </ClInclude>
@@ -678,11 +687,27 @@
     <ClInclude Include="include\ProgramOptions.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\PacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\Packet.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\GameCommandPacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\GameCommandPacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Open-Rival.rc" />
+    <Image Include="res\icons\rival.ico">
+      <Filter>Resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\icons\rival.ico" />
+    <ResourceCompile Include="Open-Rival.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -6,9 +6,9 @@
 #include <thread>
 #include <vector>
 
-#include "net/Packet.h"
 #include "net/PacketFactory.h"
 #include "net/Socket.h"
+#include "net/packets/Packet.h"
 
 namespace Rival {
 

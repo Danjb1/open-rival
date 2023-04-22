@@ -48,3 +48,18 @@
         a = static_cast<TEnum>(static_cast<TUnder>(a) ^ static_cast<TUnder>(b));                                       \
         return a;                                                                                                      \
     }
+
+namespace EnumUtils {
+
+/**
+ * Converts an enum to its underlying type.
+ *
+ * Based on: https://stackoverflow.com/a/14589519/1624459
+ */
+template <typename T>
+constexpr auto toIntegral(T e)
+{
+    return static_cast<std::underlying_type_t<T>>(e);
+}
+
+}  // namespace EnumUtils
