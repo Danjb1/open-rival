@@ -6,6 +6,7 @@
 #include <memory>
 #include <unordered_map>
 
+#include "net/packets/Packet.h"
 #include "Camera.h"
 #include "GameCommand.h"
 #include "GameRenderer.h"
@@ -19,6 +20,7 @@
 namespace Rival {
 
 class Application;
+class PacketHandler;
 
 /**
  * Represents an optional direction along a given axis.
@@ -77,70 +79,57 @@ public:
     void dispatchCommand(std::shared_ptr<GameCommand> command) override;
     // End GameCommandInvoker override
 
+    void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
+
 private:
     void pollNetwork();
     void earlyUpdateEntities() const;
     void updateEntities() const;
     void respondToInput();
+    void sendOutgoingCommands();
     void processCommands();
     bool isNetGame() const;
 
 private:
-    /**
-     * Map of player ID -> player state.
-     */
+    /** Map of player ID -> player state. */
     std::unordered_map<int, PlayerState>& playerStates;
 
-    /**
-     * The current World.
-     */
+    /** The current World. */
     std::unique_ptr<World> world;
 
-    /**
-     * The rectangle on the screen to which the game is rendered (pixels).
-     */
+    /** The rectangle on the screen to which the game is rendered (pixels). */
     Rect viewport;
 
-    /**
-     * The camera that defines the area of the game world to render.
-     */
+    /** The camera that defines the area of the game world to render. */
     Camera camera;
 
-    /**
-     * Local player context.
-     */
+    /** Local player context. */
     PlayerContext playerContext;
 
-    /**
-     * Object used to find what's under the mouse.
-     */
+    /** Object used to find what's under the mouse. */
     MousePicker mousePicker;
 
-    /**
-     * Object that renders the game.
-     */
+    /** Object that renders the game. */
     GameRenderer gameRenderer;
 
-    /**
-     * Commands ready to be executed, indexed by the tick number when they are due.
-     */
+    /** Registered PacketHandlers by packet type. */
+    std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
+
+    /** Commands ready to be executed, indexed by the tick number when they are due. */
     std::unordered_map<int, std::vector<std::shared_ptr<GameCommand>>> pendingCommands;
 
-    /**
-     * The current player input.
-     */
+    /** Commands queued for sending over the network. */
+    std::vector<std::shared_ptr<GameCommand>> outgoingCommands;
+
+    /** The current player input. */
     Input input = {};
 
-    /**
-     * Player ID of the local player.
+    /** Player ID of the local player.
      *
-     * Later, we will be allocated a player ID by the server.
-     */
+     * Later, we will be allocated a player ID by the server. */
     int localPlayerId = 0;
 
-    /**
-     * Tick number, incremented with each update.
-     */
+    /** Tick number, incremented with each update. */
     int currentTick = 0;
 };
 

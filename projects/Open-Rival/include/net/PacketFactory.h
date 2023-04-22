@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "net/Packet.h"
+#include "net/packets/Packet.h"
 
 namespace Rival {
 

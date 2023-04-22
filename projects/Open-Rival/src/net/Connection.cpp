@@ -48,7 +48,7 @@ void Connection::receiveThreadLoop()
     {
         socket.receive(recvBuffer);
 
-        // If this Connection has no packet factory, just wrap the buffers in generic packets. These are used by the
+        // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
         // relay server, which doesn't care about their contents.
         std::shared_ptr<const Packet> packet =
                 packetFactory ? packetFactory->deserialize(recvBuffer) : std::make_shared<AnonymousPacket>(recvBuffer);

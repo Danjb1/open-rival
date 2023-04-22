@@ -12,9 +12,19 @@ Selection:
 
 Multiplayer:
 
-- Register packet types with PacketFactory and allow it to deserialize based on a packet ID
-- Process received packets (extract commands and schedule)
-- GameState should send issued commands to the server
+- Register PacketHandlers with GameState
+- Implement packet serialization / deserialization
+    - GameCommands also need to be serialized / deserialized for GameCommandPackets
+- Test that MoveCommands get sent/received over the network
+- Pause the game if we are still waiting for a packet to arrive for the current tick
+- Handle clients disconnecting
+- GameState receives a garbage packet when the game closes
+- Document networking code:
+    - At the end of each tick, we send all newly-issued commands to the server in a GameCommandPacket.
+    - The server wraps all received packets in AnonymousPackets and forwards them onto all other players.
+    - When players receive a packet, it gets deserialized by a PacketFactory.
+    - At the start of each tick, the GameState polls all received packets and looks for a registered PacketHandler for each of them.
+    - The GameCommandPacketHandler schedules other players' commands for the appropriate tick.
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -331,8 +341,10 @@ Tests:
 - PassabilityComponent for units is only used to set the initial passability; after that, we rely on the MovementComponent
 - Replace ConfigUtils with JsonUtils
 - Improve enums: https://stackoverflow.com/review/suggested-edits/33596043
+    - Also see comment: "You don't need `typename` here"
 - Copy/move constructors should use `noexcept`
 - Allow non-copyable classes to be moved (check uses of "= delete")
+- Replace PacketFactory's switch statement with a map of type -> function
 
 ### Rendering
 

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "net/Packet.h"
+#include "net/packets/Packet.h"
 
 namespace Rival {
 
@@ -15,7 +15,6 @@ public:
     AnonymousPacket(const std::vector<char>& buffer);
 
     void serialize(std::vector<char>& buffer) const override;
-    void deserialize(const std::vector<char> buffer) override;
 
 private:
     const std::vector<char> packetData;

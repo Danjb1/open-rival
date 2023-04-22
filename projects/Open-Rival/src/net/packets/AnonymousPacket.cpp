@@ -17,10 +17,4 @@ void AnonymousPacket::serialize(std::vector<char>& buffer) const
     buffer.insert(std::end(buffer), std::begin(packetData), std::end(packetData));
 }
 
-void AnonymousPacket::deserialize(const std::vector<char> buffer)
-{
-    // These should never be deserialized, they are always constructed directly
-    throw std::runtime_error("Tried to deserialize anonymous packet");
-}
-
 }  // namespace Rival

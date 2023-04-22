@@ -2,13 +2,17 @@
 
 #include "GameState.h"
 
-#include <map>
+#include <map>  // std::cend
 #include <stdexcept>
+#include <string>
 #include <utility>  // std::move
 
 #include "net/Connection.h"
+#include "net/packet-handlers/PacketHandler.h"
+#include "net/packets/GameCommandPacket.h"
 #include "Application.h"
 #include "ApplicationContext.h"
+#include "EnumUtils.h"
 #include "GameInterface.h"
 #include "Image.h"
 #include "InputUtils.h"
@@ -48,6 +52,7 @@ void GameState::update()
     world->addPendingEntities();
     earlyUpdateEntities();
     respondToInput();
+    sendOutgoingCommands();
     updateEntities();
     processCommands();
     ++currentTick;
@@ -55,21 +60,24 @@ void GameState::update()
 
 void GameState::pollNetwork()
 {
-    std::optional<Connection>& connection = app.getConnection();
-    if (!connection || connection->isClosed())
+    if (!isNetGame())
     {
         return;
     }
 
-    /*
-    const auto& receivedPackets = connection->getReceivedPackets();
-    for (const auto& packet : receivedPackets)
+    const auto& receivedPackets = app.getConnection()->getReceivedPackets();
+    for (auto& packet : receivedPackets)
     {
-        // TODO: Process packet
-        //  - extract commands
-        //  - schedule commands as needed
+        auto iter = packetHandlers.find(packet->getType());
+        if (iter == packetHandlers.cend())
+        {
+            std::cerr << "Received unexpected packet of type "
+                      << std::to_string(EnumUtils::toIntegral(packet->getType())) << "\n";
+            continue;
+        }
+
+        iter->second->onPacketReceived(packet, *this);
     }
-    */
 }
 
 void GameState::earlyUpdateEntities() const
@@ -102,6 +110,19 @@ void GameState::respondToInput()
     {
         camera.translate(0.f, 0.35f);
     }
+}
+
+void GameState::sendOutgoingCommands()
+{
+    if (!isNetGame())
+    {
+        return;
+    }
+
+    // Send all commands for this tick to the server
+    GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
+    app.getConnection()->send(packet);
+    outgoingCommands.clear();
 }
 
 void GameState::updateEntities() const
@@ -299,13 +320,22 @@ void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
 
     // In multiplayer, schedule commands for 'n' ticks in the future
     int relevantTick = isNetGame() ? currentTick + TimeUtils::netCommandDelay : currentTick;
+    scheduleCommand(command, relevantTick);
 
-    // Schedule our command
-    auto findResult = pendingCommands.find(relevantTick);
+    // Queue commands to be sent over the network
+    if (isNetGame())
+    {
+        outgoingCommands.push_back(command);
+    }
+}
+
+void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
+{
+    auto findResult = pendingCommands.find(tick);
     if (findResult == pendingCommands.end())
     {
         // No commands are scheduled for this tick yet
-        pendingCommands.insert({ relevantTick, { command } });
+        pendingCommands.insert({ tick, { command } });
     }
     else
     {
@@ -313,10 +343,6 @@ void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
         std::vector<std::shared_ptr<GameCommand>>& commandsDue = findResult->second;
         commandsDue.push_back(command);
     }
-
-    // Send command to the server
-    // CommandPacket packet(command);
-    // app.getConnection()->send(packet);
 }
 
 void GameState::processCommands()
