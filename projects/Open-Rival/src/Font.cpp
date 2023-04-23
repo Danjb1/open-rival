@@ -7,6 +7,7 @@
 #include <freetype/ftwinfnt.h>
 
 #include <algorithm>  // std::max
+#include <cstddef>    // std::size_t
 #include <stdexcept>  // std::runtime_error, std::out_of_range
 #include <utility>    // std::move, std::pair
 
@@ -126,7 +127,7 @@ Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
     GLsizei imgHeight = 0;
 
     // Determine the image size
-    for (size_t i = 0; i < Font::supportedChars.length(); ++i)
+    for (std::size_t i = 0; i < Font::supportedChars.length(); ++i)
     {
         unsigned char c = Font::supportedChars[i];
 
@@ -164,7 +165,7 @@ Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
     int nextX = Font::charPadding;
 
     // Create our characters
-    for (size_t i = 0; i < Font::supportedChars.length(); ++i)
+    for (std::size_t i = 0; i < Font::supportedChars.length(); ++i)
     {
         unsigned char c = Font::supportedChars[i];
         unsigned char charCode = c - charOffset;

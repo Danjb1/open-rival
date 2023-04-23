@@ -12,19 +12,11 @@ Selection:
 
 Multiplayer:
 
-- Register PacketHandlers with GameState
-- Implement packet serialization / deserialization
-    - GameCommands also need to be serialized / deserialized for GameCommandPackets
-- Test that MoveCommands get sent/received over the network
+- Deserialize GameCommands from a GameCommandPacket
 - Pause the game if we are still waiting for a packet to arrive for the current tick
 - Handle clients disconnecting
-- GameState receives a garbage packet when the game closes
-- Document networking code:
-    - At the end of each tick, we send all newly-issued commands to the server in a GameCommandPacket.
-    - The server wraps all received packets in AnonymousPackets and forwards them onto all other players.
-    - When players receive a packet, it gets deserialized by a PacketFactory.
-    - At the start of each tick, the GameState polls all received packets and looks for a registered PacketHandler for each of them.
-    - The GameCommandPacketHandler schedules other players' commands for the appropriate tick.
+- Use a single GameCommand for groups
+- GameState receives a garbage packet when the game closes (maybe even crashes?)
 
 <!----------------------------------------------------------------------------->
 ## Bugs

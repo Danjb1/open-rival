@@ -2,6 +2,10 @@
 
 #include "net/Connection.h"
 
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
 #include "net/packets/AnonymousPacket.h"
 
 namespace Rival {
@@ -46,6 +50,7 @@ void Connection::receiveThreadLoop()
 {
     while (!socket.isClosed())
     {
+        recvBuffer.resize(bufferSize);
         socket.receive(recvBuffer);
 
         // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
@@ -55,6 +60,7 @@ void Connection::receiveThreadLoop()
 
         if (packet)
         {
+            // Pass packets directly to the listener if present, otherwise queue them until requested
             if (listener)
             {
                 listener->onPacketReceived(*this, packet);
@@ -73,6 +79,10 @@ void Connection::receiveThreadLoop()
 void Connection::send(const Packet& packet)
 {
     packet.serialize(sendBuffer);
+    if (sendBuffer.empty())
+    {
+        throw std::runtime_error("Tried to send empty buffer");
+    }
     socket.send(sendBuffer);
     sendBuffer.clear();
 }

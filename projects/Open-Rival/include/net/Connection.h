@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>  // std::size_t
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -56,7 +57,7 @@ private:
 
 private:
     /** Buffer size used for reading from the socket. Packets should not exceed this size. */
-    static constexpr size_t bufferSize = 512;
+    static constexpr std::size_t bufferSize = 512;
 
     Socket socket;
     std::shared_ptr<PacketFactory> packetFactory;

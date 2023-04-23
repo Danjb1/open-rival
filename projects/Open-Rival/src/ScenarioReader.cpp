@@ -441,7 +441,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Check remaining bytes
     if (expectEof)
     {
-        size_t remainingBytes = data.size() - pos;
+        std::size_t remainingBytes = data.size() - pos;
         if (remainingBytes == 0)
         {
             std::cout << "Reached end of file\n";
@@ -449,7 +449,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
         else
         {
             std::cout << "Found unexpected bytes:\n";
-            size_t remainingBytesCapped = std::min(remainingBytes, static_cast<size_t>(256));
+            std::size_t remainingBytesCapped = std::min(remainingBytes, static_cast<std::size_t>(256));
             printNext(remainingBytesCapped);
             throw std::runtime_error("Did not reach end of file");
         }
@@ -623,7 +623,7 @@ std::vector<TilePlacement> ScenarioReader::parseTiles(int width, int height)
     unsigned int numTiles = width * height;
     std::vector<TilePlacement> tiles;
     tiles.reserve(numTiles);
-    size_t tileId = 0;
+    std::size_t tileId = 0;
 
     while (tileId < numTiles)
     {
@@ -646,7 +646,7 @@ std::vector<TilePlacement> ScenarioReader::parseTiles(int width, int height)
         TilePlacement tile = parseTile();
 
         // Copy the tile definition to the number of tiles it describes
-        for (size_t i = 0; i < numUpcomingTiles; ++i)
+        for (std::size_t i = 0; i < numUpcomingTiles; ++i)
         {
             tiles.push_back(tile);
             tileId++;
@@ -958,7 +958,7 @@ std::uint8_t ScenarioReader::readByte()
     return value;
 }
 
-std::uint8_t ScenarioReader::readByte(size_t offset) const
+std::uint8_t ScenarioReader::readByte(std::size_t offset) const
 {
     return std::uint8_t(data[offset]);
 }
@@ -971,7 +971,7 @@ std::uint8_t ScenarioReader::readRivalByte()
 }
 
 // Special numbering used by goals, etc.
-std::uint8_t ScenarioReader::readRivalByte(size_t offset) const
+std::uint8_t ScenarioReader::readRivalByte(std::size_t offset) const
 {
     std::uint8_t val = std::uint8_t(data[offset]);
     return fixRivalByte(val);
@@ -1044,7 +1044,7 @@ std::uint16_t ScenarioReader::readRivalShort()
     return value;
 }
 
-std::uint16_t ScenarioReader::readRivalShort(size_t offset) const
+std::uint16_t ScenarioReader::readRivalShort(std::size_t offset) const
 {
     // read 2 rival bytes, and combine them like a normal short
     return std::uint16_t(fixRivalByte(data[offset + 1]) << 8 | fixRivalByte(data[offset + 0]));
@@ -1057,7 +1057,7 @@ bool ScenarioReader::readBool()
     return value;
 }
 
-bool ScenarioReader::readBool(size_t offset) const
+bool ScenarioReader::readBool(std::size_t offset) const
 {
     std::uint8_t value = data[offset];
     return value == 1;
@@ -1070,7 +1070,7 @@ std::uint16_t ScenarioReader::readShort()
     return value;
 }
 
-std::uint16_t ScenarioReader::readShort(size_t offset) const
+std::uint16_t ScenarioReader::readShort(std::size_t offset) const
 {
     // little endian
     return std::uint16_t(data[offset + 1] << 8 | data[offset + 0]);
@@ -1083,7 +1083,7 @@ std::uint32_t ScenarioReader::readInt()
     return value;
 }
 
-std::uint32_t ScenarioReader::readInt(size_t offset) const
+std::uint32_t ScenarioReader::readInt(std::size_t offset) const
 {
     // little endian
     return std::uint32_t(
@@ -1093,17 +1093,17 @@ std::uint32_t ScenarioReader::readInt(size_t offset) const
             | data[offset + 0]);
 }
 
-std::string ScenarioReader::readString(size_t length)
+std::string ScenarioReader::readString(std::size_t length)
 {
     std::string value = readString(pos, length);
     pos += length;
     return value;
 }
 
-std::string ScenarioReader::readString(size_t offset, size_t length) const
+std::string ScenarioReader::readString(std::size_t offset, std::size_t length) const
 {
     std::vector<char> chars(length);
-    for (size_t i = 0; i < length; ++i)
+    for (std::size_t i = 0; i < length; ++i)
     {
         chars[i] = data[offset + i];
     }
@@ -1111,18 +1111,18 @@ std::string ScenarioReader::readString(size_t offset, size_t length) const
     return value;
 }
 
-std::string ScenarioReader::readRivalString(size_t length)
+std::string ScenarioReader::readRivalString(std::size_t length)
 {
     std::string value = readRivalString(pos, length);
     pos += length;
     return value;
 }
 
-std::string ScenarioReader::readRivalString(size_t offset, size_t length) const
+std::string ScenarioReader::readRivalString(std::size_t offset, std::size_t length) const
 {
 
     std::vector<char> chars(length);
-    for (size_t i = 0; i < length; ++i)
+    for (std::size_t i = 0; i < length; ++i)
     {
         std::uint8_t c = data[offset + i];
         chars[i] = getRivalChar(c);
@@ -1159,7 +1159,7 @@ char ScenarioReader::getRivalChar(std::uint8_t c) const
     return '?';
 }
 
-void ScenarioReader::skip(const size_t n, bool print)
+void ScenarioReader::skip(const std::size_t n, bool print)
 {
     if (print)
     {
@@ -1193,12 +1193,12 @@ void ScenarioReader::printSection(std::string title) const
               << "==================================================\n\n";
 }
 
-void ScenarioReader::printNext(const size_t n) const
+void ScenarioReader::printNext(const std::size_t n) const
 {
     // Switch to hex
     std::cout << std::setfill('0') << std::hex;
     int col = 0;
-    for (size_t i = 0; i < n; ++i)
+    for (std::size_t i = 0; i < n; ++i)
     {
         unsigned int value = static_cast<unsigned int>(data.at(pos + i));
 

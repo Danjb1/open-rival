@@ -82,6 +82,7 @@ public:
     void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
 
 private:
+    bool isTickReady();
     void pollNetwork();
     void earlyUpdateEntities() const;
     void updateEntities() const;

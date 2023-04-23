@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>  // std::size_t
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -29,7 +30,7 @@ private:
     static constexpr int bytesPerTile = 6;
 
     std::vector<unsigned char> data;
-    size_t pos = 0;
+    std::size_t pos = 0;
 
     ///////////////////////////////////////////////////////////////////////
     // Parsing
@@ -101,41 +102,41 @@ private:
 
     std::uint8_t readByte();
 
-    std::uint8_t readByte(size_t offset) const;
+    std::uint8_t readByte(std::size_t offset) const;
 
     std::uint8_t readRivalByte();
 
-    std::uint8_t readRivalByte(size_t offset) const;
+    std::uint8_t readRivalByte(std::size_t offset) const;
 
     std::uint8_t fixRivalByte(std::uint8_t val) const;
 
     std::uint16_t readRivalShort();
 
-    std::uint16_t readRivalShort(size_t offset) const;
+    std::uint16_t readRivalShort(std::size_t offset) const;
 
     bool readBool();
 
-    bool readBool(size_t offset) const;
+    bool readBool(std::size_t offset) const;
 
     std::uint16_t readShort();
 
-    std::uint16_t readShort(size_t offset) const;
+    std::uint16_t readShort(std::size_t offset) const;
 
     std::uint32_t readInt();
 
-    std::uint32_t readInt(size_t offset) const;
+    std::uint32_t readInt(std::size_t offset) const;
 
-    std::string readString(size_t length);
+    std::string readString(std::size_t length);
 
-    std::string readString(size_t offset, size_t length) const;
+    std::string readString(std::size_t offset, std::size_t length) const;
 
-    std::string readRivalString(size_t length);
+    std::string readRivalString(std::size_t length);
 
-    std::string readRivalString(size_t offset, size_t length) const;
+    std::string readRivalString(std::size_t offset, std::size_t length) const;
 
     char getRivalChar(std::uint8_t c) const;
 
-    void skip(const size_t n, bool print);
+    void skip(const std::size_t n, bool print);
 
     ///////////////////////////////////////////////////////////////////////
     // Printing
@@ -145,7 +146,7 @@ private:
 
     void printSection(std::string title) const;
 
-    void printNext(const size_t n) const;
+    void printNext(const std::size_t n) const;
 
     void print(const ScenarioHeader& hdr) const;
 

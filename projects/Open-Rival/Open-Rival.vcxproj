@@ -218,6 +218,7 @@
     <ClInclude Include="include\UnitAnimationComponent.h" />
     <ClInclude Include="include\UnitDef.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />
+    <ClInclude Include="include\utils\BufferUtils.h" />
     <ClInclude Include="include\VoiceComponent.h" />
     <ClInclude Include="include\WalkerComponent.h" />
     <ClInclude Include="include\WallComponent.h" />

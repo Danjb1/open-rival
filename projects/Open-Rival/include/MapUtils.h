@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>  // std::size_t
 #include <ostream>
 #include <vector>
 
@@ -104,7 +105,7 @@ namespace std {
 template <>
 struct hash<Rival::MapNode>
 {
-    inline size_t operator()(Rival::MapNode const& node) const noexcept
+    inline std::size_t operator()(Rival::MapNode const& node) const noexcept
     {
         // Given that x/y will never exceed 16 bits, this ought to give a
         // totally unique value for each node.

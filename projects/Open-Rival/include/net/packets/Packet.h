@@ -5,10 +5,9 @@
 
 namespace Rival {
 
-enum class PacketType : std::uint16_t
+enum class PacketType : std::uint8_t
 {
     Invalid,
-    AcceptPlayer,
     GameCommand
 };
 
@@ -18,6 +17,7 @@ enum class PacketType : std::uint16_t
 class Packet
 {
 public:
+    Packet(PacketType type);
     virtual ~Packet() {}
 
     /** Serializes this packet to the given buffer. */
@@ -27,6 +27,9 @@ public:
     {
         return type;
     }
+
+protected:
+    static constexpr size_t packetDataOffset = sizeof(PacketType);
 
 private:
     PacketType type = PacketType::Invalid;

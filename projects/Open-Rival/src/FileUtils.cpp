@@ -2,6 +2,7 @@
 
 #include "FileUtils.h"
 
+#include <cstddef>  // std::size_t
 #include <fstream>
 #include <sstream>
 
@@ -22,7 +23,7 @@ std::vector<std::uint8_t> readBinaryFile(std::string filename)
     {
         throw std::runtime_error("Failed to retrieve file size");
     }
-    auto data = std::vector<unsigned char>(static_cast<size_t>(size));
+    auto data = std::vector<unsigned char>(static_cast<std::size_t>(size));
 
     // Read the entire file to memory
     is.seekg(0, std::ios::beg);

@@ -2,6 +2,8 @@
 
 #include "net/Server.h"
 
+#include <cstddef>  // std::size_t
+#include <iostream>
 #include <utility>  // std::make_pair, std::move
 
 #include "net/Socket.h"
@@ -30,6 +32,7 @@ Server::~Server()
 
 void Server::onPacketReceived(Connection& connection, std::shared_ptr<const Packet> packet)
 {
+    // Forward packets to all other connections
     for (const auto& entry : connectedPlayers)
     {
         const std::unique_ptr<Connection>& otherConnection = entry.second;
@@ -50,13 +53,15 @@ void Server::start()
 
 void Server::acceptThreadLoop()
 {
-    while (!serverSocket.isClosed() && connectedPlayers.size() < static_cast<size_t>(maxPlayers))
+    while (!serverSocket.isClosed() && connectedPlayers.size() < static_cast<std::size_t>(maxPlayers))
     {
         Socket newPlayer = serverSocket.accept();
         if (newPlayer.isValid())
         {
             auto newPlayerConnection = std::make_unique<Connection>(std::move(newPlayer), nullptr, this);
-            connectedPlayers.insert(std::make_pair(requestPlayerId(), std::move(newPlayerConnection)));
+            int playerId = requestPlayerId();
+            std::cout << "Player " << std::to_string(playerId) << " connected to server\n";
+            connectedPlayers.insert(std::make_pair(playerId, std::move(newPlayerConnection)));
         }
     }
 }

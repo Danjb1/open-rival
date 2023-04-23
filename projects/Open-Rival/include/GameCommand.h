@@ -1,10 +1,18 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
+#include <vector>
 
 #include "World.h"
 
 namespace Rival {
+
+enum class GameCommandType : std::uint8_t
+{
+    Invalid,
+    Move
+};
 
 /**
  * Context provided to commands during execution.
@@ -19,7 +27,18 @@ class GameCommandContext : public WorldStore
 class GameCommand
 {
 public:
+    GameCommand(GameCommandType type);
+    virtual ~GameCommand() {}
+    virtual void serialize(std::vector<char>& buffer) const;
     virtual void execute(GameCommandContext& context) = 0;
+
+    GameCommandType getType() const
+    {
+        return type;
+    }
+
+private:
+    GameCommandType type = GameCommandType::Invalid;
 };
 
 /**

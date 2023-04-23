@@ -2,13 +2,18 @@
 
 #include "net/packets/Packet.h"
 
+#include "utils/BufferUtils.h"
+
 namespace Rival {
+
+Packet::Packet(PacketType type)
+    : type(type)
+{
+}
 
 void Packet::serialize(std::vector<char>& buffer) const
 {
-    // Later, we may need to ensure a certain endianness for cross-platform compatibility.
-    // See: https://stackoverflow.com/questions/544928/reading-integer-size-bytes-from-a-char-array
-    std::memcpy(buffer.data(), &type, sizeof(type));
+    BufferUtils::addToBuffer(buffer, type);
 }
 
 }  // namespace Rival

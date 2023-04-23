@@ -141,6 +141,8 @@ void Application::makeNextStateActive()
 
 void Application::startServer(int port)
 {
+    std::cout << "Starting server on port " << std::to_string(port) << "\n ";
+
     server.emplace(port, PlayerStore::maxPlayers);
     server->start();
 
@@ -150,11 +152,15 @@ void Application::startServer(int port)
 
 void Application::connectToServer(const std::string& address, int port)
 {
+    std::cout << "Connecting to server on port " << std::to_string(port) << "\n ";
+
     if (!packetFactory)
     {
         packetFactory = std::make_shared<PacketFactory>();
     }
-    connection.emplace(Socket::createClient(address, port), packetFactory);
+
+    Socket clientSocket = Socket::createClient(address, port);
+    connection.emplace(std::move(clientSocket), packetFactory);
 }
 
 }  // namespace Rival
