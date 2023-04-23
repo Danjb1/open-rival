@@ -7,7 +7,9 @@
 namespace Rival {
 
 /**
- * A packet that can be forwarded without needing to be parsed.
+ * A packet that wraps a received packet, for forwarding by the relay server.
+ *
+ * The original packet data is not important for the server, and is never inspected.
  */
 class AnonymousPacket : public Packet
 {

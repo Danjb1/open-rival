@@ -8,6 +8,7 @@
 #include <utility>  // std::move
 
 #include "net/Connection.h"
+#include "net/packet-handlers/GameCommandPacketHandler.h"
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/GameCommandPacket.h"
 #include "Application.h"
@@ -39,6 +40,8 @@ GameState::GameState(
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
 {
+    // Register PacketHandlers
+    packetHandlers.insert({ PacketType::GameCommand, std::make_unique<GameCommandPacketHandler>() });
 }
 
 void GameState::onLoad()
@@ -49,6 +52,11 @@ void GameState::onLoad()
 void GameState::update()
 {
     pollNetwork();
+    if (!isTickReady())
+    {
+        return;
+    }
+
     world->addPendingEntities();
     earlyUpdateEntities();
     respondToInput();
@@ -58,13 +66,26 @@ void GameState::update()
     ++currentTick;
 }
 
-void GameState::pollNetwork()
+bool GameState::isTickReady()
 {
     if (!isNetGame())
     {
-        return;
+        return true;
     }
 
+    if (currentTick < TimeUtils::netCommandDelay)
+    {
+        // No commands should be scheduled before this time
+        return true;
+    }
+
+    // TODO: Use a map of tick -> players from whom we have received a GameCommandPacket.
+    // Note that this packet may be empty, so we might not necessarily have a command to execute for each player.
+    return true;
+}
+
+void GameState::pollNetwork()
+{
     const auto& receivedPackets = app.getConnection()->getReceivedPackets();
     for (auto& packet : receivedPackets)
     {

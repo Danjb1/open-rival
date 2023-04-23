@@ -699,6 +699,9 @@
     <ClInclude Include="include\net\packets\GameCommandPacket.h">
       <Filter>Source Files\net\packets</Filter>
     </ClInclude>
+    <ClInclude Include="include\utils\BufferUtils.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\icons\rival.ico">

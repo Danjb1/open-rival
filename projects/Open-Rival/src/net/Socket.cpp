@@ -23,6 +23,8 @@ Socket::Socket(SOCKET rawSocket)
     : sock(rawSocket)
 {
     init();
+
+    state = (rawSocket == INVALID_SOCKET) ? SocketState::Closed : SocketState::Open;
 }
 
 Socket::~Socket()

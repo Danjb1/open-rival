@@ -29,8 +29,13 @@ enum class SocketState : std::uint8_t
 class Socket
 {
 public:
+    /** Creates a listening socket connected to localhost. */
     static Socket createServer(int port);
+
+    /** Creates a socket and attempts to connect it to the given address and port. */
     static Socket createClient(const std::string& address, int port);
+
+    /** Creates a socket that wraps a raw socket handle. The socket is assumed to be open if the handle is valid. */
     static Socket wrap(SOCKET rawSocket);
 
     ~Socket();

@@ -6,15 +6,17 @@
 #include <string>
 
 #include "net/packets/GameCommandPacket.h"
+#include "utils/BufferUtils.h"
 #include "EnumUtils.h"
 
 namespace Rival {
 
 std::shared_ptr<Packet> PacketFactory::deserialize(const std::vector<char>& buffer)
 {
-    // Read the PacketType from the buffer
+    std::size_t offset = 0;
+
     PacketType type = PacketType::Invalid;
-    std::memcpy(&type, buffer.data(), sizeof(type));
+    BufferUtils::readFromBuffer(buffer, offset, type);
 
     switch (type)
     {

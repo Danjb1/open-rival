@@ -8,7 +8,8 @@
 namespace Rival {
 
 MoveCommand::MoveCommand(int entityId, MapNode destination)
-    : entityId(entityId)
+    : GameCommand(GameCommandType::Move)
+    , entityId(entityId)
     , destination(destination)
 {
 }

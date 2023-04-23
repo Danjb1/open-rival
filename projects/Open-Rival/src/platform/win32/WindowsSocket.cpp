@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <utility>  // std::exchange
 
 namespace Rival {
 
@@ -96,12 +97,10 @@ Socket::Socket(const std::string& address, int port, bool server)
 }
 
 Socket::Socket(Socket&& other) noexcept
-    : sock(other.sock)
-    , state(other.state)
-{
     // Reset the source object so its destructor is harmless
-    other.sock = INVALID_SOCKET;
-    other.state = SocketState::Closed;
+    : sock(std::exchange(other.sock, INVALID_SOCKET))
+    , state(std::exchange(other.state, SocketState::Closed))
+{
 }
 
 void Socket::init()
@@ -153,10 +152,11 @@ void Socket::send(std::vector<char>& buffer)
 void Socket::receive(std::vector<char>& buffer)
 {
     // Receive until the peer shuts down the connection
-    int result = recv(sock, buffer.data(), buffer.capacity(), 0);
+    int result = ::recv(sock, buffer.data(), buffer.capacity(), 0);
     if (result > 0)
     {
-        // Set the buffer size to the number of bytes read
+        // Set the buffer size to the number of bytes read.
+        // This should only ever shrink the buffer; trying to extend it this way will wipe any received data.
         buffer.resize(result);
     }
     else if (result == 0)

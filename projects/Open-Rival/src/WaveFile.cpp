@@ -2,6 +2,7 @@
 
 #include "WaveFile.h"
 
+#include <cstddef>  // std::size_t
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -36,7 +37,7 @@ WaveFile::WaveFile(std::string filename)
     {
         throw std::runtime_error("WAV file is too small: " + filename);
     }
-    size_t soundDataSize = header.subchunk2Size;
+    std::size_t soundDataSize = header.subchunk2Size;
 
     // Read the rest of the file
     soundData.resize(soundDataSize);
