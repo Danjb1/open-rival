@@ -8,8 +8,8 @@
 namespace Rival {
 
 AnonymousPacket::AnonymousPacket(const std::vector<char>& buffer)
-    // The packet type is not important, since we don't serialize it
-    : Packet(PacketType::Invalid)
+    // The packet type and player ID are not important, since we don't serialize them
+    : Packet(PacketType::Invalid, -1)
     , packetData(buffer)  // Make a copy of the incoming buffer
 {
 }
