@@ -17,7 +17,7 @@ enum class PacketType : std::uint8_t
 class Packet
 {
 public:
-    Packet(PacketType type, int playerId);
+    Packet(PacketType type);
     virtual ~Packet() {}
 
     /** Serializes this packet to the given buffer. */
@@ -28,21 +28,25 @@ public:
         return type;
     }
 
+    void setPlayerId(int newPlayerId)
+    {
+        playerId = newPlayerId;
+    }
+
     int getPlayerId() const
     {
         return playerId;
     }
 
-public:
-    static constexpr size_t playerIdOffset = sizeof(PacketType);
-
 protected:
-    /** Offset of the first data after the packet header. */
-    static constexpr size_t packetDataOffset = sizeof(PacketType) + sizeof(int) /* playerId */;
+    /** Size of the packet header, in bytes, of a packet received from the relay server. */
+    static constexpr size_t relayedPacketHeaderSize = sizeof(PacketType) + sizeof(int) /* playerId */;
+
+    /** Player ID of the sender, will be populated on all packets received from the relay server. */
+    int playerId = -1;
 
 private:
     PacketType type;
-    int playerId;
 };
 
 }  // namespace Rival

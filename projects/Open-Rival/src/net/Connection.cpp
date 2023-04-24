@@ -11,9 +11,11 @@
 
 namespace Rival {
 
-Connection::Connection(Socket socket, std::shared_ptr<PacketFactory> packetFactory, ConnectionListener* listener)
+Connection::Connection(
+        Socket socket, std::shared_ptr<PacketFactory> packetFactory, int remotePlayerId, ConnectionListener* listener)
     : socket(std::move(socket))
     , packetFactory(packetFactory)
+    , remotePlayerId(remotePlayerId)
     , listener(listener)
     , receiveThread(&Connection::receiveThreadLoop, this)
 {
@@ -56,8 +58,9 @@ void Connection::receiveThreadLoop()
 
         // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
         // relay server, which doesn't care about their contents.
-        std::shared_ptr<const Packet> packet =
-                packetFactory ? packetFactory->deserialize(recvBuffer) : makeAnonymousPacket(recvBuffer);
+        std::shared_ptr<const Packet> packet = packetFactory
+                ? packetFactory->deserialize(recvBuffer)
+                : std::make_shared<AnonymousPacket>(recvBuffer, remotePlayerId);
 
         if (packet)
         {
@@ -75,22 +78,6 @@ void Connection::receiveThreadLoop()
 
         recvBuffer.clear();
     }
-}
-
-std::shared_ptr<const Packet> Connection::makeAnonymousPacket(const std::vector<char>& buffer)
-{
-    // Peek at the packet header to validate the player ID
-    int playerId = -1;
-    size_t offset = Packet::playerIdOffset;
-    BufferUtils::readFromBuffer(buffer, offset, playerId);
-
-    if (playerId != remotePlayerId)
-    {
-        std::cerr << "Server received packet with incorrect player ID\n";
-        return {};
-    }
-
-    return std::make_shared<AnonymousPacket>(recvBuffer);
 }
 
 void Connection::send(const Packet& packet)

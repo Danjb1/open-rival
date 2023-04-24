@@ -32,6 +32,7 @@
     <ClCompile Include="src\BuildingPropsComponent.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\commands\GameCommandFactory.cpp" />
     <ClCompile Include="src\Cursor.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="include\BuildingPropsComponent.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Color.h" />
+    <ClInclude Include="include\commands\GameCommandFactory.h" />
     <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Cursor.h" />
     <ClInclude Include="include\Entity.h" />

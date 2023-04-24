@@ -4,26 +4,26 @@
 ### Next Up...
 <!----------------------------------------------------------------------------->
 
-Selection:
+### Selection & Movement
 
 - Display a rectangle while drag-select is active
 - Selected units should flash orange
 - Allow buildings to be selected
+- Use a single MoveCommand for groups
 
-Multiplayer:
+### Multiplayer
 
-- Set the remotePlayerId on Connections
-- Deserialize GameCommands from a GameCommandPacket
-- Server should assign playerIds to clients
-- Verify received packets before applying them on the client
-- Pause the game if we are still waiting for a packet to arrive for the current tick
+- Create a LobbyState while waiting for players to join
+    - Server should assign playerIds to clients
+    - GameState needs to know which players are human-controlled
 - Handle clients disconnecting
-- Use a single GameCommand for groups
-- GameState receives a garbage packet when the game closes (maybe even crashes?)
+- GameState receives a garbage packet when the game closes (and crashes)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
+
+### Game
 
 - Game will crash if no config file exists
 - Some animations need attention (e.g. Snake)
@@ -37,7 +37,7 @@ Multiplayer:
     - What if the occupant is slower than we are?
 - Units can walk through buildings
 
-Tests:
+### Tests
 
 - Test project fails to build :(
     - Write a tool to automatically generate `Open-Rival-test.proj`

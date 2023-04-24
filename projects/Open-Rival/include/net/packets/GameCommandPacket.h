@@ -8,6 +8,7 @@
 namespace Rival {
 
 class GameCommand;
+class GameCommandFactory;
 
 /**
  * A packet containing all the commands a player has issued for a given tick.
@@ -15,10 +16,11 @@ class GameCommand;
 class GameCommandPacket : public Packet
 {
 public:
-    GameCommandPacket(int playerId, std::vector<std::shared_ptr<GameCommand>> commands, int tick);
+    GameCommandPacket(std::vector<std::shared_ptr<GameCommand>> commands, int tick);
 
-    static std::shared_ptr<GameCommandPacket> deserialize(const std::vector<char> buffer);
     void serialize(std::vector<char>& buffer) const override;
+    static std::shared_ptr<GameCommandPacket>
+    deserialize(const std::vector<char> buffer, const GameCommandFactory& commandFactory);
 
     std::vector<std::shared_ptr<GameCommand>> getCommands() const
     {

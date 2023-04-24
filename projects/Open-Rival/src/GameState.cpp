@@ -79,9 +79,24 @@ bool GameState::isTickReady()
         return true;
     }
 
-    // TODO: Use a map of tick -> players from whom we have received a GameCommandPacket.
-    // Note that this packet may be empty, so we might not necessarily have a command to execute for each player.
-    return true;
+    // TODO: We need to get this from the lobby
+    int numOtherHumanPlayers = 0;
+    if (numOtherHumanPlayers == 0)
+    {
+        // TMP
+        return true;
+    }
+
+    auto iter = playersReady.find(currentTick);
+    if (iter == playersReady.end())
+    {
+        // No players are ready!
+        return false;
+    }
+
+    std::unordered_set<int>& playersReadyForTick = iter->second;
+
+    return static_cast<int>(playersReadyForTick.size()) == numOtherHumanPlayers;
 }
 
 void GameState::pollNetwork()
@@ -141,7 +156,7 @@ void GameState::sendOutgoingCommands()
     }
 
     // Send all commands for this tick to the server
-    GameCommandPacket packet(localPlayerId, outgoingCommands, currentTick + TimeUtils::netCommandDelay);
+    GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
     app.getConnection()->send(packet);
     outgoingCommands.clear();
 }
@@ -366,6 +381,31 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
     }
 }
 
+void GameState::onPlayerReady(int tick, int playerId)
+{
+    auto iter = playersReady.find(tick);
+    if (iter == playersReady.end())
+    {
+        // This is the first player ready for this tick
+        std::unordered_set<int> playersReadyForTick;
+        playersReadyForTick.insert(playerId);
+        playersReady.insert({ tick, playersReadyForTick });
+    }
+    else
+    {
+        // Add to the players already ready
+        std::unordered_set<int>& playersReadyForTick = iter->second;
+        auto result = playersReadyForTick.insert(playerId);
+        if (!result.second)
+        {
+            // result is a pair <iter, bool> where bool is false if the element was already present in the set
+            throw std::runtime_error(
+                    "Duplicate player ready received for player " + std::to_string(playerId)
+                    + " for tick: " + std::to_string(tick));
+        }
+    }
+}
+
 void GameState::processCommands()
 {
     auto findResult = pendingCommands.find(currentTick);
@@ -387,6 +427,11 @@ void GameState::processCommands()
 bool GameState::isNetGame() const
 {
     return app.getConnection().has_value();
+}
+
+int GameState::getNumPlayers() const
+{
+    return static_cast<int>(playerStates.size());
 }
 
 }  // namespace Rival

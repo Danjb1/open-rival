@@ -2,6 +2,7 @@
 
 #include "MoveCommand.h"
 
+#include "utils/BufferUtils.h"
 #include "MapUtils.h"
 #include "MovementComponent.h"
 
@@ -12,6 +13,25 @@ MoveCommand::MoveCommand(int entityId, MapNode destination)
     , entityId(entityId)
     , destination(destination)
 {
+}
+
+void MoveCommand::serialize(std::vector<char>& buffer) const
+{
+    GameCommand::serialize(buffer);
+
+    BufferUtils::addToBuffer(buffer, entityId);
+    BufferUtils::addToBuffer(buffer, destination);
+}
+
+std::shared_ptr<MoveCommand> MoveCommand::deserialize(std::vector<char> buffer, size_t& offset)
+{
+    int entityId;
+    BufferUtils::readFromBuffer(buffer, offset, entityId);
+
+    MapNode destination;
+    BufferUtils::readFromBuffer(buffer, offset, destination);
+
+    return std::make_shared<MoveCommand>(entityId, destination);
 }
 
 void MoveCommand::execute(GameCommandContext& context)

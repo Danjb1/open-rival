@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "net/packets/Packet.h"
 #include "Camera.h"
@@ -70,6 +71,7 @@ public:
     // End WorldStore override
 
     // Begin PlayerStore override
+    int getNumPlayers() const override;
     PlayerState& getLocalPlayerState() const override;
     PlayerState* getPlayerState(int playerId) const override;
     bool isLocalPlayer(int playerId) const override;
@@ -80,6 +82,7 @@ public:
     // End GameCommandInvoker override
 
     void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
+    void onPlayerReady(int tick, int playerId);
 
 private:
     bool isTickReady();
@@ -118,6 +121,9 @@ private:
 
     /** Commands ready to be executed, indexed by the tick number when they are due. */
     std::unordered_map<int, std::vector<std::shared_ptr<GameCommand>>> pendingCommands;
+
+    /** Players for whom we have received commands, indexed by tick number. */
+    std::unordered_map<int, std::unordered_set<int>> playersReady;
 
     /** Commands queued for sending over the network. */
     std::vector<std::shared_ptr<GameCommand>> outgoingCommands;
