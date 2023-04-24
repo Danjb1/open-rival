@@ -6,16 +6,14 @@
 
 namespace Rival {
 
-Packet::Packet(PacketType type, int playerId)
+Packet::Packet(PacketType type)
     : type(type)
-    , playerId(playerId)
 {
 }
 
 void Packet::serialize(std::vector<char>& buffer) const
 {
     BufferUtils::addToBuffer(buffer, type);
-    BufferUtils::addToBuffer(buffer, playerId);
 }
 
 }  // namespace Rival

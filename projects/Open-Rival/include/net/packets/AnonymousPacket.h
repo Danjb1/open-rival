@@ -14,7 +14,7 @@ namespace Rival {
 class AnonymousPacket : public Packet
 {
 public:
-    AnonymousPacket(const std::vector<char>& buffer);
+    AnonymousPacket(const std::vector<char>& buffer, int playerId);
 
     void serialize(std::vector<char>& buffer) const override;
 

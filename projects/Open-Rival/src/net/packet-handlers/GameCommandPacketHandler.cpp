@@ -19,6 +19,8 @@ void GameCommandPacketHandler::onPacketReceived(std::shared_ptr<const Packet> pa
 
     GameState& game = static_cast<GameState&>(state);
 
+    game.onPlayerReady(tick, commandPacket->getPlayerId());
+
     for (auto& command : commands)
     {
         game.scheduleCommand(command, tick);

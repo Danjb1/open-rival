@@ -376,6 +376,9 @@
     <ClCompile Include="src\net\packets\GameCommandPacket.cpp">
       <Filter>Source Files\net\packets</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\GameCommandFactory.cpp">
+      <Filter>Source Files\commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -701,6 +704,9 @@
     </ClInclude>
     <ClInclude Include="include\utils\BufferUtils.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\commands\GameCommandFactory.h">
+      <Filter>Source Files\commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

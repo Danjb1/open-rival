@@ -58,9 +58,10 @@ void Server::acceptThreadLoop()
         Socket newPlayer = serverSocket.accept();
         if (newPlayer.isValid())
         {
-            auto newPlayerConnection = std::make_unique<Connection>(std::move(newPlayer), nullptr, this);
             int playerId = requestPlayerId();
             std::cout << "Player " << std::to_string(playerId) << " connected to server\n";
+
+            auto newPlayerConnection = std::make_unique<Connection>(std::move(newPlayer), nullptr, playerId, this);
             connectedPlayers.insert(std::make_pair(playerId, std::move(newPlayerConnection)));
         }
     }

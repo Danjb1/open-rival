@@ -31,7 +31,10 @@ class Connection
 {
 public:
     Connection(
-            Socket destination, std::shared_ptr<PacketFactory> packetFactory, ConnectionListener* listener = nullptr);
+            Socket destination,
+            std::shared_ptr<PacketFactory> packetFactory,
+            int remotePlayerId = -1,
+            ConnectionListener* listener = nullptr);
     ~Connection();
 
     bool Connection::operator==(const Connection& other) const;
@@ -54,7 +57,6 @@ public:
 
 private:
     void receiveThreadLoop();
-    std::shared_ptr<const Packet> makeAnonymousPacket(const std::vector<char>& buffer);
 
 private:
     /** Buffer size used for reading from the socket. Packets should not exceed this size. */

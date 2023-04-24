@@ -30,6 +30,7 @@ private:
 class PlayerStore
 {
 public:
+    virtual int getNumPlayers() const = 0;
     virtual PlayerState& getLocalPlayerState() const = 0;
     virtual PlayerState* getPlayerState(int playerId) const = 0;
     virtual bool isLocalPlayer(int playerId) const = 0;
