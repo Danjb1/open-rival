@@ -54,6 +54,7 @@ public:
 
 private:
     void receiveThreadLoop();
+    std::shared_ptr<const Packet> makeAnonymousPacket(const std::vector<char>& buffer);
 
 private:
     /** Buffer size used for reading from the socket. Packets should not exceed this size. */
@@ -70,6 +71,10 @@ private:
     std::mutex receivedPacketsMutex;
 
     ConnectionListener* listener;
+
+    /** ID of the player at the remote end of the connection.
+     * On clients this will always be -1 since the server has no player ID. */
+    int remotePlayerId = -1;
 };
 
 }  // namespace Rival

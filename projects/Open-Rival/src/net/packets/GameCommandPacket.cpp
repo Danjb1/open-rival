@@ -12,8 +12,8 @@
 
 namespace Rival {
 
-GameCommandPacket::GameCommandPacket(std::vector<std::shared_ptr<GameCommand>> commands, int tick)
-    : Packet(PacketType::GameCommand)
+GameCommandPacket::GameCommandPacket(int playerId, std::vector<std::shared_ptr<GameCommand>> commands, int tick)
+    : Packet(PacketType::GameCommand, playerId)
     , commands(commands)
     , tick(tick)
 {
@@ -36,6 +36,9 @@ std::shared_ptr<GameCommandPacket> GameCommandPacket::deserialize(const std::vec
 {
     std::size_t offset = packetDataOffset;
 
+    int playerId = -1;
+    BufferUtils::readFromBuffer(buffer, offset, playerId);
+
     std::uint8_t numCommands = 0;
     BufferUtils::readFromBuffer(buffer, offset, numCommands);
 
@@ -51,7 +54,7 @@ std::shared_ptr<GameCommandPacket> GameCommandPacket::deserialize(const std::vec
         // TODO: deserialize command (use a GameCommandFactory?)
     }
 
-    return std::make_shared<GameCommandPacket>(commands, tick);
+    return std::make_shared<GameCommandPacket>(playerId, commands, tick);
 }
 
 }  // namespace Rival

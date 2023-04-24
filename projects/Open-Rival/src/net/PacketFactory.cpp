@@ -18,6 +18,11 @@ std::shared_ptr<Packet> PacketFactory::deserialize(const std::vector<char>& buff
     PacketType type = PacketType::Invalid;
     BufferUtils::readFromBuffer(buffer, offset, type);
 
+    return deserializeFromType(buffer, type);
+}
+
+std::shared_ptr<Packet> PacketFactory::deserializeFromType(const std::vector<char>& buffer, PacketType type)
+{
     switch (type)
     {
     case PacketType::GameCommand:

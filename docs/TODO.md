@@ -12,7 +12,10 @@ Selection:
 
 Multiplayer:
 
+- Set the remotePlayerId on Connections
 - Deserialize GameCommands from a GameCommandPacket
+- Server should assign playerIds to clients
+- Verify received packets before applying them on the client
 - Pause the game if we are still waiting for a packet to arrive for the current tick
 - Handle clients disconnecting
 - Use a single GameCommand for groups

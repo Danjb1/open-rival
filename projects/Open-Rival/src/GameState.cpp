@@ -141,7 +141,7 @@ void GameState::sendOutgoingCommands()
     }
 
     // Send all commands for this tick to the server
-    GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
+    GameCommandPacket packet(localPlayerId, outgoingCommands, currentTick + TimeUtils::netCommandDelay);
     app.getConnection()->send(packet);
     outgoingCommands.clear();
 }

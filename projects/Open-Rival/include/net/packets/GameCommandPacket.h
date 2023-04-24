@@ -15,7 +15,7 @@ class GameCommand;
 class GameCommandPacket : public Packet
 {
 public:
-    GameCommandPacket(std::vector<std::shared_ptr<GameCommand>> commands, int tick);
+    GameCommandPacket(int playerId, std::vector<std::shared_ptr<GameCommand>> commands, int tick);
 
     static std::shared_ptr<GameCommandPacket> deserialize(const std::vector<char> buffer);
     void serialize(std::vector<char>& buffer) const override;
