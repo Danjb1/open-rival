@@ -53,6 +53,7 @@
     <ClCompile Include="src\InputUtils.cpp" />
     <ClCompile Include="src\InventoryComponent.cpp" />
     <ClCompile Include="src\JsonUtils.cpp" />
+    <ClCompile Include="src\lobby\LobbyState.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
     <ClCompile Include="src\MapUtils.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="include\InputUtils.h" />
     <ClInclude Include="include\InventoryComponent.h" />
     <ClInclude Include="include\JsonUtils.h" />
+    <ClInclude Include="include\lobby\LobbyState.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MapUtils.h" />
     <ClInclude Include="include\MathUtils.h" />
