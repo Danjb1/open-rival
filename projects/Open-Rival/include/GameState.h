@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/Packet.h"
 #include "Camera.h"
 #include "GameCommand.h"
@@ -62,8 +63,8 @@ public:
     void mouseDown(const SDL_MouseButtonEvent event) override;
     void mouseUp(const SDL_MouseButtonEvent event) override;
     void mouseWheelMoved(const SDL_MouseWheelEvent event) override;
-    void render(int delta) override;
     void update() override;
+    void render(int delta) override;
     // End State override
 
     // Begin WorldStore override

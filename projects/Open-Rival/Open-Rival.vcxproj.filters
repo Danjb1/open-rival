@@ -65,6 +65,9 @@
     <Filter Include="Source Files\net\packet-handlers">
       <UniqueIdentifier>{03136e4e-6513-4300-845b-ba37e3364063}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\lobby">
+      <UniqueIdentifier>{03cdbfb7-03e0-45db-b8e2-9df88319b5c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -378,6 +381,9 @@
     </ClCompile>
     <ClCompile Include="src\commands\GameCommandFactory.cpp">
       <Filter>Source Files\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lobby\LobbyState.cpp">
+      <Filter>Source Files\lobby</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -707,6 +713,9 @@
     </ClInclude>
     <ClInclude Include="include\commands\GameCommandFactory.h">
       <Filter>Source Files\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lobby\LobbyState.h">
+      <Filter>Source Files\lobby</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
