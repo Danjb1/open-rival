@@ -385,6 +385,36 @@
     <ClCompile Include="src\lobby\LobbyState.cpp">
       <Filter>Source Files\lobby</Filter>
     </ClCompile>
+    <ClCompile Include="src\net\packets\RequestJoinPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\StartGamePacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\RequestJoinPacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\AcceptPlayerPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\KickPlayerPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\AcceptPlayerPacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\KickPlayerPacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packets\RejectPlayerPacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\RejectPlayerPacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\StartGamePacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -716,6 +746,36 @@
     </ClInclude>
     <ClInclude Include="include\lobby\LobbyState.h">
       <Filter>Source Files\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\RequestJoinPacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\StartGamePacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\RequestJoinPacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\AcceptPlayerPacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\KickPlayerPacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\KickPlayerPacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\AcceptPlayerPacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\RejectPlayerPacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\RejectPlayerPacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\StartGamePacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

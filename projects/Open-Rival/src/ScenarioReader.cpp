@@ -138,7 +138,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse player properties
     printSection("Parsing player properties");
     printOffset();
-    for (int i = 0; i < numPlayers; ++i)
+    for (int i = 0; i < ScenarioConstants::numPlayers; ++i)
     {
         scenarioData.playerProperties[i] = parsePlayerProperties();
     }
@@ -212,7 +212,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse troop defaults
     printSection("Parsing troop defaults");
     printOffset();
-    for (int i = 0; i < numTroops; ++i)
+    for (int i = 0; i < ScenarioConstants::numTroops; ++i)
     {
         scenarioData.troopDefaults[i] = parseTroopDefaults();
     }
@@ -222,7 +222,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse upgrade properties
     printSection("Parsing upgrade properties");
     printOffset();
-    for (int i = 0; i < numUpgrades; ++i)
+    for (int i = 0; i < ScenarioConstants::numUpgrades; ++i)
     {
         scenarioData.upgradeProperties[i] = parseUpgradeProperties(doesUpgradeHaveAmount(i));
     }
@@ -250,7 +250,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse unit production costs
     printSection("Parsing unit production costs");
     printOffset();
-    for (int i = 0; i < numProductionCosts; ++i)
+    for (int i = 0; i < ScenarioConstants::numProductionCosts; ++i)
     {
         scenarioData.productionCosts[i] = parseProductionCost();
     }
@@ -260,7 +260,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse weapon defaults
     printSection("Parsing weapon defaults");
     printOffset();
-    for (int i = 0; i < numWeapons; ++i)
+    for (int i = 0; i < ScenarioConstants::numWeapons; ++i)
     {
         scenarioData.weaponDefaults[i] = parseWeaponDefaults();
     }
@@ -277,7 +277,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse monster defaults
     printSection("Parsing monster defaults");
     printOffset();
-    for (int i = 0; i < numMonsters; ++i)
+    for (int i = 0; i < ScenarioConstants::numMonsters; ++i)
     {
         scenarioData.monsterDefaults[i] = parseTroopDefaults();
     }
@@ -293,9 +293,9 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse AI building settings
     printSection("Parsing AI building settings");
     printOffset();
-    for (int i = 0; i < numBuildingsPerRace; ++i)
+    for (int i = 0; i < ScenarioConstants::numBuildingsPerRace; ++i)
     {
-        for (int j = 0; j < numAiStrategies; ++j)
+        for (int j = 0; j < ScenarioConstants::numAiStrategies; ++j)
         {
             scenarioData.aiStrategies[j].aiBuildingSettings[i] = parseAiSetting();
         }
@@ -304,9 +304,9 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     // Parse AI troop settings
     printSection("Parsing AI troop settings");
     printOffset();
-    for (int i = 0; i < numTroopsPerRace; ++i)
+    for (int i = 0; i < ScenarioConstants::numTroopsPerRace; ++i)
     {
-        for (int j = 0; j < numAiStrategies; ++j)
+        for (int j = 0; j < ScenarioConstants::numAiStrategies; ++j)
         {
             scenarioData.aiStrategies[j].aiTroopSettings[i] = parseAiSetting();
         }

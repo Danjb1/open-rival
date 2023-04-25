@@ -11,7 +11,7 @@ class GameCommand;
 class GameCommandFactory;
 
 /**
- * A packet containing all the commands a player has issued for a given tick.
+ * Packet containing all the commands a player has issued for a given tick.
  */
 class GameCommandPacket : public Packet
 {

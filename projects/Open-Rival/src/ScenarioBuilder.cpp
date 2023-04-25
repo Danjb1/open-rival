@@ -5,6 +5,7 @@
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "SpriteComponent.h"
@@ -68,6 +69,23 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
     }
 
     return scenario;
+}
+
+Race ScenarioBuilder::getRace(std::uint8_t raceId) const
+{
+    if (raceId == 0x02)
+    {
+        return Race::Human;
+    }
+    else if (raceId == 0x03)
+    {
+        return Race::Greenskin;
+    }
+    else if (raceId == 0x04)
+    {
+        return Race::Elf;
+    }
+    throw std::runtime_error("Unknown race: " + std::to_string(raceId));
 }
 
 /**
@@ -139,7 +157,6 @@ std::uint8_t getTerrainEdgeTxIndex(TilePlacement& tile, std::uint8_t baseIndex, 
 
 Tile ScenarioBuilder::buildTile(TilePlacement& tile) const
 {
-
     TileType type;
     std::uint8_t txIndex;
 

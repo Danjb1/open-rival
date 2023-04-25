@@ -8,6 +8,11 @@ namespace Rival {
 enum class PacketType : std::uint8_t
 {
     Invalid,
+    RequestJoin,
+    AcceptPlayer,
+    RejectPlayer,
+    KickPlayer,
+    StartGame,
     GameCommand
 };
 
@@ -28,22 +33,22 @@ public:
         return type;
     }
 
-    void setPlayerId(int newPlayerId)
+    void setClientId(int newClientId)
     {
-        playerId = newPlayerId;
+        clientId = newClientId;
     }
 
-    int getPlayerId() const
+    int getClientId() const
     {
-        return playerId;
+        return clientId;
     }
 
 protected:
     /** Size of the packet header, in bytes, of a packet received from the relay server. */
     static constexpr size_t relayedPacketHeaderSize = sizeof(PacketType) + sizeof(int) /* playerId */;
 
-    /** Player ID of the sender, will be populated on all packets received from the relay server. */
-    int playerId = -1;
+    /** Client ID of the sender, will be populated on all packets received from the relay server. */
+    int clientId = -1;
 
 private:
     PacketType type;

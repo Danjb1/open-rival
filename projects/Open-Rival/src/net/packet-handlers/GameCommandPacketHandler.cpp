@@ -2,7 +2,6 @@
 
 #include "net/packet-handlers/GameCommandPacketHandler.h"
 
-#include <memory>
 #include <vector>
 
 #include "net/packets/GameCommandPacket.h"
@@ -18,8 +17,7 @@ void GameCommandPacketHandler::onPacketReceived(std::shared_ptr<const Packet> pa
     int tick = commandPacket->getTick();
 
     GameState& game = static_cast<GameState&>(state);
-
-    game.onPlayerReady(tick, commandPacket->getPlayerId());
+    game.onClientReady(tick, commandPacket->getClientId());
 
     for (auto& command : commands)
     {

@@ -13,11 +13,9 @@
 
 ### Multiplayer
 
-- Create a LobbyState while waiting for players to join
-    - Server should assign playerIds to clients
-    - GameState needs to know which players are human-controlled
+- We can implement GameState::isTickReady now that we have the clientToPlayerId map
 - Handle clients disconnecting
-- GameState receives a garbage packet when the game closes (and crashes)
+    - GameState receives a garbage packet when the game closes (and crashes)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -306,6 +304,8 @@
 - Scenario should maintain a list of entities as well as a map, instead of rebuilding the list whenever it's needed
 - Hitbox buffers should not need to be recreated every tick
 - EntityFactory should use maps instead of switch statements
+- Use a char[] or a std::vector<uninitialized_char> for buffers to avoid initialising elements
+    - https://stackoverflow.com/questions/11149665/c-vector-that-doesnt-initialize-its-members
 
 ### Refactoring
 
@@ -340,6 +340,7 @@
 - Copy/move constructors should use `noexcept`
 - Allow non-copyable classes to be moved (check uses of "= delete")
 - Replace PacketFactory's switch statement with a map of type -> function
+- Duplication between GameState::pollNetwork and LobbyState::pollNetwork
 
 ### Rendering
 

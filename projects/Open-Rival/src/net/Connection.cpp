@@ -12,10 +12,10 @@
 namespace Rival {
 
 Connection::Connection(
-        Socket socket, std::shared_ptr<PacketFactory> packetFactory, int remotePlayerId, ConnectionListener* listener)
+        Socket socket, std::shared_ptr<PacketFactory> packetFactory, int remoteClientId, ConnectionListener* listener)
     : socket(std::move(socket))
     , packetFactory(packetFactory)
-    , remotePlayerId(remotePlayerId)
+    , remoteClientId(remoteClientId)
     , listener(listener)
     , receiveThread(&Connection::receiveThreadLoop, this)
 {
@@ -60,7 +60,7 @@ void Connection::receiveThreadLoop()
         // relay server, which doesn't care about their contents.
         std::shared_ptr<const Packet> packet = packetFactory
                 ? packetFactory->deserialize(recvBuffer)
-                : std::make_shared<AnonymousPacket>(recvBuffer, remotePlayerId);
+                : std::make_shared<AnonymousPacket>(recvBuffer, remoteClientId);
 
         if (packet)
         {

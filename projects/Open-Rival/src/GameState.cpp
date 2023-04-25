@@ -27,7 +27,10 @@
 namespace Rival {
 
 GameState::GameState(
-        Application& app, std::unique_ptr<World> scenarioToMove, std::unordered_map<int, PlayerState>& playerStates)
+        Application& app,
+        std::unique_ptr<World> scenarioToMove,
+        std::unordered_map<int, PlayerState>& playerStates,
+        std::unordered_map<int, int> clientToPlayerId)
     : State(app)
     , world(std::move(scenarioToMove))
     , playerStates(playerStates)
@@ -39,6 +42,7 @@ GameState::GameState(
              *world)
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
+    , clientToPlayerId(clientToPlayerId)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::GameCommand, std::make_unique<GameCommandPacketHandler>() });
@@ -381,10 +385,18 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
     }
 }
 
-void GameState::onPlayerReady(int tick, int playerId)
+void GameState::onClientReady(int tick, int clientId)
 {
+    auto playerIdResult = clientToPlayerId.find(clientId);
+    if (playerIdResult == clientToPlayerId.cend())
+    {
+        std::cerr << "No player ID found for client " << std::to_string(clientId) << "\n";
+        return;
+    }
+    int playerId = playerIdResult->second;
+
     auto iter = playersReady.find(tick);
-    if (iter == playersReady.end())
+    if (iter == playersReady.cend())
     {
         // This is the first player ready for this tick
         std::unordered_set<int> playersReadyForTick;

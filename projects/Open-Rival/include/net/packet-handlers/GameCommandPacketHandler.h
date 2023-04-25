@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "net/packet-handlers/PacketHandler.h"
 
 namespace Rival {

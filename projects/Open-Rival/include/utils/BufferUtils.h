@@ -19,7 +19,7 @@ void addToBuffer(std::vector<char>& buffer, const T& val)
 
     char* destPtr = buffer.data() + buffer.size();
 
-    // Since we are writing to the vector's internal memory we need to manually resize the vector first
+    // Since we are writing to the vector's internal memory we need to manually change the size
     buffer.resize(requiredBufferSize);
 
     // Later, we may need to ensure a certain endianness for cross-platform compatibility.
