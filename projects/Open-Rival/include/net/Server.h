@@ -23,7 +23,7 @@ enum class ServerState : std::uint8_t
 class Server : public ConnectionListener
 {
 public:
-    Server(int port, int maxPlayers);
+    Server(int port, int maxClients);
     ~Server();
 
     // Begin ConnectionListener override
@@ -35,16 +35,16 @@ public:
 
 private:
     void acceptThreadLoop();
-    int requestPlayerId();
+    int requestClientId();
 
 private:
     Socket serverSocket;
     ServerState state = ServerState::Lobby;
     std::thread acceptThread;
 
-    int maxPlayers;
-    int nextPlayerId = 0;
-    std::unordered_map<int, std::unique_ptr<Connection>> connectedPlayers;
+    int maxClients;
+    int nextClientId = 0;
+    std::unordered_map<int, std::unique_ptr<Connection>> connectedClients;
 };
 
 }  // namespace Rival

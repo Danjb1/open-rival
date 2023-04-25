@@ -141,7 +141,7 @@ void Application::makeNextStateActive()
 
 void Application::startServer(int port)
 {
-    std::cout << "Starting server on port " << std::to_string(port) << "\n ";
+    std::cout << "Starting server on port " << std::to_string(port) << "\n";
 
     server.emplace(port, PlayerStore::maxPlayers);
     server->start();
@@ -152,7 +152,7 @@ void Application::startServer(int port)
 
 void Application::connectToServer(const std::string& address, int port)
 {
-    std::cout << "Connecting to server on port " << std::to_string(port) << "\n ";
+    std::cout << "Connecting to server on port " << std::to_string(port) << "\n";
 
     if (!packetFactory)
     {

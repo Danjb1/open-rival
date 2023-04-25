@@ -24,6 +24,8 @@ public:
 
     std::unique_ptr<World> build(const EntityFactory& entityFactory);
 
+    Race getRace(std::uint8_t raceId) const;
+
 private:
     ScenarioData data;
 

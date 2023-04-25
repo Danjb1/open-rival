@@ -9,6 +9,8 @@
 
 namespace Rival {
 
+namespace ScenarioConstants {
+
 static constexpr int numPlayers = 8;
 static constexpr int numTroops = 42;
 static constexpr int numTroopsPerRace = 14;
@@ -20,6 +22,8 @@ static constexpr int numProductionCosts = numBuildingsPlusCropland + numTroops;
 static constexpr int numWeapons = 96;
 static constexpr int numUpgrades = 112;
 static constexpr int numAiStrategies = 7;
+
+}  // namespace ScenarioConstants
 
 struct ScenarioHeader
 {
@@ -131,8 +135,8 @@ struct AiSetting
 
 struct AiStrategy
 {
-    std::array<AiSetting, numBuildingsPerRace> aiBuildingSettings;
-    std::array<AiSetting, numTroopsPerRace> aiTroopSettings;
+    std::array<AiSetting, ScenarioConstants::numBuildingsPerRace> aiBuildingSettings;
+    std::array<AiSetting, ScenarioConstants::numTroopsPerRace> aiTroopSettings;
 };
 
 struct TilePlacement
@@ -263,15 +267,15 @@ struct CampaignText
 struct ScenarioData
 {
     ScenarioHeader hdr {};
-    std::array<PlayerProperties, numPlayers> playerProperties {};
-    std::array<TroopDefaults, numTroops> troopDefaults {};
-    std::array<TroopDefaults, numMonsters> monsterDefaults {};
-    std::array<UpgradeProperties, numUpgrades> upgradeProperties {};
-    std::array<ProductionCost, numProductionCosts> productionCosts {};
-    std::array<WeaponDefaults, numWeapons> weaponDefaults {};
+    std::array<PlayerProperties, ScenarioConstants::numPlayers> playerProperties {};
+    std::array<TroopDefaults, ScenarioConstants::numTroops> troopDefaults {};
+    std::array<TroopDefaults, ScenarioConstants::numMonsters> monsterDefaults {};
+    std::array<UpgradeProperties, ScenarioConstants::numUpgrades> upgradeProperties {};
+    std::array<ProductionCost, ScenarioConstants::numProductionCosts> productionCosts {};
+    std::array<WeaponDefaults, ScenarioConstants::numWeapons> weaponDefaults {};
     AvailableBuildings availableBuildings {};
     HireTroopsRestrictions hireTroopsRestrictions {};
-    std::array<AiStrategy, numAiStrategies> aiStrategies {};
+    std::array<AiStrategy, ScenarioConstants::numAiStrategies> aiStrategies {};
     std::vector<TilePlacement> tiles {};
     std::vector<ObjectPlacement> objects {};
     std::vector<BuildingPlacement> buildings {};
@@ -287,7 +291,7 @@ struct ScenarioData
     ScenarioData()
     {
         // Initialize AI strategies
-        for (int i = 0; i < numAiStrategies; ++i)
+        for (int i = 0; i < ScenarioConstants::numAiStrategies; ++i)
         {
             aiStrategies[i] = AiStrategy();
         }

@@ -54,7 +54,11 @@ class GameState
 {
 
 public:
-    GameState(Application& app, std::unique_ptr<World> world, std::unordered_map<int, PlayerState>& playerStates);
+    GameState(
+            Application& app,
+            std::unique_ptr<World> world,
+            std::unordered_map<int, PlayerState>& playerStates,
+            std::unordered_map<int, int> clientToPlayerId);
 
     // Begin State override
     void onLoad() override;
@@ -83,7 +87,7 @@ public:
     // End GameCommandInvoker override
 
     void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
-    void onPlayerReady(int tick, int playerId);
+    void onClientReady(int tick, int clientId);
 
 private:
     bool isTickReady();
@@ -96,6 +100,9 @@ private:
     bool isNetGame() const;
 
 private:
+    /** Map of client ID -> player ID. */
+    std::unordered_map<int, int> clientToPlayerId;
+
     /** Map of player ID -> player state. */
     std::unordered_map<int, PlayerState>& playerStates;
 

@@ -74,9 +74,9 @@ private:
 
     ConnectionListener* listener;
 
-    /** ID of the player at the remote end of the connection.
-     * On clients this will always be -1 since the server has no player ID. */
-    int remotePlayerId = -1;
+    /** Client ID of the player at the remote end of the connection.
+     * On clients this will always be -1 since the server has no client ID. */
+    int remoteClientId = -1;
 };
 
 }  // namespace Rival

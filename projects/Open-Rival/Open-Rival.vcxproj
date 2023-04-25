@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="15.0">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -18,8 +18,7 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Animations.cpp" />
+  <ItemGroup><ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\ApplicationContext.cpp" />
     <ClCompile Include="src\AtlasRenderable.cpp" />
@@ -32,7 +31,6 @@
     <ClCompile Include="src\BuildingPropsComponent.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Color.cpp" />
-    <ClCompile Include="src\commands\GameCommandFactory.cpp" />
     <ClCompile Include="src\Cursor.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityComponent.cpp" />
@@ -53,7 +51,6 @@
     <ClCompile Include="src\InputUtils.cpp" />
     <ClCompile Include="src\InventoryComponent.cpp" />
     <ClCompile Include="src\JsonUtils.cpp" />
-    <ClCompile Include="src\lobby\LobbyState.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MapBorderRenderer.cpp" />
     <ClCompile Include="src\MapUtils.cpp" />
@@ -68,7 +65,6 @@
     <ClCompile Include="src\MouseUtils.cpp" />
     <ClCompile Include="src\MoveCommand.cpp" />
     <ClCompile Include="src\MovementComponent.cpp" />
-    <ClCompile Include="src\net\packets\GameCommandPacket.cpp" />
     <ClCompile Include="src\OwnerComponent.cpp" />
     <ClCompile Include="src\Palette.cpp" />
     <ClCompile Include="src\PaletteUtils.cpp" />
@@ -115,21 +111,32 @@
     <ClCompile Include="src\WaveFile.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\commands\GameCommandFactory.cpp" />
+    <ClCompile Include="src\lobby\LobbyState.cpp" />
     <ClCompile Include="src\net\Connection.cpp" />
     <ClCompile Include="src\net\PacketFactory.cpp" />
     <ClCompile Include="src\net\Server.cpp" />
     <ClCompile Include="src\net\Socket.cpp" />
     <ClCompile Include="src\net\WindowsNetUtils.cpp" />
-    <ClCompile Include="src\net\packet-handlers\PacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\AcceptPlayerPacketHandler.cpp" />
     <ClCompile Include="src\net\packet-handlers\GameCommandPacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\KickPlayerPacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\PacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\RejectPlayerPacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\RequestJoinPacketHandler.cpp" />
+    <ClCompile Include="src\net\packet-handlers\StartGamePacketHandler.cpp" />
+    <ClCompile Include="src\net\packets\AcceptPlayerPacket.cpp" />
     <ClCompile Include="src\net\packets\AnonymousPacket.cpp" />
+    <ClCompile Include="src\net\packets\GameCommandPacket.cpp" />
+    <ClCompile Include="src\net\packets\KickPlayerPacket.cpp" />
     <ClCompile Include="src\net\packets\Packet.cpp" />
+    <ClCompile Include="src\net\packets\RejectPlayerPacket.cpp" />
+    <ClCompile Include="src\net\packets\RequestJoinPacket.cpp" />
+    <ClCompile Include="src\net\packets\StartGamePacket.cpp" />
     <ClCompile Include="src\platform\unix\UnixTimeUtils.cpp" />
     <ClCompile Include="src\platform\win32\WindowsSocket.cpp" />
     <ClCompile Include="src\platform\win32\WindowsTimeUtils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Animations.h" />
+  </ItemGroup><ItemGroup><ClInclude Include="include\Animations.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\ApplicationContext.h" />
     <ClInclude Include="include\AtlasRenderable.h" />
@@ -142,7 +149,6 @@
     <ClInclude Include="include\BuildingPropsComponent.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Color.h" />
-    <ClInclude Include="include\commands\GameCommandFactory.h" />
     <ClInclude Include="include\ConfigUtils.h" />
     <ClInclude Include="include\Cursor.h" />
     <ClInclude Include="include\Entity.h" />
@@ -166,7 +172,6 @@
     <ClInclude Include="include\InputUtils.h" />
     <ClInclude Include="include\InventoryComponent.h" />
     <ClInclude Include="include\JsonUtils.h" />
-    <ClInclude Include="include\lobby\LobbyState.h" />
     <ClInclude Include="include\MapBorderRenderer.h" />
     <ClInclude Include="include\MapUtils.h" />
     <ClInclude Include="include\MathUtils.h" />
@@ -180,7 +185,6 @@
     <ClInclude Include="include\MouseUtils.h" />
     <ClInclude Include="include\MoveCommand.h" />
     <ClInclude Include="include\MovementComponent.h" />
-    <ClInclude Include="include\net\packets\GameCommandPacket.h" />
     <ClInclude Include="include\OwnerComponent.h" />
     <ClInclude Include="include\Palette.h" />
     <ClInclude Include="include\PaletteUtils.h" />
@@ -222,25 +226,37 @@
     <ClInclude Include="include\UnitAnimationComponent.h" />
     <ClInclude Include="include\UnitDef.h" />
     <ClInclude Include="include\UnitPropsComponent.h" />
-    <ClInclude Include="include\utils\BufferUtils.h" />
     <ClInclude Include="include\VoiceComponent.h" />
     <ClInclude Include="include\WalkerComponent.h" />
     <ClInclude Include="include\WallComponent.h" />
     <ClInclude Include="include\WaveFile.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\World.h" />
+    <ClInclude Include="include\commands\GameCommandFactory.h" />
+    <ClInclude Include="include\lobby\LobbyState.h" />
     <ClInclude Include="include\net\Connection.h" />
     <ClInclude Include="include\net\NetUtils.h" />
     <ClInclude Include="include\net\PacketFactory.h" />
     <ClInclude Include="include\net\Server.h" />
     <ClInclude Include="include\net\Socket.h" />
-    <ClInclude Include="include\net\packet-handlers\PacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\AcceptPlayerPacketHandler.h" />
     <ClInclude Include="include\net\packet-handlers\GameCommandPacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\KickPlayerPacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\PacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\RejectPlayerPacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\RequestJoinPacketHandler.h" />
+    <ClInclude Include="include\net\packet-handlers\StartGamePacketHandler.h" />
+    <ClInclude Include="include\net\packets\AcceptPlayerPacket.h" />
     <ClInclude Include="include\net\packets\AnonymousPacket.h" />
+    <ClInclude Include="include\net\packets\GameCommandPacket.h" />
+    <ClInclude Include="include\net\packets\KickPlayerPacket.h" />
     <ClInclude Include="include\net\packets\Packet.h" />
+    <ClInclude Include="include\net\packets\RejectPlayerPacket.h" />
+    <ClInclude Include="include\net\packets\RequestJoinPacket.h" />
+    <ClInclude Include="include\net\packets\StartGamePacket.h" />
+    <ClInclude Include="include\utils\BufferUtils.h" />
     <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
+  </ItemGroup><ItemGroup>
     <ResourceCompile Include="Open-Rival.rc" />
   </ItemGroup>
   <ItemGroup>

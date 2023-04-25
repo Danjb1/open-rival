@@ -46,7 +46,9 @@ int main(int argc, char* argv[])
             app.connectToServer(options.getHostAddress(), options.getPort());
         }
 
-        std::unique_ptr<State> initialState = std::make_unique<LobbyState>(app);
+        bool hostForLobby = options.isNetworked() ? options.isHost() : true;
+        std::string playerName = hostForLobby ? "Host" : "Client";
+        std::unique_ptr<State> initialState = std::make_unique<LobbyState>(app, playerName, hostForLobby);
         app.start(std::move(initialState));
     }
     catch (const std::exception& e)

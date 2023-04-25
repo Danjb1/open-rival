@@ -2,6 +2,18 @@
 
 #include "lobby/LobbyState.h"
 
+#include <cstdlib>  // std::rand
+
+#include "net/packet-handlers/AcceptPlayerPacketHandler.h"
+#include "net/packet-handlers/KickPlayerPacketHandler.h"
+#include "net/packet-handlers/RejectPlayerPacketHandler.h"
+#include "net/packet-handlers/RequestJoinPacketHandler.h"
+#include "net/packet-handlers/StartGamePacketHandler.h"
+#include "net/packets/AcceptPlayerPacket.h"
+#include "net/packets/KickPlayerPacket.h"
+#include "net/packets/RejectPlayerPacket.h"
+#include "net/packets/RequestJoinPacket.h"
+#include "net/packets/StartGamePacket.h"
 #include "Application.h"
 #include "ApplicationContext.h"
 #include "ConfigUtils.h"
@@ -13,25 +25,181 @@
 
 namespace Rival {
 
-LobbyState::LobbyState(Application& app)
+LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     : State(app)
+    , host(host)
+    , localPlayerName(playerName)
 {
+    // Register PacketHandlers
+    packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
+    packetHandlers.insert({ PacketType::AcceptPlayer, std::make_unique<AcceptPlayerPacketHandler>() });
+    packetHandlers.insert({ PacketType::RejectPlayer, std::make_unique<RejectPlayerPacketHandler>() });
+    packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
+    packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
 }
 
 void LobbyState::onLoad()
 {
-    // TMP
-    startGame();
+    // Load the initial level
+    // TODO: Clients should wait to receive the level name from the host
+    ApplicationContext& context = app.getContext();
+    const std::string levelName = ConfigUtils::get(context.getConfig(), "levelName", std::string());
+    if (levelName.empty())
+    {
+        throw std::runtime_error("No level name found in config.json ");
+    }
+    loadLevel(levelName);
+
+    if (host)
+    {
+        // Add ourselves to the lobby.
+        // The host should always have a client ID and player ID of 0.
+        onPlayerAccepted(joinRequestId, 0, localPlayerName, 0);
+    }
+    else
+    {
+        // We generate a random request ID, just in case 2 players try to join with the same name
+        joinRequestId = std::rand();
+        RequestJoinPacket helloPacket(joinRequestId, localPlayerName);
+        app.getConnection()->send(helloPacket);
+    }
 }
 
 void LobbyState::update()
 {
-    // TODO
+    pollNetwork();
 }
 
 void LobbyState::render(int /*delta*/)
 {
     // TODO
+}
+
+void LobbyState::keyUp(const SDL_Keycode keyCode)
+{
+    switch (keyCode)
+    {
+    case SDLK_SPACE:
+    case SDLK_RETURN:
+        // TMP: For now, just start the game when pressing Space or Enter
+        if (host)
+        {
+            requestStartGame();
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void LobbyState::pollNetwork()
+{
+    const auto& receivedPackets = app.getConnection()->getReceivedPackets();
+    for (auto& packet : receivedPackets)
+    {
+        auto iter = packetHandlers.find(packet->getType());
+        if (iter == packetHandlers.cend())
+        {
+            std::cerr << "Received unexpected packet of type "
+                      << std::to_string(EnumUtils::toIntegral(packet->getType())) << "\n";
+            continue;
+        }
+
+        iter->second->onPacketReceived(packet, *this);
+    }
+}
+
+void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName)
+{
+    if (!host)
+    {
+        // Only the host has the authority to accept other players
+        return;
+    }
+
+    int playerId = requestPlayerId();
+    if (playerId >= 0)
+    {
+        AcceptPlayerPacket acceptPacket(requestId, playerName, playerId);
+        app.getConnection()->send(acceptPacket);
+        onPlayerAccepted(requestId, clientId, playerName, playerId);
+    }
+    else
+    {
+        RejectPlayerPacket rejectPacket(requestId, playerName);
+        app.getConnection()->send(rejectPacket);
+        onPlayerRejected(requestId, playerName);
+    }
+}
+
+void LobbyState::onPlayerAccepted(int requestId, int clientId, const std::string& playerName, int playerId)
+{
+    clientToPlayerId.insert({ clientId, playerId });
+
+    if (requestId == joinRequestId && playerName == localPlayerName)
+    {
+        // Our request to join was the one that got accepted, which means this is our player ID!
+        localPlayerId = playerId;
+        return;
+    }
+
+    std::cout << "Player " << playerName << " has joined\n";
+
+    if (host)
+    {
+        // TODO: Inform joining player about the current lobby state.
+    }
+}
+
+void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)
+{
+    std::cout << "Player " << playerName << " was not allowed to join\n";
+
+    if (requestId == joinRequestId && playerName == localPlayerName)
+    {
+        // Our request to join was the one that got rejected
+        // TODO: return to main menu
+        throw std::runtime_error("Rejected by server");
+    }
+}
+
+void LobbyState::onPlayerKicked(int playerId)
+{
+    std::cout << "Player " << std::to_string(playerId) << " was kicked\n";
+
+    if (playerId == localPlayerId)
+    {
+        // TODO: return to main menu
+        throw std::runtime_error("Kicked by server");
+    }
+}
+
+int LobbyState::requestPlayerId()
+{
+    // TODO: Find the first available player ID
+    // This is a hack! We should consider the max players and and empty slots from disconnected clients.
+    int playerId = nextPlayerId;
+    ++nextPlayerId;
+    return playerId;
+}
+
+void LobbyState::loadLevel(const std::string& filename)
+{
+    ScenarioReader reader(Resources::mapsDir + filename);
+    scenarioData = reader.readScenario();
+}
+
+void LobbyState::requestStartGame()
+{
+    if (!host)
+    {
+        std::cerr << "Non-host player tried to start the game\n";
+        return;
+    }
+
+    StartGamePacket packet;
+    app.getConnection()->send(packet);
+    startGame();
 }
 
 void LobbyState::startGame()
@@ -44,28 +212,28 @@ std::unique_ptr<State> LobbyState::createGameState() const
 {
     ApplicationContext& context = app.getContext();
 
-    // Verify that we have a valid level
-    const std::string levelName = ConfigUtils::get(context.getConfig(), "levelName", std::string());
-    if (levelName.empty())
-    {
-        throw std::runtime_error("No level name found in config.json ");
-    }
-    ScenarioReader reader(Resources::mapsDir + levelName);
-
-    // Load the scenario
-    ScenarioBuilder scenarioBuilder(reader.readScenario());
+    // Create the world
+    ScenarioBuilder scenarioBuilder(scenarioData);
     EntityFactory entityFactory(context.getResources(), context.getAudioSystem());
     std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
     // Initialize players
-    // TODO: Read this from the Scenario
+    int numPlayers = PlayerStore::maxPlayers;  // TODO: Read this from the Scenario
     std::unordered_map<int, PlayerState> playerStates;
-    playerStates.emplace(
-            std::piecewise_construct,
-            std::forward_as_tuple(0),
-            std::forward_as_tuple(Race::Human, /* gold = */ 100, /* wood = */ 100, /* food = */ 100));
+    for (int playerId = 0; playerId < numPlayers; ++playerId)
+    {
+        const PlayerProperties& playerProps = scenarioData.playerProperties.at(playerId);
+        playerStates.emplace(
+                std::piecewise_construct,
+                std::forward_as_tuple(playerId),
+                std::forward_as_tuple(
+                        scenarioBuilder.getRace(playerProps.race),
+                        static_cast<int>(playerProps.startingGold),
+                        static_cast<int>(playerProps.startingWood),
+                        static_cast<int>(playerProps.startingFood)));
+    }
 
-    return std::make_unique<GameState>(app, std::move(world), playerStates);
+    return std::make_unique<GameState>(app, std::move(world), playerStates, clientToPlayerId);
 }
 
 }  // namespace Rival

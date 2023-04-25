@@ -4,7 +4,6 @@
 
 #include <cstddef>  // std::size_t
 #include <cstdint>
-#include <iostream>
 #include <string>
 
 #include "commands/GameCommandFactory.h"
