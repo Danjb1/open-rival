@@ -8,6 +8,7 @@
 #include "net/packets/AcceptPlayerPacket.h"
 #include "net/packets/GameCommandPacket.h"
 #include "net/packets/KickPlayerPacket.h"
+#include "net/packets/LobbyWelcomePacket.h"
 #include "net/packets/RejectPlayerPacket.h"
 #include "net/packets/RequestJoinPacket.h"
 #include "net/packets/StartGamePacket.h"
@@ -45,6 +46,8 @@ std::shared_ptr<Packet> PacketFactory::deserializeFromType(const std::vector<cha
         return AcceptPlayerPacket::deserialize(buffer);
     case PacketType::RejectPlayer:
         return RejectPlayerPacket::deserialize(buffer);
+    case PacketType::LobbyWelcome:
+        return LobbyWelcomePacket::deserialize(buffer);
     case PacketType::KickPlayer:
         return KickPlayerPacket::deserialize(buffer);
     case PacketType::StartGame:

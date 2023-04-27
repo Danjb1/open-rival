@@ -7,10 +7,12 @@ namespace Rival {
 
 enum class PacketType : std::uint8_t
 {
+    // N.B. Any packet types added here should also be added to PacketFactory!
     Invalid,
     RequestJoin,
     AcceptPlayer,
     RejectPlayer,
+    LobbyWelcome,
     KickPlayer,
     StartGame,
     GameCommand
