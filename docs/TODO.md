@@ -9,13 +9,22 @@
 - Display a rectangle while drag-select is active
 - Selected units should flash orange
 - Allow buildings to be selected
-- Use a single MoveCommand for groups
+- Use a single MoveCommand for groups?
 
 ### Multiplayer
 
-- We can implement GameState::isTickReady now that we have the clientToPlayerId map
+- Read/write fixed-value types instead of int, size_t, etc.
 - Handle clients disconnecting
     - GameState receives a garbage packet when the game closes (and crashes)
+- Add basic lobby state UI
+    - Menu background
+    - List connected clients
+- Show a message when the waiting for player commands
+
+### Misc
+
+- Add logging mechanism
+- Release a new version
 
 <!----------------------------------------------------------------------------->
 ## Bugs

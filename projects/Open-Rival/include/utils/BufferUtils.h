@@ -3,14 +3,19 @@
 #include <cstddef>  // std::size_t
 #include <cstring>  // std::memcpy
 #include <stdexcept>
+#include <string>
 #include <vector>
 
-namespace BufferUtils {
+namespace Rival { namespace BufferUtils {
 
-/** Adds a value to the end of the given buffer. */
+/** Adds a value to the end of the given buffer.
+ * This should not be used for anything which manages its own memory (e.g. containers and strings). */
 template <typename T>
 void addToBuffer(std::vector<char>& buffer, const T& val)
 {
+    // Later, we may need to ensure a certain endianness for cross-platform compatibility.
+    // See: https://stackoverflow.com/questions/544928/reading-integer-size-bytes-from-a-char-array
+
     size_t requiredBufferSize = buffer.size() + sizeof(val);
     if (requiredBufferSize > buffer.capacity())
     {
@@ -22,8 +27,6 @@ void addToBuffer(std::vector<char>& buffer, const T& val)
     // Since we are writing to the vector's internal memory we need to manually change the size
     buffer.resize(requiredBufferSize);
 
-    // Later, we may need to ensure a certain endianness for cross-platform compatibility.
-    // See: https://stackoverflow.com/questions/544928/reading-integer-size-bytes-from-a-char-array
     std::memcpy(destPtr, &val, sizeof(val));
 }
 
@@ -41,4 +44,11 @@ void readFromBuffer(const std::vector<char>& buffer, std::size_t& offset, T& des
     offset += sizeof(dest);
 }
 
-}  // namespace BufferUtils
+/** Adds a string to the end of the given buffer. */
+void addStringToBuffer(std::vector<char>& buffer, const std::string& s);
+
+/** Reads a string from the given buffer, at some offset.
+ * The offset is increased by the size of the data read. */
+std::string readStringFromBuffer(const std::vector<char>& buffer, std::size_t& offset);
+
+}}  // namespace Rival::BufferUtils

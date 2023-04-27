@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "net/ClientInfo.h"
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/Packet.h"
 #include "Camera.h"
@@ -58,7 +59,7 @@ public:
             Application& app,
             std::unique_ptr<World> world,
             std::unordered_map<int, PlayerState>& playerStates,
-            std::unordered_map<int, int> clientToPlayerId);
+            std::unordered_map<int, ClientInfo> clients);
 
     // Begin State override
     void onLoad() override;
@@ -100,8 +101,8 @@ private:
     bool isNetGame() const;
 
 private:
-    /** Map of client ID -> player ID. */
-    std::unordered_map<int, int> clientToPlayerId;
+    /** Map of client ID -> ClientInfo. */
+    std::unordered_map<int, ClientInfo> clients;
 
     /** Map of player ID -> player state. */
     std::unordered_map<int, PlayerState>& playerStates;
@@ -130,8 +131,8 @@ private:
     /** Commands ready to be executed, indexed by the tick number when they are due. */
     std::unordered_map<int, std::vector<std::shared_ptr<GameCommand>>> pendingCommands;
 
-    /** Players for whom we have received commands, indexed by tick number. */
-    std::unordered_map<int, std::unordered_set<int>> playersReady;
+    /** Clients for whom we have received commands, indexed by tick number. */
+    std::unordered_map<int, std::unordered_set<int>> clientsReady;
 
     /** Commands queued for sending over the network. */
     std::vector<std::shared_ptr<GameCommand>> outgoingCommands;

@@ -30,7 +30,7 @@ GameState::GameState(
         Application& app,
         std::unique_ptr<World> scenarioToMove,
         std::unordered_map<int, PlayerState>& playerStates,
-        std::unordered_map<int, int> clientToPlayerId)
+        std::unordered_map<int, ClientInfo> clients)
     : State(app)
     , world(std::move(scenarioToMove))
     , playerStates(playerStates)
@@ -42,7 +42,7 @@ GameState::GameState(
              *world)
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
-    , clientToPlayerId(clientToPlayerId)
+    , clients(clients)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::GameCommand, std::make_unique<GameCommandPacketHandler>() });
@@ -83,24 +83,17 @@ bool GameState::isTickReady()
         return true;
     }
 
-    // TODO: We need to get this from the lobby
-    int numOtherHumanPlayers = 0;
-    if (numOtherHumanPlayers == 0)
+    auto iter = clientsReady.find(currentTick);
+    if (iter == clientsReady.cend())
     {
-        // TMP
-        return true;
-    }
-
-    auto iter = playersReady.find(currentTick);
-    if (iter == playersReady.end())
-    {
-        // No players are ready!
+        // No clients are ready!
         return false;
     }
 
-    std::unordered_set<int>& playersReadyForTick = iter->second;
+    std::unordered_set<int>& clientsReadyForTick = iter->second;
+    size_t numClientsReady = clientsReadyForTick.size();
 
-    return static_cast<int>(playersReadyForTick.size()) == numOtherHumanPlayers;
+    return numClientsReady == clients.size();
 }
 
 void GameState::pollNetwork()
@@ -387,32 +380,24 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
 
 void GameState::onClientReady(int tick, int clientId)
 {
-    auto playerIdResult = clientToPlayerId.find(clientId);
-    if (playerIdResult == clientToPlayerId.cend())
-    {
-        std::cerr << "No player ID found for client " << std::to_string(clientId) << "\n";
-        return;
-    }
-    int playerId = playerIdResult->second;
-
-    auto iter = playersReady.find(tick);
-    if (iter == playersReady.cend())
+    auto iter = clientsReady.find(tick);
+    if (iter == clientsReady.cend())
     {
         // This is the first player ready for this tick
-        std::unordered_set<int> playersReadyForTick;
-        playersReadyForTick.insert(playerId);
-        playersReady.insert({ tick, playersReadyForTick });
+        std::unordered_set<int> clientsReadyForTick;
+        clientsReadyForTick.insert(clientId);
+        clientsReady.insert({ tick, clientsReadyForTick });
     }
     else
     {
         // Add to the players already ready
         std::unordered_set<int>& playersReadyForTick = iter->second;
-        auto result = playersReadyForTick.insert(playerId);
+        auto result = playersReadyForTick.insert(clientId);
         if (!result.second)
         {
             // result is a pair <iter, bool> where bool is false if the element was already present in the set
             throw std::runtime_error(
-                    "Duplicate player ready received for player " + std::to_string(playerId)
+                    "Duplicate player ready received for client " + std::to_string(clientId)
                     + " for tick: " + std::to_string(tick));
         }
     }
@@ -434,6 +419,7 @@ void GameState::processCommands()
     }
 
     pendingCommands.erase(currentTick);
+    clientsReady.erase(currentTick);
 }
 
 bool GameState::isNetGame() const

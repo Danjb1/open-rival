@@ -415,6 +415,18 @@
     <ClCompile Include="src\net\packet-handlers\StartGamePacketHandler.cpp">
       <Filter>Source Files\net\packet-handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\net\packets\LobbyWelcomePacket.cpp">
+      <Filter>Source Files\net\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\packet-handlers\LobbyWelcomePacketHandler.cpp">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\ClientInfo.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\BufferUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -776,6 +788,15 @@
     </ClInclude>
     <ClInclude Include="include\net\packet-handlers\StartGamePacketHandler.h">
       <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packets\LobbyWelcomePacket.h">
+      <Filter>Source Files\net\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\packet-handlers\LobbyWelcomePacketHandler.h">
+      <Filter>Source Files\net\packet-handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\ClientInfo.h">
+      <Filter>Source Files\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

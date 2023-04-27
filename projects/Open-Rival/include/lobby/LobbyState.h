@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "PlayerState.h"
 #include "ScenarioData.h"
@@ -33,8 +34,9 @@ public:
     // End State override
 
     void onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName);
-    void onPlayerAccepted(int requestId, int clientId, const std::string& playerName, int playerId);
+    void onPlayerAccepted(int requestId, int clientId, const ClientInfo& client);
     void onPlayerRejected(int requestId, const std::string& playerName);
+    void onWelcomeReceived(int playerId, std::unordered_map<int, ClientInfo> clients);
     void onPlayerKicked(int playerId);
     void startGame();
 
@@ -56,8 +58,8 @@ private:
     /** The selected scenario. */
     ScenarioData scenarioData;
 
-    /** Map of client ID -> player ID. */
-    std::unordered_map<int, int> clientToPlayerId;
+    /** Map of client ID -> ClientInfo. */
+    std::unordered_map<int, ClientInfo> clients;
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;

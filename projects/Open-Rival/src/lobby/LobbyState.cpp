@@ -6,11 +6,13 @@
 
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
+#include "net/packet-handlers/LobbyWelcomePacketHandler.h"
 #include "net/packet-handlers/RejectPlayerPacketHandler.h"
 #include "net/packet-handlers/RequestJoinPacketHandler.h"
 #include "net/packet-handlers/StartGamePacketHandler.h"
 #include "net/packets/AcceptPlayerPacket.h"
 #include "net/packets/KickPlayerPacket.h"
+#include "net/packets/LobbyWelcomePacket.h"
 #include "net/packets/RejectPlayerPacket.h"
 #include "net/packets/RequestJoinPacket.h"
 #include "net/packets/StartGamePacket.h"
@@ -34,6 +36,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
     packetHandlers.insert({ PacketType::AcceptPlayer, std::make_unique<AcceptPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::RejectPlayer, std::make_unique<RejectPlayerPacketHandler>() });
+    packetHandlers.insert({ PacketType::LobbyWelcome, std::make_unique<LobbyWelcomePacketHandler>() });
     packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
 }
@@ -54,14 +57,15 @@ void LobbyState::onLoad()
     {
         // Add ourselves to the lobby.
         // The host should always have a client ID and player ID of 0.
-        onPlayerAccepted(joinRequestId, 0, localPlayerName, 0);
+        ClientInfo localClient(0, localPlayerName);
+        onPlayerAccepted(joinRequestId, 0, localClient);
     }
     else
     {
         // We generate a random request ID, just in case 2 players try to join with the same name
         joinRequestId = std::rand();
-        RequestJoinPacket helloPacket(joinRequestId, localPlayerName);
-        app.getConnection()->send(helloPacket);
+        RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
+        app.getConnection()->send(joinPacket);
     }
 }
 
@@ -122,7 +126,9 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     {
         AcceptPlayerPacket acceptPacket(requestId, playerName, playerId);
         app.getConnection()->send(acceptPacket);
-        onPlayerAccepted(requestId, clientId, playerName, playerId);
+
+        ClientInfo client = { playerId, playerName };
+        onPlayerAccepted(requestId, clientId, client);
     }
     else
     {
@@ -132,22 +138,24 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     }
 }
 
-void LobbyState::onPlayerAccepted(int requestId, int clientId, const std::string& playerName, int playerId)
+void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo& client)
 {
-    clientToPlayerId.insert({ clientId, playerId });
-
-    if (requestId == joinRequestId && playerName == localPlayerName)
+    if (requestId == joinRequestId && client.getName() == localPlayerName)
     {
         // Our request to join was the one that got accepted, which means this is our player ID!
-        localPlayerId = playerId;
+        localPlayerId = client.getPlayerId();
         return;
     }
 
-    std::cout << "Player " << playerName << " has joined\n";
+    std::cout << "Player " << client.getName() << " has joined\n";
+
+    clients.insert({ clientId, client });
 
     if (host)
     {
-        // TODO: Inform joining player about the current lobby state.
+        // Inform joining player about the current lobby state
+        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clients);
+        app.getConnection()->send(welcomePacket);
     }
 }
 
@@ -161,6 +169,19 @@ void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)
         // TODO: return to main menu
         throw std::runtime_error("Rejected by server");
     }
+}
+
+void LobbyState::onWelcomeReceived(int playerId, std::unordered_map<int, ClientInfo> newClients)
+{
+    if (playerId != localPlayerId)
+    {
+        // This was not intended for us
+        return;
+    }
+
+    std::cout << "Received lobby state from host\n";
+
+    clients = newClients;
 }
 
 void LobbyState::onPlayerKicked(int playerId)
@@ -233,7 +254,7 @@ std::unique_ptr<State> LobbyState::createGameState() const
                         static_cast<int>(playerProps.startingFood)));
     }
 
-    return std::make_unique<GameState>(app, std::move(world), playerStates, clientToPlayerId);
+    return std::make_unique<GameState>(app, std::move(world), playerStates, clients);
 }
 
 }  // namespace Rival

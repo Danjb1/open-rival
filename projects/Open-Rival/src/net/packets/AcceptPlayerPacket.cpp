@@ -23,13 +23,7 @@ void AcceptPlayerPacket::serialize(std::vector<char>& buffer) const
     Packet::serialize(buffer);
 
     BufferUtils::addToBuffer(buffer, requestId);
-
-    BufferUtils::addToBuffer(buffer, playerName.size());
-    for (size_t i = 0; i < playerName.size(); ++i)
-    {
-        BufferUtils::addToBuffer(buffer, playerName.c_str()[i]);
-    }
-
+    BufferUtils::addStringToBuffer(buffer, playerName);
     BufferUtils::addToBuffer(buffer, playerId);
 }
 
@@ -40,17 +34,7 @@ std::shared_ptr<AcceptPlayerPacket> AcceptPlayerPacket::deserialize(const std::v
     int requestId = 0;
     BufferUtils::readFromBuffer(buffer, offset, requestId);
 
-    size_t playerNameSize = 0;
-    BufferUtils::readFromBuffer(buffer, offset, playerNameSize);
-
-    std::string playerName;
-    playerName.reserve(playerNameSize);
-    for (size_t i = 0; i < playerNameSize; ++i)
-    {
-        char c;
-        BufferUtils::readFromBuffer(buffer, offset, c);
-        playerName += c;
-    }
+    std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
 
     int playerId = 0;
     BufferUtils::readFromBuffer(buffer, offset, playerId);
