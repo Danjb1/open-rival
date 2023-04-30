@@ -152,9 +152,16 @@ void Socket::send(std::vector<char>& buffer)
 void Socket::receive(std::vector<char>& buffer)
 {
     // Receive until the peer shuts down the connection
-    int result = ::recv(sock, buffer.data(), buffer.capacity(), 0);
+    int result = ::recv(sock, buffer.data(), buffer.size(), 0);
+
     if (result > 0)
     {
+        if (result < static_cast<int>(buffer.size()))
+        {
+            std::cerr << "Did not fill buffer with data received: " << std::to_string(result) << " / "
+                      << std::to_string(buffer.size()) << "\n";
+        }
+
         // Set the buffer size to the number of bytes read.
         // This should only ever shrink the buffer; trying to extend it this way will wipe any received data.
         buffer.resize(result);

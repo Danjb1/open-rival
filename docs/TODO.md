@@ -13,7 +13,10 @@
 
 ### Multiplayer
 
-- Read/write fixed-value types instead of int, size_t, etc.
+- Improve socket programming: http://diranieh.com/SOCKETS/DosDonts.htm
+    - It suggests NOT disabling Nagel's algorithm
+    - It suggests NOT using TCP keepalives
+    - Also see: "Always check the number of bytes transferred"
 - Handle clients disconnecting
     - GameState receives a garbage packet when the game closes (and crashes)
 - Add basic lobby state UI
@@ -24,6 +27,7 @@
 ### Misc
 
 - Add logging mechanism
+- Submit net code for review
 - Release a new version
 
 <!----------------------------------------------------------------------------->
@@ -252,7 +256,6 @@
 ## Project
 <!----------------------------------------------------------------------------->
 
-- Build for Linux
 - Use a dependency manager
 - Add script to build from command line
 - Add script to run tests from command line
@@ -295,6 +298,17 @@
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
 - Add padding between spritesheet images to prevent any texure bleeding
+
+### Cross-Platform Support
+
+- Read/write fixed-value types to packets instead of int, size_t, etc.
+- Read/write values to packts using a consistent endianness
+    - "Before writing to any WinSock structure, always convert from host order to network order,
+       and after reading always convert from network order to host order"
+- Add Linux implementations in platform folder
+- Move existing platform-specific functionality to platform folder and add Linux implementation:
+    - Default font directories
+    - Registry operations in setup project
 
 ### Fonts
 

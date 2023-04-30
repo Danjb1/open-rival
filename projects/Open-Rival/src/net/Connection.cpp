@@ -19,8 +19,8 @@ Connection::Connection(
     , listener(listener)
     , receiveThread(&Connection::receiveThreadLoop, this)
 {
-    sendBuffer.reserve(bufferSize);
-    recvBuffer.reserve(bufferSize);
+    sendBuffer.reserve(maxBufferSize);
+    recvBuffer.reserve(maxBufferSize);
 }
 
 Connection::~Connection()
@@ -53,7 +53,24 @@ void Connection::receiveThreadLoop()
 {
     while (!socket.isClosed())
     {
-        recvBuffer.resize(bufferSize);
+        // First read the packet size
+        recvBuffer.resize(Packet::sizeBytes);
+        socket.receive(recvBuffer);
+
+        // Extract the packet size from the buffer
+        std::size_t offset = 0;
+        int nextPacketSize = 0;
+        BufferUtils::readFromBuffer(recvBuffer, offset, nextPacketSize);
+        recvBuffer.clear();
+
+        // Sanity-check the packet size
+        if (nextPacketSize > maxBufferSize)
+        {
+            throw std::runtime_error("Unexpected packet size: " + std::to_string(nextPacketSize));
+        }
+
+        // Now read the packet itself
+        recvBuffer.resize(nextPacketSize);
         socket.receive(recvBuffer);
 
         // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
@@ -75,14 +92,13 @@ void Connection::receiveThreadLoop()
                 receivedPackets.push_back(packet);
             }
         }
-
-        recvBuffer.clear();
     }
 }
 
 void Connection::send(const Packet& packet)
 {
     packet.serialize(sendBuffer);
+    packet.finalize(sendBuffer);
     if (sendBuffer.empty())
     {
         throw std::runtime_error("Tried to send empty buffer");
