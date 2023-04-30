@@ -59,8 +59,8 @@ private:
     void receiveThreadLoop();
 
 private:
-    /** Buffer size used for reading from the socket. Packets should not exceed this size. */
-    static constexpr std::size_t bufferSize = 512;
+    /** Maximum buffer size when receiving data. Packets should never exceed this size. */
+    static constexpr std::size_t maxBufferSize = 512;
 
     Socket socket;
     std::shared_ptr<PacketFactory> packetFactory;

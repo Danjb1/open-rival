@@ -19,10 +19,15 @@ AnonymousPacket::AnonymousPacket(const std::vector<char>& buffer, int clientId)
 
 void AnonymousPacket::serialize(std::vector<char>& buffer) const
 {
-    if (sizeof(int) + packetData.size() > buffer.capacity())
+    // Make sure the buffer is big enough for us to inject the client ID
+    std::size_t packetSize = Packet::sizeBytes + sizeof(clientId) + packetData.size();
+    if (packetSize > buffer.capacity())
     {
-        throw std::runtime_error("No room in packet for player ID");
+        throw std::runtime_error("No room in packet for client ID");
     }
+
+    // Placeholder for packet size
+    BufferUtils::addToBuffer(buffer, 0);
 
     // We inject the client ID before the packet data so clients can know who sent it
     BufferUtils::addToBuffer(buffer, clientId);
