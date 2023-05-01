@@ -14,12 +14,10 @@
 
 ### Multiplayer
 
-- Handle clients disconnecting
-    - GameState receives a garbage packet when the game closes (and crashes)
 - Add basic lobby state UI
     - Menu background
     - List connected clients
-- Show a message when the waiting for player commands
+- Show a message when waiting for player commands
 
 ### Misc
 

@@ -159,7 +159,9 @@ void Socket::send(std::vector<char>& buffer)
             else
             {
                 // Socket is still open on our side but may have been closed by the other side
-                throw std::runtime_error("Failed to send on socket: " + std::to_string(WSAGetLastError()));
+                std::cerr << "Failed to send on socket: " + std::to_string(WSAGetLastError()) << "\n";
+                close();
+                break;
             }
         }
 
@@ -186,7 +188,9 @@ void Socket::receive(std::vector<char>& buffer)
             else
             {
                 // Socket is still open on our side but may have been closed by the other side
-                throw std::runtime_error("Failed to read from socket: " + std::to_string(WSAGetLastError()));
+                std::cerr << "Failed to read from socket: " + std::to_string(WSAGetLastError()) << "\n";
+                close();
+                break;
             }
         }
 

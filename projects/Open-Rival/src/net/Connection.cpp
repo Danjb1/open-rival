@@ -54,8 +54,10 @@ void Connection::receiveThreadLoop()
     while (!socket.isClosed())
     {
         // First read the packet size
-        recvBuffer.resize(Packet::sizeBytes);
-        socket.receive(recvBuffer);
+        if (!readFromSocket(Packet::sizeBytes))
+        {
+            break;
+        }
 
         // Extract the packet size from the buffer
         std::size_t offset = 0;
@@ -70,8 +72,10 @@ void Connection::receiveThreadLoop()
         }
 
         // Now read the packet itself
-        recvBuffer.resize(nextPacketSize);
-        socket.receive(recvBuffer);
+        if (!readFromSocket(nextPacketSize))
+        {
+            break;
+        }
 
         // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
         // relay server, which doesn't care about their contents.
@@ -93,6 +97,16 @@ void Connection::receiveThreadLoop()
             }
         }
     }
+}
+
+bool Connection::readFromSocket(std::size_t numBytes)
+{
+    recvBuffer.resize(numBytes);
+    socket.receive(recvBuffer);
+
+    // The socket may get closed during a call to `receive`
+    bool success = !socket.isClosed();
+    return success;
 }
 
 void Connection::send(const Packet& packet)

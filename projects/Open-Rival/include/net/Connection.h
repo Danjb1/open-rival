@@ -57,6 +57,7 @@ public:
 
 private:
     void receiveThreadLoop();
+    bool readFromSocket(std::size_t numBytes);
 
 private:
     /** Maximum buffer size when receiving data. Packets should never exceed this size. */
