@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ui/CursorRenderer.h"
 #include "AtlasRenderable.h"
-#include "Cursor.h"
 #include "GameInterface.h"
 #include "MenuTextRenderer.h"
 #include "Race.h"
@@ -15,6 +15,9 @@ class PlayerStore;
 class TextureStore;
 struct PlayerContext;
 
+/**
+ * Class responsible for rendering the in-game UI.
+ */
 class UiRenderer
 {
 public:
@@ -42,17 +45,12 @@ private:
 
     bool isNameVisible(std::string& outName) const;
 
-    int animateCursor(const CursorDef cursorDef, int delta);
-
 private:
     // Maximum number of images we can ever render
     static constexpr int maxMainUiImages = 6;
 
     // Number of images to render when nothing is selected
     static constexpr int defaultNumMainUiImages = maxMainUiImages;
-
-    // Determines the speed of the cursor animation
-    static constexpr int msPerCursorFrame = 60;
 
     // TMP: Portrait to show when multiple units are selected
     static constexpr int multiSelectionPortraitId = 108;
@@ -83,10 +81,7 @@ private:
     MenuTextRenderer textRenderer;
 
     // Cursor
-    GameInterface::UiImage cursorImage;
-    SpriteRenderable cursorRenderable;
-    CursorDef prevCursor = Cursor::arrow;
-    int cursorAnimTime = 0;
+    CursorRenderer cursorRenderer;
 };
 
 }  // namespace Rival
