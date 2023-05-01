@@ -427,6 +427,12 @@
     <ClCompile Include="src\utils\BufferUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\MenuRenderer.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\CursorRenderer.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -797,6 +803,12 @@
     </ClInclude>
     <ClInclude Include="include\net\ClientInfo.h">
       <Filter>Source Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui\MenuRenderer.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui\CursorRenderer.h">
+      <Filter>Source Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

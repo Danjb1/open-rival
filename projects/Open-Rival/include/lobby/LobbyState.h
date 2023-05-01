@@ -8,6 +8,7 @@
 
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
+#include "ui/MenuRenderer.h"
 #include "PlayerState.h"
 #include "ScenarioData.h"
 #include "State.h"
@@ -63,6 +64,8 @@ private:
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
+
+    MenuRenderer menuRenderer;
 };
 
 }  // namespace Rival

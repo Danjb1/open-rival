@@ -27,10 +27,17 @@
 
 namespace Rival {
 
+Rect makeViewport(const Window* window)
+{
+    // Fill the screen
+    return { 0, 0, window->getWidth(), window->getHeight() };
+}
+
 LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     : State(app)
     , host(host)
     , localPlayerName(playerName)
+    , menuRenderer(window, makeViewport(window), res)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
@@ -74,9 +81,9 @@ void LobbyState::update()
     pollNetwork();
 }
 
-void LobbyState::render(int /*delta*/)
+void LobbyState::render(int delta)
 {
-    // TODO
+    menuRenderer.render(delta);
 }
 
 void LobbyState::keyUp(const SDL_Keycode keyCode)

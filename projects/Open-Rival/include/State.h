@@ -12,7 +12,6 @@ class Application;
 
 class State
 {
-
 public:
     State(Application& app);
 

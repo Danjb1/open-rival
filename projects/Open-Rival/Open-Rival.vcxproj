@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="15.0">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -18,8 +18,7 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Animations.cpp" />
+  <ItemGroup><ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\ApplicationContext.cpp" />
     <ClCompile Include="src\AtlasRenderable.cpp" />
@@ -106,7 +105,6 @@
     <ClCompile Include="src\UnitAnimationComponent.cpp" />
     <ClCompile Include="src\UnitDef.cpp" />
     <ClCompile Include="src\UnitPropsComponent.cpp" />
-    <ClCompile Include="src\utils\BufferUtils.cpp" />
     <ClCompile Include="src\VoiceComponent.cpp" />
     <ClCompile Include="src\WalkerComponent.cpp" />
     <ClCompile Include="src\WallComponent.cpp" />
@@ -130,20 +128,21 @@
     <ClCompile Include="src\net\packet-handlers\RequestJoinPacketHandler.cpp" />
     <ClCompile Include="src\net\packet-handlers\StartGamePacketHandler.cpp" />
     <ClCompile Include="src\net\packets\AcceptPlayerPacket.cpp" />
-    <ClCompile Include="src\net\packets\RelayedPacket.cpp" />
     <ClCompile Include="src\net\packets\GameCommandPacket.cpp" />
     <ClCompile Include="src\net\packets\KickPlayerPacket.cpp" />
     <ClCompile Include="src\net\packets\LobbyWelcomePacket.cpp" />
     <ClCompile Include="src\net\packets\Packet.cpp" />
     <ClCompile Include="src\net\packets\RejectPlayerPacket.cpp" />
+    <ClCompile Include="src\net\packets\RelayedPacket.cpp" />
     <ClCompile Include="src\net\packets\RequestJoinPacket.cpp" />
     <ClCompile Include="src\net\packets\StartGamePacket.cpp" />
     <ClCompile Include="src\platform\unix\UnixTimeUtils.cpp" />
     <ClCompile Include="src\platform\win32\WindowsSocket.cpp" />
     <ClCompile Include="src\platform\win32\WindowsTimeUtils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Animations.h" />
+    <ClCompile Include="src\ui\CursorRenderer.cpp" />
+    <ClCompile Include="src\ui\MenuRenderer.cpp" />
+    <ClCompile Include="src\utils\BufferUtils.cpp" />
+  </ItemGroup><ItemGroup><ClInclude Include="include\Animations.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\ApplicationContext.h" />
     <ClInclude Include="include\AtlasRenderable.h" />
@@ -256,18 +255,19 @@
     <ClInclude Include="include\net\packet-handlers\RequestJoinPacketHandler.h" />
     <ClInclude Include="include\net\packet-handlers\StartGamePacketHandler.h" />
     <ClInclude Include="include\net\packets\AcceptPlayerPacket.h" />
-    <ClInclude Include="include\net\packets\RelayedPacket.h" />
     <ClInclude Include="include\net\packets\GameCommandPacket.h" />
     <ClInclude Include="include\net\packets\KickPlayerPacket.h" />
     <ClInclude Include="include\net\packets\LobbyWelcomePacket.h" />
     <ClInclude Include="include\net\packets\Packet.h" />
     <ClInclude Include="include\net\packets\RejectPlayerPacket.h" />
+    <ClInclude Include="include\net\packets\RelayedPacket.h" />
     <ClInclude Include="include\net\packets\RequestJoinPacket.h" />
     <ClInclude Include="include\net\packets\StartGamePacket.h" />
+    <ClInclude Include="include\ui\CursorRenderer.h" />
+    <ClInclude Include="include\ui\MenuRenderer.h" />
     <ClInclude Include="include\utils\BufferUtils.h" />
     <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
+  </ItemGroup><ItemGroup>
     <ResourceCompile Include="Open-Rival.rc" />
   </ItemGroup>
   <ItemGroup>

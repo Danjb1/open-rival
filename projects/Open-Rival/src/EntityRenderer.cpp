@@ -81,13 +81,13 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     }
 
     // Determine palette based on owner
-    int paletteIndex = 0;
+    int paletteIndex = PaletteUtils::paletteIndexGame;
     const auto owner = entity.getComponent<OwnerComponent>(OwnerComponent::key);
     if (owner)
     {
-        paletteIndex = owner->getPlayerId();
+        paletteIndex += owner->getPlayerId();
     }
-    float paletteTxy = static_cast<float>(paletteIndex) / PlayerStore::maxPlayers;
+    float paletteTxy = PaletteUtils::getPaletteTxY(paletteIndex);
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxy);
 
     // Use textures
