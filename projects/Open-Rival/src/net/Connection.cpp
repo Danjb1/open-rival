@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "net/packets/AnonymousPacket.h"
+#include "net/packets/RelayedPacket.h"
 #include "utils/BufferUtils.h"
 
 namespace Rival {
@@ -77,11 +77,11 @@ void Connection::receiveThreadLoop()
             break;
         }
 
-        // If this Connection has no packet factory, just wrap the buffers in anonymous packets. These are used by the
-        // relay server, which doesn't care about their contents.
+        // If this Connection has no packet factory, then it belongs to the relay server. The relay server doesn't care
+        // about the contents of incoming packets, it just wraps them in RelayedPackets.
         std::shared_ptr<const Packet> packet = packetFactory
                 ? packetFactory->deserialize(recvBuffer)
-                : std::make_shared<AnonymousPacket>(recvBuffer, remoteClientId);
+                : std::make_shared<RelayedPacket>(recvBuffer, remoteClientId);
 
         if (packet)
         {

@@ -86,8 +86,9 @@ bool GameState::isTickReady()
     auto iter = clientsReady.find(currentTick);
     if (iter == clientsReady.cend())
     {
-        // No clients are ready!
-        return false;
+        // No clients are ready! We can still process the next tick if we are the only player (unlikely for a net game,
+        // but technically possible).
+        return clients.empty();
     }
 
     std::unordered_set<int>& clientsReadyForTick = iter->second;
