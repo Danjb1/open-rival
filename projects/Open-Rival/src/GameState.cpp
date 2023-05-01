@@ -152,6 +152,13 @@ void GameState::sendOutgoingCommands()
         return;
     }
 
+    if (app.getConnection()->isClosed())
+    {
+        // Don't try to send commands if the connection is closed.
+        // Later, we could display a message and/or try to reconnect.
+        return;
+    }
+
     // Send all commands for this tick to the server
     GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
     app.getConnection()->send(packet);
