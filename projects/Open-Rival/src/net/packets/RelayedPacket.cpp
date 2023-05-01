@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "net/packets/AnonymousPacket.h"
+#include "net/packets/RelayedPacket.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -9,7 +9,7 @@
 
 namespace Rival {
 
-AnonymousPacket::AnonymousPacket(const std::vector<char>& buffer, int clientId)
+RelayedPacket::RelayedPacket(const std::vector<char>& buffer, int clientId)
     // The packet type is not important, since we don't serialize it
     : Packet(PacketType::Invalid)
     , packetData(buffer)  // Make a copy of the incoming buffer
@@ -17,7 +17,7 @@ AnonymousPacket::AnonymousPacket(const std::vector<char>& buffer, int clientId)
     setClientId(clientId);
 }
 
-void AnonymousPacket::serialize(std::vector<char>& buffer) const
+void RelayedPacket::serialize(std::vector<char>& buffer) const
 {
     // Make sure the buffer is big enough for us to inject the client ID
     std::size_t packetSize = Packet::sizeBytes + sizeof(clientId) + packetData.size();

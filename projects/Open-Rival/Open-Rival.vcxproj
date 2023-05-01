@@ -130,7 +130,7 @@
     <ClCompile Include="src\net\packet-handlers\RequestJoinPacketHandler.cpp" />
     <ClCompile Include="src\net\packet-handlers\StartGamePacketHandler.cpp" />
     <ClCompile Include="src\net\packets\AcceptPlayerPacket.cpp" />
-    <ClCompile Include="src\net\packets\AnonymousPacket.cpp" />
+    <ClCompile Include="src\net\packets\RelayedPacket.cpp" />
     <ClCompile Include="src\net\packets\GameCommandPacket.cpp" />
     <ClCompile Include="src\net\packets\KickPlayerPacket.cpp" />
     <ClCompile Include="src\net\packets\LobbyWelcomePacket.cpp" />
@@ -256,7 +256,7 @@
     <ClInclude Include="include\net\packet-handlers\RequestJoinPacketHandler.h" />
     <ClInclude Include="include\net\packet-handlers\StartGamePacketHandler.h" />
     <ClInclude Include="include\net\packets\AcceptPlayerPacket.h" />
-    <ClInclude Include="include\net\packets\AnonymousPacket.h" />
+    <ClInclude Include="include\net\packets\RelayedPacket.h" />
     <ClInclude Include="include\net\packets\GameCommandPacket.h" />
     <ClInclude Include="include\net\packets\KickPlayerPacket.h" />
     <ClInclude Include="include\net\packets\LobbyWelcomePacket.h" />

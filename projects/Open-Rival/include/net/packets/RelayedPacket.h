@@ -11,10 +11,10 @@ namespace Rival {
  *
  * The original packet data is not important for the server, and is never inspected.
  */
-class AnonymousPacket : public Packet
+class RelayedPacket : public Packet
 {
 public:
-    AnonymousPacket(const std::vector<char>& buffer, int clientId);
+    RelayedPacket(const std::vector<char>& buffer, int clientId);
 
     void serialize(std::vector<char>& buffer) const override;
 
