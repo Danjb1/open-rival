@@ -6,6 +6,7 @@
 
 ### Selection & Movement
 
+- Drag-select cursor
 - Display a rectangle while drag-select is active
 - Selected units should flash orange
 - Allow buildings to be selected
@@ -13,10 +14,6 @@
 
 ### Multiplayer
 
-- Improve socket programming: http://diranieh.com/SOCKETS/DosDonts.htm
-    - It suggests NOT disabling Nagel's algorithm
-    - It suggests NOT using TCP keepalives
-    - Also see: "Always check the number of bytes transferred"
 - Handle clients disconnecting
     - GameState receives a garbage packet when the game closes (and crashes)
 - Add basic lobby state UI
@@ -101,7 +98,6 @@
 
 ### Multiplayer
 
-- The game should only start when all players have joined
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Create standalone project to run dedicated server
 
@@ -180,6 +176,7 @@
 - Custom Map menu
 - Pause menu
 - Troop libraries
+- Lobby screen
 
 ### Editor
 
@@ -195,7 +192,7 @@
 - [ ] Cross-platform releases (e.g. Raspberry Pi)
 - [x] Support for higher frame rates
 - [ ] Support for larger screen resolutions
-- [ ] Stable net play!
+- [x] Stable net play!
 
 ### Quality of Life
 
@@ -229,7 +226,7 @@
 
 ### Balance
 
-- [ ] Improved pathfinding
+- [x] Improved pathfinding
 - [ ] Configurable Gold multiplier
 - [ ] Configurable XP multiplier
 - [ ] Affordable Wall

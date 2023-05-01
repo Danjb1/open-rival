@@ -142,40 +142,62 @@ bool Socket::isValid() const
 
 void Socket::send(std::vector<char>& buffer)
 {
-    int result = ::send(sock, buffer.data(), buffer.size(), 0);
-    if (result == SOCKET_ERROR)
+    std::size_t bytesSent = 0;
+
+    while (bytesSent < buffer.size())
     {
-        throw std::runtime_error("Failed to send on socket: " + std::to_string(WSAGetLastError()));
+        int bytesRemaining = buffer.size() - bytesSent;
+        int result = ::send(sock, buffer.data() + bytesSent, bytesRemaining, 0);
+
+        if (result == SOCKET_ERROR)
+        {
+            if (isClosed())
+            {
+                // Socket has been closed, so just abort the send
+                break;
+            }
+            else
+            {
+                // Socket is still open on our side but may have been closed by the other side
+                throw std::runtime_error("Failed to send on socket: " + std::to_string(WSAGetLastError()));
+            }
+        }
+
+        bytesSent += result;
     }
 }
 
 void Socket::receive(std::vector<char>& buffer)
 {
-    // Receive until the peer shuts down the connection
-    int result = ::recv(sock, buffer.data(), buffer.size(), 0);
+    std::size_t bytesReceived = 0;
 
-    if (result > 0)
+    while (bytesReceived < buffer.size())
     {
-        if (result < static_cast<int>(buffer.size()))
+        int bytesExpected = buffer.size() - bytesReceived;
+        int result = ::recv(sock, buffer.data() + bytesReceived, bytesExpected, 0);
+
+        if (result == SOCKET_ERROR)
         {
-            std::cerr << "Did not fill buffer with data received: " << std::to_string(result) << " / "
-                      << std::to_string(buffer.size()) << "\n";
+            if (isClosed())
+            {
+                // Socket has been closed, so just abort the read
+                break;
+            }
+            else
+            {
+                // Socket is still open on our side but may have been closed by the other side
+                throw std::runtime_error("Failed to read from socket: " + std::to_string(WSAGetLastError()));
+            }
         }
 
-        // Set the buffer size to the number of bytes read.
-        // This should only ever shrink the buffer; trying to extend it this way will wipe any received data.
-        buffer.resize(result);
-    }
-    else if (result == 0)
-    {
-        // Connection has been gracefully closed
-        close();
-    }
-    else if (!isClosed())
-    {
-        // Socket read error; socket is still open on our side but may have been closed by the other side
-        std::cerr << "Failed to read from socket: " << std::to_string(WSAGetLastError()) << "\n";
-        close();
+        if (result == 0)
+        {
+            // Connection has been gracefully closed
+            close();
+            break;
+        }
+
+        bytesReceived += result;
     }
 }
 
