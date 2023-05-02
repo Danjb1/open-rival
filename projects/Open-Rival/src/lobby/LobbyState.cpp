@@ -37,7 +37,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     : State(app)
     , host(host)
     , localPlayerName(playerName)
-    , menuRenderer(window, makeViewport(window), res)
+    , menuRenderer(res, window, makeViewport(window))
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });

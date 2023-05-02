@@ -35,25 +35,32 @@ extern const glm::vec2 selectionName;
 extern const Rect statsPanel;
 
 /**
- * A UI image with a position, that can be used to populate an AtlasRenderable or a SpriteRenderable.
+ * A UI image with a position, that can be used to populate vertex position and texture co-ordinate buffers.
  */
 class UiImage
 {
 public:
     Rect pos;
 
+    /** Constructor for a UiImage that uses a TextureAtlas. */
     UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const std::string imageKey);
 
+    /** Constructor for a UiImage that uses a Spritesheet. */
     UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex);
+
+    /** Constructor for a UiImage that renders an entire texture. */
+    UiImage(Rect pos);
 
     void setSpriteIndex(int newSpriteIndex);
 
     void addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
 
 private:
+    // TextureAtlas version
     std::shared_ptr<const TextureAtlas> texAtlas;
     const std::string imageKey;
 
+    // Spritesheet version
     const Spritesheet* spritesheet = nullptr;
     int spriteIndex = 0;
 };

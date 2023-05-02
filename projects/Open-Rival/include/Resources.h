@@ -48,6 +48,7 @@ public:
     virtual const Spritesheet& getPortraitSpritesheet() const = 0;
     virtual const Spritesheet& getHitboxSpritesheet() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const = 0;
+    virtual std::shared_ptr<const Texture> getMenuBackgroundTexture() const = 0;
 };
 
 /**
@@ -94,6 +95,7 @@ public:
     const Spritesheet& getPortraitSpritesheet() const override;
     const Spritesheet& getHitboxSpritesheet() const override;
     std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const override;
+    std::shared_ptr<const Texture> getMenuBackgroundTexture() const override;
     // End TextureStore override
 
     // Begin FontStore override
@@ -152,6 +154,7 @@ private:
     static constexpr int txIndexBuildings = 58;
     static constexpr int txIndexPortraits = 61;
     static constexpr int txIndexHitbox = 62;
+    static constexpr int txIndexMenuBackground = 63;
 
     // Resource counts
     static constexpr int numTextures = txIndexHitbox + 1;

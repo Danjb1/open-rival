@@ -4,37 +4,38 @@
 
 #include <gl/glew.h>
 
-#include <array>
 #include <cstdint>
+#include <vector>
 
 #include "Palette.h"
 #include "Texture.h"
 
 namespace Rival { namespace PaletteUtils {
 
+static const int texWidth = Palette::numColors;
+static const int texHeight = MathUtils::nextPowerOf2(numPalettes);
+
 // Number of bytes required for all palettes
-constexpr int paletteTextureBytes = Palette::numBytesSinglePalette * numPalettes;
+static const int paletteTextureBytes = Palette::numBytesSinglePalette * texHeight;
 
 // Player color info
-constexpr int numColorsPerPlayer = 6;
-constexpr int p1ColorsIndex = 160;
-constexpr int p2ColorsIndex = p1ColorsIndex + numColorsPerPlayer;
+static constexpr int numColorsPerPlayer = 6;
+static constexpr int p1ColorsIndex = 160;
+static constexpr int p2ColorsIndex = p1ColorsIndex + numColorsPerPlayer;
 
-void addColorToPalette(std::array<std::uint8_t, paletteTextureBytes>& data, std::uint32_t col, std::size_t& nextIndex)
+void addColorToPalette(std::vector<std::uint8_t>& data, std::uint32_t col)
 {
     // RGBA
-    data[nextIndex] = static_cast<std::uint8_t>((col & 0xff000000) >> 24);
-    data[nextIndex + 1] = static_cast<std::uint8_t>((col & 0x00ff0000) >> 16);
-    data[nextIndex + 2] = static_cast<std::uint8_t>((col & 0x0000ff00) >> 8);
-    data[nextIndex + 3] = static_cast<std::uint8_t>(col & 0x000000ff);
-
-    nextIndex += Palette::numChannels;
+    data.push_back(static_cast<std::uint8_t>((col & 0xff000000) >> 24));
+    data.push_back(static_cast<std::uint8_t>((col & 0x00ff0000) >> 16));
+    data.push_back(static_cast<std::uint8_t>((col & 0x0000ff00) >> 8));
+    data.push_back(static_cast<std::uint8_t>(col & 0x000000ff));
 }
 
 std::shared_ptr<const Texture> createPaletteTexture()
 {
-    std::array<std::uint8_t, paletteTextureBytes> data { 0 };
-    std::size_t nextIndex = 0;
+    std::vector<std::uint8_t> data;
+    data.reserve(paletteTextureBytes);
 
     // 1 palette per player...
     // Since we are using indexed textures, the only way to render units in different colours is to change the palette.
@@ -57,36 +58,36 @@ std::shared_ptr<const Texture> createPaletteTexture()
                 col = Palette::paletteGame[i];
             }
 
-            addColorToPalette(data, col, nextIndex);
+            addColorToPalette(data, col);
         }
     }
 
     // Title screen
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        addColorToPalette(data, Palette::paletteTitle[i], nextIndex);
+        addColorToPalette(data, Palette::paletteTitle[i]);
     }
 
     // Loading screen
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        addColorToPalette(data, Palette::paletteLoading[i], nextIndex);
+        addColorToPalette(data, Palette::paletteLoading[i]);
     }
 
     // Menu
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        addColorToPalette(data, Palette::paletteMenu[i], nextIndex);
+        addColorToPalette(data, Palette::paletteMenu[i]);
     }
 
     // Hire troops
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        addColorToPalette(data, Palette::paletteHireTroops[i], nextIndex);
+        addColorToPalette(data, Palette::paletteHireTroops[i]);
     }
 
-    int texWidth = Palette::numColors;
-    int texHeight = numPalettes;
+    // Default-initialize any remaining elements to fill out the texture
+    data.resize(paletteTextureBytes);
 
     GLuint textureId = 0;
     glGenTextures(1, &textureId);
