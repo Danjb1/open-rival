@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "MathUtils.h"
 #include "Palette.h"
 #include "Texture.h"
 
@@ -104,7 +105,7 @@ std::shared_ptr<const Texture> createPaletteTexture()
 
 float getPaletteTxY(int paletteIndex)
 {
-    return static_cast<float>(paletteIndex) / numPalettes;
+    return static_cast<float>(paletteIndex) / texHeight;
 }
 
 }}  // namespace Rival::PaletteUtils
