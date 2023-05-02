@@ -4,18 +4,24 @@
 
 #include <gl/glew.h>
 
+#include "gfx/TextureRenderable.h"
+#include "GLUtils.h"
 #include "Rect.h"
 #include "RenderUtils.h"
-#include "Resources.h"
 #include "Shaders.h"
 #include "Window.h"
 
 namespace Rival {
 
-MenuRenderer::MenuRenderer(const Window* window, const Rect& viewport, const Resources& res)
-    : window(window)
+const Rect backgroundImageRect(0, 0, 800, 600);
+
+MenuRenderer::MenuRenderer(const TextureStore& textureStore, const Window* window, const Rect& viewport)
+    : textureStore(textureStore)
+    , window(window)
     , viewport(viewport)
-    , cursorRenderer(res, window)
+    , cursorRenderer(textureStore, window)
+    , backgroundImage(backgroundImageRect)
+    , backgroundRenderable(textureStore.getMenuBackgroundTexture())
 {
 }
 
@@ -27,18 +33,59 @@ void MenuRenderer::render(int delta)
     glUseProgram(Shaders::indexedTextureShader.programId);
 
     // Use the menu palette
-    // TODO: The cursor colors seem incorrect, but I am not sure if that is a problem with the way our menu palette is
-    // defined, or whether we need to introduce a new palette for menu cursors.
-    // Curiously, there are 3 identical cursor images that we are not currently using, which are probably meant to be
-    // used in menus: img_ui_0144.tga, img_ui_0243.tga, img_ui_0359.tga.
-    // However, these seem to use the same colors as the in-game cursor, so they don't help us here.
     float paletteTxY = PaletteUtils::getPaletteTxY(PaletteUtils::paletteIndexMenu);
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxY);
 
+    renderBackground();
     renderCursor(delta);
 
     // Restore the default palette
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, 0);
+}
+
+// TMP: For now we render the background explicitly, but later we should render menus in a more generic way
+void MenuRenderer::renderBackground()
+{
+    // Use textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, backgroundRenderable.getTextureId());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
+
+    // Bind vertex array
+    glBindVertexArray(backgroundRenderable.getVao());
+
+    // Update the data on the GPU
+    // TODO: we only need to do this once
+    sendBackgroundDataToGpu();
+
+    // Render
+    glDrawElements(GL_TRIANGLES, GLUtils::numIndicesForTriangles, GL_UNSIGNED_INT, nullptr);
+}
+
+void MenuRenderer::sendBackgroundDataToGpu()
+{
+    // Create buffers to hold all our vertex data
+    int numVertices = TextureRenderable::numVertices;
+    int positionDataSize = numVertices * TextureRenderable::numVertexDimensions;
+    int texCoordDataSize = numVertices * TextureRenderable::numTexCoordDimensions;
+    std::vector<GLfloat> positions;
+    std::vector<GLfloat> texCoords;
+    positions.reserve(positionDataSize);
+    texCoords.reserve(texCoordDataSize);
+
+    // Add data to our buffers
+    backgroundImage.addToBuffers(positions, texCoords);
+
+    // Upload position data
+    glBindBuffer(GL_ARRAY_BUFFER, backgroundRenderable.getPositionVbo());
+    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
+
+    // Upload tex co-ord data
+    glBindBuffer(GL_ARRAY_BUFFER, backgroundRenderable.getTexCoordVbo());
+    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
 void MenuRenderer::renderCursor(int delta)
@@ -56,6 +103,10 @@ void MenuRenderer::renderCursor(int delta)
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
     glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+
+    // TMP: Use the game palette since we don't have menu cursor images yet
+    float paletteTxY = PaletteUtils::getPaletteTxY(PaletteUtils::paletteIndexGame);
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxY);
 
     // Render the cursor to the screen
     glViewport(0, 0, window->getWidth(), window->getHeight());

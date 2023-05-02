@@ -12,17 +12,22 @@
 - Allow buildings to be selected
 - Use a single MoveCommand for groups?
 
-### Multiplayer
+### Networking
 
-- Add basic lobby state UI
-    - Menu background
-    - List connected clients
+- Address code review comments:
+    - https://codereview.stackexchange.com/questions/284749/winsock-code-for-lockstep-rts-game
+
+### UI
+
+- Add menu background
+    - Palette is not working correctly
+    - Need to be able to read TGA images exported from Photoshop (these have a lower-left image origin, we expect upper-left)
+- List connected clients in lobby
 - Show a message when waiting for player commands
 
 ### Misc
 
 - Add logging mechanism
-- Submit net code for review
 - Release a new version
 
 <!----------------------------------------------------------------------------->
@@ -121,7 +126,7 @@
 
 ### Rendering
 
-- Respect unit color (if set)
+- Respect monster color
 - Render interface
     - Resource icons
     - Resource counts
@@ -169,6 +174,8 @@
 
 ### Menus
 
+- Gold cursor in menus
+    - We may need to create new cursor images for this since the existing ones all use the wrong palette
 - Main menu
 - Loading screen
 - Custom Map menu
@@ -213,7 +220,7 @@
 
 ### Menus
 
-- [ ] Animated cursors
+- [x] Animated cursors
 - [ ] Rank explanations
 - [ ] Campaign map select
 - [ ] Revamped Save / Hire Troops UI
@@ -359,6 +366,7 @@
 - Allow non-copyable classes to be moved (check uses of "= delete")
 - Replace PacketFactory's switch statement with a map of type -> function
 - Duplication between GameState::pollNetwork and LobbyState::pollNetwork
+- UiImage should be split into 3 different classes
 
 ### Rendering
 

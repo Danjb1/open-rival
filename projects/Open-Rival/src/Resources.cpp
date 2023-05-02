@@ -153,6 +153,9 @@ std::vector<std::shared_ptr<const Texture>> Resources::loadTextures()
 
         // Hitbox
         "hitbox.tga",
+
+        // Menu Background
+        "menu_bg.tga",
     };
 
     for (auto const& textureName : textureNames)
@@ -450,6 +453,11 @@ std::shared_ptr<const Texture> Resources::getPalette() const
 std::shared_ptr<const TextureAtlas> Resources::getUiTextureAtlas() const
 {
     return textureAtlases.at(0);
+}
+
+std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const
+{
+    return textures.at(txIndexMenuBackground);
 }
 
 const WaveFile& Resources::getSound(int id) const

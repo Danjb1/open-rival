@@ -45,6 +45,11 @@ UiImage::UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex)
 {
 }
 
+UiImage::UiImage(Rect pos)
+    : pos(pos)
+{
+}
+
 void UiImage::setSpriteIndex(int newSpriteIndex)
 {
     spriteIndex = newSpriteIndex;
@@ -71,9 +76,23 @@ void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>
     {
         thisTexCoords = texAtlas->getTexCoords(imageKey);
     }
-    else
+    else if (spritesheet)
     {
         thisTexCoords = spritesheet->getTexCoords(spriteIndex);
+    }
+    else
+    {
+        const float tx1 = 0.f;
+        const float tx2 = 1.f;
+        const float ty1 = 0.f;
+        const float ty2 = 1.f;
+
+        thisTexCoords = {
+            tx1, ty1,  //
+            tx2, ty1,  //
+            tx2, ty2,  //
+            tx1, ty2   //
+        };
     }
 
     // Copy this data into the main buffers

@@ -433,6 +433,9 @@
     <ClCompile Include="src\ui\CursorRenderer.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\gfx\TextureRenderable.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -809,6 +812,9 @@
     </ClInclude>
     <ClInclude Include="include\ui\CursorRenderer.h">
       <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gfx\TextureRenderable.h">
+      <Filter>Source Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

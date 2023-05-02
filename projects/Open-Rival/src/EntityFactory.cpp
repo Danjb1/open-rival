@@ -60,8 +60,11 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     }
     unit->attach(std::make_shared<UnitPropsComponent>(unitType, name, isNameUnique));
 
-    // OwnerComponent
-    unit->attach(std::make_shared<OwnerComponent>(unitPlacement.player));
+    // OwnerComponent (note: monsters use player = 8)
+    if (unitPlacement.player < PlayerStore::maxPlayers)
+    {
+        unit->attach(std::make_shared<OwnerComponent>(unitPlacement.player));
+    }
 
     // FacingComponent
     const Facing facing = getFacing(unitPlacement.facing);

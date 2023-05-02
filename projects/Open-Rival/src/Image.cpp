@@ -30,7 +30,7 @@ Image Image::readImage(const std::string filename)
     /*uint8_t bpp = */ reader.readByte();
     /*uint8_t imageDescriptor = */ reader.readByte();
 
-    // Color palette
+    // Color palette (we can ignore this since we know the palettes ahead of time)
     reader.skip(Palette::numBytesSinglePalette);
 
     // Pixel data
