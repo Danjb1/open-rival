@@ -28,7 +28,7 @@ Image Image::readImage(const std::string& filename)
     std::uint16_t width = reader.readShort();
     std::uint16_t height = reader.readShort();
     uint8_t bpp = reader.readByte();
-    /*uint8_t imageDescriptor = */ reader.readByte();
+    uint8_t imageDescriptor = reader.readByte();
 
     // Sanity check image format
     if (colorMapType != 1 || imageType != 1 || bpp != 8)
@@ -48,15 +48,39 @@ Image Image::readImage(const std::string& filename)
     std::vector<std::uint8_t> data(width * height);
     reader.read(&data);
 
-    if (reader.getBytesRemaining() != 0)
+    // HACK: Fix reverse palette in files exported by Photoshop
+    auto bytesRemaining = reader.getBytesRemaining();
+    if (static_cast<int>(bytesRemaining) == tgaFooterSize)
     {
-        // TMP: Photoshop stores the palette in reverse order
+        /* This is a bit of a hack, but we use the presence of the TGA footer to detect files exported by Photoshop (as
+         * opposed to files extracted programmatically from the game assets). A less hacky approach would be to peek at
+         * the palette to see if it is reversed.
+         *
+         * For whatever reason, files exported by Photoshop have their palettes reversed, so we fix this by inverting
+         * the value of every pixel.
+         */
         for (std::size_t i = 0; i < data.size(); ++i)
         {
             data[i] = 255 - data[i];
         }
+    }
 
-        // throw std::runtime_error("Did not reach end of image: " + filename);
+    // Fix images with a lower-left origin
+    if ((imageDescriptor & (1 << 5)) == 0)
+    {
+        // Bit 5 of the image descriptor bytes describes the vertical origin (top or bottom).
+        // We expect images to have a top-left origin, so if this is not the case, we need to fix it - otherwise the
+        // image will be upside-down.
+        const auto lastRow = height - 1;
+        for (auto y = 0; y < height / 2; ++y)
+        {
+            for (auto x = 0; x < width; ++x)
+            {
+                std::size_t i = y * width + x;
+                std::size_t j = (lastRow - y) * width + x;
+                std::swap(data[i], data[j]);
+            }
+        }
     }
 
     return Image::createByMove(width, height, std::move(data));

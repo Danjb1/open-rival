@@ -155,7 +155,7 @@ std::vector<std::shared_ptr<const Texture>> Resources::loadTextures()
         "hitbox.tga",
 
         // Menu Background
-        "menu_bg.tga",
+        "menu_bg_dark.tga",
     };
 
     for (auto const& textureName : textureNames)

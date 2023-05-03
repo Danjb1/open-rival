@@ -19,10 +19,6 @@
 
 ### UI
 
-- Support menu background image exported by Photoshop
-    - Palette is backwards (this might also affect the cursor if we render using the menu palette)
-    - File has a 26-byte footer
-    - Image uses a lower-left origin in the image descriptor (we expect upper-left)
 - List connected clients in lobby
 - Show a message when waiting for player commands
 
