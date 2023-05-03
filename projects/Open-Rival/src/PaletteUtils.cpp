@@ -16,9 +16,6 @@ namespace Rival { namespace PaletteUtils {
 static const int texWidth = Palette::numColors;
 static const int texHeight = MathUtils::nextPowerOf2(numPalettes);
 
-// Number of bytes required for all palettes
-static const int paletteTextureBytes = Palette::numBytesSinglePalette * texHeight;
-
 // Player color info
 static constexpr int numColorsPerPlayer = 6;
 static constexpr int p1ColorsIndex = 160;
@@ -35,6 +32,9 @@ void addColorToPalette(std::vector<std::uint8_t>& data, std::uint32_t col)
 
 std::shared_ptr<const Texture> createPaletteTexture()
 {
+    // Number of bytes required for all palettes
+    const int paletteTextureBytes = Palette::numBytesSinglePalette * texHeight;
+
     std::vector<std::uint8_t> data;
     data.reserve(paletteTextureBytes);
 

@@ -31,6 +31,8 @@ public:
      */
     void read(std::vector<std::uint8_t>* buffer);
 
+    std::streamoff getBytesRemaining();
+
 private:
     std::ifstream in;
 };

@@ -26,7 +26,7 @@ struct ImageProperties
 class Image
 {
 public:
-    static Image readImage(const std::string filename);
+    static Image readImage(const std::string& filename);
 
     /**
      * Creates an Image by copying some existing data.

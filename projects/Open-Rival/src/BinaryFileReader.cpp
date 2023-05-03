@@ -47,4 +47,13 @@ void BinaryFileReader::read(std::vector<std::uint8_t>* buffer)
     in.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
 }
 
+std::streamoff BinaryFileReader::getBytesRemaining()
+{
+    std::streampos currentPos = getPos();
+    in.seekg(0, std::ios::end);
+    std::streampos endPos = getPos();
+    setPos(currentPos);
+    return endPos - currentPos;
+}
+
 }  // namespace Rival
