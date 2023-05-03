@@ -47,7 +47,10 @@ SORR.BLD
 /projects/Open-Rival/res/fonts
 
 # Release folder
-/dist/res
+/dist/res/data
+/dist/res/icons
+/dist/res/maps
+/dist/res/shaders
 /dist/setup
 /dist/Open-Rival.exe
 /dist/setup.exe

@@ -26,22 +26,20 @@ struct ImageProperties
 class Image
 {
 public:
+    /** Reads a TGA image file. */
     static Image readImage(const std::string& filename);
 
-    /**
-     * Creates an Image by copying some existing data.
-     */
+    /** Creates an Image by copying some existing data. */
     static Image createEmpty(int width, int height, std::uint8_t bgColor, ImageProperties props = {});
 
-    /**
-     * Creates an Image by copying some existing data.
-     */
+    /** Creates an Image by copying some existing data. */
     static Image createByCopy(int width, int height, std::vector<std::uint8_t>& data, ImageProperties props = {});
 
-    /**
-     * Creates an Image by taking ownership of some existing data.
-     */
+    /** Creates an Image by taking ownership of some existing data. */
     static Image createByMove(int width, int height, std::vector<std::uint8_t>&& data, ImageProperties props = {});
+
+    /** Copies pixels from one image into another. */
+    static void copyImage(const Image& src, Image& dst, const int dstX, const int dstY);
 
     int getWidth() const
     {
@@ -65,12 +63,9 @@ public:
         return data;
     };
 
-    /**
-     * Copies pixels from one image into another.
-     */
-    static void copyImage(const Image& src, Image& dst, const int dstX, const int dstY);
-
 private:
+    static constexpr int tgaFooterSize = 26;
+
     int width;
     int height;
     ImageProperties props;
