@@ -10,32 +10,54 @@
 
 namespace Rival {
 
-Image Image::readImage(const std::string filename)
+Image Image::readImage(const std::string& filename)
 {
     BinaryFileReader reader(filename);
 
     // Color map specification
     /*uint8_t idLength = */ reader.readByte();
-    /*uint8_t colorMapType = */ reader.readByte();
-    /*uint8_t imageType = */ reader.readByte();
+    uint8_t colorMapType = reader.readByte();
+    uint8_t imageType = reader.readByte();
     /*uint16_t firstEntryIndex = */ reader.readShort();
-    /*uint16_t numEntries = */ reader.readShort();
-    /*uint8_t entrySize = */ reader.readByte();
+    uint16_t numEntries = reader.readShort();
+    uint8_t entrySize = reader.readByte();
 
     // Image specification
     /*uint16_t xOrigin = */ reader.readShort();
     /*uint16_t yOrigin = */ reader.readShort();
     std::uint16_t width = reader.readShort();
     std::uint16_t height = reader.readShort();
-    /*uint8_t bpp = */ reader.readByte();
+    uint8_t bpp = reader.readByte();
     /*uint8_t imageDescriptor = */ reader.readByte();
 
+    // Sanity check image format
+    if (colorMapType != 1 || imageType != 1 || bpp != 8)
+    {
+        throw std::runtime_error("Unsupported image type: " + filename);
+    }
+    if (numEntries != Palette::numColors)
+    {
+        throw std::runtime_error("Image contains invalid palette: " + filename);
+    }
+
     // Color palette (we can ignore this since we know the palettes ahead of time)
-    reader.skip(Palette::numBytesSinglePalette);
+    int numChannels = entrySize / 8;  // entrySize is 16, 24 or 32
+    reader.skip(Palette::numColors * numChannels);
 
     // Pixel data
     std::vector<std::uint8_t> data(width * height);
     reader.read(&data);
+
+    if (reader.getBytesRemaining() != 0)
+    {
+        // TMP: Photoshop stores the palette in reverse order
+        for (std::size_t i = 0; i < data.size(); ++i)
+        {
+            data[i] = 255 - data[i];
+        }
+
+        // throw std::runtime_error("Did not reach end of image: " + filename);
+    }
 
     return Image::createByMove(width, height, std::move(data));
 }
