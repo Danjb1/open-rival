@@ -261,7 +261,7 @@ std::unique_ptr<State> LobbyState::createGameState() const
                         static_cast<int>(playerProps.startingFood)));
     }
 
-    return std::make_unique<GameState>(app, std::move(world), playerStates, clients);
+    return std::make_unique<GameState>(app, std::move(world), playerStates, clients, localPlayerId);
 }
 
 }  // namespace Rival

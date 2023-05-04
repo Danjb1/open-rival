@@ -148,6 +148,10 @@ The [setup project](/setup) can be trivially built using Visual Studio. Once bui
 
 Copy these folders to the `Open-Rival/res` directory.
 
+## Copy Custom Resources
+
+Some resources are custom-made for Open-Rival. These are included in the `dist/res` directory. The contents of this directory should be copied to `projects/Open-Rival/res` for use during development.
+
 ## Install Font
 
 The game uses the [Procopius font](https://fontsgeek.com/fonts/Procopius-Regular) which must be downloaded and installed separately.

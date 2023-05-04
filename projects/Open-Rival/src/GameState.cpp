@@ -30,7 +30,8 @@ GameState::GameState(
         Application& app,
         std::unique_ptr<World> scenarioToMove,
         std::unordered_map<int, PlayerState>& playerStates,
-        std::unordered_map<int, ClientInfo> clients)
+        std::unordered_map<int, ClientInfo> clients,
+        int localPlayerId)
     : State(app)
     , world(std::move(scenarioToMove))
     , playerStates(playerStates)
@@ -43,6 +44,7 @@ GameState::GameState(
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
     , clients(clients)
+    , localPlayerId(localPlayerId)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::GameCommand, std::make_unique<GameCommandPacketHandler>() });
