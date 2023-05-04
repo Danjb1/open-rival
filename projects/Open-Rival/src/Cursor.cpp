@@ -11,6 +11,11 @@ namespace Rival {
 
 CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
+    if (playerContext.dragSelect.isValid())
+    {
+        return dragSelect;
+    }
+
     // We only care about 1 of the selected Entities, doesn't matter which
     const auto selectedEntity =
             playerContext.weakSelectedEntities.empty() ? nullptr : playerContext.weakSelectedEntities[0].lock();

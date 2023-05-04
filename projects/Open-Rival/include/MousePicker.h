@@ -18,17 +18,6 @@ class Rect;
 class World;
 struct PlayerContext;
 
-struct DragSelect
-{
-    // Mouse positions during drag-select, in window co-ordinates
-    int startX = -1;
-    int startY = -1;
-    int endX = -1;
-    int endY = -1;
-
-    void reset();
-};
-
 /**
  * Class responsible for determining what is under the mouse.
  *
@@ -71,14 +60,9 @@ private:
     void tileSelected();
     void deselect();
 
-    bool isDragSelectActive() const;
-    bool isDragSelectValid() const;
     void processDragSelectArea();
 
 private:
-    /** Minimum size of one side of the drag-select area before it will be considered valid. */
-    static constexpr int minDragSelectSize = 8;
-
     World& world;
     Camera& camera;
     Rect& viewport;
@@ -88,8 +72,6 @@ private:
 
     int mapWidth;
     int mapHeight;
-
-    DragSelect dragSelect = {};
 };
 
 }  // namespace Rival
