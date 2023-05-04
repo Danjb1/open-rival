@@ -24,14 +24,6 @@
 
 namespace Rival {
 
-void DragSelect::reset()
-{
-    startX = -1;
-    startY = -1;
-    endX = -1;
-    endY = -1;
-}
-
 MousePicker::MousePicker(
         Camera& camera,
         Rect& viewport,
@@ -69,10 +61,10 @@ void MousePicker::mouseDown(std::uint8_t button)
     }
 
     // Start drag-select
-    dragSelect.startX = mouseX;
-    dragSelect.startY = mouseY;
-    dragSelect.endX = mouseX;
-    dragSelect.endY = mouseY;
+    playerContext.dragSelect.startX = mouseX;
+    playerContext.dragSelect.startY = mouseY;
+    playerContext.dragSelect.endX = mouseX;
+    playerContext.dragSelect.endY = mouseY;
 }
 
 void MousePicker::mouseUp(std::uint8_t button)
@@ -80,14 +72,14 @@ void MousePicker::mouseUp(std::uint8_t button)
     if (button == SDL_BUTTON_LEFT)
     {
         // Drag-select
-        if (isDragSelectValid())
+        if (playerContext.dragSelect.isValid())
         {
             processDragSelectArea();
-            dragSelect.reset();
+            playerContext.dragSelect.reset();
             return;
         }
 
-        dragSelect.reset();
+        playerContext.dragSelect.reset();
 
         // Get the mouse position relative to the window, in pixels
         int mouseX;
@@ -125,12 +117,12 @@ void MousePicker::handleMouse()
     SDL_GetMouseState(&mouseX, &mouseY);
 
     // Drag-select
-    if (isDragSelectActive())
+    if (playerContext.dragSelect.isActive())
     {
         // Don't allow the drag-select area to extend outside the viewport
-        dragSelect.endX =
+        playerContext.dragSelect.endX =
                 std::clamp(mouseX, static_cast<int>(viewport.x), static_cast<int>(viewport.x + viewport.width));
-        dragSelect.endY =
+        playerContext.dragSelect.endY =
                 std::clamp(mouseY, static_cast<int>(viewport.y), static_cast<int>(viewport.y + viewport.height));
         return;
     }
@@ -414,24 +406,13 @@ void MousePicker::deselect()
     playerContext.weakSelectedEntities.clear();
 }
 
-bool MousePicker::isDragSelectActive() const
-{
-    return dragSelect.startX >= 0;
-}
-
-bool MousePicker::isDragSelectValid() const
-{
-    return std::abs(dragSelect.endX - dragSelect.startX) > minDragSelectSize  //
-            && std::abs(dragSelect.endY - dragSelect.startY) > minDragSelectSize;
-}
-
 void MousePicker::processDragSelectArea()
 {
     // Normalize the drag-select area
-    int startX = std::min(dragSelect.startX, dragSelect.endX);
-    int startY = std::min(dragSelect.startY, dragSelect.endY);
-    int endX = std::max(dragSelect.startX, dragSelect.endX);
-    int endY = std::max(dragSelect.startY, dragSelect.endY);
+    int startX = std::min(playerContext.dragSelect.startX, playerContext.dragSelect.endX);
+    int startY = std::min(playerContext.dragSelect.startY, playerContext.dragSelect.endY);
+    int endX = std::max(playerContext.dragSelect.startX, playerContext.dragSelect.endX);
+    int endY = std::max(playerContext.dragSelect.startY, playerContext.dragSelect.endY);
 
     // Find the camera position, in pixels
     float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());

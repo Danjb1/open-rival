@@ -8,7 +8,6 @@
     - https://codereview.stackexchange.com/questions/284749/winsock-code-for-lockstep-rts-game
 - List connected clients in lobby
 - Show a message when waiting for player commands
-- Drag-select cursor
 - Display a rectangle while drag-select is active
 - Add logging mechanism
 - Release a new version
@@ -353,6 +352,7 @@
 - Replace PacketFactory's switch statement with a map of type -> function
 - Duplication between GameState::pollNetwork and LobbyState::pollNetwork
 - UiImage should be split into 3 different classes
+- Move some headers to pch.h
 
 ### Rendering
 
