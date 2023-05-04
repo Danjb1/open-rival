@@ -18,17 +18,9 @@ Run the executable, and the images will be extracted to an `images` directory.
 
 A full list of images can be found [here](/docs/images.md).
 
-### Single Image
-
-To extract a single image, supply the image address as a parameter to the program, e.g.
-
-    image-extractor.exe 00F9FCC5
-
 ## Palettes
 
 Some images have parts that can change colour, for example units that change colour based on their team. This program specifies which colours from the game's palette should be used for these parts.
-
-A visual representation of the game's palette is available [here](palette.png).
 
 The palette was captured in a 24-bit screenshot taken using DxWnd. This was exported to an ACT file using Photoshop, and converted to text by running [this script](convert_palette.py).
 

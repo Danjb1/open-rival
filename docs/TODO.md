@@ -1,29 +1,15 @@
 # To Do
 
 <!----------------------------------------------------------------------------->
-### Next Up...
+## Next Up...
 <!----------------------------------------------------------------------------->
-
-### Selection & Movement
-
-- Drag-select cursor
-- Display a rectangle while drag-select is active
-- Selected units should flash orange
-- Allow buildings to be selected
-- Use a single MoveCommand for groups?
-
-### Networking
 
 - Address code review comments:
     - https://codereview.stackexchange.com/questions/284749/winsock-code-for-lockstep-rts-game
-
-### UI
-
 - List connected clients in lobby
 - Show a message when waiting for player commands
-
-### Misc
-
+- Drag-select cursor
+- Display a rectangle while drag-select is active
 - Add logging mechanism
 - Release a new version
 
@@ -136,8 +122,11 @@
 - Fog of war
 - Boats should bob when stationary
 
-### Movement
+### Selection & Movement
 
+- Selected units should flash orange
+- Allow buildings to be selected
+- Use a single MoveCommand for groups?
 - Units should periodically re-plan their route
     - In particular, when the next tile in their path is blocked
 - Units should "try" to move somewhere even if there is no path

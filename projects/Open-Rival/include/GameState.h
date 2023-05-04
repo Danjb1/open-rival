@@ -59,7 +59,8 @@ public:
             Application& app,
             std::unique_ptr<World> world,
             std::unordered_map<int, PlayerState>& playerStates,
-            std::unordered_map<int, ClientInfo> clients);
+            std::unordered_map<int, ClientInfo> clients,
+            int localPlayerId);
 
     // Begin State override
     void onLoad() override;
@@ -141,8 +142,8 @@ private:
     Input input = {};
 
     /** Player ID of the local player.
-     *
-     * Later, we will be allocated a player ID by the server. */
+     * In a single-player game or when hosting, this is always zero. When joining a net game, this is allocated by the
+     * server. */
     int localPlayerId = 0;
 
     /** Tick number, incremented with each update. */
