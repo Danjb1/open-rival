@@ -75,7 +75,6 @@ private:
     SpriteRenderable portraitRenderable;
 
     // Text
-    std::vector<TextRenderable*> textRenderables;
     TextProperties nameProperties;
     TextRenderable nameRenderable;
     MenuTextRenderer textRenderer;

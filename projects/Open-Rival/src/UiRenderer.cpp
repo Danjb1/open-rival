@@ -10,6 +10,7 @@
 #include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
+#include "TextRenderable.h"
 #include "UnitPropsComponent.h"
 
 namespace Rival {
@@ -264,7 +265,7 @@ bool UiRenderer::isPortraitVisible(int& outPortraitId) const
 
 void UiRenderer::renderText()
 {
-    textRenderables.clear();
+    std::vector<const TextRenderable*> textRenderables;
 
     std::string name;
     if (isNameVisible(name))

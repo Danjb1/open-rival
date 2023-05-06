@@ -23,6 +23,7 @@
 #include "PlayerState.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
+#include "TextRenderable.h"
 #include "World.h"
 
 namespace Rival {
@@ -38,6 +39,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     , host(host)
     , localPlayerName(playerName)
     , menuRenderer(res, window, makeViewport(window))
+    , textRenderer(window)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
@@ -84,6 +86,61 @@ void LobbyState::update()
 void LobbyState::render(int delta)
 {
     menuRenderer.render(delta);
+    renderText();
+}
+
+void LobbyState::renderText()
+{
+    // TMP: Hardcoded hacky rendering until we have a proper menu system.
+    // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
+    std::vector<TextRenderable> textRenderables;
+    TextProperties nameProperties = { &res.getFontRegular() };
+    glm::vec2 renderPos = { 100, 100 };
+    float rowHeight = 32;
+    float indent = 32;
+
+    // Header
+    {
+        TextSpan textSpan = { "Connected Players:", TextRenderable::defaultColor };
+        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        renderPos.x += indent;
+        renderPos.y += rowHeight;
+    }
+
+    // Local player (if hosting, should always come first)
+    if (host)
+    {
+        std::string name = localPlayerName;
+        TextSpan textSpan = { name, TextRenderable::defaultColor };
+        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        renderPos.y += rowHeight;
+    }
+
+    // Other players
+    for (const auto& entry : clients)
+    {
+        std::string name = entry.second.getName();
+        TextSpan textSpan = { name, TextRenderable::defaultColor };
+        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        renderPos.y += rowHeight;
+    }
+
+    // Local player (if not hosting, always comes last for now; later we will sort by player ID)
+    if (!host)
+    {
+        std::string name = localPlayerName;
+        TextSpan textSpan = { name, TextRenderable::defaultColor };
+        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        renderPos.y += rowHeight;
+    }
+
+    // Render the text!
+    std::vector<const TextRenderable*> textRenderablePtrs;
+    for (const auto& textRenderable : textRenderables)
+    {
+        textRenderablePtrs.push_back(&textRenderable);
+    }
+    textRenderer.render(textRenderablePtrs);
 }
 
 void LobbyState::keyUp(const SDL_Keycode keyCode)
@@ -156,14 +213,17 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
 
     std::cout << "Player " << client.getName() << " has joined\n";
 
-    clients.insert({ clientId, client });
-
     if (host)
     {
         // Inform joining player about the current lobby state
-        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clients);
+        std::unordered_map<int, ClientInfo> clientsIncludingHost = clients;
+        ClientInfo localClient(0, localPlayerName);
+        clientsIncludingHost.insert({ 0, localClient });
+        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clientsIncludingHost);
         app.getConnection()->send(welcomePacket);
     }
+
+    clients.insert({ clientId, client });
 }
 
 void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)

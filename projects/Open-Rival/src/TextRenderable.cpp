@@ -43,6 +43,23 @@ TextRenderable::TextRenderable(int maxChars, TextProperties props, float x, floa
     init();
 }
 
+TextRenderable::TextRenderable(TextRenderable&& other) noexcept
+    : spans(other.spans)
+    , props(other.props)
+    , x(other.x)
+    , y(other.y)
+    , numChars(other.numChars)
+    , numVisibleChars(other.numVisibleChars)
+
+    // Reset the source object so its destructor is harmless
+    , vao(std::exchange(other.vao, 0))
+    , positionVbo(std::exchange(other.positionVbo, 0))
+    , texCoordVbo(std::exchange(other.texCoordVbo, 0))
+    , colorVbo(std::exchange(other.colorVbo, 0))
+    , ibo(std::exchange(other.ibo, 0))
+{
+}
+
 TextRenderable::~TextRenderable()
 {
     if (!vao)
