@@ -16,7 +16,7 @@ class MenuTextRenderer
 public:
     MenuTextRenderer::MenuTextRenderer(const Window* window);
 
-    void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const;
+    void MenuTextRenderer::render(const std::vector<const TextRenderable*> textRenderables) const;
 
 private:
     const Window* window;

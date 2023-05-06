@@ -9,6 +9,7 @@
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "ui/MenuRenderer.h"
+#include "MenuTextRenderer.h"
 #include "PlayerState.h"
 #include "ScenarioData.h"
 #include "State.h"
@@ -42,6 +43,7 @@ public:
     void startGame();
 
 private:
+    void renderText();
     void pollNetwork();
     int requestPlayerId();
     void loadLevel(const std::string& filename);
@@ -59,13 +61,15 @@ private:
     /** The selected scenario. */
     ScenarioData scenarioData;
 
-    /** Map of client ID -> ClientInfo. */
+    /** Map of client ID -> ClientInfo.
+     * Does not include an entry for the local player. */
     std::unordered_map<int, ClientInfo> clients;
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
 
     MenuRenderer menuRenderer;
+    MenuTextRenderer textRenderer;
 };
 
 }  // namespace Rival

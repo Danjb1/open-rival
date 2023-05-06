@@ -67,9 +67,9 @@ public:
     /** Deletes a TextRenderable. */
     ~TextRenderable();
 
-    // Disable moving / copying
+    // Allow moving but prevent copying and move-assignment
     TextRenderable(const TextRenderable& other) = delete;
-    TextRenderable(TextRenderable&& other) = delete;
+    TextRenderable(TextRenderable&& other) noexcept;
     TextRenderable& operator=(const TextRenderable& other) = delete;
     TextRenderable& operator=(TextRenderable&& other) = delete;
 

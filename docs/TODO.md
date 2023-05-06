@@ -6,7 +6,6 @@
 
 - Address code review comments:
     - https://codereview.stackexchange.com/questions/284749/winsock-code-for-lockstep-rts-game
-- List connected clients in lobby
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
 - Add logging mechanism
@@ -366,6 +365,7 @@
 - Rendering code is super messy
     - Create a utility method to construct a vertex array from x1,x2,y1,y2,z positions
     - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code
+- Renderables should be moveable (like TextRenderable)
 
 ### ScenarioReader
 

@@ -15,7 +15,7 @@ MenuTextRenderer::MenuTextRenderer(const Window* window)
 {
 }
 
-void MenuTextRenderer::render(const std::vector<TextRenderable*> textRenderables) const
+void MenuTextRenderer::render(const std::vector<const TextRenderable*> textRenderables) const
 {
     // Disable depth testing for now (we may use it later)
     glDisable(GL_DEPTH_TEST);

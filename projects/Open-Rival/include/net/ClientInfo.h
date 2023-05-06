@@ -20,6 +20,9 @@ public:
         return name;
     }
 
+public:
+    static constexpr int maxNameLength = 16;
+
 private:
     int playerId = -1;
     std::string name;
