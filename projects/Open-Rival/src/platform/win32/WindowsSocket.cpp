@@ -10,107 +10,143 @@
 
 #include <ws2tcpip.h>
 
+#include <cassert>  // assert macro
+#include <cstring>  // std::memset
 #include <iostream>
 #include <stdexcept>
 #include <utility>  // std::exchange
 
 namespace Rival {
 
-Socket::Socket()
-    : sock(INVALID_SOCKET)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Address Utiltiies
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// This is a std::unique_ptr to a `::addrinfo` that accepts a custom deletor, with the signature of `::freeaddrinfo`.
+// This allows us to create addrinfo instances that clean themselves up when they go out of scope.
+using addrInfoPtr = std::unique_ptr<::addrinfo, decltype(&::freeaddrinfo)>;
+
+addrInfoPtr lookupAddress(char const* node, char const* service, int domain, int type, int protocol, int flags)
 {
+    assert(node || service);
+
+    auto hints = ::addrinfo();
+    std::memset(&hints, 0, sizeof(::addrinfo));
+    hints.ai_family = domain;
+    hints.ai_socktype = type;
+    hints.ai_protocol = protocol;
+    hints.ai_flags = flags;
+
+    auto out = (::addrinfo*) nullptr;
+    auto const result = ::getaddrinfo(node, service, &hints, &out);
+
+    if (result != 0)
+    {
+        throw std::system_error(std::error_code(result, std::system_category()));
+    }
+
+    assert(out);
+
+    return addrInfoPtr(out, &::freeaddrinfo);
 }
 
-Socket::Socket(const std::string& address, int port, bool server)
+/** Gets the addrInfo for hosting a local server. */
+addrInfoPtr getLocalAddressInfo(int domain, int type, int protocol, std::uint16_t port)
 {
-    // Specify socket properties
-    addrinfo hints;
-    ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-    if (server)
-    {
-        hints.ai_flags = AI_PASSIVE;
-    }
+    auto const port_str = std::to_string(port);
+    int flags = AI_PASSIVE | AI_NUMERICSERV;
+    return lookupAddress(nullptr, port_str.data(), domain, type, protocol, flags);
+}
 
-    // Resolve the local address and port to be used by the server
-    addrinfo* addrInfo = nullptr;
-    if (int err = getaddrinfo(address.c_str(), std::to_string(port).c_str(), &hints, &addrInfo))
-    {
-        throw std::runtime_error("Failed to get net address: " + std::to_string(err));
-    }
+/** Gets the addrInfo for connecting to a server. */
+addrInfoPtr getAddressInfo(int domain, int type, int protocol, std::string const& node, std::uint16_t port)
+{
+    auto const port_str = std::to_string(port);
+    int flags = AI_NUMERICSERV;
+    return lookupAddress(node.data(), port_str.data(), domain, type, protocol, flags);
+}
 
-    // Create the socket
-    sock = INVALID_SOCKET;
-    sock = socket(addrInfo->ai_family, addrInfo->ai_socktype, addrInfo->ai_protocol);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Factory Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Check for errors
-    if (sock == INVALID_SOCKET)
+Socket Socket::createServer(std::uint16_t port)
+{
+    const auto domain = AF_INET;
+    const auto type = SOCK_STREAM;
+    const auto protocol = IPPROTO_TCP;
+    auto const addrInfoPtr = getLocalAddressInfo(domain, type, protocol, port);
+
+    // Create
+    SOCKET handle = ::socket(domain, type, protocol);
+    if (handle == INVALID_SOCKET)
     {
-        int err = WSAGetLastError();
-        freeaddrinfo(addrInfo);
+        const auto err = ::WSAGetLastError();
         throw std::runtime_error("Failed to create socket: " + std::to_string(err));
     }
 
-    // Common socket initialization
-    init();
-
-    if (server)
+    // Bind
+    const auto bindResult = ::bind(handle, addrInfoPtr->ai_addr, addrInfoPtr->ai_addrlen);
+    if (bindResult == SOCKET_ERROR)
     {
-        // Bind the socket
-        int bindResult = bind(sock, addrInfo->ai_addr, static_cast<int>(addrInfo->ai_addrlen));
-        if (bindResult == SOCKET_ERROR)
-        {
-            int err = WSAGetLastError();
-            freeaddrinfo(addrInfo);
-            throw std::runtime_error("Failed to bind socket: " + std::to_string(err));
-        }
-
-        // Address info is no longer needed
-        freeaddrinfo(addrInfo);
-
-        // Listen (server-only)
-        if (listen(sock, SOMAXCONN) == SOCKET_ERROR)
-        {
-            throw std::runtime_error("Failed to listen on socket: " + std::to_string(WSAGetLastError()));
-        }
+        const auto err = ::WSAGetLastError();
+        throw std::runtime_error("Failed to bind socket: " + std::to_string(err));
     }
-    else
+
+    // Listen
+    if (::listen(handle, SOMAXCONN) == SOCKET_ERROR)
     {
-        // Connect to server
-        int connectResult = connect(sock, addrInfo->ai_addr, static_cast<int>(addrInfo->ai_addrlen));
-        int err = WSAGetLastError();
-        if (connectResult == SOCKET_ERROR)
-        {
-            sock = INVALID_SOCKET;
-        }
-
-        // Address info is no longer needed
-        freeaddrinfo(addrInfo);
-
-        if (sock == INVALID_SOCKET)
-        {
-            throw std::runtime_error("Failed to connect to server: " + std::to_string(err));
-        }
+        throw std::runtime_error("Failed to listen on socket: " + std::to_string(::WSAGetLastError()));
     }
+
+    return { handle };
 }
+
+Socket Socket::createClient(const std::string& address, std::uint16_t port)
+{
+    const auto domain = AF_INET;
+    const auto type = SOCK_STREAM;
+    const auto protocol = IPPROTO_TCP;
+    const auto addrInfoPtr = getAddressInfo(domain, type, protocol, address, port);
+
+    // Create
+    SOCKET handle = ::socket(domain, type, protocol);
+    if (handle == INVALID_SOCKET)
+    {
+        int err = ::WSAGetLastError();
+        throw std::runtime_error("Failed to create socket: " + std::to_string(err));
+    }
+
+    // Connect
+    const auto connectResult = ::connect(handle, addrInfoPtr->ai_addr, addrInfoPtr->ai_addrlen);
+    if (connectResult == SOCKET_ERROR)
+    {
+        const auto err = ::WSAGetLastError();
+        throw std::runtime_error("Failed to connect to server: " + std::to_string(err));
+    }
+
+    return { handle };
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Socket Implementation
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Socket::Socket(Socket&& other) noexcept
     // Move constructor: this object is being created to replace `other`.
     // Just steal the socket from `other`.
-    : sock(std::exchange(other.sock, INVALID_SOCKET))
+    : handle(std::exchange(other.handle, INVALID_SOCKET))
 {
 }
 
-Socket& Socket::operator=(Socket&& other)
+Socket& Socket::operator=(Socket&& other) noexcept
 {
     if (this != &other)
     {
         // Move assignment: this object is being replaced by `other`.
         // First close this socket, then steal the socket from `other`.
         close();
-        sock = std::exchange(other.sock, INVALID_SOCKET);
+        handle = std::exchange(other.handle, INVALID_SOCKET);
     }
     return *this;
 }
@@ -119,7 +155,7 @@ void Socket::init()
 {
     // Disable Nagle algorithm to ensure packets are not held up
     BOOL socketOptionValue = TRUE;
-    setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char*) (&socketOptionValue), sizeof(BOOL));
+    ::setsockopt(handle, IPPROTO_TCP, TCP_NODELAY, (char*) (&socketOptionValue), sizeof(BOOL));
 }
 
 void Socket::close() noexcept
@@ -129,27 +165,32 @@ void Socket::close() noexcept
         return;
     }
 
-    closesocket(sock);
-    sock = INVALID_SOCKET;
+    auto const result = ::closesocket(handle);
+    if (result != 0)
+    {
+        std::cerr << "Failed to close socket: " + std::to_string(::WSAGetLastError()) << "\n";
+    }
+
+    handle = INVALID_SOCKET;
 }
 
 Socket Socket::accept()
 {
     SOCKET clientSocket = INVALID_SOCKET;
 
-    clientSocket = ::accept(sock, nullptr, nullptr);
+    clientSocket = ::accept(handle, nullptr, nullptr);
 
     if (clientSocket == INVALID_SOCKET && isOpen())
     {
-        std::cout << "Failed to accept client: " + std::to_string(WSAGetLastError()) << "\n";
+        std::cerr << "Failed to accept client: " + std::to_string(::WSAGetLastError()) << "\n";
     }
 
-    return Socket::wrap(clientSocket);
+    return { clientSocket };
 }
 
 bool Socket::isOpen() const
 {
-    return sock != INVALID_SOCKET;
+    return handle != INVALID_SOCKET;
 }
 
 void Socket::send(const std::vector<char>& buffer)
@@ -159,12 +200,12 @@ void Socket::send(const std::vector<char>& buffer)
     while (bytesSent < buffer.size())
     {
         std::size_t bytesRemaining = buffer.size() - bytesSent;
-        int result = ::send(sock, buffer.data() + bytesSent, bytesRemaining, 0);
+        int result = ::send(handle, buffer.data() + bytesSent, bytesRemaining, 0);
 
         if (result == SOCKET_ERROR && isOpen())
         {
             // Socket is still open on our side but may have been closed by the other side
-            std::cerr << "Failed to send on socket: " + std::to_string(WSAGetLastError()) << "\n";
+            std::cerr << "Failed to send on socket: " + std::to_string(::WSAGetLastError()) << "\n";
             close();
             break;
         }
@@ -180,12 +221,12 @@ void Socket::receive(std::vector<char>& buffer)
     while (bytesReceived < buffer.size())
     {
         std::size_t bytesExpected = buffer.size() - bytesReceived;
-        int result = ::recv(sock, buffer.data() + bytesReceived, bytesExpected, 0);
+        int result = ::recv(handle, buffer.data() + bytesReceived, bytesExpected, 0);
 
         if (result == SOCKET_ERROR && isOpen())
         {
             // Socket is still open on our side but may have been closed by the other side
-            std::cerr << "Failed to read from socket: " + std::to_string(WSAGetLastError()) << "\n";
+            std::cerr << "Failed to read from socket: " + std::to_string(::WSAGetLastError()) << "\n";
             close();
             break;
         }

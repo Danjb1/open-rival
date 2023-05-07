@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
@@ -55,10 +56,10 @@ public:
     }
 
     /** Starts a server and connects to it. */
-    void startServer(int port);
+    void startServer(std::uint16_t port);
 
     /** Connects to a server. */
-    void connectToServer(const std::string& address, int port);
+    void connectToServer(const std::string& address, std::uint16_t port);
 
 private:
     void makeNextStateActive();

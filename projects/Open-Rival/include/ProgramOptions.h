@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace Rival {
@@ -36,7 +37,7 @@ public:
         return hostAddress;
     }
 
-    int getPort() const
+    std::uint16_t getPort() const
     {
         return port;
     }
@@ -44,6 +45,7 @@ public:
 private:
     const std::string parseArgs(int argc, char* argv[]);
     int parseInt(int argc, char* argv[], int index, int min, int max) const;
+    std::uint16_t parseUint16(int argc, char* argv[], int index) const;
     std::string parseString(int argc, char* argv[], int index) const;
 
 private:
@@ -52,7 +54,7 @@ private:
     // Default options
     bool host = false;
     std::string hostAddress;
-    int port = 25565;
+    uint16_t port = 25565;
 };
 
 }  // namespace Rival

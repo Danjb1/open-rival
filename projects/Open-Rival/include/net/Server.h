@@ -11,19 +11,13 @@ namespace Rival {
 
 class Socket;
 
-enum class ServerState : std::uint8_t
-{
-    Lobby,
-    Game
-};
-
 /**
  * Relay server that forwards received packets to every other client.
  */
 class Server : public ConnectionListener
 {
 public:
-    Server(int port, int maxClients);
+    Server(std::uint16_t port, int maxClients);
     ~Server();
 
     // Begin ConnectionListener override
@@ -39,7 +33,6 @@ private:
 
 private:
     Socket serverSocket;
-    ServerState state = ServerState::Lobby;
     std::thread acceptThread;
 
     int maxClients;

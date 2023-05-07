@@ -2,13 +2,12 @@
 
 #include "ProgramOptions.h"
 
+#include <limits>
 #include <stdexcept>
 
 #include "PlayerState.h"
 
 namespace Rival {
-
-static constexpr int maxPort = 65535;
 
 ProgramOptions::ProgramOptions(int argc, char* argv[])
 {
@@ -55,7 +54,7 @@ const std::string ProgramOptions::parseArgs(int argc, char* argv[])
         {
             try
             {
-                port = parseInt(argc, argv, i + 1, 0, maxPort);
+                port = parseUint16(argc, argv, i + 1);
                 ++i;  // Skip next argument
             }
             catch (const std::runtime_error& e)
@@ -110,6 +109,11 @@ int ProgramOptions::parseInt(int argc, char* argv[], int index, int min, int max
                 + std::to_string(min) + " and "  //
                 + std::to_string(max));
     }
+}
+
+std::uint16_t ProgramOptions::parseUint16(int argc, char* argv[], int index) const
+{
+    return static_cast<std::uint16_t>(parseInt(argc, argv, index, 0, std::numeric_limits<std::uint8_t>::max()));
 }
 
 std::string ProgramOptions::parseString(int argc, char* argv[], int index) const

@@ -10,10 +10,9 @@
 
 namespace Rival {
 
-Server::Server(int port, int maxClients)
+Server::Server(std::uint16_t port, int maxClients)
     : serverSocket(Socket::createServer(port))
     , maxClients(maxClients)
-    , state(ServerState::Lobby)
 {
 }
 

@@ -4,23 +4,13 @@
 
 namespace Rival {
 
-Socket Socket::createServer(int port)
+Socket::Socket()
+    : handle(INVALID_SOCKET)
 {
-    return { "localhost", port, true };
 }
 
-Socket Socket::createClient(const std::string& address, int port)
-{
-    return { address, port, false };
-}
-
-Socket Socket::wrap(SOCKET rawSocket)
-{
-    return { rawSocket };
-}
-
-Socket::Socket(SOCKET rawSocket)
-    : sock(rawSocket)
+Socket::Socket(SOCKET handle)
+    : handle(handle)
 {
     init();
 }
@@ -32,7 +22,7 @@ Socket::~Socket()
 
 bool Socket::operator==(const Socket& other) const
 {
-    return sock == other.sock;
+    return handle == other.handle;
 }
 
 bool Socket::operator!=(const Socket& other) const
