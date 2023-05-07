@@ -139,7 +139,7 @@ void Application::makeNextStateActive()
     state->onLoad();
 }
 
-void Application::startServer(int port)
+void Application::startServer(std::uint16_t port)
 {
     std::cout << "Starting server on port " << std::to_string(port) << "\n";
 
@@ -150,7 +150,7 @@ void Application::startServer(int port)
     connectToServer("localhost", port);
 }
 
-void Application::connectToServer(const std::string& address, int port)
+void Application::connectToServer(const std::string& address, std::uint16_t port)
 {
     std::cout << "Connecting to server on port " << std::to_string(port) << "\n";
 

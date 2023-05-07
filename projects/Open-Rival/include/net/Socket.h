@@ -24,15 +24,13 @@ class Socket
 {
 public:
     /** Creates a listening socket connected to localhost. */
-    static Socket createServer(int port);
+    static Socket createServer(std::uint16_t port);
 
     /** Creates a socket and attempts to connect it to the given address and port. */
-    static Socket createClient(const std::string& address, int port);
-
-    /** Creates a socket that wraps a raw socket handle. The socket is assumed to be open if the handle is valid. */
-    static Socket wrap(SOCKET rawSocket);
+    static Socket createClient(const std::string& address, std::uint16_t port);
 
     Socket();
+    Socket(SOCKET handle);
     ~Socket();
 
     bool Socket::operator==(const Socket& other) const;
@@ -42,7 +40,7 @@ public:
     Socket(const Socket& other) = delete;
     Socket(Socket&& other) noexcept;
     Socket& operator=(const Socket& other) = delete;
-    Socket& operator=(Socket&& other);
+    Socket& operator=(Socket&& other) noexcept;
 
     /** Blocking call that waits for a new connection. */
     Socket accept();
@@ -60,13 +58,12 @@ public:
     void receive(std::vector<char>& buffer);
 
 private:
-    Socket(const std::string& address, int port, bool server);
-    Socket(SOCKET rawSocket);
+    Socket(int domain, int type, int protocol);
 
     void init();
 
 private:
-    SOCKET sock;
+    SOCKET handle;
 };
 
 }  // namespace Rival

@@ -4,8 +4,7 @@
 ## Next Up...
 <!----------------------------------------------------------------------------->
 
-- Address code review comments:
-    - https://codereview.stackexchange.com/questions/284749/winsock-code-for-lockstep-rts-game
+- GameState should reject new players
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
 - Add logging mechanism
