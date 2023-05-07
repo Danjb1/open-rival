@@ -8,6 +8,7 @@ namespace Rival {
 
 class RequestJoinPacketHandler : public PacketHandler
 {
+public:
     void onPacketReceived(std::shared_ptr<const Packet> packet, State& state) override;
 };
 
