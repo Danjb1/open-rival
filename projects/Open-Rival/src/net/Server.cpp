@@ -53,10 +53,10 @@ void Server::start()
 
 void Server::acceptThreadLoop()
 {
-    while (!serverSocket.isClosed() && connectedClients.size() < static_cast<std::size_t>(maxClients))
+    while (serverSocket.isOpen() && connectedClients.size() < static_cast<std::size_t>(maxClients))
     {
         Socket newPlayer = serverSocket.accept();
-        if (newPlayer.isValid())
+        if (newPlayer.isOpen())
         {
             int clientId = requestClientId();
             std::cout << "Client " << std::to_string(clientId) << " connected to server\n";

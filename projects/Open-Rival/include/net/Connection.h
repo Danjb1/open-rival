@@ -43,7 +43,7 @@ public:
     /** Closes this connection. */
     void close() noexcept;
 
-    bool isClosed() const;
+    bool isOpen() const;
 
     /** Sends a packet on this connection. */
     void send(const Packet& packet);

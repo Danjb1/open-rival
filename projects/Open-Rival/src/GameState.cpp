@@ -155,7 +155,7 @@ void GameState::sendOutgoingCommands()
         return;
     }
 
-    if (app.getConnection()->isClosed())
+    if (!app.getConnection()->isOpen())
     {
         // Don't try to send commands if the connection is closed.
         // Later, we could display a message and/or try to reconnect.

@@ -16,6 +16,11 @@
 
 namespace Rival {
 
+Socket::Socket()
+    : sock(INVALID_SOCKET)
+{
+}
+
 Socket::Socket(const std::string& address, int port, bool server)
 {
     // Specify socket properties
@@ -89,18 +94,25 @@ Socket::Socket(const std::string& address, int port, bool server)
             throw std::runtime_error("Failed to connect to server: " + std::to_string(err));
         }
     }
-
-    if (isValid())
-    {
-        state = SocketState::Open;
-    }
 }
 
 Socket::Socket(Socket&& other) noexcept
-    // Reset the source object so its destructor is harmless
+    // Move constructor: this object is being created to replace `other`.
+    // Just steal the socket from `other`.
     : sock(std::exchange(other.sock, INVALID_SOCKET))
-    , state(std::exchange(other.state, SocketState::Closed))
 {
+}
+
+Socket& Socket::operator=(Socket&& other)
+{
+    if (this != &other)
+    {
+        // Move assignment: this object is being replaced by `other`.
+        // First close this socket, then steal the socket from `other`.
+        close();
+        sock = std::exchange(other.sock, INVALID_SOCKET);
+    }
+    return *this;
 }
 
 void Socket::init()
@@ -112,13 +124,13 @@ void Socket::init()
 
 void Socket::close() noexcept
 {
-    if (state == SocketState::Closed)
+    if (!isOpen())
     {
         return;
     }
 
-    state = SocketState::Closed;
     closesocket(sock);
+    sock = INVALID_SOCKET;
 }
 
 Socket Socket::accept()
@@ -127,7 +139,7 @@ Socket Socket::accept()
 
     clientSocket = ::accept(sock, nullptr, nullptr);
 
-    if (clientSocket == INVALID_SOCKET && !isClosed())
+    if (clientSocket == INVALID_SOCKET && isOpen())
     {
         std::cout << "Failed to accept client: " + std::to_string(WSAGetLastError()) << "\n";
     }
@@ -135,34 +147,26 @@ Socket Socket::accept()
     return Socket::wrap(clientSocket);
 }
 
-bool Socket::isValid() const
+bool Socket::isOpen() const
 {
     return sock != INVALID_SOCKET;
 }
 
-void Socket::send(std::vector<char>& buffer)
+void Socket::send(const std::vector<char>& buffer)
 {
     std::size_t bytesSent = 0;
 
     while (bytesSent < buffer.size())
     {
-        int bytesRemaining = buffer.size() - bytesSent;
+        std::size_t bytesRemaining = buffer.size() - bytesSent;
         int result = ::send(sock, buffer.data() + bytesSent, bytesRemaining, 0);
 
-        if (result == SOCKET_ERROR)
+        if (result == SOCKET_ERROR && isOpen())
         {
-            if (isClosed())
-            {
-                // Socket has been closed, so just abort the send
-                break;
-            }
-            else
-            {
-                // Socket is still open on our side but may have been closed by the other side
-                std::cerr << "Failed to send on socket: " + std::to_string(WSAGetLastError()) << "\n";
-                close();
-                break;
-            }
+            // Socket is still open on our side but may have been closed by the other side
+            std::cerr << "Failed to send on socket: " + std::to_string(WSAGetLastError()) << "\n";
+            close();
+            break;
         }
 
         bytesSent += result;
@@ -175,23 +179,15 @@ void Socket::receive(std::vector<char>& buffer)
 
     while (bytesReceived < buffer.size())
     {
-        int bytesExpected = buffer.size() - bytesReceived;
+        std::size_t bytesExpected = buffer.size() - bytesReceived;
         int result = ::recv(sock, buffer.data() + bytesReceived, bytesExpected, 0);
 
-        if (result == SOCKET_ERROR)
+        if (result == SOCKET_ERROR && isOpen())
         {
-            if (isClosed())
-            {
-                // Socket has been closed, so just abort the read
-                break;
-            }
-            else
-            {
-                // Socket is still open on our side but may have been closed by the other side
-                std::cerr << "Failed to read from socket: " + std::to_string(WSAGetLastError()) << "\n";
-                close();
-                break;
-            }
+            // Socket is still open on our side but may have been closed by the other side
+            std::cerr << "Failed to read from socket: " + std::to_string(WSAGetLastError()) << "\n";
+            close();
+            break;
         }
 
         if (result == 0)

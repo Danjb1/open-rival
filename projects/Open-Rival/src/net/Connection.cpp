@@ -44,14 +44,14 @@ void Connection::close() noexcept
     socket.close();
 }
 
-bool Connection::isClosed() const
+bool Connection::isOpen() const
 {
-    return socket.isClosed();
+    return socket.isOpen();
 }
 
 void Connection::receiveThreadLoop()
 {
-    while (!socket.isClosed())
+    while (isOpen())
     {
         // First read the packet size
         if (!readFromSocket(Packet::sizeBytes))
@@ -105,7 +105,7 @@ bool Connection::readFromSocket(std::size_t numBytes)
     socket.receive(recvBuffer);
 
     // The socket may get closed during a call to `receive`
-    bool success = !socket.isClosed();
+    bool success = isOpen();
     return success;
 }
 
