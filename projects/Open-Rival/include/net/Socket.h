@@ -15,12 +15,6 @@ typedef int SOCKET;
 
 namespace Rival {
 
-enum class SocketState : std::uint8_t
-{
-    Open,
-    Closed
-};
-
 /**
  * Wrapper class for a native socket.
  *
@@ -38,16 +32,17 @@ public:
     /** Creates a socket that wraps a raw socket handle. The socket is assumed to be open if the handle is valid. */
     static Socket wrap(SOCKET rawSocket);
 
+    Socket();
     ~Socket();
 
     bool Socket::operator==(const Socket& other) const;
     bool Socket::operator!=(const Socket& other) const;
 
-    // Allow moving but prevent copying and move-assignment
+    // Allow moving but prevent copying
     Socket(const Socket& other) = delete;
     Socket(Socket&& other) noexcept;
     Socket& operator=(const Socket& other) = delete;
-    Socket& operator=(Socket&& other) = delete;
+    Socket& operator=(Socket&& other);
 
     /** Blocking call that waits for a new connection. */
     Socket accept();
@@ -55,14 +50,11 @@ public:
     /** Closes the socket; forces any blocking calls to return. */
     void close() noexcept;
 
-    /** Determines if this socket is valid. */
-    bool isValid() const;
-
-    /** Determines if this socket is closed. */
-    bool isClosed() const;
+    /** Determines if this socket is currently open. */
+    bool isOpen() const;
 
     /** Sends data on this socket. */
-    void send(std::vector<char>& buffer);
+    void send(const std::vector<char>& buffer);
 
     /** Blocking call that waits for data to arrive and adds it to the given buffer. */
     void receive(std::vector<char>& buffer);
@@ -75,7 +67,6 @@ private:
 
 private:
     SOCKET sock;
-    SocketState state = SocketState::Closed;
 };
 
 }  // namespace Rival

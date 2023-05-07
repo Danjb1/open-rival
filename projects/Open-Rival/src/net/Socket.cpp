@@ -23,8 +23,6 @@ Socket::Socket(SOCKET rawSocket)
     : sock(rawSocket)
 {
     init();
-
-    state = (rawSocket == INVALID_SOCKET) ? SocketState::Closed : SocketState::Open;
 }
 
 Socket::~Socket()
@@ -40,11 +38,6 @@ bool Socket::operator==(const Socket& other) const
 bool Socket::operator!=(const Socket& other) const
 {
     return !(*this == other);
-}
-
-bool Socket::isClosed() const
-{
-    return state == SocketState::Closed;
 }
 
 }  // namespace Rival
