@@ -11,6 +11,7 @@
 #pragma warning(pop)
 
 #include "Camera.h"
+#include "Palette.h"
 #include "PlayerContext.h"
 #include "PlayerState.h"
 #include "Rect.h"

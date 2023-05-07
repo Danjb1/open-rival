@@ -3,15 +3,18 @@
 uniform sampler2D tex;
 uniform sampler2D palette;
 uniform float palette_txy;
+uniform int transparent_index = 0;
 
 in vec2 tex_coords;
 
 out vec4 frag_color;
 
 void main() {
-    vec4 palette_idx = texture(tex, tex_coords);
-    if (palette_idx.r == 1) {
+    float palette_index = texture(tex, tex_coords).r;
+    if (palette_index == transparent_index || palette_index == 1)
+    {
         discard;
     }
-    frag_color = texture(palette, vec2(palette_idx.r, palette_txy));
+    vec2 palette_lookup = vec2(palette_index, palette_txy);
+    frag_color = texture(palette, palette_lookup);
 }

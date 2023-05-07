@@ -23,7 +23,6 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Portrait backgrounds should not use transparency (only cursors should treat black as transparent)
 - Units should be able to start moving into a tile if its occupant is already moving out (?)
     - What if the occupant is slower than we are?
 - Units can walk through buildings
@@ -254,6 +253,7 @@
     - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
 - Setup program should log output to a file (run the script via a BAT file?)
 - Amend `create_file` script to support subfolders
+- Checked-in resource location is inconsistent - some are stored in `dist/res`, others in `project/Open-Rival/res`
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -314,6 +314,7 @@
 - EntityFactory should use maps instead of switch statements
 - Use a char[] or a std::vector<uninitialized_char> for buffers to avoid initialising elements
     - https://stackoverflow.com/questions/11149665/c-vector-that-doesnt-initialize-its-members
+- The palette texture does not need an alpha channel
 
 ### Refactoring
 

@@ -4,12 +4,12 @@
 
 namespace Rival { namespace Palette {
 
-// The palette used in-game.
 /* clang-format off */
+
+    // The palette used in-game.
+    // The first color is used by cursors for transparency, but should be opaque for rendering portraits.
     extern Palette paletteGame = {
-        // First color is used by cursors for transparency.
-        // Last color is used by entities for transparency.
-        0x00000000, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
+        0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
         0x4c4c3cff, 0x544c3cff, 0x544c34ff, 0x5c4c34ff,    0x644c2cff, 0x64542cff, 0x6c5434ff, 0x745c34ff,
@@ -40,7 +40,7 @@ namespace Rival { namespace Palette {
         0x050583ff, 0x06066eff, 0x0202c4ff, 0x0202a0ff,    0x196c97ff, 0x115585ff, 0x10516dff, 0x1c80dcff,
         0x1770acff, 0x2476d1ff, 0x255698ff, 0x134572ff,    0x57350cff, 0x3e280dff, 0x31230cff, 0x040c3cff,
         0x0c1c64ff, 0x2c3cacff, 0x0c4cccff, 0x3c4cecff,    0x4c5ce4ff, 0x5c6cd4ff, 0x844cc4ff, 0x5414f4ff,
-        0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffff00
+        0x1c84e4ff, 0x3474a4ff, 0x1c741cff, 0x1c9c1cff,    0x34d434ff, 0x44fc44ff, 0xfca4acff, 0xffffffff
     };
 
     // The palette used in the title screen.
@@ -81,9 +81,9 @@ namespace Rival { namespace Palette {
     };
 
     // The palette used in the loading screen.
-    // The first color (index 0x00) is used for transparent areas.
+    // The first color is used for transparent areas.
     extern Palette paletteLoading = {
-        0x00000000, 0x8c2921ff, 0x733118ff, 0xff6329ff,    0xff6b31ff, 0x843110ff, 0xad3908ff, 0x943910ff,
+        0x000000ff, 0x8c2921ff, 0x733118ff, 0xff6329ff,    0xff6b31ff, 0x843110ff, 0xad3908ff, 0x943910ff,
         0xe75a18ff, 0xc64208ff, 0xd64a08ff, 0xad5a31ff,    0x633118ff, 0xff7329ff, 0x943908ff, 0x8c3100ff,
         0x8c5231ff, 0xf77b31ff, 0xce5a18ff, 0xa54208ff,    0xc66b31ff, 0x633110ff, 0x733108ff, 0x944a18ff,
         0x733910ff, 0x8c4210ff, 0xce5a08ff, 0xb56b31ff,    0xa55a21ff, 0x8c4a18ff, 0x9c5218ff, 0x844210ff,
@@ -118,9 +118,9 @@ namespace Rival { namespace Palette {
     };
 
     // The palette used in the menus.
-    // The first color (index 0x00) is used for transparent areas.
+    // The first color is used for transparent areas.
     extern Palette paletteMenu = {
-        0x00000000, 0x0c0c04ff, 0x381b1cff, 0x78595aff,    0x672930ff, 0x67484bff, 0x58272dff, 0x7a303bff,
+        0x000000ff, 0x0c0c04ff, 0x381b1cff, 0x78595aff,    0x672930ff, 0x67484bff, 0x58272dff, 0x7a303bff,
         0x934c57ff, 0x804e56ff, 0xa26b73ff, 0x491c24ff,    0x382024ff, 0x75454dff, 0x935d67ff, 0x340c14ff,
         0x4a2b34ff, 0x250c14ff, 0x5b5255ff, 0xe2dddfff,    0x362c34ff, 0x150c14ff, 0x0c040cff, 0x151415ff,
         0x04040cff, 0x0b0c14ff, 0x191c24ff, 0x5e6474ff,    0x454c54ff, 0x555c64ff, 0x656c74ff, 0x4c545cff,
@@ -155,11 +155,11 @@ namespace Rival { namespace Palette {
     };
 
     // The palette used in the Hire Troops menu.
-    // This is almost identical to the palette used in-game, since the troop
-    // portraits need to be rendered in both places.
-    // The first color (index 0x00) is used for transparent areas.
+    // This is almost identical to the palette used in-game, since the troop portraits need to be rendered in both
+    // places.
+    // The first color is used for transparent areas.
     extern Palette paletteHireTroops = {
-        0x00000000, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
+        0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff,
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff,
         0xd10404ff, 0x9d1a1aff, 0x645c4cff, 0x6c5c44ff,    0x64543cff, 0x5c543cff, 0x545444ff, 0x4c5444ff,
         0x4c4c3cff, 0x544c3cff, 0x544c34ff, 0x5c4c34ff,    0x644c2cff, 0x64542cff, 0x6c5434ff, 0x745c34ff,
