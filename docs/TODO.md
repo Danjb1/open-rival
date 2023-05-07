@@ -4,7 +4,6 @@
 ## Next Up...
 <!----------------------------------------------------------------------------->
 
-- GameState should reject new players
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
 - Add logging mechanism
@@ -80,6 +79,7 @@
 
 ### Multiplayer
 
+- GameState should reject new players
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Create standalone project to run dedicated server
 

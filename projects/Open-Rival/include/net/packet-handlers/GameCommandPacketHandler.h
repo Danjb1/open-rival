@@ -8,6 +8,7 @@ namespace Rival {
 
 class GameCommandPacketHandler : public PacketHandler
 {
+public:
     void onPacketReceived(std::shared_ptr<const Packet> packet, State& state) override;
 };
 

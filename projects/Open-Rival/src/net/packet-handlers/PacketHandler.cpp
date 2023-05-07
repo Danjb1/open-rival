@@ -4,6 +4,6 @@
 
 namespace Rival {
 
-// TODO
+// Pure virtual
 
 }  // namespace Rival
