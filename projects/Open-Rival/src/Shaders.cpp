@@ -13,7 +13,7 @@ namespace Rival { namespace Shaders {
 // Shader
 ///////////////////////////////////////////////////////////////////////////
 
-bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeName) const
+bool Shader::validateVertexAttribute(GLint attributeLoc, const std::string& attributeName) const
 {
     if (attributeLoc == -1)
     {
@@ -23,11 +23,11 @@ bool Shader::validateVertexAttribute(GLint attributeLoc, std::string attributeNa
     return true;
 }
 
-bool Shader::validateUniform(GLint uniformLoc, std::string uniformName) const
+bool Shader::validateUniform(GLint uniformLoc, const std::string& uniformName) const
 {
     if (uniformLoc == -1)
     {
-        std::cout << "Could not locate uniform " << uniformLoc << " for shader " << getName() << "\n";
+        std::cout << "Could not locate uniform " << uniformName << " for shader " << getName() << "\n";
         return false;
     }
     return true;
@@ -52,6 +52,7 @@ void IndexedTextureShader::init()
     indexedTextureShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
     indexedTextureShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
     indexedTextureShader.paletteTxYUnitUniformLoc = glGetUniformLocation(programId, "palette_txy");
+    indexedTextureShader.transparentIndex = glGetUniformLocation(programId, "transparent_index");
 
     if (!indexedTextureShader.isValid())
     {
@@ -74,7 +75,8 @@ bool IndexedTextureShader::isValid() const
             && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")  //
             && validateUniform(texUnitUniformLoc, "tex")                      //
             && validateUniform(paletteTexUnitUniformLoc, "palette")           //
-            && validateUniform(paletteTexUnitUniformLoc, "paletteTxY");
+            && validateUniform(paletteTexUnitUniformLoc, "palette_txy")       //
+            && validateUniform(transparentIndex, "transparent_index");
 }
 
 ///////////////////////////////////////////////////////////////////////////

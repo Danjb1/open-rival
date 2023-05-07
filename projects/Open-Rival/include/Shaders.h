@@ -23,8 +23,8 @@ public:
     GLuint programId = 0;
 
     virtual std::string getName() const = 0;
-    bool validateVertexAttribute(GLint attributeLoc, std::string attributeName) const;
-    bool validateUniform(GLint uniformLoc, std::string uniformName) const;
+    bool validateVertexAttribute(GLint attributeLoc, const std::string& attributeName) const;
+    bool validateUniform(GLint uniformLoc, const std::string& uniformName) const;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ public:
     GLint texUnitUniformLoc = -1;
     GLint paletteTexUnitUniformLoc = -1;
     GLint paletteTxYUnitUniformLoc = -1;
+    GLint transparentIndex = -1;
 
     static void init();
 

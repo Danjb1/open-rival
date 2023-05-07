@@ -10,6 +10,7 @@
 #include "PortraitComponent.h"
 #include "RenderUtils.h"
 #include "Resources.h"
+#include "Shaders.h"
 #include "TextRenderable.h"
 #include "UnitPropsComponent.h"
 
@@ -193,9 +194,15 @@ void UiRenderer::renderPortrait()
         sendPortraitDataToGpu();
     }
 
+    // Disable transparency temporarily for the unit portraits, since they use color 0 for their background
+    glUniform1i(Shaders::indexedTextureShader.transparentIndex, -1);
+
     // Render
     glDrawElements(
             portraitRenderable.getDrawMode(), portraitRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+
+    // Reset transparency
+    glUniform1i(Shaders::indexedTextureShader.transparentIndex, 0);
 }
 
 bool UiRenderer::portraitNeedsUpdate() const
