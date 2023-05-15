@@ -10,8 +10,6 @@ const std::string SpriteComponent::key = "sprite";
 
 SpriteComponent::SpriteComponent(const Spritesheet& spritesheet)
     : EntityComponent(key)
-    , txIndex(0)
-    , dirty(true)
     , renderable(spritesheet, 1)
 {
 }

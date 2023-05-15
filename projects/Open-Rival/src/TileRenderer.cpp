@@ -34,7 +34,6 @@ TileRenderer::TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const
  */
 void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const
 {
-
     // Use textures
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
@@ -67,7 +66,6 @@ bool TileRenderer::needsUpdate() const
 void TileRenderer::sendDataToGpu(
         const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const
 {
-
     // Find the first visible tiles.
     // We subtract 1 because we need to start drawing offscreen, to account
     // for tiles that are partially visible to the camera.
