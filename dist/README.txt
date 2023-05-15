@@ -5,7 +5,7 @@
           \ \_/ / |_) |  __/ | | |     | |\ \| |\ V / (_| | |
            \___/| .__/ \___|_| |_|     \_| \_|_| \_/ \__,_|_|
                 | |                                          
-                |_|                                    v0.2.0
+                |_|                                    v0.3.0
                        
             by Danjb (admin@danjb.com)
             https://github.com/Danjb1/open-rival
@@ -42,7 +42,19 @@ e.g.
 Fonts
 --------------------------------------------------------------------------------
 
-TODO
+By default, Open-Rival expects to find 2 fonts which are not included in the
+download:
+
+    "serife.fon":
+        Comes as standard with Windows (no action required).
+
+    "Procopius Regular.ttf":
+        Download for free here: https://fontsgeek.com/fonts/Procopius-Regular
+
+Once these fonts are installed, the game should detect them automatically.
+Failing that, custom font directories can be supplied (see below).
+
+Alternatively, custom fonts can be used instead (see below).
 
 --------------------------------------------------------------------------------
 Playing the Game
@@ -67,7 +79,6 @@ Thank you for your patience during these early stages of development!
 - (Not implemented) Unit hitboxes are not accurate.
 - (Bug) Flying units sometimes appear behind units they should be in front of.
 - (Bug) Units can walk too close to the edge of the map.
-- (Bug) Portrait backgrounds should be black instead of transparent.
 - (Bug) Cursor position should have a greater impact on zooming.
 - (Bug) Some animations look a little off (e.g. Snake).
 

@@ -2,9 +2,12 @@
 Changelog
 ================================================================================
 
-v0.3.0
-- Fix texture bleeding at some zoom levels
-- Improve precision of frame scheduling and MIDI playback
+v0.3.0 (Multiplayer demo)
+- Added networking functionality with basic lobby screen
+- Added drag-select cursor
+- Fixed texture bleeding at some zoom levels
+- Fixed portraits backgrounds being rendered transparent
+- Improved precision of frame scheduling and MIDI playback
 
 v0.2.0 (Movement demo)
 - Game now loads a level from a config file
