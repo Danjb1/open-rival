@@ -112,6 +112,7 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\commands\GameCommandFactory.cpp" />
+    <ClCompile Include="src\gfx\BoxRenderable.cpp" />
     <ClCompile Include="src\gfx\TextureRenderable.cpp" />
     <ClCompile Include="src\lobby\LobbyState.cpp" />
     <ClCompile Include="src\net\ClientInfo.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\commands\GameCommandFactory.h" />
+    <ClInclude Include="include\gfx\BoxRenderable.h" />
     <ClInclude Include="include\gfx\TextureRenderable.h" />
     <ClInclude Include="include\lobby\LobbyState.h" />
     <ClInclude Include="include\net\ClientInfo.h" />
