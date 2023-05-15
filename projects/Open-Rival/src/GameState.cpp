@@ -101,6 +101,11 @@ bool GameState::isTickReady()
 
 void GameState::pollNetwork()
 {
+    if (!isNetGame())
+    {
+        return;
+    }
+
     const auto& receivedPackets = app.getConnection()->getReceivedPackets();
     for (auto& packet : receivedPackets)
     {

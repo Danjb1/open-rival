@@ -49,6 +49,7 @@ private:
     void loadLevel(const std::string& filename);
     void requestStartGame();
     std::unique_ptr<State> createGameState() const;
+    bool isNetGame() const;
 
 private:
     bool host;

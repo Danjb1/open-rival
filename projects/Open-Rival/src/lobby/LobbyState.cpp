@@ -62,19 +62,27 @@ void LobbyState::onLoad()
     }
     loadLevel(levelName);
 
-    if (host)
+    if (isNetGame())
     {
-        // Add ourselves to the lobby.
-        // The host should always have a client ID and player ID of 0.
-        ClientInfo localClient(0, localPlayerName);
-        onPlayerAccepted(joinRequestId, 0, localClient);
+        if (host)
+        {
+            // Add ourselves to the lobby.
+            // The host should always have a client ID and player ID of 0.
+            ClientInfo localClient(0, localPlayerName);
+            onPlayerAccepted(joinRequestId, 0, localClient);
+        }
+        else
+        {
+            // We generate a random request ID, just in case 2 players try to join with the same name
+            joinRequestId = std::rand();
+            RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
+            app.getConnection()->send(joinPacket);
+        }
     }
     else
     {
-        // We generate a random request ID, just in case 2 players try to join with the same name
-        joinRequestId = std::rand();
-        RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
-        app.getConnection()->send(joinPacket);
+        // Just start the game immediately
+        startGame();
     }
 }
 
@@ -162,6 +170,11 @@ void LobbyState::keyUp(const SDL_Keycode keyCode)
 
 void LobbyState::pollNetwork()
 {
+    if (!isNetGame())
+    {
+        return;
+    }
+
     const auto& receivedPackets = app.getConnection()->getReceivedPackets();
     for (auto& packet : receivedPackets)
     {
@@ -322,6 +335,11 @@ std::unique_ptr<State> LobbyState::createGameState() const
     }
 
     return std::make_unique<GameState>(app, std::move(world), playerStates, clients, localPlayerId);
+}
+
+bool LobbyState::isNetGame() const
+{
+    return app.getConnection().has_value();
 }
 
 }  // namespace Rival
