@@ -298,7 +298,6 @@
     - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
 - Setup program should log output to a file (run the script via a BAT file?)
 - Amend `create_file` script to support subfolders
-- Checked-in resource location is inconsistent - some are stored in `dist/res`, others in `project/Open-Rival/res`
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests

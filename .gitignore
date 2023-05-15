@@ -32,26 +32,23 @@ SORR.BLD
 /projects/audio-extractor/output
 /projects/image-extractor/images
 /projects/interface-extractor/images
-/projects/Open-Rival/res/sound
-/projects/Open-Rival/res/textures
-/projects/Open-Rival/res/video
 /projects/setup/res/sound
 /projects/setup/res/textures
 /projects/setup/res/video
 /projects/setup/setup/images
-/projects/texture-builder/definitions
 /projects/texture-builder/images
 /projects/texture-builder/textures
+
+# Duplicates
+/projects/Open-Rival/res
+/projects/texture-builder/definitions
+/projects/setup/setup/definitions
 
 # Commercial fonts
 /projects/Open-Rival/res/fonts
 
 # Release folder
-/dist/res/data
-/dist/res/icons
 /dist/res/maps
-/dist/res/shaders
-/dist/setup
 /dist/Open-Rival.exe
 /dist/setup.exe
 /dist/*.zip

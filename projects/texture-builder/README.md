@@ -8,7 +8,7 @@ Build using Visual Studio.
 
 ## Setup
 
-This application requires a list of definition files, which can be found within the `setup` project.
+This application requires a list of definition files, which can be found in the [`dist`](/dist/setup/definitions) folder.
 
 The source sprites should be placed in an `images` folder.
 

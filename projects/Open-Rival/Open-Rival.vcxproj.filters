@@ -436,6 +436,9 @@
     <ClCompile Include="src\gfx\TextureRenderable.cpp">
       <Filter>Source Files\gfx</Filter>
     </ClCompile>
+    <ClCompile Include="src\gfx\BoxRenderable.cpp">
+      <Filter>Source Files\gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\World.h">
@@ -814,6 +817,9 @@
       <Filter>Source Files\ui</Filter>
     </ClInclude>
     <ClInclude Include="include\gfx\TextureRenderable.h">
+      <Filter>Source Files\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gfx\BoxRenderable.h">
       <Filter>Source Files\gfx</Filter>
     </ClInclude>
   </ItemGroup>
