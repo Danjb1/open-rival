@@ -17,8 +17,9 @@ Contents
 ================================================================================
 
 1. Getting Started
-2. Known Issues
-3. Settings
+2. Multiplayer
+3. Known Issues
+4. Settings
 
 ================================================================================
 1. Getting Started
@@ -66,7 +67,39 @@ By default this will load a test map, but any map from the original game can be
 loaded (see below).
 
 ================================================================================
-2. Known Issues
+2. Multiplayer
+================================================================================
+
+Multiplayer games are possible by launching the game through the command line.
+
+--------------------------------------------------------------------------------
+Host
+--------------------------------------------------------------------------------
+
+To host a game:
+
+    Open-Rival.exe -host [-port PORT]
+
+For example:
+
+    Open-Rival.exe -host -port 12345
+
+Omitting the port parameter uses the default port of 25565.
+
+Once all players are connected in the lobby, press Enter to start the game.
+
+--------------------------------------------------------------------------------
+Join
+--------------------------------------------------------------------------------
+
+To join a game:
+
+    Open-Rival.exe -connect ADDRESS [-port PORT]
+
+Omitting the port parameter uses the default port of 25565.
+
+================================================================================
+3. Known Issues
 ================================================================================
 
 Thank you for your patience during these early stages of development!
@@ -83,7 +116,7 @@ Thank you for your patience during these early stages of development!
 - (Bug) Some animations look a little off (e.g. Snake).
 
 ================================================================================
-3. Settings
+4. Settings
 ================================================================================
 
 Some settings can be configured by editing `config.json`.

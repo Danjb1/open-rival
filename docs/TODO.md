@@ -6,8 +6,6 @@
 
 ### Multiplayer Milestone
 
-- BUG: Setup fails to make game_cursors.tga: "Failed to load file: setup\images\game\img_ui_0384.tga"
-- BUG: Add networking instructions to readme
 - BUG: Music hangs after closing the window
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
