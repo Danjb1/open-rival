@@ -1,4 +1,4 @@
-cmake_minimum_requirecpp/d (VERSION 3.16)
+cmake_minimum_required (VERSION 3.16)
 
 set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/Animations.cpp
@@ -92,7 +92,7 @@ set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/Window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/World.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/commands/GameCommandFactory.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/BoxRenderable.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/gfx/BoxRenderable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/gfx/TextureRenderable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/lobby/LobbyState.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/net/ClientInfo.cpp
@@ -274,8 +274,8 @@ set(OPEN_RIVAL_RESOURCES
 
 set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.14/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.0.5/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.5.2/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-2.10.4/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/glew-2.1.0/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/glm-0.9.9.5
@@ -289,15 +289,15 @@ add_executable(Open-Rival ${OPEN_RIVAL_SOURCES} ${OPEN_RIVAL_RESOURCES})
 
 # Add the directories and headers of the project
 target_include_directories(Open-Rival PRIVATE
-    ${OPEN_RIVAL_INCLUDE_HEADERS}
+    #${OPEN_RIVAL_INCLUDE_HEADERS}
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
     ${OPEN_RIVAL_ADDITIONAL_DIRECTORIES}
 )
 
 # Adds the directories where the linker can find the libraries
 target_link_directories(Open-Rival PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.14/lib/x86/
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.0.5/lib/x86/
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/lib/x86/
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.5.2/lib/x86/
     ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-2.10.4/release/dll/win32/
     ${CMAKE_CURRENT_LIST_DIR}/libs/glew-2.1.0/lib/Release/Win32
     ${CMAKE_CURRENT_LIST_DIR}/libs/openal-soft-1.21.0/libs/Win32
