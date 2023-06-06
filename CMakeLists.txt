@@ -20,4 +20,5 @@ set_project_warnings(project_warnings)
 #include sub-projects
 # add_subdirectory(projects/audio-extractor)
 add_subdirectory(projects/Open-Rival)
+add_subdirectory(projects/setup)
 
