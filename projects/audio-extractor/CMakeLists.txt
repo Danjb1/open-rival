@@ -31,6 +31,11 @@ target_include_directories(audio-extractor PUBLIC
     ${OPEN_RIVAL_SETUP_INC_DIR}
 )
 
+target_link_libraries(audio-extractor PRIVATE
+    project_options
+    project_warnings
+)
+
 target_precompile_headers(audio-extractor PRIVATE
     ${OPEN_RIVAL_AUDIO_EXTRACTOR_PRECOMPILED_HEADERS}
 )
