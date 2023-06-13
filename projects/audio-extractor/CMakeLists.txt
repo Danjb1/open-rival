@@ -16,6 +16,10 @@ set(OPEN_RIVAL_AUDIO_EXTRACTOR_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+set(OPEN_RIVAL_AUDIO_EXTRACTOR_PRECOMPILED_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/pch.h
+)
+
 # Creates the target
 add_executable(audio-extractor
     ${OPEN_RIVAL_AUDIO_EXTRACTOR_EXTERNAL_SOURCES}
@@ -25,4 +29,8 @@ add_executable(audio-extractor
 target_include_directories(audio-extractor PUBLIC
     ${OPEN_RIVAL_AUDIO_EXTRACTOR_INCLUDE_DIRS}
     ${OPEN_RIVAL_SETUP_INC_DIR}
+)
+
+target_precompile_headers(audio-extractor PRIVATE
+    ${OPEN_RIVAL_AUDIO_EXTRACTOR_PRECOMPILED_HEADERS}
 )

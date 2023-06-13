@@ -36,8 +36,27 @@ set(OPEN_RIVAL_SETUP_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
-add_executable(setup ${OPEN_RIVAL_SETUP_EXTERNAL_SOURCES} ${OPEN_RIVAL_SETUP_SOURCES})
+set(OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/pch.h
+)
 
-target_include_directories(setup PUBLIC ${OPEN_RIVAL_SETUP_INCLUDE_DIRS})
-target_include_directories(setup PRIVATE ${OPEN_RIVAL_INC_DIR} ${OPEN_RIVAL_JSON_DIR})
+# Creates the executable
+add_executable(setup
+    ${OPEN_RIVAL_SETUP_EXTERNAL_SOURCES}
+    ${OPEN_RIVAL_SETUP_SOURCES}
+)
+
+target_include_directories(setup PUBLIC
+    ${OPEN_RIVAL_SETUP_INCLUDE_DIRS}
+)
+
+target_include_directories(setup PRIVATE
+    ${OPEN_RIVAL_INC_DIR}
+    ${OPEN_RIVAL_JSON_DIR}
+)
+
+target_precompile_headers(setup PRIVATE
+    ${OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS}
+)
+
 

@@ -19,6 +19,10 @@ set(OPEN_RIVAL_CAMPAIGN_EXTRACTOR_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+set(OPEN_RIVAL_CAMPAIGN_EXTRACTOR_PRECOMPILED_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/pch.h
+)
+
 # Creates the executable
 add_executable(campaign-extractor
     ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_EXTERNAL_SOURCES}
@@ -27,4 +31,8 @@ add_executable(campaign-extractor
 target_include_directories(campaign-extractor PUBLIC
     ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_INCLUDE_DIRS}
     ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_EXTERNAL_DIRS}
+)
+
+target_precompile_headers(campaign-extractor PRIVATE
+    ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_PRECOMPILED_HEADERS}
 )
