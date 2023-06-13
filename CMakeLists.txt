@@ -23,4 +23,4 @@ add_subdirectory(projects/audio-extractor)
 add_subdirectory(projects/campaign-extractor)
 add_subdirectory(projects/image-extractor)
 add_subdirectory(projects/interface-extractor)
-
+add_subdirectory(projects/texture-builder)
