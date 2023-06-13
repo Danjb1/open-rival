@@ -272,6 +272,10 @@ set(OPEN_RIVAL_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Open-Rival.rc
 )
 
+set(OPEN_RIVAL_PRECOMPILED_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/pch.h
+)
+
 set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/include
@@ -317,4 +321,8 @@ target_link_libraries(Open-Rival PRIVATE
     SDL2_image
     winmm
     Ws2_32
+)
+
+target_precompile_headers(Open-Rival PRIVATE
+    ${OPEN_RIVAL_PRECOMPILED_HEADERS}
 )
