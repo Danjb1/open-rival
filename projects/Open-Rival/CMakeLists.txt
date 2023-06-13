@@ -321,6 +321,8 @@ target_link_libraries(Open-Rival PRIVATE
     SDL2_image
     winmm
     Ws2_32
+    project_options
+    project_warnings
 )
 
 target_precompile_headers(Open-Rival PRIVATE

@@ -40,6 +40,11 @@ target_include_directories(interface-extractor PUBLIC
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_DIRS}
 )
 
+target_link_libraries(interface-extractor PRIVATE
+    project_options
+    project_warnings
+)
+
 target_precompile_headers(interface-extractor PRIVATE
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_PRECOMPILED_HEADERS}
 )

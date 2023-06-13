@@ -40,6 +40,11 @@ target_include_directories(texture-builder PUBLIC
     ${OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_DIRS}
 )
 
+target_link_libraries(texture-builder PRIVATE
+    project_options
+    project_warnings
+)
+
 target_precompile_headers(texture-builder PRIVATE
     ${OPEN_RIVAL_TEXTURE_BUILDER_PRECOMPILED_HEADERS}
 )

@@ -33,6 +33,12 @@ target_include_directories(campaign-extractor PUBLIC
     ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_EXTERNAL_DIRS}
 )
 
+
+target_link_libraries(campaign-extractor PRIVATE
+    project_options
+    project_warnings
+)
+
 target_precompile_headers(campaign-extractor PRIVATE
     ${OPEN_RIVAL_CAMPAIGN_EXTRACTOR_PRECOMPILED_HEADERS}
 )

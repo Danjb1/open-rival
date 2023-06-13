@@ -55,8 +55,11 @@ target_include_directories(setup PRIVATE
     ${OPEN_RIVAL_JSON_DIR}
 )
 
+target_link_libraries(setup PRIVATE
+    project_options
+    project_warnings
+)
+
 target_precompile_headers(setup PRIVATE
     ${OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS}
 )
-
-
