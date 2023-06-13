@@ -32,3 +32,8 @@ if(ENABLE_IPO)
         message(SEND_ERROR "IPO is not supported: ${output}")
     endif()
 endif()
+
+if (MSVC)
+    set(CMAKE_GENERATOR_PLATFORM "Win32" CACHE STRING "" FORCE)
+endif()
+
