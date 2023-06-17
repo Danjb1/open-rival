@@ -16,6 +16,14 @@ set(OPEN_RIVAL_INTERFACE_EXTRACTOR_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/pch.cpp
 )
 
+set(OPEN_RIVAL_INTERFACE_EXTRACTOR_INCLUDE_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/BinaryFileReader.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Image.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Palette.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/setup-utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/interface-extractor.h
+)
+
 set(OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_DIRS
     ${CMAKE_CURRENT_LIST_DIR}/../setup/include
     ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include
@@ -33,6 +41,7 @@ set(OPEN_RIVAL_INTERFACE_EXTRACTOR_PRECOMPILED_HEADERS
 add_executable(interface-extractor
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_SOURCES}
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_SOURCES}
+    ${OPEN_RIVAL_INTERFACE_EXTRACTOR_INCLUDE_HEADERS}
 )
 
 target_include_directories(interface-extractor PUBLIC

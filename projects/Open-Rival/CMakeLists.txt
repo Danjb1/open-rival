@@ -224,7 +224,7 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/Window.h
     ${CMAKE_CURRENT_LIST_DIR}/include/World.h
     ${CMAKE_CURRENT_LIST_DIR}/include/commands/GameCommandFactory.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/BoxRenderable.h
+    #${CMAKE_CURRENT_LIST_DIR}/include/gfx/BoxRenderable.h
     ${CMAKE_CURRENT_LIST_DIR}/include/gfx/TextureRenderable.h
     ${CMAKE_CURRENT_LIST_DIR}/include/lobby/LobbyState.h
     ${CMAKE_CURRENT_LIST_DIR}/include/net/ClientInfo.h
@@ -259,13 +259,6 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
 set(OPEN_RIVAL_INCLUDE_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/
     ${CMAKE_CURRENT_LIST_DIR}/include
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx
-    ${CMAKE_CURRENT_LIST_DIR}/include/lobby
-    ${CMAKE_CURRENT_LIST_DIR}/include/net
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets
-    ${CMAKE_CURRENT_LIST_DIR}/include/ui
-    ${CMAKE_CURRENT_LIST_DIR}/include/utils
 )
 
 set(OPEN_RIVAL_RESOURCES
@@ -277,7 +270,6 @@ set(OPEN_RIVAL_PRECOMPILED_HEADERS
 )
 
 set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
-    ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.5.2/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-2.10.4/include
@@ -289,7 +281,11 @@ set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
 )
 
 # Creates the executable including all the sources and resources
-add_executable(Open-Rival ${OPEN_RIVAL_SOURCES} ${OPEN_RIVAL_RESOURCES})
+add_executable(Open-Rival
+    ${OPEN_RIVAL_SOURCES}
+    ${OPEN_RIVAL_RESOURCES}
+    ${OPEN_RIVAL_INCLUDE_HEADERS}
+)
 
 # Add the directories and headers of the project
 target_include_directories(Open-Rival PRIVATE

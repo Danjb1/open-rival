@@ -26,6 +26,15 @@ set(OPEN_RIVAL_TEXTURE_BUILDER_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+set(OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_INCLUDE_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/BinaryFileReader.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Image.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/MathUtils.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Palette.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/setup-utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/texture-builder.h
+)
+
 set(OPEN_RIVAL_TEXTURE_BUILDER_PRECOMPILED_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/pch.h
 )
@@ -34,6 +43,7 @@ set(OPEN_RIVAL_TEXTURE_BUILDER_PRECOMPILED_HEADERS
 add_executable(texture-builder
     ${OPEN_RIVAL_TEXTURE_BUILDER_SOURCES}
     ${OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_SOURCES}
+    ${OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_INCLUDE_HEADERS}
 )
 target_include_directories(texture-builder PUBLIC
     ${OPEN_RIVAL_TEXTURE_BUILDER_INCLUDE_DIRS}

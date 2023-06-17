@@ -28,6 +28,16 @@ set(OPEN_RIVAL_IMAGE_EXTRACTOR_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+set(OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_INCLUDE_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/BinaryFileReader.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/FileUtils.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Image.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/MathUtils.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Palette.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/image-extractor.h
+    ${CMAKE_CURRENT_LIST_DIR}/../setup/include/setup-utils.h
+)
+
 set(OPEN_RIVAL_IMAGE_EXTRACTOR_PRECOMPILED_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/pch.h
 )
@@ -36,6 +46,7 @@ set(OPEN_RIVAL_IMAGE_EXTRACTOR_PRECOMPILED_HEADERS
 add_executable(image-extractor
     ${OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_SOURCES}
     ${OPEN_RIVAL_IMAGE_EXTRACTOR_SOURCES}
+    ${OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_INCLUDE_HEADERS}
 )
 
 target_include_directories(image-extractor PUBLIC
