@@ -26,10 +26,21 @@ set(OPEN_RIVAL_SETUP_SOURCES
 )
 
 set(OPEN_RIVAL_SETUP_EXTERNAL_INCLUDE_HEADERS
+    ${OPEN_RIVAL_INC_DIR}/BinaryFileReader.h
+    ${OPEN_RIVAL_INC_DIR}/FileUtils.h
     ${OPEN_RIVAL_INC_DIR}/Image.h
     ${OPEN_RIVAL_INC_DIR}/MathUtils.h
     ${OPEN_RIVAL_INC_DIR}/Palette.h
     ${OPEN_RIVAL_INC_DIR}/StringUtils.h
+)
+
+set(OPEN_RIVAL_SETUP_INCLUDE_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/include/audio-extractor.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/image-extractor.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/interface-extractor.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/registry.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/setup-utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/texture-builder.h
 )
 
 set(OPEN_RIVAL_SETUP_INCLUDE_DIRS
@@ -37,13 +48,15 @@ set(OPEN_RIVAL_SETUP_INCLUDE_DIRS
 )
 
 set(OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/pch.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/pch.h
 )
 
 # Creates the executable
 add_executable(setup
     ${OPEN_RIVAL_SETUP_EXTERNAL_SOURCES}
     ${OPEN_RIVAL_SETUP_SOURCES}
+    ${OPEN_RIVAL_SETUP_INCLUDE_HEADERS}
+    ${OPEN_RIVAL_SETUP_EXTERNAL_INCLUDE_HEADERS}
 )
 
 target_include_directories(setup PUBLIC
