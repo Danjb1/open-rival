@@ -38,7 +38,7 @@ public:
     /**
      * Creates an Object from raw data (e.g. read from a Scenario file).
      */
-    std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
+    std::shared_ptr<Entity> createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
 
 private:
     Unit::Type getUnitType(std::uint8_t unitType) const;

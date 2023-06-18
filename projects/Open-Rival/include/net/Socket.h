@@ -33,8 +33,8 @@ public:
     Socket(SOCKET handle);
     ~Socket();
 
-    bool Socket::operator==(const Socket& other) const;
-    bool Socket::operator!=(const Socket& other) const;
+    bool operator==(const Socket& other) const;
+    bool operator!=(const Socket& other) const;
 
     // Allow moving but prevent copying
     Socket(const Socket& other) = delete;

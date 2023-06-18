@@ -82,6 +82,7 @@ void LobbyState::onLoad()
     else
     {
         // Just start the game immediately
+        localPlayerId = 0;
         startGame();
     }
 }

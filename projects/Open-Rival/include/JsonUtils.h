@@ -12,7 +12,7 @@ template <class Iterator, class KeyType, class ValueType>
 static const ValueType getOrDefault(const Iterator& iter, const KeyType& key, const ValueType defaultValue)
 {
     auto result = iter->find(key);
-    return result == iter->end() ? defaultValue : *result;
+    return result == iter->end() ? defaultValue : static_cast<ValueType>(*result);
 }
 
 }}  // namespace Rival::JsonUtils

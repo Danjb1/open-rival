@@ -51,6 +51,7 @@ class World : public WritablePathfindingMap
 public:
     World(int width, int height, bool wilderness);
     World(int width, int height, bool wilderness, std::vector<Tile> tiles);
+    virtual ~World() = default;
 
     // Begin WritablePathfindingMap override
     int getWidth() const override;

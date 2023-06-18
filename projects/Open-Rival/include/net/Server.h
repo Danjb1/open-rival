@@ -18,7 +18,7 @@ class Server : public ConnectionListener
 {
 public:
     Server(std::uint16_t port, int maxClients);
-    ~Server();
+    virtual ~Server();
 
     // Begin ConnectionListener override
     void onPacketReceived(Connection& connection, std::shared_ptr<const Packet> packet) override;

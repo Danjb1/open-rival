@@ -21,7 +21,7 @@ struct PlayerContext;
 class UiRenderer
 {
 public:
-    UiRenderer::UiRenderer(
+    UiRenderer(
             const PlayerStore& playerStore,
             const TextureStore& textureStore,
             const FontStore& fontStore,

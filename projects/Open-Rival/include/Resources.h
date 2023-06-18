@@ -82,6 +82,7 @@ class Resources
 {
 public:
     Resources(ApplicationContext& context);
+    virtual ~Resources() = default;
 
     // Begin TextureStore override
     std::shared_ptr<const Texture> getPalette() const override;
@@ -130,8 +131,8 @@ private:
     Spritesheet initHitboxSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
-    std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const;
-    std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const;
+    std::unordered_map<Unit::Type, UnitDef> initUnitDefs() const;
+    std::unordered_map<Building::Type, BuildingDef> initBuildingDefs() const;
 
 public:
     // Directories
