@@ -37,8 +37,8 @@ public:
             ConnectionListener* listener = nullptr);
     ~Connection();
 
-    bool Connection::operator==(const Connection& other) const;
-    bool Connection::operator!=(const Connection& other) const;
+    bool operator==(const Connection& other) const;
+    bool operator!=(const Connection& other) const;
 
     /** Closes this connection. */
     void close() noexcept;

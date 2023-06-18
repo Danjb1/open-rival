@@ -7,7 +7,7 @@
 #include <algorithm>
 
 #pragma warning(push)
-#pragma warning(disable : 4244 4456)
+#pragma warning(disable : 4242 4244 4456)
 
 #ifdef _MSC_VER
 #define strcasecmp _stricmp

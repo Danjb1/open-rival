@@ -52,8 +52,7 @@ struct ReachableNode
 class Pathfinder
 {
 public:
-    Pathfinder::Pathfinder(
-            MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
+    Pathfinder(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
 
     Route getRoute() const
     {

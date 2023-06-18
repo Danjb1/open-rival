@@ -36,7 +36,7 @@ private:
 
     std::shared_ptr<const Texture> paletteTexture;
 
-    bool TileRenderer::needsUpdate() const;
+    bool needsUpdate() const;
 
     void sendDataToGpu(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
 };

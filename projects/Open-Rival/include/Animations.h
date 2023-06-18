@@ -29,10 +29,10 @@ struct Animation
 {
     static constexpr int defaultMsPerFrame = 60;
 
-    /** First sprite index of the aniamtion. */
+    /** First sprite index of the animation. */
     int startIndex;
 
-    /** Last sprite index of the aniamtion. */
+    /** Last sprite index of the animation. */
     int endIndex;
 
     /** How long to show each sprite index, in milliseconds. */

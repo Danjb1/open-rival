@@ -4,6 +4,37 @@
 ## Next Up...
 <!----------------------------------------------------------------------------->
 
+### CMake Migration
+
+- Test Debug/Release builds
+- Allow specifying library versions in CMake
+    - Upgrade libraries locally
+- Major problems (compare new project to old project):
+    - Debug build should use debug DLLs!
+        -  Currently we need to set: C++ / Code Generation > Runtime Library to "/MD" to get it to build
+    - OpenAL library requires "/SAFESEH:NO" linker option (Linker > Advanced > Image Has Safe Exception Handlers)
+    - Freetype path should be "release dll" instead of "release/dll"
+    - Files exist in a flat structure within VS
+    - Compile times are really long after making any change!
+- Minor problems:
+    - Generated solution is all lowercase (was: Open-Rival)
+    - Why do additional library directies also have a `/$(Configuration)` variant?
+    - `cmake_pch.cxx` and `cmake_pch.hxx` are generated
+    - Lots of junk files in root folder; move to `projects` folder
+    - Add extra files to project (TODO, changelog, etc.)
+    - Linker warning:
+        RtMidi.lib(RtMidi.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+        LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+- Improvements:
+    - Check warnings in use
+    - Create scripts to add new files / regenerate project
+    - Use static linking
+- Learn about ZERO_CHECK and ALL_BUILD
+- Documentation
+    - CMake arguments
+    - Generating VS project from command line
+- Fix test project
+
 ### Multiplayer Milestone
 
 - BUG: Music hangs after closing the window
@@ -173,6 +204,7 @@
     - In particular, when the next tile in their path is blocked
 - Units should "try" to move somewhere even if there is no path
 - Should we limit the pathfinding logic to 'n' iterations? (probably)
+- Units should eventually give up if their route is blocked (e.g. when moving a group, they can't all reach the target)
 - Show "star" effect when sending troops somewhere
 
 ### Animations
@@ -294,7 +326,6 @@
 - Commit upscaled video files (using Git LFS?)
 - Consider linking with static libraries (instead of using DLLs)
 - Consider moving some docs to GitHub wiki
-- Create a CMake file to generate the solution?
 - Linking against OpenAL soft binary distribution requires `/SAFESEH:NO` linker option
     - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
 - Setup program should log output to a file (run the script via a BAT file?)

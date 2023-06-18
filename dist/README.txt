@@ -6,7 +6,7 @@
            \___/| .__/ \___|_| |_|     \_| \_|_| \_/ \__,_|_|
                 | |                                          
                 |_|                                    v0.3.0
-                       
+
             by Danjb (admin@danjb.com)
             https://github.com/Danjb1/open-rival
 
