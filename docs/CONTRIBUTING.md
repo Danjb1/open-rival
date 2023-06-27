@@ -7,7 +7,7 @@ Contributions are very much appreciated. If you are not a programmer, you can st
 ## Getting Started
 
 1. Fork the repository and download a local copy.
-2. Install dependencies and build using the [Development Quickstart Guide](/docs/development_quickstart.md).
+2. Install dependencies and build using the [Development Quickstart Guide](/docs/dev_quickstart.md).
 3. Commit your changes (following the Developer Guidelines, below).
 4. Create a pull request from your fork to the main repository.
 

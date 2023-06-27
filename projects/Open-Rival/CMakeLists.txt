@@ -1,5 +1,15 @@
 cmake_minimum_required (VERSION 3.16)
 
+# Dependency versions
+set(FREETYPE_VERSION "2.13.0" CACHE STRING "FreeType version number")
+set(GLEW_VERSION "2.1.0" CACHE STRING "glew version number")
+set(GLM_VERSION "0.9.9.8" CACHE STRING "GLM version number")
+set(JSON_VERSION "3.11.2" CACHE STRING "JSON version number")
+set(OPENAL_VERSION "1.23.1" CACHE STRING "OpenAL version number")
+set(RTMIDI_VERSION "5.0.0" CACHE STRING "RtMidi version number")
+set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
+set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
+
 set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/Animations.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application.cpp
@@ -270,14 +280,14 @@ set(OPEN_RIVAL_PRECOMPILED_HEADERS
 )
 
 set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.5.2/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-2.10.4/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/glew-2.1.0/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/glm-0.9.9.5
-    ${CMAKE_CURRENT_LIST_DIR}/libs/json
-    ${CMAKE_CURRENT_LIST_DIR}/libs/openal-soft-1.21.0/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/rtmidi-5.0.0
+    ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-${FREETYPE_VERSION}/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/glew-${GLEW_VERSION}/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/glm-${GLM_VERSION}
+    ${CMAKE_CURRENT_LIST_DIR}/libs/json-${JSON_VERSION}/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/openal-soft-${OPENAL_VERSION}/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/rtmidi-${RTMIDI_VERSION}
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-${SDL2_VERSION}/include
+    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/include
 )
 
 # Creates the executable including all the sources and resources
@@ -289,29 +299,39 @@ add_executable(Open-Rival
 
 # Add the directories and headers of the project
 target_include_directories(Open-Rival PRIVATE
-    #${OPEN_RIVAL_INCLUDE_HEADERS}
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
     ${OPEN_RIVAL_ADDITIONAL_DIRECTORIES}
 )
 
 # Adds the directories where the linker can find the libraries
 target_link_directories(Open-Rival PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.18/lib/x86/
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-2.5.2/lib/x86/
-    ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-2.10.4/release/dll/win32/
-    ${CMAKE_CURRENT_LIST_DIR}/libs/glew-2.1.0/lib/Release/Win32
-    ${CMAKE_CURRENT_LIST_DIR}/libs/openal-soft-1.21.0/libs/Win32
-    ${CMAKE_CURRENT_LIST_DIR}/libs/rtmidi-5.0.0/Release
+    # Debug
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/freetype-${FREETYPE_VERSION}/objs/x64/Debug>
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-${GLEW_VERSION}/lib/Debug/x64>
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/openal-soft-${OPENAL_VERSION}/build/Debug>
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/rtmidi-${RTMIDI_VERSION}/build/Debug>
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2-${SDL2_VERSION}/lib/x64>
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/lib/x64>
+
+    # Release
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/freetype-${FREETYPE_VERSION}/objs/x64/Release>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-${GLEW_VERSION}/lib/Release/x64>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/openal-soft-${OPENAL_VERSION}/build/Release>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/rtmidi-${RTMIDI_VERSION}/build/Release>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2-${SDL2_VERSION}/lib/x64>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/lib/x64>
 )
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival PRIVATE
     freetype
-    glew32
+    $<$<CONFIG:Debug>:glew32sd>
+    $<$<CONFIG:Release>:glew32s>
+    freetype
     glu32
     OpenAL32
     opengl32
-    RtMidi
+    rtmidi
     SDL2
     SDL2main
     SDL2_image

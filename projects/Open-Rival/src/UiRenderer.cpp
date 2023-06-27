@@ -2,6 +2,7 @@
 
 #include "UiRenderer.h"
 
+#define GLEW_STATIC
 #include <gl/glew.h>
 
 #include "InventoryComponent.h"
