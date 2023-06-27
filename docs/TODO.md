@@ -6,33 +6,32 @@
 
 ### CMake Migration
 
-- Test Debug/Release builds
-- Allow specifying library versions in CMake
-    - Upgrade libraries locally
-- Major problems (compare new project to old project):
-    - Debug build should use debug DLLs!
-        -  Currently we need to set: C++ / Code Generation > Runtime Library to "/MD" to get it to build
-    - OpenAL library requires "/SAFESEH:NO" linker option (Linker > Advanced > Image Has Safe Exception Handlers)
-    - Freetype path should be "release dll" instead of "release/dll"
-    - Files exist in a flat structure within VS
-    - Compile times are really long after making any change!
-- Minor problems:
-    - Generated solution is all lowercase (was: Open-Rival)
-    - Why do additional library directies also have a `/$(Configuration)` variant?
+- Suppress font load warnings:
+    FT_Stream_Open: could not open `res\fonts\serife.fon'
+    FT_Stream_Open: could not open `res\fonts\Procopius Regular.ttf'
+    FT_Stream_Open: could not open `C:\Windows\Fonts\Procopius Regular.ttf'
+- Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
+- VS filters should reflect directory structure
+- Split CMake file into multiple files (one per library?)
+- Why do additional library directies also have a `/$(Configuration)` variant?
+- Precompiled headers:
     - `cmake_pch.cxx` and `cmake_pch.hxx` are generated
-    - Lots of junk files in root folder; move to `projects` folder
-    - Add extra files to project (TODO, changelog, etc.)
-    - Linker warning:
-        RtMidi.lib(RtMidi.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
-        LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
-- Improvements:
-    - Check warnings in use
-    - Create scripts to add new files / regenerate project
-    - Use static linking
+    - `cmake_pch.hxx` is included 4 times in the project!
+- Lots of junk files in root folder; move to `projects` folder
+- Add extra files to project (TODO, changelog, etc.)
+- Review warnings in use
+- Test Debug/Release builds - all projects
+- Update `create_file` script (add to CMakeLists, regenerate project)
+- Add parameter to allow an x86 build
+- Does SDL_Image require libpng and zlib DLLs?
+- Include libraries in a better way
+    - https://stackoverflow.com/a/61708554/1624459
+    - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
+- Copy DLL files to build directory automatically
 - Learn about ZERO_CHECK and ALL_BUILD
-- Documentation
-    - CMake arguments
-    - Generating VS project from command line
+- Document CMake arguments
+- Document using CMake from command line
+- Code review
 - Fix test project
 
 ### Multiplayer Milestone
@@ -318,16 +317,14 @@
 ## Project
 <!----------------------------------------------------------------------------->
 
-- Use a dependency manager
 - Add script to build from command line
 - Add script to run tests from command line
 - Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
 - Use a separate .gitignore file for each project folder
-- Commit upscaled video files (using Git LFS?)
-- Consider linking with static libraries (instead of using DLLs)
+- Commit upscaled video files (Git LFS)
 - Consider moving some docs to GitHub wiki
-- Linking against OpenAL soft binary distribution requires `/SAFESEH:NO` linker option
-    - [Try building OpenAL from source](https://forum.zdoom.org/viewtopic.php?p=964651#p964651)
+- Consider replacing SDL with GLFW
+    - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
 - Amend `create_file` script to support subfolders
 

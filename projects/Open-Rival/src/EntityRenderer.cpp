@@ -2,6 +2,7 @@
 
 #include "EntityRenderer.h"
 
+#define GLEW_STATIC
 #include <gl/glew.h>
 
 #include <algorithm>  // min

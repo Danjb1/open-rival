@@ -2,6 +2,7 @@
 
 #include "FramebufferRenderer.h"
 
+#define GLEW_STATIC
 #include <gl/glew.h>
 
 #include <vector>
