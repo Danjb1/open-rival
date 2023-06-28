@@ -6,10 +6,6 @@
 
 ### CMake Migration
 
-- Suppress font load warnings:
-    FT_Stream_Open: could not open `res\fonts\serife.fon'
-    FT_Stream_Open: could not open `res\fonts\Procopius Regular.ttf'
-    FT_Stream_Open: could not open `C:\Windows\Fonts\Procopius Regular.ttf'
 - Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
 - VS filters should reflect directory structure
 - Split CMake file into multiple files (one per library?)

@@ -2,6 +2,7 @@
 
 - **Danjb:** Lead Developer
 - **vdaghan:** Developer
+- **ricardobtez:** CMake assistance
 - **[u/0xa0000](https://www.reddit.com/user/0xa0000):** For assistance with image extraction
 - **[watto studios](http://www.watto.org/game_extractor.html):** For assistance with audio extraction
 - **[Christopher Snowhill](https://kode54.net/):** For assistance with MIDI playback

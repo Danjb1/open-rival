@@ -14,7 +14,7 @@
 
 > **Used for:** OpenGL functionality (rendering)
 
-[Install guide](http://lazyfoo.net/tutorials/SDL/51_SDL_and_modern_opengl/index.php)
+[Install guide](https://glew.sourceforge.net/install.html)
 
 - Static linking [recommended](https://stackoverflow.com/a/20873711/1624459).
 - Needs to be built from source to create `glew32sd.lib` / `glew32s.lib` (Debug / Release).

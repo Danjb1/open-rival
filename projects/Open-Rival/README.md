@@ -2,9 +2,9 @@
 
 ## Build
 
-Build using Visual Studio after installing all required dependencies.
+Configure the project using CMake and build using any modern compiler.
 
-See [this guide](/docs/development_quickstart.md) for more details.
+See [this guide](/docs/dev_quickstart.md) for more details.
 
 ## Static Code Analysis
 
