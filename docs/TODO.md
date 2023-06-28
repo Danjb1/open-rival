@@ -7,28 +7,29 @@
 ### CMake Migration
 
 - Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
-- VS filters should reflect directory structure
 - Split CMake file into multiple files (one per library?)
 - Why do additional library directies also have a `/$(Configuration)` variant?
-- Precompiled headers:
+- Fix precompiled headers:
     - `cmake_pch.cxx` and `cmake_pch.hxx` are generated
     - `cmake_pch.hxx` is included 4 times in the project!
-- Lots of junk files in root folder; move to `projects` folder
 - Add extra files to project (TODO, changelog, etc.)
 - Review warnings in use
 - Test Debug/Release builds - all projects
 - Update `create_file` script (add to CMakeLists, regenerate project)
-- Add parameter to allow an x86 build
+- Add support for an x86 build through an additional option
 - Does SDL_Image require libpng and zlib DLLs?
 - Include libraries in a better way
     - https://stackoverflow.com/a/61708554/1624459
     - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
+- Code review CMake files
 - Copy DLL files to build directory automatically
-- Learn about ZERO_CHECK and ALL_BUILD
-- Document CMake arguments
+- Copy resources to build directory automatically
+- Document CMake options
 - Document using CMake from command line
-- Code review
+    - Review `create_vs_solution.bat`
 - Fix test project
+- Support custom `.args.json` files and `vcxproj.user` files being copied to the build directory
+- Run cppcheck
 
 ### Multiplayer Milestone
 

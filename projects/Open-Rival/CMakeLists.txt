@@ -263,7 +263,6 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/ui/CursorRenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/ui/MenuRenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/utils/BufferUtils.h
-    ${CMAKE_CURRENT_LIST_DIR}/resource.h
 )
 
 set(OPEN_RIVAL_INCLUDE_DIRECTORIES
@@ -273,6 +272,7 @@ set(OPEN_RIVAL_INCLUDE_DIRECTORIES
 
 set(OPEN_RIVAL_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Open-Rival.rc
+    ${CMAKE_CURRENT_LIST_DIR}/resource.h
 )
 
 set(OPEN_RIVAL_PRECOMPILED_HEADERS
@@ -289,6 +289,11 @@ set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-${SDL2_VERSION}/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/include
 )
+
+# Ensure that files are organised by folder structure in the generated project
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Source Files" FILES ${OPEN_RIVAL_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_INCLUDE_HEADERS})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR} PREFIX "Resources" FILES ${OPEN_RIVAL_RESOURCES})
 
 # Creates the executable including all the sources and resources
 add_executable(Open-Rival

@@ -2,17 +2,13 @@
 
 A utility program for building textures from individual indexed TGA sprites.
 
-## Build
-
-Build using Visual Studio.
-
-## Setup
+## :wrench: Setup
 
 This application requires a list of definition files, which can be found in the [`dist`](/dist/setup/definitions) folder.
 
 The source sprites should be placed in an `images` folder.
 
-## Run
+## :runner: Run
 
 This will output textures to a `textures` directory.
 
@@ -20,7 +16,7 @@ This will output textures to a `textures` directory.
 texture-builder.exe DEFINITIONS_DIR
 ```
 
-## Definition Files
+## :page_with_curl: Definition Files
 
 A definition file specifies the mode of operation (`spritesheet` or `atlas`), and a list of sprites to combine.
 

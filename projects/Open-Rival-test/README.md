@@ -1,14 +1,10 @@
-# Open-Rival-test
+# Open-Rival Tests
 
 Unit tests for Open-Rival using the [Catch2](https://github.com/catchorg/Catch2) test framework (included).
 
-## Build & Run
-
-The project can be built and run using Visual Studio.
-
-This should display a message with the outcome of the tests.
-
 ## Project Setup
+
+> :warning: This project has not yet been converted to CMake.
 
 The test project includes all headers required by Open-Rival, but does *not* include all of the source files. In particular, most of our third-party libraries are omitted. This is to help keep the tests lightweight; we do not want to create an OpenGL context every time we run our tests.
 
