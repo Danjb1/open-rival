@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "WalkerComponent.h"
 
 #include "MapUtils.h"

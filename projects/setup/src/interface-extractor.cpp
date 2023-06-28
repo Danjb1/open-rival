@@ -2,8 +2,6 @@
  * Script to extract the Rival Realms images from "Interfac.dat".
  */
 
-#include "pch.h"
-
 #include "interface-extractor.h"
 
 #include <stdexcept>

@@ -15,7 +15,6 @@ set(OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_SOURCES
 
 set(OPEN_RIVAL_IMAGE_EXTRACTOR_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/pch.cpp
 )
 
 set(OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_DIRS
@@ -38,10 +37,6 @@ set(OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/../setup/include/setup-utils.h
 )
 
-set(OPEN_RIVAL_IMAGE_EXTRACTOR_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/pch.h
-)
-
 # Creates the target
 add_executable(image-extractor
     ${OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_SOURCES}
@@ -57,8 +52,4 @@ target_include_directories(image-extractor PUBLIC
 target_link_libraries(image-extractor PRIVATE
     project_options
     project_warnings
-)
-
-target_precompile_headers(image-extractor PRIVATE
-    ${OPEN_RIVAL_IMAGE_EXTRACTOR_PRECOMPILED_HEADERS}
 )

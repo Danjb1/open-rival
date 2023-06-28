@@ -18,8 +18,6 @@ set(OPEN_RIVAL_SETUP_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/image-extractor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/interface-extractor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/texture-builder.cpp
-    # Shall this be here?
-    ${CMAKE_CURRENT_LIST_DIR}/src/pch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/registry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/setup-utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Main.cpp
@@ -47,10 +45,6 @@ set(OPEN_RIVAL_SETUP_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
-set(OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/pch.h
-)
-
 # Creates the executable
 add_executable(setup
     ${OPEN_RIVAL_SETUP_EXTERNAL_SOURCES}
@@ -71,8 +65,4 @@ target_include_directories(setup PRIVATE
 target_link_libraries(setup PRIVATE
     project_options
     project_warnings
-)
-
-target_precompile_headers(setup PRIVATE
-    ${OPEN_RIVAL_SETUP_PRECOMPILED_HEADERS}
 )

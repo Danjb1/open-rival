@@ -9,8 +9,6 @@
  * Thanks to Reddit user 0xa0000 for all the ASM handling code.
  */
 
-#include "pch.h"
-
 #include "image-extractor.h"
 
 #include <windows.h>  // VirtualProtect, etc.

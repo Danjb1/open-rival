@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "UiRenderer.h"
 
 #define GLEW_STATIC

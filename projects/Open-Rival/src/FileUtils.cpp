@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "FileUtils.h"
 
 #include <cstddef>  // std::size_t

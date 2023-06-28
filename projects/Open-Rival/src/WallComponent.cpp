@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "WallComponent.h"
 
 #include "BuildingPropsComponent.h"

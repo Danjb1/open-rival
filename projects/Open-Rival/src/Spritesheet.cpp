@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Spritesheet.h"
 
 #include "MathUtils.h"

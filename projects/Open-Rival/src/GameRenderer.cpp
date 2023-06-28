@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "GameRenderer.h"
 
 #define GLEW_STATIC

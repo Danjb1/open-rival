@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "net/packet-handlers/StartGamePacketHandler.h"
 
 #include "lobby/LobbyState.h"

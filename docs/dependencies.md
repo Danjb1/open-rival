@@ -131,10 +131,8 @@
 
 ```
 freetype.dll
-libpng16-16.dll     (required by SDL2_image.dll)
 OpenAL32.dll
 rtmidi.dll
 SDL2.dll
 SDL2_image.dll
-zlib1.dll           (required by SDL2_image.dll)
 ```

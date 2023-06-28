@@ -64,7 +64,6 @@ set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/PassabilityComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Pathfinding.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/PathUtils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/pch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/PlayerContext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/PlayerState.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/PortraitComponent.cpp
@@ -192,7 +191,6 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/PassabilityComponent.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Pathfinding.h
     ${CMAKE_CURRENT_LIST_DIR}/include/PathUtils.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/pch.h
     ${CMAKE_CURRENT_LIST_DIR}/include/PlayerContext.h
     ${CMAKE_CURRENT_LIST_DIR}/include/PlayerState.h
     ${CMAKE_CURRENT_LIST_DIR}/include/PortraitComponent.h
@@ -275,10 +273,6 @@ set(OPEN_RIVAL_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/resource.h
 )
 
-set(OPEN_RIVAL_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/pch.h
-)
-
 set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-${FREETYPE_VERSION}/include
     ${CMAKE_CURRENT_LIST_DIR}/libs/glew-${GLEW_VERSION}/include
@@ -346,6 +340,12 @@ target_link_libraries(Open-Rival PRIVATE
     project_warnings
 )
 
+# Pre-compiled headers
 target_precompile_headers(Open-Rival PRIVATE
-    ${OPEN_RIVAL_PRECOMPILED_HEADERS}
+    <cstdint>
+    <iostream>
+    <memory>
+    <stdexcept>
+    <string>
+    <vector>
 )

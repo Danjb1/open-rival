@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Tile.h"
 
 namespace Rival {

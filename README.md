@@ -14,9 +14,7 @@ See the [Releases](https://github.com/Danjb1/open-rival/releases) page for the l
 
 ## :hammer: Develop
 
-Configure the project using CMake and build using any modern compiler.
-
-See [this guide](/docs/dev_quickstart.md) for more details.
+See the [Development Quickstart](/docs/dev_quickstart.md) for information on building the project.
 
 ## :briefcase: Legal Stuff
 

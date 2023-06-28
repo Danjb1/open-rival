@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Cursor.h"
 
 #include "MovementComponent.h"

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "BuildingAnimationComponent.h"
 
 #include <stdexcept>

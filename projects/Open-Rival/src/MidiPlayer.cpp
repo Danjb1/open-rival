@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MidiPlayer.h"
 
 #include "SDLWrapper.h"

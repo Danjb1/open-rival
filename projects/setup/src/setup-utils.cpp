@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "setup-utils.h"
 
 #include <windows.h>  // CreateDirectoryA, etc.

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "VoiceComponent.h"
 
 #include <AL/al.h>

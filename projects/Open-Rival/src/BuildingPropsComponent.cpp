@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "BuildingPropsComponent.h"
 
 namespace Rival {

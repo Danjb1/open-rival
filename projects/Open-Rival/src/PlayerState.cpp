@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "PlayerState.h"
 
 namespace Rival {

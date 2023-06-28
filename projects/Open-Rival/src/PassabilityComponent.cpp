@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "PassabilityComponent.h"
 
 #include "Entity.h"

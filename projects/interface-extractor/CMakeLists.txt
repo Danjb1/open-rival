@@ -13,7 +13,6 @@ set(OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_SOURCES
 
 set(OPEN_RIVAL_INTERFACE_EXTRACTOR_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/pch.cpp
 )
 
 set(OPEN_RIVAL_INTERFACE_EXTRACTOR_INCLUDE_HEADERS
@@ -33,10 +32,6 @@ set(OPEN_RIVAL_INTERFACE_EXTRACTOR_INCLUDE_DIRS
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
-set(OPEN_RIVAL_INTERFACE_EXTRACTOR_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/pch.h
-)
-
 # Creates the target
 add_executable(interface-extractor
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_SOURCES}
@@ -52,8 +47,4 @@ target_include_directories(interface-extractor PUBLIC
 target_link_libraries(interface-extractor PRIVATE
     project_options
     project_warnings
-)
-
-target_precompile_headers(interface-extractor PRIVATE
-    ${OPEN_RIVAL_INTERFACE_EXTRACTOR_PRECOMPILED_HEADERS}
 )

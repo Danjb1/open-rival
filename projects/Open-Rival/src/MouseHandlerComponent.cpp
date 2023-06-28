@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MouseHandlerComponent.h"
 
 #include <glm/vec2.hpp>

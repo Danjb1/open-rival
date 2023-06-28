@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "ui/CursorRenderer.h"
 
 #include "SDLWrapper.h"

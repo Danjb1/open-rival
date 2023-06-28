@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "gfx/TextureRenderable.h"
 
 #include <vector>

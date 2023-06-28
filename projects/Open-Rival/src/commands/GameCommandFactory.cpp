@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "commands/GameCommandFactory.h"
 
 #include <iostream>

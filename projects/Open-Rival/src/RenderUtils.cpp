@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "RenderUtils.h"
 
 #include <glm/vec3.hpp>

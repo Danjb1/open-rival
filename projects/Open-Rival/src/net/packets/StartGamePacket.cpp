@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "net/packets/StartGamePacket.h"
 
 #include <cstddef>  // std::size_t

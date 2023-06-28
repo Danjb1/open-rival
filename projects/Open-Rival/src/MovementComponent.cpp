@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MovementComponent.h"
 
 #include "Entity.h"

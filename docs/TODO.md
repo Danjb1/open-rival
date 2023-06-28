@@ -6,30 +6,13 @@
 
 ### CMake Migration
 
+- Use a separate `.gitignore` file for each project folder
 - Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
-- Split CMake file into multiple files (one per library?)
-- Why do additional library directies also have a `/$(Configuration)` variant?
-- Fix precompiled headers:
-    - `cmake_pch.cxx` and `cmake_pch.hxx` are generated
-    - `cmake_pch.hxx` is included 4 times in the project!
 - Add extra files to project (TODO, changelog, etc.)
-- Review warnings in use
+- Review warnings in use / fix warnings
 - Test Debug/Release builds - all projects
-- Update `create_file` script (add to CMakeLists, regenerate project)
-- Add support for an x86 build through an additional option
-- Does SDL_Image require libpng and zlib DLLs?
-- Include libraries in a better way
-    - https://stackoverflow.com/a/61708554/1624459
-    - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
-- Code review CMake files
-- Copy DLL files to build directory automatically
-- Copy resources to build directory automatically
-- Document CMake options
-- Document using CMake from command line
-    - Review `create_vs_solution.bat`
+- Update `gen_project_files` script (re-run CMake)
 - Fix test project
-- Support custom `.args.json` files and `vcxproj.user` files being copied to the build directory
-- Run cppcheck
 
 ### Multiplayer Milestone
 
@@ -271,6 +254,7 @@
 - [x] High-res fonts
 - [ ] Allow troops to stop moving if they are dying to traps
 - [ ] Repairing allied siege units
+- [ ] Translucent unit shadows (instead of solid black)
 - [ ] Real translucency for fog of war
 - [ ] Upscale graphics / videos using AI?
 
@@ -314,16 +298,32 @@
 ## Project
 <!----------------------------------------------------------------------------->
 
-- Add script to build from command line
-- Add script to run tests from command line
+### General
+
 - Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
-- Use a separate .gitignore file for each project folder
 - Commit upscaled video files (Git LFS)
 - Consider moving some docs to GitHub wiki
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
-- Amend `create_file` script to support subfolders
+
+### CMake
+
+- Split CMake file into multiple files (one per library?)
+- Why do additional library directies also have a `/$(Configuration)` variant?
+- Add support for an x86 build through an additional option
+- Include libraries in a better way
+    - https://stackoverflow.com/a/61708554/1624459
+    - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
+- Copy required files to build directory automatically (`build\projects\Open-Rival`)
+    - `res` folder
+    - `config.json`
+    - `args.json` (if present)
+    - `vcxproj.user` (if present)
+- Code review CMake files
+- Document CMake options
+- Document using CMake from command line
+    - Review `create_vs_solution.bat`
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests
@@ -348,31 +348,15 @@
 
 ### Assets
 
-- Fix "libpng warning: iCCP: known incorrect sRGB profile""
 - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
 - Add padding between spritesheet images to prevent any texure bleeding
 
-### Cross-Platform Support
-
-- Read/write fixed-value types to packets instead of int, size_t, etc.
-- Read/write values to packts using a consistent endianness
-    - "Before writing to any WinSock structure, always convert from host order to network order,
-       and after reading always convert from network order to host order"
-- Add Linux implementations in platform folder
-- Move existing platform-specific functionality to platform folder and add Linux implementation:
-    - Default font directories
-    - Registry operations in setup project
-
 ### Fonts
 
 - How do we calculate the font size correctly?
     - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
-
-### Music (MIDI)
-
-- Defer loading MIDI files until needed to speed up initial load time
 
 ### Optimisation
 
@@ -385,6 +369,18 @@
 - Use a char[] or a std::vector<uninitialized_char> for buffers to avoid initialising elements
     - https://stackoverflow.com/questions/11149665/c-vector-that-doesnt-initialize-its-members
 - The palette texture does not need an alpha channel
+- Defer loading MIDI files until needed to speed up initial load time
+
+### Portability
+
+- Read/write fixed-value types to packets instead of int, size_t, etc.
+- Read/write values to packts using a consistent endianness
+    - "Before writing to any WinSock structure, always convert from host order to network order,
+       and after reading always convert from network order to host order"
+- Add Linux implementations in platform folder
+- Move existing platform-specific functionality to platform folder and add Linux implementation:
+    - Default font directories
+    - Registry operations in setup project
 
 ### Refactoring
 
@@ -423,8 +419,9 @@
 - UiImage should be split into 3 different classes
 - Move some headers to pch.h
 - Don't return references
+- Run cppcheck
 
-### Rendering
+#### Rendering
 
 - Framebuffer size calculations should use RenderUtils
 - Extract common code from SpriteRenderable and AtlasRenderable
@@ -438,7 +435,7 @@
     - Encapsulate logic in classes (e.g. UiImage) where possible instead of duplicating code
 - Renderables should be moveable (like TextRenderable)
 
-### ScenarioReader
+#### ScenarioReader
 
 - Use BinaryFileReader
 - Improve error handling
@@ -448,13 +445,13 @@
         auto scenario = buildScenario(scenario_desc);
     - These could live inside a common namespace (e.g. ScenarioUtils)
 
-### Sound
+#### Sound
 
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
 - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 - Delete all sound sources / buffers when exiting
 
-### UI
+#### UI
 
 - UI rendering is a total mess
     - Create a hierarchical UiElement class

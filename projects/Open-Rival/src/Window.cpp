@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Window.h"
 
 #include "SDLWrapper.h"

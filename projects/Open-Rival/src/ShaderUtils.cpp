@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "ShaderUtils.h"
 
 #include "SDLWrapper.h"

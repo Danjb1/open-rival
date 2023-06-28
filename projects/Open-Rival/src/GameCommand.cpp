@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "GameCommand.h"
 
 #include "utils/BufferUtils.h"

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "PathUtils.h"
 
 #include <shlobj_core.h>

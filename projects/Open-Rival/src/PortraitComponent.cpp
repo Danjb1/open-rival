@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "PortraitComponent.h"
 
 namespace Rival {

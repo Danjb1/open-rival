@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "FramebufferRenderer.h"
 
 #define GLEW_STATIC

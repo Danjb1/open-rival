@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "net/PacketFactory.h"
 
 #include <iostream>
