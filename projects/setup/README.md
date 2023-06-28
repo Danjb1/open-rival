@@ -4,26 +4,22 @@ Combined setup utility that prepares all required resources using an existing Ri
 
 By default, this program will attempt to:
 
- - Locate the original game directory
- - Extract the game's audio
- - Extract the game's images
- - Combine these images into textures
- - Copy over the game's videos
+- Locate the original game directory
+- Extract the game's audio
+- Extract the game's images
+- Combine these images into textures
+- Copy over the game's videos
 
-## Build
-
-Build using Visual Studio.
-
-## Run
+## :runner: Run
 
 ### Game Directory
 
 By default, this looks for the Rival Realms install directory in the Windows registry.
 
-Specifically, it looks for the value `Game Directory` under the key:
+Specifically, it looks for the string value:
 
 ```
-HKEY_CURRENT_USER\Software\Titus Games\Rival Realms
+HKEY_CURRENT_USER\Software\Titus Games\Rival Realms\Game Directory
 ```
 
 > A suitable registry file is included with [this download](https://www.old-games.com/download/5514/rival-realms) of the original game, or can be easily created.
