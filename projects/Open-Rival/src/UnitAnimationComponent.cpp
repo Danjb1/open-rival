@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "UnitAnimationComponent.h"
 
 #include <stdexcept>

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "TextureAtlas.h"
 
 #include <iostream>

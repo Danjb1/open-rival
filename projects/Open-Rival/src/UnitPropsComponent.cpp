@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "UnitPropsComponent.h"
 
 #include "Entity.h"

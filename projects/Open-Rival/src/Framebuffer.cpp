@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Framebuffer.h"
 
 #include <iostream>

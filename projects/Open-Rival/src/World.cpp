@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "World.h"
 
 namespace Rival {

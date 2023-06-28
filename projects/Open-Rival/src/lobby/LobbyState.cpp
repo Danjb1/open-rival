@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "lobby/LobbyState.h"
 
 #include <cstdlib>  // std::rand

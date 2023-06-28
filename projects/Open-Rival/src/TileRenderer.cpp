@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "TileRenderer.h"
 
 #include <glm/mat4x4.hpp>

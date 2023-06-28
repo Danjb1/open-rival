@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "net/packets/Packet.h"
 
 #include "utils/BufferUtils.h"

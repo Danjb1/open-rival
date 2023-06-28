@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MidiContainer.h"
 
 #include <string.h>

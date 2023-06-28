@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "TimeUtils.h"
 
 #include <thread>

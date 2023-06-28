@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "SoundSource.h"
 
 namespace Rival {

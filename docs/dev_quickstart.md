@@ -14,7 +14,7 @@ Here is a summary of all the projects in the Open-Rival repo.
 
 ### [Open-Rival-test](/projects/Open-Rival-test)
 
-> Unit tests for `Open-Rival`.
+> Unit tests for Open-Rival.
 
 ### [setup](/projects/setup)
 

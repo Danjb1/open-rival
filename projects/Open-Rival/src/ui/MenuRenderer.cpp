@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "ui/MenuRenderer.h"
 
 #define GLEW_STATIC

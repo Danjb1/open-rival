@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MousePicker.h"
 
 #include "SDLWrapper.h"

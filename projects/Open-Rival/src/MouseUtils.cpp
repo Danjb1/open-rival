@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MouseUtils.h"
 
 namespace Rival { namespace MouseUtils {

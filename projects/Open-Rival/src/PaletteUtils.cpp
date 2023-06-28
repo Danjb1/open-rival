@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "PaletteUtils.h"
 
 #define GLEW_STATIC

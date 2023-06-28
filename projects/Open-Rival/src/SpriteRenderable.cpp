@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "SpriteRenderable.h"
 
 #include <vector>

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Font.h"
 
 #define GLEW_STATIC

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "InputUtils.h"
 
 namespace Rival { namespace InputUtils {

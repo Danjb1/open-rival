@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #ifdef _WIN32
 
 // These comments...

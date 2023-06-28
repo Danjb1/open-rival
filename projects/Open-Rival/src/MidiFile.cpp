@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MidiFile.h"
 
 namespace Rival {

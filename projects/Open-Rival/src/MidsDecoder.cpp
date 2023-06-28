@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MidsDecoder.h"
 
 namespace Rival {

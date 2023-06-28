@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "Pathfinding.h"
 
 #include <algorithm>  // min, reverse

@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "texture-builder.h"
 
 #include <cstdint>

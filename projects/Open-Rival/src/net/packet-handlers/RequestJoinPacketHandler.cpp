@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "net/packet-handlers/RequestJoinPacketHandler.h"
 
 #include "lobby/LobbyState.h"

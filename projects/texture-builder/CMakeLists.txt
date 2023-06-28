@@ -14,7 +14,6 @@ set(OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_SOURCES
 
 set(OPEN_RIVAL_TEXTURE_BUILDER_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/pch.cpp
 )
 
 set(OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_DIRS
@@ -35,10 +34,6 @@ set(OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/../setup/include/texture-builder.h
 )
 
-set(OPEN_RIVAL_TEXTURE_BUILDER_PRECOMPILED_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/pch.h
-)
-
 # Creates the executable
 add_executable(texture-builder
     ${OPEN_RIVAL_TEXTURE_BUILDER_SOURCES}
@@ -53,8 +48,4 @@ target_include_directories(texture-builder PUBLIC
 target_link_libraries(texture-builder PRIVATE
     project_options
     project_warnings
-)
-
-target_precompile_headers(texture-builder PRIVATE
-    ${OPEN_RIVAL_TEXTURE_BUILDER_PRECOMPILED_HEADERS}
 )

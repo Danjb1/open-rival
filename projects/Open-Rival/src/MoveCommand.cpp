@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "MoveCommand.h"
 
 #include "utils/BufferUtils.h"
