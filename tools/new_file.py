@@ -15,6 +15,27 @@ import sys
 SRC_DIR = '../projects/Open-Rival/src/'
 HDR_DIR = '../projects/Open-Rival/include/'
 
+CPP_TEMPLATE = '''\
+#include "pch.h"
+#include "{filename}.h"
+
+namespace Rival {{
+
+    // TODO
+
+}}  // namespace Rival
+'''
+
+HDR_TEMPLATE = '''\
+#pragma once
+
+namespace Rival {
+
+    // TODO
+
+}  // namespace Rival
+'''
+
 def camelCaseToSnakeCase(name):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).upper()
 
@@ -37,34 +58,19 @@ def main():
         filename = sys.argv[2]
 
     # Write .cpp file
-    template = '''\
-#include "pch.h"
-#include "{filename}.h"
-
-namespace Rival {{
-
-    // TODO
-
-}}  // namespace Rival
-'''
     context = {
         'filename': path + '/' + filename
     }
-    with open(SRC_DIR + path + '/' + filename + '.cpp', 'w') as myfile:
-        myfile.write(template.format(**context))
+    cpp_filename = SRC_DIR + path + '/' + filename + '.cpp'
+    with open(cpp_filename, 'w') as myfile:
+        myfile.write(CPP_TEMPLATE.format(**context))
+        print('Created ' + cpp_filename)
 
     # Write .h file
-    template = '''\
-#pragma once
-
-namespace Rival {
-
-    // TODO
-
-}  // namespace Rival
-'''
-    with open(HDR_DIR + path + '/' + filename + '.h', 'w') as myfile:
-        myfile.write(template)
+    hdr_filename = HDR_DIR + path + '/' + filename + '.h'
+    with open(hdr_filename, 'w') as myfile:
+        myfile.write(HDR_TEMPLATE)
+        print('Created ' + hdr_filename)
 
 if __name__ == '__main__':
     main()

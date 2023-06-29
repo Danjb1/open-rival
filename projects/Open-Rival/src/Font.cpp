@@ -1,7 +1,6 @@
 #include "Font.h"
 
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 #include <freetype/ftfntfmt.h>
 #include <freetype/ftwinfnt.h>
 

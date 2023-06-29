@@ -1,7 +1,6 @@
 #include "EntityRenderer.h"
 
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include <algorithm>  // min
 #include <vector>

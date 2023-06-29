@@ -11,6 +11,39 @@ set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
 set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
 
 set(OPEN_RIVAL_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/src/commands/GameCommandFactory.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/src/gfx/BoxRenderable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/TextureRenderable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/lobby/LobbyState.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/ClientInfo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/Connection.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/PacketFactory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/Server.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/Socket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/WindowsNetUtils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/AcceptPlayerPacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/GameCommandPacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/KickPlayerPacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/LobbyWelcomePacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/PacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/RejectPlayerPacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/RequestJoinPacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/StartGamePacketHandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/AcceptPlayerPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/GameCommandPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/KickPlayerPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/LobbyWelcomePacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/Packet.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RejectPlayerPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RelayedPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RequestJoinPacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/StartGamePacket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/platform/unix/UnixTimeUtils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/platform/win32/WindowsSocket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/platform/win32/WindowsTimeUtils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/ui/CursorRenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/ui/MenuRenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/BufferUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Animations.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/ApplicationContext.cpp
@@ -100,42 +133,40 @@ set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/WaveFile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/World.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/commands/GameCommandFactory.cpp
-    #${CMAKE_CURRENT_LIST_DIR}/src/gfx/BoxRenderable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/TextureRenderable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/lobby/LobbyState.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/ClientInfo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/Connection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/PacketFactory.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/Server.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/Socket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/WindowsNetUtils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/AcceptPlayerPacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/GameCommandPacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/KickPlayerPacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/LobbyWelcomePacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/PacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/RejectPlayerPacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/RequestJoinPacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packet-handlers/StartGamePacketHandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/AcceptPlayerPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/GameCommandPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/KickPlayerPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/LobbyWelcomePacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/Packet.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RejectPlayerPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RelayedPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/RequestJoinPacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/net/packets/StartGamePacket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/platform/unix/UnixTimeUtils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/platform/win32/WindowsSocket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/platform/win32/WindowsTimeUtils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui/CursorRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui/MenuRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/utils/BufferUtils.cpp
 )
 
 set(OPEN_RIVAL_INCLUDE_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/include/commands/GameCommandFactory.h
+    #${CMAKE_CURRENT_LIST_DIR}/include/gfx/BoxRenderable.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/GlewWrapper.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/TextureRenderable.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/lobby/LobbyState.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/ClientInfo.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/Connection.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/NetUtils.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/PacketFactory.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/Server.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/Socket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/AcceptPlayerPacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/GameCommandPacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/KickPlayerPacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/LobbyWelcomePacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/PacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/RejectPlayerPacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/RequestJoinPacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/StartGamePacketHandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/AcceptPlayerPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/GameCommandPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/KickPlayerPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/LobbyWelcomePacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/Packet.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RejectPlayerPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RelayedPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RequestJoinPacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/StartGamePacket.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/ui/CursorRenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/ui/MenuRenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/utils/BufferUtils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Animations.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/ApplicationContext.h
@@ -231,36 +262,6 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/WaveFile.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Window.h
     ${CMAKE_CURRENT_LIST_DIR}/include/World.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/commands/GameCommandFactory.h
-    #${CMAKE_CURRENT_LIST_DIR}/include/gfx/BoxRenderable.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/TextureRenderable.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/lobby/LobbyState.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/ClientInfo.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/Connection.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/NetUtils.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/PacketFactory.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/Server.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/Socket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/AcceptPlayerPacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/GameCommandPacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/KickPlayerPacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/LobbyWelcomePacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/PacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/RejectPlayerPacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/RequestJoinPacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packet-handlers/StartGamePacketHandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/AcceptPlayerPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/GameCommandPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/KickPlayerPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/LobbyWelcomePacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/Packet.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RejectPlayerPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RelayedPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/RequestJoinPacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/net/packets/StartGamePacket.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/ui/CursorRenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/ui/MenuRenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/utils/BufferUtils.h
 )
 
 set(OPEN_RIVAL_INCLUDE_DIRECTORIES

@@ -1,8 +1,7 @@
 #include "ui/CursorRenderer.h"
 
 #include "SDLWrapper.h"
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include "Resources.h"
 

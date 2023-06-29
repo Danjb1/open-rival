@@ -1,7 +1,6 @@
 #include "UiRenderer.h"
 
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include "InventoryComponent.h"
 #include "PlayerContext.h"

@@ -1,7 +1,6 @@
 #pragma once
 
-#define GLEW_STATIC
-#include <GL\glew.h>
+#include "gfx/GlewWrapper.h"
 
 namespace Rival { namespace GLUtils {
 
