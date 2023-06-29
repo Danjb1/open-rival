@@ -6,9 +6,9 @@
 
 ### CMake Migration
 
-- Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
-- Add extra files to project (TODO, changelog, etc.)
+- Add extra files to project (TODO, changelog, .clang-format, etc.)
 - Review warnings in use / fix warnings
+- Sort source files into subfolders
 - Test Debug/Release builds - all projects
 - Update `gen_project_files` script (re-run CMake)
 - Fix test project

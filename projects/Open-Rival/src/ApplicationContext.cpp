@@ -2,8 +2,7 @@
 
 #include "SDLWrapper.h"
 #include <SDL_image.h>
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include <iostream>
 #include <memory>

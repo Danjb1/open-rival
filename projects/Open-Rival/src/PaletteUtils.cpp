@@ -1,7 +1,6 @@
 #include "PaletteUtils.h"
 
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include <cstdint>
 #include <vector>

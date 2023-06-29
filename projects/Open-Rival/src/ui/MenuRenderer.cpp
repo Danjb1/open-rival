@@ -1,7 +1,6 @@
 #include "ui/MenuRenderer.h"
 
-#define GLEW_STATIC
-#include <gl/glew.h>
+#include "gfx/GlewWrapper.h"
 
 #include "gfx/TextureRenderable.h"
 #include "GLUtils.h"
