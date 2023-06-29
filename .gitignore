@@ -1,70 +1,21 @@
-# Visual Studio settings
-.vs
-*.args.json
-
 # System files
 Thumbs.db
 
-# CMake artifacts
-CMakeFiles/
-cmake-build-debug/
-cmake-build-release/
-cmake_install.cmake
-CMakeCache.txt
-
-# CMake output
-*.sln
-*.vcxproj
-*.vcxproj.filters
-
-# Build results
+# Build folder
 build/
-Debug/
-Release/
-
-# Libraries
-/projects/Open-Rival/libs/
-*.dll
-
-# DO include custom RtMidi library project
-!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.sln
-!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj
-!/projects/Open-Rival/libs/rtmidi-5.0.0/RtMidi.vcxproj.filters
-
-# User preferences
-*.user
-
-# Game data files
-IMAGES.DAT
-SOUNDS.DAT
-*.CMP
-*.SCO
-SORR.BLD
-
-# Extracted data files
-/projects/audio-extractor/output
-/projects/image-extractor/images
-/projects/interface-extractor/images
-/projects/setup/res/sound
-/projects/setup/res/textures
-/projects/setup/res/video
-/projects/setup/setup/images
-/projects/texture-builder/images
-/projects/texture-builder/textures
-
-# Duplicates
-/projects/Open-Rival/res
-/projects/texture-builder/definitions
-/projects/setup/setup/definitions
-
-# Commercial fonts
-/projects/Open-Rival/res/fonts
 
 # Release folder
 /dist/res/maps
 /dist/Open-Rival.exe
 /dist/setup.exe
+/dist/*.dll
 /dist/*.zip
+
+# Visual Studio - Smart Command Line Arguments plugin
+*.args.json
+
+# Visual Studio - user preferences
+*.user
 
 # Other
 /misc

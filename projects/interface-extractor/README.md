@@ -1,10 +1,10 @@
 # Image Extractor
 
-This extracts the menu images from **Interfac.DAT**.
+This extracts the menu images from **Interfac.dat**.
 
 ## :runner: Run
 
-`Interfac.DAT` should be placed in the directory from which the program is run.
+`Interfac.dat` should be placed in the directory from which the program is run.
 
 Run the executable, and the images will be extracted to an `images` directory.
 
