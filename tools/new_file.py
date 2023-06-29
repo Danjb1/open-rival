@@ -43,10 +43,10 @@ def main():
     # Check arguments
     if len(sys.argv) < 2:
         print('No filename provided!')
-        return
+        sys.exit(1)
     if len(sys.argv) > 3:
         print('Too many arguments!')
-        return
+        sys.exit(1)
 
     path = ''
     filename = ''
@@ -64,13 +64,13 @@ def main():
     cpp_filename = SRC_DIR + path + '/' + filename + '.cpp'
     with open(cpp_filename, 'w') as myfile:
         myfile.write(CPP_TEMPLATE.format(**context))
-        print('Created ' + cpp_filename)
+        print(f'Created {cpp_filename}')
 
     # Write .h file
     hdr_filename = HDR_DIR + path + '/' + filename + '.h'
     with open(hdr_filename, 'w') as myfile:
         myfile.write(HDR_TEMPLATE)
-        print('Created ' + hdr_filename)
+        print(f'Created {hdr_filename}')
 
 if __name__ == '__main__':
     main()
