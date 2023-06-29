@@ -6,7 +6,6 @@
 
 ### CMake Migration
 
-- Add extra files to project (TODO, changelog, .clang-format, etc.)
 - Review warnings in use / fix warnings
 - Sort source files into subfolders
 - Test Debug/Release builds - all projects

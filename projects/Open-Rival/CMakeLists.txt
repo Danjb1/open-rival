@@ -135,7 +135,7 @@ set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/World.cpp
 )
 
-set(OPEN_RIVAL_INCLUDE_HEADERS
+set(OPEN_RIVAL_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/commands/GameCommandFactory.h
     #${CMAKE_CURRENT_LIST_DIR}/include/gfx/BoxRenderable.h
     ${CMAKE_CURRENT_LIST_DIR}/include/gfx/GlewWrapper.h
@@ -264,6 +264,17 @@ set(OPEN_RIVAL_INCLUDE_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/World.h
 )
 
+# Not required for compilation, but helpful to have at hand
+set(OPEN_RIVAL_DOCS
+    ${CMAKE_SOURCE_DIR}/dist/docs/changelog.txt
+    ${CMAKE_SOURCE_DIR}/docs/TODO.md
+)
+
+# Not required for compilation, but helpful to have at hand
+set(OPEN_RIVAL_EXTRA_FILES
+    ${CMAKE_SOURCE_DIR}/projects/.clang-format
+)
+
 set(OPEN_RIVAL_INCLUDE_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/
     ${CMAKE_CURRENT_LIST_DIR}/include
@@ -285,16 +296,19 @@ set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
     ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/include
 )
 
-# Ensure that files are organised by folder structure in the generated project
+# Organise files into folders (filters)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Source Files" FILES ${OPEN_RIVAL_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_INCLUDE_HEADERS})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_HEADERS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} PREFIX "Resources" FILES ${OPEN_RIVAL_RESOURCES})
+source_group("Docs" FILES ${OPEN_RIVAL_DOCS})
 
 # Creates the executable including all the sources and resources
 add_executable(Open-Rival
     ${OPEN_RIVAL_SOURCES}
+    ${OPEN_RIVAL_HEADERS}
     ${OPEN_RIVAL_RESOURCES}
-    ${OPEN_RIVAL_INCLUDE_HEADERS}
+    ${OPEN_RIVAL_DOCS}
+    ${OPEN_RIVAL_EXTRA_FILES}
 )
 
 # Add the directories and headers of the project
