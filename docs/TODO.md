@@ -6,7 +6,7 @@
 
 ### CMake Migration
 
-- Review warnings in use / fix warnings
+- Fix compile warnings
 - Sort source files into subfolders
 - Test Debug/Release builds - all projects
 - Update `gen_project_files` script (re-run CMake)
@@ -304,6 +304,7 @@
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
+- Add IWYU to build pipeline: https://include-what-you-use.org/
 
 ### CMake
 
@@ -318,6 +319,7 @@
     - `config.json`
     - `args.json` (if present)
     - `vcxproj.user` (if present)
+- Use auto formatter: https://github.com/cheshirekow/cmake_format
 - Code review CMake files
 - Document CMake options
 - Document using CMake from command line
