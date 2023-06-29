@@ -6,7 +6,6 @@
 
 ### CMake Migration
 
-- Use a separate `.gitignore` file for each project folder
 - Add a GlewWrapper file to encapsulate `#define GLEW_STATIC` and `#include <gl/glew.h>`
 - Add extra files to project (TODO, changelog, etc.)
 - Review warnings in use / fix warnings
