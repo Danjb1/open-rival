@@ -17,7 +17,7 @@ public:
     void extractImages(std::string outputDir);
 
 private:
-    int index;
+    int index = 0;
     Rival::BinaryFileReader reader;
 
     void extractImage(const std::string& outputDir, const Palette::Palette& palette);

@@ -16,7 +16,7 @@ void addToBuffer(std::vector<char>& buffer, const T& val)
     // Later, we may need to ensure a certain endianness for cross-platform compatibility.
     // See: https://stackoverflow.com/questions/544928/reading-integer-size-bytes-from-a-char-array
 
-    size_t requiredBufferSize = buffer.size() + sizeof(val);
+    std::size_t requiredBufferSize = buffer.size() + sizeof(val);
     if (requiredBufferSize > buffer.capacity())
     {
         throw std::runtime_error("Trying to overfill buffer");

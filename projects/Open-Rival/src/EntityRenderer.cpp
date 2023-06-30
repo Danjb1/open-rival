@@ -155,12 +155,12 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-    int positionBufferSize = vertexData.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(vertexData.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, vertexData.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
     // Clear the dirty flag now that the GPU is up to date
@@ -361,12 +361,12 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, hitboxRenderable.getPositionVbo());
-    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, hitboxRenderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
     // Render

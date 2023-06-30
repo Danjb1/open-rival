@@ -101,7 +101,7 @@ ALuint playSound(const SoundSource& source)
             buffer,
             format,
             source.waveFile.soundData.data(),
-            source.waveFile.soundData.size(),
+            static_cast<ALsizei>(source.waveFile.soundData.size()),
             source.waveFile.header.samplesPerSec);
     checkPlaySoundALError(source.waveFile);
 

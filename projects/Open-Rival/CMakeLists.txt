@@ -1,15 +1,5 @@
 cmake_minimum_required (VERSION 3.16)
 
-# Dependency versions
-set(FREETYPE_VERSION "2.13.0" CACHE STRING "FreeType version number")
-set(GLEW_VERSION "2.1.0" CACHE STRING "glew version number")
-set(GLM_VERSION "0.9.9.8" CACHE STRING "GLM version number")
-set(JSON_VERSION "3.11.2" CACHE STRING "JSON version number")
-set(OPENAL_VERSION "1.23.1" CACHE STRING "OpenAL version number")
-set(RTMIDI_VERSION "5.0.0" CACHE STRING "RtMidi version number")
-set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
-set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
-
 set(OPEN_RIVAL_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/commands/GameCommandFactory.cpp
     #${CMAKE_CURRENT_LIST_DIR}/src/gfx/BoxRenderable.cpp

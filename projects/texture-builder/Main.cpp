@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
     }
 
     // Read parameters
-    bool atlasMode = false;
     std::string definitionsDir;
     definitionsDir = argv[1];
 

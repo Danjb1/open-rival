@@ -1,5 +1,7 @@
 #include "registry.h"
 
+#include "StringUtils.h"
+
 namespace Registry {
 
 RegistryError::RegistryError(const char* message, LONG errorCode)
@@ -15,10 +17,13 @@ LONG RegistryError::errorCode() const noexcept
 
 DWORD RegGetDword(HKEY hKey, const std::wstring& subKey, const std::wstring& value)
 {
+    std::string subKeyConverted = Rival::StringUtils::toUtf8(subKey);
+    std::string valueConverted = Rival::StringUtils::toUtf8(value);
 
     DWORD data {};
     DWORD dataSize = sizeof(data);
-    LONG retCode = ::RegGetValue(hKey, subKey.c_str(), value.c_str(), RRF_RT_REG_DWORD, nullptr, &data, &dataSize);
+    LONG retCode = ::RegGetValue(
+            hKey, subKeyConverted.c_str(), valueConverted.c_str(), RRF_RT_REG_DWORD, nullptr, &data, &dataSize);
 
     if (retCode != ERROR_SUCCESS)
     {
@@ -30,10 +35,13 @@ DWORD RegGetDword(HKEY hKey, const std::wstring& subKey, const std::wstring& val
 
 std::wstring RegGetString(HKEY hKey, const std::wstring& subKey, const std::wstring& value)
 {
+    std::string subKeyConverted = Rival::StringUtils::toUtf8(subKey);
+    std::string valueConverted = Rival::StringUtils::toUtf8(value);
 
     // Determine the size of the string
     DWORD dataSize {};
-    LONG retCode = ::RegGetValue(hKey, subKey.c_str(), value.c_str(), RRF_RT_REG_SZ, nullptr, nullptr, &dataSize);
+    LONG retCode = ::RegGetValue(
+            hKey, subKeyConverted.c_str(), valueConverted.c_str(), RRF_RT_REG_SZ, nullptr, nullptr, &dataSize);
 
     if (retCode != ERROR_SUCCESS)
     {
@@ -45,7 +53,8 @@ std::wstring RegGetString(HKEY hKey, const std::wstring& subKey, const std::wstr
     data.resize(dataSize / sizeof(wchar_t));
 
     // Retrieve the string
-    retCode = ::RegGetValue(hKey, subKey.c_str(), value.c_str(), RRF_RT_REG_SZ, nullptr, &data[0], &dataSize);
+    retCode = ::RegGetValue(
+            hKey, subKeyConverted.c_str(), valueConverted.c_str(), RRF_RT_REG_SZ, nullptr, &data[0], &dataSize);
 
     if (retCode != ERROR_SUCCESS)
     {

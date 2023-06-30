@@ -139,7 +139,10 @@ Rect TextureAtlasBuilder::findOrMakeEmptyRect(const int reqWidth, const int reqH
 /**
  * Finds the smallest Rect greater than the given size.
  */
-int TextureAtlasBuilder::findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight)
+int TextureAtlasBuilder::findRectBiggerThan(  //
+        const std::vector<Rect>& rects,
+        const int minWidth,
+        const int minHeight)
 {
     int rectIndex = -1;
     for (size_t i = 0; i < rects.size(); i++)
@@ -147,7 +150,7 @@ int TextureAtlasBuilder::findRectBiggerThan(const std::vector<Rect>& rects, cons
         auto const& rect = rects[i];
         if (rect.width >= minWidth && rect.height >= minHeight)
         {
-            rectIndex = i;
+            rectIndex = static_cast<int>(i);
             break;
         }
     }
@@ -179,7 +182,7 @@ int TextureAtlasBuilder::expandTextureToFitRect(const int reqWidth, const int re
     emptyRects.push_back(Rect(0, prevHeight, reqWidth, reqHeight));
 
     // The Rect we just created is the one we want to return
-    int rectIndex = emptyRects.size() - 1;
+    int rectIndex = static_cast<int>(emptyRects.size() - 1);
 
     // Expanding outwards creates empty space to the right of any
     // previously-added Rects
@@ -214,10 +217,15 @@ void readPalette(Palette::Palette& palette, const std::string filename)
 
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        const std::uint8_t blue = ifs.get();
-        const std::uint8_t green = ifs.get();
-        const std::uint8_t red = ifs.get();
-        const std::uint8_t alpha = ifs.get();
+        char blue;
+        char green;
+        char red;
+        char alpha;
+
+        ifs.read(&blue, 1);
+        ifs.read(&green, 1);
+        ifs.read(&red, 1);
+        ifs.read(&alpha, 1);
 
         const std::uint32_t col = (red << 24) + (green << 16) + (blue << 8) + alpha;
 
@@ -238,12 +246,11 @@ void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
         throw std::runtime_error("Failed to open atlas file for writing");
     }
 
-    // Write each image placement
+    // Print each image placement
     for (auto const& kv : builder.imagePlacements)
     {
         const std::string& key = kv.first;
         const Rect& target = kv.second;
-        const Image& img = builder.imagesByKey.at(key)->image;
         atlasFile << key << " " << target.x + atlasPadding << " " << target.y + atlasPadding << " "
                   << target.width - (2 * atlasPadding) << " " << target.height - (2 * atlasPadding) << "\n";
     }
@@ -313,7 +320,7 @@ readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outA
             else if (sprite.getWidth() < spriteWidth || sprite.getHeight() < spriteHeight)
             {
                 // Sprite too small
-                Image resizedSprite = Image::createEmpty(spriteWidth, spriteHeight, '\xff');
+                Image resizedSprite = Image::createEmpty(spriteWidth, spriteHeight, 0xff);
                 const int dstX = (spriteWidth - sprite.getWidth()) / 2;
                 const int dstY = (spriteHeight - sprite.getHeight()) / 2;
                 Image::copyImage(sprite, resizedSprite, dstX, dstY);
@@ -351,7 +358,7 @@ void createTextureAtlas(
     int texWidth = MathUtils::nextPowerOf2(builder.texWidth);
     int texHeight = MathUtils::nextPowerOf2(builder.texHeight);
     std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
-    Image texture = Image::createEmpty(texWidth, texHeight, '\xff');
+    Image texture = Image::createEmpty(texWidth, texHeight, 0xff);
 
     // Copy each image onto the texture
     for (auto const& kv : builder.imagePlacements)
@@ -390,7 +397,7 @@ void createSpritesheetTexture(
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
     // we find a suitable size with minimal wasted space
-    int tmpWidth = MathUtils::nextPowerOf2(paddedSpriteWidth * sprites.size());
+    int tmpWidth = MathUtils::nextPowerOf2(static_cast<int>(paddedSpriteWidth * sprites.size()));
     int tmpHeight = paddedSpriteWidth;
     int dataSize = tmpWidth * tmpHeight;
     int best = dataSize;
@@ -420,7 +427,7 @@ void createSpritesheetTexture(
     }
 
     // Create an empty texture
-    Image texture = Image::createEmpty(txWidth, txHeight, '\xff');
+    Image texture = Image::createEmpty(txWidth, txHeight, 0xff);
     int x = 0;
     int y = 0;
 

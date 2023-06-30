@@ -6,11 +6,15 @@
 
 ### CMake Migration
 
-- Fix compile warnings
+- MSVC does not support __asm on x64 architecture
+    - Setup MUST be built using x86!
+    - We need to create a separate solution for this; CMake cannot output x86 and x64 at the same time
 - Sort source files into subfolders
 - Test Debug/Release builds - all projects
 - Update `gen_project_files` script (re-run CMake)
 - Fix test project
+    - Copy all includes from Open-Rival
+    - Copy all source files from Open-Rival (except those we have stubbed)
 
 ### Multiplayer Milestone
 
@@ -79,13 +83,6 @@
 - Units should be able to start moving into a tile if its occupant is already moving out (?)
     - What if the occupant is slower than we are?
 - Units can walk through buildings
-
-### Tests
-
-- Test project fails to build :(
-    - Write a tool to automatically generate `Open-Rival-test.proj`
-        - Copy all includes from Open-Rival
-        - Copy all source files from Open-Rival (except those we have stubbed)
 
 <!----------------------------------------------------------------------------->
 ## Features

@@ -10,7 +10,7 @@
 
 namespace Rival {
 
-std::shared_ptr<GameCommand> GameCommandFactory::deserialize(const std::vector<char>& buffer, size_t& offset) const
+std::shared_ptr<GameCommand> GameCommandFactory::deserialize(const std::vector<char>& buffer, std::size_t& offset) const
 {
     GameCommandType type = GameCommandType::Invalid;
     BufferUtils::readFromBuffer(buffer, offset, type);
@@ -18,8 +18,8 @@ std::shared_ptr<GameCommand> GameCommandFactory::deserialize(const std::vector<c
     return deserializeFromType(buffer, type, offset);
 }
 
-std::shared_ptr<GameCommand>
-GameCommandFactory::deserializeFromType(const std::vector<char>& buffer, GameCommandType type, size_t& offset) const
+std::shared_ptr<GameCommand> GameCommandFactory::deserializeFromType(
+        const std::vector<char>& buffer, GameCommandType type, std::size_t& offset) const
 {
     switch (type)
     {

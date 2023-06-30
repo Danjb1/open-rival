@@ -92,7 +92,7 @@ bool GameState::isTickReady()
     }
 
     std::unordered_set<int>& clientsReadyForTick = iter->second;
-    size_t numClientsReady = clientsReadyForTick.size();
+    std::size_t numClientsReady = clientsReadyForTick.size();
 
     return numClientsReady == clients.size();
 }

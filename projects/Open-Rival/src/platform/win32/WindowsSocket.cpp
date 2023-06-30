@@ -84,7 +84,7 @@ Socket Socket::createServer(std::uint16_t port)
     }
 
     // Bind
-    const auto bindResult = ::bind(handle, addrInfoPtr->ai_addr, addrInfoPtr->ai_addrlen);
+    const auto bindResult = ::bind(handle, addrInfoPtr->ai_addr, static_cast<int>(addrInfoPtr->ai_addrlen));
     if (bindResult == SOCKET_ERROR)
     {
         const auto err = ::WSAGetLastError();
@@ -116,7 +116,7 @@ Socket Socket::createClient(const std::string& address, std::uint16_t port)
     }
 
     // Connect
-    const auto connectResult = ::connect(handle, addrInfoPtr->ai_addr, addrInfoPtr->ai_addrlen);
+    const auto connectResult = ::connect(handle, addrInfoPtr->ai_addr, static_cast<int>(addrInfoPtr->ai_addrlen));
     if (connectResult == SOCKET_ERROR)
     {
         const auto err = ::WSAGetLastError();
@@ -198,7 +198,7 @@ void Socket::send(const std::vector<char>& buffer)
     while (bytesSent < buffer.size())
     {
         std::size_t bytesRemaining = buffer.size() - bytesSent;
-        int result = ::send(handle, buffer.data() + bytesSent, bytesRemaining, 0);
+        int result = ::send(handle, buffer.data() + bytesSent, static_cast<int>(bytesRemaining), 0);
 
         if (result == SOCKET_ERROR && isOpen())
         {
@@ -219,7 +219,7 @@ void Socket::receive(std::vector<char>& buffer)
     while (bytesReceived < buffer.size())
     {
         std::size_t bytesExpected = buffer.size() - bytesReceived;
-        int result = ::recv(handle, buffer.data() + bytesReceived, bytesExpected, 0);
+        int result = ::recv(handle, buffer.data() + bytesReceived, static_cast<int>(bytesExpected), 0);
 
         if (result == SOCKET_ERROR && isOpen())
         {

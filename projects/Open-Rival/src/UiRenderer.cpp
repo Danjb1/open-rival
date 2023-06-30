@@ -134,12 +134,12 @@ void UiRenderer::sendMainUiDataToGpu()
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getPositionVbo());
-    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
@@ -225,12 +225,12 @@ void UiRenderer::sendPortraitDataToGpu()
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getPositionVbo());
-    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
