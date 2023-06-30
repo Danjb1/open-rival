@@ -13,11 +13,11 @@ namespace Rival {
 class GameCommandFactory
 {
 public:
-    std::shared_ptr<GameCommand> deserialize(const std::vector<char>& buffer, size_t& offset) const;
+    std::shared_ptr<GameCommand> deserialize(const std::vector<char>& buffer, std::size_t& offset) const;
 
 private:
     std::shared_ptr<GameCommand>
-    deserializeFromType(const std::vector<char>& buffer, GameCommandType type, size_t& offset) const;
+    deserializeFromType(const std::vector<char>& buffer, GameCommandType type, std::size_t& offset) const;
 };
 
 }  // namespace Rival

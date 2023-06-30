@@ -144,15 +144,15 @@ int main(int argc, char* argv[])
     bool findDirectoryFromRegistry = true;
     for (int count = 1; count < argc; ++count)
     {
-        if (argv[count] == "-h")
+        std::string arg(argv[count]);
+        if (arg == "-h")
         {
             std::cout << "-d {directory}: loads all files from {directory}" << '\n';
             return 0;
         }
-        if (strcmp("-d", argv[count]) == 0 && count + 1 <= argc)
+        if (arg == "-d" && count + 1 <= argc)
         {
-            std::string tmpStr(argv[count + 1]);
-            gameDir = std::string(tmpStr.begin(), tmpStr.end());
+            gameDir = std::string((argv[count + 1]));
             findDirectoryFromRegistry = false;
             std::cout << "Reading files from directory " << gameDir << '\n';
             ++count;

@@ -171,22 +171,22 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getPositionVbo());
-    int positionBufferSize = vertexData.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(vertexData.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, vertexData.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
     // Upload color data
     glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getColorVbo());
-    int colorBufferSize = colors.size() * sizeof(GLfloat);
+    int colorBufferSize = static_cast<int>(colors.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, colorBufferSize, colors.data());
 
     // Upload index data
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textRenderable.getIbo());
-    int indexBufferSize = indexData.size() * sizeof(GLuint);
+    int indexBufferSize = static_cast<int>(indexData.size() * sizeof(GLuint));
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexBufferSize, indexData.data());
 
     // Clear the dirty flag now that the GPU is up to date

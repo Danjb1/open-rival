@@ -48,7 +48,8 @@ void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, 
     }
 
     // Render
-    glDrawElements(renderable.getDrawMode(), tiles.size() * renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+    int numIndices = static_cast<int>(tiles.size() * renderable.getIndicesPerSprite());
+    glDrawElements(renderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
 bool TileRenderer::needsUpdate() const
@@ -99,7 +100,7 @@ void TileRenderer::sendDataToGpu(
     maxY = std::min(maxY, RenderUtils::maxTilesY);
 
     // Create buffers to hold all our tile data
-    int numVertices = tiles.size() * SpriteRenderable::numVerticesPerSprite;
+    int numVertices = static_cast<int>(tiles.size() * SpriteRenderable::numVerticesPerSprite);
     int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
     int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
     std::vector<GLfloat> positions;

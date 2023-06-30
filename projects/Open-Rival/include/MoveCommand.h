@@ -15,7 +15,7 @@ public:
     MoveCommand(int entityId, MapNode destination);
 
     void serialize(std::vector<char>& buffer) const override;
-    static std::shared_ptr<MoveCommand> deserialize(std::vector<char> buffer, size_t& offset);
+    static std::shared_ptr<MoveCommand> deserialize(std::vector<char> buffer, std::size_t& offset);
 
     // Begin GameCommand override
     void execute(GameCommandContext& context) override;

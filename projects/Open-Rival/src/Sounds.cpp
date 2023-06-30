@@ -18,7 +18,8 @@ int SoundBank::getRandomSound() const
         return -1;
     }
 
-    std::uniform_int_distribution<int> dist(0, sounds.size() - 1);
+    int maxIndex = static_cast<int>(sounds.size() - 1);
+    std::uniform_int_distribution<int> dist(0, maxIndex);
     int randIndex = dist(rng);
 
     return sounds[randIndex];

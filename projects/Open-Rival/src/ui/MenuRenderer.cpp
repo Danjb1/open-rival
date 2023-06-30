@@ -77,12 +77,12 @@ void MenuRenderer::sendBackgroundDataToGpu()
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, backgroundRenderable.getPositionVbo());
-    int positionBufferSize = positions.size() * sizeof(GLfloat);
+    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, backgroundRenderable.getTexCoordVbo());
-    int texCoordBufferSize = texCoords.size() * sizeof(GLfloat);
+    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 

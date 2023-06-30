@@ -40,13 +40,13 @@ std::shared_ptr<LobbyWelcomePacket> LobbyWelcomePacket::deserialize(const std::v
     int playerId = 0;
     BufferUtils::readFromBuffer(buffer, offset, playerId);
 
-    size_t numClients = 0;
+    std::size_t numClients = 0;
     BufferUtils::readFromBuffer(buffer, offset, numClients);
 
     std::unordered_map<int, ClientInfo> clients;
     clients.reserve(numClients);
 
-    for (size_t i = 0; i < numClients; ++i)
+    for (std::size_t i = 0; i < numClients; ++i)
     {
         int thisClientId = 0;
         BufferUtils::readFromBuffer(buffer, offset, thisClientId);

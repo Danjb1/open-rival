@@ -21,7 +21,7 @@ void MoveCommand::serialize(std::vector<char>& buffer) const
     BufferUtils::addToBuffer(buffer, destination);
 }
 
-std::shared_ptr<MoveCommand> MoveCommand::deserialize(std::vector<char> buffer, size_t& offset)
+std::shared_ptr<MoveCommand> MoveCommand::deserialize(std::vector<char> buffer, std::size_t& offset)
 {
     int entityId;
     BufferUtils::readFromBuffer(buffer, offset, entityId);

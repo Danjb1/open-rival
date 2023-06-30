@@ -43,7 +43,7 @@ std::string readStringFromBuffer(const std::vector<char>& buffer, std::size_t& o
     std::string s;
     s.reserve(strLength);
 
-    for (size_t i = 0; i < strLength; ++i)
+    for (std::size_t i = 0; i < strLength; ++i)
     {
         char c;
         std::memcpy(&c, buffer.data() + offset, sizeof(c));

@@ -20,8 +20,7 @@ const int offsetCursors = 0x1932F0A;
 const int offsetHireTroops = 0x1938DBB;
 
 InterfaceExtractor::InterfaceExtractor(std::string inputFile)
-    : index(0)
-    , reader(inputFile)
+    : reader(inputFile)
 {
 }
 
@@ -31,7 +30,6 @@ void InterfaceExtractor::extractImages(std::string outputDir)
     // there are no more images. Possibly the palettes or image offsets are
     // included in this file.
     reader.setPos(offsetTitle);
-    int index = 0;
 
     // Title image
     extractImage(outputDir, Palette::paletteTitle);
@@ -229,7 +227,7 @@ void InterfaceExtractor::extractImage(const std::string& outputDir, const Palett
         {
             // Next 'n' pixels are all the same
             int numSamePixels = next - 0x80;
-            int paletteIndex = reader.readByte();
+            std::uint8_t paletteIndex = reader.readByte();
             for (int i = 0; i < numSamePixels; i++)
             {
                 if (nextPxIndex >= imageSize)
@@ -250,7 +248,7 @@ void InterfaceExtractor::extractImage(const std::string& outputDir, const Palett
                 {
                     throw std::runtime_error("Invalid image format");
                 }
-                int paletteIndex = reader.readByte();
+                std::uint8_t paletteIndex = reader.readByte();
                 if (paletteIndex >= Palette::numColors)
                 {
                     throw std::runtime_error("Invalid palette reference");
