@@ -1,8 +1,21 @@
 cmake_minimum_required(VERSION 3.16)
 project(Open-Rival CXX)
+
+include(CMake/AddFreetype.cmake)
+include(CMake/AddGLEW.cmake)
+include(CMake/AddGLM.cmake)
+include(CMake/AddJson.cmake)
+include(CMake/AddOpenAL.cmake)
+include(CMake/AddRtMidi.cmake)
+include(CMake/AddSDL2.cmake)
+include(CMake/AddSDL2_Image.cmake)
+include(CMake/CompilerWarnings.cmake)
 include(CMake/StandardProjectSettings.cmake)
 
 set(CMAKE_CXX_STANDARD 17)
+
+# Library directory
+set(LIBS_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival/libs CACHE STRING "Library directory")
 
 # Dependency versions
 set(FREETYPE_VERSION "2.13.0" CACHE STRING "FreeType version number")
@@ -14,19 +27,18 @@ set(RTMIDI_VERSION "5.0.0" CACHE STRING "RtMidi version number")
 set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
 set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
 
+# This is seemingly an empty interface which all projects depend on... remove?
 add_library(project_options INTERFACE)
 
 # Option specifications
 option(ENABLE_TESTING "Enable Test Builds" OFF)
 
-# Link this 'library' to use the warnings specified in CompilerWarnings.cmake
+# Projects can link with this "library" to use the warnings
+# specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
-
-# standard compiler warnings
-include(CMake/CompilerWarnings.cmake)
 set_project_warnings(project_warnings)
 
-# include sub-projects
+# Add projects
 add_subdirectory(projects/Open-Rival)
 add_subdirectory(projects/setup)
 add_subdirectory(projects/audio-extractor)

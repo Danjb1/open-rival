@@ -6,11 +6,7 @@
 
 ### CMake Migration
 
-- MSVC does not support __asm on x64 architecture
-    - Setup MUST be built using x86!
-    - We need to create a separate solution for this; CMake cannot output x86 and x64 at the same time
 - Sort source files into subfolders
-- Test Debug/Release builds - all projects
 - Update `gen_project_files` script (re-run CMake)
 - Fix test project
     - Copy all includes from Open-Rival
@@ -305,9 +301,7 @@
 
 ### CMake
 
-- Split CMake file into multiple files (one per library?)
 - Why do additional library directies also have a `/$(Configuration)` variant?
-- Add support for an x86 build through an additional option
 - Include libraries in a better way
     - https://stackoverflow.com/a/61708554/1624459
     - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake

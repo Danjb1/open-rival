@@ -13,8 +13,8 @@
 #include "net/NetUtils.h"
 #include "AudioUtils.h"
 #include "ConfigUtils.h"
-#include "FileUtils.h"
 #include "GameState.h"
+#include "JsonUtils.h"
 #include "ScenarioBuilder.h"
 #include "ScenarioReader.h"
 #include "Shaders.h"
@@ -41,7 +41,7 @@ ApplicationContext::~ApplicationContext()
 
 json ApplicationContext::readConfig()
 {
-    return FileUtils::readJsonFile("config.json");
+    return JsonUtils::readJsonFile("config.json");
 }
 
 void ApplicationContext::initSDL()

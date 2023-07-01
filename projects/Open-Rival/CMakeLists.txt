@@ -275,17 +275,6 @@ set(OPEN_RIVAL_RESOURCES
     ${CMAKE_CURRENT_LIST_DIR}/resource.h
 )
 
-set(OPEN_RIVAL_ADDITIONAL_DIRECTORIES
-    ${CMAKE_CURRENT_LIST_DIR}/libs/freetype-${FREETYPE_VERSION}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/glew-${GLEW_VERSION}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/glm-${GLM_VERSION}
-    ${CMAKE_CURRENT_LIST_DIR}/libs/json-${JSON_VERSION}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/openal-soft-${OPENAL_VERSION}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/rtmidi-${RTMIDI_VERSION}
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-${SDL2_VERSION}/include
-    ${CMAKE_CURRENT_LIST_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/include
-)
-
 # Organise files into folders (filters)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Source Files" FILES ${OPEN_RIVAL_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_HEADERS})
@@ -304,42 +293,20 @@ add_executable(Open-Rival
 # Add the directories and headers of the project
 target_include_directories(Open-Rival PRIVATE
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
-    ${OPEN_RIVAL_ADDITIONAL_DIRECTORIES}
 )
 
-# Adds the directories where the linker can find the libraries
-target_link_directories(Open-Rival PUBLIC
-    # Debug
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/freetype-${FREETYPE_VERSION}/objs/x64/Debug>
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-${GLEW_VERSION}/lib/Debug/x64>
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/openal-soft-${OPENAL_VERSION}/build/Debug>
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/rtmidi-${RTMIDI_VERSION}/build/Debug>
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2-${SDL2_VERSION}/lib/x64>
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/lib/x64>
-
-    # Release
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/freetype-${FREETYPE_VERSION}/objs/x64/Release>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-${GLEW_VERSION}/lib/Release/x64>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/openal-soft-${OPENAL_VERSION}/build/Release>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/rtmidi-${RTMIDI_VERSION}/build/Release>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2-${SDL2_VERSION}/lib/x64>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/libs/SDL2_image-${SDL2_IMAGE_VERSION}/lib/x64>
-)
+# Dependencies
+add_freetype(Open-Rival)
+add_glew(Open-Rival)
+add_glm(Open-Rival)
+add_json(Open-Rival)
+add_openal(Open-Rival)
+add_rtmidi(Open-Rival)
+add_sdl2(Open-Rival)
+add_sdl2_image(Open-Rival)
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival PRIVATE
-    freetype
-    $<$<CONFIG:Debug>:glew32sd>
-    $<$<CONFIG:Release>:glew32s>
-    freetype
-    glu32
-    OpenAL32
-    opengl32
-    rtmidi
-    SDL2
-    SDL2main
-    SDL2_image
-    winmm
     Ws2_32
     project_options
     project_warnings

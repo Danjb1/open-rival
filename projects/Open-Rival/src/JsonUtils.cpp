@@ -1,7 +1,15 @@
 #include "JsonUtils.h"
 
-namespace Rival {
+#include <fstream>
 
-// Unused
+namespace Rival { namespace JsonUtils {
 
-}  // namespace Rival
+json readJsonFile(std::string filename)
+{
+    std::ifstream is(filename);
+    json j;
+    is >> j;
+    return j;
+}
+
+}}  // namespace Rival::JsonUtils

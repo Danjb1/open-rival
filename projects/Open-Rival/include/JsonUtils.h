@@ -9,10 +9,12 @@ using json = nlohmann::json;
 namespace Rival { namespace JsonUtils {
 
 template <class Iterator, class KeyType, class ValueType>
-static const ValueType getOrDefault(const Iterator& iter, const KeyType& key, const ValueType defaultValue)
+const ValueType getOrDefault(const Iterator& iter, const KeyType& key, const ValueType defaultValue)
 {
     auto result = iter->find(key);
     return result == iter->end() ? defaultValue : static_cast<ValueType>(*result);
 }
+
+json readJsonFile(std::string filename);
 
 }}  // namespace Rival::JsonUtils

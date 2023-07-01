@@ -39,13 +39,15 @@ const int headerSize = 4;
 std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
 
 // Pixel value corresponding to transparency
-int transparentColor = 0xff;
+std::uint8_t transparentColor = 0xff;
 
 // Formatter does not play nice with our preprocessor directives and ASM code
 /* clang-format off */
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
+
+// TODO: The Unix equivalent is mprotect
 
     /**
      * Makes a section of memory executable.
@@ -178,17 +180,17 @@ int transparentColor = 0xff;
             std::uint8_t* const codeEnd = findFunctionEnd(code, end, &readFromEsi);
 
             // Create an empty image buffer
-            std::vector<std::uint8_t> data(imageSize, transparentColor);
+            std::vector<std::uint8_t> imageData(imageSize, transparentColor);
 
             // Draw the image with our desired team color
-            callAssemblyCode(code, data.data());
+            callAssemblyCode(code, imageData.data());
 
             // Figure out the image dimensions based on what was drawn
             int w = 0;
             int h = 0;
             for (int y = 0; y < maxHeight; ++y) {
                 for (int x = 0; x < maxWidth; ++x) {
-                    if (data[x + y * maxWidth] != transparentColor) {
+                    if (imageData[x + y * maxWidth] != transparentColor) {
                         if (x > w) {
                             w = x + 1;
                         }
@@ -224,7 +226,7 @@ int transparentColor = 0xff;
                     + ".tga";
             ImageProperties props;
             props.stride = maxWidth;
-            Image image = Image::createByMove(w, h, std::move(data), props);
+            Image image = Image::createByMove(w, h, std::move(imageData), props);
             writeImage(image, Palette::paletteGame, filename);
 
             // Jump to the next image

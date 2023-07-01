@@ -6,6 +6,8 @@ Many of these files need to be built and/or copied to this folder, and currently
 
 ## Steps
 
+> Note that while the game can be built for x64 architecture, currently the setup project can only be built for x86.
+
 1. Build the solution in "Release" mode.
 2. Copy **Open-Rival.exe** to `dist`.
 3. Copy **setup.exe** to `dist`.
