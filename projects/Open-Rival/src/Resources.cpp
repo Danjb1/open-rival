@@ -8,6 +8,7 @@
 #include "ConfigUtils.h"
 #include "FileUtils.h"
 #include "GameInterface.h"
+#include "JsonUtils.h"
 #include "MidsDecoder.h"
 #include "PathUtils.h"
 #include "RenderUtils.h"
@@ -324,7 +325,7 @@ std::vector<MidiFile> Resources::initMidis()
 
 std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
 {
-    json rawData = FileUtils::readJsonFile(Resources::dataDir + "units.json");
+    json rawData = JsonUtils::readJsonFile(Resources::dataDir + "units.json");
     json unitList = rawData["units"];
 
     std::unordered_map<Unit::Type, UnitDef> allUnitDefs;
@@ -357,7 +358,7 @@ std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
 
 std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const
 {
-    json rawData = FileUtils::readJsonFile(Resources::dataDir + "buildings.json");
+    json rawData = JsonUtils::readJsonFile(Resources::dataDir + "buildings.json");
     json buildingList = rawData["buildings"];
 
     std::unordered_map<Building::Type, BuildingDef> allBuildingDefs;

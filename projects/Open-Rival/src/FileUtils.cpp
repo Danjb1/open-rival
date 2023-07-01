@@ -39,12 +39,4 @@ std::string readTextFile(std::string filename)
     return buffer.str();
 }
 
-json readJsonFile(std::string filename)
-{
-    std::ifstream is(filename);
-    json j;
-    is >> j;
-    return j;
-}
-
 }}  // namespace Rival::FileUtils

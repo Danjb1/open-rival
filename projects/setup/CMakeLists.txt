@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 3.16)
 
 set(OPEN_RIVAL_SRC_DIR  ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/src)
 set(OPEN_RIVAL_INC_DIR  ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include)
-set(OPEN_RIVAL_JSON_DIR ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/libs/json-${JSON_VERSION}/include)
 
 set(OPEN_RIVAL_SETUP_EXTERNAL_SOURCES
     ${OPEN_RIVAL_SRC_DIR}/BinaryFileReader.cpp
@@ -59,7 +58,6 @@ target_include_directories(setup PUBLIC
 
 target_include_directories(setup PRIVATE
     ${OPEN_RIVAL_INC_DIR}
-    ${OPEN_RIVAL_JSON_DIR}
 )
 
 target_link_libraries(setup PRIVATE

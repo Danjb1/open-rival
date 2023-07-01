@@ -38,7 +38,8 @@
 
 > **Used for:** OpenAL functionality (playing sounds)
 
-- Needs to be built from source to create `OpenAL32.lib`.
+- Needs to be built from source to create `OpenAL32.lib` (yes, even for 64-bit).
+    - A Visual Studio solution must be generated using CMake.
 
 ### [RtMidi](https://github.com/thestk/rtmidi)
 
@@ -73,59 +74,6 @@
 > **Used for:** Networking (Windows only)
 
 - This library is included by default on Windows machines.
-
-## Example Directory Structure
-
-```
-+-- Open-Rival/
-    +-- libs/
-        +-- freetype-2.13.0/
-            +-- include/
-            +-- objs/
-                +-- x64/
-                    +-- Debug/
-                        +-- freetype.lib
-                    +-- Release/
-                        +-- freetype.lib
-        +-- glew-2.1.0/
-            +-- bin/
-                +-- Debug/
-                    +-- x64/
-                        +-- glew32d.lib
-                +-- Release/
-                    +-- x64/
-                        +-- glew32.lib
-            +-- include/
-        +-- glm-0.9.9.8/
-            +-- glm/
-        +-- json-3.11.2/
-            +-- include/
-                +-- nlohmann/
-                    +-- json.hpp
-        +-- openal-soft-1.23.1
-            +-- build/
-                +-- Debug/
-                    +-- OpenAL32.dll
-                +-- Release/
-                    +-- OpenAL32.dll
-            +-- include/
-        +-- rtmidi-5.0.0
-            +-- build/
-                +-- Debug/
-                    +-- rtmidi.lib
-                +-- Release/
-                    +-- rtmidi.lib
-        +-- SDL2_image-2.6.3/
-            +-- include/
-            +-- lib/
-                +-- x64/
-                    +-- SDL2_image.lib
-        +-- SDL2-2.28.0/
-            +-- include/
-            +-- lib/
-                +-- x64/
-                    +-- SDL2.lib
-```
 
 ## DLL Files
 
