@@ -1,20 +1,19 @@
 /**
  * Script to extract the Rival Realms images from "IMAGES.DAT".
  *
- * The images are not stored as data; instead the rendering routines are stored
- * directly as assembly code. We load this code into memory and execute it in
- * order to render the images to a buffer, and then we save the buffer to a
- * file.
+ * The images are not stored as data; instead the rendering routines are stored directly as assembly code.
+ * We execute this code using a simple x86 emulator, which is more portable than trying to run the assembly directly
+ * (albeit a tad slower).
  *
- * Thanks to Reddit user 0xa0000 for all the ASM handling code.
+ * Thanks to Reddit user 0xa0000 for this solution.
  */
 
 #include "image-extractor.h"
 
-#include <windows.h>  // VirtualProtect, etc.
-
-#include <cstdint>    // uint8_t
-#include <stdexcept>  // runtime_error
+#include <cassert>
+#include <cstdint>  // std::uint8_t
+#include <iostream>
+#include <stdexcept>  // std::runtime_error
 
 #include "FileUtils.h"
 #include "Image.h"
@@ -25,14 +24,14 @@
 namespace Rival { namespace Setup {
 
 // Largest image in "IMAGES.DAT" is 128 x 128
-const int maxWidth = 128;
-const int maxHeight = 128;
+static constexpr int maxWidth = 128;
+static constexpr int maxHeight = 128;
 
 // Size of pixel data, in bytes
-const int imageSize = maxWidth * maxHeight;
+static constexpr int imageSize = maxWidth * maxHeight;
 
 // 4 byte header: number of images in file
-const int headerSize = 4;
+static constexpr int headerSize = 4;
 
 // Team colors to use when rendering
 // (these 6 colors correspond to a single team)
@@ -41,199 +40,372 @@ std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
 // Pixel value corresponding to transparency
 std::uint8_t transparentColor = 0xff;
 
-// Formatter does not play nice with our preprocessor directives and ASM code
-/* clang-format off */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// x86 Emulation
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
+enum
+{
+    AX,
+    CX,
+    DX,
+    BX,
+    SP,
+    BP,
+    SI,
+    DI,
+    NREGS
+};
 
-// TODO: The Unix equivalent is mprotect
+class CpuEmu
+{
+public:
+    static constexpr std::uint32_t image_base = 0x10000000;
+    static constexpr std::uint32_t team_color_base = 0x20000000;
+    static constexpr std::uint32_t team_color_size = 6;
 
-    /**
-     * Makes a section of memory executable.
-     */
-    BOOL makeExecutable(void* data, std::uint32_t size) {
-        DWORD old;
-        return VirtualProtect(data, size, PAGE_EXECUTE_READWRITE, &old);
+    explicit CpuEmu(const std::uint8_t* code, std::size_t code_size)
+        : code_ { code }
+        , code_size_ { code_size }
+    {
     }
 
-#endif  //////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef _MSC_VER
-
-    /**
-     * Calls the assembly code at the given memory location.
-     */
-    void callAssemblyCode(void* code, std::uint8_t* image) {
-        __asm {
-            pushad
-            mov esi, offset teamColor    // 6-byte array containing the team colors
-            mov edi, image               // image pointer
-            mov edx, maxWidth          // stride
-            call [code]
-            popad
-        }
+    bool done() const
+    {
+        return pc_ >= code_size_;
     }
 
-#endif  //////////////////////////////////////////////////////////////////////
+    void extract_image(std::vector<std::uint8_t>& image_, int imageWidth, int imageHeight)
+    {
+        memset(regs_, 0xCC, sizeof(regs_));
+        regs_[DX] = imageWidth;       // stride
+        regs_[DI] = image_base;       // dest
+        regs_[SI] = team_color_base;  // team colors
 
-#define MODRM_MOD(modrm) (((modrm) >> 6) & 0x3)
-#define MODRM_REG(modrm) (((modrm) >> 3) & 0x7)
-#define MODRM_RM(modrm) (((modrm) >> 0) & 0x7)
+        for (;;)
+        {
+            std::uint8_t inst = pc_u8();
+            opsize_ = SIZE32;
+            if (inst == 0x66)
+            {
+                opsize_ = SIZE16;
+                inst = pc_u8();
+            }
 
-    /**
-     * Finds the end of the function at the given memory location.
-     *
-     * Specifically, returns one past next 'ret' (0xC3) instruction.
-     *
-     * Recognizes only the subset of x86 actually used and takes as many shortcuts
-     * as possible.
-     */
-    std::uint8_t* findFunctionEnd(uint8_t* start, std::uint8_t* end, bool* readFromEsi) {
-        *readFromEsi = 0;
-
-        while (start < end) {
-            std::uint8_t inst = *start++;
-            const int opSize = inst == 0x66;  // Operand size prefix
-            if (opSize)
-                inst = *start++;
-
-            if ((inst & 0xf0) == 0x40) {
-                // inc/dec r16/r32
-            } else if ((inst & 0xf8) == 0xb0) {
-                // MOV r8, imm8
-                start++;  // imm8
-            } else if ((inst & 0xf8) == 0xb8) {
-                // MOV  r16/r32, imm16/imm32
-                start += opSize ? 2 : 4;
-            } else if (inst == 0x03) {
-                // ADD     r16/32     r/m16/32
-                start++;  // MODR/M
-            } else if (inst == 0x83) {
-                // ALUOP r32, imm8
-                start++;  // MODR/M
-                start++;  // imm8
-            } else if (inst == 0x8a || inst == 0x8b) {
-                // MOV     r16/32     r/m16/32
-                const std::uint8_t modrm = *start++;  // MODR/M
-                if (MODRM_MOD(modrm) == 1) {
-                    start++;  // disp8
-                }
-                if (MODRM_MOD(modrm) != 0x03 /* && MODRM_RM(modrm) == 0x6*/) {
-                    *readFromEsi = true;
-                }
-            } else if (inst == 0x69) {
-                // IMUL r16/32     r/m16/32 imm16/32
-                start++;  // MODR/M
-                start += opSize ? 2 : 4;
-            } else if (inst == 0x6b) {
-                // IMUL r16/32 r/m16/32 imm8
-                start++;  // MODR/M
-                start++;  // imm8
-            } else if (inst == 0x86) {
-                // XCHG r8, r/m8
-                start++;  // MODR/M
-            } else if (inst == 0xaa) {
+            if (inst == 0x03)
+            {
+                // add r16/32, r/m16/32
+                modrm();
+                write_reg(reg_, read_reg(reg_) + read_rm());
+            }
+            else if ((inst & 0xf0) == 0x40)
+            {
+                // inc/dec r16/32
+                const int r = inst & 7;
+                write_reg(r, read_reg(r) + (inst & 8 ? -1 : 1));
+            }
+            else if (inst == 0x69)
+            {
+                // imul r16/32, r/m16/32, imm16/32
+                modrm();
+                write_reg(reg_, read_rm() * imm());
+            }
+            else if (inst == 0x6b)
+            {
+                // imul r16/32, r/m16/32, imm8
+                modrm();
+                write_reg(reg_, read_rm() * imm8());
+            }
+            else if (inst == 0x83)
+            {
+                // aluop r/m16/32, imm8
+                modrm();
+                if (reg_ != 0)
+                    halt();
+                write_rm(read_rm() + imm8());
+            }
+            else if (inst == 0x8a)
+            {
+                // mov r8, r/m8
+                modrm();
+                opsize_ = SIZE8;
+                write_reg(reg_, read_rm());
+            }
+            else if (inst == 0x86)
+            {
+                // xchg r8, r/m8
+                modrm();
+                opsize_ = SIZE8;
+                auto tmp = read_reg(reg_);
+                write_reg(reg_, read_rm());
+                write_rm(tmp);
+            }
+            else if (inst == 0x8b)
+            {
+                // mov r16/32, r/m16/32
+                modrm();
+                write_reg(reg_, read_rm());
+            }
+            else if (inst == 0xaa)
+            {
                 // stosb
-            } else if (inst == 0xab) {
+                opsize_ = SIZE8;
+                stos(image_, imageWidth * imageHeight);
+            }
+            else if (inst == 0xab)
+            {
                 // stosw/stosd
-            } else if (inst == 0xc3) {
-                // ret!
+                stos(image_, imageWidth * imageHeight);
+            }
+            else if ((inst & 0xf0) == 0xb0)
+            {
+                // mov reg, imm
+                if (!(inst & 8))
+                    opsize_ = SIZE8;
+                write_reg(inst & 7, imm());
+            }
+            else if (inst == 0xc3)
+            {
+                // ret
                 break;
-            } else {
-                printf("Unhandled instruction %02X\n", inst);
-                abort();
+            }
+            else
+            {
+                halt();
             }
         }
-
-        return start;
     }
 
-    /**
-     * Extracts images from the given "IMAGES.DAT" file,
-     * to the given output directory.
-     */
-    void extractImages(std::string inputFile, std::string outputDir) {
+private:
+    std::uint32_t regs_[NREGS] = {};
+    std::uint32_t pc_ = 0;
+    const std::uint8_t* code_;
+    std::size_t code_size_;
+    enum
+    {
+        SIZE8 = 1,
+        SIZE16 = 2,
+        SIZE32 = 4
+    } opsize_ {};
+    // modrm
+    std::uint8_t mod_ {}, reg_ {}, rm_ {};
+    std::uint32_t addr_ {};
 
-        // Read the file
-        auto data = FileUtils::readBinaryFile(inputFile);
-        auto size = data.size();
+    [[noreturn]] void halt()
+    {
+        throw std::runtime_error { "Fatal error, halting" };
+    }
 
-        // Make the code contained within "IMAGES.DAT" executable
-        if (!makeExecutable(data.data(), size)) {
-            throw std::runtime_error("Failed to make memory executable");
+    void stos(std::vector<std::uint8_t>& image_, int size)
+    {
+        auto& edi = regs_[DI];
+        std::uint32_t sz = (std::uint32_t) opsize_;
+        if (edi < image_base || edi + sz > image_base + size)
+            halt();
+        auto val = regs_[AX];
+        while (sz--)
+        {
+            image_[edi++ - image_base] = (std::uint8_t) val;
+            val >>= 8;
         }
+    }
 
-        int i = 0;
-        std::uint8_t* start = data.data() + headerSize;
-        std::uint8_t* end = data.data() + size;
+    int32_t read_reg(int r)
+    {
+        assert(r >= 0 && r < NREGS);
+        if (opsize_ == SIZE8)
+        {
+            if (r & 4)
+                return (int8_t) ((regs_[r & 3] >> 8) & 0xff);
+            else
+                return (int8_t) (regs_[r & 3] & 0xff);
+        }
+        else if (opsize_ == SIZE16)
+            return (int16_t) (regs_[r] & 0xffff);
+        else
+            return regs_[r];
+    }
 
-        // Extract the images!
-        for (uint8_t* code = start; code < end; ++i) {
+    int32_t read_rm()
+    {
+        if (mod_ == 0b11)
+            return read_reg(rm_);
 
-            // We don't currently use this, but it can tell us if this image
-            // made use of the team color parameter
-            bool readFromEsi = false;
+        const std::uint32_t sz = (std::uint32_t) opsize_;
+        if (addr_ < team_color_base || addr_ + sz > team_color_base + team_color_size)
+            halt();
 
-            // Figure out where the next function starts
-            std::uint8_t* const codeEnd = findFunctionEnd(code, end, &readFromEsi);
+        auto ofs = addr_ - team_color_base;
 
-            // Create an empty image buffer
-            std::vector<std::uint8_t> imageData(imageSize, transparentColor);
+        const std::uint8_t team_colors[6] = { 160, 161, 162, 163, 164, 165 };
 
-            // Draw the image with our desired team color
-            callAssemblyCode(code, imageData.data());
+        std::uint32_t res = 0;
+        for (std::uint32_t i = 0; i < sz; ++i)
+            res |= team_colors[ofs + i] << (8 * i);
+        return res;
+    }
 
-            // Figure out the image dimensions based on what was drawn
-            int w = 0;
-            int h = 0;
-            for (int y = 0; y < maxHeight; ++y) {
-                for (int x = 0; x < maxWidth; ++x) {
-                    if (imageData[x + y * maxWidth] != transparentColor) {
-                        if (x > w) {
-                            w = x + 1;
-                        }
-                        if (y > h) {
-                            h = y + 1;
-                        }
+    void write_reg(int r, std::uint32_t val)
+    {
+        assert(r >= 0 && r < NREGS);
+        if (opsize_ == SIZE8)
+        {
+            if (r & 4)
+                regs_[r & 3] = (regs_[r & 3] & 0xffff00ff) | ((val & 0xff) << 8);
+            else
+                regs_[r] = (regs_[r] & 0xffffff00) | (val & 0xff);
+        }
+        else if (opsize_ == SIZE16)
+            regs_[r] = (regs_[r] & 0xffff0000) | (val & 0xffff);
+        else
+            regs_[r] = val;
+    }
+
+    void write_rm(std::uint32_t val)
+    {
+        if (mod_ != 0b11)
+            halt();
+        write_reg(rm_, val);
+    }
+
+    int32_t imm8()
+    {
+        return (int8_t) pc_u8();
+    }
+
+    int32_t imm32()
+    {
+        return (int32_t) pc_u32();
+    }
+
+    int32_t imm()
+    {
+        if (opsize_ == SIZE8)
+            return imm8();
+        else if (opsize_ == SIZE16)
+            return (int16_t) pc_u16();
+        else
+            return imm32();
+    }
+
+    void modrm()
+    {
+        const std::uint8_t mrm = pc_u8();
+
+        mod_ = (mrm >> 6) & 0x3;
+        reg_ = (mrm >> 3) & 0x7;
+        rm_ = (mrm >> 0) & 0x7;
+
+        if (mod_ != 0b11)
+        {
+            if (rm_ == 0b100)
+                halt();
+            addr_ = regs_[rm_];
+            if (mod_ == 0b01)
+                addr_ += imm8();
+            else if (mod_ == 0b10)
+                addr_ += imm32();
+        }
+    }
+
+    std::uint8_t pc_u8()
+    {
+        assert(pc_ < code_size_);
+        return code_[pc_++];
+    }
+
+    uint16_t pc_u16()
+    {
+        uint16_t res = pc_u8();
+        res |= pc_u8() << 8;
+        return res;
+    }
+
+    std::uint32_t pc_u32()
+    {
+        std::uint32_t res = pc_u8();
+        res |= pc_u8() << 8;
+        res |= pc_u8() << 16;
+        res |= pc_u8() << 24;
+        return res;
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Image Extraction
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Extracts images from the given "IMAGES.DAT" file, to the given output directory.
+ */
+void extractImages(std::string inputFile, std::string outputDir)
+{
+    // Read the file
+    auto imagesDatFile = FileUtils::readBinaryFile(inputFile);
+
+    // Execute the instructions using our x86 emulator
+    std::uint8_t* codeStart = imagesDatFile.data() + headerSize;
+    std::size_t codeSize = imagesDatFile.size() - headerSize;
+    CpuEmu emu { codeStart, codeSize };
+
+    for (int i = 0; !emu.done(); ++i)
+    {
+        std::vector<std::uint8_t> imageData(imageSize, transparentColor);
+        emu.extract_image(imageData, maxWidth, maxHeight);
+
+        // Figure out the image dimensions based on what was drawn
+        int w = 0;
+        int h = 0;
+        for (int y = 0; y < maxHeight; ++y)
+        {
+            for (int x = 0; x < maxWidth; ++x)
+            {
+                if (imageData[x + y * maxWidth] != transparentColor)
+                {
+                    if (x > w)
+                    {
+                        w = x + 1;
+                    }
+                    if (y > h)
+                    {
+                        h = y + 1;
                     }
                 }
             }
-
-            // Ensure the image is not empty (should never happen)
-            if (w == 0) {
-                w = 1;
-            }
-            if (h == 0) {
-                h = 1;
-            }
-
-            // Ensure the image is square
-            if (w > h) {
-                h = w;
-            } else if (h > w) {
-                w = h;
-            }
-
-            // Round image dimensions to nearest power of 2
-            w = h = MathUtils::nextPowerOf2(w);
-
-            // Save the rendered image to disk
-            std::string filename = outputDir
-                    + "\\img_"
-                    + zeroPad(i, 4)
-                    + ".tga";
-            ImageProperties props;
-            props.stride = maxWidth;
-            Image image = Image::createByMove(w, h, std::move(imageData), props);
-            writeImage(image, Palette::paletteGame, filename);
-
-            // Jump to the next image
-            code = codeEnd;
         }
+
+        // Ensure the image is not empty (should never happen)
+        if (w == 0)
+        {
+            w = 1;
+        }
+        if (h == 0)
+        {
+            h = 1;
+        }
+
+        // Ensure the image is square
+        if (w > h)
+        {
+            h = w;
+        }
+        else if (h > w)
+        {
+            w = h;
+        }
+
+        // Round image dimensions to nearest power of 2
+        w = h = MathUtils::nextPowerOf2(w);
+
+        // Save the rendered image to disk
+        std::string filename = outputDir + "\\img_" + zeroPad(i, 4) + ".tga";
+        ImageProperties props;
+        props.stride = maxWidth;
+        Image image = Image::createByMove(w, h, std::move(imageData), props);
+        writeImage(image, Palette::paletteGame, filename);
+
+        std::cout << "Saving image " << filename << "\n";
     }
+}
 
 }}  // namespace Rival::Setup
-
-/* clang-format on */

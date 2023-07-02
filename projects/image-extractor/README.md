@@ -2,17 +2,13 @@
 
 This extracts the in-game images from **IMAGES.DAT**.
 
-This file contains assembly code to render the majority of the game's images.
-
-Thanks to **0xa0000** of [Reddit](https://www.reddit.com/r/asm/comments/as8ivk/how_can_i_call_a_stored_routine_with_unknown/egtl489/), we can call this code directly, to allow us to extract the images to individual files.
-
 Interface images are extracted by [interface-extractor](/projects/interface-extractor).
 
-## :warning: x64 Warning
+## :robot: Assembly Code
 
-This project uses inline assembly which is [not supported](https://learn.microsoft.com/en-us/cpp/assembler/inline/inline-assembler?view=msvc-170) on x64 processors. Therefore this project can *only* be compiled for x86 architectures.
+`IMAGES.DAT` contains assembly code to render the majority of the game's images.
 
-Later, we could write a basic x86 interpreter to make this more portable. Since the image extraction only uses a small subset of x86 instructions, this should not be too difficult to do.
+Thanks to **0xa0000** of [Reddit](https://www.reddit.com/r/asm/comments/as8ivk/how_can_i_call_a_stored_routine_with_unknown/egtl489/), we can run these instructions using a purpose-built x86 emulator in order to extract the images to individual files.
 
 To see the assembly instructions in a human-readable format, [NASM](https://nasm.us/) can be used:
 
