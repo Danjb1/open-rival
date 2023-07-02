@@ -44,7 +44,7 @@ std::uint8_t transparentColor = 0xff;
 // x86 Emulation
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-enum
+enum Register
 {
     AX,
     CX,
@@ -55,6 +55,13 @@ enum
     SI,
     DI,
     NREGS
+};
+
+enum class OpSize : std::uint8_t
+{
+    SIZE8 = 1,
+    SIZE16 = 2,
+    SIZE32 = 4
 };
 
 class CpuEmu
@@ -78,17 +85,17 @@ public:
     void extract_image(std::vector<std::uint8_t>& image_, int imageWidth, int imageHeight)
     {
         memset(regs_, 0xCC, sizeof(regs_));
-        regs_[DX] = imageWidth;       // stride
-        regs_[DI] = image_base;       // dest
-        regs_[SI] = team_color_base;  // team colors
+        regs_[Register::DX] = imageWidth;       // stride
+        regs_[Register::DI] = image_base;       // dest
+        regs_[Register::SI] = team_color_base;  // team colors
 
         for (;;)
         {
             std::uint8_t inst = pc_u8();
-            opsize_ = SIZE32;
+            opsize_ = OpSize::SIZE32;
             if (inst == 0x66)
             {
-                opsize_ = SIZE16;
+                opsize_ = OpSize::SIZE16;
                 inst = pc_u8();
             }
 
@@ -128,14 +135,14 @@ public:
             {
                 // mov r8, r/m8
                 modrm();
-                opsize_ = SIZE8;
+                opsize_ = OpSize::SIZE8;
                 write_reg(reg_, read_rm());
             }
             else if (inst == 0x86)
             {
                 // xchg r8, r/m8
                 modrm();
-                opsize_ = SIZE8;
+                opsize_ = OpSize::SIZE8;
                 auto tmp = read_reg(reg_);
                 write_reg(reg_, read_rm());
                 write_rm(tmp);
@@ -149,7 +156,7 @@ public:
             else if (inst == 0xaa)
             {
                 // stosb
-                opsize_ = SIZE8;
+                opsize_ = OpSize::SIZE8;
                 stos(image_, imageWidth * imageHeight);
             }
             else if (inst == 0xab)
@@ -161,7 +168,7 @@ public:
             {
                 // mov reg, imm
                 if (!(inst & 8))
-                    opsize_ = SIZE8;
+                    opsize_ = OpSize::SIZE8;
                 write_reg(inst & 7, imm());
             }
             else if (inst == 0xc3)
@@ -177,16 +184,11 @@ public:
     }
 
 private:
-    std::uint32_t regs_[NREGS] = {};
+    std::uint32_t regs_[Register::NREGS] = {};
     std::uint32_t pc_ = 0;
     const std::uint8_t* code_;
     std::size_t code_size_;
-    enum
-    {
-        SIZE8 = 1,
-        SIZE16 = 2,
-        SIZE32 = 4
-    } opsize_ {};
+    OpSize opsize_ = OpSize::SIZE32;
     // modrm
     std::uint8_t mod_ {}, reg_ {}, rm_ {};
     std::uint32_t addr_ {};
@@ -198,11 +200,13 @@ private:
 
     void stos(std::vector<std::uint8_t>& image_, int size)
     {
-        auto& edi = regs_[DI];
+        auto& edi = regs_[Register::DI];
         std::uint32_t sz = (std::uint32_t) opsize_;
         if (edi < image_base || edi + sz > image_base + size)
+        {
             halt();
-        auto val = regs_[AX];
+        }
+        auto val = regs_[Register::AX];
         while (sz--)
         {
             image_[edi++ - image_base] = (std::uint8_t) val;
@@ -212,28 +216,40 @@ private:
 
     int32_t read_reg(int r)
     {
-        assert(r >= 0 && r < NREGS);
-        if (opsize_ == SIZE8)
+        assert(r >= 0 && r < Register::NREGS);
+        if (opsize_ == OpSize::SIZE8)
         {
             if (r & 4)
+            {
                 return (int8_t) ((regs_[r & 3] >> 8) & 0xff);
+            }
             else
+            {
                 return (int8_t) (regs_[r & 3] & 0xff);
+            }
         }
-        else if (opsize_ == SIZE16)
+        else if (opsize_ == OpSize::SIZE16)
+        {
             return (int16_t) (regs_[r] & 0xffff);
+        }
         else
+        {
             return regs_[r];
+        }
     }
 
     int32_t read_rm()
     {
         if (mod_ == 0b11)
+        {
             return read_reg(rm_);
+        }
 
         const std::uint32_t sz = (std::uint32_t) opsize_;
         if (addr_ < team_color_base || addr_ + sz > team_color_base + team_color_size)
+        {
             halt();
+        }
 
         auto ofs = addr_ - team_color_base;
 
@@ -241,30 +257,42 @@ private:
 
         std::uint32_t res = 0;
         for (std::uint32_t i = 0; i < sz; ++i)
+        {
             res |= team_colors[ofs + i] << (8 * i);
+        }
         return res;
     }
 
     void write_reg(int r, std::uint32_t val)
     {
-        assert(r >= 0 && r < NREGS);
-        if (opsize_ == SIZE8)
+        assert(r >= 0 && r < Register::NREGS);
+        if (opsize_ == OpSize::SIZE8)
         {
             if (r & 4)
+            {
                 regs_[r & 3] = (regs_[r & 3] & 0xffff00ff) | ((val & 0xff) << 8);
+            }
             else
+            {
                 regs_[r] = (regs_[r] & 0xffffff00) | (val & 0xff);
+            }
         }
-        else if (opsize_ == SIZE16)
+        else if (opsize_ == OpSize::SIZE16)
+        {
             regs_[r] = (regs_[r] & 0xffff0000) | (val & 0xffff);
+        }
         else
+        {
             regs_[r] = val;
+        }
     }
 
     void write_rm(std::uint32_t val)
     {
         if (mod_ != 0b11)
+        {
             halt();
+        }
         write_reg(rm_, val);
     }
 
@@ -280,12 +308,18 @@ private:
 
     int32_t imm()
     {
-        if (opsize_ == SIZE8)
+        if (opsize_ == OpSize::SIZE8)
+        {
             return imm8();
-        else if (opsize_ == SIZE16)
+        }
+        else if (opsize_ == OpSize::SIZE16)
+        {
             return (int16_t) pc_u16();
+        }
         else
+        {
             return imm32();
+        }
     }
 
     void modrm()
@@ -299,12 +333,18 @@ private:
         if (mod_ != 0b11)
         {
             if (rm_ == 0b100)
+            {
                 halt();
+            }
             addr_ = regs_[rm_];
             if (mod_ == 0b01)
+            {
                 addr_ += imm8();
+            }
             else if (mod_ == 0b10)
+            {
                 addr_ += imm32();
+            }
         }
     }
 
