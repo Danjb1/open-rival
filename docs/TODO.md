@@ -7,10 +7,128 @@
 ### CMake Migration
 
 - Sort source files into subfolders
-- Update `gen_project_files` script (re-run CMake)
+- Update `gen_project_files` script
 - Fix test project
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
+
+### Directory Structure
+
+```
+application/
+	Application
+	ApplicationContext
+	Resources
+	State
+	Window
+audio/
+	AudioSystem
+	AudioUtils
+	MidiContainer
+	MidiFile
+	MidiPlayer
+	MidsDecoder
+	SoundSource
+	Sounds
+	WaveFile
+commands/
+	GameCommandFactory
+	GameCommand
+	MoveCommand
+entity/
+	components/
+		BuildingAnimationComponent
+		BuildingPropsComponent
+		EntityComponent
+		FacingComponent
+		FlyerComponent
+		MouseHandlerComponent
+		MovementComponent
+		OwnerComponent
+		PassabilityComponent
+		PortraitComponent
+		SeafarerComponent
+		SpriteComponent
+		UnitAnimationComponent
+		UnitPropsComponent
+		VoiceComponent
+		WalkerComponent
+		WallComponent
+	Entity
+	EntityFactory
+	EntityRenderer
+game/
+	Animations
+	Building
+	BuildingDef
+	InventoryComponent
+	GameInterface
+	GameState
+	MapUtils
+	MousePicker
+	PathUtils
+	Pathfinding
+	PlayerContext
+	PlayerState
+	Tile
+	UnitDef
+	World
+gfx/
+	renderable/
+		AtlasRenderable
+		CursorRenderer
+		MenuRenderer
+		SpriteRenderable
+		TextRenderable
+		TextureRenderable
+	renderer/
+		FramebufferRenderer
+		GameRenderer
+		MapBorderRenderer
+		MenuTextRenderer
+		TextRenderer
+		TileRenderer
+		UiRenderer
+	Camera
+	Color
+	Font
+	Framebuffer
+	GLUtils
+	Image
+	Palette
+	PaletteUtils
+	Texture
+	TextureAtlas
+	RenderUtils
+	ShaderUtils
+	Shaders
+	Spritesheet
+lobby/
+	LobbyState
+main/
+	Main
+	ProgramOptions
+net/
+	...
+platform/
+	...
+scenario/
+	ScenarioBuilder
+	ScenarioReader
+ui/
+	Cursor
+utils/
+	BinaryFileReader
+	BufferUtils
+	FileUtils
+	InputUtils
+	JsonUtils
+	MathUtils
+	MouseUtils
+	Rect
+	StringUtils
+	TimeUtils
+```
 
 ### Multiplayer Milestone
 

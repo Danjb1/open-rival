@@ -12,7 +12,7 @@ std::vector<std::uint8_t> readBinaryFile(std::string filename)
     std::ifstream is(filename, std::ios::binary | std::ios::ate);
     if (!is.is_open())
     {
-        throw std::runtime_error("Failed to open scenario: " + filename);
+        throw std::runtime_error("Failed to open file: " + filename);
     }
 
     // Create a buffer to hold the entire file contents

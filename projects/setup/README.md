@@ -10,10 +10,6 @@ By default, this program will attempt to:
 - Combine these images into textures
 - Copy over the game's videos
 
-## :warning: x64 Warning
-
-This project uses inline assembly which is [not supported](https://learn.microsoft.com/en-us/cpp/assembler/inline/inline-assembler?view=msvc-170) on x64 processors. Therefore this project can *only* be compiled for x86 architectures.
-
 ## :runner: Run
 
 ### Game Directory
