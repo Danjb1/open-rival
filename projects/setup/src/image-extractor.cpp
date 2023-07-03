@@ -35,10 +35,11 @@ static constexpr int headerSize = 4;
 
 // Team colors to use when rendering
 // (these 6 colors correspond to a single team)
-std::uint8_t teamColor[6] = { 160, 161, 162, 163, 164, 165 };
+const constexpr int numTeamColors = 6;
+static const std::uint8_t teamColors[numTeamColors] = { 160, 161, 162, 163, 164, 165 };
 
 // Pixel value corresponding to transparency
-std::uint8_t transparentColor = 0xff;
+static constexpr std::uint8_t transparentColor = 0xff;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // x86 Emulation
@@ -67,9 +68,13 @@ enum class OpSize : std::uint8_t
 class CpuEmu
 {
 public:
+    // Addresses that we will read/write from/to.
+    // The actual values we use here are not important since we know in advance that all writes will be to our image
+    // buffer, and all reads will be from our team color array. So, all we really care when we see a read/write
+    // operation about is the offset *from* these addresses.
+    // We use some recognisable values here, just so that we can verify this assumption.
     static constexpr std::uint32_t image_base = 0x10000000;
     static constexpr std::uint32_t team_color_base = 0x20000000;
-    static constexpr std::uint32_t team_color_size = 6;
 
     explicit CpuEmu(const std::uint8_t* code, std::size_t code_size)
         : code_ { code }
@@ -84,7 +89,11 @@ public:
 
     void extract_image(std::vector<std::uint8_t>& image_, int imageWidth, int imageHeight)
     {
+        // Initialize registers to some arbitrary value.
+        // This is not strictly necessary but should help catch any bugs that might arise from unexpected behavior
+        // (e.g. when porting or trying to use the "emulator" with unsupported code).
         memset(regs_, 0xCC, sizeof(regs_));
+
         regs_[Register::DX] = imageWidth;       // stride
         regs_[Register::DI] = image_base;       // dest
         regs_[Register::SI] = team_color_base;  // team colors
@@ -198,6 +207,7 @@ private:
         throw std::runtime_error { "Fatal error, halting" };
     }
 
+    // Handles all writes to the image
     void stos(std::vector<std::uint8_t>& image_, int size)
     {
         auto& edi = regs_[Register::DI];
@@ -238,6 +248,7 @@ private:
         }
     }
 
+    // Handles all reads of team colors
     int32_t read_rm()
     {
         if (mod_ == 0b11)
@@ -246,19 +257,17 @@ private:
         }
 
         const std::uint32_t sz = (std::uint32_t) opsize_;
-        if (addr_ < team_color_base || addr_ + sz > team_color_base + team_color_size)
+        if (addr_ < team_color_base || addr_ + sz > team_color_base + numTeamColors)
         {
             halt();
         }
 
         auto ofs = addr_ - team_color_base;
 
-        const std::uint8_t team_colors[6] = { 160, 161, 162, 163, 164, 165 };
-
         std::uint32_t res = 0;
         for (std::uint32_t i = 0; i < sz; ++i)
         {
-            res |= team_colors[ofs + i] << (8 * i);
+            res |= teamColors[ofs + i] << (8 * i);
         }
         return res;
     }
