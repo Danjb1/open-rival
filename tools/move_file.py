@@ -17,7 +17,7 @@ HDR_DIR = '../projects/Open-Rival/include/'
 def move_file(src, dst):
     print(f'Attempting to move "{src}"')
     try:
-        os.rename(src, dst)
+        os.renames(src, dst)
     except FileNotFoundError:
         print(f'Source file "{src}" does not exist.')
     except PermissionError:
@@ -37,15 +37,9 @@ def update_includes_in_file(filepath, old_include, new_include):
         print(f'Updated file: {filepath}')
 
 def update_includes_in_dir(directory, old_include, new_include):
-    file_being_moved = new_include.rsplit('/', 1)[-1]
     for root, dirs, files in os.walk(directory):
         for filename in files:
             if not (filename.endswith('.cpp') or filename.endswith('.h')):
-                continue
-            filename_minus_extension = filename.split('.', 1)[0]
-            if filename_minus_extension == file_being_moved:
-                # .cpp files include their own header with no path,
-                # so we should leave them alone
                 continue
             filepath = os.path.join(root, filename)
             update_includes_in_file(filepath, old_include, new_include)

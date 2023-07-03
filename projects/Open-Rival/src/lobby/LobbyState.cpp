@@ -14,15 +14,15 @@
 #include "net/packets/RejectPlayerPacket.h"
 #include "net/packets/RequestJoinPacket.h"
 #include "net/packets/StartGamePacket.h"
-#include "Application.h"
-#include "ApplicationContext.h"
+#include "application/Application.h"
+#include "application/ApplicationContext.h"
 #include "ConfigUtils.h"
-#include "GameState.h"
-#include "PlayerState.h"
-#include "ScenarioBuilder.h"
-#include "ScenarioReader.h"
-#include "TextRenderable.h"
-#include "World.h"
+#include "game/GameState.h"
+#include "game/PlayerState.h"
+#include "scenario/ScenarioBuilder.h"
+#include "scenario/ScenarioReader.h"
+#include "gfx/renderable/TextRenderable.h"
+#include "game/World.h"
 
 namespace Rival {
 

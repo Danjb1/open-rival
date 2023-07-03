@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "net/packets/Packet.h"
-#include "State.h"
+#include "application/State.h"
 
 namespace Rival {
 

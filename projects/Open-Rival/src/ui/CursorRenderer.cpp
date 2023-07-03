@@ -3,7 +3,7 @@
 #include "SDLWrapper.h"
 #include "gfx/GlewWrapper.h"
 
-#include "Resources.h"
+#include "application/Resources.h"
 
 namespace Rival {
 

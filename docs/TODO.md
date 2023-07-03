@@ -6,129 +6,11 @@
 
 ### CMake Migration
 
-- Sort source files into subfolders
+- x86 build does not start correctly
 - Update `gen_project_files` script
 - Fix test project
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
-
-### Directory Structure
-
-```
-application/
-	Application
-	ApplicationContext
-	Resources
-	State
-	Window
-audio/
-	AudioSystem
-	AudioUtils
-	MidiContainer
-	MidiFile
-	MidiPlayer
-	MidsDecoder
-	SoundSource
-	Sounds
-	WaveFile
-commands/
-	GameCommandFactory
-	GameCommand
-	MoveCommand
-entity/
-	components/
-		BuildingAnimationComponent
-		BuildingPropsComponent
-		EntityComponent
-		FacingComponent
-		FlyerComponent
-		MouseHandlerComponent
-		MovementComponent
-		OwnerComponent
-		PassabilityComponent
-		PortraitComponent
-		SeafarerComponent
-		SpriteComponent
-		UnitAnimationComponent
-		UnitPropsComponent
-		VoiceComponent
-		WalkerComponent
-		WallComponent
-	Entity
-	EntityFactory
-	EntityRenderer
-game/
-	Animations
-	Building
-	BuildingDef
-	InventoryComponent
-	GameInterface
-	GameState
-	MapUtils
-	MousePicker
-	PathUtils
-	Pathfinding
-	PlayerContext
-	PlayerState
-	Tile
-	UnitDef
-	World
-gfx/
-	renderable/
-		AtlasRenderable
-		CursorRenderer
-		MenuRenderer
-		SpriteRenderable
-		TextRenderable
-		TextureRenderable
-	renderer/
-		FramebufferRenderer
-		GameRenderer
-		MapBorderRenderer
-		MenuTextRenderer
-		TextRenderer
-		TileRenderer
-		UiRenderer
-	Camera
-	Color
-	Font
-	Framebuffer
-	GLUtils
-	Image
-	Palette
-	PaletteUtils
-	Texture
-	TextureAtlas
-	RenderUtils
-	ShaderUtils
-	Shaders
-	Spritesheet
-lobby/
-	LobbyState
-main/
-	Main
-	ProgramOptions
-net/
-	...
-platform/
-	...
-scenario/
-	ScenarioBuilder
-	ScenarioReader
-ui/
-	Cursor
-utils/
-	BinaryFileReader
-	BufferUtils
-	FileUtils
-	InputUtils
-	JsonUtils
-	MathUtils
-	MouseUtils
-	Rect
-	StringUtils
-	TimeUtils
-```
 
 ### Multiplayer Milestone
 
@@ -137,6 +19,12 @@ utils/
 - Display a rectangle while drag-select is active
 - Add logging mechanism (no console in release builds!)
 - Release a new version
+
+#### Animated Water
+
+- Water tile animations (can be produced by palette swapping)
+    - Water tiles all animate at the same time, so can be handled globally
+    - Have the tile renderer look up the current animation frame when drawing water tiles
 
 ### Menu System
 
@@ -308,12 +196,6 @@ utils/
         - Add an entry to this list
         - Re-use logic from AnimationComponent
     - Add an extra step to the TileRenderer to render these animations on top of the relevant gold tiles
-- Water tile animations
-    - These animations have not been extracted!
-    - Check if animations can be produced by palette swapping
-    - Check if animations can be produced by supplying extra params during image extraction
-    - Water tiles all animate at the same time, so can be handled globally
-    - Have the tile renderer look up the current animation frame when drawing water tiles
 
 ### Music
 
@@ -497,7 +379,6 @@ utils/
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?
     - Should Resources always be `const` (e.g. when using `app.getResources()`)?
-- Sort source files into subfolders?
 - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset
 - Use a common file reading mechanism in audio-extractor
