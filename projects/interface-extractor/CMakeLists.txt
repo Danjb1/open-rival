@@ -4,9 +4,9 @@ set(OPEN_RIVAL_SRC_DIR          ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/src)
 set(OPEN_RIVAL_SETUP_SRC_DIR    ${CMAKE_CURRENT_LIST_DIR}/../setup/src)
 
 set(OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_SOURCES
-    ${OPEN_RIVAL_SRC_DIR}/BinaryFileReader.cpp
-    ${OPEN_RIVAL_SRC_DIR}/Image.cpp
-    ${OPEN_RIVAL_SRC_DIR}/Palette.cpp
+    ${OPEN_RIVAL_SRC_DIR}/gfx/Image.cpp
+    ${OPEN_RIVAL_SRC_DIR}/gfx/Palette.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/BinaryFileReader.cpp
     ${OPEN_RIVAL_SETUP_SRC_DIR}/setup-utils.cpp
     ${OPEN_RIVAL_SETUP_SRC_DIR}/interface-extractor.cpp
 )
@@ -16,9 +16,9 @@ set(OPEN_RIVAL_INTERFACE_EXTRACTOR_SOURCES
 )
 
 set(OPEN_RIVAL_INTERFACE_EXTRACTOR_INCLUDE_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/BinaryFileReader.h
-    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Image.h
-    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/Palette.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/gfx/Image.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/gfx/Palette.h
+    ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include/utils/BinaryFileReader.h
     ${CMAKE_CURRENT_LIST_DIR}/../setup/include/setup-utils.h
     ${CMAKE_CURRENT_LIST_DIR}/../setup/include/interface-extractor.h
 )

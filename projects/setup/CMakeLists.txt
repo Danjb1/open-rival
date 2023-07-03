@@ -4,12 +4,12 @@ set(OPEN_RIVAL_SRC_DIR  ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/src)
 set(OPEN_RIVAL_INC_DIR  ${CMAKE_CURRENT_LIST_DIR}/../Open-Rival/include)
 
 set(OPEN_RIVAL_SETUP_EXTERNAL_SOURCES
-    ${OPEN_RIVAL_SRC_DIR}/BinaryFileReader.cpp
-    ${OPEN_RIVAL_SRC_DIR}/FileUtils.cpp
-    ${OPEN_RIVAL_SRC_DIR}/Image.cpp
-    ${OPEN_RIVAL_SRC_DIR}/MathUtils.cpp
-    ${OPEN_RIVAL_SRC_DIR}/Palette.cpp
-    ${OPEN_RIVAL_SRC_DIR}/StringUtils.cpp
+    ${OPEN_RIVAL_SRC_DIR}/gfx/Image.cpp
+    ${OPEN_RIVAL_SRC_DIR}/gfx/Palette.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/BinaryFileReader.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/FileUtils.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/MathUtils.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/StringUtils.cpp
 )
 
 set(OPEN_RIVAL_SETUP_SOURCES
@@ -23,12 +23,12 @@ set(OPEN_RIVAL_SETUP_SOURCES
 )
 
 set(OPEN_RIVAL_SETUP_EXTERNAL_INCLUDE_HEADERS
-    ${OPEN_RIVAL_INC_DIR}/BinaryFileReader.h
-    ${OPEN_RIVAL_INC_DIR}/FileUtils.h
-    ${OPEN_RIVAL_INC_DIR}/Image.h
-    ${OPEN_RIVAL_INC_DIR}/MathUtils.h
-    ${OPEN_RIVAL_INC_DIR}/Palette.h
-    ${OPEN_RIVAL_INC_DIR}/StringUtils.h
+    ${OPEN_RIVAL_INC_DIR}/gfx/Image.h
+    ${OPEN_RIVAL_INC_DIR}/gfx/Palette.h
+    ${OPEN_RIVAL_INC_DIR}/utils/BinaryFileReader.h
+    ${OPEN_RIVAL_INC_DIR}/utils/FileUtils.h
+    ${OPEN_RIVAL_INC_DIR}/utils/MathUtils.h
+    ${OPEN_RIVAL_INC_DIR}/utils/StringUtils.h
 )
 
 set(OPEN_RIVAL_SETUP_INCLUDE_HEADERS

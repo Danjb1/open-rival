@@ -9,10 +9,10 @@
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "ui/MenuRenderer.h"
-#include "MenuTextRenderer.h"
-#include "PlayerState.h"
+#include "gfx/renderer/MenuTextRenderer.h"
+#include "game/PlayerState.h"
 #include "ScenarioData.h"
-#include "State.h"
+#include "application/State.h"
 
 namespace Rival {
 

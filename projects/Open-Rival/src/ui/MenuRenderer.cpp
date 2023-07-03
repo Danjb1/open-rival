@@ -2,12 +2,12 @@
 
 #include "gfx/GlewWrapper.h"
 
-#include "gfx/TextureRenderable.h"
-#include "GLUtils.h"
-#include "Rect.h"
-#include "RenderUtils.h"
-#include "Shaders.h"
-#include "Window.h"
+#include "gfx/renderable/gfx/TextureRenderable.h"
+#include "gfx/GLUtils.h"
+#include "utils/Rect.h"
+#include "gfx/RenderUtils.h"
+#include "gfx/Shaders.h"
+#include "application/Window.h"
 
 namespace Rival {
 

@@ -5,8 +5,8 @@
 
 #include "utils/BufferUtils.h"
 #include "EnumUtils.h"
-#include "GameCommand.h"
-#include "MoveCommand.h"
+#include "commands/GameCommand.h"
+#include "commands/MoveCommand.h"
 
 namespace Rival {
 

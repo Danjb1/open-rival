@@ -5,7 +5,7 @@
 #include <string>
 
 #include "utils/BufferUtils.h"
-#include "GameCommand.h"
+#include "commands/GameCommand.h"
 
 namespace Rival {
 

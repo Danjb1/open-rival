@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-#include "TimeUtils.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival { namespace TimeUtils {
 

@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "net/packets/GameCommandPacket.h"
-#include "GameCommand.h"
-#include "GameState.h"
+#include "commands/GameCommand.h"
+#include "game/GameState.h"
 
 namespace Rival {
 

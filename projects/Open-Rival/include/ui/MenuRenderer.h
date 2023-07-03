@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gfx/TextureRenderable.h"
+#include "gfx/renderable/gfx/TextureRenderable.h"
 #include "ui/CursorRenderer.h"
-#include "GameInterface.h"
-#include "Resources.h"
+#include "game/GameInterface.h"
+#include "application/Resources.h"
 
 namespace Rival {
 

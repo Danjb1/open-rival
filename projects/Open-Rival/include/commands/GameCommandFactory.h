@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "GameCommand.h"
+#include "commands/GameCommand.h"
 
 namespace Rival {
 
