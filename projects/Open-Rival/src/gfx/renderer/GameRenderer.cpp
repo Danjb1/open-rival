@@ -8,16 +8,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
 
-#include "gfx/Camera.h"
-#include "gfx/Palette.h"
+#include "application/Resources.h"
+#include "application/Window.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
-#include "utils/Rect.h"
-#include "gfx/RenderUtils.h"
-#include "application/Resources.h"
-#include "gfx/Shaders.h"
-#include "application/Window.h"
 #include "game/World.h"
+#include "gfx/Camera.h"
+#include "gfx/Palette.h"
+#include "gfx/RenderUtils.h"
+#include "gfx/Shaders.h"
+#include "utils/Rect.h"
 
 namespace Rival {
 
@@ -55,7 +55,7 @@ void GameRenderer::render(int delta)
     renderCursor(delta);
 }
 
-void GameRenderer::renderGameViaFramebuffer(int delta) const
+void GameRenderer::renderGameViaFramebuffer(int delta)
 {
     // Render to our framebuffer.
     // Here the viewport specifies the region of the framebuffer texture
@@ -81,7 +81,7 @@ void GameRenderer::renderGameViaFramebuffer(int delta) const
     renderFramebuffer(canvasWidth, canvasHeight);
 }
 
-void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) const
+void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
 {
     // Clear framebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -91,18 +91,18 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta) 
     glEnable(GL_DEPTH_TEST);
 
     // Use indexed texture shader
-    glUseProgram(Shaders::indexedTextureShader.programId);
+    glUseProgram(Shaders::worldShader.programId);
 
     // Determine our view-projection matrix
     glm::mat4 viewProjMatrix = RenderUtils::createGameViewProjectionMatrix(camera, viewportWidth, viewportHeight);
 
     // Set uniform values
-    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
-    glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
-    glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+    glUniformMatrix4fv(Shaders::worldShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1i(Shaders::worldShader.texUnitUniformLoc, 0);
+    glUniform1i(Shaders::worldShader.paletteTexUnitUniformLoc, 1);
 
     // Render Tiles
-    tileRenderer.render(camera, world.getTiles(), world.getWidth(), world.getHeight());
+    tileRenderer.render(delta, camera, world.getTiles(), world.getWidth(), world.getHeight());
 
     // Render Map Borders
     mapBorderRenderer.render();

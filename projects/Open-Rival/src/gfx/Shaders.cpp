@@ -42,7 +42,6 @@ void IndexedTextureShader::init()
 
     GLuint programId = createShader("res\\shaders\\indexed_texture.vert", "res\\shaders\\indexed_texture.frag");
 
-    indexedTextureShader = IndexedTextureShader();
     indexedTextureShader.programId = programId;
     indexedTextureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
     indexedTextureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
@@ -78,6 +77,55 @@ bool IndexedTextureShader::isValid() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
+// WorldShader
+///////////////////////////////////////////////////////////////////////////
+
+WorldShader worldShader;
+
+void WorldShader::init()
+{
+
+    GLuint programId = createShader("res\\shaders\\world.vert", "res\\shaders\\world.frag");
+
+    worldShader.programId = programId;
+    worldShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    worldShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
+    worldShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+    worldShader.texUnitUniformLoc = glGetUniformLocation(programId, "tex");
+    worldShader.paletteTexUnitUniformLoc = glGetUniformLocation(programId, "palette");
+    worldShader.paletteTxYUnitUniformLoc = glGetUniformLocation(programId, "palette_txy");
+    worldShader.transparentIndex = glGetUniformLocation(programId, "transparent_index");
+    worldShader.waterShift1 = glGetUniformLocation(programId, "water_shift_1");
+    worldShader.waterShift2 = glGetUniformLocation(programId, "water_shift_2");
+
+    if (!worldShader.isValid())
+    {
+        throw std::runtime_error("Failed to create WorldShader");
+    }
+}
+
+bool WorldShader::isValid() const
+{
+    // Validate program ID
+    if (programId == 0)
+    {
+        printf("Could not generate program ID\n");
+        return false;
+    }
+
+    // Validate vertex attributes / uniforms
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")              //
+            && validateVertexAttribute(texCoordAttribLoc, "in_tex_coords")    //
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix")  //
+            && validateUniform(texUnitUniformLoc, "tex")                      //
+            && validateUniform(paletteTexUnitUniformLoc, "palette")           //
+            && validateUniform(paletteTexUnitUniformLoc, "palette_txy")       //
+            && validateUniform(transparentIndex, "transparent_index")         //
+            && validateUniform(waterShift1, "water_shift_1")                  //
+            && validateUniform(waterShift2, "water_shift_2");
+}
+
+///////////////////////////////////////////////////////////////////////////
 // FontShader
 ///////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +136,6 @@ void FontShader::init()
 
     GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
 
-    fontShader = FontShader();
     fontShader.programId = programId;
     fontShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
     fontShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
@@ -130,7 +177,6 @@ void TextureShader::init()
 
     GLuint programId = createShader("res\\shaders\\texture.vert", "res\\shaders\\texture.frag");
 
-    textureShader = TextureShader();
     textureShader.programId = programId;
     textureShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
     textureShader.texCoordAttribLoc = glGetAttribLocation(programId, "in_tex_coords");
@@ -166,6 +212,7 @@ bool TextureShader::isValid() const
 void initializeShaders()
 {
     IndexedTextureShader::init();
+    WorldShader::init();
     FontShader::init();
     TextureShader::init();
 }
