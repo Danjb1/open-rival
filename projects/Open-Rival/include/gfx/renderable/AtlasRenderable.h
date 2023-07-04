@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gfx/GlewWrapper.h"
+
 #include <memory>
 
 #include "gfx/TextureAtlas.h"

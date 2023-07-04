@@ -6,8 +6,11 @@
 
 ### CMake Migration
 
-- x86 build does not start correctly
+- File organisation
+    - Some includes are still loose
+    - TextureRenderable is in the wrong folder
 - Update `gen_project_files` script
+- Run clang-format everywhere
 - Fix test project
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
@@ -19,12 +22,6 @@
 - Display a rectangle while drag-select is active
 - Add logging mechanism (no console in release builds!)
 - Release a new version
-
-#### Animated Water
-
-- Water tile animations (can be produced by palette swapping)
-    - Water tiles all animate at the same time, so can be handled globally
-    - Have the tile renderer look up the current animation frame when drawing water tiles
 
 ### Menu System
 
@@ -158,6 +155,7 @@
 
 ### Rendering
 
+- Improve water animations ("anim frames" should ping-pong left to right)
 - Respect monster color
 - Render interface
     - Resource icons
@@ -301,11 +299,13 @@
 
 ### CMake
 
+- Add shaders to project
 - Why do additional library directies also have a `/$(Configuration)` variant?
 - Include libraries in a better way
     - https://stackoverflow.com/a/61708554/1624459
     - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
 - Copy required files to build directory automatically (`build\projects\Open-Rival`)
+    - DLLs
     - `res` folder
     - `config.json`
     - `args.json` (if present)

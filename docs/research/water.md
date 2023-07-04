@@ -1,0 +1,8 @@
+- Water is animated using palette swaps.
+- There are 3 different groups of colours that change independently.
+    - 224-227
+    - 228-231
+    - 232-238
+- These colors seem to get shifted left and right.
+    - The order of these shifts is not yet known.
+- We can probably modify our own palette at runtime to get the same effect.

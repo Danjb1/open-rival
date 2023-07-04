@@ -32,8 +32,8 @@ public:
     void render(int delta);
 
 private:
-    void renderGameViaFramebuffer(int delta) const;
-    void renderGame(int viewportWidth, int viewportHeight, int delta) const;
+    void renderGameViaFramebuffer(int delta);
+    void renderGame(int viewportWidth, int viewportHeight, int delta);
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();

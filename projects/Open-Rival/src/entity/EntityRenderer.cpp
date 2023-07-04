@@ -5,22 +5,22 @@
 #include <algorithm>  // min
 #include <vector>
 
-#include "gfx/Camera.h"
+#include "application/Resources.h"
 #include "entity/Entity.h"
-#include "game/MapUtils.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/OwnerComponent.h"
-#include "gfx/Palette.h"
+#include "entity/components/SpriteComponent.h"
+#include "entity/components/WalkerComponent.h"
+#include "game/MapUtils.h"
 #include "game/Pathfinding.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
+#include "gfx/Camera.h"
+#include "gfx/Palette.h"
 #include "gfx/RenderUtils.h"
-#include "application/Resources.h"
 #include "gfx/Shaders.h"
-#include "entity/components/SpriteComponent.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
-#include "entity/components/WalkerComponent.h"
 
 namespace Rival {
 
@@ -42,7 +42,7 @@ void EntityRenderer::render(const Camera& camera, SharedEntityList entities, int
     }
 
     // Restore the default palette
-    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, 0);
+    glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);
 }
 
 bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const
@@ -86,7 +86,7 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
         paletteIndex += owner->getPlayerId();
     }
     float paletteTxy = PaletteUtils::getPaletteTxY(paletteIndex);
-    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxy);
+    glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, paletteTxy);
 
     // Use textures
     const SpriteRenderable& renderable = spriteComponent->getRenderable();

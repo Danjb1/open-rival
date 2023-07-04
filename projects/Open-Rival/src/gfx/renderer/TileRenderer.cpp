@@ -10,11 +10,11 @@
 #include <map>
 
 #include "gfx/Camera.h"
-#include "utils/MathUtils.h"
 #include "gfx/Palette.h"
 #include "gfx/Shaders.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 
@@ -30,8 +30,10 @@ TileRenderer::TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const
  * Note that while this is very slow in Debug mode, performance is not an
  * issue in Release mode.
  */
-void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const
+void TileRenderer::render(int delta, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight)
 {
+    updateWaterPalettes(delta);
+
     // Use textures
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
     glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
@@ -40,6 +42,10 @@ void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, 
 
     // Bind vertex array
     glBindVertexArray(renderable.getVao());
+
+    // Set uniforms
+    glUniform1i(Shaders::worldShader.waterShift1, waterPaletteShift1);
+    glUniform1i(Shaders::worldShader.waterShift2, waterPaletteShift2);
 
     // Update the data on the GPU
     if (needsUpdate())
@@ -50,6 +56,19 @@ void TileRenderer::render(const Camera& camera, const std::vector<Tile>& tiles, 
     // Render
     int numIndices = static_cast<int>(tiles.size() * renderable.getIndicesPerSprite());
     glDrawElements(renderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
+}
+
+void TileRenderer::updateWaterPalettes(int delta)
+{
+    // Water is animated by rotating a few groups of colors in the palette.
+    // We simulate this in the shader by adjusting the palette index based on some offsets that we control.
+    msSinceWaterShift += delta;
+    if (msSinceWaterShift > msPerWaterShift)
+    {
+        waterPaletteShift1 = (waterPaletteShift1 + 1) % waterPalette1Size;
+        waterPaletteShift2 = (waterPaletteShift2 + 1) % waterPalette2Size;
+        msSinceWaterShift -= msPerWaterShift;
+    }
 }
 
 bool TileRenderer::needsUpdate() const
