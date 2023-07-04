@@ -67,7 +67,7 @@ Generally, dependencies should be placed in `projects/Open-Rival/libs` (see exam
 The expected version numbers are listed in the [CMake build file](projects/Open-Rival/CMakeLists.txt).
 
 For dynamically-linked libraries:
-- Debug DLLs should be placed in the output directory (e.g. `build/projects/Open-Rival/Debug`).
+- Debug DLLs should be placed in the output directory alongside the generated executable (e.g. `build/x64/projects/Open-Rival/Debug`).
 - Release DLLs should be placed in the `dist` folder.
 
 ### 3) Install Resources
@@ -78,11 +78,11 @@ At this point, it should be possible to build the solution using Visual Studio. 
 
 Build and run the [setup project](/projects/setup) to perform resource extraction (instructions in the [readme](/projects/setup/README.md)). This should create the folders `sound`, `textures` and `video` within the `setup/res` directory.
 
-Copy these folders to the `projects/Open-Rival/res` directory.
+Copy these folders to a `res` folder inside the output directory (e.g. `build/x64/projects/Open-Rival/res`).
 
 #### Custom Resources
 
-Some resources are custom-made for Open-Rival. These are included in the `dist/res` directory. The contents of this directory should be copied to `projects/Open-Rival/res` for use during development.
+Some resources are custom-made for Open-Rival. These are included in the `dist/res` directory. The contents of this directory should also be copied to this `res` folder for use during development.
 
 #### Font
 
@@ -91,6 +91,14 @@ The game uses the [Procopius font](https://fontsgeek.com/fonts/Procopius-Regular
 ### 4) That's it! :tada:
 
 Once the dependencies and resources are in place, you should be able to run the "Open-Rival" project!
+
+## :stethoscope: Troubleshooting
+
+### The application was unable to start correctly 0xc00007b
+
+This signifies a missing DLL file.
+
+Check that the folder containing `Open-Rival.exe` also contains the [required DLLs](/docs/dependencies.md#dll-files), and that these are the correct DLLs for the current architecture (x86 or x64).
 
 ## :mag: Static Code Analysis
 

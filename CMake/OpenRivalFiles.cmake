@@ -123,7 +123,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/utils/TimeUtils.cpp
 )
 
-set(OPEN_RIVAL_INCLUDE_HEADERS
+set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/ConfigUtils.h
     ${OPEN_RIVAL_DIR}/include/EntityUtils.h
     ${OPEN_RIVAL_DIR}/include/EnumUtils.h
