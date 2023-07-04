@@ -18,8 +18,8 @@ function(add_openal project_name)
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}>
-            $<$<CONFIG:Release>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}>
+            $<$<CONFIG:Debug>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Debug>
+            $<$<CONFIG:Release>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Release>
         )
     else()
         message(STATUS "Operating system not (yet) supported!")
