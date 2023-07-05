@@ -2,6 +2,7 @@
 
 #include "gfx/GlewWrapper.h"
 
+#include <array>
 #include <memory>
 #include <vector>
 
@@ -37,15 +38,15 @@ private:
     void sendDataToGpu(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
 
 private:
-    static constexpr int msPerWaterShift = 180;
-    static constexpr int waterPalette1Size = 4;
-    static constexpr int waterPalette2Size = 7;
+    static constexpr int msPerWaterFrame = 180;
+    static const std::array<int, 4> waterFrames1;
+    static const std::array<int, 7> waterFrames2;
 
     SpriteRenderable renderable;
     std::shared_ptr<const Texture> paletteTexture;
 
-    int waterPaletteShift1 = 0;
-    int waterPaletteShift2 = 0;
+    int waterIndex1 = 0;
+    int waterIndex2 = 0;
     int msSinceWaterShift = 0;
 };
 

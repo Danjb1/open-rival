@@ -155,7 +155,6 @@
 
 ### Rendering
 
-- Improve water animations ("anim frames" should ping-pong left to right)
 - Respect monster color
 - Render interface
     - Resource icons
