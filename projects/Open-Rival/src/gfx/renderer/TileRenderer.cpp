@@ -18,6 +18,9 @@
 
 namespace Rival {
 
+const std::array<int, 4> TileRenderer::waterFrames1 = { 3, 2, 1, 0 };
+const std::array<int, 7> TileRenderer::waterFrames2 = { 6, 5, 4, 3, 2, 1, 0 };
+
 TileRenderer::TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const Texture> paletteTexture)
     : paletteTexture(paletteTexture)
     , renderable { spritesheet, maxTilesToRender }
@@ -44,8 +47,8 @@ void TileRenderer::render(int delta, const Camera& camera, const std::vector<Til
     glBindVertexArray(renderable.getVao());
 
     // Set uniforms
-    glUniform1i(Shaders::worldShader.waterShift1, waterPaletteShift1);
-    glUniform1i(Shaders::worldShader.waterShift2, waterPaletteShift2);
+    glUniform1i(Shaders::worldShader.waterShift1, waterFrames1[waterIndex1]);
+    glUniform1i(Shaders::worldShader.waterShift2, waterFrames2[waterIndex2]);
 
     // Update the data on the GPU
     if (needsUpdate())
@@ -63,11 +66,11 @@ void TileRenderer::updateWaterPalettes(int delta)
     // Water is animated by rotating a few groups of colors in the palette.
     // We simulate this in the shader by adjusting the palette index based on some offsets that we control.
     msSinceWaterShift += delta;
-    if (msSinceWaterShift > msPerWaterShift)
+    if (msSinceWaterShift > msPerWaterFrame)
     {
-        waterPaletteShift1 = (waterPaletteShift1 + 1) % waterPalette1Size;
-        waterPaletteShift2 = (waterPaletteShift2 + 1) % waterPalette2Size;
-        msSinceWaterShift -= msPerWaterShift;
+        waterIndex1 = (waterIndex1 + 1) % waterFrames1.size();
+        waterIndex2 = (waterIndex2 + 1) % waterFrames2.size();
+        msSinceWaterShift -= msPerWaterFrame;
     }
 }
 

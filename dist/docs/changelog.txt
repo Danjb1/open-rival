@@ -5,7 +5,7 @@ Changelog
 v0.3.0 (Multiplayer demo)
 - Added networking functionality with basic lobby screen
 - Added drag-select cursor
-- Added placeholder water animation
+- Added water animation
 - Fixed texture bleeding at some zoom levels
 - Fixed portraits backgrounds being rendered transparent
 - Improved precision of frame scheduling and MIDI playback
