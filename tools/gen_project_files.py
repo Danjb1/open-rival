@@ -2,6 +2,9 @@
 Script to automatically add all .cpp and .h files under the Open-Rival folder to
 our CMake build.
 
+Rebuild the ZERO_CHECK project after running this script to regenerate the
+project files.
+
     USAGE:
       python gen_project_files.py
 """
