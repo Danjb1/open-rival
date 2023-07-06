@@ -9,7 +9,6 @@
 - File organisation
     - Some includes are still loose
     - TextureRenderable is in the wrong folder
-- Update `gen_project_files` script
 - Run clang-format everywhere
 - Fix test project
     - Copy all includes from Open-Rival
@@ -360,6 +359,7 @@
     - https://stackoverflow.com/questions/11149665/c-vector-that-doesnt-initialize-its-members
 - The palette texture does not need an alpha channel
 - Defer loading MIDI files until needed to speed up initial load time
+- Eliminate branching in shaders
 
 ### Portability
 
