@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "FileUtils.h"
+#include "utils/FileUtils.h"
 
 namespace Rival { namespace Setup {
 

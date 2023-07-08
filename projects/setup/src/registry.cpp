@@ -1,6 +1,6 @@
 #include "registry.h"
 
-#include "StringUtils.h"
+#include "utils/StringUtils.h"
 
 namespace Registry {
 

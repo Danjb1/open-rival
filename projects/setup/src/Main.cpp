@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#include "StringUtils.h"
+#include "utils/StringUtils.h"
 #include "audio-extractor.h"
 #include "image-extractor.h"
 #include "interface-extractor.h"

@@ -8,7 +8,7 @@
 #include <sstream>  // ostringstream
 #include <vector>   // vector
 
-#include "Palette.h"
+#include "gfx/Palette.h"
 
 namespace Rival { namespace Setup {
 

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "BinaryFileReader.h"
-#include "Palette.h"
+#include "gfx/Palette.h"
+#include "utils/BinaryFileReader.h"
 
 namespace Rival { namespace Setup {
 
