@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include "audio/Sounds.h"
 #include "game/Animations.h"
 #include "utils/JsonUtils.h"
-#include "audio/Sounds.h"
 
 namespace Rival {
 

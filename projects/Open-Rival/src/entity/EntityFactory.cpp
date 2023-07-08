@@ -3,24 +3,24 @@
 #include <stdexcept>
 #include <string>
 
-#include "game/Animations.h"
+#include "application/Resources.h"
 #include "entity/components/BuildingAnimationComponent.h"
 #include "entity/components/BuildingPropsComponent.h"
 #include "entity/components/FlyerComponent.h"
-#include "game/InventoryComponent.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/PassabilityComponent.h"
 #include "entity/components/PortraitComponent.h"
-#include "application/Resources.h"
 #include "entity/components/SeafarerComponent.h"
 #include "entity/components/SpriteComponent.h"
-#include "game/Tile.h"
 #include "entity/components/UnitAnimationComponent.h"
 #include "entity/components/UnitPropsComponent.h"
 #include "entity/components/VoiceComponent.h"
 #include "entity/components/WalkerComponent.h"
 #include "entity/components/WallComponent.h"
+#include "game/Animations.h"
+#include "game/InventoryComponent.h"
+#include "game/Tile.h"
 
 namespace Rival {
 

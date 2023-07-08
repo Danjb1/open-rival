@@ -1,7 +1,7 @@
 #include "gfx/Spritesheet.h"
 
-#include "utils/MathUtils.h"
 #include "gfx/Texture.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <utility>  // std::move
 
-#include "utils/BinaryFileReader.h"
 #include "gfx/Palette.h"
+#include "utils/BinaryFileReader.h"
 
 namespace Rival {
 

@@ -1,8 +1,8 @@
 #include "entity/components/MovementComponent.h"
 
 #include "entity/Entity.h"
-#include "utils/TimeUtils.h"
 #include "game/World.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival {
 

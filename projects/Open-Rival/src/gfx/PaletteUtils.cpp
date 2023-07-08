@@ -5,9 +5,9 @@
 #include <cstdint>
 #include <vector>
 
-#include "utils/MathUtils.h"
 #include "gfx/Palette.h"
 #include "gfx/Texture.h"
+#include "utils/MathUtils.h"
 
 namespace Rival { namespace PaletteUtils {
 

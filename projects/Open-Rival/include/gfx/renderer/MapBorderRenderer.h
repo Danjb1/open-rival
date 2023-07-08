@@ -7,8 +7,8 @@
 
 #include "game/Race.h"
 #include "gfx/RenderUtils.h"
-#include "gfx/renderable/SpriteRenderable.h"
 #include "gfx/Spritesheet.h"
+#include "gfx/renderable/SpriteRenderable.h"
 
 namespace Rival {
 

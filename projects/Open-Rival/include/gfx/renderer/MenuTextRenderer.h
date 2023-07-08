@@ -2,9 +2,9 @@
 
 #include <vector>
 
+#include "application/Window.h"
 #include "gfx/renderable/TextRenderable.h"
 #include "gfx/renderer/TextRenderer.h"
-#include "application/Window.h"
 
 namespace Rival {
 

@@ -5,17 +5,17 @@
 #include <unordered_map>
 #include <vector>
 
+#include "audio/MidiFile.h"
+#include "audio/WaveFile.h"
 #include "game/Building.h"
 #include "game/BuildingDef.h"
+#include "game/Unit.h"
+#include "game/UnitDef.h"
 #include "gfx/Font.h"
-#include "audio/MidiFile.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
 #include "gfx/TextureAtlas.h"
-#include "game/Unit.h"
-#include "game/UnitDef.h"
-#include "audio/WaveFile.h"
 
 namespace Rival {
 

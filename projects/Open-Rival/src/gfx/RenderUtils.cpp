@@ -6,8 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
 
-#include "gfx/Camera.h"
 #include "game/MapUtils.h"
+#include "gfx/Camera.h"
 #include "gfx/Spritesheet.h"
 
 namespace Rival { namespace RenderUtils {

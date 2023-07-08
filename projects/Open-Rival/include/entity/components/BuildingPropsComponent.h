@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "game/Building.h"
 #include "entity/components/EntityComponent.h"
+#include "game/Building.h"
 
 namespace Rival {
 

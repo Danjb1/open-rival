@@ -9,9 +9,9 @@
 #include <stdexcept>  // std::runtime_error, std::out_of_range
 #include <utility>    // std::move, std::pair
 
+#include "application/Resources.h"
 #include "gfx/GLUtils.h"
 #include "gfx/Image.h"
-#include "application/Resources.h"
 
 namespace Rival {
 

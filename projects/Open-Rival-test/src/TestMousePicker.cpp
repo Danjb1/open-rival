@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include <memory>
@@ -9,6 +8,7 @@
 #include "MousePicker.h"
 #include "RenderUtils.h"
 #include "World.h"
+#include "pch.h"
 
 using namespace Rival;
 

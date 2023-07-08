@@ -3,10 +3,10 @@
 #include <iostream>
 #include <string>
 
-#include "utils/BufferUtils.h"
-#include "utils/EnumUtils.h"
 #include "commands/GameCommand.h"
 #include "commands/MoveCommand.h"
+#include "utils/BufferUtils.h"
+#include "utils/EnumUtils.h"
 
 namespace Rival {
 

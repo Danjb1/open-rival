@@ -1,10 +1,10 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include <memory>
 
 #include "Entity.h"
 #include "EntityComponent.h"
+#include "pch.h"
 
 using namespace Rival;
 

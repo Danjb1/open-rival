@@ -1,6 +1,6 @@
-#include "pch.h"
-
 #include "Resources.h"
+
+#include "pch.h"
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

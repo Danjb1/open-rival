@@ -5,13 +5,13 @@
 #include <string>
 
 #include "application/ApplicationContext.h"
-#include "utils/ConfigUtils.h"
-#include "utils/FileUtils.h"
-#include "game/GameInterface.h"
-#include "utils/JsonUtils.h"
 #include "audio/MidsDecoder.h"
+#include "game/GameInterface.h"
 #include "game/PathUtils.h"
 #include "gfx/RenderUtils.h"
+#include "utils/ConfigUtils.h"
+#include "utils/FileUtils.h"
+#include "utils/JsonUtils.h"
 
 namespace Rival {
 

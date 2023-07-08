@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "net/packets/Packet.h"
 #include "application/State.h"
+#include "net/packets/Packet.h"
 
 namespace Rival {
 

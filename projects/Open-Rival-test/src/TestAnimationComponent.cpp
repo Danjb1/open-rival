@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include <memory>
@@ -10,6 +9,7 @@
 #include "Spritesheet.h"
 #include "Texture.h"
 #include "TimerUtils.h"
+#include "pch.h"
 
 using namespace Rival;
 

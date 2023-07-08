@@ -1,7 +1,7 @@
 #include "entity/components/WallComponent.h"
 
-#include "entity/components/BuildingPropsComponent.h"
 #include "entity/Entity.h"
+#include "entity/components/BuildingPropsComponent.h"
 #include "game/World.h"
 
 namespace Rival {

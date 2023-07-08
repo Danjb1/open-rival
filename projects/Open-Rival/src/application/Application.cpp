@@ -5,11 +5,11 @@
 #include <memory>
 #include <utility>  // std::in_place, std::move
 
-#include "net/Socket.h"
 #include "application/ApplicationContext.h"
-#include "utils/ConfigUtils.h"
-#include "game/PlayerState.h"
 #include "application/State.h"
+#include "game/PlayerState.h"
+#include "net/Socket.h"
+#include "utils/ConfigUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {

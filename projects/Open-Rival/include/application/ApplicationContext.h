@@ -3,10 +3,10 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "audio/AudioSystem.h"
-#include "utils/JsonUtils.h"
 #include "application/Resources.h"
 #include "application/Window.h"
+#include "audio/AudioSystem.h"
+#include "utils/JsonUtils.h"
 
 namespace Rival {
 

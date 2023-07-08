@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "utils/Rect.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/TextureAtlas.h"
+#include "utils/Rect.h"
 
 namespace Rival { namespace GameInterface {
 

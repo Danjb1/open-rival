@@ -6,8 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "utils/Rect.h"
 #include "gfx/Texture.h"
+#include "utils/Rect.h"
 
 namespace Rival {
 

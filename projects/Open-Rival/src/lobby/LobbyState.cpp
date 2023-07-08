@@ -2,6 +2,12 @@
 
 #include <cstdlib>  // std::rand
 
+#include "application/Application.h"
+#include "application/ApplicationContext.h"
+#include "game/GameState.h"
+#include "game/PlayerState.h"
+#include "game/World.h"
+#include "gfx/renderable/TextRenderable.h"
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
 #include "net/packet-handlers/LobbyWelcomePacketHandler.h"
@@ -14,15 +20,9 @@
 #include "net/packets/RejectPlayerPacket.h"
 #include "net/packets/RequestJoinPacket.h"
 #include "net/packets/StartGamePacket.h"
-#include "application/Application.h"
-#include "application/ApplicationContext.h"
-#include "utils/ConfigUtils.h"
-#include "game/GameState.h"
-#include "game/PlayerState.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
-#include "gfx/renderable/TextRenderable.h"
-#include "game/World.h"
+#include "utils/ConfigUtils.h"
 
 namespace Rival {
 

@@ -6,9 +6,9 @@
 #include <unordered_map>
 #include <utility>  // std::move, std::piecewise_construct
 
-#include "lobby/LobbyState.h"
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
 
 using namespace Rival;

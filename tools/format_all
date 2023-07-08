@@ -19,10 +19,8 @@ clang-format -i -style=file interface-extractor/*.cpp
 clang-format -i -style=file interface-extractor/*.h
 
 echo "Formatting Open-Rival"
-mv Open-Rival/include/json.h Open-Rival/include/json.h.bak
-clang-format -i -style=file Open-Rival/include/*.h
-mv Open-Rival/include/json.h.bak Open-Rival/include/json.h
-clang-format -i -style=file Open-Rival/src/*.cpp
+find Open-Rival/src -name '*.cpp' -type f | xargs clang-format -style=file -i
+find Open-Rival/include -name '*.h' -type f | xargs clang-format -style=file -i
 
 echo "Formatting Open-Rival-test"
 clang-format -i -style=file Open-Rival-test/include/*.h

@@ -10,15 +10,15 @@
 #include <string>
 #include <utility>  // std::move
 
-#include "net/NetUtils.h"
 #include "audio/AudioUtils.h"
-#include "utils/ConfigUtils.h"
 #include "game/GameState.h"
-#include "utils/JsonUtils.h"
+#include "game/World.h"
+#include "gfx/Shaders.h"
+#include "net/NetUtils.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
-#include "gfx/Shaders.h"
-#include "game/World.h"
+#include "utils/ConfigUtils.h"
+#include "utils/JsonUtils.h"
 
 namespace Rival {
 

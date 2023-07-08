@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <string>
 
+#include "commands/GameCommand.h"
 #include "commands/GameCommandFactory.h"
 #include "utils/BufferUtils.h"
-#include "commands/GameCommand.h"
 
 namespace Rival {
 

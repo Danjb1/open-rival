@@ -1,10 +1,10 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include "Application.h"
 #include "MockSDL.h"
 #include "State.h"
 #include "TimerUtils.h"
+#include "pch.h"
 
 using namespace Rival;
 
