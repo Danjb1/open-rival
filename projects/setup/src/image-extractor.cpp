@@ -15,10 +15,10 @@
 #include <iostream>
 #include <stdexcept>  // std::runtime_error
 
-#include "FileUtils.h"
-#include "Image.h"
-#include "MathUtils.h"
-#include "Palette.h"
+#include "gfx/Image.h"
+#include "gfx/Palette.h"
+#include "utils/FileUtils.h"
+#include "utils/MathUtils.h"
 #include "setup-utils.h"
 
 namespace Rival { namespace Setup {

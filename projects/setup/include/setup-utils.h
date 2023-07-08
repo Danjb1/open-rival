@@ -4,8 +4,8 @@
 
 #include <string>
 
-#include "Image.h"
-#include "Palette.h"
+#include "gfx/Image.h"
+#include "gfx/Palette.h"
 
 namespace Rival { namespace Setup {
 

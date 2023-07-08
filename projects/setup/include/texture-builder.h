@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Image.h"
-#include "Palette.h"
+#include "gfx/Image.h"
+#include "gfx/Palette.h"
 
 namespace fs = std::filesystem;
 
