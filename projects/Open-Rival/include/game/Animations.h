@@ -4,7 +4,7 @@
 #include <map>
 
 #include "game/Building.h"
-#include "Unit.h"
+#include "game/Unit.h"
 
 namespace Rival {
 

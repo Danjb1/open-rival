@@ -5,7 +5,7 @@ function(add_json project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/json-${JSON_VERSION}/include
+        "${LIBS_DIR}/json-${JSON_VERSION}/include"
     )
 
 endfunction()

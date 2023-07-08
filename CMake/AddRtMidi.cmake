@@ -12,14 +12,14 @@ function(add_rtmidi project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}
+        "${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}"
     )
 
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}/${_rtmidi_lib_suffix}/Debug>
-            $<$<CONFIG:Release>:${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}/${_rtmidi_lib_suffix}/Release>
+            "$<$<CONFIG:Debug>:${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}/${_rtmidi_lib_suffix}/Debug>"
+            "$<$<CONFIG:Release>:${LIBS_DIR}/rtmidi-${RTMIDI_VERSION}/${_rtmidi_lib_suffix}/Release>"
         )
     else()
         message(STATUS "Operating system not (yet) supported!")

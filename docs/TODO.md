@@ -1,4 +1,4 @@
-# To Do
+﻿# To Do
 
 <!----------------------------------------------------------------------------->
 ## Next Up...
@@ -6,9 +6,6 @@
 
 ### CMake Migration
 
-- File organisation
-    - Some includes are still loose
-    - TextureRenderable is in the wrong folder
 - Run clang-format everywhere
 - Fix test project
     - Copy all includes from Open-Rival
@@ -16,10 +13,21 @@
 
 ### Multiplayer Milestone
 
-- BUG: Music hangs after closing the window
+- Reading from the registry is broken:
+    Found game at: Ò®äþë£þÖ®µ▒íµò▓µ▒í
+    Failed to extract sounds: Unable to open file: Ò®äþë£þÖ®µ▒íµò▓µ▒í\DATA\SOUNDS.DAT
+- BUG: Music hangs after closing the window (when running from command prompt)
+    [ALSOFT] (WW) 1 Source not deleted
+    [ALSOFT] (WW) 1 Buffer not deleted
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
-- Add logging mechanism (no console in release builds!)
+- Add logging mechanism
+    - Replace cout / cerr with logger calls
+    - Interface extractor should log its progress
+    - Log important events to file
+- Improve water shader: https://codereview.stackexchange.com/a/285931/222906
+- Sometimes units that were part of a drag-select can no longer be selected
+    - Related: sometimes units walk into the same tile
 - Release a new version
 
 ### Menu System
@@ -73,7 +81,6 @@
 
 - Game will crash if no config file exists
 - Some animations need attention (e.g. Snake)
-- Sometimes units that were part of a drag-select can no longer be selected
 - "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
@@ -88,10 +95,6 @@
 
 ### General
 
-- Logging mechanism
-    - Log important events to file
-    - Replace cout / cerr with logger calls
-    - texture-builder is particularly noisy (for atlas files)
 - Add support for [Unicode filenames](http://utf8everywhere.org/)
 
 ### Data Loading
@@ -294,6 +297,9 @@
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
 - Add IWYU to build pipeline: https://include-what-you-use.org/
+- Linker warning:
+    warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+- Treat linker warnings as errors
 
 ### CMake
 

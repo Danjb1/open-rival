@@ -4,7 +4,7 @@
 #include <memory>
 #include <utility>
 
-#include "EntityUtils.h"
+#include "utils/EntityUtils.h"
 #include "game/MapUtils.h"
 #include "gfx/RenderUtils.h"
 

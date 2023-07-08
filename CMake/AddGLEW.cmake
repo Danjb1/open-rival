@@ -12,14 +12,14 @@ function(add_glew project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/glew-${GLEW_VERSION}/include
+        "${LIBS_DIR}/glew-${GLEW_VERSION}/include"
     )
 
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/glew-${GLEW_VERSION}/lib/Debug/${_glew_lib_suffix}>
-            $<$<CONFIG:Release>:${LIBS_DIR}/glew-${GLEW_VERSION}/lib/Release/${_glew_lib_suffix}>
+            "$<$<CONFIG:Debug>:${LIBS_DIR}/glew-${GLEW_VERSION}/lib/Debug/${_glew_lib_suffix}>"
+            "$<$<CONFIG:Release>:${LIBS_DIR}/glew-${GLEW_VERSION}/lib/Release/${_glew_lib_suffix}>"
         )
     else()
         message(STATUS "Operating system not (yet) supported!")

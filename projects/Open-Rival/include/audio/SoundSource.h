@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Unit.h"
+#include "game/Unit.h"
 #include "audio/WaveFile.h"
 
 namespace Rival {

@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-#include "Race.h"
+#include "game/Race.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/renderable/SpriteRenderable.h"
 #include "gfx/Spritesheet.h"

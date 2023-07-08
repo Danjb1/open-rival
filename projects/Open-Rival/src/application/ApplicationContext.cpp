@@ -1,6 +1,6 @@
 #include "application/ApplicationContext.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 #include <SDL_image.h>
 #include "gfx/GlewWrapper.h"
 
@@ -12,7 +12,7 @@
 
 #include "net/NetUtils.h"
 #include "audio/AudioUtils.h"
-#include "ConfigUtils.h"
+#include "utils/ConfigUtils.h"
 #include "game/GameState.h"
 #include "utils/JsonUtils.h"
 #include "scenario/ScenarioBuilder.h"

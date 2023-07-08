@@ -1,6 +1,6 @@
 #include "ui/CursorRenderer.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 #include "gfx/GlewWrapper.h"
 
 #include "application/Resources.h"

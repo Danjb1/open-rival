@@ -94,9 +94,13 @@ Once the dependencies and resources are in place, you should be able to run the 
 
 ## :stethoscope: Troubleshooting
 
+### The code execution cannot proceed because XXXXX.dll was not found
+
+Check that the folder containing `Open-Rival.exe` also contains the [required DLLs](/docs/dependencies.md#dll-files), and that these are the correct DLLs for the current architecture (x86 or x64).
+
 ### The application was unable to start correctly 0xc00007b
 
-This signifies a missing DLL file.
+This signifies a missing or incorrect DLL file.
 
 Check that the folder containing `Open-Rival.exe` also contains the [required DLLs](/docs/dependencies.md#dll-files), and that these are the correct DLLs for the current architecture (x86 or x64).
 

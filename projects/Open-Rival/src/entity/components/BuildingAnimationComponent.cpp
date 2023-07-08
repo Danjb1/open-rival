@@ -7,7 +7,7 @@
 #include "application/Resources.h"
 #include "entity/components/SpriteComponent.h"
 #include "utils/TimeUtils.h"
-#include "Unit.h"
+#include "game/Unit.h"
 #include "game/UnitDef.h"
 #include "game/World.h"
 

@@ -7,7 +7,7 @@
 
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementComponent.h"
-#include "Unit.h"
+#include "game/Unit.h"
 
 namespace Rival {
 

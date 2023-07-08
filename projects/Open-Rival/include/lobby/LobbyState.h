@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 #include <memory>
 #include <string>
@@ -11,7 +11,7 @@
 #include "ui/MenuRenderer.h"
 #include "gfx/renderer/MenuTextRenderer.h"
 #include "game/PlayerState.h"
-#include "ScenarioData.h"
+#include "scenario/ScenarioData.h"
 #include "application/State.h"
 
 namespace Rival {

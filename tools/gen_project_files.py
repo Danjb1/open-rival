@@ -54,7 +54,7 @@ with open(cmake_file, 'w') as myfile:
         myfile.write(f"    {file}\n")
     myfile.write(")\n\n")
 
-    myfile.write("set(OPEN_RIVAL_INCLUDE_HEADERS\n")
+    myfile.write("set(OPEN_RIVAL_HEADERS\n")
     for file in output_include_headers:
         myfile.write(f"    {file}\n")
     myfile.write(")\n")

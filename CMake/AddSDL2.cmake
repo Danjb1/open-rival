@@ -12,14 +12,14 @@ function(add_sdl2 project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/SDL2-${SDL2_VERSION}/include
+        "${LIBS_DIR}/SDL2-${SDL2_VERSION}/include"
     )
 
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/SDL2-${SDL2_VERSION}/${_sdl2_lib_suffix}>
-            $<$<CONFIG:Release>:${LIBS_DIR}/SDL2-${SDL2_VERSION}/${_sdl2_lib_suffix}>
+            "$<$<CONFIG:Debug>:${LIBS_DIR}/SDL2-${SDL2_VERSION}/${_sdl2_lib_suffix}>"
+            "$<$<CONFIG:Release>:${LIBS_DIR}/SDL2-${SDL2_VERSION}/${_sdl2_lib_suffix}>"
         )
     else()
         message(STATUS "Operating system not (yet) supported!")

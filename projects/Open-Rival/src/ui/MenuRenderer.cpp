@@ -2,7 +2,7 @@
 
 #include "gfx/GlewWrapper.h"
 
-#include "gfx/renderable/gfx/TextureRenderable.h"
+#include "gfx/renderable/TextureRenderable.h"
 #include "gfx/GLUtils.h"
 #include "utils/Rect.h"
 #include "gfx/RenderUtils.h"

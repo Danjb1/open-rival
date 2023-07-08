@@ -1,6 +1,6 @@
 #include "application/Window.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 #include <iostream>
 
