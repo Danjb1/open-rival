@@ -296,8 +296,6 @@
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
 - Add IWYU to build pipeline: https://include-what-you-use.org/
-- Linker warning:
-    warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
 - Treat linker warnings as errors
 
 ### CMake

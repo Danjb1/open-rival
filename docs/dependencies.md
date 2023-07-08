@@ -20,6 +20,7 @@
 - Statically-linked (as recommended [here](https://stackoverflow.com/a/20873711/1624459)).
 - Needs to be built from source to create `glew32sd.lib` / `glew32s.lib` (Debug / Release).
     - A Visual Studio project is included in the download (`build/vc12`).
+    - Clear the Runtime Library property (C/C++ > Code Generation) to avoid linker warnings.
 
 ### [GLM](https://github.com/g-truc/glm)
 
