@@ -12,14 +12,14 @@ function(add_openal project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/include
+        "${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/include"
     )
 
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Debug>
-            $<$<CONFIG:Release>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Release>
+            "$<$<CONFIG:Debug>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Debug>"
+            "$<$<CONFIG:Release>:${LIBS_DIR}/openal-soft-${OPENAL_VERSION}/${_openal_lib_suffix}/Release>"
         )
     else()
         message(STATUS "Operating system not (yet) supported!")

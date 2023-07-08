@@ -8,9 +8,9 @@
 #include "entity/EntityFactory.h"
 #include "entity/components/FacingComponent.h"
 #include "application/Resources.h"
-#include "ScenarioData.h"
+#include "scenario/ScenarioData.h"
 #include "game/Tile.h"
-#include "Unit.h"
+#include "game/Unit.h"
 #include "game/World.h"
 
 namespace Rival {

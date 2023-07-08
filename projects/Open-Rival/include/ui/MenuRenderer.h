@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gfx/renderable/gfx/TextureRenderable.h"
+#include "gfx/renderable/TextureRenderable.h"
 #include "ui/CursorRenderer.h"
 #include "game/GameInterface.h"
 #include "application/Resources.h"

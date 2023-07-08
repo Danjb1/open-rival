@@ -12,14 +12,14 @@ function(add_freetype project_name)
 
     # Include directory
     target_include_directories(${project_name} PRIVATE
-        ${LIBS_DIR}/freetype-${FREETYPE_VERSION}/include
+        "${LIBS_DIR}/freetype-${FREETYPE_VERSION}/include"
     )
 
     # Library directory
     if(WIN32)
         target_link_directories(${project_name} PUBLIC
-            $<$<CONFIG:Debug>:${LIBS_DIR}/freetype-${FREETYPE_VERSION}/${_freetype_lib_suffix}/Debug>
-            $<$<CONFIG:Release>:${LIBS_DIR}/freetype-${FREETYPE_VERSION}/${_freetype_lib_suffix}/ Release>
+            "$<$<CONFIG:Debug>:${LIBS_DIR}/freetype-${FREETYPE_VERSION}/${_freetype_lib_suffix}/Debug>"
+            "$<$<CONFIG:Release>:${LIBS_DIR}/freetype-${FREETYPE_VERSION}/${_freetype_lib_suffix}/Release>"
         )
     else()
         message(STATUS "Operating system not (yet) supported!")

@@ -4,7 +4,7 @@
 #include <string>
 
 #include "utils/BufferUtils.h"
-#include "EnumUtils.h"
+#include "utils/EnumUtils.h"
 #include "commands/GameCommand.h"
 #include "commands/MoveCommand.h"
 

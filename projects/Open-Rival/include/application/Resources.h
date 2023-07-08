@@ -13,7 +13,7 @@
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
 #include "gfx/TextureAtlas.h"
-#include "Unit.h"
+#include "game/Unit.h"
 #include "game/UnitDef.h"
 #include "audio/WaveFile.h"
 

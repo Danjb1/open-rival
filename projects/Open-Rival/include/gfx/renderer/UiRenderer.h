@@ -4,7 +4,7 @@
 #include "gfx/renderable/AtlasRenderable.h"
 #include "game/GameInterface.h"
 #include "gfx/renderer/MenuTextRenderer.h"
-#include "Race.h"
+#include "game/Race.h"
 #include "gfx/renderable/SpriteRenderable.h"
 #include "application/Window.h"
 

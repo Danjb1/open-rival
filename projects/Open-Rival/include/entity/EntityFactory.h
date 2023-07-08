@@ -7,8 +7,8 @@
 #include "commands/GameCommand.h"
 #include "game/MapUtils.h"
 #include "game/PlayerState.h"
-#include "ScenarioData.h"
-#include "Unit.h"
+#include "scenario/ScenarioData.h"
+#include "game/Unit.h"
 
 namespace Rival {
 

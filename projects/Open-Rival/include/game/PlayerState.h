@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Race.h"
+#include "game/Race.h"
 
 namespace Rival {
 

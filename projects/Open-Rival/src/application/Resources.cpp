@@ -5,7 +5,7 @@
 #include <string>
 
 #include "application/ApplicationContext.h"
-#include "ConfigUtils.h"
+#include "utils/ConfigUtils.h"
 #include "utils/FileUtils.h"
 #include "game/GameInterface.h"
 #include "utils/JsonUtils.h"

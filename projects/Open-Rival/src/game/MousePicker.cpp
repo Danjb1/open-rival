@@ -1,6 +1,6 @@
 #include "game/MousePicker.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 #include <algorithm>  // min, max
 #include <cstdint>

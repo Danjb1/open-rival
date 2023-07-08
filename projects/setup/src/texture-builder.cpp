@@ -357,7 +357,6 @@ void createTextureAtlas(
     // Create the texture
     int texWidth = MathUtils::nextPowerOf2(builder.texWidth);
     int texHeight = MathUtils::nextPowerOf2(builder.texHeight);
-    std::cout << "Creating texture of size " << texWidth << ", " << texHeight << "\n";
     Image texture = Image::createEmpty(texWidth, texHeight, 0xff);
 
     // Copy each image onto the texture
@@ -366,7 +365,6 @@ void createTextureAtlas(
         const std::string& key = kv.first;
         const Rect& target = kv.second;
         const Image& img = builder.imagesByKey.at(key)->image;
-        std::cout << "Copying " << key << " to " << target.x << ", " << target.y << "\n";
         Image::copyImage(img, texture, target.x + atlasPadding, target.y + atlasPadding);
     }
 

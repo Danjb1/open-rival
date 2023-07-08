@@ -6,8 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ScenarioData.h"
-#include "Unit.h"
+#include "scenario/ScenarioData.h"
+#include "game/Unit.h"
 
 namespace Rival {
 

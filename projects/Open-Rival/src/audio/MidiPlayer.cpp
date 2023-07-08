@@ -1,6 +1,6 @@
 #include "audio/MidiPlayer.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 #include <RtMidi.h>
 
 #include <chrono>

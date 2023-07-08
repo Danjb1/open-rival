@@ -16,7 +16,7 @@
 #include "net/packets/StartGamePacket.h"
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
-#include "ConfigUtils.h"
+#include "utils/ConfigUtils.h"
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "scenario/ScenarioBuilder.h"

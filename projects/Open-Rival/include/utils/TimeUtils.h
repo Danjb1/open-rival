@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 namespace Rival { namespace TimeUtils {
 

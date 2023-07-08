@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "entity/Entity.h"
-#include "EntityUtils.h"
+#include "utils/EntityUtils.h"
 #include "game/MapUtils.h"
 
 namespace Rival {

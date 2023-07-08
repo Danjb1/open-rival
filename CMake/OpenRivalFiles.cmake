@@ -69,7 +69,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/BoxRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/gfx/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp
@@ -124,13 +124,6 @@ set(OPEN_RIVAL_SOURCES
 )
 
 set(OPEN_RIVAL_HEADERS
-    ${OPEN_RIVAL_DIR}/include/ConfigUtils.h
-    ${OPEN_RIVAL_DIR}/include/EntityUtils.h
-    ${OPEN_RIVAL_DIR}/include/EnumUtils.h
-    ${OPEN_RIVAL_DIR}/include/Race.h
-    ${OPEN_RIVAL_DIR}/include/SDLWrapper.h
-    ${OPEN_RIVAL_DIR}/include/ScenarioData.h
-    ${OPEN_RIVAL_DIR}/include/Unit.h
     ${OPEN_RIVAL_DIR}/include/application/Application.h
     ${OPEN_RIVAL_DIR}/include/application/ApplicationContext.h
     ${OPEN_RIVAL_DIR}/include/application/Resources.h
@@ -180,7 +173,9 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/Pathfinding.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerContext.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerState.h
+    ${OPEN_RIVAL_DIR}/include/game/Race.h
     ${OPEN_RIVAL_DIR}/include/game/Tile.h
+    ${OPEN_RIVAL_DIR}/include/game/Unit.h
     ${OPEN_RIVAL_DIR}/include/game/UnitDef.h
     ${OPEN_RIVAL_DIR}/include/game/World.h
     ${OPEN_RIVAL_DIR}/include/gfx/Camera.h
@@ -202,7 +197,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/BoxRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/SpriteRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/gfx/TextureRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextureRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/FramebufferRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/GameRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/MapBorderRenderer.h
@@ -236,18 +231,23 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/net/packets/RequestJoinPacket.h
     ${OPEN_RIVAL_DIR}/include/net/packets/StartGamePacket.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioBuilder.h
+    ${OPEN_RIVAL_DIR}/include/scenario/ScenarioData.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioReader.h
     ${OPEN_RIVAL_DIR}/include/ui/Cursor.h
     ${OPEN_RIVAL_DIR}/include/ui/CursorRenderer.h
     ${OPEN_RIVAL_DIR}/include/ui/MenuRenderer.h
     ${OPEN_RIVAL_DIR}/include/utils/BinaryFileReader.h
     ${OPEN_RIVAL_DIR}/include/utils/BufferUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/ConfigUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/EntityUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/EnumUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/FileUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/InputUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/JsonUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/MathUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/MouseUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/Rect.h
+    ${OPEN_RIVAL_DIR}/include/utils/SDLWrapper.h
     ${OPEN_RIVAL_DIR}/include/utils/StringUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/TimeUtils.h
 )

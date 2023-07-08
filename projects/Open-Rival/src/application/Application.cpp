@@ -1,13 +1,13 @@
 #include "application/Application.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 #include <memory>
 #include <utility>  // std::in_place, std::move
 
 #include "net/Socket.h"
 #include "application/ApplicationContext.h"
-#include "ConfigUtils.h"
+#include "utils/ConfigUtils.h"
 #include "game/PlayerState.h"
 #include "application/State.h"
 #include "utils/TimeUtils.h"

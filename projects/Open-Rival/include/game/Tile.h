@@ -2,7 +2,7 @@
 
 #include <cstdint>  // uint*_t
 
-#include "EnumUtils.h"
+#include "utils/EnumUtils.h"
 
 namespace Rival {
 

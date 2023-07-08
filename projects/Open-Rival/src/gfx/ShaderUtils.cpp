@@ -1,6 +1,6 @@
 #include "gfx/ShaderUtils.h"
 
-#include "SDLWrapper.h"
+#include "utils/SDLWrapper.h"
 
 #include <stdio.h>
 

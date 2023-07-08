@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "EntityUtils.h"
+#include "utils/EntityUtils.h"
 #include "gfx/renderable/SpriteRenderable.h"
 
 namespace Rival {
