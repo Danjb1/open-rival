@@ -1,7 +1,7 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include "Camera.h"
+#include "pch.h"
 
 using namespace Rival;
 

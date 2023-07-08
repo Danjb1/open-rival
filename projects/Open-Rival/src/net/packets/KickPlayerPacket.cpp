@@ -4,8 +4,8 @@
 #include <cstdlib>  // std::rand
 #include <string>
 
-#include "utils/BufferUtils.h"
 #include "commands/GameCommand.h"
+#include "utils/BufferUtils.h"
 
 namespace Rival {
 

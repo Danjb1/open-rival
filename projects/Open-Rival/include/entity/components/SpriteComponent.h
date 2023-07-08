@@ -6,8 +6,8 @@
 #include <string>
 
 #include "entity/components/EntityComponent.h"
-#include "gfx/renderable/SpriteRenderable.h"
 #include "game/Unit.h"
+#include "gfx/renderable/SpriteRenderable.h"
 
 namespace Rival {
 

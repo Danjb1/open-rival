@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ui/CursorRenderer.h"
-#include "gfx/renderable/AtlasRenderable.h"
-#include "game/GameInterface.h"
-#include "gfx/renderer/MenuTextRenderer.h"
-#include "game/Race.h"
-#include "gfx/renderable/SpriteRenderable.h"
 #include "application/Window.h"
+#include "game/GameInterface.h"
+#include "game/Race.h"
+#include "gfx/renderable/AtlasRenderable.h"
+#include "gfx/renderable/SpriteRenderable.h"
+#include "gfx/renderer/MenuTextRenderer.h"
+#include "ui/CursorRenderer.h"
 
 namespace Rival {
 

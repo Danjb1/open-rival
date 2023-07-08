@@ -3,8 +3,8 @@
 #include <iostream>
 
 #include "game/MapUtils.h"
-#include "utils/MathUtils.h"
 #include "game/World.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 

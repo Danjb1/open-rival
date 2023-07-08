@@ -1,6 +1,6 @@
-#include "pch.h"
-
 #include "MockSDL.h"
+
+#include "pch.h"
 
 #define SDL_MAIN_HANDLED
 #pragma warning(push)

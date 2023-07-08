@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "game/Unit.h"
 #include "audio/WaveFile.h"
+#include "game/Unit.h"
 
 namespace Rival {
 

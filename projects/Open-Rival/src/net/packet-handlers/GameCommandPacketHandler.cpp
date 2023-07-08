@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "net/packets/GameCommandPacket.h"
 #include "commands/GameCommand.h"
 #include "game/GameState.h"
+#include "net/packets/GameCommandPacket.h"
 
 namespace Rival {
 

@@ -5,21 +5,21 @@
 #include <string>
 #include <utility>  // std::move
 
+#include "application/Application.h"
+#include "application/ApplicationContext.h"
+#include "game/GameInterface.h"
+#include "game/Race.h"
+#include "gfx/Image.h"
+#include "gfx/Palette.h"
+#include "gfx/RenderUtils.h"
+#include "gfx/Spritesheet.h"
 #include "net/Connection.h"
 #include "net/packet-handlers/GameCommandPacketHandler.h"
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/GameCommandPacket.h"
-#include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "utils/EnumUtils.h"
-#include "game/GameInterface.h"
-#include "gfx/Image.h"
 #include "utils/InputUtils.h"
 #include "utils/MouseUtils.h"
-#include "gfx/Palette.h"
-#include "game/Race.h"
-#include "gfx/RenderUtils.h"
-#include "gfx/Spritesheet.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {

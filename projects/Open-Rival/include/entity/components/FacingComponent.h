@@ -3,8 +3,8 @@
 #include <string>
 
 #include "entity/components/EntityComponent.h"
-#include "game/MapUtils.h"
 #include "entity/components/MovementComponent.h"
+#include "game/MapUtils.h"
 
 namespace Rival {
 

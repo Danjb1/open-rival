@@ -2,12 +2,12 @@
 
 #include <string>
 
-#include "entity/components/EntityComponent.h"
 #include "commands/GameCommand.h"
+#include "entity/components/EntityComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "game/PlayerState.h"
-#include "utils/Rect.h"
 #include "gfx/RenderUtils.h"
+#include "utils/Rect.h"
 
 namespace Rival {
 

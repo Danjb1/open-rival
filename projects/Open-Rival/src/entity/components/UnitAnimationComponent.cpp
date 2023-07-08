@@ -2,14 +2,14 @@
 
 #include <stdexcept>
 
-#include "game/Animations.h"
-#include "entity/Entity.h"
 #include "application/Resources.h"
+#include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
-#include "utils/TimeUtils.h"
+#include "game/Animations.h"
 #include "game/Unit.h"
 #include "game/UnitDef.h"
 #include "game/World.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival {
 

@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(LIBS_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival/libs CACHE STRING "Library directory")
 
 # Dependency versions
-set(FREETYPE_VERSION "2.13.0" CACHE STRING "FreeType version number")
+set(FREETYPE_VERSION "2.13.1" CACHE STRING "FreeType version number")
 set(GLEW_VERSION "2.1.0" CACHE STRING "glew version number")
 set(GLM_VERSION "0.9.9.8" CACHE STRING "GLM version number")
 set(JSON_VERSION "3.11.2" CACHE STRING "JSON version number")

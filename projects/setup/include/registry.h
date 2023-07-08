@@ -1,7 +1,8 @@
 #pragma once
 
-#include <IntSafe.h>
 #include <windows.h>
+
+#include <IntSafe.h>
 
 #include <stdexcept>
 

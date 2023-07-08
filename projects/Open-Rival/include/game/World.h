@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "entity/Entity.h"
-#include "utils/EntityUtils.h"
 #include "game/MapUtils.h"
 #include "game/Tile.h"
+#include "utils/EntityUtils.h"
 
 namespace Rival {
 

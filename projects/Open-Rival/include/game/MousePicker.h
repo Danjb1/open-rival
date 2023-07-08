@@ -4,9 +4,9 @@
 #include <memory>
 #include <utility>
 
-#include "utils/EntityUtils.h"
 #include "game/MapUtils.h"
 #include "gfx/RenderUtils.h"
+#include "utils/EntityUtils.h"
 
 namespace Rival {
 

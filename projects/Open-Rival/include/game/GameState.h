@@ -7,18 +7,18 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "net/ClientInfo.h"
-#include "net/packet-handlers/PacketHandler.h"
-#include "net/packets/Packet.h"
-#include "gfx/Camera.h"
+#include "application/State.h"
 #include "commands/GameCommand.h"
-#include "gfx/renderer/GameRenderer.h"
 #include "game/MousePicker.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
-#include "utils/Rect.h"
-#include "application/State.h"
 #include "game/World.h"
+#include "gfx/Camera.h"
+#include "gfx/renderer/GameRenderer.h"
+#include "net/ClientInfo.h"
+#include "net/packet-handlers/PacketHandler.h"
+#include "net/packets/Packet.h"
+#include "utils/Rect.h"
 
 namespace Rival {
 

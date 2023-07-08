@@ -7,10 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #pragma warning(pop)
 
-#include "utils/MathUtils.h"
 #include "gfx/Palette.h"
 #include "gfx/Shaders.h"
 #include "gfx/Texture.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 

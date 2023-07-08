@@ -6,13 +6,13 @@
 #include <string>
 #include <unordered_map>
 
+#include "application/State.h"
+#include "game/PlayerState.h"
+#include "gfx/renderer/MenuTextRenderer.h"
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
-#include "ui/MenuRenderer.h"
-#include "gfx/renderer/MenuTextRenderer.h"
-#include "game/PlayerState.h"
 #include "scenario/ScenarioData.h"
-#include "application/State.h"
+#include "ui/MenuRenderer.h"
 
 namespace Rival {
 

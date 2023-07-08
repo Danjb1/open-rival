@@ -1,8 +1,8 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include "Spritesheet.h"
 #include "Texture.h"
+#include "pch.h"
 
 using namespace Rival;
 

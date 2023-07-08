@@ -2,13 +2,13 @@
 
 #include <memory>
 
-#include "game/Building.h"
-#include "entity/Entity.h"
 #include "commands/GameCommand.h"
+#include "entity/Entity.h"
+#include "game/Building.h"
 #include "game/MapUtils.h"
 #include "game/PlayerState.h"
-#include "scenario/ScenarioData.h"
 #include "game/Unit.h"
+#include "scenario/ScenarioData.h"
 
 namespace Rival {
 

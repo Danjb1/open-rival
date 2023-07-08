@@ -1,6 +1,6 @@
-#include "pch.h"
-
 #include "Window.h"
+
+#include "pch.h"
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

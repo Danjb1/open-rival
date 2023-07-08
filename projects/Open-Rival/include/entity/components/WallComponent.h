@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 
-#include "game/Building.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/SpriteComponent.h"
+#include "game/Building.h"
 
 namespace Rival {
 

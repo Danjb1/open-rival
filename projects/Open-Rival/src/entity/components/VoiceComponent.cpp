@@ -2,12 +2,12 @@
 
 #include <AL/al.h>
 
-#include "audio/AudioSystem.h"
-#include "entity/Entity.h"
 #include "application/Resources.h"
+#include "audio/AudioSystem.h"
 #include "audio/SoundSource.h"
-#include "game/UnitDef.h"
 #include "audio/WaveFile.h"
+#include "entity/Entity.h"
+#include "game/UnitDef.h"
 
 namespace Rival {
 

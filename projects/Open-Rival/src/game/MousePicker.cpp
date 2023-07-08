@@ -7,18 +7,18 @@
 #include <cstdlib>  // abs
 #include <iostream>
 
-#include "gfx/Camera.h"
-#include "entity/Entity.h"
 #include "commands/GameCommand.h"
-#include "game/MapUtils.h"
-#include "utils/MathUtils.h"
+#include "entity/Entity.h"
 #include "entity/components/MouseHandlerComponent.h"
-#include "utils/MouseUtils.h"
 #include "entity/components/OwnerComponent.h"
+#include "game/MapUtils.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
-#include "utils/Rect.h"
 #include "game/World.h"
+#include "gfx/Camera.h"
+#include "utils/MathUtils.h"
+#include "utils/MouseUtils.h"
+#include "utils/Rect.h"
 
 namespace Rival {
 

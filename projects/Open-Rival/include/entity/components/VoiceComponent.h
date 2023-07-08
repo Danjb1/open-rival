@@ -3,8 +3,8 @@
 #include <memory>
 #include <string>
 
-#include "entity/components/EntityComponent.h"
 #include "audio/Sounds.h"
+#include "entity/components/EntityComponent.h"
 #include "entity/components/UnitPropsComponent.h"
 
 namespace Rival {

@@ -4,14 +4,14 @@
 #include <fstream>
 #include <memory>
 
-#include "game/Building.h"
+#include "application/Resources.h"
 #include "entity/EntityFactory.h"
 #include "entity/components/FacingComponent.h"
-#include "application/Resources.h"
-#include "scenario/ScenarioData.h"
+#include "game/Building.h"
 #include "game/Tile.h"
 #include "game/Unit.h"
 #include "game/World.h"
+#include "scenario/ScenarioData.h"
 
 namespace Rival {
 

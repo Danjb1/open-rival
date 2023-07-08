@@ -1,8 +1,8 @@
 #include "commands/MoveCommand.h"
 
-#include "utils/BufferUtils.h"
-#include "game/MapUtils.h"
 #include "entity/components/MovementComponent.h"
+#include "game/MapUtils.h"
+#include "utils/BufferUtils.h"
 
 namespace Rival {
 

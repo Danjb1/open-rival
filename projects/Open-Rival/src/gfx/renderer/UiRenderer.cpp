@@ -2,15 +2,15 @@
 
 #include "gfx/GlewWrapper.h"
 
+#include "application/Resources.h"
+#include "entity/components/PortraitComponent.h"
+#include "entity/components/UnitPropsComponent.h"
 #include "game/InventoryComponent.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
-#include "entity/components/PortraitComponent.h"
 #include "gfx/RenderUtils.h"
-#include "application/Resources.h"
 #include "gfx/Shaders.h"
 #include "gfx/renderable/TextRenderable.h"
-#include "entity/components/UnitPropsComponent.h"
 
 namespace Rival {
 

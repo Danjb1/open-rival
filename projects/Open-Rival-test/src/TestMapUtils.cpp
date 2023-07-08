@@ -1,7 +1,7 @@
-#include "pch.h"
 #include "catch2/catch.h"
 
 #include "MapUtils.h"
+#include "pch.h"
 
 using namespace Rival;
 

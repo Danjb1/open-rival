@@ -6,7 +6,6 @@
 
 ### CMake Migration
 
-- Run clang-format everywhere
 - Fix test project
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
