@@ -94,7 +94,15 @@ Once the dependencies and resources are in place, you should be able to run the 
 
 ## :stethoscope: Troubleshooting
 
+### LNK1104	cannot open file 'XXXXX.lib'
+
+This signifies that a library cannot be found by the linker.
+
+Check that the library has been built and that the required `.lib` file is present in one of the linker's "Additional Library Directories".
+
 ### The code execution cannot proceed because XXXXX.dll was not found
+
+This signifies a missing DLL file.
 
 Check that the folder containing `Open-Rival.exe` also contains the [required DLLs](/docs/dependencies.md#dll-files), and that these are the correct DLLs for the current architecture (x86 or x64).
 
