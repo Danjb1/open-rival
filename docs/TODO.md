@@ -24,7 +24,6 @@
     - Replace cout / cerr with logger calls
     - Interface extractor should log its progress
     - Log important events to file
-- Improve water shader: https://codereview.stackexchange.com/a/285931/222906
 - Sometimes units that were part of a drag-select can no longer be selected
     - Related: sometimes units walk into the same tile
 - Release a new version
