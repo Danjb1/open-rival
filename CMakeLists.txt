@@ -9,13 +9,14 @@ include(CMake/AddOpenAL.cmake)
 include(CMake/AddRtMidi.cmake)
 include(CMake/AddSDL2.cmake)
 include(CMake/AddSDL2_Image.cmake)
+include(CMake/AddSpdlog.cmake)
 include(CMake/CompilerWarnings.cmake)
 include(CMake/StandardProjectSettings.cmake)
 
 set(CMAKE_CXX_STANDARD 17)
 
 # Library directory
-set(LIBS_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival/libs CACHE STRING "Library directory")
+set(LIBS_DIR ${CMAKE_SOURCE_DIR}/libs CACHE STRING "Library directory")
 
 # Dependency versions
 set(FREETYPE_VERSION "2.13.1" CACHE STRING "FreeType version number")
@@ -26,6 +27,7 @@ set(OPENAL_VERSION "1.23.1" CACHE STRING "OpenAL version number")
 set(RTMIDI_VERSION "5.0.0" CACHE STRING "RtMidi version number")
 set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
 set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
+set(SPDLOG_VERSION "1.12.0" CACHE STRING "spdlog version number")
 
 # This is seemingly an empty interface which all projects depend on... remove?
 add_library(project_options INTERFACE)
