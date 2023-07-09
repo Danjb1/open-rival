@@ -107,6 +107,10 @@ IncludeCategories:
   - Regex:           '^<nlohmann\/.+>'
     Priority:        1
     SortPriority:    70
+  ## spdlog
+  - Regex:           '^<spdlog\/.+>'
+    Priority:        1
+    SortPriority:    80
   # C system headers ===========================================================
   - Regex:           '^<.+\.h>'
     Priority:        2

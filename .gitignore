@@ -2,7 +2,7 @@
 Thumbs.db
 
 # Build folder
-build/
+/build/
 
 # Release folder
 /dist/res/maps
@@ -17,5 +17,8 @@ build/
 # Visual Studio - user preferences
 *.user
 
+# Libraries
+/libs/
+
 # Other
-/misc
+/misc/

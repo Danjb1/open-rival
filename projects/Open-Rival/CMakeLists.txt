@@ -54,6 +54,7 @@ add_openal(Open-Rival)
 add_rtmidi(Open-Rival)
 add_sdl2(Open-Rival)
 add_sdl2_image(Open-Rival)
+add_spdlog(Open-Rival)
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival PRIVATE

@@ -68,6 +68,13 @@
 - Dynamically-linked.
 [Install guide](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/windows/msvc2019/index.php)
 
+### [spdlog](https://github.com/gabime/spdlog)
+
+> **Used for:** Logging
+
+- Statically-linked.
+- Needs to be built from source to create `spdlogd.lib` / `spdlog.lib` (Debug / Release).
+
 ### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 
 > **Used for:** High-precision timers, MIDI playback (Windows only)

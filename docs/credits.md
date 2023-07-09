@@ -19,3 +19,4 @@
     - RtMidi
     - SDL2
     - SDL_image
+    - spdlog
