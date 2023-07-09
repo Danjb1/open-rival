@@ -12,9 +12,6 @@
 
 ### Multiplayer Milestone
 
-- Reading from the registry is broken:
-    Found game at: Ò®äþë£þÖ®µ▒íµò▓µ▒í
-    Failed to extract sounds: Unable to open file: Ò®äþë£þÖ®µ▒íµò▓µ▒í\DATA\SOUNDS.DAT
 - BUG: Music hangs after closing the window (when running from command prompt)
     [ALSOFT] (WW) 1 Source not deleted
     [ALSOFT] (WW) 1 Buffer not deleted
@@ -299,6 +296,7 @@
 
 ### CMake
 
+- Make some settings common to all projects (e.g. Unicode)
 - Add shaders to project
 - Why do additional library directies also have a `/$(Configuration)` variant?
 - Include libraries in a better way
