@@ -64,3 +64,8 @@ target_link_libraries(setup PRIVATE
     project_options
     project_warnings
 )
+
+# Use Unicode encoding on Windows
+if (MSVC)
+    target_compile_definitions(setup PUBLIC UNICODE _UNICODE)
+endif()

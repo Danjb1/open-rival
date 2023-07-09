@@ -139,7 +139,6 @@ void copyVideos(std::string gameDir)
  */
 int main(int argc, char* argv[])
 {
-
     std::string gameDir;
     bool findDirectoryFromRegistry = true;
     for (int count = 1; count < argc; ++count)
@@ -178,6 +177,9 @@ int main(int argc, char* argv[])
                       << "Error code: " << e.errorCode() << "\n";
             return -1;
         }
+
+        // TMP
+        return 0;
     }
 
     // Create the output directories
