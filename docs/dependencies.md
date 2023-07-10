@@ -74,6 +74,8 @@
 
 - Statically-linked.
 - Needs to be built from source to create `spdlogd.lib` / `spdlog.lib` (Debug / Release).
+    - A Visual Studio solution must be generated using CMake.
+    - Clear the Runtime Library property (C/C++ > Code Generation) to avoid linker warnings.
 
 ### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 

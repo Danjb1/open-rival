@@ -18,8 +18,6 @@
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
 - Add logging mechanism
-    - spdlog link warning:
-        - LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
     - Replace cout / cerr with logger calls
     - Interface extractor should log its progress
     - Log important events to file
