@@ -20,8 +20,6 @@ using namespace Rival;
  */
 int main(int argc, char* argv[])
 {
-    spdlog::info("Test log!");
-
     // Parse command-line parameters
     ProgramOptions options(argc, argv);
     if (options.hasError())

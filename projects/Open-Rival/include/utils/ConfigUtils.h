@@ -7,7 +7,7 @@ using json = nlohmann::json;
 namespace Rival { namespace ConfigUtils {
 
 template <class T>
-T get(json cfg, std::string key, T defaultValue)
+T get(const json& cfg, const std::string& key, const T& defaultValue)
 {
     if (cfg.contains(key))
     {

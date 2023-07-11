@@ -53,6 +53,7 @@ private:
     static std::unique_ptr<Window> createWindow();
     static void setWindowIcon(Window& window);
 
+    void initLogging();
     void initSDL();
     void initAudio();
     void initFonts();

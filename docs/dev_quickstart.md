@@ -104,9 +104,7 @@ Check that the library has been built and that the required `.lib` file is prese
 
 This signifies that a library is including a different C Runtime (CRT) from Open-Rival. Check the build settings of all libraries (C/C++ > Code Generation > Runtime Library).
 
-Open-Rival uses "Multi-threaded Debug DLL (/MDd)" or "Multi-threaded DLL (/MD)", as this is the version [required by SDL](https://wiki.libsdl.org/SDL2/FAQWindows#when_using_visual_c_i_get_link_errors_relating_to_msvcrt.lib_or_libc). Any dynamic libraries should use this same version.
-
-Static libraries should be built with *no* CRT to avoid conflicts, as recommended [here](https://stackoverflow.com/a/28703199/1624459). This lets them depend on the CRT used by Open-Rival.
+Open-Rival uses "Multi-threaded Debug DLL (/MDd)" or "Multi-threaded DLL (/MD)", as this is the version [required by SDL](https://wiki.libsdl.org/SDL2/FAQWindows#when_using_visual_c_i_get_link_errors_relating_to_msvcrt.lib_or_libc). All libraries should be built with this same version.
 
 ### The code execution cannot proceed because XXXXX.dll was not found
 
