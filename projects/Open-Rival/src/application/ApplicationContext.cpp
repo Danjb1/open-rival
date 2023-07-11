@@ -3,9 +3,13 @@
 #include "utils/SDLWrapper.h"
 #include <SDL_image.h>
 #include "gfx/GlewWrapper.h"
+#include <spdlog/spdlog.h>
 
+#include <chrono>
+#include <format>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>  // std::move
@@ -17,6 +21,7 @@
 #include "net/NetUtils.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #include "utils/ConfigUtils.h"
 #include "utils/JsonUtils.h"
 
@@ -24,7 +29,7 @@ namespace Rival {
 
 ApplicationContext::ApplicationContext()
     : cfg(readConfig())
-    , window((initSDL(), createWindow()))
+    , window((initLogging(), initSDL(), createWindow()))
     , res((initGLEW(), initGL(), initFonts(), *this))
 {
     initAudio();
@@ -42,6 +47,29 @@ ApplicationContext::~ApplicationContext()
 json ApplicationContext::readConfig()
 {
     return JsonUtils::readJsonFile("config.json");
+}
+
+void ApplicationContext::initLogging()
+{
+    const std::string logLevel = ConfigUtils::get(cfg, "logLevel", std::string("info"));
+    try
+    {
+        // Log to file
+        const auto now = std::chrono::system_clock::now();
+        std::ostringstream ss;
+        // See: https://en.cppreference.com/w/cpp/chrono/system_clock/formatter#Format_specification
+        ss << "logs/Open-Rival_"                        //
+           << std::format("{:%Y-%m-%d_%H-%M-%S}", now)  //
+           << ".log";
+        const std::string logFilename = ss.str();
+        auto file_logger = spdlog::basic_logger_mt("file_logger", logFilename);
+        spdlog::set_default_logger(file_logger);
+    }
+    catch (const spdlog::spdlog_ex& ex)
+    {
+        std::cerr << "Log init failed: " << ex.what() << "\n";
+    }
+    spdlog::set_level(spdlog::level::from_str(logLevel));
 }
 
 void ApplicationContext::initSDL()

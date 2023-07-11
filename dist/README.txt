@@ -200,3 +200,21 @@ Gameplay
     Example:
 
         "levelToLoad": "my_map.sco"
+
+--------------------------------------------------------------------------------
+Logging
+--------------------------------------------------------------------------------
+
+=> logLevel
+
+    Level of detail of any generated log files.
+
+    Examples:
+
+        "logLevel": "off"
+        "logLevel": "trace"
+        "logLevel": "debug"
+        "logLevel": "info"
+        "logLevel": "warn"
+        "logLevel": "error"
+        "logLevel": "critical"

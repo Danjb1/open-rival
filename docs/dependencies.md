@@ -20,7 +20,8 @@
 - Statically-linked (as recommended [here](https://stackoverflow.com/a/20873711/1624459)).
 - Needs to be built from source to create `glew32sd.lib` / `glew32s.lib` (Debug / Release).
     - A Visual Studio project is included in the download (`build/vc12`).
-    - Clear the Runtime Library property (C/C++ > Code Generation) to avoid linker warnings.
+    - Set the Runtime Library property (C/C++ > Code Generation) to "Multi-threaded Debug DLL (/MDd)" (Debug) or "Multi-threaded DLL (/MD)" (Release) to avoid linker warnings.
+        - GLEW does not actually require a C runtime but it is still recommended for all libraries to share the same runtime.
 
 ### [GLM](https://github.com/g-truc/glm)
 
@@ -75,7 +76,7 @@
 - Statically-linked.
 - Needs to be built from source to create `spdlogd.lib` / `spdlog.lib` (Debug / Release).
     - A Visual Studio solution must be generated using CMake.
-    - Clear the Runtime Library property (C/C++ > Code Generation) to avoid linker warnings.
+    - Set the Runtime Library property (C/C++ > Code Generation) to "Multi-threaded Debug DLL (/MDd)" (Debug) or "Multi-threaded DLL (/MD)" (Release) to avoid linker warnings.
 
 ### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 

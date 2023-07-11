@@ -1,5 +1,6 @@
 # System files
 Thumbs.db
+*.lnk
 
 # Build folder
 /build/
