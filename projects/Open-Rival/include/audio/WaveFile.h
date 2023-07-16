@@ -36,7 +36,7 @@ public:
     std::vector<std::uint8_t> soundData;
     std::string filename;
 
-    WaveFile(std::string filename);
+    WaveFile(const std::string& filename);
 };
 
 }  // namespace Rival

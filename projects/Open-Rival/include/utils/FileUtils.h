@@ -6,8 +6,8 @@
 
 namespace Rival { namespace FileUtils {
 
-std::vector<std::uint8_t> readBinaryFile(std::string filename);
+std::vector<std::uint8_t> readBinaryFile(const std::string& filename);
 
-std::string readTextFile(std::string filename);
+std::string readTextFile(const std::string& filename);
 
 }}  // namespace Rival::FileUtils

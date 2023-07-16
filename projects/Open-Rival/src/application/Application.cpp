@@ -10,6 +10,7 @@
 #include "game/PlayerState.h"
 #include "net/Socket.h"
 #include "utils/ConfigUtils.h"
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -139,7 +140,7 @@ void Application::makeNextStateActive()
 
 void Application::startServer(std::uint16_t port)
 {
-    std::cout << "Starting server on port " << std::to_string(port) << "\n";
+    LOG_INFO("Starting server on port {}", port);
 
     server.emplace(port, PlayerStore::maxPlayers);
     server->start();
@@ -150,7 +151,7 @@ void Application::startServer(std::uint16_t port)
 
 void Application::connectToServer(const std::string& address, std::uint16_t port)
 {
-    std::cout << "Connecting to server on port " << std::to_string(port) << "\n";
+    LOG_INFO("Connecting to server on port {}", port);
 
     if (!packetFactory)
     {

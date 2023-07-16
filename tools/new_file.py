@@ -16,7 +16,6 @@ SRC_DIR = '../projects/Open-Rival/src/'
 HDR_DIR = '../projects/Open-Rival/include/'
 
 CPP_TEMPLATE = '''\
-#include "pch.h"
 #include "{filename}.h"
 
 namespace Rival {{

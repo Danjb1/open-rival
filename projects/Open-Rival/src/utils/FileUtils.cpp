@@ -6,7 +6,7 @@
 
 namespace Rival { namespace FileUtils {
 
-std::vector<std::uint8_t> readBinaryFile(std::string filename)
+std::vector<std::uint8_t> readBinaryFile(const std::string& filename)
 {
     // Open the file at the end
     std::ifstream is(filename, std::ios::binary | std::ios::ate);
@@ -31,7 +31,7 @@ std::vector<std::uint8_t> readBinaryFile(std::string filename)
     return data;
 }
 
-std::string readTextFile(std::string filename)
+std::string readTextFile(const std::string& filename)
 {
     std::ifstream is(filename);
     std::stringstream buffer;

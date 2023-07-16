@@ -22,7 +22,7 @@ public:
 
     const std::vector<GLfloat> getTexCoords(std::string key) const;
 
-    static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string filename);
+    static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string& filename);
 
 public:
     std::shared_ptr<const Texture> texture;

@@ -1,11 +1,12 @@
 #include "scenario/ScenarioReader.h"
 
 #include <algorithm>
-#include <iomanip>
-#include <iostream>
+#include <iomanip>  // std::setfill, std::setw
+#include <ios>      // std::hex
 #include <stdexcept>
 
 #include "utils/FileUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -78,7 +79,7 @@ namespace Rival {
 // Entry points
 ///////////////////////////////////////////////////////////////////////////
 
-ScenarioReader::ScenarioReader(const std::string filename)
+ScenarioReader::ScenarioReader(const std::string& filename)
 {
     try
     {
@@ -86,7 +87,7 @@ ScenarioReader::ScenarioReader(const std::string filename)
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what();
+        LOG_ERROR("{}", e.what());
         throw std::runtime_error("Failed to read scenario: " + filename);
     }
 }
@@ -95,6 +96,7 @@ ScenarioData ScenarioReader::readScenario()
 {
     pos = 0;
     ScenarioData scenarioData = parseScenario(true);
+    LOG_TRACE("Scenario data:\n{}", log.view());
     return scenarioData;
 }
 
@@ -352,7 +354,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing objects");
     printOffset();
     scenarioData.objects = parseObjects();
-    std::cout << "Found " << scenarioData.objects.size() << " object(s)\n";
+    log << "Found " << scenarioData.objects.size() << " object(s)\n";
     if (scenarioData.objects.size() > 0)
     {
         print(scenarioData.objects[0]);
@@ -362,7 +364,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing buildings");
     printOffset();
     scenarioData.buildings = parseBuildings();
-    std::cout << "Found " << scenarioData.buildings.size() << " building(s)\n";
+    log << "Found " << scenarioData.buildings.size() << " building(s)\n";
     if (scenarioData.buildings.size() > 0)
     {
         print(scenarioData.buildings[0]);
@@ -372,7 +374,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing units");
     printOffset();
     scenarioData.units = parseUnits();
-    std::cout << "Found " << scenarioData.units.size() << " unit(s)\n";
+    log << "Found " << scenarioData.units.size() << " unit(s)\n";
     if (scenarioData.units.size() > 0)
     {
         print(scenarioData.units[0]);
@@ -382,7 +384,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing chests");
     printOffset();
     scenarioData.chests = parseChests();
-    std::cout << "Found " << scenarioData.chests.size() << " chest(s)\n";
+    log << "Found " << scenarioData.chests.size() << " chest(s)\n";
     if (scenarioData.chests.size() > 0)
     {
         // print(scenarioData.chests[0]);
@@ -392,7 +394,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing info points");
     printOffset();
     scenarioData.infoPoints = parseInfoPoints();
-    std::cout << "Found " << scenarioData.infoPoints.size() << " info point(s)\n";
+    log << "Found " << scenarioData.infoPoints.size() << " info point(s)\n";
     if (scenarioData.infoPoints.size() > 0)
     {
         // print(scenarioData.infoPoints[0]);
@@ -402,7 +404,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing traps");
     printOffset();
     scenarioData.traps = parseTraps();
-    std::cout << "Found " << scenarioData.traps.size() << " trap(s)\n";
+    log << "Found " << scenarioData.traps.size() << " trap(s)\n";
     if (scenarioData.traps.size() > 0)
     {
         print(scenarioData.traps[0]);
@@ -413,7 +415,7 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
     printSection("Parsing goal locations");
     printOffset();
     scenarioData.goalLocations = parseGoalLocations();
-    std::cout << "Found " << scenarioData.goalLocations.size() << " goal location(s)\n";
+    log << "Found " << scenarioData.goalLocations.size() << " goal location(s)\n";
     if (scenarioData.goalLocations.size() > 0)
     {
         print(scenarioData.goalLocations[0]);
@@ -442,11 +444,11 @@ ScenarioData ScenarioReader::parseScenario(bool expectEof)
         std::size_t remainingBytes = data.size() - pos;
         if (remainingBytes == 0)
         {
-            std::cout << "Reached end of file\n";
+            log << "Reached end of file\n";
         }
         else
         {
-            std::cout << "Found unexpected bytes:\n";
+            log << "Found unexpected bytes:\n";
             std::size_t remainingBytesCapped = std::min(remainingBytes, static_cast<std::size_t>(256));
             printNext(remainingBytesCapped);
             throw std::runtime_error("Did not reach end of file");
@@ -1151,7 +1153,7 @@ char ScenarioReader::getRivalChar(std::uint8_t c) const
         return it->second;
     }
 
-    std::cout << "Found unknown character: " << static_cast<int>(c) << "\n";
+    log << "Found unknown character: " << static_cast<int>(c) << "\n";
 
     // Unknown character
     return '?';
@@ -1161,7 +1163,7 @@ void ScenarioReader::skip(const std::size_t n, bool print)
 {
     if (print)
     {
-        std::cout << "SKIP: ";
+        log << "SKIP: ";
         printNext(n);
     }
     pos += n;
@@ -1174,7 +1176,7 @@ void ScenarioReader::skip(const std::size_t n, bool print)
 void ScenarioReader::printOffset() const
 {
     // Switch to hex, print the value, and switch back
-    std::cout                     //
+    log                           //
             << "Offset: 0x"       //
             << std::setw(4)       //
             << std::setfill('0')  //
@@ -1186,15 +1188,15 @@ void ScenarioReader::printOffset() const
 
 void ScenarioReader::printSection(std::string title) const
 {
-    std::cout << "\n==================================================\n"
-              << title << '\n'
-              << "==================================================\n\n";
+    log << "\n==================================================\n"
+        << title << '\n'
+        << "==================================================\n\n";
 }
 
 void ScenarioReader::printNext(const std::size_t n) const
 {
     // Switch to hex
-    std::cout << std::setfill('0') << std::hex;
+    log << std::setfill('0') << std::hex;
     int col = 0;
     for (std::size_t i = 0; i < n; ++i)
     {
@@ -1202,195 +1204,195 @@ void ScenarioReader::printNext(const std::size_t n) const
 
         if (value == 0)
         {
-            std::cout << "-- ";
+            log << "-- ";
         }
         else
         {
-            std::cout << std::setw(2) << value << " ";
+            log << std::setw(2) << value << " ";
         }
 
         // Print a new line every 16 bytes
         col++;
         if (col == 16)
         {
-            std::cout << '\n';
+            log << '\n';
             col = 0;
         }
     }
     // Switch back to decimal
-    std::cout << '\n' << std::dec;
+    log << '\n' << std::dec;
 }
 
 void ScenarioReader::print(const ScenarioHeader& hdr) const
 {
-    std::cout << "Map Name: " << hdr.mapName << '\n' << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
+    log << "Map Name: " << hdr.mapName << '\n' << "Map Size: " << hdr.mapWidth << "x" << hdr.mapHeight << '\n';
 }
 
 void ScenarioReader::print(const PlayerProperties& props) const
 {
     if (props.hasStartLocation)
     {
-        std::cout << "Start Location: " << props.startLocX << ", " << props.startLocY << '\n';
+        log << "Start Location: " << props.startLocX << ", " << props.startLocY << '\n';
     }
-    std::cout << "Starting Gold:  " << props.startingGold << '\n'
-              << "Starting Wood:  " << props.startingWood << '\n'
-              << "Starting Food:  " << props.startingFood << '\n'
-              << "Race:           " << static_cast<int>(props.race) << '\n'
-              << "AI:             " << props.ai << '\n'
-              << "AI Type:        " << static_cast<int>(props.aiType) << '\n'
-              << "AI Performance: " << static_cast<int>(props.aiPerformance) << '\n'
-              << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
+    log << "Starting Gold:  " << props.startingGold << '\n'
+        << "Starting Wood:  " << props.startingWood << '\n'
+        << "Starting Food:  " << props.startingFood << '\n'
+        << "Race:           " << static_cast<int>(props.race) << '\n'
+        << "AI:             " << props.ai << '\n'
+        << "AI Type:        " << static_cast<int>(props.aiType) << '\n'
+        << "AI Performance: " << static_cast<int>(props.aiPerformance) << '\n'
+        << "AI Strategy:    " << static_cast<int>(props.aiStrategy) << '\n';
 }
 
 void ScenarioReader::print(const TroopDefaults& troop) const
 {
-    std::cout << "Hitpoints: " << troop.hitpoints << '\n'
-              << "Magic:     " << troop.magic << '\n'
-              << "Armour:    " << static_cast<int>(troop.armour) << '\n'
-              << "Sight:     " << static_cast<int>(troop.sight) << '\n'
-              << "Range:     " << static_cast<int>(troop.range) << '\n';
+    log << "Hitpoints: " << troop.hitpoints << '\n'
+        << "Magic:     " << troop.magic << '\n'
+        << "Armour:    " << static_cast<int>(troop.armour) << '\n'
+        << "Sight:     " << static_cast<int>(troop.sight) << '\n'
+        << "Range:     " << static_cast<int>(troop.range) << '\n';
 }
 
 void ScenarioReader::print(const UpgradeProperties& upgrade) const
 {
-    std::cout << "Amount:    " << upgrade.amount << '\n'
-              << "Gold Cost: " << upgrade.goldCost << '\n'
-              << "Wood Cost: " << upgrade.woodCost << '\n'
-              << "Unknown:   " << upgrade.unknown << '\n';
+    log << "Amount:    " << upgrade.amount << '\n'
+        << "Gold Cost: " << upgrade.goldCost << '\n'
+        << "Wood Cost: " << upgrade.woodCost << '\n'
+        << "Unknown:   " << upgrade.unknown << '\n';
 }
 
 void ScenarioReader::print(const ProductionCost& cost) const
 {
-    std::cout << "Gold Cost:         " << cost.goldCost << '\n'
-              << "Wood Cost:         " << cost.woodCost << '\n'
-              << "Construction Time: " << cost.constructionTime << '\n'
-              << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
+    log << "Gold Cost:         " << cost.goldCost << '\n'
+        << "Wood Cost:         " << cost.woodCost << '\n'
+        << "Construction Time: " << cost.constructionTime << '\n'
+        << "XP or Increase:    " << cost.requiredExpOrIncreasePercent << '\n';
 }
 
 void ScenarioReader::print(const WeaponDefaults& wpn) const
 {
-    std::cout << "Move Spaces:  " << wpn.moveSpaces << '\n'
-              << "Move Time:    " << wpn.moveSpaces << '\n'
-              << "Damage:       " << wpn.damage << '\n'
-              << "Penetrate:    " << wpn.penetrate << '\n'
-              << "Accuracy:     " << wpn.accuracy << '\n'
-              << "Effect Range: " << static_cast<int>(wpn.effectRange) << '\n'
-              << "Attack Range: " << static_cast<int>(wpn.attackRange) << '\n'
-              << "Mana Cost:    " << wpn.manaCost << '\n'
-              << "Reload Time:  " << wpn.reloadTime << '\n'
-              << "Unknown:      " << wpn.unknown << '\n';
+    log << "Move Spaces:  " << wpn.moveSpaces << '\n'
+        << "Move Time:    " << wpn.moveSpaces << '\n'
+        << "Damage:       " << wpn.damage << '\n'
+        << "Penetrate:    " << wpn.penetrate << '\n'
+        << "Accuracy:     " << wpn.accuracy << '\n'
+        << "Effect Range: " << static_cast<int>(wpn.effectRange) << '\n'
+        << "Attack Range: " << static_cast<int>(wpn.attackRange) << '\n'
+        << "Mana Cost:    " << wpn.manaCost << '\n'
+        << "Reload Time:  " << wpn.reloadTime << '\n'
+        << "Unknown:      " << wpn.unknown << '\n';
 }
 
 void ScenarioReader::print(const AvailableBuildings& bldg) const
 {
-    std::cout << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
-              << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
-              << "Ranged Troop Building:      " << static_cast<int>(bldg.rangedTroopBuilding) << '\n'
-              << "Siege Troop Building:       " << static_cast<int>(bldg.siegeTroopBuilding) << '\n'
-              << "Melee Troop Building:       " << static_cast<int>(bldg.meleeTroopBuilding) << '\n'
-              << "Flying Troop Building:      " << static_cast<int>(bldg.flyingTroopBuilding) << '\n'
-              << "Engineer Troop Building:    " << static_cast<int>(bldg.engineerTroopBuilding) << '\n'
-              << "Healer Troop Building:      " << static_cast<int>(bldg.healerTroopBuilding) << '\n'
-              << "Spellcaster Troop Building: " << static_cast<int>(bldg.spellcasterTroopBuilding) << '\n'
-              << "Shipyard:                   " << static_cast<int>(bldg.shipyard) << '\n'
-              << "Watch Tower:                " << static_cast<int>(bldg.watchTower) << '\n'
-              << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
+    log << "Crop Land:                  " << static_cast<int>(bldg.cropLand) << '\n'
+        << "Gold Amplifier:             " << static_cast<int>(bldg.goldAmplifier) << '\n'
+        << "Ranged Troop Building:      " << static_cast<int>(bldg.rangedTroopBuilding) << '\n'
+        << "Siege Troop Building:       " << static_cast<int>(bldg.siegeTroopBuilding) << '\n'
+        << "Melee Troop Building:       " << static_cast<int>(bldg.meleeTroopBuilding) << '\n'
+        << "Flying Troop Building:      " << static_cast<int>(bldg.flyingTroopBuilding) << '\n'
+        << "Engineer Troop Building:    " << static_cast<int>(bldg.engineerTroopBuilding) << '\n'
+        << "Healer Troop Building:      " << static_cast<int>(bldg.healerTroopBuilding) << '\n'
+        << "Spellcaster Troop Building: " << static_cast<int>(bldg.spellcasterTroopBuilding) << '\n'
+        << "Shipyard:                   " << static_cast<int>(bldg.shipyard) << '\n'
+        << "Watch Tower:                " << static_cast<int>(bldg.watchTower) << '\n'
+        << "Wall:                       " << static_cast<int>(bldg.wall) << '\n';
 }
 
 void ScenarioReader::print(const HireTroopsRestrictions& restrictions) const
 {
-    std::cout << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
-              << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
-              << "Light Melee / Spellcaster: " << static_cast<int>(restrictions.lightMeleeOrSpellcasterTroop) << '\n'
-              << "Heavy Melee Troop:         " << static_cast<int>(restrictions.heavyMeleeTroop) << '\n'
-              << "Engineer:                  " << static_cast<int>(restrictions.engineer) << '\n'
-              << "Stealth Troop:             " << static_cast<int>(restrictions.stealthTroop) << '\n'
-              << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
-              << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
-              << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
-              << "Healer:                    " << static_cast<int>(restrictions.healer) << '\n'
-              << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
-              << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
-              << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
-              << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
-              << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
+    log << "Worker:                    " << static_cast<int>(restrictions.worker) << '\n'
+        << "Ranged Troop:              " << static_cast<int>(restrictions.rangedTroop) << '\n'
+        << "Light Melee / Spellcaster: " << static_cast<int>(restrictions.lightMeleeOrSpellcasterTroop) << '\n'
+        << "Heavy Melee Troop:         " << static_cast<int>(restrictions.heavyMeleeTroop) << '\n'
+        << "Engineer:                  " << static_cast<int>(restrictions.engineer) << '\n'
+        << "Stealth Troop:             " << static_cast<int>(restrictions.stealthTroop) << '\n'
+        << "Siege Troop:               " << static_cast<int>(restrictions.siegeTroop) << '\n'
+        << "Race Bonus Troop:          " << static_cast<int>(restrictions.raceBonusTroop) << '\n'
+        << "Spellcaster:               " << static_cast<int>(restrictions.spellcaster) << '\n'
+        << "Healer:                    " << static_cast<int>(restrictions.healer) << '\n'
+        << "Transport Ship:            " << static_cast<int>(restrictions.transportShip) << '\n'
+        << "Combat Ship:               " << static_cast<int>(restrictions.combatShip) << '\n'
+        << "Flying Troop:              " << static_cast<int>(restrictions.flyingTroop) << '\n'
+        << "Flying Transport:          " << static_cast<int>(restrictions.flyingTransport) << '\n'
+        << "Must Hire:                 " << static_cast<int>(restrictions.mustHire) << '\n';
 }
 
 void ScenarioReader::print(const AiSetting& settings) const
 {
-    std::cout << "Count: " << static_cast<int>(settings.amount) << '\n'
-              << "Flag:  " << static_cast<int>(settings.flag) << '\n';
+    log << "Count: " << static_cast<int>(settings.amount) << '\n'
+        << "Flag:  " << static_cast<int>(settings.flag) << '\n';
 }
 
 void ScenarioReader::print(const ObjectPlacement& obj) const
 {
-    std::cout << "Type:    " << static_cast<int>(obj.type) << '\n'
-              << "Variant: " << static_cast<int>(obj.variant) << '\n'
-              << "X:       " << obj.x << '\n'
-              << "Y:       " << obj.y << '\n';
+    log << "Type:    " << static_cast<int>(obj.type) << '\n'
+        << "Variant: " << static_cast<int>(obj.variant) << '\n'
+        << "X:       " << obj.x << '\n'
+        << "Y:       " << obj.y << '\n';
 }
 
 void ScenarioReader::print(const BuildingPlacement& bldg) const
 {
-    std::cout << "Type:           " << static_cast<int>(bldg.type) << '\n'
-              << "Player:         " << static_cast<int>(bldg.player) << '\n'
-              << "X:              " << bldg.x << '\n'
-              << "Y:              " << bldg.y << '\n'
-              << "Hitpoints:      " << bldg.hitpoints << '\n'
-              << "Armour:         " << bldg.armour << '\n'
-              << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
-              << "Range:          " << static_cast<int>(bldg.range) << '\n'
-              << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
-              << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
-              << "Special Colour: " << static_cast<int>(bldg.specialColor) << '\n'
-              << "Prisoner:       " << bldg.prisoner << '\n'
-              << "Name:           " << bldg.name << '\n';
+    log << "Type:           " << static_cast<int>(bldg.type) << '\n'
+        << "Player:         " << static_cast<int>(bldg.player) << '\n'
+        << "X:              " << bldg.x << '\n'
+        << "Y:              " << bldg.y << '\n'
+        << "Hitpoints:      " << bldg.hitpoints << '\n'
+        << "Armour:         " << bldg.armour << '\n'
+        << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
+        << "Range:          " << static_cast<int>(bldg.range) << '\n'
+        << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
+        << "Upgrade 2:      " << bldg.upgrade2Enabled << '\n'
+        << "Special Colour: " << static_cast<int>(bldg.specialColor) << '\n'
+        << "Prisoner:       " << bldg.prisoner << '\n'
+        << "Name:           " << bldg.name << '\n';
 }
 
 void ScenarioReader::print(const UnitPlacement& unit) const
 {
-    std::cout << "Type:           " << static_cast<int>(unit.type) << '\n'
-              << "Facing:         " << static_cast<int>(unit.facing) << '\n'
-              << "X:              " << unit.x << '\n'
-              << "Y:              " << unit.y << '\n'
-              << "Player:         " << static_cast<int>(unit.player) << '\n'
-              << "Hitpoints:      " << unit.hitpoints << '\n'
-              << "Magic:          " << static_cast<int>(unit.magic) << '\n'
-              << "Armour:         " << unit.armour << '\n'
-              << "Type2:          " << static_cast<int>(unit.type2) << '\n'
-              << "Sight:          " << static_cast<int>(unit.sight) << '\n'
-              << "Range:          " << static_cast<int>(unit.range) << '\n'
-              << "Special Colour: " << static_cast<int>(unit.specialColor) << '\n'
-              << "Prisoner:       " << unit.prisoner << '\n'
-              << "Gold Cost:      " << unit.goldCost << '\n'
-              << "Wood Cost:      " << unit.woodCost << '\n'
-              << "Name:           " << unit.name << '\n'
-              << "Upgrade 1:      " << unit.upgrade1Enabled << '\n'
-              << "Upgrade 2:      " << unit.upgrade2Enabled << '\n'
-              << "Upgrade 3:      " << unit.upgrade3Enabled << '\n'
-              << "Upgrade 4:      " << unit.upgrade4Enabled << '\n'
-              << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
+    log << "Type:           " << static_cast<int>(unit.type) << '\n'
+        << "Facing:         " << static_cast<int>(unit.facing) << '\n'
+        << "X:              " << unit.x << '\n'
+        << "Y:              " << unit.y << '\n'
+        << "Player:         " << static_cast<int>(unit.player) << '\n'
+        << "Hitpoints:      " << unit.hitpoints << '\n'
+        << "Magic:          " << static_cast<int>(unit.magic) << '\n'
+        << "Armour:         " << unit.armour << '\n'
+        << "Type2:          " << static_cast<int>(unit.type2) << '\n'
+        << "Sight:          " << static_cast<int>(unit.sight) << '\n'
+        << "Range:          " << static_cast<int>(unit.range) << '\n'
+        << "Special Colour: " << static_cast<int>(unit.specialColor) << '\n'
+        << "Prisoner:       " << unit.prisoner << '\n'
+        << "Gold Cost:      " << unit.goldCost << '\n'
+        << "Wood Cost:      " << unit.woodCost << '\n'
+        << "Name:           " << unit.name << '\n'
+        << "Upgrade 1:      " << unit.upgrade1Enabled << '\n'
+        << "Upgrade 2:      " << unit.upgrade2Enabled << '\n'
+        << "Upgrade 3:      " << unit.upgrade3Enabled << '\n'
+        << "Upgrade 4:      " << unit.upgrade4Enabled << '\n'
+        << "Fighting Area:  " << static_cast<int>(unit.fightingArea) << '\n';
 }
 
 void ScenarioReader::print(const TrapPlacement& trap) const
 {
-    std::cout << "X:              " << static_cast<int>(trap.x) << '\n'
-              << "Y:              " << static_cast<int>(trap.y) << '\n'
-              << "Player:         " << static_cast<int>(trap.player) << '\n';
+    log << "X:              " << static_cast<int>(trap.x) << '\n'
+        << "Y:              " << static_cast<int>(trap.y) << '\n'
+        << "Player:         " << static_cast<int>(trap.player) << '\n';
 }
 
 void ScenarioReader::print(const GoalLocation& goalLoc) const
 {
-    std::cout << "Type: " << static_cast<int>(goalLoc.type) << '\n'
-              << "X:    " << static_cast<int>(goalLoc.x) << '\n'
-              << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
+    log << "Type: " << static_cast<int>(goalLoc.type) << '\n'
+        << "X:    " << static_cast<int>(goalLoc.x) << '\n'
+        << "Y:    " << static_cast<int>(goalLoc.y) << '\n';
 }
 
 void ScenarioReader::print(const CampaignText& text) const
 {
-    std::cout << "Title:      " << text.title << '\n'
-              << "Objectives: " << text.objectives << '\n'
-              << "Narration:  " << text.narration << '\n';
+    log << "Title:      " << text.title << '\n'
+        << "Objectives: " << text.objectives << '\n'
+        << "Narration:  " << text.narration << '\n';
 }
 
 }  // namespace Rival

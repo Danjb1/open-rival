@@ -3,7 +3,6 @@
 #include "utils/SDLWrapper.h"
 #include <SDL_image.h>
 #include "gfx/GlewWrapper.h"
-#include <spdlog/spdlog.h>
 
 #include <chrono>
 #include <format>
@@ -21,13 +20,14 @@
 #include "net/NetUtils.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
-#include "spdlog/sinks/basic_file_sink.h"
 #include "utils/ConfigUtils.h"
 #include "utils/JsonUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 ApplicationContext::ApplicationContext()
+    /* We initialize logging as early as possible, but we need to read the config first to know the log level. */
     : cfg(readConfig())
     , window((initLogging(), initSDL(), createWindow()))
     , res((initGLEW(), initGL(), initFonts(), *this))
@@ -52,28 +52,13 @@ json ApplicationContext::readConfig()
 void ApplicationContext::initLogging()
 {
     const std::string logLevel = ConfigUtils::get(cfg, "logLevel", std::string("info"));
-    try
-    {
-        // Log to file
-        const auto now = std::chrono::system_clock::now();
-        std::ostringstream ss;
-        // See: https://en.cppreference.com/w/cpp/chrono/system_clock/formatter#Format_specification
-        ss << "logs/Open-Rival_"                        //
-           << std::format("{:%Y-%m-%d_%H-%M-%S}", now)  //
-           << ".log";
-        const std::string logFilename = ss.str();
-        auto file_logger = spdlog::basic_logger_mt("file_logger", logFilename);
-        spdlog::set_default_logger(file_logger);
-    }
-    catch (const spdlog::spdlog_ex& ex)
-    {
-        std::cerr << "Log init failed: " << ex.what() << "\n";
-    }
-    spdlog::set_level(spdlog::level::from_str(logLevel));
+    LogUtils::initLogging(logLevel);
 }
 
 void ApplicationContext::initSDL()
 {
+    LOG_DEBUG("Initializing...");
+
     // This must be called before SDL_Init since we're not using SDL_main
     // as an entry point
     SDL_SetMainReady();

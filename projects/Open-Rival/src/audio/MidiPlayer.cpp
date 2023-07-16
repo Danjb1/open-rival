@@ -6,6 +6,7 @@
 #include <chrono>
 #include <stdexcept>
 
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -23,7 +24,7 @@ void MidiPlayer::init()
         throw std::runtime_error("No MIDI output ports available!");
     }
 
-    std::cout << "\nOpening MIDI port: " << midiOut.getPortName() << "\n";
+    LOG_TRACE("Opening MIDI port: {}", midiOut.getPortName());
 
     midiOut.openPort(0);
 }

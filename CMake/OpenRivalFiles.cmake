@@ -116,6 +116,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/utils/FileUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/InputUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/JsonUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/utils/LogUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/MathUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/MouseUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/Rect.cpp
@@ -244,6 +245,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/utils/FileUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/InputUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/JsonUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/LogUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/MathUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/MouseUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/Rect.h

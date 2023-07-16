@@ -80,8 +80,6 @@ void MouseHandlerComponent::onSelect(const PlayerStore& playerStore, bool isLead
     // For chests:
     // - Move there (depending on selection)
 
-    std::cout << "Clicked on Entity " << entity->getId() << "\n";
-
     // Check owner
     const auto ownerComponent = weakOwnerComponent.lock();
     if (!ownerComponent || !playerStore.isLocalPlayer(ownerComponent->getPlayerId()))

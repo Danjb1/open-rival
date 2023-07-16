@@ -5,13 +5,17 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "utils/LogUtils.h"
+
 namespace Rival {
 
 // Based on:
 // https://github.com/zxf8665905/wavDecoder
-WaveFile::WaveFile(std::string filename)
+WaveFile::WaveFile(const std::string& filename)
     : filename(filename)
 {
+    LOG_TRACE("Reading WAV file: {}", filename);
+
     // Open file and check size
     std::streamoff remainSize;
     std::ifstream in(filename, std::ios::in | std::ios::binary | std::ios::ate);

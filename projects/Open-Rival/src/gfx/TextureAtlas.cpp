@@ -1,8 +1,7 @@
 #include "gfx/TextureAtlas.h"
 
-#include <iostream>
-
 #include "utils/BinaryFileReader.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -49,11 +48,13 @@ const std::vector<GLfloat> TextureAtlas::getTexCoords(std::string key) const
     };
 }
 
-std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::string resourceName)
+std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::string& resourceName)
 {
     std::string textureName = resourceName + ".tga";
     std::string atlasName = resourceName + ".atlas";
     std::unordered_map<std::string, Rect> imagePlacements;
+
+    LOG_TRACE("Reading atlas: {}", atlasName);
 
     std::ifstream reader(atlasName);
     if (!reader)

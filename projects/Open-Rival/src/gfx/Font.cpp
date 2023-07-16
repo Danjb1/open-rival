@@ -12,6 +12,7 @@
 #include "application/Resources.h"
 #include "gfx/GLUtils.h"
 #include "gfx/Image.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -71,6 +72,8 @@ FontLoadError::FontLoadError(const char* message)
 
 Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
 {
+    LOG_TRACE("Reading font: {}", filename);
+
     for (std::string fontDir : fontDirs)
     {
         try
@@ -148,7 +151,7 @@ Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
         {
             // Glyph is not present in font; character will be displayed as
             // an empty space.
-            std::cout << "Font " << filename << " does not support character " << makePrintable(c) << "\n";
+            LOG_WARN("Font {} does not support character {}", filename, makePrintable(c));
         }
 
         int charWidth = face->glyph->bitmap.width;
