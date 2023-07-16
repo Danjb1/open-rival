@@ -1,15 +1,17 @@
 #include "gfx/Image.h"
 
-#include <iostream>
 #include <utility>  // std::move
 
 #include "gfx/Palette.h"
 #include "utils/BinaryFileReader.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 Image Image::readImage(const std::string& filename)
 {
+    LOG_TRACE("Reading image: {}", filename);
+
     BinaryFileReader reader(filename);
 
     // Color map specification

@@ -5,6 +5,7 @@
 #include "gfx/Framebuffer.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/renderable/TextRenderable.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -74,7 +75,7 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
 
                 if (!charData)
                 {
-                    std::cout << "Trying to render unsupported character: " << c << "\n";
+                    LOG_WARN("Trying to render unsupported character: {}", c);
                     continue;
                 }
 

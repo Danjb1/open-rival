@@ -10,7 +10,6 @@ project files.
 """
 
 import os
-import re
 
 CMAKE_DIR = "../cmake"
 OPEN_RIVAL_DIR = "../projects/Open-Rival"

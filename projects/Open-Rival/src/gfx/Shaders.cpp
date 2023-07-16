@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "gfx/ShaderUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival { namespace Shaders {
 
@@ -15,7 +16,7 @@ bool Shader::validateVertexAttribute(GLint attributeLoc, const std::string& attr
 {
     if (attributeLoc == -1)
     {
-        std::cout << "Could not locate vertex attribute " << attributeName << " for shader " << getName() << "\n";
+        LOG_WARN("Could not locate vertex attribute {} for shader {}", attributeName, getName());
         return false;
     }
     return true;
@@ -25,7 +26,7 @@ bool Shader::validateUniform(GLint uniformLoc, const std::string& uniformName) c
 {
     if (uniformLoc == -1)
     {
-        std::cout << "Could not locate uniform " << uniformName << " for shader " << getName() << "\n";
+        LOG_WARN("Could not locate uniform {} for shader {}", uniformName, getName());
         return false;
     }
     return true;

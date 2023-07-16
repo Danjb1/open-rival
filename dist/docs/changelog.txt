@@ -9,6 +9,7 @@ v0.3.0 (Multiplayer demo)
 - Fixed texture bleeding at some zoom levels
 - Fixed portraits backgrounds being rendered transparent
 - Improved precision of frame scheduling and MIDI playback
+- Added logging library
 - Updated dependencies
 
 v0.2.0 (Movement demo)

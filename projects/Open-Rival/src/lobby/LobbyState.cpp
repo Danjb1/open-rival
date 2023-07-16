@@ -23,6 +23,7 @@
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
 #include "utils/ConfigUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -223,7 +224,7 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
         return;
     }
 
-    std::cout << "Player " << client.getName() << " has joined\n";
+    LOG_INFO("Player {} has joined", client.getName());
 
     if (host)
     {
@@ -240,7 +241,7 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
 
 void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)
 {
-    std::cout << "Player " << playerName << " was not allowed to join\n";
+    LOG_INFO("Player {} was not allowed to join", playerName);
 
     if (requestId == joinRequestId && playerName == localPlayerName)
     {
@@ -258,14 +259,14 @@ void LobbyState::onWelcomeReceived(int playerId, std::unordered_map<int, ClientI
         return;
     }
 
-    std::cout << "Received lobby state from host\n";
+    LOG_INFO("Received lobby state from host");
 
     clients = newClients;
 }
 
 void LobbyState::onPlayerKicked(int playerId)
 {
-    std::cout << "Player " << std::to_string(playerId) << " was kicked\n";
+    LOG_INFO("Player {} was kicked", std::to_string(playerId));
 
     if (playerId == localPlayerId)
     {

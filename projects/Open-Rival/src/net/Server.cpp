@@ -5,6 +5,7 @@
 #include <utility>  // std::make_pair, std::move
 
 #include "net/Socket.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -56,7 +57,7 @@ void Server::acceptThreadLoop()
         if (newPlayer.isOpen())
         {
             int clientId = requestClientId();
-            std::cout << "Client " << std::to_string(clientId) << " connected to server\n";
+            LOG_INFO("Client {} connected to server", clientId);
 
             auto newPlayerConnection = std::make_unique<Connection>(std::move(newPlayer), nullptr, clientId, this);
             connectedClients.insert(std::make_pair(clientId, std::move(newPlayerConnection)));

@@ -47,7 +47,7 @@ const int Texture::getHeight() const
     return height;
 }
 
-std::shared_ptr<const Texture> Texture::loadTexture(const std::string filename)
+std::shared_ptr<const Texture> Texture::loadTexture(const std::string& filename)
 {
     TextureProperties props;  // use defaults
     return wrap(Image::readImage(filename), props);

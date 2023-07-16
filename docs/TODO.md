@@ -10,6 +10,14 @@
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
 
+### Logging
+
+- Interface extractor should log its progress
+- Replace cerr with logger calls
+- Log important events
+- Simplify log line format:
+    [2023-07-16 21:14:20.865] [file_logger] [trace] Reading WAV file: res\sound\362.wav
+
 ### Multiplayer Milestone
 
 - BUG: Music hangs after closing the window (when running from command prompt)
@@ -17,10 +25,6 @@
     [ALSOFT] (WW) 1 Buffer not deleted
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
-- Add logging mechanism
-    - Replace cout / cerr with logger calls
-    - Interface extractor should log its progress
-    - Log important events
 - Sometimes units that were part of a drag-select can no longer be selected
     - Related: sometimes units walk into the same tile
 - Release a new version
@@ -91,6 +95,7 @@
 ### General
 
 - Add support for [Unicode filenames](http://utf8everywhere.org/)
+- Redirect stdout to log file
 - Save config.json / log files to AppData (or at least provide the option)
 
 ### Data Loading

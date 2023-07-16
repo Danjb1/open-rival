@@ -12,6 +12,7 @@
 #include "utils/ConfigUtils.h"
 #include "utils/FileUtils.h"
 #include "utils/JsonUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -307,9 +308,11 @@ std::vector<MidiFile> Resources::initMidis()
     {
         midi_container result;
 
+        const std::string midiFilename = std::to_string(midiStartIndex + i) + ".mid";
+        LOG_TRACE("Reading MIDI file: {}", midiFilename);
+
         // Read MIDI file
-        std::vector<std::uint8_t> const& p_file =
-                FileUtils::readBinaryFile(soundDir + std::to_string(midiStartIndex + i) + ".mid");
+        std::vector<std::uint8_t> const& p_file = FileUtils::readBinaryFile(soundDir + midiFilename);
 
         // Parse MIDI file
         if (!MidsDecoder::process_mids(p_file, result))
@@ -346,7 +349,7 @@ std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
         }
         catch (const json::exception&)
         {
-            std::cout << "Error parsing unit definition: " << std::to_string(nextUnitType) << "\n";
+            LOG_ERROR("Error parsing unit definition: %s", std::to_string(nextUnitType));
             throw;
         }
 
@@ -379,7 +382,7 @@ std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() co
         }
         catch (const json::exception&)
         {
-            std::cout << "Error parsing building definition: " << std::to_string(nextBuildingType) << "\n";
+            LOG_ERROR("Error parsing building definition: %s", std::to_string(nextBuildingType));
             throw;
         }
 

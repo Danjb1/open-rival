@@ -2,6 +2,7 @@
 
 #include <cstddef>  // std::size_t
 #include <cstdint>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -15,23 +16,13 @@ class ScenarioReader
 {
 
 public:
-    ScenarioReader(const std::string filename);
+    ScenarioReader(const std::string& filename);
 
     ScenarioData readScenario();
 
     ScenarioData readCampaignScenario(int levelIndex);
 
 private:
-    static const std::unordered_map<std::uint8_t, char> alphabet;
-
-    static constexpr int numBytesShort = 2;
-    static constexpr int numBytesInt = 4;
-
-    static constexpr int bytesPerTile = 6;
-
-    std::vector<unsigned char> data;
-    std::size_t pos = 0;
-
     ///////////////////////////////////////////////////////////////////////
     // Parsing
     ///////////////////////////////////////////////////////////////////////
@@ -177,6 +168,19 @@ private:
     void print(const GoalLocation& trap) const;
 
     void print(const CampaignText& text) const;
+
+private:
+    static const std::unordered_map<std::uint8_t, char> alphabet;
+
+    static constexpr int numBytesShort = 2;
+    static constexpr int numBytesInt = 4;
+
+    static constexpr int bytesPerTile = 6;
+
+    std::vector<unsigned char> data;
+    std::size_t pos = 0;
+
+    mutable std::stringstream log;
 };
 
 }  // namespace Rival

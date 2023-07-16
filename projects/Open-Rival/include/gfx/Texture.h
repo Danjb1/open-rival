@@ -50,7 +50,7 @@ public:
 
     const int getHeight() const;
 
-    static std::shared_ptr<const Texture> loadTexture(const std::string filename);
+    static std::shared_ptr<const Texture> loadTexture(const std::string& filename);
 
     static std::shared_ptr<const Texture> wrap(const Image img, TextureProperties props);
 
