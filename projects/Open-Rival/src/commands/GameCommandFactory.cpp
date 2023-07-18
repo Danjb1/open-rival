@@ -1,12 +1,12 @@
 #include "commands/GameCommandFactory.h"
 
-#include <iostream>
 #include <string>
 
 #include "commands/GameCommand.h"
 #include "commands/MoveCommand.h"
 #include "utils/BufferUtils.h"
 #include "utils/EnumUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -26,7 +26,7 @@ std::shared_ptr<GameCommand> GameCommandFactory::deserializeFromType(
     case GameCommandType::Move:
         return MoveCommand::deserialize(buffer, offset);
     default:
-        std::cerr << "Unsupported GameCommand type received: " << std::to_string(EnumUtils::toIntegral(type)) << "\n";
+        LOG_WARN("Unsupported GameCommand type received: {}", EnumUtils::toIntegral(type));
         return {};
     }
 }

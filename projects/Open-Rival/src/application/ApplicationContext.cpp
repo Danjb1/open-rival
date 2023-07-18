@@ -6,7 +6,6 @@
 
 #include <chrono>
 #include <format>
-#include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -52,7 +51,8 @@ json ApplicationContext::readConfig()
 void ApplicationContext::initLogging()
 {
     const std::string logLevel = ConfigUtils::get(cfg, "logLevel", std::string("info"));
-    LogUtils::initLogging(logLevel);
+    const bool logToFile = ConfigUtils::get(cfg, "logToFile", true);
+    LogUtils::initLogging(logLevel, logToFile);
 }
 
 void ApplicationContext::initSDL()
@@ -65,7 +65,7 @@ void ApplicationContext::initSDL()
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        std::cerr << "Failed to initialize SDL\n";
+        LOG_ERROR("Failed to initialize SDL");
         throw std::runtime_error(SDL_GetError());
     }
 
@@ -92,7 +92,9 @@ void ApplicationContext::initGLEW()
 
     if (glewError != GLEW_OK)
     {
-        std::cerr << "Error initializing GLEW:" << glewGetErrorString(glewError) << "\n";
+        const GLubyte* glewErrorString = glewGetErrorString(glewError);
+        std::string errorString(reinterpret_cast<const char*>(glewErrorString));
+        LOG_ERROR("Error initializing GLEW: {}", errorString);
         throw std::runtime_error("Failed to initialize GLEW");
     }
 }

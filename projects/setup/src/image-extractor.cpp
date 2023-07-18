@@ -448,12 +448,11 @@ void extractImages(std::string inputFile, std::string outputDir)
 
         // Save the rendered image to disk
         std::string filename = outputDir + "\\img_" + zeroPad(i, 4) + ".tga";
+        std::cout << "Saving image " << filename << "\n";
         ImageProperties props;
         props.stride = maxWidth;
         Image image = Image::createByMove(w, h, std::move(imageData), props);
         writeImage(image, Palette::paletteGame, filename);
-
-        std::cout << "Saving image " << filename << "\n";
     }
 }
 

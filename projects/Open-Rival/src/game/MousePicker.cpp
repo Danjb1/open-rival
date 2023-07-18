@@ -5,7 +5,6 @@
 #include <algorithm>  // min, max
 #include <cstdint>
 #include <cstdlib>  // abs
-#include <iostream>
 
 #include "commands/GameCommand.h"
 #include "entity/Entity.h"

@@ -1,7 +1,5 @@
 #include "gfx/renderer/TextRenderer.h"
 
-#include <iostream>
-
 #include "gfx/Framebuffer.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/renderable/TextRenderable.h"
@@ -51,13 +49,17 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
     // Reserve space upfront
     int numVisibleChars = textRenderable.getNumVisibleChars();
     int numLayers = textRenderable.getNumLayers();
-    vertexData.reserve(
-            numVisibleChars * numLayers * TextRenderable::numVertexDimensions * TextRenderable::numVerticesPerChar);
-    texCoords.reserve(
-            numVisibleChars * numLayers * TextRenderable::numTexCoordDimensions * TextRenderable::numVerticesPerChar);
-    colors.reserve(
-            numVisibleChars * numLayers * TextRenderable::numColorDimensions * TextRenderable::numVerticesPerChar);
-    indexData.reserve(numVisibleChars * TextRenderable::numIndicesPerChar);
+    int numVertices =
+            numVisibleChars * numLayers * TextRenderable::numVertexDimensions * TextRenderable::numVerticesPerChar;
+    int numTexCoords =
+            numVisibleChars * numLayers * TextRenderable::numTexCoordDimensions * TextRenderable::numVerticesPerChar;
+    int numColors =
+            numVisibleChars * numLayers * TextRenderable::numColorDimensions * TextRenderable::numVerticesPerChar;
+    int numIndices = numVisibleChars * TextRenderable::numIndicesPerChar;
+    vertexData.reserve(numVertices);
+    texCoords.reserve(numTexCoords);
+    colors.reserve(numColors);
+    indexData.reserve(numIndices);
 
     int charsAdded = 0;
 

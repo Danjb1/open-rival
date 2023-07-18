@@ -1,12 +1,12 @@
 #pragma once
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
 
 #include "entity/components/EntityComponent.h"
 #include "game/MapUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -303,7 +303,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }
@@ -317,7 +317,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }
@@ -331,7 +331,7 @@ public:
         auto result = getComponentShared<T>(key);
         if (!result)
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }
@@ -345,7 +345,7 @@ public:
         auto result = getComponentShared<const T>(key);
         if (!result)
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }
@@ -359,7 +359,7 @@ public:
         auto result = getComponentWeak<T>(key);
         if (!result.lock())
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }
@@ -373,7 +373,7 @@ public:
         auto result = getComponentWeak<const T>(key);
         if (!result.lock())
         {
-            std::cerr << "No component found with key: " << key << '\n';
+            LOG_WARN("No component found with key: {}", key);
         }
         return result;
     }

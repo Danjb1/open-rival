@@ -5,8 +5,9 @@
 #include <stdio.h>
 
 #include <fstream>
-#include <iostream>
 #include <sstream>
+
+#include "utils/LogUtils.h"
 
 namespace Rival { namespace ShaderUtils {
 
@@ -23,7 +24,7 @@ void printProgramLog(const GLuint program)
 
     if (!glIsProgram(program))
     {
-        printf("Name %d is not a program\n", program);
+        LOG_WARN("Name {} is not a program", program);
         return;
     }
 
@@ -42,7 +43,7 @@ void printProgramLog(const GLuint program)
     if (infoLogLength > 0)
     {
         // Print Log
-        printf("%s\n", infoLog);
+        LOG_WARN("{}", infoLog);
     }
 
     // Deallocate string
@@ -54,7 +55,7 @@ void printShaderLog(const GLuint shader)
 
     if (!glIsShader(shader))
     {
-        printf("Name %d is not a shader\n", shader);
+        LOG_WARN("Name {} is not a shader", shader);
     }
 
     // Shader log length
@@ -72,7 +73,7 @@ void printShaderLog(const GLuint shader)
     if (infoLogLength > 0)
     {
         // Print Log
-        printf("%s\n", infoLog);
+        LOG_WARN("{}", infoLog);
     }
 
     // Deallocate string

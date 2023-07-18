@@ -1,7 +1,5 @@
 #include "gfx/Camera.h"
 
-#include <iostream>
-
 #include "game/MapUtils.h"
 #include "game/World.h"
 #include "utils/MathUtils.h"

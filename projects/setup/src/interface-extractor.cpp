@@ -4,6 +4,7 @@
 
 #include "interface-extractor.h"
 
+#include <iostream>
 #include <stdexcept>
 
 #include "setup-utils.h"
@@ -259,10 +260,9 @@ void InterfaceExtractor::extractImage(const std::string& outputDir, const Palett
         }
     }
 
-    // Generate the image filename
-    std::string filename = outputDir + "\\img_ui_" + zeroPad(index, 4) + ".tga";
-
     // Save the rendered image to disk
+    std::string filename = outputDir + "\\img_ui_" + zeroPad(index, 4) + ".tga";
+    std::cout << "Saving image " << filename << "\n";
     Image image = Image::createByMove(static_cast<int>(w), static_cast<int>(h), std::move(pixels));
     writeImage(image, palette, filename);
 

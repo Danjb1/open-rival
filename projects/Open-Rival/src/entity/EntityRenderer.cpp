@@ -21,6 +21,7 @@
 #include "gfx/Shaders.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -260,7 +261,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
     const MouseHandlerComponent* mouseHandler = entity.getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
     if (!mouseHandler)
     {
-        std::cerr << "Could not find MouseHandlerComponent for entity under mouse\n";
+        LOG_WARN("Could not find MouseHandlerComponent for entity under mouse");
         return;
     }
 

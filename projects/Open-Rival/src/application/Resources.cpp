@@ -1,6 +1,5 @@
 #include "application/Resources.h"
 
-#include <iostream>
 #include <stdexcept>
 #include <string>
 

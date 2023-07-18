@@ -1,7 +1,6 @@
 #include "net/Server.h"
 
 #include <cstddef>  // std::size_t
-#include <iostream>
 #include <utility>  // std::make_pair, std::move
 
 #include "net/Socket.h"

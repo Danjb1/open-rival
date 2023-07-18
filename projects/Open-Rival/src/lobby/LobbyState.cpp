@@ -181,8 +181,7 @@ void LobbyState::pollNetwork()
         auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
-            std::cerr << "Received unexpected packet of type "
-                      << std::to_string(EnumUtils::toIntegral(packet->getType())) << "\n";
+            LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));
             continue;
         }
 
@@ -294,7 +293,7 @@ void LobbyState::requestStartGame()
 {
     if (!host)
     {
-        std::cerr << "Non-host player tried to start the game\n";
+        LOG_WARN("Non-host player tried to start the game");
         return;
     }
 

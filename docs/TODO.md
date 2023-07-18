@@ -9,14 +9,7 @@
 - Fix test project
     - Copy all includes from Open-Rival
     - Copy all source files from Open-Rival (except those we have stubbed)
-
-### Logging
-
-- Interface extractor should log its progress
-- Replace cerr with logger calls
-- Log important events
-- Simplify log line format:
-    [2023-07-16 21:14:20.865] [file_logger] [trace] Reading WAV file: res\sound\362.wav
+    - Delete old project files
 
 ### Multiplayer Milestone
 
@@ -385,6 +378,7 @@
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?
     - Should Resources always be `const` (e.g. when using `app.getResources()`)?
+    - "Unhandled error during initialization or gameplay" - would be nice to split into 2 separate stages
 - Remove BinaryFileReader in favour of FileUtils::readBinaryFile
     - Add a new class that can read the buffer and maintain some offset
 - Use a common file reading mechanism in audio-extractor
