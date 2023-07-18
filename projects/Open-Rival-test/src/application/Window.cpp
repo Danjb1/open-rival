@@ -1,6 +1,4 @@
-#include "Window.h"
-
-#include "pch.h"
+#include "application/Window.h"
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -26,21 +24,6 @@ Window::~Window()
 void Window::swapBuffers() const
 {
     // Do nothing!
-}
-
-int Window::getWidth() const
-{
-    return width;
-}
-
-int Window::getHeight() const
-{
-    return height;
-}
-
-double Window::getAspectRatio() const
-{
-    return aspectRatio;
 }
 
 }  // namespace Rival

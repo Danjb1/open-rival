@@ -1,18 +1,18 @@
 #include "catch2/catch.h"
 
-#include "Spritesheet.h"
-#include "Texture.h"
-#include "pch.h"
+#include <memory>
+
+#include "gfx/Spritesheet.h"
+#include "gfx/Texture.h"
 
 using namespace Rival;
 
 SCENARIO("Spritesheet calculates the correct texture co-ordinates", "[spritesheet]")
 {
-
     GIVEN("A Spritesheet that divides up a Texture")
     {
-        Texture texture(0, 64, 64);
-        Spritesheet spritesheet(texture, 32, 32);
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>(0, 64, 64);
+        Spritesheet spritesheet(texture, 32, 32, 0);
 
         WHEN("getting the texture co-ordinates for a frame of the sprite")
         {

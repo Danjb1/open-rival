@@ -1,7 +1,6 @@
 #include "catch2/catch.h"
 
-#include "RenderUtils.h"
-#include "pch.h"
+#include "gfx/RenderUtils.h"
 
 using namespace Rival;
 
@@ -25,28 +24,6 @@ TEST_CASE("tileToPx_Y calculates the correct tile position", "[render-utils]")
     REQUIRE(RenderUtils::tileToPx_Y(1, 1) == 48);
     REQUIRE(RenderUtils::tileToPx_Y(2, 1) == 32);
     REQUIRE(RenderUtils::tileToPx_Y(3, 1) == 48);
-}
-
-TEST_CASE("tileToScaledPx_X calculates the correct tile position based on the zoom level", "[render-utils]")
-{
-    REQUIRE(RenderUtils::tileToScaledPx_X(0, 2.0f) == 0);
-    REQUIRE(RenderUtils::tileToScaledPx_X(1, 2.0f) == 64);
-    REQUIRE(RenderUtils::tileToScaledPx_X(2, 2.0f) == 128);
-}
-
-TEST_CASE("tileToScaledPx_Y calculates the correct tile position based on the zoom level", "[render-utils]")
-{
-    // First row
-    REQUIRE(RenderUtils::tileToScaledPx_Y(0, 0, 2.0f) == 0);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(1, 0, 2.0f) == 32);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(2, 0, 2.0f) == 0);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(3, 0, 2.0f) == 32);
-
-    // Second row
-    REQUIRE(RenderUtils::tileToScaledPx_Y(0, 1, 2.0f) == 64);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(1, 1, 2.0f) == 96);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(2, 1, 2.0f) == 64);
-    REQUIRE(RenderUtils::tileToScaledPx_Y(3, 1, 2.0f) == 96);
 }
 
 TEST_CASE("cameraToPx_X calculates the correct distance", "[render-utils]")
@@ -79,7 +56,7 @@ TEST_CASE("pxToCamera_Y calculates the correct distance", "[render-utils]")
 
 TEST_CASE("getEntityZ calculates the correct z-positions", "[render-utils]")
 {
-    float zStart = RenderUtils::zEntitiesStart;
+    float zStart = RenderUtils::zEntityFurthest;
 
     // First row
     REQUIRE(RenderUtils::getEntityZ(0, 0) == zStart + 0.0f);

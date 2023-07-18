@@ -34,13 +34,6 @@ int tileToPx_Y(int x, int y)
     return renderPos;
 }
 
-float pxToScaledPx_X(int x, float zoomLevel)
-{
-    // Same as tileToPx_X, above, but with a zoom level applied
-    float scaledTileWidth = tileWidthPx * zoomLevel;
-    return x * (scaledTileWidth / 2);
-}
-
 float cameraToPx_X(float x)
 {
     // Same as tileToPx_X, above, but using floats, since the camera can be

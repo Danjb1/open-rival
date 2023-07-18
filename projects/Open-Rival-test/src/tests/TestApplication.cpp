@@ -1,16 +1,15 @@
 #include "catch2/catch.h"
 
-#include "Application.h"
-#include "MockSDL.h"
-#include "State.h"
-#include "TimerUtils.h"
-#include "pch.h"
+#include "application/Application.h"
+#include "application/ApplicationContext.h"
+#include "application/State.h"
+#include "gfx/MockSDL.h"
+#include "utils/TimeUtils.h"
 
 using namespace Rival;
 
 SCENARIO("Logic is run multiple times if we are running behind", "[application][game-loop]")
 {
-
     /**
      * A State that takes a long time to render.
      *
@@ -36,7 +35,7 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
         void render(int) override
         {
             // Simulate 2 frame-lengths passing
-            MockSDL::ticks += 2 * TimerUtils::timeStepMs;
+            MockSDL::ticks += 2 * TimeUtils::timeStepMs;
 
             // Exit after the second frame
             framesPassed++;
@@ -49,9 +48,8 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
 
     GIVEN("An Application that has not yet started")
     {
-        Window window(800, 600, "Rival Realms");
-        json cfg;
-        Application app(window, cfg);
+        ApplicationContext appContext;
+        Application app(appContext);
 
         WHEN("the game ticks, and the first render takes too long")
         {
