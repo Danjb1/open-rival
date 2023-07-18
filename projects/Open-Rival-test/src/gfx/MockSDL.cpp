@@ -1,6 +1,4 @@
-#include "MockSDL.h"
-
-#include "pch.h"
+#include "gfx/MockSDL.h"
 
 #define SDL_MAIN_HANDLED
 #pragma warning(push)
@@ -14,7 +12,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-int SDL_GL_SetSwapInterval(int i)
+int SDL_GL_SetSwapInterval(int /*i*/)
 {
     return 0;
 }
@@ -29,12 +27,12 @@ Uint32 SDL_GetTicks(void)
     return MockSDL::ticks;
 }
 
-void SDL_Delay(Uint32 ms)
+void SDL_Delay(Uint32 /*ms*/)
 {
     // Do nothing!
 }
 
-int SDL_PollEvent(SDL_Event* event)
+int SDL_PollEvent(SDL_Event* /*event*/)
 {
     return 0;
 }

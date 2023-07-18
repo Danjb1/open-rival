@@ -1,8 +1,6 @@
-#include "Texture.h"
+#include "gfx/Texture.h"
 
 #include <memory>
-
-#include "pch.h"
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -34,7 +32,7 @@ const int Texture::getHeight() const
     return height;
 }
 
-const std::shared_ptr<const Texture> Texture::loadTexture(const std::string filename)
+std::shared_ptr<const Texture> Texture::loadTexture(const std::string& /*filename*/)
 {
     return std::make_shared<const Texture>(0, 0, 0);
 }

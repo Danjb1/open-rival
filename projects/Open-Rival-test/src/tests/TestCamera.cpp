@@ -1,7 +1,7 @@
 #include "catch2/catch.h"
 
-#include "Camera.h"
-#include "pch.h"
+#include "game/World.h"
+#include "gfx/Camera.h"
 
 using namespace Rival;
 
@@ -9,11 +9,10 @@ float aspectRatio = (16.0f / 9);
 
 SCENARIO("Camera should stay in bounds", "[camera]")
 {
-
-    GIVEN("A camera looking at some point in a scenario")
+    GIVEN("A camera looking at some point in a world")
     {
-        World scenario(50, 50, false);
-        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
+        World world(50, 50, false);
+        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, world);
 
         WHEN("moving the camera left")
         {
@@ -59,11 +58,10 @@ SCENARIO("Camera should stay in bounds", "[camera]")
 
 SCENARIO("Camera should point at the centre of a tile", "[camera]")
 {
-
-    GIVEN("A camera looking at some point in a scenario")
+    GIVEN("A camera looking at some point in a world")
     {
-        World scenario(50, 50, false);
-        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
+        World world(50, 50, false);
+        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, world);
 
         WHEN("centering the camera on a tile in an even-numbered column")
         {
@@ -73,11 +71,11 @@ SCENARIO("Camera should point at the centre of a tile", "[camera]")
             {
                 // tileX + halfTileWidth
                 //  16   +     1
-                REQUIRE(camera.getX() == 17.0f);
+                REQUIRE(camera.getPosition().x == 17.0f);
 
                 // tileY + halfTileHeight
                 //  25   +     0.5
-                REQUIRE(camera.getY() == 25.5f);
+                REQUIRE(camera.getPosition().y == 25.5f);
             }
         }
 
@@ -89,11 +87,11 @@ SCENARIO("Camera should point at the centre of a tile", "[camera]")
             {
                 // tileX + halfTileWidth
                 //  17   +     1
-                REQUIRE(camera.getX() == 18.0f);
+                REQUIRE(camera.getPosition().x == 18.0f);
 
                 // tileY + halfTileHeight + zigzagOffset
                 //  25   +     0.5        +     0.5
-                REQUIRE(camera.getY() == 26.0f);
+                REQUIRE(camera.getPosition().y == 26.0f);
             }
         }
     }
@@ -101,11 +99,10 @@ SCENARIO("Camera should point at the centre of a tile", "[camera]")
 
 SCENARIO("Camera should be the correct size", "[camera]")
 {
-
-    GIVEN("A camera looking at some point in a scenario")
+    GIVEN("A camera looking at some point in a world")
     {
-        World scenario(50, 50, false);
-        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, scenario);
+        World world(50, 50, false);
+        Camera camera(25.0f, 25.0f, 20.0f, 20.0f / aspectRatio, world);
 
         WHEN("getting the camera size")
         {

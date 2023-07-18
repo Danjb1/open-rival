@@ -2,9 +2,8 @@
 
 #include <memory>
 
-#include "Entity.h"
-#include "EntityComponent.h"
-#include "pch.h"
+#include "entity/Entity.h"
+#include "entity/components/EntityComponent.h"
 
 using namespace Rival;
 
@@ -29,7 +28,7 @@ public:
         attached = true;
     }
 
-    void onEntitySpawned(World* scenario) override
+    void onEntitySpawned(World*) override
     {
         entitySpawned = true;
     }
@@ -42,7 +41,6 @@ public:
 
 SCENARIO("Entities can have components attached to them", "[entity]")
 {
-
     GIVEN("An Entity")
     {
         Entity e(EntityType::Unit, 1, 1);
@@ -68,7 +66,6 @@ SCENARIO("Entities can have components attached to them", "[entity]")
 
 SCENARIO("Entities should initialize their components when they spawn", "[entity]")
 {
-
     GIVEN("An Entity with a component")
     {
         Entity e(EntityType::Unit, 1, 1);
@@ -90,7 +87,6 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
 
 SCENARIO("Entities should update their components each frame", "[entity]")
 {
-
     GIVEN("An Entity with a component")
     {
         Entity e(EntityType::Unit, 1, 1);
@@ -124,8 +120,9 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
                 AND_THEN("the deleted component is removed from the Entity")
                 {
-                    const ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("example_key");
-                    REQUIRE(component == nullptr);
+                    const ExampleEntityComponent* foundComponent =
+                            e.getComponent<ExampleEntityComponent>("example_key");
+                    REQUIRE(foundComponent == nullptr);
                 }
             }
         }
@@ -134,7 +131,6 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
 SCENARIO("Entities can return components by their keys", "[entity]")
 {
-
     GIVEN("An Entity with a component")
     {
         Entity e(EntityType::Unit, 1, 1);

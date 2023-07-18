@@ -2,30 +2,46 @@
 
 #include <memory>
 
-#include "AnimationComponent.h"
-#include "Animations.h"
-#include "Entity.h"
-#include "SpriteComponent.h"
-#include "Spritesheet.h"
-#include "Texture.h"
-#include "TimerUtils.h"
-#include "pch.h"
+#include "entity/Entity.h"
+#include "entity/components/SpriteComponent.h"
+#include "entity/components/UnitAnimationComponent.h"
+#include "game/Animations.h"
+#include "game/UnitDef.h"
+#include "gfx/Spritesheet.h"
+#include "gfx/Texture.h"
+#include "utils/TimeUtils.h"
 
 using namespace Rival;
 
 SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[components][animation-component]")
 {
-    const Texture tex(0, 128, 128);
-    const Spritesheet spritesheet(tex, 16, 16);
+    std::shared_ptr<Texture> tex = std::make_shared<Texture>(0, 128, 128);
+    const Spritesheet spritesheet(tex, 16, 16, 0);
 
     GIVEN("An entity with an AnimationComponent, with a single-frame animation")
     {
+        /* clang-format off */
+        json unitDefJson =
+        {
+            { "animations",
+                { "standing",
+                    {
+                        "startIndex", 3,
+                        "endIndex", 5
+                    }
+                }
+            }
+        };
+        /* clang-format on */
+
         Entity e(EntityType::Unit, 1, 1);
+        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
+
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 3, TimerUtils::timeStepMs }));
+        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.requireComponent<AnimationComponent>(AnimationComponent::key);
+        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 0);
 
@@ -53,19 +69,35 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
 
 SCENARIO("AnimationComponent updates the txIndex at the right time", "[components][animation-component]")
 {
-    const Texture tex(0, 128, 128);
-    const Spritesheet spritesheet(tex, 16, 16);
+    std::shared_ptr<Texture> tex = std::make_shared<Texture>(0, 128, 128);
+    const Spritesheet spritesheet(tex, 16, 16, 0);
 
     GIVEN("An entity with an AnimationComponent, where each frame of the animation lasts 1.5 * the time step")
     {
+        /* clang-format off */
+        json unitDefJson =
+        {
+            { "animations",
+                { "standing",
+                    {
+                        "startIndex", 3,
+                        "endIndex", 5,
+                        "msPerFrame", static_cast<int>(1.5f * TimeUtils::timeStepMs)
+                    }
+                }
+            }
+        };
+        /* clang-format on */
+
         Entity e(EntityType::Unit, 1, 1);
+        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
+
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        int msPerFrame = static_cast<int>(1.5f * TimerUtils::timeStepMs);
-        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 5, msPerFrame }));
+        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.requireComponent<AnimationComponent>(AnimationComponent::key);
+        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 
@@ -109,18 +141,34 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
 SCENARIO("AnimationComponent loops the animation back to the start", "[components][animation-component]")
 {
-    const Texture tex(0, 128, 128);
-    const Spritesheet spritesheet(tex, 16, 16);
+    std::shared_ptr<Texture> tex = std::make_shared<Texture>(0, 128, 128);
+    const Spritesheet spritesheet(tex, 16, 16, 0);
 
     GIVEN("An entity with an AnimationComponent, and a 2-frame animation")
     {
+        /* clang-format off */
+        json unitDefJson =
+        {
+            { "animations",
+                { "standing",
+                    {
+                        "startIndex", 3,
+                        "endIndex", 4
+                    }
+                }
+            }
+        };
+        /* clang-format on */
+
         Entity e(EntityType::Unit, 1, 1);
+        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
+
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        e.attach(std::make_shared<AnimationComponent>(Animations::Animation { 3, 4, TimerUtils::timeStepMs }));
+        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
         e.onSpawn(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        AnimationComponent* animComponent = e.requireComponent<AnimationComponent>(AnimationComponent::key);
+        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 

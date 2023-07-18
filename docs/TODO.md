@@ -4,12 +4,73 @@
 ## Next Up...
 <!----------------------------------------------------------------------------->
 
-### CMake Migration
+### Tests
 
-- Fix test project
-    - Copy all includes from Open-Rival
-    - Copy all source files from Open-Rival (except those we have stubbed)
-    - Delete old project files
+- Missing GLEW symbols:
+    GL_BLEND
+    GL_COLOR_ATTACHMENT0
+    GL_COLOR_BUFFER_BIT
+    GL_CULL_FACE
+    GL_CW
+    GL_DEPTH_ATTACHMENT
+    GL_DEPTH_BUFFER_BIT
+    GL_DEPTH_COMPONENT
+    GL_DEPTH_TEST
+    GL_FRAMEBUFFER
+    GL_FRAMEBUFFER_COMPLETE
+    GL_ONE_MINUS_SRC_ALPHA
+    GL_RENDERBUFFER
+    GL_RGB
+    GL_RGBA
+    GL_SRC_ALPHA
+    GL_TEXTURE_2D
+    GL_TEXTURE_MAG_FILTER
+    GL_TEXTURE_MIN_FILTER
+    GL_TEXTURE_WRAP_S
+    GL_TEXTURE_WRAP_T
+    GL_TEXTURE0
+    GL_TEXTURE1
+    GL_UNSIGNED_BYTE
+    GL_UNSIGNED_INT
+    glActiveTexture
+    glBindFramebuffer
+    glBindRenderbuffer
+    glBindTexture
+    glBlendFunc
+    glBufferSubData
+    glCheckFramebufferStatus
+    glClear
+    glClearColor
+    glDeleteBuffers
+    glDeleteFramebuffers
+    glDeleteShader
+    glDeleteTextures
+    glDeleteVertexArrays
+    glDetachShader
+    glDisable
+    glDrawBuffers
+    glDrawElements
+    glEnable
+    GLEW_OK
+    glewErrorString
+    glewExperimental
+    glewGetErrorString
+    glewInit
+    glFramebufferRenderbuffer
+    glFramebufferTexture
+    glFrontFace
+    glGenFramebuffers
+    glGenRenderbuffers
+    glGenTextures
+    glRenderbufferStorage
+    glTexImage2D
+    glTexParameteri
+    glUniform1f
+    glUniform1i
+    glUniformMatrix4fv
+    glUseProgram
+    glViewport
+- Consider stubbing/excluding renderers to reduce the number of usages of GLEW functionality
 
 ### Multiplayer Milestone
 
@@ -284,13 +345,11 @@
 
 ### General
 
-- Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
 - Commit upscaled video files (Git LFS)
 - Consider moving some docs to GitHub wiki
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Setup program should log output to a file (run the script via a BAT file?)
-- Add IWYU to build pipeline: https://include-what-you-use.org/
 - Treat linker warnings as errors
 - Suppress warnings from JSON and spdlog libraries
 
@@ -312,7 +371,14 @@
 - Code review CMake files
 - Document CMake options
 - Document using CMake from command line
-    - Review `create_vs_solution.bat`
+
+### Tools
+
+- Make scripts work with ALL projects
+    - move_file.py only fixes references in Open-Rival
+    - new_file.py and gen_project_files.py can only be used for Open-Rival
+- Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
+- Add IWYU to build pipeline: https://include-what-you-use.org/
 
 <!----------------------------------------------------------------------------->
 ## Unit Tests

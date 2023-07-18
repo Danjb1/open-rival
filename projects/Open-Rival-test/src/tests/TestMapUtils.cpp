@@ -1,13 +1,11 @@
 #include "catch2/catch.h"
 
-#include "MapUtils.h"
-#include "pch.h"
+#include "game/MapUtils.h"
 
 using namespace Rival;
 
 TEST_CASE("getDir should return the correct direction from an even-column node", "[map-utils]")
 {
-
     // We are in the top part of the zigzag;
     // => Moving to the row above is diagonally north.
     // => Moving to the *same* row is diagonally south.
@@ -56,7 +54,6 @@ TEST_CASE("getDir should return the correct direction from an even-column node",
 
 TEST_CASE("getDir should return the correct direction from an odd-column node", "[map-utils]")
 {
-
     // We are in the bottom part of the zigzag;
     // => Moving to the *same* row is diagonally north.
     // => Moving to the row below is diagonally south.
