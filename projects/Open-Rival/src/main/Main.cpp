@@ -1,6 +1,5 @@
 #include <spdlog/spdlog.h>
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -12,6 +11,7 @@
 #include "application/ApplicationContext.h"
 #include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
+#include "utils/LogUtils.h"
 
 using namespace Rival;
 
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     ProgramOptions options(argc, argv);
     if (options.hasError())
     {
-        std::cerr << options.getError() << "\n";
+        LOG_ERROR("{}", options.getError());
         return -1;
     }
 
@@ -53,8 +53,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::exception& e)
     {
-        std::cerr << "Unhandled error during initialization or gameplay\n";
-        std::cerr << e.what() << "\n";
+        LOG_ERROR("Unhandled error during initialization or gameplay: {}", e.what());
         exitCode = 1;
     }
 

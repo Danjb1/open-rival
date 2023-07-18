@@ -1,6 +1,5 @@
 #include "gfx/Shaders.h"
 
-#include <iostream>
 #include <stdexcept>
 
 #include "gfx/ShaderUtils.h"

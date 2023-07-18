@@ -1,6 +1,5 @@
 #include "net/packets/RelayedPacket.h"
 
-#include <iostream>
 #include <stdexcept>
 
 #include "utils/BufferUtils.h"

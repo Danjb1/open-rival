@@ -2,9 +2,9 @@
 
 #include <shlobj_core.h>
 
-#include <iostream>
 #include <sstream>
 
+#include "utils/LogUtils.h"
 #include "utils/StringUtils.h"
 
 namespace Rival { namespace PathUtils {
@@ -18,7 +18,8 @@ std::string getLocalAppData()
 
     if (result != S_OK)
     {
-        std::cerr << "Get local app data failed: " << result << "\n";
+        LOG_WARN("Get local app data failed: {}", result);
+        return "";
     }
 
     std::wstring localAppData = std::wstring(localAppDataRaw);

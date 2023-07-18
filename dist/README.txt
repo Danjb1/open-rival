@@ -142,7 +142,7 @@ Fonts
     An array of directories that should be searched when looking for font files.
     They will be searched in the order listed.
 
-    By default, the examples directories shown here are used (adapted to your
+    By default, the example directories shown here are used (adapted to your
     user).
 
     Example:
@@ -150,7 +150,7 @@ Fonts
         "fontDirs": [
             "res\\fonts\\",
             "C:\\Windows\\Fonts\\",
-            "C:\\Users\\Danjb\\AppData\\Local\\Microsoft\\Windows\\Fonts\\"
+            "C:\\Users\\USERNAME\\AppData\\Local\\Microsoft\\Windows\\Fonts\\"
         ]
 
 => fontSmall
@@ -207,14 +207,20 @@ Logging
 
 => logLevel
 
-    Level of detail of any generated log files.
+    Level of detail to use for log messages.
 
-    Examples:
+    Acceptable values are:
 
-        "logLevel": "off"
-        "logLevel": "trace"
-        "logLevel": "debug"
-        "logLevel": "info"
-        "logLevel": "warn"
-        "logLevel": "error"
-        "logLevel": "critical"
+        "off", 
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+        "critical"
+
+=> logToFile
+
+    Whether to log to a file (true / false).
+
+    Log files are saved to a `logs` directory.

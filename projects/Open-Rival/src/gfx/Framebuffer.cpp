@@ -1,7 +1,8 @@
 #include "gfx/Framebuffer.h"
 
-#include <iostream>
 #include <stdexcept>
+
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -60,7 +61,7 @@ Framebuffer::Framebuffer(int w, int h, bool useDepth)
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
     {
-        std::cerr << "Framebuffer status: " << status << "\n";
+        LOG_WARN("Framebuffer status: {}", status);
         throw std::runtime_error("Failed to create framebuffer");
     }
 

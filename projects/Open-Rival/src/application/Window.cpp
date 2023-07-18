@@ -2,7 +2,7 @@
 
 #include "utils/SDLWrapper.h"
 
-#include <iostream>
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -23,7 +23,7 @@ Window::Window(int width, int height, const char* title)
 
     if (sdlWindow == nullptr)
     {
-        std::cerr << "Window could not be created!\n";
+        LOG_ERROR("Failed to create window");
         throw std::runtime_error(SDL_GetError());
     }
 
@@ -31,7 +31,7 @@ Window::Window(int width, int height, const char* title)
 
     if (glContext == nullptr)
     {
-        std::cerr << "OpenGL context could not be created!\n";
+        LOG_ERROR("Failed to create OpenGL context");
         throw std::runtime_error(SDL_GetError());
     }
 
@@ -43,7 +43,7 @@ Window::Window(int width, int height, const char* title)
     }
     else
     {
-        std::cerr << "Unable to enable vsync! SDL Error: " << SDL_GetError() << "\n";
+        LOG_WARN("Failed to enable vsync! SDL Error: {}", SDL_GetError());
     }
 }
 

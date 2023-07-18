@@ -16,6 +16,6 @@
 
 namespace Rival { namespace LogUtils {
 
-void initLogging(const std::string& logLevel);
+void initLogging(const std::string& logLevel, bool logToFile);
 
 }}  // namespace Rival::LogUtils

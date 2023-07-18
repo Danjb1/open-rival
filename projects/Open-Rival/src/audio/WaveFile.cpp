@@ -2,7 +2,6 @@
 
 #include <cstddef>  // std::size_t
 #include <fstream>
-#include <iostream>
 #include <stdexcept>
 
 #include "utils/LogUtils.h"

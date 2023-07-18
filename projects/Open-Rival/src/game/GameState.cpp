@@ -19,6 +19,7 @@
 #include "net/packets/GameCommandPacket.h"
 #include "utils/EnumUtils.h"
 #include "utils/InputUtils.h"
+#include "utils/LogUtils.h"
 #include "utils/MouseUtils.h"
 #include "utils/TimeUtils.h"
 
@@ -110,8 +111,7 @@ void GameState::pollNetwork()
         auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
-            std::cerr << "Received unexpected packet of type "
-                      << std::to_string(EnumUtils::toIntegral(packet->getType())) << "\n";
+            LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));
             continue;
         }
 
@@ -360,7 +360,7 @@ void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
 {
     if (!command)
     {
-        std::cerr << "Tried to dispatch invalid command";
+        LOG_WARN("Tried to dispatch invalid command");
         return;
     }
 

@@ -1,6 +1,5 @@
 #include "net/PacketFactory.h"
 
-#include <iostream>
 #include <string>
 
 #include "net/packets/AcceptPlayerPacket.h"
@@ -53,7 +52,7 @@ std::shared_ptr<Packet> PacketFactory::deserializeFromType(const std::vector<cha
     case PacketType::GameCommand:
         return GameCommandPacket::deserialize(buffer, gameCommandFactory);
     default:
-        std::cerr << "Unsupported packet type received: " << std::to_string(EnumUtils::toIntegral(type)) << "\n";
+        LOG_WARN("Unsupported packet type received: {}", EnumUtils::toIntegral(type));
         return {};
     }
 }

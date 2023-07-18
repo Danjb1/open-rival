@@ -66,7 +66,6 @@ target_link_libraries(Open-Rival PRIVATE
 # Pre-compiled headers
 target_precompile_headers(Open-Rival PRIVATE
     <cstdint>
-    <iostream>
     <memory>
     <stdexcept>
     <string>

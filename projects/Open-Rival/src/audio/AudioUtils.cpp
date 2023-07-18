@@ -2,8 +2,9 @@
 
 #include <AL/alc.h>
 
-#include <iostream>
 #include <stdexcept>
+
+#include "utils/LogUtils.h"
 
 namespace Rival { namespace AudioUtils {
 
@@ -38,20 +39,20 @@ void destroyAL()
     // Clear active audio context
     if (alcMakeContextCurrent(nullptr) != ALC_TRUE)
     {
-        std::cerr << "Failed to clear active audio context\n";
+        LOG_WARN("Failed to clear active audio context");
     }
 
     // Destroy audio context
     alcDestroyContext(openALContext);
     if (alcGetError(openALDevice) != ALC_NO_ERROR)
     {
-        std::cerr << "Failed to destroy audio context\n";
+        LOG_WARN("Failed to destroy audio context");
     }
 
     // Close audio device
     if (alcCloseDevice(openALDevice) != ALC_TRUE)
     {
-        std::cerr << "Failed to close audio device\n";
+        LOG_WARN("Failed to close audio device");
     }
 }
 
@@ -60,7 +61,7 @@ void checkPlaySoundALError(const WaveFile& waveFile)
     ALenum error = alGetError();
     if (error != AL_NO_ERROR)
     {
-        std::cerr << "OpenAL error: " << error << "\n";
+        LOG_ERROR("OpenAL error: {}", error);
         throw std::runtime_error("Error playing sound: " + waveFile.filename);
     }
 }

@@ -10,9 +10,11 @@
 
 #include <cassert>  // assert macro
 #include <cstring>  // std::memset
-#include <iostream>
 #include <stdexcept>
+#include <system_error>
 #include <utility>  // std::exchange
+
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -166,7 +168,7 @@ void Socket::close() noexcept
     auto const result = ::closesocket(handle);
     if (result != 0)
     {
-        std::cerr << "Failed to close socket: " + std::to_string(::WSAGetLastError()) << "\n";
+        LOG_WARN("Failed to close socket: {}", ::WSAGetLastError());
     }
 
     handle = INVALID_SOCKET;
@@ -180,7 +182,7 @@ Socket Socket::accept()
 
     if (clientSocket == INVALID_SOCKET && isOpen())
     {
-        std::cerr << "Failed to accept client: " + std::to_string(::WSAGetLastError()) << "\n";
+        LOG_WARN("Failed to accept client: {}", ::WSAGetLastError());
     }
 
     return { clientSocket };
@@ -203,7 +205,7 @@ void Socket::send(const std::vector<char>& buffer)
         if (result == SOCKET_ERROR && isOpen())
         {
             // Socket is still open on our side but may have been closed by the other side
-            std::cerr << "Failed to send on socket: " + std::to_string(::WSAGetLastError()) << "\n";
+            LOG_WARN("Failed to send on socket: {}", ::WSAGetLastError());
             close();
             break;
         }
@@ -224,7 +226,7 @@ void Socket::receive(std::vector<char>& buffer)
         if (result == SOCKET_ERROR && isOpen())
         {
             // Socket is still open on our side but may have been closed by the other side
-            std::cerr << "Failed to read from socket: " + std::to_string(::WSAGetLastError()) << "\n";
+            LOG_WARN("Failed to read from socket: {}", ::WSAGetLastError());
             close();
             break;
         }

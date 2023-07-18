@@ -1,7 +1,5 @@
 #include "utils/BufferUtils.h"
 
-#include <iostream>
-
 namespace Rival { namespace BufferUtils {
 
 void addStringToBuffer(std::vector<char>& buffer, const std::string& s)

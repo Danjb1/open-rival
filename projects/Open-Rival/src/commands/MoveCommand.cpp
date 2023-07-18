@@ -3,6 +3,7 @@
 #include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 #include "utils/BufferUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -46,7 +47,7 @@ void MoveCommand::execute(GameCommandContext& context)
     auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
     if (!moveComponent)
     {
-        std::cerr << "Tried to move an immovable entity\n";
+        LOG_WARN("Tried to move an immovable entity");
         return;
     }
 
