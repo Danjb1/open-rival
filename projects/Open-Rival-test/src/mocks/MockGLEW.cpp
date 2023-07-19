@@ -6,6 +6,8 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+GLboolean glewExperimental = false;
+
 GLenum glewInit(void)
 {
     return GLEW_OK;
@@ -22,66 +24,6 @@ void glFrontFace(GLenum /*mode*/)
 }
 
 void glEnable(GLenum /*cap*/)
-{
-    // Do nothing!
-}
-
-GLuint glCreateProgram()
-{
-    return 1;
-}
-
-GLuint glCreateShader(GLenum /*shaderType*/)
-{
-    return 1;
-}
-
-void glShaderSource(GLuint /*shader*/, GLsizei /*count*/, const GLchar** /*string*/, const GLint* /*length*/)
-{
-    // Do nothing!
-}
-
-void glCompileShader(GLuint /*shader*/)
-{
-    // Do nothing!
-}
-
-void glGetShaderiv(GLuint /*shader*/, GLenum /*pname*/, GLint* /*params*/)
-{
-    // Do nothing!
-}
-
-void glAttachShader(GLuint /*program*/, GLuint /*shader*/)
-{
-    // Do nothing!
-}
-
-void glLinkProgram(GLuint /*program*/)
-{
-    // Do nothing!
-}
-
-void glGetProgramiv(GLuint /*program*/, GLenum /*pname*/, GLint* /*params*/)
-{
-    // Do nothing!
-}
-
-GLboolean glIsProgram(GLuint /*program*/)
-{
-    return GL_TRUE;
-}
-
-GLboolean glIsShader(GLuint /*shader*/)
-{
-    return GL_TRUE;
-}
-
-void glGetProgramInfoLog(GLuint /*program*/, GLsizei /*maxLength*/, GLsizei* /*length*/, GLchar* /*infoLog*/)
-{
-    // Do nothing!
-}
-
-void glGetShaderInfoLog(GLuint /*shader*/, GLsizei /*maxLength*/, GLsizei* /*length*/, GLchar* /*infoLog*/)
 {
     // Do nothing!
 }
@@ -145,4 +87,14 @@ void glPixelStorei(GLenum /*pname*/, GLint /*param*/)
 void glClearColor(GLclampf /*red*/, GLclampf /*green*/, GLclampf /*blue*/, GLclampf /*alpha*/)
 {
     // Do nothing!
+}
+
+const GLubyte* glewGetErrorString(GLenum /*error*/)
+{
+    return nullptr;
+}
+
+const GLubyte* glewGetString(GLenum /*name*/)
+{
+    return nullptr;
 }

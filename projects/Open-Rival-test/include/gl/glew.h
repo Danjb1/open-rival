@@ -62,18 +62,6 @@ void glBlendFunc(GLenum sfactor, GLenum dfactor);
 void glFrontFace(GLenum mode);
 void glEnable(GLenum cap);
 
-GLuint glCreateProgram();
-GLuint glCreateShader(GLenum shaderType);
-void glShaderSource(GLuint shader, GLsizei count, const GLchar** string, const GLint* length);
-void glCompileShader(GLuint shader);
-void glGetShaderiv(GLuint shader, GLenum pname, GLint* params);
-void glAttachShader(GLuint program, GLuint shader);
-void glLinkProgram(GLuint program);
-void glGetProgramiv(GLuint program, GLenum pname, GLint* params);
-GLboolean glIsProgram(GLuint program);
-GLboolean glIsShader(GLuint shader);
-void glGetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
-void glGetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 GLint glGetUniformLocation(GLuint program, const GLchar* name);
 GLint glGetAttribLocation(GLuint program, const GLchar* name);
 
@@ -91,6 +79,6 @@ void glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
 /* error codes */
 #define GLEW_OK 0
 
-GLboolean glewExperimental;
+extern GLboolean glewExperimental;
 const GLubyte* glewGetErrorString(GLenum error);
 const GLubyte* glewGetString(GLenum name);

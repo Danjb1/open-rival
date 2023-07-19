@@ -26,6 +26,7 @@ list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/Framebuffer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/PaletteUtils.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Shaders.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/ShaderUtils.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/TextureAtlas.cpp
     ${OPEN_RIVAL_DIR}/src/ui/CursorRenderer.cpp
