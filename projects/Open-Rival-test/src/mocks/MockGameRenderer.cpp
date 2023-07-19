@@ -44,9 +44,6 @@ GameRenderer::GameRenderer(
 {
 }
 
-void GameRenderer::render(int /*delta*/)
-{
-    // Do nothing!
-}
+void GameRenderer::render(int /*delta*/) {}
 
 }  // namespace Rival

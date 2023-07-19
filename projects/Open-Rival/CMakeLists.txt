@@ -58,6 +58,7 @@ add_spdlog(Open-Rival)
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival PRIVATE
+    winmm
     Ws2_32
     project_options
     project_warnings

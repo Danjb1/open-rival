@@ -42,4 +42,17 @@ void AudioSystem::setSoundActive(bool active)
 
 void AudioSystem::playMidi(MidiFile midi) {}
 
+///////////////////////////////////////////////////////////////////////////
+// WAV playback
+///////////////////////////////////////////////////////////////////////////
+
+void AudioSystem::playSound(SoundSource source) {}
+
+void AudioSystem::cleanUpPlayedSounds() {}
+
+bool AudioSystem::isSoundPlaying(ALuint /*sourceId*/) const
+{
+    return true;
+}
+
 }  // namespace Rival

@@ -164,19 +164,19 @@ public:
     mutable bool dirty = true;
 
 private:
-    GLuint vao;
-    GLuint positionVbo;
-    GLuint texCoordVbo;
-    GLuint colorVbo;
-    GLuint ibo;
+    GLuint vao = 0;
+    GLuint positionVbo = 0;
+    GLuint texCoordVbo = 0;
+    GLuint colorVbo = 0;
+    GLuint ibo = 0;
 
     std::vector<TextSpan> spans;
     TextProperties props;
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
 
-    int numChars;
-    int numVisibleChars;
+    int numChars = 0;
+    int numVisibleChars = 0;
 };
 
 }  // namespace Rival

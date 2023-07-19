@@ -4,9 +4,9 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-#include "gfx/Texture.h"
-
 #include <memory>
+
+#include "gfx/Texture.h"
 
 namespace Rival {
 
@@ -16,6 +16,8 @@ Texture::Texture(const GLuint id, int width, int height)
     , height(height)
 {
 }
+
+Texture ::~Texture() {}
 
 const GLuint Texture::getId() const
 {

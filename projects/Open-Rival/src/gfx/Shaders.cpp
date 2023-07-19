@@ -39,7 +39,6 @@ IndexedTextureShader indexedTextureShader;
 
 void IndexedTextureShader::init()
 {
-
     GLuint programId = createShader("res\\shaders\\indexed_texture.vert", "res\\shaders\\indexed_texture.frag");
 
     indexedTextureShader.programId = programId;
@@ -84,7 +83,6 @@ WorldShader worldShader;
 
 void WorldShader::init()
 {
-
     GLuint programId = createShader("res\\shaders\\world.vert", "res\\shaders\\world.frag");
 
     worldShader.programId = programId;
@@ -133,7 +131,6 @@ FontShader fontShader;
 
 void FontShader::init()
 {
-
     GLuint programId = createShader("res\\shaders\\font.vert", "res\\shaders\\font.frag");
 
     fontShader.programId = programId;
@@ -174,7 +171,6 @@ TextureShader textureShader;
 
 void TextureShader::init()
 {
-
     GLuint programId = createShader("res\\shaders\\texture.vert", "res\\shaders\\texture.frag");
 
     textureShader.programId = programId;
@@ -219,7 +215,6 @@ void initializeShaders()
 
 GLuint createShader(const char* vertShader, const char* fragShader)
 {
-
     GLuint programId = glCreateProgram();
 
     // Create vertex shader

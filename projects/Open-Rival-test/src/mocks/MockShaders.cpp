@@ -13,9 +13,6 @@ WorldShader worldShader;
 FontShader fontShader;
 TextureShader textureShader;
 
-void initializeShaders()
-{
-    // Do nothing!
-}
+void initializeShaders() {}
 
 }}  // namespace Rival::Shaders

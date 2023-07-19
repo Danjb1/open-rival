@@ -12,26 +12,16 @@
 #include <SDL.h>
 #pragma warning(pop)
 
-void SDL_SetMainReady(void)
-{
-    // Do nothing!
-}
+void SDL_SetMainReady(void) {}
 
 int SDL_Init(Uint32 /*flags*/)
 {
     return 0;
 }
 
-void SDL_Quit(void)
-{
-    // Do nothing!
-}
+void SDL_Quit(void) {}
 
-void SDL_FreeSurface(SDL_Surface* /*surface*/)
-{
-
-    // Do nothing!
-}
+void SDL_FreeSurface(SDL_Surface* /*surface*/) {}
 
 int SDL_GL_SetAttribute(SDL_GLattr /*attr*/, int /*value*/)
 {
@@ -58,10 +48,7 @@ Uint32 SDL_GetTicks(void)
     return MockSDL::ticks;
 }
 
-void SDL_Delay(Uint32 /*ms*/)
-{
-    // Do nothing!
-}
+void SDL_Delay(Uint32 /*ms*/) {}
 
 int SDL_PollEvent(SDL_Event* /*event*/)
 {
@@ -73,6 +60,16 @@ Uint32 SDL_GetMouseState(int* x, int* y)
     *x = MockSDL::mouseX;
     *y = MockSDL::mouseY;
     return 0;
+}
+
+const Uint8* SDL_GetKeyboardState(int* /*numkeys*/)
+{
+    return nullptr;
+}
+
+SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode /*key*/)
+{
+    return SDL_SCANCODE_UNKNOWN;
 }
 
 namespace MockSDL {
