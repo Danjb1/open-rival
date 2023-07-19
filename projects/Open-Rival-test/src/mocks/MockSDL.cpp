@@ -12,6 +12,37 @@
 #include <SDL.h>
 #pragma warning(pop)
 
+void SDL_SetMainReady(void)
+{
+    // Do nothing!
+}
+
+int SDL_Init(Uint32 /*flags*/)
+{
+    return 0;
+}
+
+void SDL_Quit(void)
+{
+    // Do nothing!
+}
+
+void SDL_FreeSurface(SDL_Surface* /*surface*/)
+{
+
+    // Do nothing!
+}
+
+int SDL_GL_SetAttribute(SDL_GLattr /*attr*/, int /*value*/)
+{
+    return 0;
+}
+
+int SDL_ShowCursor(int /*toggle*/)
+{
+    return 0;
+}
+
 int SDL_GL_SetSwapInterval(int /*i*/)
 {
     return 0;
