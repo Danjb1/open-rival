@@ -1,16 +1,16 @@
-#include "gfx/MockSDL.h"
+/*
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!! Stub implementation for unit testing !!!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+#include "mocks/MockSDL.h"
 
 #define SDL_MAIN_HANDLED
 #pragma warning(push)
 #pragma warning(disable : 26819)
 #include <SDL.h>
 #pragma warning(pop)
-
-/*
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!! Stub implementation for unit testing !!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
 
 int SDL_GL_SetSwapInterval(int /*i*/)
 {

@@ -1,12 +1,12 @@
-#include "application/Resources.h"
-
-#include "application/ApplicationContext.h"
-
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#include "application/Resources.h"
+
+#include "application/ApplicationContext.h"
 
 namespace Rival {
 
