@@ -1,12 +1,12 @@
-#include "gfx/Texture.h"
-
-#include <memory>
-
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#include "gfx/Texture.h"
+
+#include <memory>
 
 namespace Rival {
 

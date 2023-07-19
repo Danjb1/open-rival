@@ -6,6 +6,26 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+GLenum glewInit(void)
+{
+    return GLEW_OK;
+}
+
+void glBlendFunc(GLenum /*sfactor*/, GLenum /*dfactor*/)
+{
+    // Do nothing!
+}
+
+void glFrontFace(GLenum /*mode*/)
+{
+    // Do nothing!
+}
+
+void glEnable(GLenum /*cap*/)
+{
+    // Do nothing!
+}
+
 GLuint glCreateProgram()
 {
     return 1;
@@ -118,6 +138,11 @@ void glEnableVertexAttribArray(GLuint /*index*/)
 }
 
 void glPixelStorei(GLenum /*pname*/, GLint /*param*/)
+{
+    // Do nothing!
+}
+
+void glClearColor(GLclampf /*red*/, GLclampf /*green*/, GLclampf /*blue*/, GLclampf /*alpha*/)
 {
     // Do nothing!
 }

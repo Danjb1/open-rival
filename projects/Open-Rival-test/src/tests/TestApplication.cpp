@@ -3,7 +3,7 @@
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
 #include "application/State.h"
-#include "gfx/MockSDL.h"
+#include "mocks/MockSDL.h"
 #include "utils/TimeUtils.h"
 
 using namespace Rival;

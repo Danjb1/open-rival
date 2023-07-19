@@ -1,10 +1,10 @@
-#include "audio/AudioSystem.h"
-
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#include "audio/AudioSystem.h"
 
 namespace Rival {
 

@@ -1,10 +1,10 @@
-#include "application/Window.h"
-
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#include "application/Window.h"
 
 namespace Rival {
 

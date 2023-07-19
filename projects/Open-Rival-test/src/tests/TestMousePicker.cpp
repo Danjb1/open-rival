@@ -10,8 +10,8 @@
 #include "game/PlayerState.h"
 #include "game/World.h"
 #include "gfx/Camera.h"
-#include "gfx/MockSDL.h"
 #include "gfx/RenderUtils.h"
+#include "mocks/MockSDL.h"
 #include "utils/Rect.h"
 
 using namespace Rival;

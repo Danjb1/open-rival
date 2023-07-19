@@ -4,34 +4,58 @@ cmake_minimum_required (VERSION 3.16)
 set(OPEN_RIVAL_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival)
 include(${CMAKE_SOURCE_DIR}/CMake/OpenRivalFiles.cmake)
 
-# Remove Open-Rival's Main.cpp so it doesn't conflict with our own main method
-list(REMOVE_ITEM OPEN_RIVAL_HEADERS ${OPEN_RIVAL_DIR}/src/main/Main.cpp)
+# Remove Open-Rival files that we don't need or that we are replacing
+list(REMOVE_ITEM OPEN_RIVAL_SOURCES
+    ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
+    ${OPEN_RIVAL_DIR}/src/application/Window.cpp
+    ${OPEN_RIVAL_DIR}/src/audio/AudioSystem.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/EntityRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/AtlasRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/BoxRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MenuTextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TileRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/UiRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Font.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Framebuffer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/PaletteUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Shaders.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/TextureAtlas.cpp
+    ${OPEN_RIVAL_DIR}/src/ui/CursorRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/ui/MenuRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/main/Main.cpp
+)
 
 # Test framework
 set(OPEN_RIVAL_TEST_FRAMEWORK_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/catch2/catch.h
 )
 
-# Replacement headers to override Open-Rival headers
-set(OPEN_RIVAL_REPLACEMENT_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/MockSDL.h
+# Test headers
+set(OPEN_RIVAL_TEST_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/gl/glew.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/mocks/MockSDL.h
 )
 
-# Replacement sources to override Open-Rival sources
-set(OPEN_RIVAL_REPLACEMENT_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/src/application/Resources.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/application/Window.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/audio/AudioSystem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/Font.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/MockSDL.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gfx/Texture.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/gl/glew.cpp
-)
-
-# Tests and utilities
+# Tests sources
 set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/main/Main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioSystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGameRenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGLEW.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFont.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockResources.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDL.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockShaders.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTexture.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockWindow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAnimationComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestApplication.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestCamera.cpp
@@ -60,12 +84,11 @@ set(OPEN_RIVAL_TEST_LIBARY_INCLUDES
 )
 
 # Organise files into folders (filters)
-source_group(TREE ${OPEN_RIVAL_DIR}/src PREFIX "Open-Rival Source Files" FILES ${OPEN_RIVAL_SOURCES})
-source_group(TREE ${OPEN_RIVAL_DIR}/include PREFIX "Open-Rival Source Files" FILES ${OPEN_RIVAL_HEADERS})
+source_group(TREE ${OPEN_RIVAL_DIR}/src PREFIX "Open-Rival Sources" FILES ${OPEN_RIVAL_SOURCES})
+source_group(TREE ${OPEN_RIVAL_DIR}/include PREFIX "Open-Rival Sources" FILES ${OPEN_RIVAL_HEADERS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Test Framework" FILES ${OPEN_RIVAL_TEST_FRAMEWORK_HEADERS})
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Replacement Source Files" FILES ${OPEN_RIVAL_REPLACEMENT_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Replacement Source Files" FILES ${OPEN_RIVAL_REPLACEMENT_HEADERS})
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Test Source Files" FILES ${OPEN_RIVAL_TEST_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Test Sources" FILES ${OPEN_RIVAL_TEST_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Test Sources" FILES ${OPEN_RIVAL_TEST_HEADERS})
 
 # Creates the executable including all the sources and resources
 add_executable(Open-Rival-test
@@ -75,6 +98,7 @@ add_executable(Open-Rival-test
     ${OPEN_RIVAL_REPLACEMENT_SOURCES}
     ${OPEN_RIVAL_REPLACEMENT_HEADERS}
     ${OPEN_RIVAL_TEST_SOURCES}
+    ${OPEN_RIVAL_TEST_HEADERS}
 )
 
 # Add the directories and headers of the project

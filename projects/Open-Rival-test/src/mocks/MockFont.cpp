@@ -1,10 +1,10 @@
-#include "gfx/Font.h"
-
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub implementation for unit testing !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#include "gfx/Font.h"
 
 namespace Rival {
 
