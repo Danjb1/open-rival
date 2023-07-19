@@ -21,7 +21,6 @@ std::string readShaderSource(const char* filename)
 
 void printProgramLog(const GLuint program)
 {
-
     if (!glIsProgram(program))
     {
         LOG_WARN("Name {} is not a program", program);
@@ -52,7 +51,6 @@ void printProgramLog(const GLuint program)
 
 void printShaderLog(const GLuint shader)
 {
-
     if (!glIsShader(shader))
     {
         LOG_WARN("Name {} is not a shader", shader);

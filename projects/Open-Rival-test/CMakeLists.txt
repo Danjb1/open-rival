@@ -9,6 +9,8 @@ list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/Window.cpp
     ${OPEN_RIVAL_DIR}/src/audio/AudioSystem.cpp
+    ${OPEN_RIVAL_DIR}/src/audio/AudioUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/audio/MidiPlayer.cpp
     ${OPEN_RIVAL_DIR}/src/entity/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/AtlasRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/BoxRenderable.cpp
@@ -47,16 +49,24 @@ set(OPEN_RIVAL_TEST_HEADERS
 
 # Tests sources
 set(OPEN_RIVAL_TEST_SOURCES
+    # Mocks
     ${CMAKE_CURRENT_LIST_DIR}/src/main/Main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioSystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGameRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGLEW.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFont.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFreeType.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockResources.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDL.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDLImage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockShaders.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSpriteRenderable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTextRenderable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTexture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockWindow.cpp
+    
+    # Tests
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAnimationComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestApplication.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestCamera.cpp
@@ -115,6 +125,7 @@ add_spdlog(Open-Rival-test)
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival-test PRIVATE
+    winmm
     Ws2_32
     project_options
     project_warnings

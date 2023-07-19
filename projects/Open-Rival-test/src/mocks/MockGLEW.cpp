@@ -13,20 +13,11 @@ GLenum glewInit(void)
     return GLEW_OK;
 }
 
-void glBlendFunc(GLenum /*sfactor*/, GLenum /*dfactor*/)
-{
-    // Do nothing!
-}
+void glBlendFunc(GLenum /*sfactor*/, GLenum /*dfactor*/) {}
 
-void glFrontFace(GLenum /*mode*/)
-{
-    // Do nothing!
-}
+void glFrontFace(GLenum /*mode*/) {}
 
-void glEnable(GLenum /*cap*/)
-{
-    // Do nothing!
-}
+void glEnable(GLenum /*cap*/) {}
 
 GLint glGetUniformLocation(GLuint /*program*/, const GLchar* /*name*/)
 {
@@ -38,30 +29,15 @@ GLint glGetAttribLocation(GLuint /*program*/, const GLchar* /*name*/)
     return 1;
 }
 
-void glGenVertexArrays(int /*n*/, GLuint* /*arrays*/)
-{
-    // Do nothing!
-}
+void glGenVertexArrays(int /*n*/, GLuint* /*arrays*/) {}
 
-void glBindVertexArray(GLuint /*array*/)
-{
-    // Do nothing!
-}
+void glBindVertexArray(GLuint /*array*/) {}
 
-void glGenBuffers(GLsizei /*n*/, GLuint* /*buffers*/)
-{
-    // Do nothing!
-}
+void glGenBuffers(GLsizei /*n*/, GLuint* /*buffers*/) {}
 
-void glBindBuffer(GLenum /*target*/, GLuint /*buffer*/)
-{
-    // Do nothing!
-}
+void glBindBuffer(GLenum /*target*/, GLuint /*buffer*/) {}
 
-void glBufferData(GLenum /*target*/, GLsizeiptr /*size*/, const void* /*data*/, GLenum /*usage*/)
-{
-    // Do nothing!
-}
+void glBufferData(GLenum /*target*/, GLsizeiptr /*size*/, const void* /*data*/, GLenum /*usage*/) {}
 
 void glVertexAttribPointer(
         GLuint /*index*/,
@@ -71,23 +47,13 @@ void glVertexAttribPointer(
         GLsizei /*stride*/,
         const void* /*pointer*/)
 {
-    // Do nothing!
 }
 
-void glEnableVertexAttribArray(GLuint /*index*/)
-{
-    // Do nothing!
-}
+void glEnableVertexAttribArray(GLuint /*index*/) {}
 
-void glPixelStorei(GLenum /*pname*/, GLint /*param*/)
-{
-    // Do nothing!
-}
+void glPixelStorei(GLenum /*pname*/, GLint /*param*/) {}
 
-void glClearColor(GLclampf /*red*/, GLclampf /*green*/, GLclampf /*blue*/, GLclampf /*alpha*/)
-{
-    // Do nothing!
-}
+void glClearColor(GLclampf /*red*/, GLclampf /*green*/, GLclampf /*blue*/, GLclampf /*alpha*/) {}
 
 const GLubyte* glewGetErrorString(GLenum /*error*/)
 {

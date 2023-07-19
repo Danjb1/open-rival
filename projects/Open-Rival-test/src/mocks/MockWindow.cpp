@@ -16,14 +16,10 @@ Window::Window(int width, int height, const char* title)
 {
 }
 
-Window::~Window()
-{
-    // Do nothing!
-}
+Window::~Window() {}
 
-void Window::swapBuffers() const
-{
-    // Do nothing!
-}
+void Window::swapBuffers() const {}
+
+void Window::setIcon(SDL_Surface* /*surface*/) {}
 
 }  // namespace Rival

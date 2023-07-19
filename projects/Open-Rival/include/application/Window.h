@@ -45,8 +45,8 @@ public:
     }
 
 private:
-    SDL_Window* sdlWindow;
-    SDL_GLContext glContext;
+    SDL_Window* sdlWindow = nullptr;
+    SDL_GLContext glContext = nullptr;
 
     const int width;
     const int height;

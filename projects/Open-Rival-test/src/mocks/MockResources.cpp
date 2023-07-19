@@ -4,9 +4,8 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-#include "application/Resources.h"
-
 #include "application/ApplicationContext.h"
+#include "application/Resources.h"
 
 namespace Rival {
 
@@ -32,7 +31,6 @@ Resources::Resources(ApplicationContext& context)
     , midis(initMidis())
     , unitDefs(initUnitDefs())
     , buildingDefs(initBuildingDefs())
-
 {
 }
 
@@ -48,12 +46,12 @@ Font Resources::initFontRegular()
     return Font::loadFont(ft, {}, "", 0);
 }
 
-std::vector<std::shared_ptr<const Texture>> loadTextures()
+std::vector<std::shared_ptr<const Texture>> Resources::loadTextures()
 {
     return {};
 }
 
-std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases()
+std::vector<std::shared_ptr<const TextureAtlas>> Resources::loadTextureAtlases()
 {
     return {};
 }
@@ -127,6 +125,11 @@ std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() co
     return {};
 }
 
+std::shared_ptr<const Texture> Resources::getPalette() const
+{
+    return paletteTexture;
+}
+
 const Spritesheet& Resources::getTileSpritesheet(bool /*wilderness*/) const
 {
     return tileSpritesheets.at(0);
@@ -142,14 +145,76 @@ const Spritesheet& Resources::getBuildingSpritesheet(Building::Type /*buildingTy
     return buildingSpritesheets.at(Building::Type::Barracks);
 }
 
+const Spritesheet& Resources::getCommonObjectSpritesheet() const
+{
+    return objectSpritesheets.at(0);
+}
+
+const Spritesheet& Resources::getObjectSpritesheet(bool /*wilderness*/) const
+{
+    return objectSpritesheets.at(0);
+}
+
+const Spritesheet& Resources::getCursorSpritesheet() const
+{
+    return cursorSpritesheet;
+}
+
 const Spritesheet& Resources::getMapBorderSpritesheet() const
 {
     return mapBorderSpritesheet;
 }
 
-std::shared_ptr<const Texture> Resources::getPalette() const
+const Spritesheet& Resources::getPortraitSpritesheet() const
 {
-    return paletteTexture;
+    return portraitSpritesheet;
+}
+
+const Spritesheet& Resources::getHitboxSpritesheet() const
+{
+    return hitboxSpritesheet;
+}
+
+std::shared_ptr<const TextureAtlas> Resources::getUiTextureAtlas() const
+{
+    return {};
+}
+
+std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const
+{
+    return {};
+}
+
+const Font& Resources::getFontSmall() const
+{
+    return fontSmall;
+}
+
+const Font& Resources::getFontRegular() const
+{
+    return fontRegular;
+}
+
+const WaveFile& Resources::getSound(int id) const
+{
+    return sounds.at(id);
+}
+
+const MidiFile& Resources::getMidi(int id) const
+{
+    return midis.at(id);
+}
+
+const UnitDef* Resources::getUnitDef(Unit::Type unitType) const
+{
+    auto iter = unitDefs.find(unitType);
+    return iter == unitDefs.cend() ? nullptr : &iter->second;
+}
+
+const BuildingDef* Resources::getBuildingDef(Building::Type buildingType) const
+{
+    auto iter = buildingDefs.find(buildingType);
+    return iter == buildingDefs.cend() ? nullptr : &iter->second;
 }
 
 }  // namespace Rival

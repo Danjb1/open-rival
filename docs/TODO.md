@@ -6,71 +6,28 @@
 
 ### Tests
 
-- Missing GLEW symbols:
-    GL_BLEND
-    GL_COLOR_ATTACHMENT0
-    GL_COLOR_BUFFER_BIT
-    GL_CULL_FACE
-    GL_CW
-    GL_DEPTH_ATTACHMENT
-    GL_DEPTH_BUFFER_BIT
-    GL_DEPTH_COMPONENT
-    GL_DEPTH_TEST
-    GL_FRAMEBUFFER
-    GL_FRAMEBUFFER_COMPLETE
-    GL_ONE_MINUS_SRC_ALPHA
-    GL_RENDERBUFFER
-    GL_RGB
-    GL_RGBA
-    GL_SRC_ALPHA
-    GL_TEXTURE_2D
-    GL_TEXTURE_MAG_FILTER
-    GL_TEXTURE_MIN_FILTER
-    GL_TEXTURE_WRAP_S
-    GL_TEXTURE_WRAP_T
-    GL_TEXTURE0
-    GL_TEXTURE1
-    GL_UNSIGNED_BYTE
-    GL_UNSIGNED_INT
-    glActiveTexture
-    glBindFramebuffer
-    glBindRenderbuffer
-    glBindTexture
-    glBlendFunc
-    glBufferSubData
-    glCheckFramebufferStatus
-    glClear
-    glClearColor
-    glDeleteBuffers
-    glDeleteFramebuffers
-    glDeleteShader
-    glDeleteTextures
-    glDeleteVertexArrays
-    glDetachShader
-    glDisable
-    glDrawBuffers
-    glDrawElements
-    glEnable
-    GLEW_OK
-    glewErrorString
-    glewExperimental
-    glewGetErrorString
-    glewInit
-    glFramebufferRenderbuffer
-    glFramebufferTexture
-    glFrontFace
-    glGenFramebuffers
-    glGenRenderbuffers
-    glGenTextures
-    glRenderbufferStorage
-    glTexImage2D
-    glTexParameteri
-    glUniform1f
-    glUniform1i
-    glUniformMatrix4fv
-    glUseProgram
-    glViewport
-- Consider stubbing/excluding renderers to reduce the number of usages of GLEW functionality
+- Unresolved external symbols:
+
+```
+1>GameInterface.obj : error LNK2019: unresolved external symbol "public: class std::vector<float,class std::allocator<float> > const __cdecl Rival::TextureAtlas::getTexCoords(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)const " (?getTexCoords@TextureAtlas@Rival@@QEBA?BV?$vector@MV?$allocator@M@std@@@std@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@4@@Z) referenced in function "public: void __cdecl Rival::GameInterface::UiImage::addToBuffers(class std::vector<float,class std::allocator<float> > &,class std::vector<float,class std::allocator<float> > &)const " (?addToBuffers@UiImage@GameInterface@Rival@@QEBAXAEAV?$vector@MV?$allocator@M@std@@@std@@0@Z)
+1>GameState.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::Framebuffer::~Framebuffer(void)" (??1Framebuffer@Rival@@QEAA@XZ) referenced in function "public: __cdecl Rival::GameRenderer::~GameRenderer(void)" (??1GameRenderer@Rival@@QEAA@XZ)
+1>MockGameRenderer.obj : error LNK2001: unresolved external symbol "public: __cdecl Rival::Framebuffer::~Framebuffer(void)" (??1Framebuffer@Rival@@QEAA@XZ)
+1>GameState.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::AtlasRenderable::~AtlasRenderable(void)" (??1AtlasRenderable@Rival@@QEAA@XZ) referenced in function "public: __cdecl Rival::UiRenderer::~UiRenderer(void)" (??1UiRenderer@Rival@@QEAA@XZ)
+1>LobbyState.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::MenuTextRenderer::MenuTextRenderer(class Rival::Window const *)" (??0MenuTextRenderer@Rival@@QEAA@PEBVWindow@1@@Z) referenced in function "public: __cdecl Rival::LobbyState::LobbyState(class Rival::Application &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,bool)" (??0LobbyState@Rival@@QEAA@AEAVApplication@1@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z)
+1>LobbyState.obj : error LNK2019: unresolved external symbol "public: void __cdecl Rival::MenuTextRenderer::render(class std::vector<class Rival::TextRenderable const *,class std::allocator<class Rival::TextRenderable const *> >)const " (?render@MenuTextRenderer@Rival@@QEBAXV?$vector@PEBVTextRenderable@Rival@@V?$allocator@PEBVTextRenderable@Rival@@@std@@@std@@@Z) referenced in function "private: void __cdecl Rival::LobbyState::renderText(void)" (?renderText@LobbyState@Rival@@AEAAXXZ)
+1>LobbyState.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::TextureRenderable::~TextureRenderable(void)" (??1TextureRenderable@Rival@@QEAA@XZ) referenced in function "public: __cdecl Rival::MenuRenderer::~MenuRenderer(void)" (??1MenuRenderer@Rival@@QEAA@XZ)
+1>LobbyState.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::MenuRenderer::MenuRenderer(class Rival::TextureStore const &,class Rival::Window const *,class Rival::Rect const &)" (??0MenuRenderer@Rival@@QEAA@AEBVTextureStore@1@PEBVWindow@1@AEBVRect@1@@Z) referenced in function "public: __cdecl Rival::LobbyState::LobbyState(class Rival::Application &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,bool)" (??0LobbyState@Rival@@QEAA@AEAVApplication@1@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N@Z)
+1>LobbyState.obj : error LNK2019: unresolved external symbol "public: void __cdecl Rival::MenuRenderer::render(int)" (?render@MenuRenderer@Rival@@QEAAXH@Z) referenced in function "public: virtual void __cdecl Rival::LobbyState::render(int)" (?render@LobbyState@Rival@@UEAAXH@Z)
+1>LobbyState.obj : error LNK2001: unresolved external symbol "public: static class Rival::Color const Rival::TextRenderable::defaultColor" (?defaultColor@TextRenderable@Rival@@2VColor@2@B)
+1>MockAudioSystem.obj : error LNK2019: unresolved external symbol "public: __cdecl RtMidiOut::RtMidiOut(enum RtMidi::Api,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (??0RtMidiOut@@QEAA@W4Api@RtMidi@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: __cdecl Rival::MidiPlayer::MidiPlayer(void)" (??0MidiPlayer@Rival@@QEAA@XZ)
+1>MockAudioSystem.obj : error LNK2019: unresolved external symbol "public: virtual __cdecl RtMidiOut::~RtMidiOut(void)" (??1RtMidiOut@@UEAA@XZ) referenced in function "public: __cdecl Rival::MidiPlayer::~MidiPlayer(void)" (??1MidiPlayer@Rival@@QEAA@XZ)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::EntityRenderer::EntityRenderer(class Rival::TextureStore const &,struct Rival::PlayerContext const &)" (??0EntityRenderer@Rival@@QEAA@AEBVTextureStore@1@AEBUPlayerContext@1@@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::Framebuffer::Framebuffer(int,int,bool)" (??0Framebuffer@Rival@@QEAA@HH_N@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::FramebufferRenderer::FramebufferRenderer(class Rival::Framebuffer &)" (??0FramebufferRenderer@Rival@@QEAA@AEAVFramebuffer@1@@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::MapBorderRenderer::MapBorderRenderer(enum Rival::Race,int,int,class Rival::Spritesheet const &,class std::shared_ptr<class Rival::Texture const >)" (??0MapBorderRenderer@Rival@@QEAA@W4Race@1@HHAEBVSpritesheet@1@V?$shared_ptr@$$CBVTexture@Rival@@@std@@@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::TileRenderer::TileRenderer(class Rival::Spritesheet const &,class std::shared_ptr<class Rival::Texture const >)" (??0TileRenderer@Rival@@QEAA@AEBVSpritesheet@1@V?$shared_ptr@$$CBVTexture@Rival@@@std@@@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+1>MockGameRenderer.obj : error LNK2019: unresolved external symbol "public: __cdecl Rival::UiRenderer::UiRenderer(class Rival::PlayerStore const &,class Rival::TextureStore const &,class Rival::FontStore const &,class Rival::Window const *,struct Rival::PlayerContext const &)" (??0UiRenderer@Rival@@QEAA@AEBVPlayerStore@1@AEBVTextureStore@1@AEBVFontStore@1@PEBVWindow@1@AEBUPlayerContext@1@@Z) referenced in function "public: __cdecl Rival::GameRenderer::GameRenderer(class Rival::Window const *,class Rival::World const &,class Rival::PlayerStore const &,class Rival::Camera const &,class Rival::Rect const &,class Rival::Resources const &,struct Rival::PlayerContext const &)" (??0GameRenderer@Rival@@QEAA@PEBVWindow@1@AEBVWorld@1@AEBVPlayerStore@1@AEBVCamera@1@AEBVRect@1@AEBVResources@1@AEBUPlayerContext@1@@Z)
+```
 
 ### Multiplayer Milestone
 
@@ -386,7 +343,8 @@
 
 ### General
 
-- Mock Shaders / ShaderUtils in tests instead of mocking so many library functions?
+- Lower warning level for test project
+- Refactor Open-Rival code such that fewer mocks are needed
 
 ### Entity/Component Lifecycle
 
@@ -440,6 +398,8 @@
 
 ### Refactoring
 
+- Separate Resources from resource *loading*
+    - In tests, we only need to mock resource loading
 - Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?
