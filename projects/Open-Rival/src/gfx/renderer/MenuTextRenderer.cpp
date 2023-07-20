@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+#include "application/Window.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Shaders.h"
 

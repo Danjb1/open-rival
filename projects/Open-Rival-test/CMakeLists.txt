@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 3.16)
 set(OPEN_RIVAL_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival)
 include(${CMAKE_SOURCE_DIR}/CMake/OpenRivalFiles.cmake)
 
-# Remove Open-Rival files that we don't need or that we are replacing
+# Remove Open-Rival sources that we don't need or that we are replacing
 list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/Window.cpp
@@ -30,33 +30,42 @@ list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/Shaders.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/ShaderUtils.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/TextureAtlas.cpp
     ${OPEN_RIVAL_DIR}/src/ui/CursorRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/ui/MenuRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/main/Main.cpp
 )
 
-# Test framework
+# Replacement Headers
+set(OPEN_RIVAL_REPLACEMENT_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/include/audio/AudioSystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/renderer/GameRenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/renderer/MenuTextRenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/gl/glew.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/ui/MenuRenderer.h
+)
+
+# Test Framework
 set(OPEN_RIVAL_TEST_FRAMEWORK_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/catch2/catch.h
 )
 
-# Test headers
+# Test Headers
 set(OPEN_RIVAL_TEST_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/gl/glew.h
     ${CMAKE_CURRENT_LIST_DIR}/include/mocks/MockSDL.h
 )
 
-# Tests sources
+# Test Sources
 set(OPEN_RIVAL_TEST_SOURCES
-    # Mocks
     ${CMAKE_CURRENT_LIST_DIR}/src/main/Main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGameRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGLEW.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFont.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFramebuffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFreeType.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockMenuRenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockMenuTextRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockResources.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDL.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDLImage.cpp
@@ -65,8 +74,6 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTextRenderable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTexture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockWindow.cpp
-    
-    # Tests
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAnimationComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestApplication.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestCamera.cpp
@@ -77,9 +84,10 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSpritesheet.cpp
 )
 
+# We include the test includes first so that they take precedence
 set(OPEN_RIVAL_TEST_INCLUDE_DIRECTORIES
-    ${OPEN_RIVAL_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/include
+    ${OPEN_RIVAL_DIR}/include
 )
 
 set(OPEN_RIVAL_TEST_LIBARY_INCLUDES
@@ -98,6 +106,7 @@ set(OPEN_RIVAL_TEST_LIBARY_INCLUDES
 source_group(TREE ${OPEN_RIVAL_DIR}/src PREFIX "Open-Rival Sources" FILES ${OPEN_RIVAL_SOURCES})
 source_group(TREE ${OPEN_RIVAL_DIR}/include PREFIX "Open-Rival Sources" FILES ${OPEN_RIVAL_HEADERS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Test Framework" FILES ${OPEN_RIVAL_TEST_FRAMEWORK_HEADERS})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Replacement Headers" FILES ${OPEN_RIVAL_REPLACEMENT_HEADERS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Test Sources" FILES ${OPEN_RIVAL_TEST_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Test Sources" FILES ${OPEN_RIVAL_TEST_HEADERS})
 
@@ -105,9 +114,8 @@ source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Test Sources" FILES 
 add_executable(Open-Rival-test
     ${OPEN_RIVAL_SOURCES}
     ${OPEN_RIVAL_HEADERS}
-    ${OPEN_RIVAL_TEST_FRAMEWORK_HEADERS}
-    ${OPEN_RIVAL_REPLACEMENT_SOURCES}
     ${OPEN_RIVAL_REPLACEMENT_HEADERS}
+    ${OPEN_RIVAL_TEST_FRAMEWORK_HEADERS}
     ${OPEN_RIVAL_TEST_SOURCES}
     ${OPEN_RIVAL_TEST_HEADERS}
 )

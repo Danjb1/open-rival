@@ -8,7 +8,8 @@
 
 namespace Rival {
 
-Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
+Font Font::loadFont(
+        FT_Library& /*ft*/, std::vector<std::string> /*fontDirs*/, std::string /*filename*/, int /*defaultSize*/)
 {
     std::shared_ptr<const Texture> texture = {};
     std::unordered_map<char, CharData> chars = {};

@@ -2,11 +2,12 @@
 
 #include <vector>
 
-#include "application/Window.h"
 #include "gfx/renderable/TextRenderable.h"
 #include "gfx/renderer/TextRenderer.h"
 
 namespace Rival {
+
+class Window;
 
 /**
  * Class responsible for rendering TextRenderables on the UI layer.

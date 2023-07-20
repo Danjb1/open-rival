@@ -8,37 +8,17 @@
 
 namespace Rival {
 
-AudioSystem::AudioSystem()
-    : midiActive(false)
-    , soundActive(false)
-{
-}
+AudioSystem::AudioSystem() {}
 
-AudioSystem::~AudioSystem()
-{
-    setMidiActive(false);
-    setSoundActive(false);
-}
+AudioSystem::~AudioSystem() {}
 
 ///////////////////////////////////////////////////////////////////////////
 // MIDI playback
 ///////////////////////////////////////////////////////////////////////////
 
-void AudioSystem::midiThreadLoop() {}
+void AudioSystem::setMidiActive(bool /*active*/) {}
 
-void AudioSystem::startMidiSystem() {}
-
-void AudioSystem::destroyMidiSystem() {}
-
-void AudioSystem::setMidiActive(bool active)
-{
-    midiActive = active;
-}
-
-void AudioSystem::setSoundActive(bool active)
-{
-    soundActive = active;
-}
+void AudioSystem::setSoundActive(bool /*active*/) {}
 
 void AudioSystem::playMidi(MidiFile midi) {}
 
@@ -48,11 +28,14 @@ void AudioSystem::playMidi(MidiFile midi) {}
 
 void AudioSystem::playSound(SoundSource source) {}
 
-void AudioSystem::cleanUpPlayedSounds() {}
-
 bool AudioSystem::isSoundPlaying(ALuint /*sourceId*/) const
 {
     return true;
+}
+
+std::unordered_map<ALuint, SoundSource> AudioSystem::getPlayedSounds() const
+{
+    return {};
 }
 
 }  // namespace Rival

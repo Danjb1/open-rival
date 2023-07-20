@@ -10,7 +10,6 @@ Framebuffer::Framebuffer(int w, int h, bool useDepth)
     : width(w)
     , height(h)
 {
-
     // Generate framebuffer
     glGenFramebuffers(1, &id);
     glBindFramebuffer(GL_FRAMEBUFFER, id);

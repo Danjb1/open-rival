@@ -11,6 +11,7 @@ namespace Rival {
 
 class Camera;
 class PlayerState;
+class PlayerStore;
 class Rect;
 class Resources;
 class Window;

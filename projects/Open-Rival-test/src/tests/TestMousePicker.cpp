@@ -375,11 +375,11 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
         WHEN("getting the entity under the mouse")
         {
             mousePicker.handleMouse();
-            int entityId = playerContext.weakEntityUnderMouse.lock()->getId();
+            std::shared_ptr<Entity> entity = playerContext.weakEntityUnderMouse.lock();
 
-            THEN("the value -1 is returned")
+            THEN("no entity is returned")
             {
-                REQUIRE(entityId == -1);
+                REQUIRE(!entity);
             }
         }
     }
@@ -392,11 +392,12 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
         WHEN("getting the entity under the mouse")
         {
             mousePicker.handleMouse();
-            int entityId = playerContext.weakEntityUnderMouse.lock()->getId();
+            std::shared_ptr<Entity> entity = playerContext.weakEntityUnderMouse.lock();
 
-            THEN("the correct entity ID is returned")
+            THEN("the correct entity is returned")
             {
-                REQUIRE(entityId == 0);
+                REQUIRE(entity);
+                REQUIRE(entity->getId() == 0);
             }
         }
     }

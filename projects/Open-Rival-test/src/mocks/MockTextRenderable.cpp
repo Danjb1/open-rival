@@ -8,6 +8,9 @@
 
 namespace Rival {
 
+const Color TextRenderable::defaultColor = Color::makeRgb(255, 221, 65);
+const Color TextRenderable::highlightColor = Color::makeRgb(255, 43, 40);
+
 TextRenderable::TextRenderable(TextSpan /*span*/, TextProperties /*props*/, float /*x*/, float /*y*/) {}
 
 TextRenderable::TextRenderable(
