@@ -11,7 +11,6 @@
 #include "audio/MidiFile.h"
 #include "audio/MidiPlayer.h"
 #include "audio/SoundSource.h"
-#include "audio/WaveFile.h"
 
 namespace Rival {
 
