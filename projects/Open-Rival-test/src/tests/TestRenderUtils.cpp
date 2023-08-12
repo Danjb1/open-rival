@@ -59,16 +59,16 @@ TEST_CASE("getEntityZ calculates the correct z-positions", "[render-utils]")
     float zStart = RenderUtils::zEntityFurthest;
 
     // First row
-    REQUIRE(RenderUtils::getEntityZ(0, 0) == zStart + 0.0f);
-    REQUIRE(RenderUtils::getEntityZ(1, 0) == zStart + 0.5f);
-    REQUIRE(RenderUtils::getEntityZ(2, 0) == zStart + 0.0f);
-    REQUIRE(RenderUtils::getEntityZ(3, 0) == zStart + 0.5f);
+    REQUIRE(RenderUtils::getEntityZ(0, 0) == zStart - 0.0f);
+    REQUIRE(RenderUtils::getEntityZ(1, 0) == zStart - 0.5f);
+    REQUIRE(RenderUtils::getEntityZ(2, 0) == zStart - 0.0f);
+    REQUIRE(RenderUtils::getEntityZ(3, 0) == zStart - 0.5f);
 
     // Second row
-    REQUIRE(RenderUtils::getEntityZ(0, 1) == zStart + 1.0f);
-    REQUIRE(RenderUtils::getEntityZ(1, 1) == zStart + 1.5f);
-    REQUIRE(RenderUtils::getEntityZ(2, 1) == zStart + 1.0f);
-    REQUIRE(RenderUtils::getEntityZ(3, 1) == zStart + 1.5f);
+    REQUIRE(RenderUtils::getEntityZ(0, 1) == zStart - 1.0f);
+    REQUIRE(RenderUtils::getEntityZ(1, 1) == zStart - 1.5f);
+    REQUIRE(RenderUtils::getEntityZ(2, 1) == zStart - 1.0f);
+    REQUIRE(RenderUtils::getEntityZ(3, 1) == zStart - 1.5f);
 }
 
 TEST_CASE("getCanvasWidth always returns an even number", "[render-utils]")

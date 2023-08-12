@@ -13,6 +13,22 @@
 
 using namespace Rival;
 
+json defaultUnitDefJson = R"(
+    {
+        "name": "Test Unit",
+        "portrait": 0,
+        "animations":
+        {
+            "standing":
+            {
+                "startIndex": 3,
+                "endIndex": 5
+            }
+        },
+        "sounds": {}
+    }
+)"_json;
+
 SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[components][animation-component]")
 {
     std::shared_ptr<Texture> tex = std::make_shared<Texture>(0, 128, 128);
@@ -21,22 +37,17 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
     GIVEN("An entity with an AnimationComponent, with a single-frame animation")
     {
         /* clang-format off */
-        json unitDefJson =
-        {
-            { "animations",
-                { "standing",
-                    {
-                        "startIndex", 3,
-                        "endIndex", 5
-                    }
-                }
-            }
+        json unitDefJson = defaultUnitDefJson;
+        unitDefJson["animations"]["standing"] = {
+            { "startIndex", 3 },
+            { "endIndex", 5 }
         };
         /* clang-format on */
 
         Entity e(EntityType::Unit, 1, 1);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
+        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
 
@@ -75,23 +86,18 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
     GIVEN("An entity with an AnimationComponent, where each frame of the animation lasts 1.5 * the time step")
     {
         /* clang-format off */
-        json unitDefJson =
-        {
-            { "animations",
-                { "standing",
-                    {
-                        "startIndex", 3,
-                        "endIndex", 5,
-                        "msPerFrame", static_cast<int>(1.5f * TimeUtils::timeStepMs)
-                    }
-                }
-            }
+        json unitDefJson = defaultUnitDefJson;
+        unitDefJson["animations"]["standing"] = {
+            { "startIndex", 3 },
+            { "endIndex", 5 },
+            { "msPerFrame", static_cast<int>(1.5f * TimeUtils::timeStepMs) }
         };
         /* clang-format on */
 
         Entity e(EntityType::Unit, 1, 1);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
+        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
         e.onSpawn(nullptr, 0, { 0, 0 });
@@ -147,22 +153,18 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
     GIVEN("An entity with an AnimationComponent, and a 2-frame animation")
     {
         /* clang-format off */
-        json unitDefJson =
-        {
-            { "animations",
-                { "standing",
-                    {
-                        "startIndex", 3,
-                        "endIndex", 4
-                    }
-                }
-            }
+        json unitDefJson = defaultUnitDefJson;
+        unitDefJson["animations"]["standing"] = {
+            { "startIndex", 3 },
+            { "endIndex", 4 },
+            { "msPerFrame", static_cast<int>(TimeUtils::timeStepMs) }
         };
         /* clang-format on */
 
         Entity e(EntityType::Unit, 1, 1);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
+        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
         e.onSpawn(nullptr, 0, { 0, 0 });
