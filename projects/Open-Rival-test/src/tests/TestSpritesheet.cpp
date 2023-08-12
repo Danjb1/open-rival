@@ -7,6 +7,8 @@
 
 using namespace Rival;
 
+namespace TestSpritesheet {
+
 SCENARIO("Spritesheet calculates the correct texture co-ordinates", "[spritesheet]")
 {
     GIVEN("A Spritesheet that divides up a Texture")
@@ -32,3 +34,5 @@ SCENARIO("Spritesheet calculates the correct texture co-ordinates", "[spriteshee
         }
     }
 }
+
+}  // namespace TestSpritesheet

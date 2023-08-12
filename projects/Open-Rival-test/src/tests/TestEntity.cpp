@@ -7,6 +7,8 @@
 
 using namespace Rival;
 
+namespace TestEntity {
+
 class ExampleEntityComponent : public EntityComponent
 {
 public:
@@ -158,3 +160,5 @@ SCENARIO("Entities can return components by their keys", "[entity]")
         }
     }
 }
+
+}  // namespace TestEntity

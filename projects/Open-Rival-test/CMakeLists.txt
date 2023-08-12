@@ -82,6 +82,7 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestMousePicker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestRenderUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSpritesheet.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestWalkerComponent.cpp
 )
 
 # We include the test includes first so that they take precedence

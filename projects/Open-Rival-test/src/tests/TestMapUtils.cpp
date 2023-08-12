@@ -4,6 +4,8 @@
 
 using namespace Rival;
 
+namespace TestMapUtils {
+
 TEST_CASE("getDir should return the correct direction from an even-column node", "[map-utils]")
 {
     // We are in the top part of the zigzag;
@@ -99,3 +101,5 @@ TEST_CASE("getDir should return the correct direction from an odd-column node", 
         REQUIRE(MapUtils::getDir(startNode, { startNode.x - 1, startNode.y + 1 }) == Facing::SouthWest);
     }
 }
+
+}  // namespace TestMapUtils

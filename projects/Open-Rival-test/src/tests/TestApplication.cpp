@@ -8,6 +8,8 @@
 
 using namespace Rival;
 
+namespace TestApplication {
+
 SCENARIO("Logic is run multiple times if we are running behind", "[application][game-loop]")
 {
     /**
@@ -67,3 +69,5 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
         }
     }
 }
+
+}  // namespace TestApplication
