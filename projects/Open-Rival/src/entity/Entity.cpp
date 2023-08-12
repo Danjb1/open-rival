@@ -20,9 +20,9 @@ void Entity::attach(std::shared_ptr<EntityComponent> component)
     components.insert({ component->getKey(), component });
 }
 
-void Entity::onSpawn(World* newScenario, int newId, MapNode newPos)
+void Entity::onSpawn(World* newWorld, int newId, MapNode newPos)
 {
-    world = newScenario;
+    world = newWorld;
     id = newId;
     pos = newPos;
 

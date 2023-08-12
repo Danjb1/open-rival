@@ -5,6 +5,8 @@
 
 using namespace Rival;
 
+namespace TestCamera {
+
 float aspectRatio = (16.0f / 9);
 
 SCENARIO("Camera should stay in bounds", "[camera]")
@@ -155,3 +157,5 @@ SCENARIO("Camera should be the correct size", "[camera]")
         }
     }
 }
+
+}  // namespace TestCamera

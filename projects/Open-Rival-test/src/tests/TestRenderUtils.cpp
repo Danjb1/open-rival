@@ -4,6 +4,8 @@
 
 using namespace Rival;
 
+namespace TestRenderUtils {
+
 TEST_CASE("tileToPx_X calculates the correct tile position", "[render-utils]")
 {
     REQUIRE(RenderUtils::tileToPx_X(0) == 0);
@@ -82,3 +84,5 @@ TEST_CASE("getCanvasHeight always returns an even number", "[render-utils]")
     REQUIRE(RenderUtils::getCanvasHeight(10.03124f) == 320);
     REQUIRE(RenderUtils::getCanvasHeight(10.03125f) == 322);
 }
+
+}  // namespace TestRenderUtils

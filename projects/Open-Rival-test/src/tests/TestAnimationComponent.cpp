@@ -13,6 +13,8 @@
 
 using namespace Rival;
 
+namespace TestAnimationComponent {
+
 json defaultUnitDefJson = R"(
     {
         "name": "Test Unit",
@@ -196,3 +198,5 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
         }
     }
 }
+
+}  // namespace TestAnimationComponent

@@ -17,6 +17,8 @@
 
 using namespace Rival;
 
+namespace TestMousePicker {
+
 // TODO: Move this somewhere common
 class DummyPlayerStore : public PlayerStore
 {
@@ -404,3 +406,5 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
         }
     }
 }
+
+}  // namespace TestMousePicker
