@@ -5,6 +5,7 @@
 
 #include "commands/GameCommand.h"
 #include "entity/Entity.h"
+#include "entity/components/MouseHandlerComponent.h"
 #include "game/MousePicker.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
@@ -95,8 +96,8 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker);
 
-        REQUIRE(playerContext.tileUnderMouse.x == 0);
-        REQUIRE(playerContext.tileUnderMouse.y == 0);
+        REQUIRE(playerContext.tileUnderMouse.x == -1);
+        REQUIRE(playerContext.tileUnderMouse.y == -1);
 
         MockSDL::mouseX = viewportWidth + 10;
         MockSDL::mouseY = viewportHeight + 10;
@@ -109,8 +110,8 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 
             THEN("the previous tile co-ordinates are returned")
             {
-                REQUIRE(tileX == 0);
-                REQUIRE(tileY == 0);
+                REQUIRE(tileX == -1);
+                REQUIRE(tileY == -1);
             }
         }
     }
@@ -358,9 +359,10 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
-    // Add a Unit
+    // Add a Unit with a MouseHandlerComponent
     std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, 1, 1);
-    world.addEntity(std::move(unit), 4, 4);
+    unit->attach(std::make_shared<MouseHandlerComponent>());
+    world.addEntity(unit, 4, 4);
 
     // Create a pixel-perfect Camera
     float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));

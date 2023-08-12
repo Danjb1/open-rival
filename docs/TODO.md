@@ -4,10 +4,6 @@
 ## Next Up...
 <!----------------------------------------------------------------------------->
 
-### Tests
-
-- Fix failing tests
-
 ### Multiplayer Milestone
 
 - BUG: Music hangs after closing the window (when running from command prompt)
@@ -68,7 +64,6 @@
 
 ### Game
 
-- Game will crash if no config file exists
 - Some animations need attention (e.g. Snake)
 - "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
@@ -304,7 +299,7 @@
     - `args.json` (if present)
     - `vcxproj.user` (if present)
 - Use auto formatter: https://github.com/cheshirekow/cmake_format
-- Code review CMake files
+- Code review suggestions: https://codereview.stackexchange.com/questions/286277/a-slightly-unconventional-cmake-project
 - Document CMake options
 - Document using CMake from command line
 
@@ -324,6 +319,9 @@
 
 - Lower warning level for test project
 - Refactor Open-Rival code such that fewer mocks are needed
+- Use EntityFactory to create entities for tests
+- Tests should use a custom config file with debugging enabled
+- Document how to run a specific test
 
 ### Entity/Component Lifecycle
 

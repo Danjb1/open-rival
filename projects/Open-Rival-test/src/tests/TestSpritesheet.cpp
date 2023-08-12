@@ -25,7 +25,7 @@ SCENARIO("Spritesheet calculates the correct texture co-ordinates", "[spriteshee
             THEN("the correct texture co-ordinates are calculated")
             {
                 REQUIRE(tx1 == 0.0f);
-                REQUIRE(ty1 == 1.0f);
+                REQUIRE(ty1 == 0.0f);
                 REQUIRE(tx2 == 0.5f);
                 REQUIRE(ty2 == 0.5f);
             }

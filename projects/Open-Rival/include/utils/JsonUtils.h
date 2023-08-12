@@ -15,6 +15,6 @@ const ValueType getOrDefault(const Iterator& iter, const KeyType& key, const Val
     return result == iter->end() ? defaultValue : static_cast<ValueType>(*result);
 }
 
-json readJsonFile(std::string filename);
+json readJsonFile(const std::string& filename);
 
 }}  // namespace Rival::JsonUtils
