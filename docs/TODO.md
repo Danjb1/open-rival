@@ -11,8 +11,6 @@
     [ALSOFT] (WW) 1 Buffer not deleted
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
-- Sometimes units that were part of a drag-select can no longer be selected
-    - Related: sometimes units walk into the same tile
 - Release a new version
 
 ### Menu System

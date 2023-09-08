@@ -1,3 +1,3 @@
-cd ..\projects\build\Debug
-Open-Rival.exe -host
+cd ..\build\x64\projects\Open-Rival
+Debug\Open-Rival.exe -host
 pause

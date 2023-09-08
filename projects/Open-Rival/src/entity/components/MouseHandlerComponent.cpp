@@ -50,6 +50,7 @@ void MouseHandlerComponent::onUnitMoveStart(const MapNode*)
 
 void MouseHandlerComponent::onUnitStopped()
 {
+    dirty = true;
     moving = false;
 }
 
