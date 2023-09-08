@@ -72,6 +72,7 @@
 - Units should be able to start moving into a tile if its occupant is already moving out (?)
     - What if the occupant is slower than we are?
 - Units can walk through buildings
+- Units should not be able to move laterally if one of the tiles being moved through is not traversable
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -413,6 +414,7 @@
 - Move some headers to pch.h
 - Don't return references
 - Run cppcheck
+- PassabilityComponent is pointless for units, this should be handled by the MovementComponent instead
 
 #### Rendering
 
