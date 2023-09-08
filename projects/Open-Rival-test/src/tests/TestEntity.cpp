@@ -58,7 +58,7 @@ SCENARIO("Entities can have components attached to them", "[entity]")
                 REQUIRE(component != nullptr);
             }
 
-            AND_THEN("the component receives a callback")
+            THEN("the component receives a callback")
             {
                 REQUIRE(component->attached);
             }
@@ -120,7 +120,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
                     REQUIRE(updateCount == 0);
                 }
 
-                AND_THEN("the deleted component is removed from the Entity")
+                THEN("the deleted component is removed from the Entity")
                 {
                     const ExampleEntityComponent* foundComponent =
                             e.getComponent<ExampleEntityComponent>("example_key");
@@ -149,7 +149,7 @@ SCENARIO("Entities can return components by their keys", "[entity]")
             }
         }
 
-        AND_WHEN("trying to retrieve a non-existent component")
+        WHEN("trying to retrieve a non-existent component")
         {
             const ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("no_such_key");
 

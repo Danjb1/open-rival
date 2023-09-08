@@ -44,6 +44,9 @@ target_include_directories(interface-extractor PUBLIC
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_DIRS}
 )
 
+# Dependencies
+add_spdlog(interface-extractor)
+
 target_link_libraries(interface-extractor PRIVATE
     project_options
     project_warnings
