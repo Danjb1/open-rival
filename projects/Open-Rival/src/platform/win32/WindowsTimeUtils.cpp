@@ -14,25 +14,36 @@
 #include <chrono>
 #include <thread>
 
+#include "utils/LogUtils.h"
+
 namespace Rival { namespace TimeUtils {
 
-bool nanosleep(HANDLE timer, LONGLONG ns)
+bool nanosleep(HANDLE timerHandle, HANDLE interruptHandle, LONGLONG ns)
 {
-    if (!timer)
+    if (!timerHandle || !interruptHandle)
     {
         return false;
     }
 
-    // Set timer properties
+    // Set up timer
     LARGE_INTEGER li {};
     li.QuadPart = -ns;
-    if (!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE))
+
+    // Activate the timer
+    if (!SetWaitableTimer(timerHandle, &li, 0, NULL, NULL, FALSE))
     {
         return false;
     }
 
-    // Start and wait for timer
-    WaitForSingleObject(timer, INFINITE);
+    // Wait for timer to complete, or be interrupted
+    std::vector<HANDLE> handles;
+    handles.push_back(timerHandle);
+    handles.push_back(interruptHandle);
+    WaitForMultipleObjects(
+            static_cast<DWORD>(handles.size()),
+            handles.data(),
+            /* WaitAll = */ FALSE,
+            /* Timeout = */ INFINITE);
 
     return true;
 }
@@ -52,8 +63,11 @@ PrecisionTimer::PrecisionTimer()
         timeBeginPeriod(timerResolution);
     }
 
-    // Create a timer
-    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    // Create our timer
+    timerHandle = CreateWaitableTimer(NULL, TRUE, NULL);
+
+    // Create our interrupt event
+    interruptHandle = CreateEventA(NULL, /* ManualReset = */ TRUE, /* Signalled = */ FALSE, NULL);
 }
 
 PrecisionTimer::~PrecisionTimer()
@@ -65,21 +79,46 @@ PrecisionTimer::~PrecisionTimer()
     }
 
     // Clean up resources
-    if (timer)
+    if (timerHandle)
     {
-        CloseHandle(timer);
+        CloseHandle(timerHandle);
     }
 }
 
 void PrecisionTimer::sleep(long ns)
 {
-    if (nanosleep(timer, ns))
+    if (nanosleep(timerHandle, interruptHandle, ns))
     {
         return;
     }
 
     // Default cross-platform sleep, if all else fails
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
+}
+
+void PrecisionTimer::interrupt()
+{
+    if (!SetEvent(interruptHandle))
+    {
+        LOG_WARN("Failed to interrupt timer: {}\n", GetLastError());
+    }
+
+    interrupted = true;
+}
+
+void PrecisionTimer::reset()
+{
+    if (!interrupted)
+    {
+        return;
+    }
+
+    if (!ResetEvent(interruptHandle))
+    {
+        LOG_WARN("Failed to reset timer: {}\n", GetLastError());
+    }
+
+    interrupted = false;
 }
 
 }}  // namespace Rival::TimeUtils

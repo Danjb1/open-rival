@@ -24,7 +24,7 @@ void MidiPlayer::init()
         throw std::runtime_error("No MIDI output ports available!");
     }
 
-    LOG_TRACE("Opening MIDI port: {}", midiOut.getPortName());
+    LOG_TRACE("Opening MIDI port");
 
     midiOut.openPort(0);
 }
@@ -48,7 +48,7 @@ static int getMessageSize(uint8_t eventId)
     return 3;
 }
 
-void MidiPlayer::play(MidiFile file)
+void MidiPlayer::play(const MidiFile& file)
 {
     const std::scoped_lock<std::mutex> lock(playingMutex);
 
@@ -60,9 +60,6 @@ void MidiPlayer::play(MidiFile file)
     stopped = false;
 
     const std::vector<midi_stream_event>& events = file.getEvents();
-
-    // Create a high-precision timer
-    TimeUtils::PrecisionTimer timer;
 
     // Play the file until completion
     Uint32 startTime = SDL_GetTicks();
@@ -92,14 +89,14 @@ void MidiPlayer::play(MidiFile file)
         }
 
         // Calculate how long we need to wait
-        Uint32 currentTime = SDL_GetTicks();
-        Uint32 timeElapsed = currentTime - startTime;
-        int timeUntilMessage = static_cast<int>(evt.m_timestamp - timeElapsed);
+        const Uint32 currentTime = SDL_GetTicks();
+        const Uint32 timeElapsed = currentTime - startTime;
+        const int timeUntilMessage = static_cast<int>(evt.m_timestamp - timeElapsed);
 
         // Wait until the message is due
         if (timeUntilMessage > 0)
         {
-            timer.wait(static_cast<Uint32>(timeUntilMessage));
+            midiTimer.wait(static_cast<Uint32>(timeUntilMessage));
         }
 
         // Send the message to our MIDI output
@@ -110,6 +107,9 @@ void MidiPlayer::play(MidiFile file)
 void MidiPlayer::stop()
 {
     stopped = true;
+
+    // Forcibly interrupt the MIDI thread which may be sleeping
+    midiTimer.interrupt();
 
     // Wait until the play() method terminates
     const std::scoped_lock<std::mutex> lock(playingMutex);

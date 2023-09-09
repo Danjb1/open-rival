@@ -12,11 +12,13 @@ static constexpr Uint32 maxYieldTime = 10;
 
 void PrecisionTimer::wait(Uint32 waitTimeMs)
 {
+    reset();
+
     Uint32 startTime = SDL_GetTicks();
     Uint32 timeElapsed = 0;
     int timeRemaining = static_cast<int>(waitTimeMs);
 
-    while (timeRemaining > 0)
+    while (timeRemaining > 0 && !interrupted)
     {
         // If there is hardly any time to wait, just spin until done.
         // This is the most reliable way to kill time but uses max CPU.

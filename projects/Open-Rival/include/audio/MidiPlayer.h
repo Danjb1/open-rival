@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "audio/MidiFile.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival {
 
@@ -23,7 +24,7 @@ public:
      *
      * Throws an exception if the MidiPlayer is not initialized.
      */
-    void play(MidiFile midi);
+    void play(const MidiFile& midi);
 
     /**
      * Stops the current track.
@@ -34,6 +35,7 @@ public:
     void stop();
 
 private:
+    TimeUtils::PrecisionTimer midiTimer;
     std::mutex playingMutex;
     RtMidiOut midiOut;
     bool stopped { true };
