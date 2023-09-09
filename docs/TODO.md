@@ -6,9 +6,6 @@
 
 ### Multiplayer Milestone
 
-- BUG: Music hangs after closing the window (when running from command prompt)
-    [ALSOFT] (WW) 1 Source not deleted
-    [ALSOFT] (WW) 1 Buffer not deleted
 - Show a message when waiting for player commands
 - Display a rectangle while drag-select is active
 - Release a new version
@@ -185,6 +182,12 @@
 
 - Add support for WMA music (or convert to another format)
     - [OGG support](https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/)
+
+### Audio
+
+- Clean up audio on exit
+    [ALSOFT] (WW) 1 Source not deleted
+    [ALSOFT] (WW) 1 Buffer not deleted
 
 ### Menus
 

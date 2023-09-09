@@ -36,13 +36,25 @@ public:
     /** Waits for some time (seconds) using the most appropriate mechanism available. */
     void wait(Uint32 waitTimeMs);
 
+    /** Interrupts the timer if it is currently waiting. */
+    void interrupt();
+
 private:
     /** Sleeps for the given number of nanoseconds. */
     void sleep(long ns);
 
+    /** Resets the interrupt flag. */
+    void reset();
+
 private:
     /** Timer handle used for sleep operations. */
-    void* timer;
+    void* timerHandle;
+
+    /** Event handle used to interrupt a sleep. */
+    void* interruptHandle;
+
+    /** Flag set when the timer is interrupted. */
+    bool interrupted = false;
 
     /** The timer resolution in use. */
     unsigned int timerResolution = 0;
