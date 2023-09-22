@@ -47,15 +47,14 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
     std::vector<GLuint> indexData;
 
     // Reserve space upfront
-    int numVisibleChars = textRenderable.getNumVisibleChars();
-    int numLayers = textRenderable.getNumLayers();
-    int numVertices =
-            numVisibleChars * numLayers * TextRenderable::numVertexDimensions * TextRenderable::numVerticesPerChar;
-    int numTexCoords =
-            numVisibleChars * numLayers * TextRenderable::numTexCoordDimensions * TextRenderable::numVerticesPerChar;
-    int numColors =
-            numVisibleChars * numLayers * TextRenderable::numColorDimensions * TextRenderable::numVerticesPerChar;
-    int numIndices = numVisibleChars * TextRenderable::numIndicesPerChar;
+    const int numVisibleCharsPerLayer = textRenderable.getNumVisibleChars();
+    const int numLayers = textRenderable.getNumLayers();
+    const int numVisibleChars = numVisibleCharsPerLayer * numLayers;
+    const int numVertices = numVisibleChars * TextRenderable::numVertexDimensions * TextRenderable::numVerticesPerChar;
+    const int numTexCoords =
+            numVisibleChars * TextRenderable::numTexCoordDimensions * TextRenderable::numVerticesPerChar;
+    const int numColors = numVisibleChars * TextRenderable::numColorDimensions * TextRenderable::numVerticesPerChar;
+    const int numIndices = numVisibleChars * TextRenderable::numIndicesPerChar;
     vertexData.reserve(numVertices);
     texCoords.reserve(numTexCoords);
     colors.reserve(numColors);
@@ -69,7 +68,7 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
         float x = textRenderable.getX();
         float y = textRenderable.getY();
 
-        for (TextSpan span : spans)
+        for (const TextSpan& span : spans)
         {
             for (char c : span.text)
             {
@@ -171,6 +170,12 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
             }
         }
     }
+
+    // Ensure we haven't resized the vector by accident!
+    assert(vertexData.size() == numVertices);
+    assert(texCoords.size() == numTexCoords);
+    assert(colors.size() == numColors);
+    assert(indexData.size() == numIndices);
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, textRenderable.getPositionVbo());

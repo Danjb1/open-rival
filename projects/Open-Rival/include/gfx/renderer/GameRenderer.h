@@ -1,7 +1,8 @@
 #pragma once
 
-#include "entity/EntityRenderer.h"
 #include "gfx/Framebuffer.h"
+#include "gfx/renderer/DragSelectRenderer.h"
+#include "gfx/renderer/EntityRenderer.h"
 #include "gfx/renderer/FramebufferRenderer.h"
 #include "gfx/renderer/MapBorderRenderer.h"
 #include "gfx/renderer/TileRenderer.h"
@@ -38,6 +39,7 @@ private:
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();
+    void renderDragSelect();
     void renderCursor(int delta);
 
 private:
@@ -51,6 +53,7 @@ private:
     const World& world;
     const Rect& viewport;
     const Camera& camera;
+    const PlayerContext& playerContext;
 
     /**
      * Framebuffer to which the visible region of the game is rendered at
@@ -67,6 +70,7 @@ private:
     TileRenderer tileRenderer;
     MapBorderRenderer mapBorderRenderer;
     UiRenderer uiRenderer;
+    DragSelectRenderer dragSelectRenderer;
 };
 
 }  // namespace Rival

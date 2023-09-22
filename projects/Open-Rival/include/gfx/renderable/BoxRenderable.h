@@ -12,9 +12,9 @@ namespace Rival {
 class BoxRenderable
 {
 public:
-    static constexpr int numVertexDimensions = 3;    // x, y, z
-    static constexpr int numTexCoordDimensions = 2;  // u, v
-    static constexpr int numVerticesPerSprite = 4;
+    static constexpr int numVertexDimensions = 2;  // x, y
+    static constexpr int numColorDimensions = 4;   // r, g, b, a
+    static constexpr int numVerticesPerBox = 4;
 
     /**
      * Constructs a BoxRenderable.
@@ -34,7 +34,7 @@ public:
 
     GLuint getVao() const;
     GLuint getPositionVbo() const;
-    GLuint getTexCoordVbo() const;
+    GLuint getColorVbo() const;
     GLuint getIbo() const;
 
     GLenum getDrawMode() const;
@@ -44,7 +44,7 @@ public:
 private:
     GLuint vao;
     GLuint positionVbo;
-    GLuint texCoordVbo;
+    GLuint colorVbo;
     GLuint ibo;
 
     GLenum drawMode;

@@ -104,8 +104,8 @@ void LobbyState::renderText()
     std::vector<TextRenderable> textRenderables;
     TextProperties nameProperties = { &res.getFontRegular() };
     glm::vec2 renderPos = { 100, 100 };
-    float rowHeight = 32;
-    float indent = 32;
+    const float rowHeight = 32;
+    const float indent = 32;
 
     // Header
     {
