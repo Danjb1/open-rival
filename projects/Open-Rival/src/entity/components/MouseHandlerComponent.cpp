@@ -6,7 +6,7 @@
 
 #include "commands/MoveCommand.h"
 #include "entity/Entity.h"
-#include "entity/EntityRenderer.h"
+#include "gfx/renderer/EntityRenderer.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitPropsComponent.h"

@@ -202,6 +202,42 @@ bool TextureShader::isValid() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
+// BoxShader
+///////////////////////////////////////////////////////////////////////////
+
+BoxShader boxShader;
+
+void BoxShader::init()
+{
+    GLuint programId = createShader("res\\shaders\\box.vert", "res\\shaders\\box.frag");
+
+    boxShader.programId = programId;
+    boxShader.vertexAttribLoc = glGetAttribLocation(programId, "in_vertex");
+    boxShader.colorAttribLoc = glGetAttribLocation(programId, "in_color");
+    boxShader.viewProjMatrixUniformLoc = glGetUniformLocation(programId, "view_proj_matrix");
+
+    if (!boxShader.isValid())
+    {
+        throw std::runtime_error("Failed to create BoxShader");
+    }
+}
+
+bool BoxShader::isValid() const
+{
+    // Validate program ID
+    if (programId == 0)
+    {
+        printf("Could not generate program ID\n");
+        return false;
+    }
+
+    // Validate vertex attributes / uniforms
+    return validateVertexAttribute(vertexAttribLoc, "in_vertex")    //
+            && validateVertexAttribute(colorAttribLoc, "in_color")  //
+            && validateUniform(viewProjMatrixUniformLoc, "view_proj_matrix");
+}
+
+///////////////////////////////////////////////////////////////////////////
 // Generic methods
 ///////////////////////////////////////////////////////////////////////////
 
@@ -211,6 +247,7 @@ void initializeShaders()
     WorldShader::init();
     FontShader::init();
     TextureShader::init();
+    BoxShader::init();
 }
 
 GLuint createShader(const char* vertShader, const char* fragShader)

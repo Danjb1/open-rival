@@ -406,10 +406,11 @@ void MousePicker::deselect()
 void MousePicker::processDragSelectArea()
 {
     // Normalize the drag-select area
-    int startX = std::min(playerContext.dragSelect.startX, playerContext.dragSelect.endX);
-    int startY = std::min(playerContext.dragSelect.startY, playerContext.dragSelect.endY);
-    int endX = std::max(playerContext.dragSelect.startX, playerContext.dragSelect.endX);
-    int endY = std::max(playerContext.dragSelect.startY, playerContext.dragSelect.endY);
+    const auto& dragSelect = playerContext.dragSelect;
+    int startX = std::min(dragSelect.startX, dragSelect.endX);
+    int startY = std::min(dragSelect.startY, dragSelect.endY);
+    int endX = std::max(dragSelect.startX, dragSelect.endX);
+    int endY = std::max(dragSelect.startY, dragSelect.endY);
 
     // Find the camera position, in pixels
     float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());

@@ -15,7 +15,7 @@ BoxRenderable::BoxRenderable(int maxBoxes)
 
     // Generate VBOs
     glGenBuffers(1, &positionVbo);
-    glGenBuffers(1, &texCoordVbo);
+    glGenBuffers(1, &colorVbo);
     glGenBuffers(1, &ibo);
 
     // Determine the primitive that should be drawn
@@ -36,24 +36,24 @@ BoxRenderable::BoxRenderable(int maxBoxes)
     int positionBufferSize = maxBoxes * numVertexDimensions * indicesPerBox * sizeof(GLfloat);
     glBufferData(GL_ARRAY_BUFFER, positionBufferSize, NULL, GL_DYNAMIC_DRAW);
 
-    // Initialize tex co-ord buffer with empty data
-    glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-    int texCoordBufferSize = maxBoxes * numTexCoordDimensions * indicesPerBox * sizeof(GLfloat);
+    // Initialize color buffer with empty data
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    int colorBufferSize = maxBoxes * numColorDimensions * indicesPerBox * sizeof(GLfloat);
     glVertexAttribPointer(
-            Shaders::texCoordAttribIndex,
-            numTexCoordDimensions,
+            Shaders::colorAttribIndex,
+            numColorDimensions,
             GL_FLOAT,
             GL_FALSE,
-            numTexCoordDimensions * sizeof(GLfloat),
+            numColorDimensions * sizeof(GLfloat),
             nullptr);
-    glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colorBufferSize, NULL, GL_DYNAMIC_DRAW);
 
     // Initialize index buffer - this should never need to change
     std::vector<GLuint> indexData;
     indexData.reserve(maxBoxes * indicesPerBox);
     for (int i = 0; i < maxBoxes; i++)
     {
-        unsigned int startIndex = i * numVerticesPerSprite;
+        unsigned int startIndex = i * numVerticesPerBox;
 
         if (drawMode == GL_TRIANGLE_FAN)
         {
@@ -77,7 +77,7 @@ BoxRenderable::BoxRenderable(int maxBoxes)
 
     // Enable vertex attributes
     glEnableVertexAttribArray(Shaders::vertexAttribIndex);
-    glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
+    glEnableVertexAttribArray(Shaders::colorAttribIndex);
 }
 
 BoxRenderable::~BoxRenderable()
@@ -92,8 +92,8 @@ BoxRenderable::~BoxRenderable()
     {
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glDeleteBuffers(1, &positionVbo);
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glDeleteBuffers(1, &texCoordVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+        glDeleteBuffers(1, &colorVbo);
         glBindBuffer(GL_ARRAY_BUFFER, ibo);
         glDeleteBuffers(1, &ibo);
     }
@@ -111,9 +111,9 @@ GLuint BoxRenderable::getPositionVbo() const
     return positionVbo;
 }
 
-GLuint BoxRenderable::getTexCoordVbo() const
+GLuint BoxRenderable::getColorVbo() const
 {
-    return texCoordVbo;
+    return colorVbo;
 }
 
 GLuint BoxRenderable::getIbo() const

@@ -101,6 +101,11 @@ private:
     bool isNetGame() const;
 
 private:
+    /** Player ID of the local player.
+     * In a single-player game or when hosting, this is always zero. When joining a net game, this is allocated by the
+     * server. */
+    int localPlayerId = 0;
+
     /** Map of client ID -> ClientInfo. */
     std::unordered_map<int, ClientInfo> clients;
 
@@ -139,11 +144,6 @@ private:
 
     /** The current player input. */
     Input input = {};
-
-    /** Player ID of the local player.
-     * In a single-player game or when hosting, this is always zero. When joining a net game, this is allocated by the
-     * server. */
-    int localPlayerId = 0;
 
     /** Tick number, incremented with each update. */
     int currentTick = 0;

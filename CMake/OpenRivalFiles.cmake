@@ -18,7 +18,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/commands/MoveCommand.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Entity.cpp
     ${OPEN_RIVAL_DIR}/src/entity/EntityFactory.cpp
-    ${OPEN_RIVAL_DIR}/src/entity/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingPropsComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
@@ -70,6 +69,8 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp
@@ -144,7 +145,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/commands/MoveCommand.h
     ${OPEN_RIVAL_DIR}/include/entity/Entity.h
     ${OPEN_RIVAL_DIR}/include/entity/EntityFactory.h
-    ${OPEN_RIVAL_DIR}/include/entity/EntityRenderer.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingPropsComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
@@ -199,6 +199,8 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/SpriteRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextureRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/renderer/DragSelectRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/renderer/EntityRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/FramebufferRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/GameRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/MapBorderRenderer.h

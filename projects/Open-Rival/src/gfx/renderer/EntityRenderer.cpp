@@ -1,4 +1,4 @@
-#include "entity/EntityRenderer.h"
+#include "gfx/renderer/EntityRenderer.h"
 
 #include "gfx/GlewWrapper.h"
 

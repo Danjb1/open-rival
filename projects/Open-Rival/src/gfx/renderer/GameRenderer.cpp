@@ -33,6 +33,7 @@ GameRenderer::GameRenderer(
     , world(world)
     , camera(camera)
     , viewport(viewport)
+    , playerContext(playerContext)
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
     , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
@@ -44,6 +45,7 @@ GameRenderer::GameRenderer(
               res.getPalette())
     , entityRenderer(res, playerContext)
     , uiRenderer(playerStore, res, res, window, playerContext)
+    , dragSelectRenderer(playerContext)
 {
 }
 
@@ -52,6 +54,7 @@ void GameRenderer::render(int delta)
     renderGameViaFramebuffer(delta);
     renderUi();
     renderText();
+    renderDragSelect();
     renderCursor(delta);
 }
 
@@ -168,6 +171,30 @@ void GameRenderer::renderText()
     // (the MenuTextRenderer takes care of the shader, projection, etc.)
     glViewport(0, 0, window->getWidth(), window->getHeight());
     uiRenderer.renderText();
+}
+
+void GameRenderer::renderDragSelect()
+{
+    if (!playerContext.dragSelect.isValid())
+    {
+        return;
+    }
+
+    // Disable depth testing since the drag-select is always on top
+    glDisable(GL_DEPTH_TEST);
+
+    // Use indexed texture shader
+    glUseProgram(Shaders::boxShader.programId);
+
+    // Determine our view-projection matrix
+    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
+
+    // Set uniform values
+    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+
+    // Render the cursor to the screen
+    glViewport(0, 0, window->getWidth(), window->getHeight());
+    dragSelectRenderer.render();
 }
 
 void GameRenderer::renderCursor(int delta)

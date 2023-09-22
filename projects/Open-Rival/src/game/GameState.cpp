@@ -40,6 +40,7 @@ GameState::GameState(
              RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
              *world)
+    , playerContext()
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
     , clients(clients)
