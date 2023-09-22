@@ -65,7 +65,6 @@ void DragSelectRenderer::render()
         x1 + thickness, y2,
         x1, y2
     };
-    /* clang-format on */
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getPositionVbo());
@@ -73,11 +72,31 @@ void DragSelectRenderer::render()
 
     // Define colors (solid white)
     const std::vector<GLfloat> colorData = {
-        1.f, 1.f, 1.f, 1.f,  // box 1
-        1.f, 1.f, 1.f, 1.f,  // box 2
-        1.f, 1.f, 1.f, 1.f,  // box 3
-        1.f, 1.f, 1.f, 1.f   // box 4
+        // Box 1 (top)
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+
+        // Box 2 (right)
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+
+        // Box 3 (bottom)
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+
+        // Box 4 (left)
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f, 1.f
     };
+    /* clang-format on */
 
     // Upload color data
     glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getColorVbo());

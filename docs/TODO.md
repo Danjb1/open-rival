@@ -6,8 +6,6 @@
 
 ### Multiplayer Milestone
 
-- Display a rectangle while drag-select is active
-    - BUG: Right now it is only rendering the first of the drag-select's 4 boxes
 - Show a message when waiting for player commands
 - Release a new version
 
@@ -26,6 +24,7 @@
     - What if the occupant is slower than we are?
 - Units can walk through buildings
 - Units should not be able to move laterally if one of the tiles being moved through is not traversable
+- Drag-select cursor / outline should remain active when shrunk down to a small size
 
 <!----------------------------------------------------------------------------->
 ## Features

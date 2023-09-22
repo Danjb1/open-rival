@@ -33,12 +33,12 @@ BoxRenderable::BoxRenderable(int maxBoxes)
             GL_FALSE,
             numVertexDimensions * sizeof(GLfloat),
             nullptr);
-    int positionBufferSize = maxBoxes * numVertexDimensions * indicesPerBox * sizeof(GLfloat);
+    const int positionBufferSize = maxBoxes * numVertexDimensions * indicesPerBox * sizeof(GLfloat);
     glBufferData(GL_ARRAY_BUFFER, positionBufferSize, NULL, GL_DYNAMIC_DRAW);
 
     // Initialize color buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
-    int colorBufferSize = maxBoxes * numColorDimensions * indicesPerBox * sizeof(GLfloat);
+    const int colorBufferSize = maxBoxes * numColorDimensions * indicesPerBox * sizeof(GLfloat);
     glVertexAttribPointer(
             Shaders::colorAttribIndex,
             numColorDimensions,
@@ -50,7 +50,8 @@ BoxRenderable::BoxRenderable(int maxBoxes)
 
     // Initialize index buffer - this should never need to change
     std::vector<GLuint> indexData;
-    indexData.reserve(maxBoxes * indicesPerBox);
+    const int numIndices = maxBoxes * indicesPerBox;
+    indexData.reserve(numIndices);
     for (int i = 0; i < maxBoxes; i++)
     {
         unsigned int startIndex = i * numVerticesPerBox;
@@ -73,7 +74,7 @@ BoxRenderable::BoxRenderable(int maxBoxes)
         }
     }
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxBoxes * indicesPerBox * sizeof(GLuint), indexData.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indexData.data(), GL_STATIC_DRAW);
 
     // Enable vertex attributes
     glEnableVertexAttribArray(Shaders::vertexAttribIndex);
