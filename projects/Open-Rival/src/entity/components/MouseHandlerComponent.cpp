@@ -6,11 +6,11 @@
 
 #include "commands/MoveCommand.h"
 #include "entity/Entity.h"
-#include "gfx/renderer/EntityRenderer.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitPropsComponent.h"
 #include "entity/components/VoiceComponent.h"
+#include "gfx/renderer/EntityRenderer.h"
 
 namespace Rival {
 
@@ -26,7 +26,8 @@ void MouseHandlerComponent::onEntitySpawned(World*)
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->addListener(this);
+        std::weak_ptr<MouseHandlerComponent> weakThis = entity->getComponentWeak<MouseHandlerComponent>(key);
+        movementComponent->addListener(weakThis);
     }
 
     weakOwnerComponent = entity->getComponentWeak<OwnerComponent>(OwnerComponent::key);
@@ -38,7 +39,8 @@ void MouseHandlerComponent::onDelete()
 {
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->removeListener(this);
+        std::weak_ptr<MouseHandlerComponent> weakThis = entity->getComponentWeak<MouseHandlerComponent>(key);
+        movementComponent->removeListener(weakThis);
     }
 }
 

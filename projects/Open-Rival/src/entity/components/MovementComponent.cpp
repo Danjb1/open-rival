@@ -54,18 +54,18 @@ void MovementComponent::update()
     entity->moved = true;
 }
 
-void MovementComponent::addListener(MovementListener* listener)
+void MovementComponent::addListener(std::weak_ptr<MovementListener> listener)
 {
-    if (!listener)
+    if (listener.expired())
     {
         return;
     }
-    listeners.emplace(listener);
+    // listeners.emplace(listener);
 }
 
-void MovementComponent::removeListener(MovementListener* listener)
+void MovementComponent::removeListener(std::weak_ptr<MovementListener> listener)
 {
-    if (!listener)
+    if (listener.expired())
     {
         return;
     }
@@ -138,10 +138,15 @@ bool MovementComponent::prepareNextMovement()
     passabilityUpdater.onUnitEnteringTile(*world, movement.destination);
 
     // Inform listeners
-    for (MovementListener* listener : listeners)
+    /*
+    for (std::weak_ptr<MovementListener> weakListener : listeners)
     {
-        listener->onUnitMoveStart(&movement.destination);
+        if (std::shared_ptr<MovementListener> listener = weakListener.lock())
+        {
+            listener->onUnitMoveStart(&movement.destination);
+        }
     }
+        */
 
     return true;
 }
@@ -173,10 +178,15 @@ void MovementComponent::completeMovement()
 void MovementComponent::onStop()
 {
     // Inform listeners
-    for (MovementListener* listener : listeners)
+    /*
+    for (std::weak_ptr<MovementListener> weakListener : listeners)
     {
-        listener->onUnitStopped();
+        if (std::shared_ptr<MovementListener> listener = weakListener.lock())
+        {
+            listener->onUnitStopped();
+        }
     }
+        */
 }
 
 }  // namespace Rival

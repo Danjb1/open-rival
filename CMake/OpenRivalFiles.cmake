@@ -241,6 +241,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/ui/MenuRenderer.h
     ${OPEN_RIVAL_DIR}/include/utils/BinaryFileReader.h
     ${OPEN_RIVAL_DIR}/include/utils/BufferUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/CollectionUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/ConfigUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/EntityUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/EnumUtils.h

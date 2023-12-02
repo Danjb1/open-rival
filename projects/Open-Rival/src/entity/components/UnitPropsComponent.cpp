@@ -20,7 +20,8 @@ void UnitPropsComponent::onEntitySpawned(World*)
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->addListener(this);
+        std::weak_ptr<UnitPropsComponent> weakThis = entity->getComponentWeak<UnitPropsComponent>(key);
+        movementComponent->addListener(weakThis);
     }
 }
 
@@ -28,7 +29,8 @@ void UnitPropsComponent::onDelete()
 {
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->removeListener(this);
+        std::weak_ptr<UnitPropsComponent> weakThis = entity->getComponentWeak<UnitPropsComponent>(key);
+        movementComponent->removeListener(weakThis);
     }
 }
 
