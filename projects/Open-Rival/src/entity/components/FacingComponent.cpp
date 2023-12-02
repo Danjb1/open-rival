@@ -18,7 +18,8 @@ void FacingComponent::onEntitySpawned(World*)
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->addListener(this);
+        std::weak_ptr<FacingComponent> weakThis = entity->getComponentWeak<FacingComponent>(key);
+        movementComponent->addListener(weakThis);
     }
 }
 
@@ -26,7 +27,8 @@ void FacingComponent::onDelete()
 {
     if (auto movementComponent = weakMovementComponent.lock())
     {
-        movementComponent->removeListener(this);
+        std::weak_ptr<FacingComponent> weakThis = entity->getComponentWeak<FacingComponent>(key);
+        movementComponent->removeListener(weakThis);
     }
 }
 

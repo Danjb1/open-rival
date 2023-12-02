@@ -1,10 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <set>
 #include <string>
-#include <unordered_set>
 
 #include "entity/components/EntityComponent.h"
 #include "game/Pathfinding.h"
+#include "utils/CollectionUtils.h"
 
 namespace Rival {
 
@@ -58,8 +60,8 @@ public:
     void update() override;
     // End EntityComponent override
 
-    void addListener(MovementListener* listener);
-    void removeListener(MovementListener* listener);
+    void addListener(std::weak_ptr<MovementListener> listener);
+    void removeListener(std::weak_ptr<MovementListener> listener);
 
     void moveTo(MapNode node);
 
@@ -86,7 +88,7 @@ protected:
     const Pathfinding::PassabilityChecker& passabilityChecker;
     Pathfinding::PassabilityUpdater& passabilityUpdater;
 
-    std::unordered_set<MovementListener*> listeners;
+    WeakPtrSet<MovementListener> listeners;
 
     Pathfinding::Route route;
 
