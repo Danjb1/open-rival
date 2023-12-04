@@ -4,6 +4,7 @@
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "entity/EntityFactory.h"
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "game/World.h"
@@ -323,11 +324,9 @@ std::unique_ptr<State> LobbyState::createGameState() const
     for (int playerId = 0; playerId < numPlayers; ++playerId)
     {
         const PlayerProperties& playerProps = scenarioData.playerProperties.at(playerId);
-        playerStates.emplace(
-                std::piecewise_construct,
+        playerStates.emplace(std::piecewise_construct,
                 std::forward_as_tuple(playerId),
-                std::forward_as_tuple(
-                        scenarioBuilder.getRace(playerProps.race),
+                std::forward_as_tuple(scenarioBuilder.getRace(playerProps.race),
                         static_cast<int>(playerProps.startingGold),
                         static_cast<int>(playerProps.startingWood),
                         static_cast<int>(playerProps.startingFood)));

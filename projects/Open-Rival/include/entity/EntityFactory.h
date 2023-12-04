@@ -2,17 +2,15 @@
 
 #include <memory>
 
-#include "commands/GameCommand.h"
-#include "entity/Entity.h"
 #include "game/Building.h"
 #include "game/MapUtils.h"
-#include "game/PlayerState.h"
 #include "game/Unit.h"
 #include "scenario/ScenarioData.h"
 
 namespace Rival {
 
 class AudioSystem;
+class Entity;
 class Resources;
 
 class EntityFactory
@@ -33,7 +31,8 @@ public:
     /**
      * Creates a Palisade from raw data (e.g. read from a Scenario file).
      */
-    std::shared_ptr<Entity> createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const;
+    std::shared_ptr<Entity> createPalisade(
+            const BuildingPlacement& buildingPlacement, bool wilderness, bool isGrate) const;
 
     /**
      * Creates an Object from raw data (e.g. read from a Scenario file).

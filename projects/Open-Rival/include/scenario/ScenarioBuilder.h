@@ -4,21 +4,19 @@
 #include <fstream>
 #include <memory>
 
-#include "application/Resources.h"
-#include "entity/EntityFactory.h"
-#include "entity/components/FacingComponent.h"
 #include "game/Building.h"
+#include "game/Race.h"
 #include "game/Tile.h"
-#include "game/Unit.h"
-#include "game/World.h"
 #include "scenario/ScenarioData.h"
 
 namespace Rival {
 
+class EntityFactory;
+class World;
+
 // Class that can create a World from previously-loaded ScenarioData
 class ScenarioBuilder
 {
-
 public:
     ScenarioBuilder(ScenarioData data);
 
@@ -33,11 +31,14 @@ private:
 
     void addUnit(World* scenario, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const;
 
-    void
-    addPalisade(World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+    void addPalisade(
+            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
-    void
-    addBuilding(World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+    void addGrate(
+            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+
+    void addBuilding(
+            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
     void addObject(World* scenario, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
 };
