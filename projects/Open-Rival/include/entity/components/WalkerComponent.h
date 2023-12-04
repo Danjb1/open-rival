@@ -18,6 +18,7 @@ class WalkerPassability
 public:
     // Begin PassabilityChecker override
     bool isNodePathable(const PathfindingMap& map, const MapNode& node) const override;
+    bool isNodeObstructed(const PathfindingMap& map, const MapNode& node) const override;
     bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
     // End PassabilityChecker override
 
@@ -29,17 +30,22 @@ public:
     // End PassabilityUpdater override
 
 private:
+    /** TilePassability values that block pathfinding. */
     static constexpr TilePassability unpathableFlags =  //
             TilePassability::Blocked                    //
             | TilePassability::Building                 //
             | TilePassability::Coastline                //
-            | TilePassability::GroundUnit               //
             | TilePassability::SoftMountain             //
             | TilePassability::Tree                     //
             | TilePassability::Water;
 
-    // We have to wait for a unit to leave before we can move into their tile
-    static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::GroundUnitLeaving;
+    /** TilePassability values that signify an obstruction. */
+    static constexpr TilePassability obstructedFlags = TilePassability::GroundUnit;
+
+    /** TilePassability values that block traversal. */
+    static constexpr TilePassability untraversableFlags = unpathableFlags  //
+            | TilePassability::GroundUnit                                  //
+            | TilePassability::GroundUnitLeaving;
 };
 
 /**

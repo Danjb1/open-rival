@@ -58,6 +58,41 @@ public:
     }
 
 private:
+    /** Base movement cost for moving between two tiles. */
+    static constexpr float baseMovementCost = 1.f;
+
+    /** Movement cost when trying to move into a tile that is currently obstructed.
+     * This should always be more expensive than trying to move around the blockage, so that units only try to move
+     * *through* a blockage as a last resort. */
+    static constexpr float obstructedMovementCost = 1000.f;
+
+    /*
+     * Movement cost multiplier for horizontal movement.
+     *
+     * This warrants some explanation.
+     *
+     * Imagine you want to move 2 tiles north-east (A -> C):
+     *
+     *           ,x
+     *         ,x C`x
+     *       ,x B`x'
+     *      x A`x'D`x
+     *       `x' `x'
+     *
+     * This can be accomplished 2 different ways:
+     *   A -> B -> C
+     *   A -> D -> C
+     *
+     * Both routes involve 2 movements, but it would look strange if we
+     * chose the second route because the diagonal route appears more
+     * logical and direct.
+     *
+     * To ensure that the first route gets chosen, we consider east and west
+     * movements to be slightly more expensive than other movements.
+     * Crucially, they are still cheaper than 2 diagonals movements, so
+     * units will still move directly east/west when it makes sense to do
+     * so.
+     */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
 
     /**
@@ -147,7 +182,7 @@ std::deque<MapNode> Pathfinder::findPath()
 
     while (!isFinished())
     {
-        ReachableNode current = popBestNode();
+        const ReachableNode current = popBestNode();
 
         // See if we've reached the goal
         if (current.node == goal)
@@ -157,9 +192,9 @@ std::deque<MapNode> Pathfinder::findPath()
 
         std::vector<MapNode> neighbors = findNeighbors(current.node);
 
-        for (MapNode neighbor : neighbors)
+        for (const MapNode& neighbor : neighbors)
         {
-            float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
+            const float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
             if (newCostToNeighbor < getCostToNode(neighbor))
             {
                 // This path to neighbor is better than any previous one
@@ -277,33 +312,14 @@ float Pathfinder::getCostToNode(const MapNode& node) const
  */
 float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 {
-    /*
-     * This warrants some explanation.
-     *
-     * Imagine you want to move 2 tiles north-east (A -> C):
-     *
-     *           ,x
-     *         ,x C`x
-     *       ,x B`x'
-     *      x A`x'D`x
-     *       `x' `x'
-     *
-     * This can be accomplished 2 different ways:
-     *   A -> B -> C
-     *   A -> D -> C
-     *
-     * Both routes involve 2 movements, but it would look strange if we
-     * chose the second route because the diagonal route appears more
-     * logical and direct.
-     *
-     * To ensure that the first route gets chosen, we consider east and west
-     * movements to be slightly more expensive than other movements.
-     * Crucially, they are still cheaper than 2 diagonals movements, so
-     * units will still move directly east/west when it makes sense to do
-     * so.
-     */
-    Facing dir = MapUtils::getDir(from, to);
-    return (dir == Facing::East || dir == Facing::West) ? horizontalMoveCostMultiplier : 1.f;
+    const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
+    const float movementCost = isObstructed ? baseMovementCost : obstructedMovementCost;
+
+    const Facing movementDir = MapUtils::getDir(from, to);
+    const float dirMultiplier =
+            (movementDir == Facing::East || movementDir == Facing::West) ? horizontalMoveCostMultiplier : 1.f;
+
+    return movementCost * dirMultiplier;
 }
 
 /**
@@ -367,8 +383,7 @@ const MapNode* Route::peek() const
     return path.empty() ? nullptr : &path.front();
 }
 
-Route findPath(
-        const MapNode start,
+Route findPath(const MapNode start,
         const MapNode goal,
         const PathfindingMap& map,
         const PassabilityChecker& passabilityChecker)

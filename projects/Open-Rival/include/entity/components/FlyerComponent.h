@@ -16,6 +16,7 @@ class FlyerPassability
 public:
     // Begin PassabilityChecker override
     bool isNodePathable(const PathfindingMap& map, const MapNode& node) const override;
+    bool isNodeObstructed(const PathfindingMap& map, const MapNode& node) const override;
     bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
     // End PassabilityChecker override
 
@@ -27,10 +28,16 @@ public:
     // End PassabilityUpdater override
 
 private:
-    static constexpr TilePassability unpathableFlags = TilePassability::FlyingUnit;
+    /** TilePassability values that block pathfinding.
+     * Using a value of "Clear" here is equivalent to "none"; flying units can pathfind anywhere. */
+    static constexpr TilePassability unpathableFlags = TilePassability::Clear;
 
-    // We have to wait for a unit to leave before we can move into their tile
-    static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::FlyingUnitLeaving;
+    /** TilePassability values that signify an obstruction. */
+    static constexpr TilePassability obstructedFlags = TilePassability::FlyingUnit;
+
+    /** TilePassability values that block traversal. */
+    static constexpr TilePassability untraversableFlags =
+            TilePassability::FlyingUnit | TilePassability::FlyingUnitLeaving;
 };
 
 /**

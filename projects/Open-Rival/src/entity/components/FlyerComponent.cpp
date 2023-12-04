@@ -13,6 +13,12 @@ bool FlyerPassability::isNodePathable(const PathfindingMap& map, const MapNode& 
     return (passability & unpathableFlags) == TilePassability::Clear;
 }
 
+bool FlyerPassability::isNodeObstructed(const PathfindingMap& map, const MapNode& node) const
+{
+    TilePassability passability = map.getPassability(node);
+    return (passability & obstructedFlags) == TilePassability::Clear;
+}
+
 bool FlyerPassability::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
 {
     TilePassability passability = map.getPassability(node);

@@ -17,7 +17,14 @@ namespace Pathfinding {
 class PassabilityChecker
 {
 public:
+    /** Checks if a node can be included as part of a route. */
     virtual bool isNodePathable(const PathfindingMap& map, const MapNode& node) const = 0;
+
+    /** Checks if a node is currently obstructed.
+     * Obstructed tiles will only be included in a route as a last resort. */
+    virtual bool isNodeObstructed(const PathfindingMap& map, const MapNode& node) const = 0;
+
+    /** Checks if a node can currently be moved into. */
     virtual bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const = 0;
 };
 
