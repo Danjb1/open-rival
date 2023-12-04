@@ -6,8 +6,13 @@
 
 ### Multiplayer Milestone
 
+- Units should not be able to move laterally if one of the tiles being moved through is not traversable
+- Units should be able to start moving into a tile if its occupant is already moving out (?)
+    - What if the occupant is slower than we are?
+- Units should "try" to move somewhere even if there is no path
+- Units should eventually give up if their route is blocked (e.g. when moving a group, they can't all reach the target)
 - Show a message when waiting for player commands
-- Release a new version
+- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -20,11 +25,12 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Units should be able to start moving into a tile if its occupant is already moving out (?)
-    - What if the occupant is slower than we are?
 - Units can walk through buildings
-- Units should not be able to move laterally if one of the tiles being moved through is not traversable
 - Drag-select cursor / outline should remain active when shrunk down to a small size
+
+### Setup
+
+- objects_meadow.tga cannot be opened in Photoshop (invalid file format)
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -116,9 +122,7 @@
 - Use a single MoveCommand for groups?
 - Units should periodically re-plan their route
     - In particular, when the next tile in their path is blocked
-- Units should "try" to move somewhere even if there is no path
 - Should we limit the pathfinding logic to 'n' iterations? (probably)
-- Units should eventually give up if their route is blocked (e.g. when moving a group, they can't all reach the target)
 - Show "star" effect when sending troops somewhere
 
 ### Animations
@@ -324,7 +328,7 @@
 ### Portability
 
 - Read/write fixed-value types to packets instead of int, size_t, etc.
-- Read/write values to packts using a consistent endianness
+- Read/write values to packets using a consistent endianness
     - "Before writing to any WinSock structure, always convert from host order to network order,
        and after reading always convert from network order to host order"
 - Add Linux implementations in platform folder
@@ -353,7 +357,6 @@
 - Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities
 - Use vectors in MousePicker instead of separate x/y variables
 - Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
-- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
 - Replace `Resources::get*Spritesheet` with a generic method that takes an enum parameter
 - Create a CursorRenderer to hold all the cursor rendering logic
 - Reduce duplication between Unit/BuildingAnimationComponent

@@ -60,7 +60,7 @@ void MovementComponent::addListener(std::weak_ptr<MovementListener> listener)
     {
         return;
     }
-    // listeners.emplace(listener);
+    listeners.emplace(listener);
 }
 
 void MovementComponent::removeListener(std::weak_ptr<MovementListener> listener)
@@ -138,7 +138,6 @@ bool MovementComponent::prepareNextMovement()
     passabilityUpdater.onUnitEnteringTile(*world, movement.destination);
 
     // Inform listeners
-    /*
     for (std::weak_ptr<MovementListener> weakListener : listeners)
     {
         if (std::shared_ptr<MovementListener> listener = weakListener.lock())
@@ -146,7 +145,6 @@ bool MovementComponent::prepareNextMovement()
             listener->onUnitMoveStart(&movement.destination);
         }
     }
-        */
 
     return true;
 }
@@ -178,7 +176,6 @@ void MovementComponent::completeMovement()
 void MovementComponent::onStop()
 {
     // Inform listeners
-    /*
     for (std::weak_ptr<MovementListener> weakListener : listeners)
     {
         if (std::shared_ptr<MovementListener> listener = weakListener.lock())
@@ -186,7 +183,6 @@ void MovementComponent::onStop()
             listener->onUnitStopped();
         }
     }
-        */
 }
 
 }  // namespace Rival

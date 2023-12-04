@@ -6,7 +6,9 @@
 #include <string>
 #include <vector>
 
+#include "entity/EntityFactory.h"
 #include "entity/components/SpriteComponent.h"
+#include "game/World.h"
 
 namespace Rival {
 
@@ -46,7 +48,7 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         else if (buildingPlacement.type == 0xAC)
         {
             // Grate
-            continue;
+            addGrate(scenario.get(), buildingPlacement, entityFactory);
         }
         else if (buildingPlacement.type == 0xAD)
         {
@@ -250,7 +252,14 @@ void ScenarioBuilder::addUnit(
 void ScenarioBuilder::addPalisade(
         World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
 {
-    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness());
+    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness(), false);
+    scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+}
+
+void ScenarioBuilder::addGrate(
+        World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
+{
+    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness(), true);
     scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
 }
 

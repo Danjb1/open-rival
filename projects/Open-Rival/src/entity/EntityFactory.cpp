@@ -20,6 +20,7 @@
 #include "entity/components/WallComponent.h"
 #include "game/Animations.h"
 #include "game/InventoryComponent.h"
+#include "game/PlayerState.h"
 #include "game/Tile.h"
 
 namespace Rival {
@@ -150,11 +151,12 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     return building;
 }
 
-std::shared_ptr<Entity> EntityFactory::createPalisade(const BuildingPlacement& buildingPlacement, bool wilderness) const
+std::shared_ptr<Entity> EntityFactory::createPalisade(
+        const BuildingPlacement& buildingPlacement, bool wilderness, bool isGrate) const
 {
     // Create Entity
-    std::shared_ptr<Entity> building =
-            std::make_shared<Entity>(EntityType::Wall, Building::wallWidth, Building::wallHeight);
+    EntityType type = isGrate ? EntityType::Grate : EntityType::Palisade;
+    std::shared_ptr<Entity> building = std::make_shared<Entity>(type, Building::wallWidth, Building::wallHeight);
 
     // SpriteComponent
     const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);

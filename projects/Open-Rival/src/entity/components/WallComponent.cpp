@@ -25,10 +25,13 @@ void WallComponent::onEntitySpawned(World*)
     {
         baseTxIndex = getBaseTxIndex(buildingPropsComponent->getBuildingType());
     }
+    else if (entity->getType() == EntityType::Palisade)
+    {
+        baseTxIndex = baseTxIndexPalisade;
+    }
     else
     {
-        // TMP: we need a way to distinguish between Palisades and Grates
-        baseTxIndex = baseTxIndexPalisade;
+        baseTxIndex = baseTxIndexGrate;
     }
 
     // Update txIndex in SpriteComponent

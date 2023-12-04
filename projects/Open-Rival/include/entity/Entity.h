@@ -21,6 +21,8 @@ enum class EntityType : std::uint8_t
     Tree,
     Mountain,
     Wall,
+    Palisade,
+    Grate,
     Door,
     Decoration,
     Chest,

@@ -10,7 +10,6 @@ AccessModifierOffset: '-4'
 AlignAfterOpenBracket: DontAlign
 AlignOperands: 'false'
 AlignTrailingComments: 'true'
-AlignAfterOpenBracket: AlwaysBreak
 AllowAllArgumentsOnNextLine: 'true'
 AllowAllConstructorInitializersOnNextLine: 'false'
 AllowAllParametersOfDeclarationOnNextLine: 'true'
