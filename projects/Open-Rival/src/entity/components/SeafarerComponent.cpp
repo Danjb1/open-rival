@@ -13,6 +13,12 @@ bool SeafarerPassability::isNodePathable(const PathfindingMap& map, const MapNod
     return isWater(passability) && (passability & unpathableFlags) == TilePassability::Clear;
 }
 
+bool SeafarerPassability::isNodeObstructed(const PathfindingMap& map, const MapNode& node) const
+{
+    TilePassability passability = map.getPassability(node);
+    return (passability & obstructedFlags) == TilePassability::Clear;
+}
+
 bool SeafarerPassability::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
 {
     TilePassability passability = map.getPassability(node);

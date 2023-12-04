@@ -18,6 +18,7 @@ class SeafarerPassability
 public:
     // Begin PassabilityChecker override
     bool isNodePathable(const PathfindingMap& map, const MapNode& node) const override;
+    bool isNodeObstructed(const PathfindingMap& map, const MapNode& node) const override;
     bool isNodeTraversable(const PathfindingMap& map, const MapNode& node) const override;
     // End PassabilityChecker override
 
@@ -32,10 +33,17 @@ private:
     bool isWater(TilePassability passability) const;
 
 private:
-    static constexpr TilePassability unpathableFlags = TilePassability::GroundUnit;
+    /** TilePassability values that block pathfinding.
+     * Using a value of "Clear" here is equivalent to "none"; seafaring units can pathfind anywhere on water
+     * (this requirement is enforced elsewhere). */
+    static constexpr TilePassability unpathableFlags = TilePassability::Clear;
 
-    // We have to wait for a unit to leave before we can move into their tile
-    static constexpr TilePassability untraversableFlags = unpathableFlags | TilePassability::GroundUnitLeaving;
+    /** TilePassability values that signify an obstruction. */
+    static constexpr TilePassability obstructedFlags = TilePassability::GroundUnit;
+
+    /** TilePassability values that block traversal. */
+    static constexpr TilePassability untraversableFlags =
+            TilePassability::GroundUnit | TilePassability::GroundUnitLeaving;
 };
 
 /**

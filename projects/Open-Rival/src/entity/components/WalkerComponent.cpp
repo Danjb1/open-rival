@@ -13,6 +13,12 @@ bool WalkerPassability::isNodePathable(const PathfindingMap& map, const MapNode&
     return (passability & unpathableFlags) == TilePassability::Clear;
 }
 
+bool WalkerPassability::isNodeObstructed(const PathfindingMap& map, const MapNode& node) const
+{
+    TilePassability passability = map.getPassability(node);
+    return (passability & obstructedFlags) == TilePassability::Clear;
+}
+
 bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const
 {
     TilePassability passability = map.getPassability(node);
