@@ -6,10 +6,8 @@
 
 ### Multiplayer Milestone
 
-- Units should not be able to move laterally if one of the tiles being moved through is not traversable
 - Units should be able to start moving into a tile if its occupant is already moving out (?)
     - What if the occupant is slower than we are?
-- Units should "try" to move somewhere even if there is no path (?)
 - Units should eventually give up if their route is blocked (e.g. when moving a group, they can't all reach the target)
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
@@ -206,7 +204,8 @@
 - [ ] Show map preview / description
 - [ ] More endgame stats
 - [ ] Show additional unit stats (speed, hit speed, etc.)
-- [ ] Hover states for buttons
+- [ ] Hover states for buttons#
+- [ ] Scroll wheel support for lists
 
 ### Balance
 
