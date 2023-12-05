@@ -58,6 +58,18 @@ public:
     }
 
 private:
+    std::deque<MapNode> findPath();
+    bool isFinished() const;
+    ReachableNode popBestNode();
+    float estimateCostToGoal(const MapNode& node) const;
+    std::deque<MapNode> reconstructPath(const MapNode& node) const;
+    std::vector<MapNode> findNeighbors(const MapNode& node) const;
+    float getCostToNode(const MapNode& node) const;
+    float getMovementCost(const MapNode& from, const MapNode& to) const;
+    void updatePathToNode(const MapNode& node, float newCost);
+    ReachableNode* findDiscoveredNode(const MapNode& node);
+
+private:
     /** Base movement cost for moving between two tiles. */
     static constexpr float baseMovementCost = 1.f;
 
@@ -95,70 +107,48 @@ private:
      */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
 
-    /**
-     * The starting node.
-     */
+    /** The starting node. */
     MapNode start;
 
-    /**
-     * The destination node.
-     */
+    /** The destination node. */
     MapNode goal;
 
-    /**
-     * The PathfindingMap used to find obstacles, etc.
-     */
+    /** The PathfindingMap used to find obstacles, etc. */
     const PathfindingMap& map;
 
-    /**
-     * Object used to check for passability.
-     */
+    /** Object used to check for passability. */
     const PassabilityChecker& passabilityChecker;
 
-    /**
-     * All discovered nodes, sorted with the "best" nodes first.
-     */
+    /** All discovered nodes, sorted with the "best" nodes first. */
     std::vector<ReachableNode> discoveredNodes;
 
-    /**
-     * Map of node -> lowest cost to reach that node from the start.
-     */
+    /** Map of node -> lowest cost to reach that node from the start. */
     std::unordered_map<MapNode, float> costToNode;
 
-    /**
-     * Map of node -> previous node in the shortest path found.
-     */
+    /** Map of node -> previous node in the shortest path found. */
     std::unordered_map<MapNode, MapNode> prevNode;
 
-    /**
-     * After construction, contains the shortest route to the goal.
-     */
+    /** After construction, contains the shortest route to the goal. */
     Route route;
 
-    std::deque<MapNode> findPath();
-    bool isFinished() const;
-    ReachableNode popBestNode();
-    float estimateCostToGoal(const MapNode& node) const;
-    std::deque<MapNode> reconstructPath(const MapNode& node) const;
-    std::vector<MapNode> findNeighbors(const MapNode& node) const;
-    float getCostToNode(const MapNode& node) const;
-    float getMovementCost(const MapNode& from, const MapNode& to) const;
-    void updatePathToNode(const MapNode& node, float newCost);
-    ReachableNode* findDiscoveredNode(const MapNode& node);
+    /** The lowest cost found to the goal. */
+    float lowestCostToGoal = std::numeric_limits<float>::max();
+
+    /** The closest node found to the goal. */
+    MapNode closestNodeToGoal;
 };
 
 /**
- * Constructs a Pathfinder which attempts to find a path connecting start
- * to goal.
+ * Constructs a Pathfinder which attempts to find a path connecting start to goal.
  */
 Pathfinder::Pathfinder(
         MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker)
     : start(start)
     , goal(goal)
     , map(map)
-    , route({ goal, findPath() })
     , passabilityChecker(passabilityChecker)
 {
+    route = { goal, findPath() };
 }
 
 /**
@@ -171,13 +161,8 @@ std::deque<MapNode> Pathfinder::findPath()
         return {};
     }
 
-    if (!passabilityChecker.isNodePathable(map, goal))
-    {
-        // Destination is unreachable
-        return {};
-    }
-
     discoveredNodes.push_back({ start, 0 });
+    closestNodeToGoal = start;
     costToNode[start] = 0;
 
     while (!isFinished())
@@ -194,8 +179,9 @@ std::deque<MapNode> Pathfinder::findPath()
 
         for (const MapNode& neighbor : neighbors)
         {
+            const float bestCostToNeighbor = getCostToNode(neighbor);
             const float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
-            if (newCostToNeighbor < getCostToNode(neighbor))
+            if (newCostToNeighbor < bestCostToNeighbor)
             {
                 // This path to neighbor is better than any previous one
                 costToNode[neighbor] = newCostToNeighbor;
@@ -205,8 +191,11 @@ std::deque<MapNode> Pathfinder::findPath()
         }
     }
 
-    // The goal could not be reached
-    return {};
+    // The goal could not be reached - get as close as we can.
+    // Note that, due to the fact that due to the fact that we do not set lowestCostToGoal for the start node, we will
+    // always move at least 1 tile (if possible), even if it takes us further away than our starting location.
+    // This is in keeping with the behavior of the original game.
+    return reconstructPath(closestNodeToGoal);
 }
 
 bool Pathfinder::isFinished() const
@@ -240,12 +229,12 @@ float Pathfinder::estimateCostToGoal(const MapNode& node) const
         return 0.f;
     }
 
-    int dx = abs(node.x - goal.x);
-    int dy = abs(node.y - goal.y);
+    const int dx = abs(node.x - goal.x);
+    const int dy = abs(node.y - goal.y);
 
     // Whatever distance x and y have in common can be covered diagonally
-    int diagonalDistance = std::min(dx, dy);
-    int remainingDistance = abs(dx - dy);
+    const int diagonalDistance = std::min(dx, dy);
+    const int remainingDistance = abs(dx - dy);
 
     return static_cast<float>(diagonalDistance + remainingDistance);
 }
@@ -325,18 +314,27 @@ float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 /**
  * Updates the path to a node with a shorter one, or adds a new path to
  * the node if this is the first one found.
+ *
+ * Also records the closest node to the goal.
  */
 void Pathfinder::updatePathToNode(const MapNode& node, float newCost)
 {
-    float newEstimate = newCost + estimateCostToGoal(node);
-    ReachableNode* existingNode = findDiscoveredNode(node);
-    if (existingNode)
+    const float estimatedCostToGoal = estimateCostToGoal(node);
+    const float newEstimate = newCost + estimatedCostToGoal;
+
+    if (ReachableNode* previouslyDiscoveredNode = findDiscoveredNode(node))
     {
-        existingNode->cost = newEstimate;
+        previouslyDiscoveredNode->cost = newEstimate;
     }
     else
     {
-        discoveredNodes.push_back({ node, newEstimate });
+        discoveredNodes.emplace_back(node, newEstimate);
+    }
+
+    if (estimatedCostToGoal < lowestCostToGoal)
+    {
+        lowestCostToGoal = estimatedCostToGoal;
+        closestNodeToGoal = node;
     }
 }
 
@@ -373,7 +371,7 @@ bool Route::isEmpty() const
 
 MapNode Route::pop()
 {
-    MapNode node = path.front();
+    const MapNode node = path.front();
     path.pop_front();
     return node;
 }
