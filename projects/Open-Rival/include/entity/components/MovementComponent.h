@@ -65,6 +65,7 @@ private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement();
     bool prepareNextMovement();
+    bool handleObstruction();
     void completeMovement();
     void stopMovement();
     bool tryToRepath();
@@ -87,6 +88,8 @@ protected:
 
 private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
+
+    int ticksObstructed = 0;
 };
 
 }  // namespace Rival
