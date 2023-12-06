@@ -30,9 +30,9 @@ void FlyerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapN
     map.setPassability(node, TilePassability::FlyingUnitLeaving);
 }
 
-void FlyerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node)
+void FlyerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
-    map.setPassability(node, TilePassability::FlyingUnit);
+    map.setPassability(node, isPassingThrough ? TilePassability::FlyingUnitLeaving : TilePassability::FlyingUnit);
 }
 
 void FlyerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
@@ -40,9 +40,9 @@ void FlyerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode
     map.setPassability(node, TilePassability::Clear);
 }
 
-void FlyerPassability::onUnitEnteredTile(WritablePathfindingMap&, const MapNode&)
+void FlyerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
 {
-    // Nothing to do (passability has already been set by `onUnitEnteringTile`)
+    map.setPassability(node, TilePassability::FlyingUnit);
 }
 
 FlyerComponent::FlyerComponent()

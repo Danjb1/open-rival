@@ -127,15 +127,16 @@ bool MovementComponent::prepareNextMovement()
     movement.timeRequired = ticksPerMove * TimeUtils::timeStepMs;
 
     // Horizontal movements should take longer because the distance is greater
-    Facing facing = MapUtils::getDir(entity->getPos(), movement.destination);
+    const Facing facing = MapUtils::getDir(entity->getPos(), movement.destination);
     if (facing == Facing::East || facing == Facing::West)
     {
         movement.timeRequired = static_cast<int>(movement.timeRequired * horizontalMoveTimeMultiplier);
     }
 
     // Update tile passability
+    const bool doesRouteContinue = !route.isEmpty();
     passabilityUpdater.onUnitLeavingTile(*world, entity->getPos());
-    passabilityUpdater.onUnitEnteringTile(*world, movement.destination);
+    passabilityUpdater.onUnitEnteringTile(*world, movement.destination, doesRouteContinue);
 
     // Inform listeners
     for (std::weak_ptr<MovementListener> weakListener : listeners)
@@ -157,7 +158,6 @@ void MovementComponent::completeMovement()
     // Update tile passability
     World* world = entity->getWorld();
     passabilityUpdater.onUnitLeftTile(*world, entity->getPos());
-    passabilityUpdater.onUnitEnteredTile(*world, movement.destination);
 
     // Update entity position
     // TODO: Currently, during movement, entities are considered to occupy their original tile until they have fully
@@ -175,6 +175,10 @@ void MovementComponent::completeMovement()
 
 void MovementComponent::onStop()
 {
+    // Update tile passability
+    World* world = entity->getWorld();
+    passabilityUpdater.onUnitStopped(*world, entity->getPos());
+
     // Inform listeners
     for (std::weak_ptr<MovementListener> weakListener : listeners)
     {

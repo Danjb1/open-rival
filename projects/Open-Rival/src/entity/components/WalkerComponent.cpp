@@ -30,9 +30,9 @@ void WalkerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const Map
     map.setPassability(node, TilePassability::GroundUnitLeaving);
 }
 
-void WalkerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node)
+void WalkerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
-    map.setPassability(node, TilePassability::GroundUnit);
+    map.setPassability(node, isPassingThrough ? TilePassability::GroundUnitLeaving : TilePassability::GroundUnit);
 }
 
 void WalkerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
@@ -40,9 +40,9 @@ void WalkerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNod
     map.setPassability(node, TilePassability::Clear);
 }
 
-void WalkerPassability::onUnitEnteredTile(WritablePathfindingMap&, const MapNode&)
+void WalkerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
 {
-    // Nothing to do (passability has already been set by `onUnitEnteringTile`)
+    map.setPassability(node, TilePassability::GroundUnit);
 }
 
 WalkerComponent::WalkerComponent()

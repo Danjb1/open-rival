@@ -24,9 +24,9 @@ public:
 
     // Begin PassabilityUpdater override
     void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) override;
-    void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node) override;
+    void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough) override;
     void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) override;
-    void onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node) override;
+    void onUnitStopped(WritablePathfindingMap& map, const MapNode& node) override;
     // End PassabilityUpdater override
 
 private:
