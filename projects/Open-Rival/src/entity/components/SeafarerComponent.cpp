@@ -35,9 +35,11 @@ void SeafarerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const M
     map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitLeaving);
 }
 
-void SeafarerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node)
+void SeafarerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
-    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnit);
+    const TilePassability newPassability =
+            isPassingThrough ? TilePassability::FlyingUnitLeaving : TilePassability::FlyingUnit;
+    map.setPassability(node, TilePassability::Water | newPassability);
 }
 
 void SeafarerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
@@ -45,9 +47,9 @@ void SeafarerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapN
     map.setPassability(node, TilePassability::Water);
 }
 
-void SeafarerPassability::onUnitEnteredTile(WritablePathfindingMap&, const MapNode&)
+void SeafarerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
 {
-    // Nothing to do (passability has already been set by `onUnitEnteringTile`)
+    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnit);
 }
 
 SeafarerComponent::SeafarerComponent()

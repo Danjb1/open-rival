@@ -34,10 +34,17 @@ public:
 class PassabilityUpdater
 {
 public:
+    /** Called when a unit starts moving out of a tile. */
     virtual void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) = 0;
-    virtual void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+
+    /** Called when a unit starts moving into a tile. */
+    virtual void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough) = 0;
+
+    /** Called when a unit has fully left a tile. */
     virtual void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) = 0;
-    virtual void onUnitEnteredTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+
+    /** Called when a unit stops moving. */
+    virtual void onUnitStopped(WritablePathfindingMap& map, const MapNode& node) = 0;
 };
 
 /**
