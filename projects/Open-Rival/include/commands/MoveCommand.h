@@ -4,8 +4,7 @@
 #include <vector>
 
 #include "commands/GameCommand.h"
-
-class MapNode;
+#include "game/MapUtils.h"
 
 namespace Rival {
 

@@ -1,5 +1,7 @@
 #include "entity/components/WalkerComponent.h"
 
+#include <iostream>  // TMP
+
 #include "game/MapUtils.h"
 #include "game/World.h"
 
@@ -16,7 +18,7 @@ bool WalkerPassability::isNodePathable(const PathfindingMap& map, const MapNode&
 bool WalkerPassability::isNodeObstructed(const PathfindingMap& map, const MapNode& node) const
 {
     TilePassability passability = map.getPassability(node);
-    return (passability & obstructedFlags) == TilePassability::Clear;
+    return (passability & obstructedFlags) != TilePassability::Clear;
 }
 
 bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNode& node) const

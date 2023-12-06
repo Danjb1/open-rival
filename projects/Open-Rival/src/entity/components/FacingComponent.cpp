@@ -1,6 +1,7 @@
 #include "entity/components/FacingComponent.h"
 
 #include "entity/Entity.h"
+#include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 
 namespace Rival {

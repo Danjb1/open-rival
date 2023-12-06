@@ -25,6 +25,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/FlyerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MouseHandlerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MovementComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/MovementListener.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/OwnerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PassabilityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PortraitComponent.cpp
@@ -152,6 +153,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/FlyerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/MouseHandlerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/MovementComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/MovementListener.h
     ${OPEN_RIVAL_DIR}/include/entity/components/OwnerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/PassabilityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/PortraitComponent.h

@@ -4,7 +4,7 @@
 
 #include "commands/GameCommand.h"
 #include "entity/components/EntityComponent.h"
-#include "entity/components/MovementComponent.h"
+#include "entity/components/MovementListener.h"
 #include "game/PlayerState.h"
 #include "gfx/RenderUtils.h"
 #include "utils/Rect.h"
@@ -12,6 +12,7 @@
 namespace Rival {
 
 class Camera;
+class MovementComponent;
 class OwnerComponent;
 class SpriteComponent;
 class VoiceComponent;

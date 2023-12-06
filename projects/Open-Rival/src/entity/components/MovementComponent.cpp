@@ -72,22 +72,16 @@ void MovementComponent::removeListener(std::weak_ptr<MovementListener> listener)
     listeners.erase(listener);
 }
 
-void MovementComponent::moveTo(MapNode node)
+void MovementComponent::moveTo(const MapNode& node)
 {
     const MapNode startPos = getStartPosForNextMovement();
-    auto newRoute = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker);
-    setRoute(newRoute);
+    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker);
 }
 
 MapNode MovementComponent::getStartPosForNextMovement() const
 {
     // If we are already moving between tiles, use the tile where we're about to end up
     return movement.isInProgress() ? movement.destination : entity->getPos();
-}
-
-void MovementComponent::setRoute(Pathfinding::Route newRoute)
-{
-    route = newRoute;
 }
 
 void MovementComponent::updateMovement()
@@ -111,15 +105,47 @@ bool MovementComponent::prepareNextMovement()
         return false;
     }
 
-    // Verify that the destination tile is traversable
+    // Check that the destination is still pathable
     World* world = entity->getWorld();
-    if (!passabilityChecker.isNodeTraversable(*world, *route.peek()))
+    const MapNode* nextNode = route.peek();
+    if (!passabilityChecker.isNodePathable(*world, *nextNode))
     {
-        // Destination tile is either temporarily or permanently blocked.
-        // TODO: If we know that the tile will become available again (e.g. if a unit is leaving the tile), then wait.
-        //   Otherwise, re-plan our route.
-        onStop();
+        // Tile is no longer pathable, e.g. a building has been placed or terrain has changed
+        stopMovement();
         return false;
+    }
+
+    // Check that the destination is traversable
+    if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
+    {
+        if (passabilityChecker.isNodeObstructed(*world, *nextNode))
+        {
+            // Tile is obstructed, e.g. another unit has stopped there.
+            // In this case we try to pathfind around them.
+            if (tryToRepath())
+            {
+                nextNode = route.peek();
+                if (passabilityChecker.isNodeObstructed(*world, *nextNode))
+                {
+                    // Alternate route is still obstructed
+                    stopMovement();
+                    return false;
+                }
+            }
+            else
+            {
+                // This should never happen, but just in case.
+                // At the very least we would expect a path to the obstruction to be returned.
+                stopMovement();
+                return false;
+            }
+        }
+        else
+        {
+            // Tile is only temporarily obstructed, e.g. another unit is leaving the tile.
+            // Just wait until it frees up.
+            return false;
+        }
     }
 
     // Configure the new movement
@@ -169,12 +195,15 @@ void MovementComponent::completeMovement()
     if (route.isEmpty())
     {
         // Reached end of route
-        onStop();
+        stopMovement();
     }
 }
 
-void MovementComponent::onStop()
+void MovementComponent::stopMovement()
 {
+    route = {};
+    movement.clear();
+
     // Update tile passability
     World* world = entity->getWorld();
     passabilityUpdater.onUnitStopped(*world, entity->getPos());
@@ -187,6 +216,19 @@ void MovementComponent::onStop()
             listener->onUnitStopped();
         }
     }
+}
+
+bool MovementComponent::tryToRepath()
+{
+    if (route.isEmpty())
+    {
+        return false;
+    }
+
+    const MapNode destination = route.getDestination();
+    moveTo(destination);
+
+    return !route.isEmpty();
 }
 
 }  // namespace Rival

@@ -3,11 +3,12 @@
 #include <string>
 
 #include "entity/components/EntityComponent.h"
-#include "entity/components/MovementComponent.h"
+#include "entity/components/MovementListener.h"
 #include "game/MapUtils.h"
 
 namespace Rival {
 
+class MovementComponent;
 struct MapNode;
 
 /**
