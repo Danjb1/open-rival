@@ -5,12 +5,11 @@
 #include <string>
 
 #include "entity/components/EntityComponent.h"
+#include "entity/components/MovementListener.h"
 #include "game/Pathfinding.h"
 #include "utils/CollectionUtils.h"
 
 namespace Rival {
-
-struct MapNode;
 
 /**
  * Represents a movement between 2 tiles.
@@ -36,23 +35,12 @@ struct Movement
 };
 
 /**
- * Interface used to listen to movements.
- */
-class MovementListener
-{
-public:
-    virtual void onUnitMoveStart(const MapNode* nextNode) = 0;
-    virtual void onUnitStopped() = 0;
-};
-
-/**
  * Base class for a component that allows entities to move between tiles.
  */
 class MovementComponent : public EntityComponent
 {
 public:
-    MovementComponent(
-            const Pathfinding::PassabilityChecker& passabilityChecker,
+    MovementComponent(const Pathfinding::PassabilityChecker& passabilityChecker,
             Pathfinding::PassabilityUpdater& passabilityUpdater);
     virtual ~MovementComponent() = default;
 
@@ -63,7 +51,7 @@ public:
     void addListener(std::weak_ptr<MovementListener> listener);
     void removeListener(std::weak_ptr<MovementListener> listener);
 
-    void moveTo(MapNode node);
+    void moveTo(const MapNode& node);
 
     /**
      * Gets the movement that's currently in progress.
@@ -75,11 +63,11 @@ public:
 
 private:
     MapNode getStartPosForNextMovement() const;
-    void setRoute(Pathfinding::Route route);
     void updateMovement();
     bool prepareNextMovement();
     void completeMovement();
-    void onStop();
+    void stopMovement();
+    bool tryToRepath();
 
 public:
     static const std::string key;

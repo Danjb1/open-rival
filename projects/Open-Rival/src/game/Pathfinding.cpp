@@ -381,10 +381,7 @@ const MapNode* Route::peek() const
     return path.empty() ? nullptr : &path.front();
 }
 
-Route findPath(const MapNode start,
-        const MapNode goal,
-        const PathfindingMap& map,
-        const PassabilityChecker& passabilityChecker)
+Route findPath(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker)
 {
     return Pathfinder(start, goal, map, passabilityChecker).getRoute();
 }

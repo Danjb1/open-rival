@@ -6,11 +6,12 @@
 #include <unordered_set>
 
 #include "entity/components/EntityComponent.h"
-#include "entity/components/MovementComponent.h"
+#include "entity/components/MovementListener.h"
 #include "game/Unit.h"
 
 namespace Rival {
 
+class MovementComponent;
 struct MapNode;
 
 enum class UnitState : std::uint8_t

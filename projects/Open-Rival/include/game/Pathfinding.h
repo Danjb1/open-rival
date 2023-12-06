@@ -21,7 +21,10 @@ public:
     virtual bool isNodePathable(const PathfindingMap& map, const MapNode& node) const = 0;
 
     /** Checks if a node is currently obstructed.
-     * Obstructed tiles will only be included in a route as a last resort. */
+     * Obstructed tiles will only be included in a route as a last resort.
+     * This serves 2 purposes:
+     * 1) The obstruction may clear by the time we reach it.
+     * 2) If the obstruction is an enemy unit, we can attack it upon reaching it. */
     virtual bool isNodeObstructed(const PathfindingMap& map, const MapNode& node) const = 0;
 
     /** Checks if a node can currently be moved into. */

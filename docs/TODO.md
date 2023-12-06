@@ -7,15 +7,15 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
+    - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?
-    - Units should eventually give up if their route is blocked (e.g. when moving a group, they can't all reach the target)
-    - Units should periodically re-plan their route
-        - In particular, when the next tile in their path is blocked
+    - Units should periodically re-plan their route in case a better route becomes available
     - What happens if 2 units try to pass through each other?
     - When moving a group, units are moved 1 at a time, so that they can't pathfind through others after them in the group
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
+- Ensure tests are passing
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -125,6 +125,7 @@
 - Use a single MoveCommand for groups?
 - Should we limit the pathfinding logic to 'n' iterations? (probably)
 - Show "star" effect when sending troops somewhere
+- Passability debug visualisation
 
 ### Animations
 

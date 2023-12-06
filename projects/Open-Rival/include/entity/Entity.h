@@ -164,7 +164,7 @@ public:
      * fluctuates - so it does not make sense to try to store the absolute
      * position of an Entity as a float.
      */
-    const MapNode& getPos() const
+    const MapNode getPos() const
     {
         return pos;
     }
