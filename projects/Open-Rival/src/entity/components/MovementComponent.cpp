@@ -121,22 +121,14 @@ bool MovementComponent::prepareNextMovement()
         if (passabilityChecker.isNodeObstructed(*world, *nextNode))
         {
             // Tile is obstructed, e.g. another unit has stopped there.
-            // In this case we try to pathfind around them.
-            if (tryToRepath())
+            // Try to find a way around the obstruction.
+            const bool canMove = handleObstruction();
+            if (canMove)
             {
                 nextNode = route.peek();
-                if (passabilityChecker.isNodeObstructed(*world, *nextNode))
-                {
-                    // Alternate route is still obstructed
-                    stopMovement();
-                    return false;
-                }
             }
             else
             {
-                // This should never happen, but just in case.
-                // At the very least we would expect a path to the obstruction to be returned.
-                stopMovement();
                 return false;
             }
         }
@@ -171,6 +163,47 @@ bool MovementComponent::prepareNextMovement()
         {
             listener->onUnitMoveStart(&movement.destination);
         }
+    }
+
+    return true;
+}
+
+bool MovementComponent::handleObstruction()
+{
+    if (ticksObstructed < 30)
+    {
+        /*
+         * We have only recently become obstructed.
+         * Do nothing for now, maybe it will clear.
+         *
+         * !!! THIS IS A HACK - we need a better long-term solution !!!
+         *
+         * This is particularly important when moving a group of units. Units pathfind one-by-one, which means that
+         * units at the back of the group are obstructed until the units ahead of them start moving. In a big group, it
+         * can take some time for this "chain of obstructions" to clear.
+         */
+        ++ticksObstructed;
+        return false;
+    }
+
+    // We have been obstructed long enough that we need to consider alternative options
+    ticksObstructed = 0;
+
+    if (!tryToRepath())
+    {
+        // This should never happen, but just in case.
+        // At the very least we would expect a path to the obstruction to be returned.
+        stopMovement();
+        return false;
+    }
+
+    World* world = entity->getWorld();
+    const MapNode* nextNode = route.peek();
+    if (passabilityChecker.isNodeObstructed(*world, *nextNode))
+    {
+        // Alternate route is still obstructed
+        stopMovement();
+        return false;
     }
 
     return true;
