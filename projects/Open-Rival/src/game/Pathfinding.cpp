@@ -51,7 +51,11 @@ struct ReachableNode
 class Pathfinder
 {
 public:
-    Pathfinder(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
+    Pathfinder(MapNode start,
+            MapNode goal,
+            const PathfindingMap& map,
+            const PassabilityChecker& passabilityChecker,
+            const Hints hints);
 
     Route getRoute() const
     {
@@ -83,6 +87,10 @@ private:
      *   is long.
      * - If this is too high, group movement becomes computationally expensive because units will waste their time
      *   trying long alternative routes to avoid (inevitable) obstructions.
+     *
+     * To help with this, we could make obstructions more expensive the further they are from the goal. This would mean
+     * that units try harder to pathfind around obstructions when they still have a long way to travel, but they
+     * become "lazier" as they near the destination.
      */
     static constexpr float obstructedMovementCost = 3.f;
 
@@ -132,6 +140,9 @@ private:
     /** Object used to check for passability. */
     const PassabilityChecker& passabilityChecker;
 
+    /** Hints used during pathfinding. */
+    Hints hints;
+
     /** All discovered nodes, sorted with the "best" nodes first. */
     std::vector<ReachableNode> discoveredNodes;
 
@@ -160,12 +171,16 @@ private:
 /**
  * Constructs a Pathfinder which attempts to find a path connecting start to goal.
  */
-Pathfinder::Pathfinder(
-        MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker)
+Pathfinder::Pathfinder(MapNode start,
+        MapNode goal,
+        const PathfindingMap& map,
+        const PassabilityChecker& passabilityChecker,
+        const Hints hints)
     : start(start)
     , goal(goal)
     , map(map)
     , passabilityChecker(passabilityChecker)
+    , hints(hints)
 {
     route = { goal, findPath() };
 }
@@ -336,14 +351,15 @@ float Pathfinder::getCostToNode(const MapNode& node) const
  */
 float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 {
+    const bool shouldAvoidNode = hints.nodesToAvoid.find(to) != hints.nodesToAvoid.cend();
     const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
-    const float movementCost = isObstructed ? obstructedMovementCost : baseMovementCost;
+    const float baseCost = (shouldAvoidNode || isObstructed) ? obstructedMovementCost : baseMovementCost;
 
     const Facing movementDir = MapUtils::getDir(from, to);
     const float dirMultiplier =
             (movementDir == Facing::East || movementDir == Facing::West) ? horizontalMoveCostMultiplier : 1.f;
 
-    return movementCost * dirMultiplier;
+    return baseCost * dirMultiplier;
 }
 
 /**
@@ -416,9 +432,13 @@ const MapNode* Route::peek() const
     return path.empty() ? nullptr : &path.front();
 }
 
-Route findPath(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker)
+Route findPath(MapNode start,
+        MapNode goal,
+        const PathfindingMap& map,
+        const PassabilityChecker& passabilityChecker,
+        const Hints hints)
 {
-    return Pathfinder(start, goal, map, passabilityChecker).getRoute();
+    return Pathfinder(start, goal, map, passabilityChecker, hints).getRoute();
 }
 
 }}  // namespace Rival::Pathfinding
