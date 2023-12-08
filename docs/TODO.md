@@ -7,8 +7,7 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
-    - Pathfinding to an obstructed tile is very computationally expensive
-        - The cost of this movement makes it - literally - a last resort, so it does an exhaustive search of the whole map
+    - Units form long lines when travelling around corners because they all want the same route
     - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?
