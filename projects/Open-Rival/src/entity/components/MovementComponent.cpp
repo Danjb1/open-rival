@@ -2,6 +2,7 @@
 
 #include "entity/Entity.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -72,10 +73,30 @@ void MovementComponent::removeListener(std::weak_ptr<MovementListener> listener)
     listeners.erase(listener);
 }
 
+void MovementComponent::prepareForMovement()
+{
+    World* world = entity->getWorld();
+    passabilityUpdater.onUnitPreparingMove(*world, entity->getPos());
+}
+
+void MovementComponent::resetPassability()
+{
+    World* world = entity->getWorld();
+    passabilityUpdater.onUnitStopped(*world, entity->getPos());
+}
+
 void MovementComponent::moveTo(const MapNode& node)
 {
+    prepareForMovement();
+
     const MapNode startPos = getStartPosForNextMovement();
     route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker);
+
+    if (route.isEmpty())
+    {
+        // Failed to plan a route
+        resetPassability();
+    }
 }
 
 MapNode MovementComponent::getStartPosForNextMovement() const
@@ -122,7 +143,7 @@ bool MovementComponent::prepareNextMovement()
         {
             // Tile is obstructed, e.g. another unit has stopped there.
             // Try to find a way around the obstruction.
-            const bool canMove = handleObstruction();
+            const bool canMove = handleObstruction(*world);
             if (canMove)
             {
                 nextNode = route.peek();
@@ -168,27 +189,8 @@ bool MovementComponent::prepareNextMovement()
     return true;
 }
 
-bool MovementComponent::handleObstruction()
+bool MovementComponent::handleObstruction(const World& world)
 {
-    if (ticksObstructed < 30)
-    {
-        /*
-         * We have only recently become obstructed.
-         * Do nothing for now, maybe it will clear.
-         *
-         * !!! THIS IS A HACK - we need a better long-term solution !!!
-         *
-         * This is particularly important when moving a group of units. Units pathfind one-by-one, which means that
-         * units at the back of the group are obstructed until the units ahead of them start moving. In a big group, it
-         * can take some time for this "chain of obstructions" to clear.
-         */
-        ++ticksObstructed;
-        return false;
-    }
-
-    // We have been obstructed long enough that we need to consider alternative options
-    ticksObstructed = 0;
-
     if (!tryToRepath())
     {
         // This should never happen, but just in case.
@@ -197,9 +199,8 @@ bool MovementComponent::handleObstruction()
         return false;
     }
 
-    World* world = entity->getWorld();
     const MapNode* nextNode = route.peek();
-    if (passabilityChecker.isNodeObstructed(*world, *nextNode))
+    if (passabilityChecker.isNodeObstructed(world, *nextNode))
     {
         // Alternate route is still obstructed
         stopMovement();
@@ -236,10 +237,7 @@ void MovementComponent::stopMovement()
 {
     route = {};
     movement.clear();
-
-    // Update tile passability
-    World* world = entity->getWorld();
-    passabilityUpdater.onUnitStopped(*world, entity->getPos());
+    resetPassability();
 
     // Inform listeners
     for (std::weak_ptr<MovementListener> weakListener : listeners)

@@ -5,7 +5,8 @@ namespace Rival { namespace BufferUtils {
 void addStringToBuffer(std::vector<char>& buffer, const std::string& s)
 {
     std::size_t numChars = s.size();
-    std::size_t requiredBufferSize = buffer.size() + sizeof(numChars) + sizeof(char) * numChars;
+    std::size_t strSize = numChars * sizeof(char);
+    std::size_t requiredBufferSize = buffer.size() + sizeof(numChars) + strSize;
     if (requiredBufferSize > buffer.capacity())
     {
         throw std::runtime_error("Trying to overfill buffer");
@@ -20,12 +21,9 @@ void addStringToBuffer(std::vector<char>& buffer, const std::string& s)
     std::memcpy(destPtr, &numChars, sizeof(numChars));
     destPtr += sizeof(numChars);
 
-    // Write each character
-    for (std::size_t i = 0; i < numChars; ++i)
-    {
-        std::memcpy(destPtr, &s.c_str()[i], sizeof(char));
-        destPtr += sizeof(char);
-    }
+    // Write the character data
+    std::memcpy(destPtr, &s.c_str()[0], strSize);
+    destPtr += strSize;
 }
 
 std::string readStringFromBuffer(const std::vector<char>& buffer, std::size_t& offset)

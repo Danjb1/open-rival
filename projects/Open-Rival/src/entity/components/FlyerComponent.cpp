@@ -25,6 +25,11 @@ bool FlyerPassability::isNodeTraversable(const PathfindingMap& map, const MapNod
     return (passability & untraversableFlags) == TilePassability::Clear;
 }
 
+void FlyerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+{
+    map.setPassability(node, TilePassability::FlyingUnitPendingMove);
+}
+
 void FlyerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::FlyingUnitLeaving);

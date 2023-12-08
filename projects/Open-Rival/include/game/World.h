@@ -125,6 +125,11 @@ public:
     const Entity* getEntity(int id) const;
 
     /**
+     * Gets the entity at the given tile position.
+     */
+    const Entity* getEntityAt(const MapNode& pos) const;
+
+    /**
      * Gets a shared pointer to the Entity with the given key (mutable version).
      *
      * The weak pointer version should generally be preferred to avoid memory leaks, unless the Entity explicitly

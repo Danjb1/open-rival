@@ -27,6 +27,11 @@ bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNo
     return (passability & untraversableFlags) == TilePassability::Clear;
 }
 
+void WalkerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+{
+    map.setPassability(node, TilePassability::GroundUnitPendingMove);
+}
+
 void WalkerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::GroundUnitLeaving);

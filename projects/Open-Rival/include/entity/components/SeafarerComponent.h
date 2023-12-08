@@ -23,6 +23,7 @@ public:
     // End PassabilityChecker override
 
     // Begin PassabilityUpdater override
+    void onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node) override;
     void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) override;
     void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough) override;
     void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) override;
@@ -43,7 +44,7 @@ private:
 
     /** TilePassability values that block traversal. */
     static constexpr TilePassability untraversableFlags =
-            TilePassability::GroundUnit | TilePassability::GroundUnitLeaving;
+            TilePassability::GroundUnit | TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving;
 };
 
 /**

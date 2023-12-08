@@ -131,6 +131,20 @@ const Entity* World::getEntity(int id) const
     return (iter->second).get();
 }
 
+const Entity* World::getEntityAt(const MapNode& pos) const
+{
+    // TODO: Add a more efficient way to retrieve entities by position
+    // TODO: Add shared/mutable variants
+    for (const auto& [entityId, entity] : entities)
+    {
+        if (entity->getPos() == pos)
+        {
+            return entity.get();
+        }
+    }
+    return nullptr;
+}
+
 std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
 {
     auto const iter = entities.find(id);

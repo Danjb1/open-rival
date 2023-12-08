@@ -44,6 +44,59 @@ void readFromBuffer(const std::vector<char>& buffer, std::size_t& offset, T& des
     offset += sizeof(dest);
 }
 
+/** Adds a vector to the end of the given buffer. */
+template <typename T>
+void addVectorToBuffer(std::vector<char>& buffer, const std::vector<T>& vec)
+{
+    std::size_t numElems = buffer.size();
+    std::size_t dataSize = sizeof(T) * numElems;
+    std::size_t requiredBufferSize = buffer.size() + sizeof(numElems) + dataSize;
+    if (requiredBufferSize > buffer.capacity())
+    {
+        throw std::runtime_error("Trying to overfill buffer");
+    }
+
+    char* destPtr = buffer.data() + buffer.size();
+
+    // Since we are writing to the vector's internal memory we need to manually change the size
+    buffer.resize(requiredBufferSize);
+
+    // Write the number of elements
+    std::memcpy(destPtr, &numElems, sizeof(numElems));
+    destPtr += sizeof(numElems);
+
+    // Write the data
+    std::memcpy(destPtr, &vec[0], dataSize);
+    destPtr += dataSize;
+}
+
+/** Reads a vector from the given buffer, at some offset.
+ * The offset is increased by the size of the data read. */
+template <typename T>
+std::vector<T> readVectorFromBuffer(const std::vector<char>& buffer, std::size_t& offset)
+{
+    std::size_t numElems = 0;
+    readFromBuffer(buffer, offset, numElems);
+
+    if (offset + numElems * sizeof(T) > buffer.size())
+    {
+        throw std::runtime_error("Trying to read past end of buffer");
+    }
+
+    std::vector<T> outVector;
+    outVector.reserve(numElems);
+
+    for (std::size_t i = 0; i < numElems; ++i)
+    {
+        T elem;
+        std::memcpy(&elem, buffer.data() + offset, sizeof(elem));
+        offset += sizeof(elem);
+        outVector.push_back(elem);
+    }
+
+    return outVector;
+}
+
 /** Adds a string to the end of the given buffer. */
 void addStringToBuffer(std::vector<char>& buffer, const std::string& s);
 

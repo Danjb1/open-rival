@@ -37,6 +37,9 @@ public:
 class PassabilityUpdater
 {
 public:
+    /** Called when a unit is due to try and move out of a tile. */
+    virtual void onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node) = 0;
+
     /** Called when a unit starts moving out of a tile. */
     virtual void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) = 0;
 

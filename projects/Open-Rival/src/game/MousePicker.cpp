@@ -9,6 +9,7 @@
 #include "commands/GameCommand.h"
 #include "entity/Entity.h"
 #include "entity/components/MouseHandlerComponent.h"
+#include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "game/MapUtils.h"
 #include "game/PlayerContext.h"
@@ -21,8 +22,7 @@
 
 namespace Rival {
 
-MousePicker::MousePicker(
-        Camera& camera,
+MousePicker::MousePicker(Camera& camera,
         Rect& viewport,
         World& world,
         PlayerContext& playerContext,
@@ -364,7 +364,7 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
         }
 
         if (const auto mouseHandlerComponent =
-                    selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+                        selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
             mouseHandlerComponent->onSelect(playerStore, isLeader);
         }
@@ -376,8 +376,7 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
 
 void MousePicker::tileSelected()
 {
-    bool isLeader = true;
-
+    // Inform the first entity of the input
     for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
     {
         const auto& selectedEntity = weakSelectedEntity.lock();
@@ -388,13 +387,14 @@ void MousePicker::tileSelected()
         }
 
         if (const auto& mouseHandlerComponent =
-                    selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+                        selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, playerContext.tileUnderMouse, isLeader);
+            bool inputHandled = mouseHandlerComponent->onTileClicked(cmdInvoker, playerStore, playerContext);
+            if (inputHandled)
+            {
+                break;
+            }
         }
-
-        // TMP: For now, the first unit in the selection is the leader
-        isLeader = false;
     }
 }
 

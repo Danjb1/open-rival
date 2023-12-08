@@ -7,9 +7,9 @@
 
 namespace Rival {
 
-MoveCommand::MoveCommand(int entityId, MapNode destination)
+MoveCommand::MoveCommand(std::vector<int> entityIds, MapNode destination)
     : GameCommand(GameCommandType::Move)
-    , entityId(entityId)
+    , entityIds(entityIds)
     , destination(destination)
 {
 }
@@ -18,40 +18,65 @@ void MoveCommand::serialize(std::vector<char>& buffer) const
 {
     GameCommand::serialize(buffer);
 
-    BufferUtils::addToBuffer(buffer, entityId);
+    BufferUtils::addVectorToBuffer(buffer, entityIds);
     BufferUtils::addToBuffer(buffer, destination);
 }
 
 std::shared_ptr<MoveCommand> MoveCommand::deserialize(std::vector<char> buffer, std::size_t& offset)
 {
-    int entityId;
-    BufferUtils::readFromBuffer(buffer, offset, entityId);
+    std::vector<int> entityIds = BufferUtils::readVectorFromBuffer<int>(buffer, offset);
 
     MapNode destination;
     BufferUtils::readFromBuffer(buffer, offset, destination);
 
-    return std::make_shared<MoveCommand>(entityId, destination);
+    return std::make_shared<MoveCommand>(entityIds, destination);
 }
 
 void MoveCommand::execute(GameCommandContext& context)
 {
     World& world = context.getWorld();
 
-    Entity* entity = world.getMutableEntity(entityId);
-    if (!entity)
+    // Prepare all entities for movement.
+    // This needs to be called for all entities *before* any are moved, so that we can take measures to prevent them
+    // from obstructing each other.
+    for (int entityId : entityIds)
     {
-        // Entity has been deleted since this command was issued
-        return;
+        Entity* entity = world.getMutableEntity(entityId);
+        if (!entity)
+        {
+            // Entity has been deleted since this command was issued
+            return;
+        }
+
+        auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        if (!moveComponent)
+        {
+            LOG_WARN("Tried to move an immovable entity");
+            return;
+        }
+
+        moveComponent->prepareForMovement();
     }
 
-    auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
-    if (!moveComponent)
+    // Move entities
+    for (int entityId : entityIds)
     {
-        LOG_WARN("Tried to move an immovable entity");
-        return;
-    }
+        Entity* entity = world.getMutableEntity(entityId);
+        if (!entity)
+        {
+            // Entity has been deleted since this command was issued
+            return;
+        }
 
-    moveComponent->moveTo(destination);
+        auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        if (!moveComponent)
+        {
+            LOG_WARN("Tried to move an immovable entity");
+            return;
+        }
+
+        moveComponent->moveTo(destination);
+    }
 }
 
 }  // namespace Rival
