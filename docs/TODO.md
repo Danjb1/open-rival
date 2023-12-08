@@ -7,7 +7,9 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
-    - Units form long lines when travelling around corners because they all want the same route
+    - BUG: In rare instances, units can end up overlapping
+    - Simplify `prepareNextMovement` method
+    - Units can cross paths if one is travelling horizontally and the other vertically!
     - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?

@@ -84,12 +84,13 @@ void MovementComponent::resetPassability()
     passabilityUpdater.onUnitStopped(*world, entity->getPos());
 }
 
-void MovementComponent::moveTo(const MapNode& node)
+void MovementComponent::moveTo(const MapNode& node, Pathfinding::Hints hints)
 {
+    ticksSpentWaiting = 0;
     prepareForMovement();
 
     const MapNode startPos = getStartPosForNextMovement();
-    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker);
+    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker, hints);
 
     if (route.isEmpty())
     {
@@ -155,10 +156,38 @@ bool MovementComponent::prepareNextMovement()
         else
         {
             // Tile is only temporarily obstructed, e.g. another unit is leaving the tile.
-            // Just wait until it frees up.
-            return false;
+            // Wait a while, but try to path around it if it's taking too long.
+            if (ticksSpentWaiting > maxTicksToWaitForTileToClear)
+            {
+                Pathfinding::Hints hints;
+                hints.nodesToAvoid.insert(*nextNode);
+                if (tryToRepath(hints))
+                {
+                    nextNode = route.peek();
+                    if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
+                    {
+                        // Still can't move! Reset the timer so we don't pathfind every tick
+                        ticksSpentWaiting = 0;
+                        return false;
+                    }
+                }
+                else
+                {
+                    // This should never happen, but just in case.
+                    // At the very least we would expect a path to the obstruction to be returned.
+                    stopMovement();
+                    return false;
+                }
+            }
+            else
+            {
+                ++ticksSpentWaiting;
+                return false;
+            }
         }
     }
+
+    ticksSpentWaiting = 0;
 
     // Configure the new movement
     movement.destination = route.pop();
@@ -237,6 +266,7 @@ void MovementComponent::stopMovement()
     route = {};
     movement.clear();
     resetPassability();
+    ticksSpentWaiting = 0;
 
     // Inform listeners
     for (std::weak_ptr<MovementListener> weakListener : listeners)
@@ -248,7 +278,7 @@ void MovementComponent::stopMovement()
     }
 }
 
-bool MovementComponent::tryToRepath()
+bool MovementComponent::tryToRepath(Pathfinding::Hints hints)
 {
     if (route.isEmpty())
     {
@@ -256,7 +286,7 @@ bool MovementComponent::tryToRepath()
     }
 
     const MapNode destination = route.getDestination();
-    moveTo(destination);
+    moveTo(destination, hints);
 
     return !route.isEmpty();
 }

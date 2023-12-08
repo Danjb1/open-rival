@@ -53,8 +53,11 @@ public:
     void addListener(std::weak_ptr<MovementListener> listener);
     void removeListener(std::weak_ptr<MovementListener> listener);
 
+    /** Called before a group movement in order to help prevent units obstructing each other. */
     void prepareForMovement();
-    void moveTo(const MapNode& node);
+
+    /** Starts moving to the given node, if a route can be found. */
+    void moveTo(const MapNode& node, Pathfinding::Hints hints = {});
 
     /**
      * Gets the movement that's currently in progress.
@@ -72,7 +75,7 @@ private:
     bool handleObstruction(const World& world);
     void completeMovement();
     void stopMovement();
-    bool tryToRepath();
+    bool tryToRepath(Pathfinding::Hints hints = {});
 
 public:
     static const std::string key;
@@ -92,6 +95,9 @@ protected:
 
 private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
+    static constexpr int maxTicksToWaitForTileToClear = 5;
+
+    int ticksSpentWaiting = 0;
 };
 
 }  // namespace Rival

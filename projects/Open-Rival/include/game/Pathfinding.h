@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <unordered_set>
 
 #include "game/MapUtils.h"
 
@@ -98,11 +99,24 @@ private:
 };
 
 /**
+ * Hints that can be supplied during pathfinding to affect the route found.
+ */
+struct Hints
+{
+    /** Nodes that should be treated as obstructed. */
+    std::unordered_set<MapNode> nodesToAvoid;
+};
+
+/**
  * Attempts to find the optimal path connecting `start` to `goal`.
  *
  * The start node is not included in the path.
  */
-Route findPath(MapNode start, MapNode goal, const PathfindingMap& map, const PassabilityChecker& passabilityChecker);
+Route findPath(MapNode start,
+        MapNode goal,
+        const PathfindingMap& map,
+        const PassabilityChecker& passabilityChecker,
+        const Hints hints = {});
 
 }  // namespace Pathfinding
 }  // namespace Rival
