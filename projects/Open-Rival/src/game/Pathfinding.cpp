@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "game/World.h"
+#include "utils/LogUtils.h"
 
 namespace Rival { namespace Pathfinding {
 
@@ -61,7 +62,7 @@ private:
     std::deque<MapNode> findPath();
     bool isFinished() const;
     ReachableNode popBestNode();
-    float estimateCostToGoal(const MapNode& node) const;
+    float estimateCostToGoal(const MapNode& node);
     std::deque<MapNode> reconstructPath(const MapNode& node) const;
     std::vector<MapNode> findNeighbors(const MapNode& node) const;
     float getCostToNode(const MapNode& node) const;
@@ -73,10 +74,17 @@ private:
     /** Base movement cost for moving between two tiles. */
     static constexpr float baseMovementCost = 1.f;
 
-    /** Movement cost when trying to move into a tile that is currently obstructed.
-     * This should always be more expensive than trying to move around the blockage, so that units only try to move
-     * *through* a blockage as a last resort. */
-    static constexpr float obstructedMovementCost = 1000.f;
+    /**
+     * Movement cost when trying to move into a tile that is currently obstructed.
+     * Note that when moving a group, obstructions at the destination are inevitable.
+     *
+     * This is tricky to get right:
+     * - If this is too low, units will not be able to pathfind around obstructions in cases where the alternative route
+     *   is long.
+     * - If this is too high, group movement becomes computationally expensive because units will waste their time
+     *   trying long alternative routes to avoid (inevitable) obstructions.
+     */
+    static constexpr float obstructedMovementCost = 3.f;
 
     /*
      * Movement cost multiplier for horizontal movement.
@@ -107,6 +115,11 @@ private:
      */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
 
+    /** Maximum nodes that the pathfinder can visit before giving up.
+     * This is more of a safety mechanism than anything, and should not be an issue unless pathfinding across vast
+     * distances. */
+    static constexpr int maxNodesVisited = 50000;
+
     /** The starting node. */
     MapNode start;
 
@@ -125,6 +138,9 @@ private:
     /** Map of node -> lowest cost to reach that node from the start. */
     std::unordered_map<MapNode, float> costToNode;
 
+    /** Map of node -> estimated cost to reach the goal. */
+    std::unordered_map<MapNode, float> cachedCostToGoal;
+
     /** Map of node -> previous node in the shortest path found. */
     std::unordered_map<MapNode, MapNode> prevNode;
 
@@ -136,6 +152,9 @@ private:
 
     /** The closest node found to the goal. */
     MapNode closestNodeToGoal;
+
+    /** Nodes visited during pathfinding. */
+    int nodesVisited = 0;
 };
 
 /**
@@ -167,6 +186,12 @@ std::deque<MapNode> Pathfinder::findPath()
 
     while (!isFinished())
     {
+        if (nodesVisited >= maxNodesVisited)
+        {
+            LOG_WARN("Pathfinding exceeded maximum nodes visited");
+            break;
+        }
+
         const ReachableNode current = popBestNode();
 
         // See if we've reached the goal
@@ -179,6 +204,7 @@ std::deque<MapNode> Pathfinder::findPath()
 
         for (const MapNode& neighbor : neighbors)
         {
+            ++nodesVisited;
             const float bestCostToNeighbor = getCostToNode(neighbor);
             const float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
             if (newCostToNeighbor < bestCostToNeighbor)
@@ -192,9 +218,9 @@ std::deque<MapNode> Pathfinder::findPath()
     }
 
     // The goal could not be reached - get as close as we can.
-    // Note that, due to the fact that due to the fact that we do not set lowestCostToGoal for the start node, we will
-    // always move at least 1 tile (if possible), even if it takes us further away than our starting location.
-    // This is in keeping with the behavior of the original game.
+    // Note that, due to the fact that due to the fact that we do not set lowestCostToGoal for the start node,
+    // we will always move at least 1 tile (if possible), even if it takes us further away than our starting
+    // location. This is in keeping with the behavior of the original game.
     return reconstructPath(closestNodeToGoal);
 }
 
@@ -222,11 +248,17 @@ ReachableNode Pathfinder::popBestNode()
 /**
  * Heuristic function used to estimate the cost from a MapNode to the goal.
  */
-float Pathfinder::estimateCostToGoal(const MapNode& node) const
+float Pathfinder::estimateCostToGoal(const MapNode& node)
 {
     if (node == goal)
     {
         return 0.f;
+    }
+
+    auto iter = cachedCostToGoal.find(node);
+    if (iter != cachedCostToGoal.cend())
+    {
+        return iter->second;
     }
 
     const int dx = abs(node.x - goal.x);
@@ -236,7 +268,10 @@ float Pathfinder::estimateCostToGoal(const MapNode& node) const
     const int diagonalDistance = std::min(dx, dy);
     const int remainingDistance = abs(dx - dy);
 
-    return static_cast<float>(diagonalDistance + remainingDistance);
+    const float costToGoal = static_cast<float>(diagonalDistance + remainingDistance);
+    cachedCostToGoal.emplace(node, costToGoal);
+
+    return costToGoal;
 }
 
 /**
