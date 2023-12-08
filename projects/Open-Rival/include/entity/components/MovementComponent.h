@@ -11,6 +11,8 @@
 
 namespace Rival {
 
+class World;
+
 /**
  * Represents a movement between 2 tiles.
  */
@@ -51,6 +53,7 @@ public:
     void addListener(std::weak_ptr<MovementListener> listener);
     void removeListener(std::weak_ptr<MovementListener> listener);
 
+    void prepareForMovement();
     void moveTo(const MapNode& node);
 
     /**
@@ -65,7 +68,8 @@ private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement();
     bool prepareNextMovement();
-    bool handleObstruction();
+    void resetPassability();
+    bool handleObstruction(const World& world);
     void completeMovement();
     void stopMovement();
     bool tryToRepath();
@@ -88,8 +92,6 @@ protected:
 
 private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
-
-    int ticksObstructed = 0;
 };
 
 }  // namespace Rival

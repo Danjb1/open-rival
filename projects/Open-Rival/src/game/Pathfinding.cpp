@@ -302,7 +302,7 @@ float Pathfinder::getCostToNode(const MapNode& node) const
 float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 {
     const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
-    const float movementCost = isObstructed ? baseMovementCost : obstructedMovementCost;
+    const float movementCost = isObstructed ? obstructedMovementCost : baseMovementCost;
 
     const Facing movementDir = MapUtils::getDir(from, to);
     const float dirMultiplier =

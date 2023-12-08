@@ -11,6 +11,7 @@
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitPropsComponent.h"
 #include "entity/components/VoiceComponent.h"
+#include "game/PlayerContext.h"
 #include "gfx/renderer/EntityRenderer.h"
 
 namespace Rival {
@@ -103,34 +104,45 @@ void MouseHandlerComponent::onSelect(const PlayerStore& playerStore, bool isLead
     }
 }
 
-void MouseHandlerComponent::onTileClicked(
-        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tile, bool isLeader)
+bool MouseHandlerComponent::onTileClicked(
+        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
     // TODO: Depends on state and entity type (e.g. move, harvest, cast spell)
-    // TODO: What about when a group is selected?
 
     // Check owner
     const auto ownerComponent = weakOwnerComponent.lock();
     if (!ownerComponent || !playerStore.isLocalPlayer(ownerComponent->getPlayerId()))
     {
         // Other players' units cannot be controlled
-        return;
+        return false;
     }
 
-    // Move to tile
+    // Move all selected entities
     if (auto moveComponent = weakMovementComponent.lock())
     {
-        if (isLeader)
+        // Play a sound
+        if (const auto voiceComponent = weakVoiceComponent.lock())
         {
-            // Leader should play a sound
-            if (const auto voiceComponent = weakVoiceComponent.lock())
+            voiceComponent->playSound(UnitSoundType::Move);
+        }
+
+        // Find all entity IDs in the selection
+        std::vector<int> entityIdsInGroup;
+        for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
+        {
+            const auto& selectedEntity = weakSelectedEntity.lock();
+            if (selectedEntity)
             {
-                voiceComponent->playSound(UnitSoundType::Move);
+                entityIdsInGroup.push_back(selectedEntity->getId());
             }
         }
 
-        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entity->getId(), tile));
+        // Issue the MoveCommand
+        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entityIdsInGroup, playerContext.tileUnderMouse));
+        return true;
     }
+
+    return false;
 }
 
 const Rect MouseHandlerComponent::createHitbox() const

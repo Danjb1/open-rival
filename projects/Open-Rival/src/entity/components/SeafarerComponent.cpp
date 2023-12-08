@@ -30,6 +30,11 @@ bool SeafarerPassability::isWater(TilePassability passability) const
     return (passability & TilePassability::Water) != TilePassability::Clear;
 }
 
+void SeafarerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+{
+    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitPendingMove);
+}
+
 void SeafarerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitLeaving);

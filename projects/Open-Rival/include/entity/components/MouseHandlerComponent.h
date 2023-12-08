@@ -17,6 +17,7 @@ class OwnerComponent;
 class SpriteComponent;
 class VoiceComponent;
 struct MapNode;
+struct PlayerContext;
 
 /**
  * Component that allows an Entity to respond to mouse input.
@@ -56,8 +57,8 @@ public:
     /**
      * Called when a tile is clicked, with this Entity selected.
      */
-    void onTileClicked(
-            GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const MapNode& tilePos, bool isLeader);
+    bool onTileClicked(
+            GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const PlayerContext& playerContext);
 
 private:
     const Rect createHitbox() const;

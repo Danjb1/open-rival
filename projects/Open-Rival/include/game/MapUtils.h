@@ -99,9 +99,7 @@ Facing getDir(const MapNode& from, const MapNode& to);
 
 namespace std {
 
-/**
- * Custom hash function for MapNode.
- */
+/** Custom hash function for MapNode. */
 template <>
 struct hash<Rival::MapNode>
 {
@@ -113,10 +111,8 @@ struct hash<Rival::MapNode>
     }
 };
 
-/**
- * Print method for MapNodes.
- */
-inline ostream& operator<<(ostream& out, const Rival::MapNode& node)
+/** Print method for MapNodes. */
+inline std::ostream& operator<<(std::ostream& out, const Rival::MapNode& node)
 {
     return out << node.x << ", " << node.y;
 }

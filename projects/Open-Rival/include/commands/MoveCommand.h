@@ -11,7 +11,7 @@ namespace Rival {
 class MoveCommand : public GameCommand
 {
 public:
-    MoveCommand(int entityId, MapNode destination);
+    MoveCommand(std::vector<int> entityIds, MapNode destination);
 
     void serialize(std::vector<char>& buffer) const override;
     static std::shared_ptr<MoveCommand> deserialize(std::vector<char> buffer, std::size_t& offset);
@@ -21,7 +21,7 @@ public:
     // End GameCommand override
 
 private:
-    int entityId;
+    std::vector<int> entityIds;
     MapNode destination;
 };
 

@@ -198,7 +198,7 @@ public:
      * Returns nullptr if no matching EntityComponent is found.
      */
     template <class T>
-    T* getComponent(const std::string key)
+    T* getComponent(const std::string& key)
     {
         auto iter = components.find(key);
         if (iter == components.cend())
@@ -216,7 +216,7 @@ public:
      * Returns nullptr if no matching EntityComponent is found.
      */
     template <class T>
-    const T* getComponent(const std::string key) const
+    const T* getComponent(const std::string& key) const
     {
         const auto iter = components.find(key);
         if (iter == components.cend())
@@ -235,7 +235,7 @@ public:
      * Returns an empty shared_ptr if no matching EntityComponent is found.
      */
     template <class T>
-    std::shared_ptr<T> getComponentShared(const std::string key)
+    std::shared_ptr<T> getComponentShared(const std::string& key)
     {
         auto iter = components.find(key);
         if (iter == components.cend())
@@ -254,7 +254,7 @@ public:
      * Returns an empty shared_ptr if no matching EntityComponent is found.
      */
     template <class T>
-    std::shared_ptr<const T> getComponentShared(const std::string key) const
+    std::shared_ptr<const T> getComponentShared(const std::string& key) const
     {
         const auto iter = components.find(key);
         if (iter == components.cend())
@@ -286,7 +286,7 @@ public:
      * Returns an empty weak_ptr if no matching EntityComponent is found.
      */
     template <class T>
-    std::weak_ptr<const T> getComponentWeak(const std::string key) const
+    std::weak_ptr<const T> getComponentWeak(const std::string& key) const
     {
         const auto iter = components.find(key);
         if (iter == components.cend())
@@ -300,7 +300,7 @@ public:
      * Returns the result of `getComponent`, and verifies that it is valid.
      */
     template <class T>
-    T* requireComponent(const std::string key)
+    T* requireComponent(const std::string& key)
     {
         auto result = getComponent<T>(key);
         if (!result)
@@ -314,7 +314,7 @@ public:
      * Returns the result of `getComponent`, and verifies that it is valid.
      */
     template <class T>
-    const T* requireComponent(const std::string key) const
+    const T* requireComponent(const std::string& key) const
     {
         auto result = getComponent<T>(key);
         if (!result)
@@ -328,7 +328,7 @@ public:
      * Returns the result of `getComponentShared`, and verifies that it is valid.
      */
     template <class T>
-    std::shared_ptr<T> requireComponentShared(const std::string key)
+    std::shared_ptr<T> requireComponentShared(const std::string& key)
     {
         auto result = getComponentShared<T>(key);
         if (!result)
@@ -342,7 +342,7 @@ public:
      * Returns the result of `getComponentShared`, and verifies that it is valid.
      */
     template <class T>
-    std::shared_ptr<const T> requireComponentShared(const std::string key) const
+    std::shared_ptr<const T> requireComponentShared(const std::string& key) const
     {
         auto result = getComponentShared<const T>(key);
         if (!result)
@@ -356,7 +356,7 @@ public:
      * Returns the result of `getComponentWeak`, and verifies that it is valid.
      */
     template <class T>
-    std::weak_ptr<T> requireComponentWeak(const std::string key)
+    std::weak_ptr<T> requireComponentWeak(const std::string& key)
     {
         auto result = getComponentWeak<T>(key);
         if (!result.lock())
@@ -370,7 +370,7 @@ public:
      * Returns the result of `getComponentWeak`, and verifies that it is valid.
      */
     template <class T>
-    std::weak_ptr<const T> requireComponentWeak(const std::string key) const
+    std::weak_ptr<const T> requireComponentWeak(const std::string& key) const
     {
         auto result = getComponentWeak<const T>(key);
         if (!result.lock())
