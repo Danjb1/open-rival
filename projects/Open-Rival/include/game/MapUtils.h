@@ -52,10 +52,11 @@ enum class Facing : std::uint8_t
 
 namespace MapUtils {
 
-/**
- * Tiles spanned by a direct east/west movement.
- */
+/** Tiles spanned by a direct east/west movement. */
 static constexpr int eastWestTileSpan = 2;
+
+/** Maximum number of neighbors that 1 tile can have. */
+static constexpr int maxNeighbors = 8;
 
 /**
  * Determines if a tile is an "upper tile".
