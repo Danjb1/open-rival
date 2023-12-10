@@ -2,10 +2,14 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!! Stub definitions for unit testing  !!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * Including the real `glew.h` is problematic due to its arcane use of macros.
- * So, we supply our own header file instead with all required definitions.
  */
+
+// Including the real `glew.h` is problematic due to its arcane use of macros.
+// So, we supply our own header file instead with all required definitions.
+
+// If you find yourself needing to add additional definitions here then it is worth asking the question: why are these
+// needed? In many cases these definitions are needed by renderers, which can often be omitted from test code entirely
+// by replacing the offending headers with stripped-down test versions (see the test version of GameRenderer.h).
 
 #pragma once
 

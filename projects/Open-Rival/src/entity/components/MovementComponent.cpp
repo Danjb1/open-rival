@@ -231,7 +231,12 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
     // Reset the timer so we don't try to repath every tick
     ticksSpentWaiting = 0;
 
-    // Repath, but treat the next node as an obstruction
+    // Repath, but treat the next node as an obstruction.
+    // This behavior is useful in several cases:
+    // 1) Units can pathfind around bottlenecks, e.g. when moving a group around a corner, units would otherwise try to
+    //    move in single-file and form a queue along the "optimal" route.
+    // 2) Units can overtake slower units.
+    // 3) Units can move out of each other's way if they are trying to walk through each other.
     const MapNode* nextNode = route.peek();
     Pathfinding::Hints hints;
     hints.nodesToAvoid.insert(*nextNode);
