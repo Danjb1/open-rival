@@ -9,7 +9,8 @@
 
 // If you find yourself needing to add additional definitions here then it is worth asking the question: why are these
 // needed? In many cases these definitions are needed by renderers, which can often be omitted from test code entirely
-// by replacing the offending headers with stripped-down test versions (see the test version of GameRenderer.h).
+// by replacing the dependant headers with stripped-down versions (see the test version of GameRenderer.h), and
+// excluding the renderer's source file from the CMake build.
 
 #pragma once
 

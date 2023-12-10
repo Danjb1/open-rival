@@ -5,14 +5,15 @@ namespace Rival { namespace MapUtils {
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 {
     std::vector<MapNode> neighbors;
+    neighbors.reserve(maxNeighbors);
 
     // First determine which map locations are valid relative to this node.
     // The neighborhood is very strange due to the zigzag nature of the map.
     // A direct move east or west actually moves 2 tiles.
-    bool hasNorth = node.y > 0;
-    bool hasSouth = node.y < area.getHeight() - 1;
-    bool hasEast = node.x < area.getWidth() - eastWestTileSpan;
-    bool hasWest = node.x >= eastWestTileSpan;
+    const bool hasNorth = node.y > 0;
+    const bool hasSouth = node.y < area.getHeight() - 1;
+    const bool hasEast = node.x < area.getWidth() - eastWestTileSpan;
+    const bool hasWest = node.x >= eastWestTileSpan;
 
     // Find all valid neighbors
     if (hasNorth)
@@ -33,17 +34,17 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
     }
 
     // The diagonal neighbors depend on which part of the zigzag we are in
-    bool hasDiagonalEast = node.x < area.getWidth() - 1;
-    bool hasDiagonalWest = node.x > 0;
+    const bool hasDiagonalEast = node.x < area.getWidth() - 1;
+    const bool hasDiagonalWest = node.x > 0;
     if (isUpperTile(node.x))
     {
         // We are in the top part of the zigzag;
         // => Moving diagonally north moves us into the row above.
         // => Moving diagonally south keeps us in the same row.
-        bool hasNorthEast = hasDiagonalEast && hasNorth;
-        bool hasNorthWest = hasDiagonalWest && hasNorth;
-        bool hasSouthEast = hasDiagonalEast;
-        bool hasSouthWest = hasDiagonalWest;
+        const bool hasNorthEast = hasDiagonalEast && hasNorth;
+        const bool hasNorthWest = hasDiagonalWest && hasNorth;
+        const bool hasSouthEast = hasDiagonalEast;
+        const bool hasSouthWest = hasDiagonalWest;
 
         if (hasNorthEast)
         {
@@ -67,10 +68,10 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
         // We are in the bottom part of the zigzag;
         // => Moving diagonally north keeps us in the same row.
         // => Moving diagonally south moves us into the row below.
-        bool hasNorthEast = hasDiagonalEast;
-        bool hasNorthWest = hasDiagonalWest;
-        bool hasSouthEast = hasDiagonalEast && hasSouth;
-        bool hasSouthWest = hasDiagonalWest && hasSouth;
+        const bool hasNorthEast = hasDiagonalEast;
+        const bool hasNorthWest = hasDiagonalWest;
+        const bool hasSouthEast = hasDiagonalEast && hasSouth;
+        const bool hasSouthWest = hasDiagonalWest && hasSouth;
 
         if (hasNorthEast)
         {
