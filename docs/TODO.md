@@ -13,12 +13,8 @@
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?
     - Units should periodically re-plan their route in case a better route becomes available
-    - What happens if 2 units try to pass through each other?
-        - We need to consider the direction of the other unit
-- Allow MapNodes to be logged using spdlog: https://github.com/gabime/spdlog/wiki/1.-QuickStart#log-user-defined-objects
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
-- Ensure tests are passing
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -126,9 +122,9 @@
 - Selected units should flash orange
 - Allow buildings to be selected
 - Use a single MoveCommand for groups?
-- Should we limit the pathfinding logic to 'n' iterations? (probably)
 - Show "star" effect when sending troops somewhere
 - Passability debug visualisation
+- Pathfinding debug visualisation
 
 ### Animations
 
@@ -383,6 +379,7 @@
 - Don't return references
 - Run cppcheck
 - PassabilityComponent is pointless for units, this should be handled by the MovementComponent instead
+- Allow MapNodes to be logged using spdlog: https://github.com/gabime/spdlog/wiki/1.-QuickStart#log-user-defined-objects
 
 #### Rendering
 

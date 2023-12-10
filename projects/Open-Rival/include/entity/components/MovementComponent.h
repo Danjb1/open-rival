@@ -67,6 +67,11 @@ public:
         return movement;
     }
 
+    const Pathfinding::Route& getRoute() const
+    {
+        return route;
+    }
+
 private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement();

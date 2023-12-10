@@ -1,9 +1,5 @@
 #pragma once
 
-#include "gfx/GlewWrapper.h"
-#include <glm/mat4x4.hpp>
-
-#include "gfx/GLUtils.h"
 #include "gfx/renderable/BoxRenderable.h"
 
 namespace Rival {

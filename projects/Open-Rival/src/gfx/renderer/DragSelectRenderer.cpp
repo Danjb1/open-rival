@@ -1,11 +1,13 @@
 #include "gfx/renderer/DragSelectRenderer.h"
 
 #include "gfx/GlewWrapper.h"
+#include <glm/mat4x4.hpp>
 
 #include <vector>
 
 #include "game/PlayerContext.h"
 #include "gfx/Framebuffer.h"
+#include "gfx/GLUtils.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Shaders.h"
 #include "gfx/renderable/BoxRenderable.h"

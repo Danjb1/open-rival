@@ -17,6 +17,8 @@ list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp

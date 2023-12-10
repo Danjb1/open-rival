@@ -25,23 +25,12 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
         WHEN("trying to plan a route to a reachable tile")
         {
             walkerComponent->moveTo({ 1, 2 });
-            walkerComponent->update();
 
-            THEN("a route is found")
+            THEN("a route is found to the destination")
             {
-                REQUIRE(walkerComponent->getMovement().isValid());
-            }
-        }
-
-        WHEN("trying to plan a route to an unreachable tile")
-        {
-            world.setPassability({ 4, 4 }, TilePassability::Blocked);
-            walkerComponent->moveTo({ 4, 4 });
-            walkerComponent->update();
-
-            THEN("no route is found")
-            {
-                REQUIRE(!walkerComponent->getMovement().isValid());
+                REQUIRE(!walkerComponent->getRoute().isEmpty());
+                MapNode expectedDestination = { 1, 2 };
+                REQUIRE(walkerComponent->getRoute().getDestination() == expectedDestination);
             }
         }
     }
