@@ -44,7 +44,7 @@ void MovementComponent::update()
     // Prepare the next movement if we are not currently moving between tiles
     if (!movement.isValid())
     {
-        if (!prepareNextMovement())
+        if (!tryStartNextMovement())
         {
             return;
         }
@@ -111,14 +111,14 @@ void MovementComponent::updateMovement()
 
     if (movement.isFinished())
     {
-        completeMovement();
+        onReachedNewTile();
     }
 }
 
 /**
  * Called before moving to a new tile.
  */
-bool MovementComponent::prepareNextMovement()
+bool MovementComponent::tryStartNextMovement()
 {
     // Check if we have a route planned
     if (route.isEmpty())
@@ -141,52 +141,37 @@ bool MovementComponent::prepareNextMovement()
     {
         if (passabilityChecker.isNodeObstructed(*world, *nextNode))
         {
-            // Tile is obstructed, e.g. another unit has stopped there.
-            // Try to find a way around the obstruction.
-            const bool canMove = handleObstruction(*world);
-            if (canMove)
+            // Tile is obstructed, e.g. another unit has stopped there
+            if (!tryRepathAroundObstruction(*world))
             {
-                nextNode = route.peek();
-            }
-            else
-            {
+                // No way around the obstruction - give up
+                stopMovement();
                 return false;
             }
         }
         else
         {
-            // Tile is only temporarily obstructed, e.g. another unit is leaving the tile.
-            // Wait a while, but try to path around it if it's taking too long.
-            if (ticksSpentWaiting > maxTicksToWaitForTileToClear)
+            // Tile is only temporarily obstructed, e.g. another unit is leaving the tile
+            if (!tryRepathAroundTemporaryObstruction(*world))
             {
-                Pathfinding::Hints hints;
-                hints.nodesToAvoid.insert(*nextNode);
-                if (tryToRepath(hints))
-                {
-                    nextNode = route.peek();
-                    if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
-                    {
-                        // Still can't move! Reset the timer so we don't pathfind every tick
-                        ticksSpentWaiting = 0;
-                        return false;
-                    }
-                }
-                else
-                {
-                    // This should never happen, but just in case.
-                    // At the very least we would expect a path to the obstruction to be returned.
-                    stopMovement();
-                    return false;
-                }
-            }
-            else
-            {
-                ++ticksSpentWaiting;
                 return false;
             }
         }
+
+        nextNode = route.peek();
+        if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
+        {
+            // Still can't move yet!
+            return false;
+        }
     }
 
+    startNextMovement(*world);
+    return true;
+}
+
+void MovementComponent::startNextMovement(WritablePathfindingMap& map)
+{
     ticksSpentWaiting = 0;
 
     // Configure the new movement
@@ -202,8 +187,8 @@ bool MovementComponent::prepareNextMovement()
 
     // Update tile passability
     const bool doesRouteContinue = !route.isEmpty();
-    passabilityUpdater.onUnitLeavingTile(*world, entity->getPos());
-    passabilityUpdater.onUnitEnteringTile(*world, movement.destination, doesRouteContinue);
+    passabilityUpdater.onUnitLeavingTile(map, entity->getPos());
+    passabilityUpdater.onUnitEnteringTile(map, movement.destination, doesRouteContinue);
 
     // Inform listeners
     for (std::weak_ptr<MovementListener> weakListener : listeners)
@@ -213,35 +198,48 @@ bool MovementComponent::prepareNextMovement()
             listener->onUnitMoveStart(&movement.destination);
         }
     }
-
-    return true;
 }
 
-bool MovementComponent::handleObstruction(const World& world)
+bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints)
 {
-    if (!tryToRepath())
+    if (!tryRepath(hints))
     {
         // This should never happen, but just in case.
         // At the very least we would expect a path to the obstruction to be returned.
-        stopMovement();
         return false;
     }
 
     const MapNode* nextNode = route.peek();
-    if (passabilityChecker.isNodeObstructed(world, *nextNode))
+    if (passabilityChecker.isNodeObstructed(map, *nextNode))
     {
         // Alternate route is still obstructed
-        stopMovement();
         return false;
     }
 
     return true;
 }
 
-/**
- * Called after moving to a new tile.
- */
-void MovementComponent::completeMovement()
+bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap& map)
+{
+    if (ticksSpentWaiting < maxTicksToWaitForTileToClear)
+    {
+        // Wait a while to see if the obstruction clears
+        ++ticksSpentWaiting;
+        return false;
+    }
+
+    // Reset the timer so we don't try to repath every tick
+    ticksSpentWaiting = 0;
+
+    // Repath, but treat the next node as an obstruction
+    const MapNode* nextNode = route.peek();
+    Pathfinding::Hints hints;
+    hints.nodesToAvoid.insert(*nextNode);
+
+    return tryRepathAroundObstruction(map, hints);
+}
+
+void MovementComponent::onReachedNewTile()
 {
     // Update tile passability
     World* world = entity->getWorld();
@@ -278,7 +276,7 @@ void MovementComponent::stopMovement()
     }
 }
 
-bool MovementComponent::tryToRepath(Pathfinding::Hints hints)
+bool MovementComponent::tryRepath(Pathfinding::Hints hints)
 {
     if (route.isEmpty())
     {
