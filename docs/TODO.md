@@ -7,8 +7,7 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
-    - BUG: In rare instances, units can end up overlapping
-    - Simplify `prepareNextMovement` method
+    - Lag spikes can occur during group pathfinding
     - Units can cross paths if one is travelling horizontally and the other vertically!
     - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
@@ -16,7 +15,6 @@
     - Units should periodically re-plan their route in case a better route becomes available
     - What happens if 2 units try to pass through each other?
         - We need to consider the direction of the other unit
-- Revise getEntityAt
 - Allow MapNodes to be logged using spdlog: https://github.com/gabime/spdlog/wiki/1.-QuickStart#log-user-defined-objects
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
@@ -332,6 +330,7 @@
 - The palette texture does not need an alpha channel
 - Defer loading MIDI files until needed to speed up initial load time
 - Eliminate branching in shaders
+- Revise `World::getEntityAt` to use a map or spartial partitioning
 
 ### Portability
 

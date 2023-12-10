@@ -70,12 +70,14 @@ public:
 private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement();
-    bool prepareNextMovement();
+    bool tryStartNextMovement();
+    void startNextMovement(WritablePathfindingMap& map);
     void resetPassability();
-    bool handleObstruction(const World& world);
-    void completeMovement();
+    bool tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints = {});
+    bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
+    void onReachedNewTile();
     void stopMovement();
-    bool tryToRepath(Pathfinding::Hints hints = {});
+    bool tryRepath(Pathfinding::Hints hints = {});
 
 public:
     static const std::string key;
@@ -95,7 +97,7 @@ protected:
 
 private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
-    static constexpr int maxTicksToWaitForTileToClear = 5;
+    static constexpr int maxTicksToWaitForTileToClear = 4;
 
     int ticksSpentWaiting = 0;
 };
