@@ -62,7 +62,8 @@ const auto lastEntityType { static_cast<int>(EntityType::InfoPoint) };
  *         - All components receive onDelete() callback
  *
  * Note that, unless specified, no guarantees are made about the order in
- * which Entities within the game world receive lifecycle callbacks.
+ * which Entities within the game world receive lifecycle callbacks,
+ * except that this order will always be deterministic.
  */
 class Entity final
 {

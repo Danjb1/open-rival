@@ -21,8 +21,7 @@
 
 namespace Rival {
 
-GameRenderer::GameRenderer(
-        const Window* window,
+GameRenderer::GameRenderer(const Window* window,
         const World& world,
         const PlayerStore& playerStore,
         const Camera& camera,
@@ -37,8 +36,7 @@ GameRenderer::GameRenderer(
     , gameFbo(framebufferWidth, framebufferHeight, true)
     , gameFboRenderer(gameFbo)
     , tileRenderer(res.getTileSpritesheet(world.isWilderness()), res.getPalette())
-    , mapBorderRenderer(
-              playerStore.getLocalPlayerState().getRace(),
+    , mapBorderRenderer(playerStore.getLocalPlayerState().getRace(),
               world.getWidth(),
               world.getHeight(),
               res.getMapBorderSpritesheet(),
@@ -75,8 +73,7 @@ void GameRenderer::renderGameViaFramebuffer(int delta)
     // Here the viewport specifies the region of the game window that we
     // render onto, in pixels.
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(
-            static_cast<int>(viewport.x),
+    glViewport(static_cast<int>(viewport.x),
             // Adjust for OpenGL origin
             static_cast<int>(window->getHeight() - (viewport.y + viewport.height)),
             static_cast<int>(viewport.width),
@@ -111,7 +108,7 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
     mapBorderRenderer.render();
 
     // Render Entities
-    entityRenderer.render(camera, world.getEntities(), delta);
+    entityRenderer.render(camera, world, delta);
 }
 
 void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
@@ -127,8 +124,7 @@ void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
     glUseProgram(Shaders::textureShader.programId);
 
     // Set uniform values
-    glUniformMatrix4fv(
-            Shaders::textureShader.viewProjMatrixUniformLoc,
+    glUniformMatrix4fv(Shaders::textureShader.viewProjMatrixUniformLoc,
             1,
             GL_FALSE,
             &FramebufferRenderer::viewProjectionMatrix[0][0]);

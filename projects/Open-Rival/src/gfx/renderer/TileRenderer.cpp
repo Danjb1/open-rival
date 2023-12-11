@@ -140,7 +140,7 @@ void TileRenderer::sendDataToGpu(
         for (int tileX = minX; tileX <= maxX; ++tileX)
         {
 
-            auto const& tile = tiles[tileIndex];
+            const auto& tile = tiles[tileIndex];
             const int txIndex = tile.txIndex;
 
             // Define vertex positions
@@ -156,10 +156,18 @@ void TileRenderer::sendDataToGpu(
             float y2 = y1 + height;
             float z = RenderUtils::zTiles;
             std::vector<GLfloat> thisVertexData = {
-                x1, y1, z,  //
-                x2, y1, z,  //
-                x2, y2, z,  //
-                x1, y2, z   //
+                x1,
+                y1,
+                z,  //
+                x2,
+                y1,
+                z,  //
+                x2,
+                y2,
+                z,  //
+                x1,
+                y2,
+                z  //
             };
 
             // Determine texture co-ordinates

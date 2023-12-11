@@ -32,15 +32,14 @@ EntityRenderer::EntityRenderer(const TextureStore& textureStore, const PlayerCon
 {
 }
 
-void EntityRenderer::render(const Camera& camera, SharedEntityList entities, int delta) const
+void EntityRenderer::render(const Camera& camera, const WritableEntityContainer& entityContainer, int delta) const
 {
-    for (auto const& e : entities)
-    {
-        if (isEntityVisible(*e, camera))
+    entityContainer.forEachEntity([&](const auto& entity) {
+        if (isEntityVisible(*entity, camera))
         {
-            renderEntity(*e, delta);
+            renderEntity(*entity, delta);
         }
-    }
+    });
 
     // Restore the default palette
     glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);

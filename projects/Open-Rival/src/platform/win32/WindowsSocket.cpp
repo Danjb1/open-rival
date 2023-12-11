@@ -38,7 +38,7 @@ addrInfoPtr lookupAddress(char const* node, char const* service, int domain, int
     hints.ai_flags = flags;
 
     auto out = (::addrinfo*) nullptr;
-    auto const result = ::getaddrinfo(node, service, &hints, &out);
+    const auto result = ::getaddrinfo(node, service, &hints, &out);
 
     if (result != 0)
     {
@@ -53,7 +53,7 @@ addrInfoPtr lookupAddress(char const* node, char const* service, int domain, int
 /** Gets the addrInfo for hosting a local server. */
 addrInfoPtr getLocalAddressInfo(int domain, int type, int protocol, std::uint16_t port)
 {
-    auto const port_str = std::to_string(port);
+    const auto port_str = std::to_string(port);
     int flags = AI_PASSIVE | AI_NUMERICSERV;
     return lookupAddress(nullptr, port_str.data(), domain, type, protocol, flags);
 }
@@ -61,7 +61,7 @@ addrInfoPtr getLocalAddressInfo(int domain, int type, int protocol, std::uint16_
 /** Gets the addrInfo for connecting to a server. */
 addrInfoPtr getAddressInfo(int domain, int type, int protocol, std::string const& node, std::uint16_t port)
 {
-    auto const port_str = std::to_string(port);
+    const auto port_str = std::to_string(port);
     int flags = AI_NUMERICSERV;
     return lookupAddress(node.data(), port_str.data(), domain, type, protocol, flags);
 }
@@ -75,7 +75,7 @@ Socket Socket::createServer(std::uint16_t port)
     const auto domain = AF_INET;
     const auto type = SOCK_STREAM;
     const auto protocol = IPPROTO_TCP;
-    auto const addrInfoPtr = getLocalAddressInfo(domain, type, protocol, port);
+    const auto addrInfoPtr = getLocalAddressInfo(domain, type, protocol, port);
 
     // Create
     SOCKET handle = ::socket(domain, type, protocol);
@@ -169,7 +169,7 @@ void Socket::close() noexcept
         return;
     }
 
-    auto const result = ::closesocket(handle);
+    const auto result = ::closesocket(handle);
     if (result != 0)
     {
         LOG_WARN("Failed to close socket: {}", ::WSAGetLastError());

@@ -26,7 +26,7 @@ void Entity::onSpawn(World* newWorld, int newId, MapNode newPos)
     id = newId;
     pos = newPos;
 
-    for (auto const& kv : components)
+    for (const auto& kv : components)
     {
         const auto& component = kv.second;
         component->onEntitySpawned(world);
@@ -59,7 +59,7 @@ void Entity::update()
 void Entity::onDelete()
 {
     // Delete all components
-    for (auto const& kv : components)
+    for (const auto& kv : components)
     {
         const auto& component = kv.second;
         component->onDelete();

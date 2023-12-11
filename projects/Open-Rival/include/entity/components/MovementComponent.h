@@ -90,7 +90,7 @@ private:
     void onCompletedMoveToNewTile();
     void stopMovement();
 
-    void forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func);
+    void forEachListener(std::function<void(const std::shared_ptr<MovementListener>&)> func);
 
 public:
     static const std::string key;
