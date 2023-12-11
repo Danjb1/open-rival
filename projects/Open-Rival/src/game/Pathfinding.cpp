@@ -69,7 +69,7 @@ private:
     bool isFinished() const;
     ReachableNode popBestNode();
     float estimateCostToGoal(const MapNode& node);
-    std::deque<MapNode> reconstructPath(const MapNode& node) const;
+    std::deque<MapNode> reconstructPath(const MapNode& node, bool shouldCachePaths = false) const;
     std::deque<MapNode> reconstructPathWithCache(const MapNode& node, const std::deque<MapNode>& cachedPath) const;
     std::vector<MapNode> findNeighbors(const MapNode& node) const;
     float getCostToNode(const MapNode& node) const;
@@ -223,7 +223,7 @@ std::deque<MapNode> Pathfinder::findPath()
         if (current.node == goal)
         {
             LOG_DEBUG_CATEGORY("pathfinding", "Found goal in {} steps", nodesVisited);
-            return reconstructPath(current.node);
+            return reconstructPath(current.node, /* cachePaths = */ true);
         }
 
         auto cachedPath = context.getCachedPath(current.node, goal);
@@ -316,7 +316,7 @@ float Pathfinder::estimateCostToGoal(const MapNode& node)
 /**
  * Returns the path found from the start to the given MapNode.
  */
-std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const
+std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node, bool shouldCachePaths) const
 {
     std::deque<MapNode> path = {};
     MapNode currentNode = node;
@@ -326,9 +326,12 @@ std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node) const
     {
         path.push_front(currentNode);
 
-        // Cache every partial path to the goal.
-        // Note that cached paths always include the start node.
-        context.cachePath(currentNode, goal, path);
+        if (shouldCachePaths)
+        {
+            // Cache every partial path that we have found.
+            // Note that cached paths always include the start node.
+            context.cachePath(currentNode, node, path);
+        }
 
         const auto it = prevNode.find(currentNode);
         if (it == prevNode.cend())

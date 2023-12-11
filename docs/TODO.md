@@ -7,15 +7,13 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
-    - BUG: Units can sometimes get left behind when moving a group
     - Units can cross paths if one is travelling horizontally and the other vertically!
     - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?
     - Units should periodically re-plan their route in case a better route becomes available
-- Crash when closing game window (OpenAL32.dll)
+- Crash when closing game window (sometimes) (OpenAL32.dll)
 - Can't use unordered_maps when iteration is required due to non-deterministic behavior in multiplayer!
-- Send a checksum periodically to check that players are in-sync?
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
 
@@ -81,6 +79,7 @@
 
 ### Multiplayer
 
+- Send a checksum periodically to check that players are in-sync?
 - GameState should reject new players
 - Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Create standalone project to run dedicated server
