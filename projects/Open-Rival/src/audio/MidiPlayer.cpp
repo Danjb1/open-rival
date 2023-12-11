@@ -63,7 +63,7 @@ void MidiPlayer::play(const MidiFile& file)
 
     // Play the file until completion
     Uint32 startTime = SDL_GetTicks();
-    for (auto const& evt : events)
+    for (const auto& evt : events)
     {
         if (stopped)
         {

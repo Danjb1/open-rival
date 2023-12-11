@@ -16,7 +16,6 @@ class World;
  */
 class EntityComponent
 {
-
     friend class Entity;
 
 public:

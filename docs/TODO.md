@@ -6,9 +6,14 @@
 
 ### Multiplayer Milestone
 
-- Crash when closing game window (sometimes) (OpenAL32.dll)
-- Can't use unordered_maps when iteration is required due to non-deterministic behavior in multiplayer!
+- Tidy up entity iteration
+    - Expose an iterator instead of making a copy of the entity list?
+    - Prefer iterators to forEach method?
+    - Move getEntities functions to EntityContainer?
 - Show a message when waiting for player commands
+
+### Combat Milestone
+
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
 
 <!----------------------------------------------------------------------------->
@@ -24,6 +29,8 @@
 - Tiles covered by the map border should not be passable
 - Units can walk through buildings
 - Drag-select cursor / outline should remain active when shrunk down to a small size
+- Crash when closing game window (sometimes) (OpenAL32.dll)
+- Pathfinding lags the game when moving very large groups of units
 
 ### Setup
 
@@ -75,7 +82,6 @@
 
 - Send a checksum periodically to check that players are in-sync?
 - GameState should reject new players
-- Ensure we are iterating over entities / components deterministically so that pathfinding outcomes are consistent!
 - Create standalone project to run dedicated server
 
 ### Mouse Picking

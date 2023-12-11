@@ -58,11 +58,9 @@ Tile World::getTile(int x, int y) const
 
 void World::addEntity(std::shared_ptr<Entity> entity, int x, int y)
 {
-    // Add the Entity to the world
-    entities[nextId] = entity;
-    entities[nextId]->onSpawn(this, nextId, { x, y });
-
-    // Increase the ID for the next one
+    entitiesList.push_back(entity);
+    entitiesById[nextId] = entity;
+    entity->onSpawn(this, nextId, { x, y });
     ++nextId;
 }
 
@@ -73,7 +71,7 @@ void World::requestAddEntity(std::shared_ptr<Entity> entity, int x, int y)
 
 void World::addPendingEntities()
 {
-    for (auto const& pendingEntity : pendingEntities)
+    for (const auto& pendingEntity : pendingEntities)
     {
         addEntity(pendingEntity.entity, pendingEntity.x, pendingEntity.y);
     }
@@ -82,39 +80,46 @@ void World::addPendingEntities()
 
 void World::removeEntity(std::shared_ptr<Entity> entity)
 {
-    entities.erase(entity->getId());
-}
-
-const SharedMutableEntityList World::getMutableEntities() const
-{
-    SharedMutableEntityList entityList;
-    entityList.reserve(entities.size());
-
-    for (auto const& entry : entities)
+    const auto it = std::find(entitiesList.begin(), entitiesList.end(), entity);
+    if (it != entitiesList.end())
     {
-        entityList.push_back(entry.second);
+        entitiesList.erase(it);
     }
 
-    return entityList;
+    entitiesById.erase(entity->getId());
 }
 
-const SharedEntityList World::getEntities() const
+SharedMutableEntityList World::getMutableEntities() const
 {
-    SharedEntityList entityList;
-    entityList.reserve(entities.size());
+    return entitiesList;
+}
 
-    for (auto const& entry : entities)
+SharedEntityList World::getEntities() const
+{
+    // Make a copy of the original vector with each element implicitly made const
+    return { entitiesList.cbegin(), entitiesList.cend() };
+}
+
+void World::forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func)
+{
+    for (const auto& entity : entitiesList)
     {
-        entityList.push_back(entry.second);
+        func(entity);
     }
+}
 
-    return entityList;
+void World::forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const
+{
+    for (const auto& entity : entitiesList)
+    {
+        func(entity);
+    }
 }
 
 Entity* World::getMutableEntity(int id) const
 {
-    const auto iter = entities.find(id);
-    if (iter == entities.cend())
+    const auto iter = entitiesById.find(id);
+    if (iter == entitiesById.cend())
     {
         return nullptr;
     }
@@ -123,8 +128,8 @@ Entity* World::getMutableEntity(int id) const
 
 const Entity* World::getEntity(int id) const
 {
-    const auto iter = entities.find(id);
-    if (iter == entities.cend())
+    const auto iter = entitiesById.find(id);
+    if (iter == entitiesById.cend())
     {
         return nullptr;
     }
@@ -135,7 +140,7 @@ const Entity* World::getEntityAt(const MapNode& pos) const
 {
     // TODO: Add a more efficient way to retrieve entities by position
     // TODO: Add shared/mutable variants
-    for (const auto& [entityId, entity] : entities)
+    for (const auto& entity : entitiesList)
     {
         if (entity->getPos() == pos)
         {
@@ -147,26 +152,26 @@ const Entity* World::getEntityAt(const MapNode& pos) const
 
 std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
 {
-    const auto iter = entities.find(id);
-    return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
+    const auto iter = entitiesById.find(id);
+    return iter == entitiesById.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::shared_ptr<const Entity> World::getEntityShared(int id) const
 {
-    const auto iter = entities.find(id);
-    return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
+    const auto iter = entitiesById.find(id);
+    return iter == entitiesById.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
 {
-    const auto iter = entities.find(id);
-    return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
+    const auto iter = entitiesById.find(id);
+    return iter == entitiesById.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<const Entity> World::getEntityWeak(int id) const
 {
-    const auto iter = entities.find(id);
-    return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
+    const auto iter = entitiesById.find(id);
+    return iter == entitiesById.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
 int Rival::World::getWidth() const

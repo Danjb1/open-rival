@@ -121,11 +121,7 @@ void GameState::pollNetwork()
 
 void GameState::earlyUpdateEntities() const
 {
-    const auto& entities = world->getMutableEntities();
-    for (const auto& e : entities)
-    {
-        e->earlyUpdate();
-    }
+    world->forEachMutableEntity([](const auto& entity) { entity->earlyUpdate(); });
 }
 
 void GameState::respondToInput()
@@ -175,21 +171,19 @@ void GameState::updateEntities() const
 {
     std::vector<std::shared_ptr<Entity>> deletedEntities;
 
-    auto const& entities = world->getMutableEntities();
-    for (auto const& e : entities)
-    {
-        if (e->isDeleted())
+    world->forEachMutableEntity([&](const auto& entity) {
+        if (entity->isDeleted())
         {
-            deletedEntities.push_back(e);
+            deletedEntities.push_back(entity);
         }
         else
         {
-            e->update();
+            entity->update();
         }
-    }
+    });
 
     // Remove deleted Entities
-    for (auto const& e : deletedEntities)
+    for (const auto& e : deletedEntities)
     {
         world->removeEntity(e);
         e->onDelete();

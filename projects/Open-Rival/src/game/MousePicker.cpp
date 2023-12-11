@@ -298,7 +298,7 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     float mouseInWorldY = (mouseInViewportY / zoom) + cameraY_px;
 
     // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
-    const auto& entities = world.getMutableEntities();
+    const auto entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
         MouseHandlerComponent* mouseHandlerComponent =
@@ -323,7 +323,7 @@ WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) c
     WeakMutableEntityList entitiesInArea;
 
     // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
-    const auto& entities = world.getMutableEntities();
+    const auto entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
         const auto& mouseHandlerComponent = e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);

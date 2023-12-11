@@ -204,7 +204,7 @@ void MovementComponent::startNextMovement(WritablePathfindingMap& map)
     passabilityUpdater.onUnitLeavingTile(map, entity->getPos());
     passabilityUpdater.onUnitEnteringTile(map, movement.destination, doesRouteContinue);
 
-    forEachListener([&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
+    forEachListener([&](const auto& listener) { listener->onUnitMoveStart(&movement.destination); });
 }
 
 bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints)
@@ -233,7 +233,7 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
         // Wait a while to see if the obstruction clears
         if (ticksSpentWaiting == 0)
         {
-            forEachListener([&](auto listener) { listener->onUnitPaused(); });
+            forEachListener([&](const auto& listener) { listener->onUnitPaused(); });
         }
         ++ticksSpentWaiting;
         return false;
@@ -298,10 +298,10 @@ void MovementComponent::stopMovement()
     movement.clear();
     resetPassability();
     ticksSpentWaiting = 0;
-    forEachListener([](auto listener) { listener->onUnitStopped(); });
+    forEachListener([](const auto& listener) { listener->onUnitStopped(); });
 }
 
-void MovementComponent::forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func)
+void MovementComponent::forEachListener(std::function<void(const std::shared_ptr<MovementListener>&)> func)
 {
     auto it = listeners.begin();
     while (it != listeners.end())

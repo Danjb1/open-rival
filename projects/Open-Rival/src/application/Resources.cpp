@@ -157,7 +157,7 @@ std::vector<std::shared_ptr<const Texture>> Resources::loadTextures()
         "menu_bg_dark.tga",
     };
 
-    for (auto const& textureName : textureNames)
+    for (const auto& textureName : textureNames)
     {
         texList.push_back(Texture::loadTexture(txDir + textureName));
     }
@@ -172,7 +172,7 @@ std::vector<std::shared_ptr<const TextureAtlas>> Resources::loadTextureAtlases()
 
     std::vector<std::string> resourceNames = { "game_interface" };
 
-    for (auto const& resourceName : resourceNames)
+    for (const auto& resourceName : resourceNames)
     {
         texAtlasList.push_back(TextureAtlas::loadTextureAtlas(Resources::txDir + resourceName));
     }
@@ -193,8 +193,7 @@ std::unordered_map<Building::Type, Spritesheet> Resources::initBuildingSpriteshe
     auto createSpritesheets = [&](int first, int last) {
         for (auto it = first; it <= last; ++it)
         {
-            spritesheets.emplace(
-                    std::piecewise_construct,
+            spritesheets.emplace(std::piecewise_construct,
                     std::forward_as_tuple(static_cast<Building::Type>(it)),
                     std::forward_as_tuple(
                             textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
@@ -217,8 +216,7 @@ std::unordered_map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
 
     for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it)
     {
-        spritesheets.emplace(
-                std::piecewise_construct,
+        spritesheets.emplace(std::piecewise_construct,
                 std::forward_as_tuple(static_cast<Unit::Type>(it)),
                 std::forward_as_tuple(
                         textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
@@ -266,17 +264,17 @@ Spritesheet Resources::initMapBorderSpritesheet()
 Spritesheet Resources::initCursorSpritesheet()
 {
     return { textures.at(txIndexCursors),
-             static_cast<int>(RenderUtils::cursorWidthPx),
-             static_cast<int>(RenderUtils::cursorHeightPx),
-             0 };
+        static_cast<int>(RenderUtils::cursorWidthPx),
+        static_cast<int>(RenderUtils::cursorHeightPx),
+        0 };
 }
 
 Spritesheet Resources::initPortraitSpritesheet()
 {
     return { textures.at(txIndexPortraits),
-             static_cast<int>(GameInterface::portrait.width),
-             static_cast<int>(GameInterface::portrait.height),
-             1 };
+        static_cast<int>(GameInterface::portrait.width),
+        static_cast<int>(GameInterface::portrait.height),
+        1 };
 }
 
 Spritesheet Resources::initHitboxSpritesheet()

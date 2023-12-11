@@ -46,12 +46,19 @@ struct PendingEntity
  *
  * Contains map data and entities.
  */
-class World : public WritablePathfindingMap
+class World
+    : public WritableEntityContainer
+    , public WritablePathfindingMap
 {
 public:
     World(int width, int height, bool wilderness);
     World(int width, int height, bool wilderness, std::vector<Tile> tiles);
     virtual ~World() = default;
+
+    // Begin WritableEntityContainer override
+    void forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func) override;
+    void forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const override;
+    // End WritableEntityContainer override
 
     // Begin WritablePathfindingMap override
     int getWidth() const override;
@@ -102,13 +109,17 @@ public:
 
     /**
      * Gets a list of all entities currently present in the world (mutable version).
+     *
+     * Where possible, forEachMutableEntity should be used instead to avoid making a copy of this list.
      */
-    const SharedMutableEntityList getMutableEntities() const;
+    SharedMutableEntityList getMutableEntities() const;
 
     /**
      * Gets a list of all entities currently present in the world (read-only version).
+     *
+     * Where possible, forEachEntity should be used instead to avoid making a copy of this list.
      */
-    const SharedEntityList getEntities() const;
+    SharedEntityList getEntities() const;
 
     /**
      * Gets a raw pointer to the Entity with the given key (mutable version).
@@ -168,7 +179,8 @@ private:
 
     int nextId;
     std::vector<PendingEntity> pendingEntities;
-    std::unordered_map<int, std::shared_ptr<Entity>> entities;
+    std::unordered_map<int, std::shared_ptr<Entity>> entitiesById;
+    std::vector<std::shared_ptr<Entity>> entitiesList;
 };
 
 /**
