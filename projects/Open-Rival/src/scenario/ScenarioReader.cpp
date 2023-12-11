@@ -1086,10 +1086,9 @@ std::uint32_t ScenarioReader::readInt()
 std::uint32_t ScenarioReader::readInt(std::size_t offset) const
 {
     // little endian
-    return std::uint32_t(
-            data[offset + 3] << 24    //
-            | data[offset + 2] << 16  //
-            | data[offset + 1] << 8   //
+    return std::uint32_t(data[offset + 3] << 24  //
+            | data[offset + 2] << 16             //
+            | data[offset + 1] << 8              //
             | data[offset + 0]);
 }
 
@@ -1145,9 +1144,8 @@ char ScenarioReader::getRivalChar(std::uint8_t c) const
         return 0x03;
     }
 
-    auto it = alphabet.find(c);
-
-    if (it != alphabet.end())
+    const auto it = alphabet.find(c);
+    if (it != alphabet.cend())
     {
         // Entry found
         return it->second;

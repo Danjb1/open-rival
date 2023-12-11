@@ -25,8 +25,7 @@
 
 namespace Rival {
 
-GameState::GameState(
-        Application& app,
+GameState::GameState(Application& app,
         std::unique_ptr<World> scenarioToMove,
         std::unordered_map<int, PlayerState>& playerStates,
         std::unordered_map<int, ClientInfo> clients,
@@ -36,10 +35,10 @@ GameState::GameState(
     , playerStates(playerStates)
     , viewport(0, 0, window->getWidth(), window->getHeight() - GameInterface::uiHeight)
     , camera(0.0f,
-             0.0f,
-             RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
-             RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
-             *world)
+              0.0f,
+              RenderUtils::pxToCamera_X(static_cast<float>(viewport.width)),
+              RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
+              *world)
     , playerContext()
     , mousePicker(camera, viewport, *world, playerContext, *this, *this)
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
@@ -85,7 +84,7 @@ bool GameState::isTickReady()
         return true;
     }
 
-    auto iter = clientsReady.find(currentTick);
+    const auto iter = clientsReady.find(currentTick);
     if (iter == clientsReady.cend())
     {
         // No clients are ready! We can still process the next tick if we are the only player (unlikely for a net game,
@@ -109,7 +108,7 @@ void GameState::pollNetwork()
     const auto& receivedPackets = app.getConnection()->getReceivedPackets();
     for (auto& packet : receivedPackets)
     {
-        auto iter = packetHandlers.find(packet->getType());
+        const auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
             LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));
@@ -122,8 +121,8 @@ void GameState::pollNetwork()
 
 void GameState::earlyUpdateEntities() const
 {
-    auto const& entities = world->getMutableEntities();
-    for (auto const& e : entities)
+    const auto& entities = world->getMutableEntities();
+    for (const auto& e : entities)
     {
         e->earlyUpdate();
     }
@@ -337,8 +336,8 @@ World& GameState::getWorld()
 
 PlayerState& GameState::getLocalPlayerState() const
 {
-    auto result = playerStates.find(localPlayerId);
-    if (result == playerStates.end())
+    const auto result = playerStates.find(localPlayerId);
+    if (result == playerStates.cend())
     {
         throw std::runtime_error("No local player state found!");
     }
@@ -348,8 +347,8 @@ PlayerState& GameState::getLocalPlayerState() const
 
 PlayerState* GameState::getPlayerState(int playerId) const
 {
-    auto result = playerStates.find(playerId);
-    return result == playerStates.end() ? nullptr : &result->second;
+    const auto result = playerStates.find(playerId);
+    return result == playerStates.cend() ? nullptr : &result->second;
 }
 
 bool GameState::isLocalPlayer(int playerId) const
@@ -378,8 +377,8 @@ void GameState::dispatchCommand(std::shared_ptr<GameCommand> command)
 
 void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
 {
-    auto findResult = pendingCommands.find(tick);
-    if (findResult == pendingCommands.end())
+    const auto findResult = pendingCommands.find(tick);
+    if (findResult == pendingCommands.cend())
     {
         // No commands are scheduled for this tick yet
         pendingCommands.insert({ tick, { command } });
@@ -394,7 +393,7 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
 
 void GameState::onClientReady(int tick, int clientId)
 {
-    auto iter = clientsReady.find(tick);
+    const auto iter = clientsReady.find(tick);
     if (iter == clientsReady.cend())
     {
         // This is the first player ready for this tick
@@ -406,12 +405,11 @@ void GameState::onClientReady(int tick, int clientId)
     {
         // Add to the players already ready
         std::unordered_set<int>& playersReadyForTick = iter->second;
-        auto result = playersReadyForTick.insert(clientId);
+        const auto result = playersReadyForTick.insert(clientId);
         if (!result.second)
         {
             // result is a pair <iter, bool> where bool is false if the element was already present in the set
-            throw std::runtime_error(
-                    "Duplicate player ready received for client " + std::to_string(clientId)
+            throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
                     + " for tick: " + std::to_string(tick));
         }
     }
@@ -419,8 +417,8 @@ void GameState::onClientReady(int tick, int clientId)
 
 void GameState::processCommands()
 {
-    auto findResult = pendingCommands.find(currentTick);
-    if (findResult == pendingCommands.end())
+    const auto findResult = pendingCommands.find(currentTick);
+    if (findResult == pendingCommands.cend())
     {
         // No commands due
         return;

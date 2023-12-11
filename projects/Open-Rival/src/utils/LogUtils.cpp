@@ -1,5 +1,7 @@
 #include "utils/LogUtils.h"
 
+#include <memory>
+
 #include "spdlog/sinks/basic_file_sink.h"
 
 namespace Rival { namespace LogUtils {
@@ -37,6 +39,19 @@ void initLogging(const std::string& logLevel, bool logToFile)
     spdlog::set_pattern("[%H:%M:%S:%e] [%l] %v");
 
     spdlog::set_level(spdlog::level::from_str(logLevel));
+}
+
+Logger makeLogCategory(const std::string& category, const std::string& logLevel)
+{
+    Logger defaultLogger = spdlog::default_logger();
+    Logger categoryLogger =
+            std::make_shared<spdlog::logger>(category, defaultLogger->sinks().begin(), defaultLogger->sinks().end());
+    categoryLogger->set_level(spdlog::level::from_str(logLevel));
+
+    // Globally register the logger so it can be accessed using spdlog::get(logger_name)
+    spdlog::register_logger(categoryLogger);
+
+    return categoryLogger;
 }
 
 }}  // namespace Rival::LogUtils

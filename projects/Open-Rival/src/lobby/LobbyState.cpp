@@ -179,7 +179,7 @@ void LobbyState::pollNetwork()
     const auto& receivedPackets = app.getConnection()->getReceivedPackets();
     for (auto& packet : receivedPackets)
     {
-        auto iter = packetHandlers.find(packet->getType());
+        const auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
             LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));

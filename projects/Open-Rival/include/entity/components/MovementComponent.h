@@ -57,7 +57,7 @@ public:
     void prepareForMovement();
 
     /** Starts moving to the given node, if a route can be found. */
-    void moveTo(const MapNode& node, Pathfinding::Hints hints = {});
+    void moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints = {});
 
     /**
      * Gets the movement that's currently in progress.

@@ -22,14 +22,13 @@ BuildingDef BuildingDef::fromJson(const json& j)
     return { name, portraitId, animations, soundBanks };
 }
 
-void BuildingDef::tryReadAnimation(
-        const json& rawAnims,
+void BuildingDef::tryReadAnimation(const json& rawAnims,
         const std::string& key,
         BuildingAnimationType animType,
         std::unordered_map<BuildingAnimationType, const Animation>& animations)
 {
-    auto iter = rawAnims.find(key);
-    if (iter == rawAnims.end())
+    const auto iter = rawAnims.find(key);
+    if (iter == rawAnims.cend())
     {
         // Animation not found
         return;
@@ -39,20 +38,18 @@ void BuildingDef::tryReadAnimation(
     int endIndex = iter->at("endIndex");
     int msPerFrame = JsonUtils::getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
 
-    animations.emplace(
-            std::piecewise_construct,
+    animations.emplace(std::piecewise_construct,
             std::forward_as_tuple(animType),
             std::forward_as_tuple(startIndex, endIndex, msPerFrame, 0));
 }
 
-void BuildingDef::tryReadSoundBank(
-        const json& rawSounds,
+void BuildingDef::tryReadSoundBank(const json& rawSounds,
         const std::string& key,
         BuildingSoundType soundType,
         std::unordered_map<BuildingSoundType, const SoundBank>& soundBanks)
 {
-    auto iter = rawSounds.find(key);
-    if (iter == rawSounds.end())
+    const auto iter = rawSounds.find(key);
+    if (iter == rawSounds.cend())
     {
         // SoundBank not found
         return;
@@ -61,8 +58,7 @@ void BuildingDef::tryReadSoundBank(
     soundBanks.emplace(soundType, *iter);
 }
 
-BuildingDef::BuildingDef(
-        std::string name,
+BuildingDef::BuildingDef(std::string name,
         int portraitId,
         std::unordered_map<BuildingAnimationType, const Animation> animations,
         std::unordered_map<BuildingSoundType, const SoundBank> soundBanks)
@@ -75,13 +71,13 @@ BuildingDef::BuildingDef(
 
 const Animation* BuildingDef::getAnimation(BuildingAnimationType animType) const
 {
-    auto iter = animations.find(animType);
+    const auto iter = animations.find(animType);
     return iter == animations.cend() ? nullptr : &iter->second;
 }
 
 const SoundBank* BuildingDef::getSoundBank(BuildingSoundType soundType) const
 {
-    auto iter = soundBanks.find(soundType);
+    const auto iter = soundBanks.find(soundType);
     return iter == soundBanks.cend() ? nullptr : &iter->second;
 }
 

@@ -200,7 +200,7 @@ public:
     template <class T>
     T* getComponent(const std::string& key)
     {
-        auto iter = components.find(key);
+        const auto iter = components.find(key);
         if (iter == components.cend())
         {
             return nullptr;
@@ -237,7 +237,7 @@ public:
     template <class T>
     std::shared_ptr<T> getComponentShared(const std::string& key)
     {
-        auto iter = components.find(key);
+        const auto iter = components.find(key);
         if (iter == components.cend())
         {
             return std::shared_ptr<T>();
@@ -272,7 +272,7 @@ public:
     template <class T>
     std::weak_ptr<T> getComponentWeak(const std::string key)
     {
-        auto iter = components.find(key);
+        const auto iter = components.find(key);
         if (iter == components.cend())
         {
             return std::weak_ptr<T>();
