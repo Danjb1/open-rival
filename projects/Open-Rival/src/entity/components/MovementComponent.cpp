@@ -192,14 +192,7 @@ void MovementComponent::startNextMovement(WritablePathfindingMap& map)
     passabilityUpdater.onUnitLeavingTile(map, entity->getPos());
     passabilityUpdater.onUnitEnteringTile(map, movement.destination, doesRouteContinue);
 
-    // Inform listeners
-    for (std::weak_ptr<MovementListener> weakListener : listeners)
-    {
-        if (std::shared_ptr<MovementListener> listener = weakListener.lock())
-        {
-            listener->onUnitMoveStart(&movement.destination);
-        }
-    }
+    forEachListener([&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
 }
 
 bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints)
@@ -226,6 +219,10 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
     if (ticksSpentWaiting < maxTicksToWaitForTileToClear)
     {
         // Wait a while to see if the obstruction clears
+        if (ticksSpentWaiting == 0)
+        {
+            forEachListener([&](auto listener) { listener->onUnitPaused(); });
+        }
         ++ticksSpentWaiting;
         return false;
     }
@@ -272,15 +269,7 @@ void MovementComponent::stopMovement()
     movement.clear();
     resetPassability();
     ticksSpentWaiting = 0;
-
-    // Inform listeners
-    for (std::weak_ptr<MovementListener> weakListener : listeners)
-    {
-        if (std::shared_ptr<MovementListener> listener = weakListener.lock())
-        {
-            listener->onUnitStopped();
-        }
-    }
+    forEachListener([](auto listener) { listener->onUnitStopped(); });
 }
 
 bool MovementComponent::tryRepath(Pathfinding::Hints hints)
@@ -295,6 +284,24 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
     moveTo(destination, context, hints);
 
     return !route.isEmpty();
+}
+
+void MovementComponent::forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func)
+{
+    auto it = listeners.begin();
+    while (it != listeners.end())
+    {
+        if (std::shared_ptr<MovementListener> listener = it->lock())
+        {
+            func(listener);
+            ++it;
+        }
+        else
+        {
+            // The weak pointer has expired, erase it from the list
+            it = listeners.erase(it);
+        }
+    }
 }
 
 }  // namespace Rival

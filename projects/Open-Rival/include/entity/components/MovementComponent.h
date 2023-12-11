@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <set>
 #include <string>
@@ -83,6 +84,7 @@ private:
     void onReachedNewTile();
     void stopMovement();
     bool tryRepath(Pathfinding::Hints hints = {});
+    void forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func);
 
 public:
     static const std::string key;

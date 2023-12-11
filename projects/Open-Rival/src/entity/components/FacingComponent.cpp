@@ -39,6 +39,11 @@ void FacingComponent::onUnitMoveStart(const MapNode* nextNode)
     setFacing(newFacing);
 }
 
+void FacingComponent::onUnitPaused()
+{
+    // Do nothing
+}
+
 void FacingComponent::onUnitStopped()
 {
     // Do nothing

@@ -40,6 +40,11 @@ void UnitPropsComponent::onUnitMoveStart(const MapNode*)
     setState(UnitState::Moving);
 }
 
+void UnitPropsComponent::onUnitPaused()
+{
+    setState(UnitState::Idle);
+}
+
 void UnitPropsComponent::onUnitStopped()
 {
     setState(UnitState::Idle);
