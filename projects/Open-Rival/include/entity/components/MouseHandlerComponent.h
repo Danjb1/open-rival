@@ -36,6 +36,7 @@ public:
 
     // Begin MovementComponent override
     virtual void onUnitMoveStart(const MapNode* nextNode) override;
+    virtual void onUnitPaused() override;
     virtual void onUnitStopped() override;
     // End MovementComponent override
 
