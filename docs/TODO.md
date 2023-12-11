@@ -7,12 +7,25 @@
 ### Multiplayer Milestone
 
 - Pathfinding improvements
-    - Lag spikes can occur during group pathfinding
+    - BUG: Units can sometimes get left behind when moving a group
     - Units can cross paths if one is travelling horizontally and the other vertically!
     - Stop walking anim when waiting for a tile to empty
     - Units should be able to start moving into a tile if its occupant is already moving out (?)
         - What if the occupant is slower than we are?
     - Units should periodically re-plan their route in case a better route becomes available
+- Crash when closing game window (OpenAL32.dll)
+- cppcheck warnings:
+    D:\Danjb\Stuff\open-rival\projects\Open-Rival\src\platform\win32\WindowsSocket.cpp:93:9: error: Resource leak: handle [resourceLeak]
+            throw std::runtime_error("Failed to bind socket: " + std::to_string(err));
+            ^
+    D:\Danjb\Stuff\open-rival\projects\Open-Rival\src\platform\win32\WindowsSocket.cpp:99:9: error: Resource leak: handle [resourceLeak]
+            throw std::runtime_error("Failed to listen on socket: " + std::to_string(::WSAGetLastError()));
+            ^
+    D:\Danjb\Stuff\open-rival\projects\Open-Rival\src\platform\win32\WindowsSocket.cpp:125:9: error: Resource leak: handle [resourceLeak]
+            throw std::runtime_error("Failed to connect to server: " + std::to_string(err));
+            ^
+- Can't use unordered_maps when iteration is required due to non-deterministic behavior in multiplayer!
+- Send a checksum periodically to check that players are in-sync?
 - Show a message when waiting for player commands
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
 

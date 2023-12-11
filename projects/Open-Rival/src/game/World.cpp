@@ -113,7 +113,7 @@ const SharedEntityList World::getEntities() const
 
 Entity* World::getMutableEntity(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     if (iter == entities.cend())
     {
         return nullptr;
@@ -123,7 +123,7 @@ Entity* World::getMutableEntity(int id) const
 
 const Entity* World::getEntity(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     if (iter == entities.cend())
     {
         return nullptr;
@@ -147,25 +147,25 @@ const Entity* World::getEntityAt(const MapNode& pos) const
 
 std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::shared_ptr<const Entity> World::getEntityShared(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     return iter == entities.cend() ? std::shared_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 
 std::weak_ptr<const Entity> World::getEntityWeak(int id) const
 {
-    auto const iter = entities.find(id);
+    const auto iter = entities.find(id);
     return iter == entities.cend() ? std::weak_ptr<Entity>() : iter->second;
 }
 

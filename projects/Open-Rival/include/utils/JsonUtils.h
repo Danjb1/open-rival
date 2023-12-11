@@ -1,6 +1,10 @@
 #pragma once
 
+#pragma warning(push)
+// NOTE: This warning is fixed in later versions of the library: https://github.com/nlohmann/json/issues/3805
+#pragma warning(disable : 26800)
 #include <nlohmann/json.hpp>
+#pragma warning(pop)
 
 #include <string>
 

@@ -116,6 +116,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/utils/BinaryFileReader.cpp
     ${OPEN_RIVAL_DIR}/src/utils/BufferUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/FileUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/utils/HashUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/InputUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/JsonUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/LogUtils.cpp
@@ -248,6 +249,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/utils/EntityUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/EnumUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/FileUtils.h
+    ${OPEN_RIVAL_DIR}/include/utils/HashUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/InputUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/JsonUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/LogUtils.h

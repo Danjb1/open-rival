@@ -2,6 +2,7 @@
 
 #include "entity/Entity.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -84,13 +85,13 @@ void MovementComponent::resetPassability()
     passabilityUpdater.onUnitStopped(*world, entity->getPos());
 }
 
-void MovementComponent::moveTo(const MapNode& node, Pathfinding::Hints hints)
+void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints)
 {
     ticksSpentWaiting = 0;
     prepareForMovement();
 
     const MapNode startPos = getStartPosForNextMovement();
-    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker, hints);
+    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker, context, hints);
 
     if (route.isEmpty())
     {
@@ -154,6 +155,7 @@ bool MovementComponent::tryStartNextMovement()
             // Tile is only temporarily obstructed, e.g. another unit is leaving the tile
             if (!tryRepathAroundTemporaryObstruction(*world))
             {
+                // We are either waiting to repath, or repathing failed
                 return false;
             }
         }
@@ -288,8 +290,9 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
         return false;
     }
 
+    Pathfinding::Context context;
     const MapNode destination = route.getDestination();
-    moveTo(destination, hints);
+    moveTo(destination, context, hints);
 
     return !route.isEmpty();
 }

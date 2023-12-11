@@ -1,10 +1,31 @@
 #pragma once
 
 #include <deque>
+#include <optional>
+#include <unordered_map>
 #include <unordered_set>
+#include <utility>  // std::pair
 
 #include "game/MapUtils.h"
+#include "utils/HashUtils.h"
 
+namespace std {
+
+/** Custom hash function for std::pair<MapNode, MapNode>.
+ * This must be defined *before* any use of std::unordered_map<std::pair<MapNode, MapNode>, ...>. */
+template <>
+struct hash<std::pair<Rival::MapNode, Rival::MapNode>>
+{
+    inline size_t operator()(const std::pair<Rival::MapNode, Rival::MapNode>& p) const noexcept
+    {
+        size_t seed = 0;
+        Rival::HashUtils::hashCombineObj(seed, p.first);
+        Rival::HashUtils::hashCombineObj(seed, p.second);
+        return seed;
+    }
+};
+
+}  // namespace std
 namespace Rival {
 
 class PathfindingMap;
@@ -99,6 +120,33 @@ private:
 };
 
 /**
+ * Context object used to share information between separate pathfinding attempts.
+ *
+ * This allows us to save a lot of work during group pathfinding, when large portions of the path are likely to be
+ * shared by multiple group members.
+ */
+class Context
+{
+public:
+    Context(bool isCacheEnabled = false);
+
+    /** Informs the context of a new pathfinding attempt. */
+    void beginPathfinding();
+
+    /** Gets the cached path from start to goal, if it exists. */
+    std::optional<std::deque<MapNode>> getCachedPath(const MapNode& start, const MapNode& goal) const;
+
+    /** Caches a path from start to goal. */
+    void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path);
+
+private:
+    std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
+
+    bool isCacheEnabled = false;
+    int pathfindingAttempts = 0;
+};
+
+/**
  * Hints that can be supplied during pathfinding to affect the route found.
  */
 struct Hints
@@ -116,6 +164,7 @@ Route findPath(MapNode start,
         MapNode goal,
         const PathfindingMap& map,
         const PassabilityChecker& passabilityChecker,
+        Context& context,
         const Hints hints = {});
 
 }  // namespace Pathfinding

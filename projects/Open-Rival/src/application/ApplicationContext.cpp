@@ -50,9 +50,13 @@ json ApplicationContext::readConfig()
 
 void ApplicationContext::initLogging()
 {
-    const std::string logLevel = ConfigUtils::get(cfg, "logLevel", std::string("info"));
+    const std::string defaultLogLevel = "info";
+    const std::string logLevel = ConfigUtils::get(cfg, "logLevel", defaultLogLevel);
     const bool logToFile = ConfigUtils::get(cfg, "logToFile", true);
     LogUtils::initLogging(logLevel, logToFile);
+
+    // Categories
+    LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
 }
 
 void ApplicationContext::initSDL()
