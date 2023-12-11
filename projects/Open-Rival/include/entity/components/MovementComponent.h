@@ -19,6 +19,7 @@ class World;
  */
 struct Movement
 {
+    MapNode start = { -1, -1 };
     MapNode destination = { -1, -1 };
 
     /**
@@ -34,6 +35,7 @@ struct Movement
     void clear();
     bool isValid() const;
     bool isInProgress() const;
+    bool isPastHalfway() const;
     bool isFinished() const;
 };
 
@@ -79,11 +81,15 @@ private:
     bool tryStartNextMovement();
     void startNextMovement(WritablePathfindingMap& map);
     void resetPassability();
+
     bool tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints = {});
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
-    void onReachedNewTile();
-    void stopMovement();
     bool tryRepath(Pathfinding::Hints hints = {});
+
+    void onLeftPreviousTile();
+    void onCompletedMoveToNewTile();
+    void stopMovement();
+
     void forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func);
 
 public:

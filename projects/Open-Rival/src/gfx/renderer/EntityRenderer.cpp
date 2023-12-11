@@ -144,10 +144,12 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
 
     float z = RenderUtils::getEntityZ(pos.x, pos.y);
     std::vector<GLfloat> vertexData = {
-        x1, y1, z,  //
-        x2, y1, z,  //
-        x2, y2, z,  //
-        x1, y2, z   //
+        /* clang-format off */
+        x1, y1, z,
+        x2, y1, z,
+        x2, y2, z,
+        x1, y2, z
+        /* clang-format on */
     };
 
     // Determine texture co-ordinates
@@ -183,7 +185,6 @@ glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
     glm::vec2 offset = { 0, 0 };
 
     // See if the Entity can move
-    // TODO: This needs to work for flying units too
     const MovementComponent* moveComponent = entity.getComponent<MovementComponent>(MovementComponent::key);
     if (!moveComponent)
     {
@@ -197,15 +198,20 @@ glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
         return offset;
     }
 
-    // Find the MapNode the Entity is moving to
-    const MapNode& nextNode = movement.destination;
-
     // Determine the direction of movement
-    Facing dir = MapUtils::getDir(entity.getPos(), nextNode);
+    const Facing dir = MapUtils::getDir(movement.start, movement.destination);
 
     // Determine the overall "progress" through the movement (0-1)
-    int timeElapsed = movement.timeElapsed + delta;
+    const int timeElapsed = movement.timeElapsed + delta;
     float progress = std::min(static_cast<float>(timeElapsed) / movement.timeRequired, 1.f);
+
+    if (movement.isPastHalfway())
+    {
+        // Once an Entity has passed the halfway point of its movement, it is considered to be in the new tile.
+        // But since progress is measured from the previous tile, we need to visually "undo" this movement otherwise
+        // the entity will jump ahead.
+        progress -= 1.f;
+    }
 
     // Determine x-offset
     if (dir == Facing::East)
@@ -292,10 +298,18 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1, y1, z,  //
-            x2, y1, z,  //
-            x2, y2, z,  //
-            x1, y2, z   //
+            x1,
+            y1,
+            z,  //
+            x2,
+            y1,
+            z,  //
+            x2,
+            y2,
+            z,  //
+            x1,
+            y2,
+            z  //
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -311,10 +325,18 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1, y1, z,  //
-            x2, y1, z,  //
-            x2, y2, z,  //
-            x1, y2, z   //
+            x1,
+            y1,
+            z,  //
+            x2,
+            y1,
+            z,  //
+            x2,
+            y2,
+            z,  //
+            x1,
+            y2,
+            z  //
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -330,10 +352,18 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1, y1, z,  //
-            x2, y1, z,  //
-            x2, y2, z,  //
-            x1, y2, z   //
+            x1,
+            y1,
+            z,  //
+            x2,
+            y1,
+            z,  //
+            x2,
+            y2,
+            z,  //
+            x1,
+            y2,
+            z  //
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -349,10 +379,18 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1, y1, z,  //
-            x2, y1, z,  //
-            x2, y2, z,  //
-            x1, y2, z   //
+            x1,
+            y1,
+            z,  //
+            x2,
+            y1,
+            z,  //
+            x2,
+            y2,
+            z,  //
+            x1,
+            y2,
+            z  //
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -371,8 +409,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
     // Render
-    glDrawElements(
-            hitboxRenderable.getDrawMode(),
+    glDrawElements(hitboxRenderable.getDrawMode(),
             hitboxRenderable.getIndicesPerSprite() * numHitboxSprites,
             GL_UNSIGNED_INT,
             nullptr);
