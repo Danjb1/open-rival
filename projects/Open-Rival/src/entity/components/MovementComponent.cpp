@@ -26,6 +26,11 @@ bool Movement::isInProgress() const
     return isValid() && !isFinished();
 }
 
+bool Movement::isPastHalfway() const
+{
+    return timeElapsed > timeRequired / 2;
+}
+
 bool Movement::isFinished() const
 {
     return isValid() && timeElapsed >= timeRequired;
@@ -108,11 +113,17 @@ MapNode MovementComponent::getStartPosForNextMovement() const
 
 void MovementComponent::updateMovement()
 {
+    const bool wasPastHalfway = movement.isPastHalfway();
     movement.timeElapsed += TimeUtils::timeStepMs;
 
     if (movement.isFinished())
     {
-        onReachedNewTile();
+        onCompletedMoveToNewTile();
+    }
+    else if (!wasPastHalfway && movement.isPastHalfway())
+    {
+        // Once the unit has passed the halfway point, they are considered to have moved tiles
+        onLeftPreviousTile();
     }
 }
 
@@ -177,6 +188,7 @@ void MovementComponent::startNextMovement(WritablePathfindingMap& map)
     ticksSpentWaiting = 0;
 
     // Configure the new movement
+    movement.start = entity->getPos();
     movement.destination = route.pop();
     movement.timeRequired = ticksPerMove * TimeUtils::timeStepMs;
 
@@ -243,7 +255,21 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
     return tryRepathAroundObstruction(map, hints);
 }
 
-void MovementComponent::onReachedNewTile()
+bool MovementComponent::tryRepath(Pathfinding::Hints hints)
+{
+    if (route.isEmpty())
+    {
+        return false;
+    }
+
+    Pathfinding::Context context;
+    const MapNode destination = route.getDestination();
+    moveTo(destination, context, hints);
+
+    return !route.isEmpty();
+}
+
+void MovementComponent::onLeftPreviousTile()
 {
     // Update tile passability
     World* world = entity->getWorld();
@@ -253,7 +279,10 @@ void MovementComponent::onReachedNewTile()
     // TODO: Currently, during movement, entities are considered to occupy their original tile until they have fully
     // moved into the new tile. We may want to move the unit to the new tile once they are halfway through the movement.
     entity->setPos(movement.destination);
+}
 
+void MovementComponent::onCompletedMoveToNewTile()
+{
     movement.clear();
 
     if (route.isEmpty())
@@ -270,20 +299,6 @@ void MovementComponent::stopMovement()
     resetPassability();
     ticksSpentWaiting = 0;
     forEachListener([](auto listener) { listener->onUnitStopped(); });
-}
-
-bool MovementComponent::tryRepath(Pathfinding::Hints hints)
-{
-    if (route.isEmpty())
-    {
-        return false;
-    }
-
-    Pathfinding::Context context;
-    const MapNode destination = route.getDestination();
-    moveTo(destination, context, hints);
-
-    return !route.isEmpty();
 }
 
 void MovementComponent::forEachListener(std::function<void(std::shared_ptr<MovementListener>)> func)

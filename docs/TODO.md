@@ -6,7 +6,6 @@
 
 ### Multiplayer Milestone
 
-- Units should be able to start moving into a tile if its occupant is already moving out
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Can't use unordered_maps when iteration is required due to non-deterministic behavior in multiplayer!
 - Show a message when waiting for player commands
