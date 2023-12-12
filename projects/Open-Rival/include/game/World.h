@@ -14,20 +14,12 @@ namespace Rival {
 class Entity;
 
 /**
- * Interface exposing read-only map data for pathfinding.
+ * Interface exposing map data for pathfinding.
  */
 class PathfindingMap : public MapBounds
 {
 public:
     virtual TilePassability getPassability(const MapNode& pos) const = 0;
-};
-
-/**
- * Interface exposing writable map data for pathfinding.
- */
-class WritablePathfindingMap : public PathfindingMap
-{
-public:
     virtual void setPassability(const MapNode& pos, TilePassability newPassability) = 0;
 };
 
@@ -47,25 +39,25 @@ struct PendingEntity
  * Contains map data and entities.
  */
 class World
-    : public WritableEntityContainer
-    , public WritablePathfindingMap
+    : public EntityContainer
+    , public PathfindingMap
 {
 public:
     World(int width, int height, bool wilderness);
     World(int width, int height, bool wilderness, std::vector<Tile> tiles);
     virtual ~World() = default;
 
-    // Begin WritableEntityContainer override
+    // Begin EntityContainer override
     void forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func) override;
     void forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const override;
-    // End WritableEntityContainer override
+    // End EntityContainer override
 
-    // Begin WritablePathfindingMap override
+    // Begin PathfindingMap override
     int getWidth() const override;
     int getHeight() const override;
     TilePassability getPassability(const MapNode& pos) const override;
     void setPassability(const MapNode& pos, TilePassability newPassability) override;
-    // End WritablePathfindingMap override
+    // End PathfindingMap override
 
     const std::vector<Tile>& getTiles() const
     {

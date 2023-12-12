@@ -176,9 +176,11 @@ void LobbyState::pollNetwork()
         return;
     }
 
-    const auto& receivedPackets = app.getConnection()->getReceivedPackets();
-    for (auto& packet : receivedPackets)
+    auto& connection = app.getConnection();
+    const auto& receivedPackets = connection->getReceivedPackets();
+    for (int i = 0; i < receivedPackets.size(); ++i)
     {
+        const auto& packet = receivedPackets[i];
         const auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
@@ -187,6 +189,15 @@ void LobbyState::pollNetwork()
         }
 
         iter->second->onPacketReceived(packet, *this);
+
+        if (isGameStarted)
+        {
+            // Any packets received after this point are intended for the next state
+            std::vector<std::shared_ptr<const Packet>> packetsToReturn(
+                    receivedPackets.cbegin() + i + 1, receivedPackets.cend());
+            connection->returnPackets(packetsToReturn);
+            break;
+        }
     }
 }
 
@@ -305,8 +316,10 @@ void LobbyState::requestStartGame()
 
 void LobbyState::startGame()
 {
+    LOG_INFO("Starting game!");
     std::unique_ptr<State> game = createGameState();
     app.setState(std::move(game));
+    isGameStarted = true;
 }
 
 std::unique_ptr<State> LobbyState::createGameState() const

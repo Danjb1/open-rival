@@ -29,7 +29,6 @@ struct hash<std::pair<Rival::MapNode, Rival::MapNode>>
 namespace Rival {
 
 class PathfindingMap;
-class WritablePathfindingMap;
 
 namespace Pathfinding {
 
@@ -60,19 +59,19 @@ class PassabilityUpdater
 {
 public:
     /** Called when a unit is due to try and move out of a tile. */
-    virtual void onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitPreparingMove(PathfindingMap& map, const MapNode& node) = 0;
 
     /** Called when a unit starts moving out of a tile. */
-    virtual void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitLeavingTile(PathfindingMap& map, const MapNode& node) = 0;
 
     /** Called when a unit starts moving into a tile. */
-    virtual void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough) = 0;
+    virtual void onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough) = 0;
 
     /** Called when a unit has fully left a tile. */
-    virtual void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitLeftTile(PathfindingMap& map, const MapNode& node) = 0;
 
     /** Called when a unit stops moving. */
-    virtual void onUnitStopped(WritablePathfindingMap& map, const MapNode& node) = 0;
+    virtual void onUnitStopped(PathfindingMap& map, const MapNode& node) = 0;
 };
 
 /**

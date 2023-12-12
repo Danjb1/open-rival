@@ -23,11 +23,11 @@ public:
     // End PassabilityChecker override
 
     // Begin PassabilityUpdater override
-    void onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node) override;
-    void onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node) override;
-    void onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough) override;
-    void onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node) override;
-    void onUnitStopped(WritablePathfindingMap& map, const MapNode& node) override;
+    void onUnitPreparingMove(PathfindingMap& map, const MapNode& node) override;
+    void onUnitLeavingTile(PathfindingMap& map, const MapNode& node) override;
+    void onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough) override;
+    void onUnitLeftTile(PathfindingMap& map, const MapNode& node) override;
+    void onUnitStopped(PathfindingMap& map, const MapNode& node) override;
     // End PassabilityUpdater override
 
 private:

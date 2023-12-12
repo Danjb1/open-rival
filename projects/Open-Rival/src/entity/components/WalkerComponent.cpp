@@ -27,27 +27,27 @@ bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNo
     return (passability & untraversableFlags) == TilePassability::Clear;
 }
 
-void WalkerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+void WalkerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::GroundUnitPendingMove);
 }
 
-void WalkerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
+void WalkerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::GroundUnitLeaving);
 }
 
-void WalkerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
+void WalkerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
     map.setPassability(node, isPassingThrough ? TilePassability::GroundUnitLeaving : TilePassability::GroundUnit);
 }
 
-void WalkerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
+void WalkerPassability::onUnitLeftTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Clear);
 }
 
-void WalkerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
+void WalkerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::GroundUnit);
 }

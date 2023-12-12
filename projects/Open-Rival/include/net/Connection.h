@@ -30,8 +30,7 @@ public:
 class Connection
 {
 public:
-    Connection(
-            Socket destination,
+    Connection(Socket destination,
             std::shared_ptr<PacketFactory> packetFactory,
             int remotePlayerId = -1,
             ConnectionListener* listener = nullptr);
@@ -54,6 +53,11 @@ public:
      * If this Connection has a listener, the packets will be sent there instead.
      */
     std::vector<std::shared_ptr<const Packet>> getReceivedPackets();
+
+    /**
+     * Returns some packets to the connection, so that they will be retrieved in the next call to getReceivedPackets.
+     */
+    void returnPackets(std::vector<std::shared_ptr<const Packet>>& packetsToReturn);
 
 private:
     void receiveThreadLoop();

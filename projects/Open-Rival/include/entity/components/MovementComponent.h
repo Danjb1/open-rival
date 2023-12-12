@@ -79,7 +79,7 @@ private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement();
     bool tryStartNextMovement();
-    void startNextMovement(WritablePathfindingMap& map);
+    void startNextMovement(PathfindingMap& map);
     void resetPassability();
 
     bool tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints = {});

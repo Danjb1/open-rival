@@ -54,8 +54,7 @@ class GameState
 {
 
 public:
-    GameState(
-            Application& app,
+    GameState(Application& app,
             std::unique_ptr<World> world,
             std::unordered_map<int, PlayerState>& playerStates,
             std::unordered_map<int, ClientInfo> clients,
@@ -91,7 +90,7 @@ public:
     void onClientReady(int tick, int clientId);
 
 private:
-    bool isTickReady();
+    bool isTickReady() const;
     void pollNetwork();
     void earlyUpdateEntities() const;
     void updateEntities() const;
@@ -147,6 +146,9 @@ private:
 
     /** Tick number, incremented with each update. */
     int currentTick = 0;
+
+    /** Flag set to true when waiting for network player input. */
+    bool isWaitingForPlayers = false;
 };
 
 }  // namespace Rival
