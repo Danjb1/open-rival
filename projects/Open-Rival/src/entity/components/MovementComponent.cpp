@@ -183,7 +183,7 @@ bool MovementComponent::tryStartNextMovement()
     return true;
 }
 
-void MovementComponent::startNextMovement(WritablePathfindingMap& map)
+void MovementComponent::startNextMovement(PathfindingMap& map)
 {
     ticksSpentWaiting = 0;
 

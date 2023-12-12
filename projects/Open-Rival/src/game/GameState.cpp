@@ -59,9 +59,11 @@ void GameState::update()
     pollNetwork();
     if (!isTickReady())
     {
+        isWaitingForPlayers = true;
         return;
     }
 
+    isWaitingForPlayers = false;
     world->addPendingEntities();
     earlyUpdateEntities();
     respondToInput();
@@ -71,7 +73,7 @@ void GameState::update()
     ++currentTick;
 }
 
-bool GameState::isTickReady()
+bool GameState::isTickReady() const
 {
     if (!isNetGame())
     {
@@ -92,8 +94,8 @@ bool GameState::isTickReady()
         return clients.empty();
     }
 
-    std::unordered_set<int>& clientsReadyForTick = iter->second;
-    std::size_t numClientsReady = clientsReadyForTick.size();
+    const std::unordered_set<int>& clientsReadyForTick = iter->second;
+    const std::size_t numClientsReady = clientsReadyForTick.size();
 
     return numClientsReady == clients.size();
 }
@@ -193,6 +195,54 @@ void GameState::updateEntities() const
 void GameState::render(int delta)
 {
     gameRenderer.render(delta);
+
+    // Render message when waiting for players
+    if (isWaitingForPlayers)
+    {
+        // TMP: Hardcoded hacky rendering until we have a proper menu system.
+        // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
+        // Same goes for the TextRenderer
+        MenuTextRenderer textRenderer(window);
+        std::vector<TextRenderable> textRenderables;
+        TextProperties nameProperties = { &res.getFontRegular() };
+        glm::vec2 renderPos = { 100, 100 };
+        const float rowHeight = 32;
+        const float indent = 32;
+
+        // Message
+        {
+            TextSpan textSpan = { "Waiting for players:", TextRenderable::defaultColor };
+            textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+            renderPos.x += indent;
+            renderPos.y += rowHeight;
+        }
+
+        // Player names
+        const auto iter = clientsReady.find(currentTick);
+        const bool areAnyClientsReady = iter != clientsReady.cend();
+        const std::unordered_set<int> clientsReadyThisTick =
+                areAnyClientsReady ? iter->second : std::unordered_set<int>();
+        for (const auto& client : clients)
+        {
+            if (clientsReadyThisTick.contains(client.first))
+            {
+                continue;
+            }
+
+            std::string name = client.second.getName();
+            TextSpan textSpan = { name, TextRenderable::defaultColor };
+            textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+            renderPos.y += rowHeight;
+        }
+
+        // Render the text!
+        std::vector<const TextRenderable*> textRenderablePtrs;
+        for (const auto& textRenderable : textRenderables)
+        {
+            textRenderablePtrs.push_back(&textRenderable);
+        }
+        textRenderer.render(textRenderablePtrs);
+    }
 }
 
 void GameState::keyDown(const SDL_Keycode keyCode)

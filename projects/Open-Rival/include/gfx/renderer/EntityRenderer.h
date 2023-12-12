@@ -28,7 +28,7 @@ public:
     EntityRenderer(const EntityRenderer&) = delete;
     EntityRenderer& operator=(const EntityRenderer&) = delete;
 
-    void render(const Camera& camera, const WritableEntityContainer& entityContainer, int delta) const;
+    void render(const Camera& camera, const EntityContainer& entityContainer, int delta) const;
 
     static glm::vec2 getLerpOffset(const Entity& entity, int delta);
 

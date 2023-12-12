@@ -25,27 +25,27 @@ bool FlyerPassability::isNodeTraversable(const PathfindingMap& map, const MapNod
     return (passability & untraversableFlags) == TilePassability::Clear;
 }
 
-void FlyerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+void FlyerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::FlyingUnitPendingMove);
 }
 
-void FlyerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
+void FlyerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::FlyingUnitLeaving);
 }
 
-void FlyerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
+void FlyerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
     map.setPassability(node, isPassingThrough ? TilePassability::FlyingUnitLeaving : TilePassability::FlyingUnit);
 }
 
-void FlyerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
+void FlyerPassability::onUnitLeftTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Clear);
 }
 
-void FlyerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
+void FlyerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::FlyingUnit);
 }

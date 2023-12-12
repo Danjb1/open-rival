@@ -48,7 +48,7 @@ void readFromBuffer(const std::vector<char>& buffer, std::size_t& offset, T& des
 template <typename T>
 void addVectorToBuffer(std::vector<char>& buffer, const std::vector<T>& vec)
 {
-    std::size_t numElems = buffer.size();
+    std::size_t numElems = vec.size();
     std::size_t dataSize = sizeof(T) * numElems;
     std::size_t requiredBufferSize = buffer.size() + sizeof(numElems) + dataSize;
     if (requiredBufferSize > buffer.capacity())

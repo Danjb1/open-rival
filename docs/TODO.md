@@ -1,20 +1,19 @@
 ﻿# To Do
 
 <!----------------------------------------------------------------------------->
-## Next Up...
+## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-### Multiplayer Milestone
-
-- Tidy up entity iteration
-    - Expose an iterator instead of making a copy of the entity list?
-    - Prefer iterators to forEach method?
-    - Move getEntities functions to EntityContainer?
-- Show a message when waiting for player commands
-
-### Combat Milestone
-
 - Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
+- Create HealthComponent
+- Render health bars of selected units
+- Show attack cursor when hovering over enemy-owned entities
+- Show attack cursor after entering attack mode (press A)
+- Issue an AttackCommand when the selection is instructed to attack
+- Units instructed to attack should maintain a reference to the target
+- Units instructed to attack should move to the target
+- Units instructed to attack should update their route as the target moves
+- Units instructed to attack should play their attack animation when in range
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -80,6 +79,7 @@
 
 ### Multiplayer
 
+- Adjust net command delay dynamically based on ping
 - Send a checksum periodically to check that players are in-sync?
 - GameState should reject new players
 - Create standalone project to run dedicated server
@@ -382,6 +382,9 @@
 - Run cppcheck
 - PassabilityComponent is pointless for units, this should be handled by the MovementComponent instead
 - Allow MapNodes to be logged using spdlog: https://github.com/gabime/spdlog/wiki/1.-QuickStart#log-user-defined-objects
+- LobbyState's mechanism for passing unprocessed packets back to the connection is hacky
+    - Connection could store receivedPackets instead, and return an iterator
+- GameState should expose an iterator instead of making a copy of the entity list in getEntities
 
 #### Rendering
 

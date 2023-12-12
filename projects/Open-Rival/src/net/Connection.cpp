@@ -131,4 +131,10 @@ std::vector<std::shared_ptr<const Packet>> Connection::getReceivedPackets()
     return packetsToReturn;
 }
 
+void Connection::returnPackets(std::vector<std::shared_ptr<const Packet>>& unprocessedPackets)
+{
+    std::scoped_lock lock(receivedPacketsMutex);
+    receivedPackets.insert(receivedPackets.cbegin(), unprocessedPackets.cbegin(), unprocessedPackets.cend());
+}
+
 }  // namespace Rival

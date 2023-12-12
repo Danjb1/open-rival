@@ -47,14 +47,14 @@ void MoveCommand::execute(GameCommandContext& context)
         if (!entity)
         {
             // Entity has been deleted since this command was issued
-            return;
+            continue;
         }
 
         auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
         if (!moveComponent)
         {
             LOG_WARN("Tried to move an immovable entity");
-            return;
+            continue;
         }
 
         moveComponent->prepareForMovement();
@@ -71,14 +71,14 @@ void MoveCommand::execute(GameCommandContext& context)
         if (!entity)
         {
             // Entity has been deleted since this command was issued
-            return;
+            continue;
         }
 
         auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
         if (!moveComponent)
         {
             LOG_WARN("Tried to move an immovable entity");
-            return;
+            continue;
         }
 
         moveComponent->moveTo(destination, pathfindingContext);

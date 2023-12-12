@@ -30,29 +30,29 @@ bool SeafarerPassability::isWater(TilePassability passability) const
     return (passability & TilePassability::Water) != TilePassability::Clear;
 }
 
-void SeafarerPassability::onUnitPreparingMove(WritablePathfindingMap& map, const MapNode& node)
+void SeafarerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitPendingMove);
 }
 
-void SeafarerPassability::onUnitLeavingTile(WritablePathfindingMap& map, const MapNode& node)
+void SeafarerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitLeaving);
 }
 
-void SeafarerPassability::onUnitEnteringTile(WritablePathfindingMap& map, const MapNode& node, bool isPassingThrough)
+void SeafarerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
     const TilePassability newPassability =
             isPassingThrough ? TilePassability::FlyingUnitLeaving : TilePassability::FlyingUnit;
     map.setPassability(node, TilePassability::Water | newPassability);
 }
 
-void SeafarerPassability::onUnitLeftTile(WritablePathfindingMap& map, const MapNode& node)
+void SeafarerPassability::onUnitLeftTile(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Water);
 }
 
-void SeafarerPassability::onUnitStopped(WritablePathfindingMap& map, const MapNode& node)
+void SeafarerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
     map.setPassability(node, TilePassability::Water | TilePassability::GroundUnit);
 }

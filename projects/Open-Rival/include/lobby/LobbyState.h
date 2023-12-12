@@ -71,6 +71,8 @@ private:
 
     MenuRenderer menuRenderer;
     MenuTextRenderer textRenderer;
+
+    bool isGameStarted = false;
 };
 
 }  // namespace Rival

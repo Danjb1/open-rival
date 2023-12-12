@@ -32,7 +32,7 @@ EntityRenderer::EntityRenderer(const TextureStore& textureStore, const PlayerCon
 {
 }
 
-void EntityRenderer::render(const Camera& camera, const WritableEntityContainer& entityContainer, int delta) const
+void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, int delta) const
 {
     entityContainer.forEachEntity([&](const auto& entity) {
         if (isEntityVisible(*entity, camera))
