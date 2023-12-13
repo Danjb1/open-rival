@@ -247,7 +247,7 @@
 - Consider moving some docs to GitHub wiki
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
-- Setup program should log output to a file (run the script via a BAT file?)
+- Setup utilities should log debug output to a file (currently they use cout)
 - Treat linker warnings as errors
 - Suppress warnings from JSON and spdlog libraries
 
@@ -259,12 +259,15 @@
 - Include libraries in a better way
     - https://stackoverflow.com/a/61708554/1624459
     - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
-- Copy required files to build directory automatically (`build\projects\Open-Rival`)
+- Copy required files to build directory automatically (`build\x64\projects\Open-Rival`)
     - DLLs
     - `res` folder
     - `config.json`
     - `args.json` (if present)
     - `vcxproj.user` (if present)
+- Copy required files to setup build directory automatically (`build\x64\projects\setup`)
+    - `setup` folder
+    - `res` folder also needs to exist!
 - Use auto formatter: https://github.com/cheshirekow/cmake_format
 - Code review suggestions: https://codereview.stackexchange.com/questions/286277/a-slightly-unconventional-cmake-project
 - Document CMake options

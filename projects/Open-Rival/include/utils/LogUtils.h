@@ -1,7 +1,7 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable : 6285 26437 26498 26800)
+#pragma warning(disable : 6285 26437 26450 26451 26495 26498 26800)
 #include <spdlog/spdlog.h>
 #pragma warning(pop)
 
@@ -29,7 +29,8 @@ namespace Rival { namespace LogUtils {
 
 using Logger = std::shared_ptr<spdlog::logger>;
 
-void initLogging(const std::string& logLevel, bool logToFile);
+void initLogging(
+        const std::string& logLevel, bool logToConsole, bool logToFile, const std::string filenamePrefix = "log");
 
 /** Creates a new log "category" that can have its own independent log level.
  * This should be called exactly once per category. */

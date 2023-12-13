@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "utils/LogUtils.h"
 #include "utils/StringUtils.h"
 #include "audio-extractor.h"
 #include "image-extractor.h"
@@ -29,7 +30,7 @@ bool shouldCopyVideos = true;
 
 void createOutputDirectories()
 {
-    std::wcout << "Creating output directories\n";
+    LOG_INFO("Creating output directories");
     std::vector<std::string> directories = {
         "setup\\images",        //
         "setup\\images\\game",  //
@@ -38,72 +39,40 @@ void createOutputDirectories()
         "res\\textures",        //
         "res\\video"            //
     };
-    for (auto const& dir : directories)
+    for (const auto& dir : directories)
     {
         if (!Setup::createDirectory(dir.c_str()))
         {
-            std::cerr << "Could not create directory: " << dir << "\n";
-            throw new std::runtime_error("Failed to create output directories");
+            LOG_ERROR("Could not create directory {}", dir);
+            throw std::runtime_error("Failed to create output directories");
         }
     }
 }
 
 void extractSounds(std::string gameDir)
 {
-    try
-    {
-        std::wcout << "Extracting audio\n";
-        Setup::extractAudio(gameDir + "\\DATA\\SOUNDS.DAT", "res\\sound");
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << "Failed to extract sounds: " << e.what() << "\n";
-        throw new std::runtime_error("Failed to extract sounds");
-    }
+    LOG_INFO("Extracting audio");
+    Setup::extractAudio(gameDir + "\\DATA\\SOUNDS.DAT", "res\\sound");
 }
 
 void extractImages(std::string gameDir)
 {
-    try
-    {
-        std::wcout << "Extracting images\n";
-        Setup::extractImages(gameDir + "\\DATA\\IMAGES.DAT", "setup\\images\\game");
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << "Failed to extract images: " << e.what() << "\n";
-        throw new std::runtime_error("Failed to extract images");
-    }
+    LOG_INFO("Extracting images");
+    Setup::extractImages(gameDir + "\\DATA\\IMAGES.DAT", "setup\\images\\game");
 }
 
 void extractInterface(std::string gameDir)
 {
-    try
-    {
-        std::wcout << "Extracting UI images\n";
-        Setup::InterfaceExtractor imageExtractor(gameDir + "\\DATA\\Interfac.dat");
-        imageExtractor.extractImages("setup\\images\\ui");
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << "Failed to extract UI images: " << e.what() << "\n";
-        throw new std::runtime_error("Failed to extract interface");
-    }
+    LOG_INFO("Extracting UI images");
+    Setup::InterfaceExtractor imageExtractor(gameDir + "\\DATA\\Interfac.dat");
+    imageExtractor.extractImages("setup\\images\\ui");
 }
 
 void buildTextures()
 {
-    try
-    {
-        std::wcout << "Building textures\n";
-        Setup::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures");
-        Setup::buildTextures("setup\\definitions\\ui", "setup\\images\\ui", "res\\textures");
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << "Failed to build textures: " << e.what() << "\n";
-        throw new std::runtime_error("Failed to build textures");
-    }
+    LOG_INFO("Building textures");
+    Setup::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures");
+    Setup::buildTextures("setup\\definitions\\ui", "setup\\images\\ui", "res\\textures");
 }
 
 void copyVideos(std::string videoDir, std::string outputDir)
@@ -118,15 +87,8 @@ void copyVideos(std::string videoDir, std::string outputDir)
 
 void copyVideos(std::string gameDir)
 {
-    try
-    {
-        copyVideos(gameDir + "\\MOVIES", "res\\video");
-    }
-    catch (const std::runtime_error& e)
-    {
-        std::cerr << "Failed to copy videos: " << e.what() << "\n";
-        throw new std::runtime_error("Failed to copy videos");
-    }
+    LOG_INFO("Copying videos");
+    copyVideos(gameDir + "\\MOVIES", "res\\video");
 }
 
 /**
@@ -139,8 +101,10 @@ void copyVideos(std::string gameDir)
  */
 int main(int argc, char* argv[])
 {
+    // Parse command-line arguments
     std::string gameDir;
     bool findDirectoryFromRegistry = true;
+    bool isDebugMode = false;
     for (int count = 1; count < argc; ++count)
     {
         std::string arg(argv[count]);
@@ -153,68 +117,82 @@ int main(int argc, char* argv[])
         {
             gameDir = std::string((argv[count + 1]));
             findDirectoryFromRegistry = false;
-            std::cout << "Reading files from directory " << gameDir << '\n';
-            ++count;
+            ++count;  // skip next argument (directory)
+        }
+        if (arg == "--debug")
+        {
+            isDebugMode = true;
         }
     }
+
+    const std::string logLevel = isDebugMode ? "debug" : "info";
+    LogUtils::initLogging(logLevel, /* logToConsole = */ true, /* logToFile = */ true, "setup");
 
     if (findDirectoryFromRegistry)
     {
-        std::wcout << "Reading files from registry." << '\n';
         // Read original game directory from registry
+        LOG_INFO("Looking for game directory in registry");
         try
         {
-            gameDir = StringUtils::toUtf8(Registry::RegGetString(
-                    HKEY_CURRENT_USER,                       //
-                    L"Software\\Titus Games\\Rival Realms",  //
+            gameDir = StringUtils::toUtf8(Registry::RegGetString(HKEY_CURRENT_USER,  //
+                    L"Software\\Titus Games\\Rival Realms",                          //
                     L"Game Directory"));
-            std::cout << "Found game at: " << gameDir << "\n";
+            LOG_INFO("Found game directory: {}", gameDir);
         }
         catch (const Registry::RegistryError& e)
         {
-            std::cerr << "Failed to find registry entry:\n"
-                      << "HKEY_CURRENT_USER\\Software\\Titus Games\\Rival Realms\n"
-                      << "Error code: " << e.errorCode() << "\n";
+            LOG_ERROR("Failed to find registry entry:\n"
+                      "HKEY_CURRENT_USER\\Software\\Titus Games\\Rival Realms\n"
+                      "Error code: {}",
+                    e.errorCode());
             return -1;
         }
-
-        // TMP
-        return 0;
+    }
+    else
+    {
+        LOG_INFO("Reading files from user-supplied directory: {}", gameDir);
     }
 
-    // Create the output directories
-    if (shouldCreateOutputDirectories)
+    try
     {
-        createOutputDirectories();
-    }
+        // Create the output directories
+        if (shouldCreateOutputDirectories)
+        {
+            createOutputDirectories();
+        }
 
-    // Extract sounds
-    if (shouldExtractSounds)
-    {
-        extractSounds(gameDir);
-    }
+        // Extract sounds
+        if (shouldExtractSounds)
+        {
+            extractSounds(gameDir);
+        }
 
-    // Extract images (game)
-    if (shouldExtractImages)
-    {
-        extractImages(gameDir);
-    }
+        // Extract images (game)
+        if (shouldExtractImages)
+        {
+            extractImages(gameDir);
+        }
 
-    // Extract images (ui)
-    if (shouldExtractInterface)
-    {
-        extractInterface(gameDir);
-    }
+        // Extract images (ui)
+        if (shouldExtractInterface)
+        {
+            extractInterface(gameDir);
+        }
 
-    // Build textures
-    if (shouldBuildTextures)
-    {
-        buildTextures();
-    }
+        // Build textures
+        if (shouldBuildTextures)
+        {
+            buildTextures();
+        }
 
-    // Copy videos
-    if (shouldCopyVideos)
+        // Copy videos
+        if (shouldCopyVideos)
+        {
+            copyVideos(gameDir);
+        }
+    }
+    catch (const std::runtime_error& e)
     {
-        copyVideos(gameDir);
+        LOG_ERROR("Error during setup: {}", e.what());
     }
 }
