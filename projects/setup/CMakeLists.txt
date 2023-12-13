@@ -8,6 +8,7 @@ set(OPEN_RIVAL_SETUP_EXTERNAL_SOURCES
     ${OPEN_RIVAL_SRC_DIR}/gfx/Palette.cpp
     ${OPEN_RIVAL_SRC_DIR}/utils/BinaryFileReader.cpp
     ${OPEN_RIVAL_SRC_DIR}/utils/FileUtils.cpp
+    ${OPEN_RIVAL_SRC_DIR}/utils/LogUtils.cpp
     ${OPEN_RIVAL_SRC_DIR}/utils/MathUtils.cpp
     ${OPEN_RIVAL_SRC_DIR}/utils/StringUtils.cpp
 )
@@ -27,6 +28,7 @@ set(OPEN_RIVAL_SETUP_EXTERNAL_INCLUDE_HEADERS
     ${OPEN_RIVAL_INC_DIR}/gfx/Palette.h
     ${OPEN_RIVAL_INC_DIR}/utils/BinaryFileReader.h
     ${OPEN_RIVAL_INC_DIR}/utils/FileUtils.h
+    ${OPEN_RIVAL_INC_DIR}/utils/LogUtils.h
     ${OPEN_RIVAL_INC_DIR}/utils/MathUtils.h
     ${OPEN_RIVAL_INC_DIR}/utils/StringUtils.h
 )
@@ -59,6 +61,9 @@ target_include_directories(setup PUBLIC
 target_include_directories(setup PRIVATE
     ${OPEN_RIVAL_INC_DIR}
 )
+
+# Dependencies
+add_spdlog(setup)
 
 target_link_libraries(setup PRIVATE
     project_options

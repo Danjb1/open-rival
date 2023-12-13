@@ -52,8 +52,9 @@ void ApplicationContext::initLogging()
 {
     const std::string defaultLogLevel = "info";
     const std::string logLevel = ConfigUtils::get(cfg, "logLevel", defaultLogLevel);
+    const bool logToConsole = ConfigUtils::get(cfg, "logToConsole", false);
     const bool logToFile = ConfigUtils::get(cfg, "logToFile", true);
-    LogUtils::initLogging(logLevel, logToFile);
+    LogUtils::initLogging(logLevel, logToConsole, logToFile, "Open-Rival");
 
     // Categories
     LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
