@@ -26,7 +26,7 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Units can walk through buildings
+- Units can walk through buildings and other objects
 - Drag-select cursor / outline should remain active when shrunk down to a small size
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
