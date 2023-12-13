@@ -13,6 +13,7 @@
 #include "gfx/Palette.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Spritesheet.h"
+#include "gfx/renderer/MenuTextRenderer.h"  // TMP
 #include "net/Connection.h"
 #include "net/packet-handlers/GameCommandPacketHandler.h"
 #include "net/packet-handlers/PacketHandler.h"

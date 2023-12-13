@@ -3,6 +3,7 @@
 #include "entity/Entity.h"
 #include "entity/components/PassabilityComponent.h"
 #include "entity/components/WalkerComponent.h"
+#include "game/Pathfinding.h"
 #include "game/World.h"
 #include "utils/TimeUtils.h"
 
@@ -24,7 +25,8 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
 
         WHEN("trying to plan a route to a reachable tile")
         {
-            walkerComponent->moveTo({ 1, 2 });
+            Pathfinding::Context context;
+            walkerComponent->moveTo({ 1, 2 }, context);
 
             THEN("a route is found to the destination")
             {
@@ -48,7 +50,8 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
         WalkerComponent* walkerComponent = e.requireComponent<WalkerComponent>(WalkerComponent::key);
         const MapNode destination = { 1, 2 };
-        walkerComponent->moveTo(destination);
+        Pathfinding::Context context;
+        walkerComponent->moveTo(destination, context);
 
         WHEN("the WalkerComponent is updated once")
         {
@@ -100,7 +103,8 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
         // Plan a route
         WalkerComponent* walkerComponent = e.requireComponent<WalkerComponent>(WalkerComponent::key);
         const MapNode destination = { 1, 2 };
-        walkerComponent->moveTo(destination);
+        Pathfinding::Context context;
+        walkerComponent->moveTo(destination, context);
 
         // Spawn an obstruction
         Entity obstruction(EntityType::Unit, 1, 1);
