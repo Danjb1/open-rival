@@ -45,6 +45,9 @@ target_include_directories(texture-builder PUBLIC
     ${OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_DIRS}
 )
 
+# Dependencies
+add_spdlog(texture-builder)
+
 target_link_libraries(texture-builder PRIVATE
     project_options
     project_warnings

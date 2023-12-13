@@ -48,6 +48,9 @@ target_include_directories(image-extractor PUBLIC
     ${OPEN_RIVAL_IMAGE_EXTRACTOR_EXTERNAL_DIRS}
 )
 
+# Dependencies
+add_spdlog(image-extractor)
+
 target_link_libraries(image-extractor PRIVATE
     project_options
     project_warnings
