@@ -263,7 +263,7 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
     }
 
     Pathfinding::Context context;
-    const MapNode destination = route.getDestination();
+    const MapNode destination = route.getIntendedDestination();
     moveTo(destination, context, hints);
 
     return !route.isEmpty();
