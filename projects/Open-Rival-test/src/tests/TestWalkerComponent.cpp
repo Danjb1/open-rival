@@ -12,12 +12,11 @@ using namespace Rival;
 namespace TestWalkerComponent {
 
 SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
-{
-    World world(6, 6, false);
-    World largeWorld(1001, 1001, false);
+{     
 
     GIVEN("A unit with a WalkerComponent")
     {
+        World world(5, 5, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&world, 0, { 1, 1 });
@@ -40,13 +39,14 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
     
     GIVEN("A unit with a WalkerComponent in an enclosed space")
     {
+        World world(6, 6, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&world, 0, { 3, 2 });
 
         WalkerComponent* walkerComponent = e.requireComponent<WalkerComponent>(WalkerComponent::key);
 
-        MapNode enclosure[] = {
+        const MapNode enclosure[] = {
             { 1, 2 }, { 2, 2 }, { 3, 1 }, { 4, 1 }, { 2, 3 }, { 5, 1 }, { 3, 3 }, { 4, 3 }, { 5, 2 }, { 6, 2 } 
         };
         for (const MapNode& node : enclosure)
@@ -70,6 +70,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
     
     GIVEN("A unit with a WalkerComponent positioned in the corner of a large map")
     {
+        World largeWorld(1001, 1001, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&largeWorld, 0, { 1, 1 });
