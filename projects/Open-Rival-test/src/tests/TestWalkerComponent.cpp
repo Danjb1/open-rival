@@ -6,18 +6,18 @@
 #include "game/Pathfinding.h"
 #include "game/World.h"
 #include "utils/TimeUtils.h"
+#include <array>
 
 using namespace Rival;
 
 namespace TestWalkerComponent {
 
 SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
-{
-    World world(6, 6, false);
-    World largeWorld(1001, 1001, false);
+{     
 
     GIVEN("A unit with a WalkerComponent")
     {
+        World world(5, 5, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&world, 0, { 1, 1 });
@@ -40,15 +40,17 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
     
     GIVEN("A unit with a WalkerComponent in an enclosed space")
     {
+        World world(6, 6, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&world, 0, { 3, 2 });
 
         WalkerComponent* walkerComponent = e.requireComponent<WalkerComponent>(WalkerComponent::key);
 
-        MapNode enclosure[] = {
-            { 1, 2 }, { 2, 2 }, { 3, 1 }, { 4, 1 }, { 2, 3 }, { 5, 1 }, { 3, 3 }, { 4, 3 }, { 5, 2 }, { 6, 2 } 
+        const std::array<MapNode, 10> enclosure = {
+            { { 1, 2 }, { 2, 2 }, { 3, 1 }, { 4, 1 }, { 2, 3 }, { 5, 1 }, { 3, 3 }, { 4, 3 }, { 5, 2 }, { 6, 2 } }
         };
+
         for (const MapNode& node : enclosure)
         {
             world.setPassability(node, TilePassability::Blocked);
@@ -70,6 +72,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
     
     GIVEN("A unit with a WalkerComponent positioned in the corner of a large map")
     {
+        World largeWorld(1001, 1001, false);
         Entity e(EntityType::Unit, 1, 1);
         e.attach(std::make_shared<WalkerComponent>());
         e.onSpawn(&largeWorld, 0, { 1, 1 });
@@ -90,6 +93,52 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
         }
     }
     
+    GIVEN("Two 2 units with WalkerComponents trying to move into the same tile")
+    {
+        World world(5, 5, false);
+        Entity e1(EntityType::Unit, 1, 1);
+        e1.attach(std::make_shared<WalkerComponent>());
+        e1.attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+        e1.onSpawn(&world, 0, { 1, 1 });
+        Entity e2(EntityType::Unit, 1, 1);
+        e2.attach(std::make_shared<WalkerComponent>());
+        e2.attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
+        e2.onSpawn(&world, 1, { 2, 2 });
+
+        WalkerComponent* walkerComponent1 = e1.requireComponent<WalkerComponent>(WalkerComponent::key);
+        WalkerComponent* walkerComponent2 = e2.requireComponent<WalkerComponent>(WalkerComponent::key);
+
+        WHEN("their WalkerComponents are updated to completion")
+        {
+            Pathfinding::Context context;
+            const MapNode destination = { 1, 2 };
+            walkerComponent1->moveTo(destination, context);
+            walkerComponent2->moveTo(destination, context);
+            walkerComponent1->update();
+            walkerComponent2->update();
+
+            while (walkerComponent1->getMovement().timeElapsed < walkerComponent1->getMovement().timeRequired)
+            {
+                walkerComponent1->update();
+            }
+            while (walkerComponent2->getMovement().timeElapsed < walkerComponent2->getMovement().timeRequired)
+            {
+                walkerComponent2->update();
+            }
+            
+            THEN("one unit has moved into the tile and the other has stayed put")
+            {
+                REQUIRE(!walkerComponent1->getMovement().isValid());
+                REQUIRE(!walkerComponent2->getMovement().isValid());
+                REQUIRE((e1.getPos() == destination || e2.getPos() == destination));
+                REQUIRE(world.getPassability(destination) == TilePassability::GroundUnit);
+                REQUIRE((world.getPassability({ 1, 1 }) == TilePassability::Clear
+                        || world.getPassability({ 2, 2 }) == TilePassability::Clear));
+                REQUIRE((world.getPassability({ 1, 1 }) == TilePassability::GroundUnit
+                        || world.getPassability({ 2, 2 }) == TilePassability::GroundUnit));              
+            }            
+        }
+    }      
 }
 
 SCENARIO("WalkerComponent can move a unit according to its route", "[components][movement-component]")
