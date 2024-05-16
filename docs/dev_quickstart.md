@@ -74,19 +74,11 @@ For dynamically-linked libraries:
 
 At this point, it should be possible to build the solution using Visual Studio. However, the game cannot run without the required resources. Most of these are extracted from the original game by the "setup" project.
 
-#### Setup Project
+> Some resources are custom-made for, or bundled with, Open-Rival. These are included in the `dist/res` directory. When compiling the project, CMake will automatically copy the contents of this directory to the build folder for use during development.
 
-Build and run the [setup project](/projects/setup) to perform resource extraction (instructions in the [readme](/projects/setup/README.md)). This should create the folders `sound`, `textures` and `video` within the `setup/res` directory.
+To extract the required resources, build and run the [setup project](/projects/setup) (instructions in the [readme](/projects/setup/README.md)). This should create the folders `sound`, `textures` and `video` within the `setup/res` directory.
 
 Copy these folders to a `res` folder inside the output directory (e.g. `build/x64/projects/Open-Rival/res`).
-
-#### Custom Resources
-
-Some resources are custom-made for Open-Rival. These are included in the `dist/res` directory. The contents of this directory should also be copied to this `res` folder for use during development.
-
-#### Font
-
-The game uses the [Procopius font](https://fontsgeek.com/fonts/Procopius-Regular) which must be downloaded and installed separately.
 
 ### 4) That's it! :tada:
 

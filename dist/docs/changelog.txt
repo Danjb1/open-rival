@@ -2,6 +2,9 @@
 Changelog
 ================================================================================
 
+v0.4.0 (Combat demo)
+- Procopius Regular font is now included in the download
+
 v0.3.0 (Multiplayer demo)
 - Added networking functionality with basic lobby screen
 - Added drag-select cursor

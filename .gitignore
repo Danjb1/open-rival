@@ -12,12 +12,6 @@ Thumbs.db
 /dist/*.dll
 /dist/*.zip
 
-# Visual Studio - Smart Command Line Arguments plugin
-*.args.json
-
-# Visual Studio - user preferences
-*.user
-
 # Libraries
 /libs/
 

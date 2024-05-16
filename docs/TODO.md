@@ -102,7 +102,6 @@
     - We should support 2 options:
         - Vanilla: Uses premade bitmaps with no translucency
         - Smooth: The current implementation
-- Include shareware version of Procopius?
 
 ### Rendering
 
@@ -196,6 +195,10 @@
 - [x] High-res fonts
 - [ ] Allow troops to stop moving if they are dying to traps
 - [ ] Repairing allied siege units
+- [x] Remove 25-unit limit for selections
+
+### Graphics
+
 - [ ] Translucent unit shadows (instead of solid black)
 - [ ] Real translucency for fog of war
 - [ ] Upscale graphics / videos using AI?
@@ -209,7 +212,7 @@
 - [ ] Show map preview / description
 - [ ] More endgame stats
 - [ ] Show additional unit stats (speed, hit speed, etc.)
-- [ ] Hover states for buttons#
+- [ ] Hover states for buttons
 - [ ] Scroll wheel support for lists
 
 ### Balance
@@ -254,20 +257,14 @@
 ### CMake
 
 - Make some settings common to all projects (e.g. Unicode)
-- Add shaders to project
-- Why do additional library directies also have a `/$(Configuration)` variant?
+- Why do additional library directories also have a `/$(Configuration)` variant?
 - Include libraries in a better way
     - https://stackoverflow.com/a/61708554/1624459
     - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
-- Copy required files to build directory automatically (`build\x64\projects\Open-Rival`)
-    - DLLs
-    - `res` folder
-    - `config.json`
-    - `args.json` (if present)
-    - `vcxproj.user` (if present)
 - Copy required files to setup build directory automatically (`build\x64\projects\setup`)
     - `setup` folder
     - `res` folder also needs to exist!
+- Resources, DLLs, config file, etc. are not checked for changes when running ZERO_CHECK
 - Use auto formatter: https://github.com/cheshirekow/cmake_format
 - Code review suggestions: https://codereview.stackexchange.com/questions/286277/a-slightly-unconventional-cmake-project
 - Document CMake options
