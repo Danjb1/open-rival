@@ -95,9 +95,14 @@ public:
      */
     bool isEmpty() const;
 
-    MapNode getDestination() const
+    MapNode getIntendedDestination() const
     {
         return destination;
+    }
+
+    MapNode getFinalDestination() const
+    {
+        return path.back();
     }
 
     /**
