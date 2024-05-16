@@ -16,7 +16,7 @@ include(CMake/StandardProjectSettings.cmake)
 set(CMAKE_CXX_STANDARD 20)
 
 # Library directory
-set(LIBS_DIR ${CMAKE_SOURCE_DIR}/libs CACHE STRING "Library directory")
+set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE STRING "Library directory")
 
 # Dependency versions
 set(FREETYPE_VERSION "2.13.1" CACHE STRING "FreeType version number")

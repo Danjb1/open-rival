@@ -5,7 +5,7 @@
           \ \_/ / |_) |  __/ | | |     | |\ \| |\ V / (_| | |
            \___/| .__/ \___|_| |_|     \_| \_|_| \_/ \__,_|_|
                 | |                                          
-                |_|                                    v0.3.0
+                |_|                                    v0.4.0
 
             by Danjb (admin@danjb.com)
             https://github.com/Danjb1/open-rival
@@ -38,24 +38,6 @@ can also specify the game directory manually by running from the command line,
 e.g.
 
     setup.exe -d "C:\rivalrealms"
-
---------------------------------------------------------------------------------
-Fonts
---------------------------------------------------------------------------------
-
-By default, Open-Rival expects to find 2 fonts which are not included in the
-download:
-
-    "serife.fon":
-        Comes as standard with Windows (no action required).
-
-    "Procopius Regular.ttf":
-        Download for free here: https://fontsgeek.com/fonts/Procopius-Regular
-
-Once these fonts are installed, the game should detect them automatically.
-Failing that, custom font directories can be supplied (see below).
-
-Alternatively, custom fonts can be used instead (see below).
 
 --------------------------------------------------------------------------------
 Playing the Game
