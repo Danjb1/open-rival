@@ -60,7 +60,7 @@ void World::addEntity(std::shared_ptr<Entity> entity, int x, int y)
 {
     entitiesList.push_back(entity);
     entitiesById[nextId] = entity;
-    entity->onSpawn(this, nextId, { x, y });
+    entity->addedToWorld(this, nextId, { x, y });
     ++nextId;
 }
 

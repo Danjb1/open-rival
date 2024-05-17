@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "game/Building.h"
+#include "game/BuildingType.h"
 #include "game/MapUtils.h"
-#include "game/Unit.h"
+#include "game/UnitType.h"
 #include "scenario/ScenarioData.h"
 
 namespace Rival {
@@ -40,10 +40,10 @@ public:
     std::shared_ptr<Entity> createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
 
 private:
-    Unit::Type getUnitType(std::uint8_t unitType) const;
+    UnitType getUnitType(std::uint8_t unitType) const;
     bool isNameEmpty(const std::string& name) const;
     Facing getFacing(std::uint8_t facing) const;
-    Building::Type getBuildingType(std::uint8_t buildingType) const;
+    BuildingType getBuildingType(std::uint8_t buildingType) const;
 
 private:
     const Resources& resources;

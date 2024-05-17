@@ -7,10 +7,10 @@
 
 #include "audio/MidiFile.h"
 #include "audio/WaveFile.h"
-#include "game/Building.h"
 #include "game/BuildingDef.h"
-#include "game/Unit.h"
+#include "game/BuildingType.h"
 #include "game/UnitDef.h"
+#include "game/UnitType.h"
 #include "gfx/Font.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/Spritesheet.h"
@@ -39,8 +39,8 @@ class TextureStore
 public:
     virtual std::shared_ptr<const Texture> getPalette() const = 0;
     virtual const Spritesheet& getTileSpritesheet(bool wilderness) const = 0;
-    virtual const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const = 0;
-    virtual const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const = 0;
+    virtual const Spritesheet& getUnitSpritesheet(UnitType unitType) const = 0;
+    virtual const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const = 0;
     virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
     virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
     virtual const Spritesheet& getCursorSpritesheet() const = 0;
@@ -67,8 +67,8 @@ public:
 class DataStore
 {
 public:
-    virtual const UnitDef* getUnitDef(Unit::Type unitType) const = 0;
-    virtual const BuildingDef* getBuildingDef(Building::Type buildingType) const = 0;
+    virtual const UnitDef* getUnitDef(UnitType unitType) const = 0;
+    virtual const BuildingDef* getBuildingDef(BuildingType buildingType) const = 0;
 };
 
 /**
@@ -87,8 +87,8 @@ public:
     // Begin TextureStore override
     std::shared_ptr<const Texture> getPalette() const override;
     const Spritesheet& getTileSpritesheet(bool wilderness) const override;
-    const Spritesheet& getUnitSpritesheet(Unit::Type unitType) const override;
-    const Spritesheet& getBuildingSpritesheet(Building::Type buildingType) const override;
+    const Spritesheet& getUnitSpritesheet(UnitType unitType) const override;
+    const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const override;
     const Spritesheet& getCommonObjectSpritesheet() const override;
     const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
     const Spritesheet& getCursorSpritesheet() const override;
@@ -110,8 +110,8 @@ public:
     // End SoundStore override
 
     // Begin DataStore override
-    const UnitDef* getUnitDef(Unit::Type unitType) const override;
-    const BuildingDef* getBuildingDef(Building::Type buildingType) const override;
+    const UnitDef* getUnitDef(UnitType unitType) const override;
+    const BuildingDef* getBuildingDef(BuildingType buildingType) const override;
     // End DataStore override
 
 private:
@@ -121,8 +121,8 @@ private:
     std::vector<std::shared_ptr<const Texture>> loadTextures();
     std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases();
     std::shared_ptr<const Texture> initPaletteTexture();
-    std::unordered_map<Building::Type, Spritesheet> initBuildingSpritesheets();
-    std::unordered_map<Unit::Type, Spritesheet> initUnitSpritesheets();
+    std::unordered_map<BuildingType, Spritesheet> initBuildingSpritesheets();
+    std::unordered_map<UnitType, Spritesheet> initUnitSpritesheets();
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
     Spritesheet initCursorSpritesheet();
@@ -131,8 +131,8 @@ private:
     Spritesheet initHitboxSpritesheet();
     std::vector<WaveFile> initSounds();
     std::vector<MidiFile> initMidis();
-    std::unordered_map<Unit::Type, UnitDef> initUnitDefs() const;
-    std::unordered_map<Building::Type, BuildingDef> initBuildingDefs() const;
+    std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
+    std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
 
 public:
     // Directories
@@ -177,8 +177,8 @@ private:
     std::shared_ptr<const Texture> paletteTexture;
 
     // Spritesheets
-    std::unordered_map<Unit::Type, Spritesheet> unitSpritesheets;
-    std::unordered_map<Building::Type, Spritesheet> buildingSpritesheets;
+    std::unordered_map<UnitType, Spritesheet> unitSpritesheets;
+    std::unordered_map<BuildingType, Spritesheet> buildingSpritesheets;
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
     Spritesheet cursorSpritesheet;
@@ -196,8 +196,8 @@ private:
     std::vector<MidiFile> midis;
 
     // Data
-    std::unordered_map<Unit::Type, UnitDef> unitDefs;
-    std::unordered_map<Building::Type, BuildingDef> buildingDefs;
+    std::unordered_map<UnitType, UnitDef> unitDefs;
+    std::unordered_map<BuildingType, BuildingDef> buildingDefs;
 };
 
 }  // namespace Rival

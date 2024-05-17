@@ -5,6 +5,7 @@
 #include <ios>      // std::hex
 #include <stdexcept>
 
+#include "entity/Entity.h"
 #include "utils/FileUtils.h"
 #include "utils/LogUtils.h"
 
@@ -777,7 +778,7 @@ UnitPlacement ScenarioReader::parseUnit()
     unit.prisoner = readBool();
     unit.goldCost = readShort();
     unit.woodCost = readShort();
-    unit.name = readString(Unit::maxNameLength);
+    unit.name = readString(Entity::maxNameLength);
     skip(13, false);
     unit.upgrade1Enabled = readBool();
     unit.upgrade2Enabled = readBool();

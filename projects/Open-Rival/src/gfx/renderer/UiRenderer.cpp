@@ -3,8 +3,8 @@
 #include "gfx/GlewWrapper.h"
 
 #include "application/Resources.h"
+#include "entity/Unit.h"
 #include "entity/components/PortraitComponent.h"
-#include "entity/components/UnitPropsComponent.h"
 #include "game/InventoryComponent.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
@@ -14,8 +14,7 @@
 
 namespace Rival {
 
-UiRenderer::UiRenderer(
-        const PlayerStore& playerStore,
+UiRenderer::UiRenderer(const PlayerStore& playerStore,
         const TextureStore& textureStore,
         const FontStore& fontStore,
         const Window* window,
@@ -30,16 +29,13 @@ UiRenderer::UiRenderer(
     , minimapLeftBorder(GameInterface::minimapLeftBorder, textureStore.getUiTextureAtlas(), "img_ui_1060.tga")
     , minimapTopBorder(GameInterface::minimapTopBorder, textureStore.getUiTextureAtlas(), "img_ui_1058.tga")
     , minimapBottomBorder(GameInterface::minimapBottomBorder, textureStore.getUiTextureAtlas(), "img_ui_1059.tga")
-    , mainPanel(
-              GameInterface::mainPanel,
+    , mainPanel(GameInterface::mainPanel,
               textureStore.getUiTextureAtlas(),
               playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1123.tga" : "img_ui_1057.tga")
-    , hideInventoryOverlay(
-              GameInterface::hideInventoryOverlay,
+    , hideInventoryOverlay(GameInterface::hideInventoryOverlay,
               textureStore.getUiTextureAtlas(),
               playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1130.tga" : "img_ui_1064.tga")
-    , statsPanel(
-              GameInterface::statsPanel,
+    , statsPanel(GameInterface::statsPanel,
               textureStore.getUiTextureAtlas(),
               playerStore.getLocalPlayerState().getRace() == Race::Greenskin ? "img_ui_1136.tga" : "img_ui_1070.tga")
 
@@ -50,7 +46,7 @@ UiRenderer::UiRenderer(
     // Text
     , nameProperties({ &fontStore.getFontSmall() })
     , nameRenderable(
-              Unit::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
+              Entity::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
     , textRenderer(window)
 
     // Cursor
@@ -86,8 +82,7 @@ void UiRenderer::renderMainUi()
     }
 
     // Render
-    glDrawElements(
-            mainUiRenderable.getDrawMode(),
+    glDrawElements(mainUiRenderable.getDrawMode(),
             numMainUiImages * mainUiRenderable.getIndicesPerSprite(),
             GL_UNSIGNED_INT,
             nullptr);
@@ -303,13 +298,13 @@ bool UiRenderer::isNameVisible(std::string& outName) const
         return false;
     }
 
-    auto unitProps = selectedEntity->getComponent<UnitPropsComponent>(UnitPropsComponent::key);
-    if (!unitProps)
+    Unit* unit = selectedEntity->as<Unit>();
+    if (!unit)
     {
         return false;
     }
 
-    outName = unitProps->getName();
+    outName = unit->getName();
     return true;
 }
 

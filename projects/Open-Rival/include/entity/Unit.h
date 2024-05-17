@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cstdint>  // uint8_t
 #include <memory>
 #include <string>
 #include <unordered_set>
 
-#include "entity/components/EntityComponent.h"
+#include "entity/Entity.h"
 #include "entity/components/MovementListener.h"
-#include "game/Unit.h"
+#include "game/UnitType.h"
 
 namespace Rival {
 
@@ -21,41 +20,47 @@ enum class UnitState : std::uint8_t
     Attacking
 };
 
-/**
- * Interface used to listen to unit state changes.
- */
+/** Interface used to listen to unit state changes. */
 class UnitStateListener
 {
 public:
     virtual void onUnitStateChanged(const UnitState newState) = 0;
 };
 
-/**
- * Component containing basic unit properties.
- */
-class UnitPropsComponent
-    : public EntityComponent
+/** A Unit that can be added to the world. */
+class Unit
+    : public Entity
     , public MovementListener
 {
+public:
+    static constexpr EntityType staticEntityType = EntityType::Unit;
+    static constexpr int width = 1;
+    static constexpr int height = 1;
 
 public:
-    UnitPropsComponent(Unit::Type type, std::string name, bool isNameUnique);
+    Unit(UnitType type, std::string name, bool isNameUnique)
+        : Entity(staticEntityType, width, height)
+        , type(type)
+        , name(name)
+        , isNameUnique(isNameUnique)
+    {
+    }
 
-    // Begin EntityComponent override
-    virtual void onEntitySpawned(World* scenario) override;
-    virtual void onDelete() override;
-    // End EntityComponent override
+    // Begin Entity override
+    void onReady() override;
+    void onDestroy() override;
+    // End Entity override
 
     // Begin MovementListener override
-    virtual void onUnitMoveStart(const MapNode* nextNode) override;
-    virtual void onUnitPaused() override;
-    virtual void onUnitStopped() override;
+    void onUnitMoveStart(const MapNode* nextNode) override;
+    void onUnitPaused() override;
+    void onUnitStopped() override;
     // End MovementListener override
 
     void addStateListener(UnitStateListener* listener);
     void removeStateListener(UnitStateListener* listener);
 
-    Unit::Type getUnitType() const
+    UnitType getUnitType() const
     {
         return type;
     }
@@ -65,21 +70,18 @@ public:
         return name;
     }
 
-    /**
-     * Gets the unit's current state.
-     */
+    /** Gets the Unit's current state. */
     UnitState getState() const
     {
         return state;
     }
 
-    /**
-     * Sets this Entity's state.
-     */
+    /** Sets this Unit's state. */
     void setState(UnitState state);
 
-public:
-    static const std::string key;
+private:
+    /** Gets a weak pointer to this Unit. */
+    std::weak_ptr<Unit> getWeakThis();
 
 private:
     std::string name;
@@ -89,7 +91,7 @@ private:
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
 
-    Unit::Type type = Unit::Type::Invalid;
+    UnitType type = UnitType::Invalid;
 
     UnitState state = UnitState::Idle;
 };

@@ -2,8 +2,8 @@
 
 namespace Rival {
 
-Entity::Entity(EntityType type, int width, int height)
-    : type(type)
+Entity::Entity(EntityType entityType, int width, int height)
+    : entityType(entityType)
     , width(width)
     , height(height)
     , pos({ -1, -1 })
@@ -20,7 +20,7 @@ void Entity::attach(std::shared_ptr<EntityComponent> component)
     components.insert({ component->getKey(), component });
 }
 
-void Entity::onSpawn(World* newWorld, int newId, MapNode newPos)
+void Entity::addedToWorld(World* newWorld, int newId, MapNode newPos)
 {
     world = newWorld;
     id = newId;
@@ -29,8 +29,10 @@ void Entity::onSpawn(World* newWorld, int newId, MapNode newPos)
     for (const auto& kv : components)
     {
         const auto& component = kv.second;
-        component->onEntitySpawned(world);
+        component->onEntityAddedToWorld(world);
     }
+
+    onReady();
 }
 
 void Entity::earlyUpdate()
@@ -46,7 +48,7 @@ void Entity::update()
         if (component->isDeleted())
         {
             // Clean up deleted components
-            component->onDelete();
+            component->destroy();
             it = components.erase(it);
             continue;
         }
@@ -56,13 +58,15 @@ void Entity::update()
     }
 }
 
-void Entity::onDelete()
+void Entity::destroy()
 {
-    // Delete all components
+    onDestroy();
+
+    // Destroy all components
     for (const auto& kv : components)
     {
         const auto& component = kv.second;
-        component->onDelete();
+        component->destroy();
     }
 
     components.clear();

@@ -1,8 +1,10 @@
 #include "entity/components/WallComponent.h"
 
+#include "entity/Building.h"
 #include "entity/Entity.h"
-#include "entity/components/BuildingPropsComponent.h"
+#include "entity/Palisade.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -14,18 +16,15 @@ WallComponent::WallComponent(WallVariant variant)
 {
 }
 
-void WallComponent::onEntitySpawned(World*)
+void WallComponent::onEntityAddedToWorld(World*)
 {
-    int baseTxIndex = 0;
-
     // Set txIndex based on Wall type
-    const BuildingPropsComponent* buildingPropsComponent =
-            entity->getComponent<BuildingPropsComponent>(BuildingPropsComponent::key);
-    if (buildingPropsComponent)
+    int baseTxIndex = 0;
+    if (Building* building = entity->as<Building>())
     {
-        baseTxIndex = getBaseTxIndex(buildingPropsComponent->getBuildingType());
+        baseTxIndex = getBaseTxIndex(building->getBuildingType());
     }
-    else if (entity->getType() == EntityType::Palisade)
+    else if (Palisade* palisade = entity->as<Palisade>())
     {
         baseTxIndex = baseTxIndexPalisade;
     }
@@ -43,13 +42,13 @@ void WallComponent::onEntitySpawned(World*)
     }
 }
 
-int WallComponent::getBaseTxIndex(Building::Type buildingType) const
+int WallComponent::getBaseTxIndex(BuildingType buildingType) const
 {
-    if (buildingType == Building::Type::TreeWall)
+    if (buildingType == BuildingType::TreeWall)
     {
         return baseTxIndexElf;
     }
-    else if (buildingType == Building::Type::GreenskinWall)
+    else if (buildingType == BuildingType::GreenskinWall)
     {
         return baseTxIndexGreenskin;
     }

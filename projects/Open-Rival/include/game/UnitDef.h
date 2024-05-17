@@ -34,14 +34,12 @@ public:
     const SoundBank* getSoundBank(UnitSoundType soundType) const;
 
 private:
-    static void tryReadAnimation(
-            const json& rawAnims,
+    static void tryReadAnimation(const json& rawAnims,
             const std::string& key,
             UnitAnimationType animType,
             std::unordered_map<UnitAnimationType, const Animation>& animations);
 
-    static void tryReadSoundBank(
-            const json& rawSounds,
+    static void tryReadSoundBank(const json& rawSounds,
             const std::string& key,
             UnitSoundType soundType,
             std::unordered_map<UnitSoundType, const SoundBank>& soundBanks);
@@ -49,19 +47,13 @@ private:
     static MovementMode getMovementMode(const std::string& s);
 
 public:
-    /**
-     * The default name for this unit type.
-     */
+    /** The default name for this unit type. */
     std::string name;
 
-    /**
-     * ID of this unit's portrait image.
-     */
+    /** ID of this unit's portrait image. */
     int portraitId = 0;
 
-    /**
-     * How this unit moves around the map.
-     */
+    /** How this unit moves around the map. */
     MovementMode movementMode;
 
 private:
@@ -72,9 +64,7 @@ private:
      */
     std::unordered_map<UnitAnimationType, const Animation> animations;
 
-    /**
-     * Sound banks by type.
-     */
+    /** Sound banks by type. */
     std::unordered_map<UnitSoundType, const SoundBank> soundBanks;
 };
 

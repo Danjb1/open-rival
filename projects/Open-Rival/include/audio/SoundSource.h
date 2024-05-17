@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "audio/WaveFile.h"
-#include "game/Unit.h"
+#include "game/UnitType.h"
 
 namespace Rival {
 
@@ -20,7 +20,7 @@ struct SoundSource
     /**
      * Unit type that generated the sound, if applicable.
      */
-    Unit::Type unitType = Unit::Type::Invalid;
+    UnitType unitType = UnitType::Invalid;
 
     /**
      * Creates a new SoundSource positioned at the listener.

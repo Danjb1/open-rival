@@ -28,13 +28,13 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         tiles.push_back(buildTile(data.tiles[i]));
     }
 
-    std::unique_ptr<World> scenario =
+    std::unique_ptr<World> world =
             std::make_unique<World>(data.hdr.mapWidth, data.hdr.mapHeight, data.hdr.wilderness, tiles);
 
     // Initialize Units
     for (const UnitPlacement& unitPlacement : data.units)
     {
-        addUnit(scenario.get(), unitPlacement, entityFactory);
+        addUnit(world.get(), unitPlacement, entityFactory);
     }
 
     // Initialize Buildings
@@ -43,12 +43,12 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         if (buildingPlacement.type == 0xAB)
         {
             // Palisade
-            addPalisade(scenario.get(), buildingPlacement, entityFactory);
+            addPalisade(world.get(), buildingPlacement, entityFactory);
         }
         else if (buildingPlacement.type == 0xAC)
         {
             // Grate
-            addGrate(scenario.get(), buildingPlacement, entityFactory);
+            addGrate(world.get(), buildingPlacement, entityFactory);
         }
         else if (buildingPlacement.type == 0xAD)
         {
@@ -58,17 +58,17 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         else
         {
             // Player-owned building
-            addBuilding(scenario.get(), buildingPlacement, entityFactory);
+            addBuilding(world.get(), buildingPlacement, entityFactory);
         }
     }
 
     // Initialize Objects
     for (const ObjectPlacement& objPlacement : data.objects)
     {
-        addObject(scenario.get(), objPlacement, entityFactory);
+        addObject(world.get(), objPlacement, entityFactory);
     }
 
-    return scenario;
+    return world;
 }
 
 Race ScenarioBuilder::getRace(std::uint8_t raceId) const
@@ -243,38 +243,38 @@ Tile ScenarioBuilder::buildTile(TilePlacement& tile) const
 }
 
 void ScenarioBuilder::addUnit(
-        World* scenario, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const
+        World* world, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const
 {
     std::shared_ptr<Entity> unit = entityFactory.createUnit(unitPlacement);
-    scenario->addEntity(unit, unitPlacement.x, unitPlacement.y);
+    world->addEntity(unit, unitPlacement.x, unitPlacement.y);
 }
 
 void ScenarioBuilder::addPalisade(
-        World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
+        World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
 {
-    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness(), false);
-    scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, world->isWilderness(), false);
+    world->addEntity(building, buildingPlacement.x, buildingPlacement.y);
 }
 
 void ScenarioBuilder::addGrate(
-        World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
+        World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
 {
-    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, scenario->isWilderness(), true);
-    scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+    std::shared_ptr<Entity> building = entityFactory.createPalisade(buildingPlacement, world->isWilderness(), true);
+    world->addEntity(building, buildingPlacement.x, buildingPlacement.y);
 }
 
 void ScenarioBuilder::addBuilding(
-        World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
+        World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const
 {
     std::shared_ptr<Entity> building = entityFactory.createBuilding(buildingPlacement);
-    scenario->addEntity(building, buildingPlacement.x, buildingPlacement.y);
+    world->addEntity(building, buildingPlacement.x, buildingPlacement.y);
 }
 
 void ScenarioBuilder::addObject(
-        World* scenario, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const
+        World* world, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const
 {
-    std::shared_ptr<Entity> obj = entityFactory.createObject(objPlacement, scenario->isWilderness());
-    scenario->addEntity(obj, objPlacement.x, objPlacement.y);
+    std::shared_ptr<Entity> obj = entityFactory.createObject(objPlacement, world->isWilderness());
+    world->addEntity(obj, objPlacement.x, objPlacement.y);
 }
 
 }  // namespace Rival

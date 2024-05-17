@@ -7,6 +7,7 @@
 #include "audio/SoundSource.h"
 #include "audio/WaveFile.h"
 #include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "game/UnitDef.h"
 
 namespace Rival {
@@ -21,11 +22,6 @@ VoiceComponent::VoiceComponent(const AudioStore& audioStore, AudioSystem& audioS
 {
 }
 
-void VoiceComponent::onEntitySpawned(World*)
-{
-    weakUnitPropsComponent = entity->getComponentWeak<UnitPropsComponent>(UnitPropsComponent::key);
-}
-
 void VoiceComponent::playSound(UnitSoundType soundType)
 {
     const SoundBank* soundBank = unitDef.getSoundBank(soundType);
@@ -34,7 +30,14 @@ void VoiceComponent::playSound(UnitSoundType soundType)
         return;
     }
 
-    if (isUnitTypeAlreadySpeaking())
+    Unit* unit = entity->as<Unit>();
+    if (!unit)
+    {
+        // For now, we only support Unit voices; later we will need to support Buildings as well
+        return;
+    }
+
+    if (isUnitTypeAlreadySpeaking(unit->getUnitType()))
     {
         return;
     }
@@ -42,37 +45,28 @@ void VoiceComponent::playSound(UnitSoundType soundType)
     int soundId = soundBank->getRandomSound();
     const WaveFile& waveFile = audioStore.getSound(soundId);
     SoundSource soundSource = { waveFile };
-
-    // Associate the sound source with our unit type
-    if (auto unitPropsComponent = weakUnitPropsComponent.lock())
-    {
-        soundSource.unitType = unitPropsComponent->getUnitType();
-    }
+    soundSource.unitType = unit->getUnitType();
 
     audioSystem.playSound(soundSource);
 }
 
-bool VoiceComponent::isUnitTypeAlreadySpeaking() const
+bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
 {
     // There can only be 1 voice clip playing at a time, per unit type
-    if (auto unitPropsComponent = weakUnitPropsComponent.lock())
+    std::unordered_map<ALuint, SoundSource> playedSounds = audioSystem.getPlayedSounds();
+
+    for (const auto& playedSound : playedSounds)
     {
-        std::unordered_map<ALuint, SoundSource> playedSounds = audioSystem.getPlayedSounds();
-        Unit::Type currentUnitType = unitPropsComponent->getUnitType();
-
-        for (const auto& playedSound : playedSounds)
+        const SoundSource& source = playedSound.second;
+        if (source.unitType != unitType)
         {
-            const SoundSource& source = playedSound.second;
-            if (source.unitType != currentUnitType)
-            {
-                continue;
-            }
+            continue;
+        }
 
-            ALuint sourceId = playedSound.first;
-            if (audioSystem.isSoundPlaying(sourceId))
-            {
-                return true;
-            }
+        ALuint sourceId = playedSound.first;
+        if (audioSystem.isSoundPlaying(sourceId))
+        {
+            return true;
         }
     }
 

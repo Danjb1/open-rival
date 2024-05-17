@@ -4,7 +4,6 @@
 #include <fstream>
 #include <memory>
 
-#include "game/Building.h"
 #include "game/Race.h"
 #include "game/Tile.h"
 #include "scenario/ScenarioData.h"
@@ -29,18 +28,17 @@ private:
 
     Tile buildTile(TilePlacement& tile) const;
 
-    void addUnit(World* scenario, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const;
+    void addUnit(World* world, const UnitPlacement& unitPlacement, const EntityFactory& entityFactory) const;
 
     void addPalisade(
-            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+            World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
-    void addGrate(
-            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+    void addGrate(World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
     void addBuilding(
-            World* scenario, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
+            World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
-    void addObject(World* scenario, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
+    void addObject(World* world, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
 };
 
 }  // namespace Rival

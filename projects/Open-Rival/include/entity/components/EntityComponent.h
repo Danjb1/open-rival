@@ -33,7 +33,7 @@ public:
      * At this point, the Entity is guaranteed to have a valid ID and
      * position, and all initial components will have been attached.
      */
-    virtual void onEntitySpawned(World*) {}
+    virtual void onEntityAddedToWorld(World*) {}
 
     /**
      * Updates this EntityComponent by one frame.
@@ -70,9 +70,9 @@ public:
 
 protected:
     /**
-     * Callback for when this EntityComponent is deleted.
+     * Callback for when this EntityComponent is destroyed.
      */
-    virtual void onDelete() {};
+    virtual void destroy() {};
 
 protected:
     /**

@@ -7,6 +7,7 @@
 #include "audio/MidsDecoder.h"
 #include "game/GameInterface.h"
 #include "game/PathUtils.h"
+#include "game/UnitType.h"
 #include "gfx/RenderUtils.h"
 #include "utils/ConfigUtils.h"
 #include "utils/FileUtils.h"
@@ -185,39 +186,39 @@ std::shared_ptr<const Texture> Resources::initPaletteTexture()
     return PaletteUtils::createPaletteTexture();
 }
 
-std::unordered_map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets()
+std::unordered_map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets()
 {
-    std::unordered_map<Building::Type, Spritesheet> spritesheets;
+    std::unordered_map<BuildingType, Spritesheet> spritesheets;
     int nextIndex = txIndexBuildings;
 
-    auto createSpritesheets = [&](int first, int last) {
-        for (auto it = first; it <= last; ++it)
+    auto createSpritesheets = [&](BuildingType first, BuildingType last) {
+        for (int i = static_cast<int>(first); i <= static_cast<int>(last); ++i)
         {
             spritesheets.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(static_cast<Building::Type>(it)),
+                    std::forward_as_tuple(static_cast<BuildingType>(i)),
                     std::forward_as_tuple(
                             textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
         }
     };
 
-    createSpritesheets(Building::firstElfBuildingType, Building::lastElfBuildingType);
+    createSpritesheets(BuildingType::ElfFirst, BuildingType::ElfLast);
     ++nextIndex;
-    createSpritesheets(Building::firstGreenskinBuildingType, Building::lastGreenskinBuildingType);
+    createSpritesheets(BuildingType::GreenskinFirst, BuildingType::GreenskinLast);
     ++nextIndex;
-    createSpritesheets(Building::firstHumanBuildingType, Building::lastHumanBuildingType);
+    createSpritesheets(BuildingType::HumanFirst, BuildingType::HumanLast);
 
     return spritesheets;
 }
 
-std::unordered_map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
+std::unordered_map<UnitType, Spritesheet> Resources::initUnitSpritesheets()
 {
-    std::unordered_map<Unit::Type, Spritesheet> spritesheets;
+    std::unordered_map<UnitType, Spritesheet> spritesheets;
     int nextIndex = txIndexUnits;
 
-    for (auto it = Unit::firstUnitType; it <= Unit::lastUnitType; ++it)
+    for (int i = static_cast<int>(UnitType::First); i <= static_cast<int>(UnitType::Last); ++i)
     {
         spritesheets.emplace(std::piecewise_construct,
-                std::forward_as_tuple(static_cast<Unit::Type>(it)),
+                std::forward_as_tuple(static_cast<UnitType>(i)),
                 std::forward_as_tuple(
                         textures.at(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0));
         nextIndex++;
@@ -323,22 +324,22 @@ std::vector<MidiFile> Resources::initMidis()
     return midisRead;
 }
 
-std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
+std::unordered_map<UnitType, UnitDef> Resources::initUnitDefs() const
 {
     json rawData = JsonUtils::readJsonFile(Resources::dataDir + "units.json");
     json unitList = rawData["units"];
 
-    std::unordered_map<Unit::Type, UnitDef> allUnitDefs;
+    std::unordered_map<UnitType, UnitDef> allUnitDefs;
     int nextUnitType = 0;
 
     for (const auto& rawUnitDef : unitList)
     {
-        if (nextUnitType < 0 || nextUnitType > Unit::lastUnitType)
+        if (nextUnitType < 0 || nextUnitType > static_cast<int>(UnitType::Last))
         {
             throw std::runtime_error("Trying to parse invalid unit type: " + std::to_string(nextUnitType));
         }
 
-        Unit::Type unitType = static_cast<Unit::Type>(nextUnitType);
+        UnitType unitType = static_cast<UnitType>(nextUnitType);
 
         try
         {
@@ -356,22 +357,22 @@ std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
     return allUnitDefs;
 }
 
-std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const
+std::unordered_map<BuildingType, BuildingDef> Resources::initBuildingDefs() const
 {
     json rawData = JsonUtils::readJsonFile(Resources::dataDir + "buildings.json");
     json buildingList = rawData["buildings"];
 
-    std::unordered_map<Building::Type, BuildingDef> allBuildingDefs;
+    std::unordered_map<BuildingType, BuildingDef> allBuildingDefs;
     int nextBuildingType = 0;
 
     for (const auto& rawBuildingDef : buildingList)
     {
-        if (nextBuildingType < 0 || nextBuildingType > Building::lastBuildingType)
+        if (nextBuildingType < 0 || nextBuildingType > static_cast<int>(BuildingType::Last))
         {
             throw std::runtime_error("Trying to parse invalid building type: " + std::to_string(nextBuildingType));
         }
 
-        Building::Type unitType = static_cast<Building::Type>(nextBuildingType);
+        BuildingType unitType = static_cast<BuildingType>(nextBuildingType);
 
         try
         {
@@ -404,12 +405,12 @@ const Spritesheet& Resources::getTileSpritesheet(bool wilderness) const
     return wilderness ? tileSpritesheets.at(1) : tileSpritesheets.at(0);
 }
 
-const Spritesheet& Resources::getUnitSpritesheet(Unit::Type unitType) const
+const Spritesheet& Resources::getUnitSpritesheet(UnitType unitType) const
 {
     return unitSpritesheets.at(unitType);
 }
 
-const Spritesheet& Resources::getBuildingSpritesheet(Building::Type buildingType) const
+const Spritesheet& Resources::getBuildingSpritesheet(BuildingType buildingType) const
 {
     return buildingSpritesheets.at(buildingType);
 }
@@ -469,13 +470,13 @@ const MidiFile& Resources::getMidi(int id) const
     return midis.at(id);
 }
 
-const UnitDef* Resources::getUnitDef(Unit::Type unitType) const
+const UnitDef* Resources::getUnitDef(UnitType unitType) const
 {
     auto iter = unitDefs.find(unitType);
     return iter == unitDefs.cend() ? nullptr : &iter->second;
 }
 
-const BuildingDef* Resources::getBuildingDef(Building::Type buildingType) const
+const BuildingDef* Resources::getBuildingDef(BuildingType buildingType) const
 {
     auto iter = buildingDefs.find(buildingType);
     return iter == buildingDefs.cend() ? nullptr : &iter->second;
