@@ -46,10 +46,9 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
         };
         /* clang-format on */
 
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
-        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
 
@@ -60,7 +59,7 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
 
         WHEN("the entity is spawned")
         {
-            e.onSpawn(nullptr, 0, { 0, 0 });
+            e.addedToWorld(nullptr, 0, { 0, 0 });
 
             THEN("the entity's SpriteComponent has its txIndex set")
             {
@@ -96,13 +95,12 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
         };
         /* clang-format on */
 
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
-        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
-        e.onSpawn(nullptr, 0, { 0, 0 });
+        e.addedToWorld(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
         UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
@@ -163,13 +161,12 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
         };
         /* clang-format on */
 
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         UnitDef unitDef = UnitDef::fromJson(unitDefJson);
 
-        e.attach(std::make_shared<UnitPropsComponent>(Unit::Type::Knight, "", false));
         e.attach(std::make_shared<SpriteComponent>(spritesheet));
         e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
-        e.onSpawn(nullptr, 0, { 0, 0 });
+        e.addedToWorld(nullptr, 0, { 0, 0 });
 
         const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
         UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);

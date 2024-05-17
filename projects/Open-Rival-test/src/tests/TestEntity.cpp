@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
 
 using namespace Rival;
@@ -30,7 +30,7 @@ public:
         attached = true;
     }
 
-    void onEntitySpawned(World*) override
+    void onEntityAddedToWorld(World*) override
     {
         entitySpawned = true;
     }
@@ -45,7 +45,7 @@ SCENARIO("Entities can have components attached to them", "[entity]")
 {
     GIVEN("An Entity")
     {
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
 
         WHEN("attaching a component to the Entity")
         {
@@ -70,13 +70,13 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
 {
     GIVEN("An Entity with a component")
     {
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         int updateCount = 0;
         e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is spawned")
         {
-            e.onSpawn(nullptr, 0, { 0, 0 });
+            e.addedToWorld(nullptr, 0, { 0, 0 });
 
             THEN("the component receives a callback")
             {
@@ -91,7 +91,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 {
     GIVEN("An Entity with a component")
     {
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         int updateCount = 0;
         e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
@@ -135,7 +135,7 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 {
     GIVEN("An Entity with a component")
     {
-        Entity e(EntityType::Unit, 1, 1);
+        Unit e(UnitType::Knight, "", false);
         int updateCount = 0;
         e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
