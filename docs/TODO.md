@@ -4,7 +4,10 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Create subclasses of Entity, e.g. Unit, Building, Container instead of using *PropsComponent to store basic properties
+- Provide an easier way to get components that are guaranteed to exist for a Unit
+- Revise usages of weakThis in EntityComponents (use std::enable_shared_from_this<EntityComponent>)
+- Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
+- Lag spike when trying to move onto a wall
 - Create HealthComponent
 - Render health bars of selected units
 - Show attack cursor when hovering over enemy-owned entities
@@ -246,7 +249,6 @@
 
 ### General
 
-- Commit upscaled video files (Git LFS)
 - Consider moving some docs to GitHub wiki
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)

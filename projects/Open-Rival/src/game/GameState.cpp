@@ -189,7 +189,7 @@ void GameState::updateEntities() const
     for (const auto& e : deletedEntities)
     {
         world->removeEntity(e);
-        e->onDelete();
+        e->destroy();
     }
 }
 

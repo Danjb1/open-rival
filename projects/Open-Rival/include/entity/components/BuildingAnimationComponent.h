@@ -3,7 +3,6 @@
 #include <memory>
 #include <string>
 
-#include "entity/components/BuildingPropsComponent.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/FacingComponent.h"
 
@@ -23,7 +22,7 @@ public:
     BuildingAnimationComponent(const BuildingDef& buildingDef);
 
     // Begin EntityComponent override
-    virtual void onEntitySpawned(World* world) override;
+    virtual void onEntityAddedToWorld(World* world) override;
     virtual void update() override;
     // End EntityComponent override
 

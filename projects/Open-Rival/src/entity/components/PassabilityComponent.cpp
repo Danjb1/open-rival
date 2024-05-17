@@ -13,7 +13,7 @@ PassabilityComponent::PassabilityComponent(TilePassability passability)
 {
 }
 
-void PassabilityComponent::onEntitySpawned(World* world)
+void PassabilityComponent::onEntityAddedToWorld(World* world)
 {
     world->setPassability(entity->getPos(), passability);
 }

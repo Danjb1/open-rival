@@ -20,7 +20,7 @@ public:
 
     PassabilityComponent(TilePassability passability);
 
-    void onEntitySpawned(World* world) override;
+    void onEntityAddedToWorld(World* world) override;
 
     TilePassability getPassability() const;
 

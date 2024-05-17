@@ -4,8 +4,11 @@
 #include <string>
 
 #include "application/Resources.h"
+#include "entity/Building.h"
+#include "entity/Decoration.h"
+#include "entity/Palisade.h"
+#include "entity/Unit.h"
 #include "entity/components/BuildingAnimationComponent.h"
-#include "entity/components/BuildingPropsComponent.h"
 #include "entity/components/FlyerComponent.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/OwnerComponent.h"
@@ -14,7 +17,6 @@
 #include "entity/components/SeafarerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitAnimationComponent.h"
-#include "entity/components/UnitPropsComponent.h"
 #include "entity/components/VoiceComponent.h"
 #include "entity/components/WalkerComponent.h"
 #include "entity/components/WallComponent.h"
@@ -22,6 +24,7 @@
 #include "game/InventoryComponent.h"
 #include "game/PlayerState.h"
 #include "game/Tile.h"
+#include "game/UnitType.h"
 
 namespace Rival {
 
@@ -33,18 +36,15 @@ EntityFactory::EntityFactory(const Resources& resources, AudioSystem& audioSyste
 
 std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlacement) const
 {
-    // Create Entity
-    std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, Unit::width, Unit::height);
-
     // Find the UnitDef
-    const Unit::Type unitType = getUnitType(unitPlacement.type);
+    const UnitType unitType = getUnitType(unitPlacement.type);
     const UnitDef* unitDef = resources.getUnitDef(unitType);
     if (!unitDef)
     {
         throw std::runtime_error("No unit definition found for " + std::to_string(unitPlacement.type));
     }
 
-    // UnitPropsComponent
+    // Create Unit
     std::string name;
     bool isNameUnique;
     if (isNameEmpty(unitPlacement.name))
@@ -57,7 +57,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
         name = unitPlacement.name;
         isNameUnique = true;
     }
-    unit->attach(std::make_shared<UnitPropsComponent>(unitType, name, isNameUnique));
+    std::shared_ptr<Unit> unit = std::make_shared<Unit>(unitType, name, isNameUnique);
 
     // OwnerComponent (note: monsters use player = 8)
     if (unitPlacement.player < PlayerStore::maxPlayers)
@@ -110,11 +110,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
 std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& buildingPlacement) const
 {
-    // Create Entity
-    const Building::Type buildingType = getBuildingType(buildingPlacement.type);
-    const int width = Building::getWidth(buildingType);
-    const int height = Building::getHeight(buildingType);
-    std::shared_ptr<Entity> building = std::make_shared<Entity>(EntityType::Building, width, height);
+    // Create Building
+    const BuildingType buildingType = getBuildingType(buildingPlacement.type);
+    std::shared_ptr<Building> building = std::make_shared<Building>(buildingType);
 
     // Find the BuildingDef
     const BuildingDef* buildingDef = resources.getBuildingDef(buildingType);
@@ -123,9 +121,6 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
         throw std::runtime_error("No building definition found for " + std::to_string(buildingPlacement.type));
     }
 
-    // BuildingPropsComponent
-    building->attach(std::make_shared<BuildingPropsComponent>(buildingType));
-
     // OwnerComponent
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));
 
@@ -133,7 +128,7 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     const Spritesheet& spritesheet = resources.getBuildingSpritesheet(buildingType);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
-    if (Building::isWall(buildingType))
+    if (building->isWall())
     {
         // WallComponent
         WallVariant wallVariant = static_cast<WallVariant>(buildingPlacement.wallVariant);
@@ -155,8 +150,7 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(
         const BuildingPlacement& buildingPlacement, bool wilderness, bool isGrate) const
 {
     // Create Entity
-    EntityType type = isGrate ? EntityType::Grate : EntityType::Palisade;
-    std::shared_ptr<Entity> building = std::make_shared<Entity>(type, Building::wallWidth, Building::wallHeight);
+    std::shared_ptr<Palisade> building = std::make_shared<Palisade>(isGrate);
 
     // SpriteComponent
     const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
@@ -175,7 +169,7 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(
 std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const
 {
     // Create Entity
-    std::shared_ptr<Entity> obj = std::make_shared<Entity>(EntityType::Decoration, Unit::width, Unit::height);
+    std::shared_ptr<Decoration> obj = std::make_shared<Decoration>();
 
     // SpriteComponent
     if (objPlacement.type == 0xAF)
@@ -196,154 +190,154 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     return obj;
 }
 
-Unit::Type EntityFactory::getUnitType(std::uint8_t unitType) const
+UnitType EntityFactory::getUnitType(std::uint8_t unitType) const
 {
     switch (unitType)
     {
     case 0x33:
-        return Unit::Type::Peasant;
+        return UnitType::Peasant;
     case 0x34:
-        return Unit::Type::Bowman;
+        return UnitType::Bowman;
     case 0x35:
-        return Unit::Type::LightCavalry;
+        return UnitType::LightCavalry;
     case 0x36:
-        return Unit::Type::Knight;
+        return UnitType::Knight;
     case 0x37:
-        return Unit::Type::FireMaster;
+        return UnitType::FireMaster;
     case 0x38:
-        return Unit::Type::Thief;
+        return UnitType::Thief;
     case 0x39:
-        return Unit::Type::Ballista;
+        return UnitType::Ballista;
     case 0x3A:
-        return Unit::Type::ChariotOfWar;
+        return UnitType::ChariotOfWar;
     case 0x3B:
-        return Unit::Type::Wizard;
+        return UnitType::Wizard;
     case 0x3C:
-        return Unit::Type::Priest;
+        return UnitType::Priest;
     case 0x3D:
-        return Unit::Type::SeaBarge;
+        return UnitType::SeaBarge;
     case 0x3E:
-        return Unit::Type::Battleship;
+        return UnitType::Battleship;
     case 0x3F:
-        return Unit::Type::PegasRider;
+        return UnitType::PegasRider;
     case 0x40:
-        return Unit::Type::Zeppelin;
+        return UnitType::Zeppelin;
     case 0x41:
-        return Unit::Type::Serf;
+        return UnitType::Serf;
     case 0x42:
-        return Unit::Type::RockThrower;
+        return UnitType::RockThrower;
     case 0x43:
-        return Unit::Type::HordeRider;
+        return UnitType::HordeRider;
     case 0x44:
-        return Unit::Type::Warlord;
+        return UnitType::Warlord;
     case 0x45:
-        return Unit::Type::GnomeBoomer;
+        return UnitType::GnomeBoomer;
     case 0x46:
-        return Unit::Type::Rogue;
+        return UnitType::Rogue;
     case 0x47:
-        return Unit::Type::Catapult;
+        return UnitType::Catapult;
     case 0x48:
-        return Unit::Type::StormTrooper;
+        return UnitType::StormTrooper;
     case 0x49:
-        return Unit::Type::PriestOfDoom;
+        return UnitType::PriestOfDoom;
     case 0x4A:
-        return Unit::Type::Necromancer;
+        return UnitType::Necromancer;
     case 0x4B:
-        return Unit::Type::LandingCraft;
+        return UnitType::LandingCraft;
     case 0x4C:
-        return Unit::Type::TrollGalley;
+        return UnitType::TrollGalley;
     case 0x4D:
-        return Unit::Type::Warbat;
+        return UnitType::Warbat;
     case 0x4E:
-        return Unit::Type::Balloon;
+        return UnitType::Balloon;
     case 0x4F:
-        return Unit::Type::Yeoman;
+        return UnitType::Yeoman;
     case 0x50:
-        return Unit::Type::Archer;
+        return UnitType::Archer;
     case 0x51:
-        return Unit::Type::Druid;
+        return UnitType::Druid;
     case 0x52:
-        return Unit::Type::Centaur;
+        return UnitType::Centaur;
     case 0x53:
-        return Unit::Type::DwarfMiner;
+        return UnitType::DwarfMiner;
     case 0x54:
-        return Unit::Type::Scout;
+        return UnitType::Scout;
     case 0x55:
-        return Unit::Type::Bombard;
+        return UnitType::Bombard;
     case 0x56:
-        return Unit::Type::Arquebusier;
+        return UnitType::Arquebusier;
     case 0x57:
-        return Unit::Type::Mage;
+        return UnitType::Mage;
     case 0x58:
-        return Unit::Type::Enchanter;
+        return UnitType::Enchanter;
     case 0x59:
-        return Unit::Type::Bark;
+        return UnitType::Bark;
     case 0x5A:
-        return Unit::Type::Warship;
+        return UnitType::Warship;
     case 0x5B:
-        return Unit::Type::SkyRider;
+        return UnitType::SkyRider;
     case 0x5C:
-        return Unit::Type::MagicChopper;
+        return UnitType::MagicChopper;
     case 0x5D:
-        return Unit::Type::SeaMonster;  // Black
+        return UnitType::SeaMonster;  // Black
     case 0x5E:
-        return Unit::Type::SeaMonster;  // Blue
+        return UnitType::SeaMonster;  // Blue
     case 0x5F:
-        return Unit::Type::SeaMonster;  // Green
+        return UnitType::SeaMonster;  // Green
     case 0x60:
-        return Unit::Type::Snake;  // Black
+        return UnitType::Snake;  // Black
     case 0x61:
-        return Unit::Type::Snake;  // Red
+        return UnitType::Snake;  // Red
     case 0x62:
-        return Unit::Type::Snake;  // Green
+        return UnitType::Snake;  // Green
     case 0x63:
-        return Unit::Type::Snake;  // Yellow
+        return UnitType::Snake;  // Yellow
     case 0x64:
-        return Unit::Type::Gryphon;  // Black
+        return UnitType::Gryphon;  // Black
     case 0x65:
-        return Unit::Type::Gryphon;  // Yellow
+        return UnitType::Gryphon;  // Yellow
     case 0x66:
-        return Unit::Type::Gryphon;  // Cyan
+        return UnitType::Gryphon;  // Cyan
     case 0x67:
-        return Unit::Type::Hydra;  // Black
+        return UnitType::Hydra;  // Black
     case 0x68:
-        return Unit::Type::Hydra;  // Blue
+        return UnitType::Hydra;  // Blue
     case 0x69:
-        return Unit::Type::Hydra;  // Green
+        return UnitType::Hydra;  // Green
     case 0x6A:
-        return Unit::Type::Golem;  // Black
+        return UnitType::Golem;  // Black
     case 0x6B:
-        return Unit::Type::Golem;  // Blue
+        return UnitType::Golem;  // Blue
     case 0x6C:
-        return Unit::Type::Golem;  // Cyan
+        return UnitType::Golem;  // Cyan
     case 0x6D:
-        return Unit::Type::Devil;  // Black
+        return UnitType::Devil;  // Black
     case 0x6E:
-        return Unit::Type::Devil;  // Red
+        return UnitType::Devil;  // Red
     case 0x6F:
-        return Unit::Type::Devil;  // Orange
+        return UnitType::Devil;  // Orange
     case 0x70:
-        return Unit::Type::Devil;  // Yellow
+        return UnitType::Devil;  // Yellow
     case 0x71:
-        return Unit::Type::Skeleton;  // Black
+        return UnitType::Skeleton;  // Black
     case 0x72:
-        return Unit::Type::Skeleton;  // Red
+        return UnitType::Skeleton;  // Red
     case 0x73:
-        return Unit::Type::Skeleton;  // Cyan
+        return UnitType::Skeleton;  // Cyan
     case 0x74:
-        return Unit::Type::Skeleton;  // Yellow
+        return UnitType::Skeleton;  // Yellow
     case 0x75:
-        return Unit::Type::Dragon;  // Black
+        return UnitType::Dragon;  // Black
     case 0x76:
-        return Unit::Type::Dragon;  // Red
+        return UnitType::Dragon;  // Red
     case 0x77:
-        return Unit::Type::Dragon;  // Violet
+        return UnitType::Dragon;  // Violet
     case 0x78:
-        return Unit::Type::Dragon;  // Blue
+        return UnitType::Dragon;  // Blue
     case 0x79:
-        return Unit::Type::Dragon;  // Orange
+        return UnitType::Dragon;  // Orange
     case 0x7A:
-        return Unit::Type::Dragon;  // Green
+        return UnitType::Dragon;  // Green
     default:
         throw std::runtime_error("Unknown unit type: " + std::to_string(unitType));
     }
@@ -379,82 +373,82 @@ Facing EntityFactory::getFacing(std::uint8_t facing) const
     }
 }
 
-Building::Type EntityFactory::getBuildingType(std::uint8_t buildingType) const
+BuildingType EntityFactory::getBuildingType(std::uint8_t buildingType) const
 {
     switch (buildingType)
     {
     case 0x27:
-        return Building::Type::ElvenKeep;
+        return BuildingType::ElvenKeep;
     case 0x28:
-        return Building::Type::Treasury;
+        return BuildingType::Treasury;
     case 0x29:
-        return Building::Type::CombatCamp;
+        return BuildingType::CombatCamp;
     case 0x2a:
-        return Building::Type::Arsenal;
+        return BuildingType::Arsenal;
     case 0x2b:
-        return Building::Type::DuelRange;
+        return BuildingType::DuelRange;
     case 0x2c:
-        return Building::Type::HolyNest;
+        return BuildingType::HolyNest;
     case 0x2d:
-        return Building::Type::MinerGuildhall;
+        return BuildingType::MinerGuildhall;
     case 0x2e:
-        return Building::Type::AbbeyTower;
+        return BuildingType::AbbeyTower;
     case 0x2f:
-        return Building::Type::CouncilOfRunes;
+        return BuildingType::CouncilOfRunes;
     case 0x30:
-        return Building::Type::Harbour;
+        return BuildingType::Harbour;
     case 0x31:
-        return Building::Type::WarningTower;
+        return BuildingType::WarningTower;
     case 0x32:
-        return Building::Type::TreeWall;
+        return BuildingType::TreeWall;
     case 0x1b:
-        return Building::Type::Fortress;
+        return BuildingType::Fortress;
     case 0x1c:
-        return Building::Type::HoardKeep;
+        return BuildingType::HoardKeep;
     case 0x1d:
-        return Building::Type::Fort;
+        return BuildingType::Fort;
     case 0x1e:
-        return Building::Type::Blacksmith;
+        return BuildingType::Blacksmith;
     case 0x1f:
-        return Building::Type::BattleQuarters;
+        return BuildingType::BattleQuarters;
     case 0x20:
-        return Building::Type::BlackNest;
+        return BuildingType::BlackNest;
     case 0x21:
-        return Building::Type::WeirdWorkshop;
+        return BuildingType::WeirdWorkshop;
     case 0x22:
-        return Building::Type::UnholyChapel;
+        return BuildingType::UnholyChapel;
     case 0x23:
-        return Building::Type::AltarOfDoom;
+        return BuildingType::AltarOfDoom;
     case 0x24:
-        return Building::Type::Docks;
+        return BuildingType::Docks;
     case 0x25:
-        return Building::Type::GuardTower;
+        return BuildingType::GuardTower;
     case 0x26:
-        return Building::Type::GreenskinWall;
+        return BuildingType::GreenskinWall;
     case 0x0f:
-        return Building::Type::Castle;
+        return BuildingType::Castle;
     case 0x10:
-        return Building::Type::GoldMill;
+        return BuildingType::GoldMill;
     case 0x11:
-        return Building::Type::ArcheryRange;
+        return BuildingType::ArcheryRange;
     case 0x12:
-        return Building::Type::Armoury;
+        return BuildingType::Armoury;
     case 0x13:
-        return Building::Type::Barracks;
+        return BuildingType::Barracks;
     case 0x14:
-        return Building::Type::HolyStables;
+        return BuildingType::HolyStables;
     case 0x15:
-        return Building::Type::FireGuild;
+        return BuildingType::FireGuild;
     case 0x16:
-        return Building::Type::Temple;
+        return BuildingType::Temple;
     case 0x17:
-        return Building::Type::MageTower;
+        return BuildingType::MageTower;
     case 0x18:
-        return Building::Type::Shipyard;
+        return BuildingType::Shipyard;
     case 0x19:
-        return Building::Type::WatchTower;
+        return BuildingType::WatchTower;
     case 0x1a:
-        return Building::Type::Wall;
+        return BuildingType::Wall;
     default:
         throw std::runtime_error("Unknown building type: " + std::to_string(buildingType));
     }

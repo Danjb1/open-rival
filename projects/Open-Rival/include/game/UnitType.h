@@ -1,8 +1,10 @@
 #pragma once
 
-namespace Rival { namespace Unit {
+#include <cstdint>  // uint8_t
 
-enum class Type : std::uint8_t
+namespace Rival {
+
+enum class UnitType : std::uint8_t
 {
     // Human
     Ballista,
@@ -63,17 +65,9 @@ enum class Type : std::uint8_t
     Snake,
 
     // Other
-    Invalid
+    Invalid,
+    First = Ballista,
+    Last = Snake
 };
 
-static const int firstUnitType = static_cast<int>(Type::Ballista);
-static const int lastUnitType = static_cast<int>(Type::Snake);
-
-// TODO: This applies to Buildings as well - should be moved to somewhere common
-static const int maxNameLength = 12;
-
-// Size, in tiles
-static constexpr int width = 1;
-static constexpr int height = 1;
-
-}}  // namespace Rival::Unit
+}  // namespace Rival

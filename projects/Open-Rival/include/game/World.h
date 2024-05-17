@@ -148,7 +148,7 @@ public:
     std::shared_ptr<const Entity> getEntityShared(int id) const;
 
     /**
-     * Gets a shared pointer to the Entity with the given key (mutable version).
+     * Gets a weak pointer to the Entity with the given key (mutable version).
      *
      * Returns an empty weak_ptr if the Entity is not found.
      */

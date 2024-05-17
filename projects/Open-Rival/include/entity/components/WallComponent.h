@@ -5,7 +5,7 @@
 
 #include "entity/components/EntityComponent.h"
 #include "entity/components/SpriteComponent.h"
-#include "game/Building.h"
+#include "game/BuildingType.h"
 
 namespace Rival {
 
@@ -40,12 +40,12 @@ class WallComponent : public EntityComponent
 public:
     WallComponent(WallVariant variant);
 
-    void onEntitySpawned(World* scenario) override;
+    void onEntityAddedToWorld(World* scenario) override;
 
     WallVariant getVariant() const;
 
 private:
-    int getBaseTxIndex(Building::Type buildingType) const;
+    int getBaseTxIndex(BuildingType buildingType) const;
 
 public:
     static const std::string key;

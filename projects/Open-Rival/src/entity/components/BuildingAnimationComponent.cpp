@@ -6,7 +6,7 @@
 #include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
 #include "game/Animations.h"
-#include "game/Unit.h"
+#include "game/UnitType.h"
 #include "game/UnitDef.h"
 #include "game/World.h"
 #include "utils/TimeUtils.h"
@@ -22,7 +22,7 @@ BuildingAnimationComponent::BuildingAnimationComponent(const BuildingDef& buildi
 {
 }
 
-void BuildingAnimationComponent::onEntitySpawned(World*)
+void BuildingAnimationComponent::onEntityAddedToWorld(World*)
 {
     weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 

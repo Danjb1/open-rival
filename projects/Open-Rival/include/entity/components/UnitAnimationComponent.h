@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 
+#include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/FacingComponent.h"
-#include "entity/components/UnitPropsComponent.h"
 
 namespace Rival {
 
@@ -26,8 +26,8 @@ public:
     UnitAnimationComponent(const UnitDef& unitDef);
 
     // Begin EntityComponent override
-    virtual void onEntitySpawned(World* world) override;
-    virtual void onDelete() override;
+    virtual void onEntityAddedToWorld(World* world) override;
+    virtual void destroy() override;
     virtual void update() override;
     // End EntityComponent override
 
@@ -56,7 +56,6 @@ public:
     static const std::string key;
 
 private:
-    std::weak_ptr<UnitPropsComponent> weakUnitPropsComponent;
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<FacingComponent> weakFacingComponent;
 

@@ -1,10 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <map>
-
-#include "game/Building.h"
-#include "game/Unit.h"
 
 namespace Rival {
 

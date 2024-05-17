@@ -6,9 +6,10 @@
 #include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
 #include "game/Animations.h"
-#include "game/Unit.h"
 #include "game/UnitDef.h"
+#include "game/UnitType.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -22,8 +23,15 @@ UnitAnimationComponent::UnitAnimationComponent(const UnitDef& unitDef)
 {
 }
 
-void UnitAnimationComponent::onEntitySpawned(World*)
+void UnitAnimationComponent::onEntityAddedToWorld(World*)
 {
+    Unit* unit = entity->as<Unit>();
+    if (!unit)
+    {
+        LOG_WARN("UnitAnimationComponent must be attached to a Unit!");
+        return;
+    }
+
     weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 
     weakFacingComponent = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
@@ -32,17 +40,13 @@ void UnitAnimationComponent::onEntitySpawned(World*)
         facingComponent->setListener(this);
     }
 
-    weakUnitPropsComponent = entity->getComponentWeak<UnitPropsComponent>(UnitPropsComponent::key);
-    if (auto unitPropsComponent = weakUnitPropsComponent.lock())
-    {
-        unitPropsComponent->addStateListener(this);
+    unit->addStateListener(this);
 
-        // Determine animation based on initial state
-        onUnitStateChanged(unitPropsComponent->getState());
-    }
+    // Determine animation based on initial state
+    onUnitStateChanged(unit->getState());
 }
 
-void UnitAnimationComponent::onDelete()
+void UnitAnimationComponent::destroy()
 {
     if (auto facingComponent = weakFacingComponent.lock())
     {
@@ -76,12 +80,6 @@ void UnitAnimationComponent::update()
 
 void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
 {
-    auto unitPropsComponent = weakUnitPropsComponent.lock();
-    if (!unitPropsComponent)
-    {
-        return;
-    }
-
     if (newState == UnitState::Idle)
     {
         setAnimation(unitDef.getAnimation(UnitAnimationType::Standing));

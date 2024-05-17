@@ -9,7 +9,6 @@
 #include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/SpriteComponent.h"
-#include "entity/components/UnitPropsComponent.h"
 #include "entity/components/VoiceComponent.h"
 #include "game/PlayerContext.h"
 #include "gfx/renderer/EntityRenderer.h"
@@ -23,7 +22,7 @@ MouseHandlerComponent::MouseHandlerComponent()
 {
 }
 
-void MouseHandlerComponent::onEntitySpawned(World*)
+void MouseHandlerComponent::onEntityAddedToWorld(World*)
 {
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
@@ -37,7 +36,7 @@ void MouseHandlerComponent::onEntitySpawned(World*)
     weakVoiceComponent = entity->getComponentWeak<VoiceComponent>(VoiceComponent::key);
 }
 
-void MouseHandlerComponent::onDelete()
+void MouseHandlerComponent::destroy()
 {
     if (auto movementComponent = weakMovementComponent.lock())
     {
