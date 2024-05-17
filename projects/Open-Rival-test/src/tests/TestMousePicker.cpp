@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "commands/GameCommand.h"
-#include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "game/MousePicker.h"
 #include "game/PlayerContext.h"
@@ -362,7 +362,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
     // Add a Unit with a MouseHandlerComponent
-    std::shared_ptr<Entity> unit = std::make_shared<Entity>(EntityType::Unit, 1, 1);
+    std::shared_ptr<Unit> unit = std::make_shared<Unit>(UnitType::Knight, "", false);
     unit->attach(std::make_shared<MouseHandlerComponent>());
     world.addEntity(unit, 4, 4);
 

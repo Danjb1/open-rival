@@ -23,7 +23,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/Palisade.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Unit.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
-    ${OPEN_RIVAL_DIR}/src/entity/components/BuildingPropsComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FacingComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FlyerComponent.cpp
@@ -40,7 +39,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/WalkerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/WallComponent.cpp
     ${OPEN_RIVAL_DIR}/src/game/Animations.cpp
-    ${OPEN_RIVAL_DIR}/src/game/Building.cpp
     ${OPEN_RIVAL_DIR}/src/game/BuildingDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameInterface.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameState.cpp
@@ -155,7 +153,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
     ${OPEN_RIVAL_DIR}/include/entity/Unit.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
-    ${OPEN_RIVAL_DIR}/include/entity/components/BuildingPropsComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FlyerComponent.h
@@ -172,7 +169,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/WalkerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/WallComponent.h
     ${OPEN_RIVAL_DIR}/include/game/Animations.h
-    ${OPEN_RIVAL_DIR}/include/game/Building.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingType.h
     ${OPEN_RIVAL_DIR}/include/game/GameInterface.h

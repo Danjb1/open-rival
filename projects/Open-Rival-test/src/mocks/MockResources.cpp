@@ -61,12 +61,12 @@ std::shared_ptr<const Texture> Resources::initPaletteTexture()
     return std::make_shared<const Texture>(0, 256, 1);
 }
 
-std::unordered_map<Building::Type, Spritesheet> Resources::initBuildingSpritesheets()
+std::unordered_map<BuildingType, Spritesheet> Resources::initBuildingSpritesheets()
 {
     return {};
 }
 
-std::unordered_map<Unit::Type, Spritesheet> Resources::initUnitSpritesheets()
+std::unordered_map<UnitType, Spritesheet> Resources::initUnitSpritesheets()
 {
     return {};
 }
@@ -115,12 +115,12 @@ std::vector<MidiFile> Resources::initMidis()
     return {};
 }
 
-std::unordered_map<Unit::Type, UnitDef> Resources::initUnitDefs() const
+std::unordered_map<UnitType, UnitDef> Resources::initUnitDefs() const
 {
     return {};
 }
 
-std::unordered_map<Building::Type, BuildingDef> Resources::initBuildingDefs() const
+std::unordered_map<BuildingType, BuildingDef> Resources::initBuildingDefs() const
 {
     return {};
 }
@@ -135,14 +135,14 @@ const Spritesheet& Resources::getTileSpritesheet(bool /*wilderness*/) const
     return tileSpritesheets.at(0);
 }
 
-const Spritesheet& Resources::getUnitSpritesheet(Unit::Type /*unitType*/) const
+const Spritesheet& Resources::getUnitSpritesheet(UnitType /*unitType*/) const
 {
-    return unitSpritesheets.at(Unit::Type::Knight);
+    return unitSpritesheets.at(UnitType::Knight);
 }
 
-const Spritesheet& Resources::getBuildingSpritesheet(Building::Type /*buildingType*/) const
+const Spritesheet& Resources::getBuildingSpritesheet(BuildingType /*buildingType*/) const
 {
-    return buildingSpritesheets.at(Building::Type::Barracks);
+    return buildingSpritesheets.at(BuildingType::Barracks);
 }
 
 const Spritesheet& Resources::getCommonObjectSpritesheet() const
@@ -205,13 +205,13 @@ const MidiFile& Resources::getMidi(int id) const
     return midis.at(id);
 }
 
-const UnitDef* Resources::getUnitDef(Unit::Type unitType) const
+const UnitDef* Resources::getUnitDef(UnitType unitType) const
 {
     auto iter = unitDefs.find(unitType);
     return iter == unitDefs.cend() ? nullptr : &iter->second;
 }
 
-const BuildingDef* Resources::getBuildingDef(Building::Type buildingType) const
+const BuildingDef* Resources::getBuildingDef(BuildingType buildingType) const
 {
     auto iter = buildingDefs.find(buildingType);
     return iter == buildingDefs.cend() ? nullptr : &iter->second;
