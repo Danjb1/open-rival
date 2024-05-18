@@ -258,8 +258,8 @@ void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
     atlasFile.close();
 }
 
-std::vector<NamedImage>
-readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding)
+std::vector<NamedImage> readDefinitionFile(
+        const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding)
 {
     std::ifstream file(path);
     std::string line;
@@ -337,8 +337,7 @@ readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outA
     return sprites;
 }
 
-void createTextureAtlas(
-        const std::string& outputDir,
+void createTextureAtlas(const std::string& outputDir,
         fs::path definitionFilename,
         std::vector<NamedImage>& images,
         const Palette::Palette& palette)
@@ -377,8 +376,7 @@ void createTextureAtlas(
     writeAtlas(altasFilename, builder);
 }
 
-void createSpritesheetTexture(
-        const std::string& outputDir,
+void createSpritesheetTexture(const std::string& outputDir,
         fs::path definitionFilename,
         const std::vector<NamedImage>& sprites,
         const Palette::Palette& palette,
@@ -447,6 +445,8 @@ void createSpritesheetTexture(
     }
 
     // Save the final texture
+    std::cout << "Saving texture: " << definitionFilename << "\n";
+    std::cout << "  >> size = " << txWidth << ", " << txHeight << "\n";
     std::string filename = outputDir + "\\" + definitionFilename.replace_extension(".tga").string();
     writeImage(texture, palette, filename);
 }

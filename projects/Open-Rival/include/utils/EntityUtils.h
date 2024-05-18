@@ -25,12 +25,12 @@ public:
     /**
      * Calls a function for each entity within the container (read-only version).
      */
-    virtual void forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func) = 0;
+    virtual void forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func) = 0;
 
     /**
      * Calls a function for each entity within the container (mutable version).
      */
-    virtual void forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const = 0;
+    virtual void forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const = 0;
 };
 
 }  // namespace Rival

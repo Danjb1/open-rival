@@ -1,7 +1,6 @@
 #include "gfx/renderer/GameRenderer.h"
 
 #include "gfx/GlewWrapper.h"
-#include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #pragma warning(push)
 #pragma warning(disable : 4127)
@@ -109,6 +108,24 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
 
     // Render Entities
     entityRenderer.render(camera, world, delta);
+
+    // Render overlays
+    renderGameOverlays(viewProjMatrix);
+}
+
+void GameRenderer::renderGameOverlays(glm::mat4 viewProjMatrix)
+{
+    // Disable depth testing since the overlays are always on top
+    glDisable(GL_DEPTH_TEST);
+
+    // Use box shader
+    glUseProgram(Shaders::boxShader.programId);
+
+    // Set uniform values
+    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+
+    // Render the overlays to the screen
+    entityOverlayRenderer.render(world);
 }
 
 void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const
@@ -179,7 +196,7 @@ void GameRenderer::renderDragSelect()
     // Disable depth testing since the drag-select is always on top
     glDisable(GL_DEPTH_TEST);
 
-    // Use indexed texture shader
+    // Use box shader
     glUseProgram(Shaders::boxShader.programId);
 
     // Determine our view-projection matrix
@@ -188,7 +205,7 @@ void GameRenderer::renderDragSelect()
     // Set uniform values
     glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
 
-    // Render the cursor to the screen
+    // Render the drag-select to the screen
     glViewport(0, 0, window->getWidth(), window->getHeight());
     dragSelectRenderer.render();
 }

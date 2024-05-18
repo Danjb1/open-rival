@@ -80,7 +80,8 @@ public:
     void setState(UnitState state);
 
 private:
-    /** Gets a weak pointer to this Unit. */
+    /** Gets a weak pointer to this Unit.
+     * NOTE: This requires that this Unit was created using std::make_shared. */
     std::weak_ptr<Unit> getWeakThis();
 
 private:
