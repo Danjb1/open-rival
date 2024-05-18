@@ -156,18 +156,12 @@ void TileRenderer::sendDataToGpu(
             float y2 = y1 + height;
             float z = RenderUtils::zTiles;
             std::vector<GLfloat> thisVertexData = {
-                x1,
-                y1,
-                z,  //
-                x2,
-                y1,
-                z,  //
-                x2,
-                y2,
-                z,  //
-                x1,
-                y2,
-                z  //
+                /* clang-format off */
+                x1, y1, z,
+                x2, y1, z,
+                x2, y2, z,
+                x1, y2, z
+                /* clang-format on */
             };
 
             // Determine texture co-ordinates

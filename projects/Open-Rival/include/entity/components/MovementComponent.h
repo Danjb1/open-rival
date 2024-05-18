@@ -1,8 +1,6 @@
 #pragma once
 
-#include <functional>
 #include <memory>
-#include <set>
 #include <string>
 
 #include "entity/components/EntityComponent.h"
@@ -89,8 +87,6 @@ private:
     void onLeftPreviousTile();
     void onCompletedMoveToNewTile();
     void stopMovement();
-
-    void forEachListener(std::function<void(const std::shared_ptr<MovementListener>&)> func);
 
 public:
     static const std::string key;

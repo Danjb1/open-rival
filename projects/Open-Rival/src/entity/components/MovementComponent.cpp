@@ -204,7 +204,8 @@ void MovementComponent::startNextMovement(PathfindingMap& map)
     passabilityUpdater.onUnitLeavingTile(map, entity->getPos());
     passabilityUpdater.onUnitEnteringTile(map, movement.destination, doesRouteContinue);
 
-    forEachListener([&](const auto& listener) { listener->onUnitMoveStart(&movement.destination); });
+    CollectionUtils::forEachWeakPtr<MovementListener>(
+            listeners, [&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
 }
 
 bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints)
@@ -233,7 +234,8 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
         // Wait a while to see if the obstruction clears
         if (ticksSpentWaiting == 0)
         {
-            forEachListener([&](const auto& listener) { listener->onUnitPaused(); });
+            CollectionUtils::forEachWeakPtr<MovementListener>(
+                    listeners, [&](auto listener) { listener->onUnitPaused(); });
         }
         ++ticksSpentWaiting;
         return false;
@@ -298,25 +300,7 @@ void MovementComponent::stopMovement()
     movement.clear();
     resetPassability();
     ticksSpentWaiting = 0;
-    forEachListener([](const auto& listener) { listener->onUnitStopped(); });
-}
-
-void MovementComponent::forEachListener(std::function<void(const std::shared_ptr<MovementListener>&)> func)
-{
-    auto it = listeners.begin();
-    while (it != listeners.end())
-    {
-        if (std::shared_ptr<MovementListener> listener = it->lock())
-        {
-            func(listener);
-            ++it;
-        }
-        else
-        {
-            // The weak pointer has expired, erase it from the list
-            it = listeners.erase(it);
-        }
-    }
+    CollectionUtils::forEachWeakPtr<MovementListener>(listeners, [&](auto listener) { listener->onUnitStopped(); });
 }
 
 }  // namespace Rival

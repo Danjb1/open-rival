@@ -100,7 +100,7 @@ SharedEntityList World::getEntities() const
     return { entitiesList.cbegin(), entitiesList.cend() };
 }
 
-void World::forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func)
+void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func)
 {
     for (const auto& entity : entitiesList)
     {
@@ -108,7 +108,7 @@ void World::forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> fu
     }
 }
 
-void World::forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const
+void World::forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const
 {
     for (const auto& entity : entitiesList)
     {

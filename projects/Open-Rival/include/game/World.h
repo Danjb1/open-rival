@@ -48,8 +48,8 @@ public:
     virtual ~World() = default;
 
     // Begin EntityContainer override
-    void forEachMutableEntity(std::function<void(std::shared_ptr<Entity>)> func) override;
-    void forEachEntity(std::function<void(std::shared_ptr<const Entity>)> func) const override;
+    void forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func) override;
+    void forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const override;
     // End EntityContainer override
 
     // Begin PathfindingMap override

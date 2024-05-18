@@ -10,6 +10,7 @@
 #include "entity/Unit.h"
 #include "entity/components/BuildingAnimationComponent.h"
 #include "entity/components/FlyerComponent.h"
+#include "entity/components/HealthComponent.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/PassabilityComponent.h"
@@ -58,6 +59,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
         isNameUnique = true;
     }
     std::shared_ptr<Unit> unit = std::make_shared<Unit>(unitType, name, isNameUnique);
+
+    // HealthComponent
+    unit->attach(std::make_shared<HealthComponent>(unitPlacement.hitpoints));
 
     // OwnerComponent (note: monsters use player = 8)
     if (unitPlacement.player < PlayerStore::maxPlayers)
@@ -120,6 +124,9 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     {
         throw std::runtime_error("No building definition found for " + std::to_string(buildingPlacement.type));
     }
+
+    // HealthComponent
+    building->attach(std::make_shared<HealthComponent>(buildingPlacement.hitpoints));
 
     // OwnerComponent
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));

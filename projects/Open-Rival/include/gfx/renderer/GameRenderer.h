@@ -1,7 +1,10 @@
 #pragma once
 
+#include <glm/mat4x4.hpp>
+
 #include "gfx/Framebuffer.h"
 #include "gfx/renderer/DragSelectRenderer.h"
+#include "gfx/renderer/EntityOverlayRenderer.h"
 #include "gfx/renderer/EntityRenderer.h"
 #include "gfx/renderer/FramebufferRenderer.h"
 #include "gfx/renderer/MapBorderRenderer.h"
@@ -22,8 +25,7 @@ struct PlayerContext;
 class GameRenderer
 {
 public:
-    GameRenderer(
-            const Window* window,
+    GameRenderer(const Window* window,
             const World& world,
             const PlayerStore& playerStore,
             const Camera& camera,
@@ -36,6 +38,7 @@ public:
 private:
     void renderGameViaFramebuffer(int delta);
     void renderGame(int viewportWidth, int viewportHeight, int delta);
+    void renderGameOverlays(glm::mat4 viewProjMatrix);
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();
@@ -66,6 +69,7 @@ private:
 
     // Renderers
     EntityRenderer entityRenderer;
+    EntityOverlayRenderer entityOverlayRenderer;
     FramebufferRenderer gameFboRenderer;
     TileRenderer tileRenderer;
     MapBorderRenderer mapBorderRenderer;

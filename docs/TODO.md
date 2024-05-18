@@ -4,12 +4,8 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Provide an easier way to get components that are guaranteed to exist for a Unit
-- Revise usages of weakThis in EntityComponents (use std::enable_shared_from_this<EntityComponent>)
-- Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
-- Lag spike when trying to move onto a wall
-- Create HealthComponent
-- Render health bars of selected units
+- Fix health bar color / size / offset
+- Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
 - Show attack cursor after entering attack mode (press A)
 - Issue an AttackCommand when the selection is instructed to attack
@@ -17,13 +13,15 @@
 - Units instructed to attack should move to the target
 - Units instructed to attack should update their route as the target moves
 - Units instructed to attack should play their attack animation when in range
+- Play a sound when an attack hits
+- Damage target when an attack hits
+    - Need to figure out damage calculation!
 
 <!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-### Game
-
+- Lag spike when trying to move onto a wall
 - Some animations need attention (e.g. Snake)
 - "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
@@ -33,10 +31,6 @@
 - Drag-select cursor / outline should remain active when shrunk down to a small size
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
-
-### Setup
-
-- objects_meadow.tga cannot be opened in Photoshop (invalid file format)
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -387,6 +381,9 @@
 - LobbyState's mechanism for passing unprocessed packets back to the connection is hacky
     - Connection could store receivedPackets instead, and return an iterator
 - GameState should expose an iterator instead of making a copy of the entity list in getEntities
+- Provide an easier way to get components that are guaranteed to exist for a Unit
+- Revise usages of weakThis in EntityComponents (use std::enable_shared_from_this<EntityComponent>)
+- Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
 
 #### Rendering
 

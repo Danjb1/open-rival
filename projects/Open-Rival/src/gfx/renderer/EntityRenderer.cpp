@@ -2,7 +2,7 @@
 
 #include "gfx/GlewWrapper.h"
 
-#include <algorithm>  // min
+#include <algorithm>  // std::min
 #include <vector>
 
 #include "application/Resources.h"
@@ -297,18 +297,12 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1,
-            y1,
-            z,  //
-            x2,
-            y1,
-            z,  //
-            x2,
-            y2,
-            z,  //
-            x1,
-            y2,
-            z  //
+            /* clang-format off */
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+            /* clang-format on */
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -324,18 +318,12 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1,
-            y1,
-            z,  //
-            x2,
-            y1,
-            z,  //
-            x2,
-            y2,
-            z,  //
-            x1,
-            y2,
-            z  //
+            /* clang-format off */
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+            /* clang-format on */
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -351,18 +339,12 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1,
-            y1,
-            z,  //
-            x2,
-            y1,
-            z,  //
-            x2,
-            y2,
-            z,  //
-            x1,
-            y2,
-            z  //
+            /* clang-format off */
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+            /* clang-format on */
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
@@ -378,18 +360,12 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
         std::vector<GLfloat> newPositions = {
-            x1,
-            y1,
-            z,  //
-            x2,
-            y1,
-            z,  //
-            x2,
-            y2,
-            z,  //
-            x1,
-            y2,
-            z  //
+            /* clang-format off */
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+            /* clang-format on */
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 

@@ -26,6 +26,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FacingComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FlyerComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/HealthComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MouseHandlerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MovementComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MovementListener.cpp
@@ -72,6 +73,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityOverlayRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
@@ -156,6 +158,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FlyerComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/HealthComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/MouseHandlerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/MovementComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/MovementListener.h
@@ -206,6 +209,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextureRenderable.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/DragSelectRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/renderer/EntityOverlayRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/EntityRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/FramebufferRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/renderer/GameRenderer.h

@@ -60,7 +60,8 @@ static constexpr float nearPlane = 1.0f;
 // Lower values are nearer to the camera and will be rendered on top.
 static constexpr float zStart = cameraZ + nearPlane;
 static constexpr float zMapBorder = zStart;
-static constexpr float zHitbox = zMapBorder + 1;
+static constexpr float zOverlays = zMapBorder + 1;
+static constexpr float zHitbox = zOverlays + 1;
 static constexpr float zFog = zHitbox + 1.f;
 static constexpr float zEntityNearest = zFog + 1.f;
 static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
