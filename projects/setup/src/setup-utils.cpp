@@ -2,11 +2,11 @@
 
 #include <windows.h>  // CreateDirectoryA, etc.
 
-#include <cstdint>  // uint8_t
-#include <fstream>  // ofstream
-#include <iomanip>  // setw, setfill
-#include <sstream>  // ostringstream
-#include <vector>   // vector
+#include <cstdint>   // uint8_t
+#include <fstream>   // ofstream
+#include <iomanip>   // setw, setfill
+#include <sstream>   // ostringstream
+#include <vector>    // vector
 
 #include "gfx/Palette.h"
 
@@ -72,25 +72,24 @@ void writeImage(Image& image, const Palette::Palette& palette, const std::string
     for (int i = 0; i < Palette::numColors; ++i)
     {
         const std::uint32_t col = palette[i];
-        const std::uint8_t red = (uint8_t) ((col & 0xFF000000) >> 24);
-        const std::uint8_t green = (uint8_t) ((col & 0x00FF0000) >> 16);
-        const std::uint8_t blue = (uint8_t) ((col & 0x0000FF00) >> 8);
-        const std::uint8_t alpha = (uint8_t) (col & 0x000000FF);
 
-        out.put(blue);
-        out.put(green);
-        out.put(red);
-        out.put(alpha);
+        const std::uint8_t red = (std::uint8_t)((col & 0xFF000000) >> 24);
+        const std::uint8_t green = (std::uint8_t)((col & 0x00FF0000) >> 16);
+        const std::uint8_t blue = (std::uint8_t)((col & 0x0000FF00) >> 8);
+        const std::uint8_t alpha = (std::uint8_t)(col & 0x000000FF);
+
+        out.put(static_cast<char>(blue));
+        out.put(static_cast<char>(green));
+        out.put(static_cast<char>(red));
+        out.put(static_cast<char>(alpha));
     }
 
     // Pixel data
-    const std::vector<std::uint8_t>& data = image.getData();
-    int stride = image.getStride();
     for (int y = 0; y < h; ++y)
     {
         for (int x = 0; x < w; ++x)
         {
-            out.put(data[x + y * stride]);
+            out.put(image.getPixel(x, y));
         }
     }
 }

@@ -9,6 +9,7 @@
 
 #include "utils/LogUtils.h"
 #include "utils/StringUtils.h"
+#include "ImageGen.h"
 #include "audio-extractor.h"
 #include "image-extractor.h"
 #include "interface-extractor.h"
@@ -21,23 +22,22 @@ namespace fs = std::filesystem;
 using namespace Rival;
 
 // Configuration
-bool shouldCreateOutputDirectories = true;
-bool shouldExtractSounds = true;
-bool shouldExtractImages = true;
-bool shouldExtractInterface = true;
+bool shouldCreateOutputDirectories = false;
+bool shouldExtractSounds = false;
+bool shouldExtractImages = false;
+bool shouldExtractInterface = false;
+bool shouldMakeImages = true;
 bool shouldBuildTextures = true;
-bool shouldCopyVideos = true;
+bool shouldCopyVideos = false;
 
 void createOutputDirectories()
 {
     LOG_INFO("Creating output directories");
     std::vector<std::string> directories = {
-        "setup\\images",        //
-        "setup\\images\\game",  //
-        "setup\\images\\ui",    //
-        "res\\sound",           //
-        "res\\textures",        //
-        "res\\video"            //
+        "setup\\images",  //
+        "res\\sound",     //
+        "res\\textures",  //
+        "res\\video"      //
     };
     for (const auto& dir : directories)
     {
@@ -58,21 +58,27 @@ void extractSounds(std::string gameDir)
 void extractImages(std::string gameDir)
 {
     LOG_INFO("Extracting images");
-    Setup::extractImages(gameDir + "\\DATA\\IMAGES.DAT", "setup\\images\\game");
+    Setup::extractImages(gameDir + "\\DATA\\IMAGES.DAT", "setup\\images");
 }
 
 void extractInterface(std::string gameDir)
 {
     LOG_INFO("Extracting UI images");
     Setup::InterfaceExtractor imageExtractor(gameDir + "\\DATA\\Interfac.dat");
-    imageExtractor.extractImages("setup\\images\\ui");
+    imageExtractor.extractImages("setup\\images");
+}
+
+void makeImages(std::string gameDir)
+{
+    LOG_INFO("Making procedural images");
+    Setup::makeProceduralImages("setup\\images");
 }
 
 void buildTextures()
 {
     LOG_INFO("Building textures");
-    Setup::buildTextures("setup\\definitions\\game", "setup\\images\\game", "res\\textures");
-    Setup::buildTextures("setup\\definitions\\ui", "setup\\images\\ui", "res\\textures");
+    Setup::buildTextures("setup\\definitions\\game", "setup\\images", "res\\textures");
+    Setup::buildTextures("setup\\definitions\\ui", "setup\\images", "res\\textures");
 }
 
 void copyVideos(std::string videoDir, std::string outputDir)
@@ -177,6 +183,12 @@ int main(int argc, char* argv[])
         if (shouldExtractInterface)
         {
             extractInterface(gameDir);
+        }
+
+        // Procedural images
+        if (shouldMakeImages)
+        {
+            makeImages(gameDir);
         }
 
         // Build textures
