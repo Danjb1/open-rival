@@ -29,7 +29,7 @@ public:
     /** Reads a TGA image file. */
     static Image readImage(const std::string& filename);
 
-    /** Creates an Image by copying some existing data. */
+    /** Creates an empty Image with a background color. */
     static Image createEmpty(int width, int height, std::uint8_t bgColor, ImageProperties props = {});
 
     /** Creates an Image by copying some existing data. */
@@ -62,6 +62,9 @@ public:
     {
         return data;
     };
+
+    std::uint8_t getPixel(int x, int y) const;
+    void setPixel(int x, int y, std::uint8_t col);
 
 private:
     static constexpr int tgaFooterSize = 26;

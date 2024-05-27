@@ -13,17 +13,16 @@ namespace fs = std::filesystem;
 namespace Rival { namespace Setup {
 
 ///////////////////////////////////////////////////////////////////////////////
-// NamedImage class
+// NamedImage struct
 ///////////////////////////////////////////////////////////////////////////////
 
-class NamedImage
+struct NamedImage
 {
-public:
     std::string name;
     Image image;
 
     // Wraps an Image by moving it into this NamedImage
-    NamedImage(const std::string name, Image&& image)
+    NamedImage(const std::string& name, Image&& image)
         : name(name)
         , image(std::move(image))
     {
@@ -34,10 +33,8 @@ public:
 // Rect class
 ///////////////////////////////////////////////////////////////////////////////
 
-class Rect
+struct Rect
 {
-
-public:
     int x;
     int y;
     int width;
@@ -52,7 +49,6 @@ public:
 
 class TextureAtlasBuilder
 {
-
 public:
     std::unordered_map<std::string, const NamedImage*> imagesByKey;
     std::unordered_map<std::string, Rect> imagePlacements;
@@ -65,33 +61,31 @@ public:
     void addImage(const NamedImage& img);
 
 private:
-    Rect findOrMakeEmptyRect(const int reqWidth, const int reqHeight);
+    Rect findOrMakeEmptyRect(int reqWidth, int reqHeight);
 
-    int findRectBiggerThan(const std::vector<Rect>& rects, const int minWidth, const int minHeight);
+    int findRectBiggerThan(const std::vector<Rect>& rects, int minWidth, int minHeight);
 
-    int expandTextureToFitRect(const int reqWidth, const int reqHeight);
+    int expandTextureToFitRect(int reqWidth, int reqHeight);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // End of classes
 ///////////////////////////////////////////////////////////////////////////////
 
-void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir);
+void buildTextures(const std::string& definitionsDir, const std::string& imageDir, const std::string& outputDir);
 
-void readPalette(Palette::Palette& palette, const std::string filename);
+void readPalette(Palette::Palette& outPalette, const std::string& filename);
 
-std::vector<NamedImage>
-readDefinitionFile(const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding);
+std::vector<NamedImage> readDefinitionFile(
+        const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding);
 
-void createTextureAtlas(
-        const std::string& imageDir,
-        fs::path definitionFilename,
+void createTextureAtlas(const std::string& imageDir,
+        const fs::path& definitionFilename,
         std::vector<NamedImage>& images,
         const Palette::Palette& palette);
 
-void createSpritesheetTexture(
-        const std::string& imageDir,
-        fs::path definitionFilename,
+void createSpritesheetTexture(const std::string& imageDir,
+        const fs::path& definitionFilename,
         const std::vector<NamedImage>& sprites,
         const Palette::Palette& palette,
         int padding);

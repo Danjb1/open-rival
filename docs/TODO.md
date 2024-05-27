@@ -4,8 +4,16 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Only render health bars of *selected* or *hovered* units
+- Unit overlays
+    - Render health bars using textures
+    - Render grey background behind health bars (big enough for 2 bars)
+    - If units have upgrades, this background gets taller when units are hovered to show upgrades
+        - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
+    - Health should turn red when depleted
+    - Monsters should have a silver health bar that turns purple when depleted
+    - Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
+- Show red hitbox when hovering over enemy-owned entities
 - Show attack cursor after entering attack mode (press A)
 - Issue an AttackCommand when the selection is instructed to attack
 - Units instructed to attack should maintain a reference to the target

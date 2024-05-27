@@ -97,7 +97,7 @@ void TextureAtlasBuilder::addImage(const NamedImage& namedImage)
  * If no Rect matches this size exactly, an empty Rect will be subdivided.
  * If no Rect is big enough, the texture will be expanded.
  */
-Rect TextureAtlasBuilder::findOrMakeEmptyRect(const int reqWidth, const int reqHeight)
+Rect TextureAtlasBuilder::findOrMakeEmptyRect(int reqWidth, int reqHeight)
 {
     // Find the smallest rectangle that fits our required size
     std::sort(emptyRects.begin(), emptyRects.end(), compareRectsSmallestFirst);
@@ -141,8 +141,8 @@ Rect TextureAtlasBuilder::findOrMakeEmptyRect(const int reqWidth, const int reqH
  */
 int TextureAtlasBuilder::findRectBiggerThan(  //
         const std::vector<Rect>& rects,
-        const int minWidth,
-        const int minHeight)
+        int minWidth,
+        int minHeight)
 {
     int rectIndex = -1;
     for (size_t i = 0; i < rects.size(); i++)
@@ -163,7 +163,7 @@ int TextureAtlasBuilder::findRectBiggerThan(  //
  *
  * Returns the index of the newly-created Rect.
  */
-int TextureAtlasBuilder::expandTextureToFitRect(const int reqWidth, const int reqHeight)
+int TextureAtlasBuilder::expandTextureToFitRect(int reqWidth, int reqHeight)
 {
     // Remember the previous texture size
     int prevWidth = texWidth;
@@ -205,7 +205,7 @@ int TextureAtlasBuilder::expandTextureToFitRect(const int reqWidth, const int re
 // End of classes
 ///////////////////////////////////////////////////////////////////////////
 
-void readPalette(Palette::Palette& palette, const std::string filename)
+void readPalette(Palette::Palette& outPalette, const std::string& filename)
 {
     std::ifstream ifs(filename, std::ios::binary | std::ios::in);
     if (!ifs)
@@ -217,26 +217,31 @@ void readPalette(Palette::Palette& palette, const std::string filename)
 
     for (int i = 0; i < Palette::numColors; ++i)
     {
-        char blue;
-        char green;
-        char red;
-        char alpha;
+        // It is vital to use unsigned values here to prevent incorrect conversions to int
+        unsigned char blue;
+        unsigned char green;
+        unsigned char red;
+        unsigned char alpha;
 
-        ifs.read(&blue, 1);
-        ifs.read(&green, 1);
-        ifs.read(&red, 1);
-        ifs.read(&alpha, 1);
+        ifs.read(reinterpret_cast<char*>(&blue), 1);
+        ifs.read(reinterpret_cast<char*>(&green), 1);
+        ifs.read(reinterpret_cast<char*>(&red), 1);
+        ifs.read(reinterpret_cast<char*>(&alpha), 1);
 
-        const std::uint32_t col = (red << 24) + (green << 16) + (blue << 8) + alpha;
+        std::uint32_t col =                                  //
+                (static_cast<std::uint32_t>(red) << 24)      //
+                | (static_cast<std::uint32_t>(green) << 16)  //
+                | (static_cast<std::uint32_t>(blue) << 8)    //
+                | (static_cast<std::uint32_t>(alpha));
 
-        palette[i] = col;
+        outPalette[i] = col;
     }
 }
 
 /**
  * Writes an atlas definition to file.
  */
-void writeAtlas(const std::string filename, TextureAtlasBuilder& builder)
+void writeAtlas(const std::string& filename, TextureAtlasBuilder& builder)
 {
     // Open the file for writing
     std::ofstream atlasFile;
@@ -338,7 +343,7 @@ std::vector<NamedImage> readDefinitionFile(
 }
 
 void createTextureAtlas(const std::string& outputDir,
-        fs::path definitionFilename,
+        const fs::path& definitionFilename,
         std::vector<NamedImage>& images,
         const Palette::Palette& palette)
 {
@@ -368,16 +373,22 @@ void createTextureAtlas(const std::string& outputDir,
     }
 
     // Save the final texture
-    std::string txFilename = outputDir + "\\" + definitionFilename.replace_extension(".tga").string();
+    fs::path tgaFilename = definitionFilename;
+    tgaFilename.replace_extension(".tga");
+    std::cout << "Saving atlas texture: " << tgaFilename << "\n";
+    std::cout << "  >> size = " << texWidth << ", " << texHeight << "\n";
+    const std::string txFilename = outputDir + "\\" + tgaFilename.string();
     writeImage(texture, palette, txFilename);
 
     // Save the atlas definition
-    std::string altasFilename = outputDir + "\\" + definitionFilename.replace_extension(".atlas").string();
+    fs::path atlasFilename = definitionFilename;
+    atlasFilename.replace_extension(".atlas");
+    const std::string altasFilename = outputDir + "\\" + atlasFilename.string();
     writeAtlas(altasFilename, builder);
 }
 
 void createSpritesheetTexture(const std::string& outputDir,
-        fs::path definitionFilename,
+        const fs::path& definitionFilename,
         const std::vector<NamedImage>& sprites,
         const Palette::Palette& palette,
         int padding)
@@ -445,15 +456,17 @@ void createSpritesheetTexture(const std::string& outputDir,
     }
 
     // Save the final texture
-    std::cout << "Saving texture: " << definitionFilename << "\n";
+    fs::path tgaFilename = definitionFilename;
+    tgaFilename.replace_extension(".tga");
+    std::cout << "Saving spritesheet texture: " << tgaFilename << "\n";
     std::cout << "  >> size = " << txWidth << ", " << txHeight << "\n";
-    std::string filename = outputDir + "\\" + definitionFilename.replace_extension(".tga").string();
+    const std::string filename = outputDir + "\\" + tgaFilename.string();
     writeImage(texture, palette, filename);
 }
 
-void buildTextures(std::string definitionsDir, std::string imageDir, std::string outputDir)
+void buildTextures(const std::string& definitionsDir, const std::string& imageDir, const std::string& outputDir)
 {
-    // Process each definition file in the given directory
+    // For each definition file in the given directory...
     for (const fs::directory_entry& entry : fs::directory_iterator(definitionsDir))
     {
         if (entry.is_directory())

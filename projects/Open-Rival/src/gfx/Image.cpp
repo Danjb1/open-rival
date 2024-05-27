@@ -132,4 +132,16 @@ void Image::copyImage(const Image& src, Image& dst, const int dstX, const int ds
     }
 }
 
+std::uint8_t Image::getPixel(int x, int y) const
+{
+    const int stride = getStride();
+    return data[x + y * stride];
+}
+
+void Image::setPixel(int x, int y, std::uint8_t col)
+{
+    const int stride = getStride();
+    data[x + y * stride] = col;
+}
+
 };  // namespace Rival
