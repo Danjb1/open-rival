@@ -106,4 +106,21 @@ float getPaletteTxY(int paletteIndex)
     return static_cast<float>(paletteIndex) / texHeight;
 }
 
+GLfloat byteToFloat(std::uint8_t byte)
+{
+    return static_cast<GLfloat>(byte) / 255.f;
+}
+
+std::vector<GLfloat> fromHex(std::uint32_t hexValue)
+{
+    // Extract each byte from the hexadecimal value
+    uint8_t byte1 = (hexValue >> 24) & 0xFF;
+    uint8_t byte2 = (hexValue >> 16) & 0xFF;
+    uint8_t byte3 = (hexValue >> 8) & 0xFF;
+    uint8_t byte4 = hexValue & 0xFF;
+
+    // Convert each byte to a float value
+    return { byteToFloat(byte1), byteToFloat(byte2), byteToFloat(byte3), byteToFloat(byte4) };
+}
+
 }}  // namespace Rival::PaletteUtils

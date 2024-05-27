@@ -3,7 +3,8 @@ Changelog
 ================================================================================
 
 v0.4.0 (Combat demo)
-- Procopius Regular font is now included in the download
+- Added health bars for units
+- The shareware version of the Procopius Regular font is now included in the download
 
 v0.3.0 (Multiplayer demo)
 - Added networking functionality with basic lobby screen

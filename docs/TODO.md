@@ -4,7 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Fix health bar color / size / offset
 - Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
 - Show attack cursor after entering attack mode (press A)
