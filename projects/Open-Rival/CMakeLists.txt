@@ -75,6 +75,12 @@ target_link_libraries(Open-Rival PRIVATE
     project_warnings
 )
 
+# Add macro definitions
+target_compile_definitions(Open-Rival PRIVATE
+    # Define DEBUG macro in debug builds
+    $<$<CONFIG:Debug>:DEBUG>
+)
+
 # Pre-compiled headers
 target_precompile_headers(Open-Rival PRIVATE
     <cstdint>

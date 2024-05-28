@@ -1,5 +1,6 @@
 #include "gfx/renderer/EntityOverlayRenderer.h"
 
+#include "application/Resources.h"
 #include "entity/Entity.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/SpriteComponent.h"
@@ -11,44 +12,59 @@
 
 namespace Rival {
 
-EntityOverlayRenderer::EntityOverlayRenderer()
-    : boxRenderable(maxBoxesToRender)
-    , healthColor1(PaletteUtils::fromHex(Palette::paletteGame[healthColorIndex1]))
-    , healthColor2(PaletteUtils::fromHex(Palette::paletteGame[healthColorIndex2]))
+const std::string EntityOverlayRenderer::healthBarAtlasKey = "img_overlay_health.tga";
+const std::string EntityOverlayRenderer::healthBarDepletedAtlasKey = "img_overlay_health_depleted.tga";
+const std::string EntityOverlayRenderer::monsterHealthBarAtlasKey = "img_overlay_health_monster.tga";
+const std::string EntityOverlayRenderer::monsterHealthBarDepletedAtlasKey = "img_overlay_health_monster_depleted.tga";
+
+EntityOverlayRenderer::EntityOverlayRenderer(const TextureStore& textureStore)
+    : paletteTexture(textureStore.getPalette())
+    , overlayRenderable(textureStore.getOverlayTextureAtlas(), maxImagesToRender)
 {
-    vertexData.reserve(maxBoxesToRender * BoxRenderable::numVerticesPerBox * BoxRenderable::numVertexDimensions);
-    colorData.reserve(maxBoxesToRender * BoxRenderable::numVerticesPerBox * BoxRenderable::numColorDimensions);
+    vertexData.reserve(
+            maxImagesToRender * AtlasRenderable::numVerticesPerSprite * AtlasRenderable::numVertexDimensions);
+    texCoordData.reserve(
+            maxImagesToRender * AtlasRenderable::numVerticesPerSprite * AtlasRenderable::numTexCoordDimensions);
 }
 
 void EntityOverlayRenderer::render(const EntityContainer& entityContainer)
 {
     // Fill buffers
     vertexData.clear();
-    colorData.clear();
-    int numBoxes = 0;
-    entityContainer.forEachEntity([&](const auto& entity) { addEntityOverlayToBuffers(*entity, numBoxes); });
+    texCoordData.clear();
+    int numSprites = 0;
+    entityContainer.forEachEntity([&](const auto& entity) { addEntityOverlayToBuffers(*entity, numSprites); });
 
     // Bind vertex array
-    glBindVertexArray(boxRenderable.getVao());
+    glBindVertexArray(overlayRenderable.getVao());
+
+    // Set palette
+    glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, PaletteUtils::paletteIndexGame);
+
+    // Use textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, overlayRenderable.getTextureId());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getPositionVbo());
+    glBindBuffer(GL_ARRAY_BUFFER, overlayRenderable.getPositionVbo());
     glBufferSubData(GL_ARRAY_BUFFER, 0, vertexData.size() * sizeof(GLfloat), vertexData.data());
 
-    // Upload color data
-    glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getColorVbo());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, colorData.size() * sizeof(GLfloat), colorData.data());
+    // Upload tex co-ord data
+    glBindBuffer(GL_ARRAY_BUFFER, overlayRenderable.getTexCoordVbo());
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordData.size() * sizeof(GLfloat), texCoordData.data());
 
     // Render
-    const int numIndices = boxRenderable.getIndicesPerBox() * numBoxes;
-    glDrawElements(boxRenderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
+    const int numIndices = overlayRenderable.getIndicesPerSprite() * numSprites;
+    glDrawElements(overlayRenderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
-void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, int& numBoxes)
+void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, int& numSprites)
 {
-    if (numBoxes >= maxBoxesToRender)
+    if (numSprites >= maxImagesToRender)
     {
-        // Avoid a buffer overflow
+        // Don't overflow the buffer
         return;
     }
 
@@ -64,45 +80,33 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, int&
         return;
     }
 
-    // OpenGL determines colors at pixel centres, so our vertices need to be perfectly aligned with pixel centres in
-    // order for the correct colors to be sampled.
-    const float halfPixelCorrection = 0.5f;
-
     // Define vertex positions
     const MapNode& pos = entity.getPos();
     const float x1 = static_cast<float>(RenderUtils::tileToPx_X(pos.x))  //
             + static_cast<float>(healthBarDrawOffsetX)                   //
             + spriteComponent->lastLerpOffset.x;
-    float y1 = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
-            + static_cast<float>(healthBarDrawOffsetY)                    //
-            + spriteComponent->lastLerpOffset.y                           //
-            + halfPixelCorrection;
+    const float y1 = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
+            + static_cast<float>(healthBarDrawOffsetY)                          //
+            + spriteComponent->lastLerpOffset.y;                                //
     const float x2 = x1 + healthBarWidth;
-    float y2 = y1 + healthBarHeight;
-
-    LOG_WARN("Rendering health bar from {} to {}", y1, y2);
+    const float y2 = y1 + healthBarHeight;
+    const float z = 0.f;  // Unused
 
     std::vector<GLfloat> newVerts = {
         /* clang-format off */
-        x1, y1,
-        x2, y1,
-        x2, y2,
-        x1, y2
+        x1, y1, z,
+        x2, y1, z,
+        x2, y2, z,
+        x1, y2, z
         /* clang-format on */
     };
     vertexData.insert(vertexData.end(), newVerts.cbegin(), newVerts.cend());
-    ++numBoxes;
 
-    // Define colors.
-    // Here we are relying on OpenGL to create a gradient, so we might not end up with *exactly* the same colors as the
-    // original game, but literally no-one is going to notice.
-    //   TODO: Units with lots of health show multiple bars with a grey box behind.
-    //   TODO: Health turns red when depleted.
-    //   TODO: Monsters have a silver health bar that turns purple when depleted.
-    colorData.insert(colorData.end(), healthColor1.cbegin(), healthColor1.cend());  // top-left
-    colorData.insert(colorData.end(), healthColor1.cbegin(), healthColor1.cend());  // top-right
-    colorData.insert(colorData.end(), healthColor2.cbegin(), healthColor2.cend());  // bottom-right
-    colorData.insert(colorData.end(), healthColor2.cbegin(), healthColor2.cend());  // bottom-left
+    // Define texture co-ords
+    std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(healthBarAtlasKey);
+    texCoordData.insert(texCoordData.end(), texCoords.cbegin(), texCoords.cend());
+
+    ++numSprites;
 }
 
 }  // namespace Rival

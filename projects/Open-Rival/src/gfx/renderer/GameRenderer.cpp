@@ -41,6 +41,7 @@ GameRenderer::GameRenderer(const Window* window,
               res.getMapBorderSpritesheet(),
               res.getPalette())
     , entityRenderer(res, playerContext)
+    , entityOverlayRenderer(res)
     , uiRenderer(playerStore, res, res, window, playerContext)
     , dragSelectRenderer(playerContext)
 {
@@ -109,22 +110,10 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
     // Render Entities
     entityRenderer.render(camera, world, delta);
 
-    // Render overlays
-    renderGameOverlays(viewProjMatrix);
-}
-
-void GameRenderer::renderGameOverlays(glm::mat4 viewProjMatrix)
-{
-    // Disable depth testing since the overlays are always on top
+    // Disable depth testing since overlays are always on top
     glDisable(GL_DEPTH_TEST);
 
-    // Use box shader
-    glUseProgram(Shaders::boxShader.programId);
-
-    // Set uniform values
-    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
-
-    // Render the overlays to the screen
+    // Render overlays
     entityOverlayRenderer.render(world);
 }
 

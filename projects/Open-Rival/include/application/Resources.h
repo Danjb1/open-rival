@@ -48,6 +48,7 @@ public:
     virtual const Spritesheet& getPortraitSpritesheet() const = 0;
     virtual const Spritesheet& getHitboxSpritesheet() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const = 0;
+    virtual std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const = 0;
     virtual std::shared_ptr<const Texture> getMenuBackgroundTexture() const = 0;
 };
 
@@ -96,6 +97,7 @@ public:
     const Spritesheet& getPortraitSpritesheet() const override;
     const Spritesheet& getHitboxSpritesheet() const override;
     std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const override;
+    std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const override;
     std::shared_ptr<const Texture> getMenuBackgroundTexture() const override;
     // End TextureStore override
 

@@ -30,8 +30,12 @@ int main(int argc, char* argv[])
 
     int exitCode = 0;
 
+#if !DEBUG
+    // Fail gracefully if we are not debugging
     try
     {
+#endif
+
         ApplicationContext context;
         Application app(context);
 
@@ -50,12 +54,16 @@ int main(int argc, char* argv[])
         std::string playerName = hostForLobby ? "Host" : "Client";
         std::unique_ptr<State> initialState = std::make_unique<LobbyState>(app, playerName, hostForLobby);
         app.start(std::move(initialState));
+
+#if !DEBUG
     }
+    // Fail gracefully if we are not debugging
     catch (const std::exception& e)
     {
         LOG_ERROR("Unhandled error during initialization or gameplay: {}", e.what());
         exitCode = 1;
     }
+#endif
 
     return exitCode;
 }

@@ -10,47 +10,56 @@
 namespace Rival { namespace Setup {
 
 /**
- * Makes an image containing all the bars needed for the health overlay.
+ * Makes all the images needed for the health overlay.
  *
  * We could try to render health bars as a gradient using coloured quads but it is much easier to get the colors right
  * if we use a texture.
  */
-void makeHealthOverlay(const std::string& outputDir)
+void makeHealthOverlays(const std::string& outputDir)
 {
-    // N.B. Use power-of-two dimensions!
-    const int width = 8;
-    const int height = 8;
-    Image image = Image::createEmpty(width, height, 0xff);
+    const int width = 1;
+    const int height = 3;
 
     // Unit health bar (full)
+    Image image = Image::createEmpty(width, height, 0xff);
     image.setPixel(0, 0, 172);
     image.setPixel(0, 1, 174);
     image.setPixel(0, 2, 176);
+    std::string filename = outputDir + "\\img_overlay_health.tga";
+    std::cout << "Saving image " << filename << "\n";
+    writeImage(image, Palette::paletteGame, filename);
 
     // Unit health bar (depleted)
-    image.setPixel(1, 0, 160);
-    image.setPixel(1, 1, 162);
-    image.setPixel(1, 2, 164);
+    image = Image::createEmpty(width, height, 0xff);
+    image.setPixel(0, 0, 160);
+    image.setPixel(0, 1, 162);
+    image.setPixel(0, 2, 164);
+    filename = outputDir + "\\img_overlay_health_depleted.tga";
+    std::cout << "Saving image " << filename << "\n";
+    writeImage(image, Palette::paletteGame, filename);
 
     // Monster health bar (full)
-    image.setPixel(2, 0, 255);
-    image.setPixel(2, 1, 210);
-    image.setPixel(2, 2, 212);
+    image = Image::createEmpty(width, height, 0xff);
+    image.setPixel(0, 0, 255);
+    image.setPixel(0, 1, 210);
+    image.setPixel(0, 2, 212);
+    filename = outputDir + "\\img_overlay_health_monster.tga";
+    std::cout << "Saving image " << filename << "\n";
+    writeImage(image, Palette::paletteGame, filename);
 
     // Monster health bar (depleted)
-    image.setPixel(3, 0, 190);
-    image.setPixel(3, 1, 192);
-    image.setPixel(3, 2, 194);
-
-    // Save image to disk
-    const std::string filename = outputDir + "\\img_overlay_health.tga";
+    image = Image::createEmpty(width, height, 0xff);
+    image.setPixel(0, 0, 190);
+    image.setPixel(0, 1, 192);
+    image.setPixel(0, 2, 194);
+    filename = outputDir + "\\img_overlay_health_monster_depleted.tga";
     std::cout << "Saving image " << filename << "\n";
     writeImage(image, Palette::paletteGame, filename);
 }
 
 void makeProceduralImages(const std::string& outputDir)
 {
-    makeHealthOverlay(outputDir);
+    makeHealthOverlays(outputDir);
 }
 
 }}  // namespace Rival::Setup

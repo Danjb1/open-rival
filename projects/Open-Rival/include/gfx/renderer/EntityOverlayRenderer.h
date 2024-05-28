@@ -2,15 +2,18 @@
 
 #include "gfx/GlewWrapper.h"
 
+#include <string>
 #include <vector>
 
 #include "gfx/RenderUtils.h"
-#include "gfx/renderable/BoxRenderable.h"
+#include "gfx/renderable/AtlasRenderable.h"
 #include "utils/EntityUtils.h"
 
 namespace Rival {
 
 class Camera;
+class Texture;
+class TextureStore;
 
 /**
  * Class responsible for rendering the health/mana/XP bars above Entities.
@@ -18,7 +21,7 @@ class Camera;
 class EntityOverlayRenderer
 {
 public:
-    EntityOverlayRenderer();
+    EntityOverlayRenderer(const TextureStore& textureStore);
 
     // Prevent copying
     EntityOverlayRenderer(const EntityOverlayRenderer&) = delete;
@@ -27,14 +30,11 @@ public:
     void render(const EntityContainer& entityContainer);
 
 private:
-    void addEntityOverlayToBuffers(const Entity& entity, int& numBoxes);
+    void addEntityOverlayToBuffers(const Entity& entity, int& numSprites);
 
 private:
-    // Unlikely we'll need more than this
-    static constexpr int maxBoxesToRender = 256;
-
-    static constexpr int healthColorIndex1 = 172;
-    static constexpr int healthColorIndex2 = 176;
+    // TODO: This is an arbitrary value but we could run out!
+    static constexpr int maxImagesToRender = 1024;
 
     // TODO: These were measured for a Centaur with 2 bars; should they vary based on unit hitbox / number of bars?
     static constexpr int healthBarDrawOffsetX = 19;
@@ -43,12 +43,16 @@ private:
     static constexpr float healthBarWidth = 25.f;
     static constexpr float healthBarHeight = 3.f;
 
-    std::vector<GLfloat> healthColor1;
-    std::vector<GLfloat> healthColor2;
+    static const std::string healthBarAtlasKey;
+    static const std::string healthBarDepletedAtlasKey;
+    static const std::string monsterHealthBarAtlasKey;
+    static const std::string monsterHealthBarDepletedAtlasKey;
+
+    std::shared_ptr<const Texture> paletteTexture;
 
     std::vector<GLfloat> vertexData;
-    std::vector<GLfloat> colorData;
-    BoxRenderable boxRenderable;
+    std::vector<GLfloat> texCoordData;
+    AtlasRenderable overlayRenderable;
 };
 
 }  // namespace Rival

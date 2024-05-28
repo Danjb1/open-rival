@@ -20,7 +20,7 @@ public:
     const int getImageWidth(std::string key) const;
     const int getImageHeight(std::string key) const;
 
-    const std::vector<GLfloat> getTexCoords(std::string key) const;
+    const std::vector<GLfloat> getTexCoords(const std::string& key) const;
 
     static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string& filename);
 
