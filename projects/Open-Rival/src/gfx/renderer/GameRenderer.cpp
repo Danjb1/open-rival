@@ -40,7 +40,7 @@ GameRenderer::GameRenderer(const Window* window,
               world.getHeight(),
               res.getMapBorderSpritesheet(),
               res.getPalette())
-    , entityRenderer(res, playerContext)
+    , entityRenderer(res, playerContext, playerStore)
     , entityOverlayRenderer(res, playerContext)
     , uiRenderer(playerStore, res, res, window, playerContext)
     , dragSelectRenderer(playerContext)

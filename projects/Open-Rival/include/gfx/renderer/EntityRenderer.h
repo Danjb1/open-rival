@@ -11,6 +11,7 @@ namespace Rival {
 
 class Camera;
 class Entity;
+class PlayerStore;
 class SpriteComponent;
 class Texture;
 class TextureStore;
@@ -22,7 +23,8 @@ struct PlayerContext;
 class EntityRenderer
 {
 public:
-    EntityRenderer(const TextureStore& textureStore, const PlayerContext& playerContext);
+    EntityRenderer(
+            const TextureStore& textureStore, const PlayerContext& playerContext, const PlayerStore& playerStore);
 
     // Prevent copying
     EntityRenderer(const EntityRenderer&) = delete;
@@ -45,6 +47,7 @@ private:
 
     std::shared_ptr<const Texture> paletteTexture;
     const PlayerContext& playerContext;
+    const PlayerStore& playerStore;
 
     SpriteRenderable hitboxRenderable;
 };

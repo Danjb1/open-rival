@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
 - Show attack cursor when hovering over enemy-owned entities
-- Show red hitbox when hovering over enemy-owned entities
 - Show attack cursor after entering attack mode (press A)
 - Issue an AttackCommand when the selection is instructed to attack
 - Units instructed to attack should maintain a reference to the target
