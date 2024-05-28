@@ -15,6 +15,7 @@ namespace Rival {
 class Camera;
 class Texture;
 class TextureStore;
+struct PlayerContext;
 
 /**
  * Class responsible for rendering the health/mana/XP bars above Entities.
@@ -22,7 +23,7 @@ class TextureStore;
 class EntityOverlayRenderer
 {
 public:
-    EntityOverlayRenderer(const TextureStore& textureStore);
+    EntityOverlayRenderer(const TextureStore& textureStore, const PlayerContext& playerContext);
 
     // Prevent copying
     EntityOverlayRenderer(const EntityOverlayRenderer&) = delete;
@@ -36,7 +37,7 @@ public:
     void renderTextures();
 
 private:
-    void addEntityOverlayToBuffers(const Entity& entity);
+    void addEntityOverlayToBuffers(const Entity& entity, bool isHovered);
 
 private:
     // 2 x health bar + depleted health bar
@@ -59,6 +60,8 @@ private:
     static const std::string healthBarDepletedAtlasKey;
     static const std::string monsterHealthBarAtlasKey;
     static const std::string monsterHealthBarDepletedAtlasKey;
+
+    const PlayerContext& playerContext;
 
     std::shared_ptr<const Texture> paletteTexture;
 

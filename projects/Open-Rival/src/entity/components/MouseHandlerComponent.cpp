@@ -3,6 +3,7 @@
 #include <glm/vec2.hpp>
 
 #include <memory>
+#include <set>
 
 #include "commands/MoveCommand.h"
 #include "entity/Entity.h"
@@ -131,18 +132,11 @@ bool MouseHandlerComponent::onTileClicked(
         }
 
         // Find all entity IDs in the selection
-        std::vector<int> entityIdsInGroup;
-        for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
-        {
-            const auto& selectedEntity = weakSelectedEntity.lock();
-            if (selectedEntity)
-            {
-                entityIdsInGroup.push_back(selectedEntity->getId());
-            }
-        }
+        std::set<int> entityIdsSet = playerContext.getSelectedEntityIds();
+        std::vector<int> entityIdsVector(entityIdsSet.cbegin(), entityIdsSet.cend());
 
         // Issue the MoveCommand
-        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entityIdsInGroup, playerContext.tileUnderMouse));
+        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entityIdsVector, playerContext.tileUnderMouse));
         return true;
     }
 

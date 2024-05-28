@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <set>
 
 #include "entity/Entity.h"
 #include "game/MapUtils.h"
@@ -33,6 +34,8 @@ struct PlayerContext
     MapNode tileUnderMouse { -1, -1 };
     std::weak_ptr<Entity> weakEntityUnderMouse;
     WeakMutableEntityList weakSelectedEntities;
+
+    std::set<int> getSelectedEntityIds() const;
 };
 
 }  // namespace Rival

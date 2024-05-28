@@ -41,7 +41,7 @@ GameRenderer::GameRenderer(const Window* window,
               res.getMapBorderSpritesheet(),
               res.getPalette())
     , entityRenderer(res, playerContext)
-    , entityOverlayRenderer(res)
+    , entityOverlayRenderer(res, playerContext)
     , uiRenderer(playerStore, res, res, window, playerContext)
     , dragSelectRenderer(playerContext)
 {

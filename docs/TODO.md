@@ -4,9 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Unit overlays
-    - Health should turn red when depleted
-    - Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
 - Show red hitbox when hovering over enemy-owned entities
 - Show attack cursor after entering attack mode (press A)
@@ -111,6 +108,7 @@
 ### Rendering
 
 - Units with more than 2 bars should display a plus sign in their overlay
+- Health bars should be rendered higher for flying units
 - Respect monster color
 - Render interface
     - Resource icons
@@ -128,7 +126,6 @@
 
 - Selected units should flash orange
 - Allow buildings to be selected
-- Use a single MoveCommand for groups?
 - Show "star" effect when sending troops somewhere
 - Passability debug visualisation
 - Pathfinding debug visualisation
