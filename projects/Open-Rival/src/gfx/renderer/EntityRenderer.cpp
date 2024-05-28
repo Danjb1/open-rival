@@ -25,10 +25,12 @@
 
 namespace Rival {
 
-EntityRenderer::EntityRenderer(const TextureStore& textureStore, const PlayerContext& playerContext)
+EntityRenderer::EntityRenderer(
+        const TextureStore& textureStore, const PlayerContext& playerContext, const PlayerStore& playerStore)
     : paletteTexture(textureStore.getPalette())
     , hitboxRenderable(textureStore.getHitboxSpritesheet(), numHitboxSprites)
     , playerContext(playerContext)
+    , playerStore(playerStore)
 {
 }
 
@@ -110,6 +112,7 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     // Render hitbox
     if (isEntityUnderMouse(entity))
     {
+        glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);  // Use default palette for hitboxes
         renderHitbox(entity);
     }
 }
@@ -271,6 +274,9 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
     }
 
     const Rect& hitbox = mouseHandler->getHitbox();
+    const OwnerComponent* ownerComp = entity.getComponent<OwnerComponent>(OwnerComponent::key);
+    const bool isSelf = ownerComp && playerStore.isLocalPlayer(ownerComp->getPlayerId());
+    const int baseTexCoord = isSelf ? 0 : 4;  // Use red hitbox for enemies
 
     // Use textures
     glActiveTexture(GL_TEXTURE0);
@@ -306,7 +312,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(0);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 0);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -327,7 +333,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(1);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 1);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -348,7 +354,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(2);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 2);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -369,7 +375,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(3);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 3);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
