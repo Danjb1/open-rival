@@ -188,6 +188,17 @@ public:
         return entityType == T::staticEntityType ? static_cast<T*>(this) : nullptr;
     }
 
+    /** Casts this Entity to the given subclass, if it is safe to do so (const version).
+     * Subclasses MUST have a `staticEntityType` member variable in order for this to work.
+     * Returns nullptr if there is a type mismatch. */
+    template <class T>
+    const T* as() const
+    {
+        static_assert(std::is_base_of<Entity, T>::value, "T must be a subclass of Entity");
+        static_assert(has_entity_type<T>::value, "T must have a static member variable named 'staticEntityType'");
+        return entityType == T::staticEntityType ? static_cast<const T*>(this) : nullptr;
+    }
+
     /**
      * Gets a raw pointer to the EntityComponent with the given key (mutable version).
      *

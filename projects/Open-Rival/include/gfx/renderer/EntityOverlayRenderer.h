@@ -52,6 +52,7 @@ private:
 
     static constexpr float healthBarWidth = 25.f;
     static constexpr float healthBarHeight = 3.f;
+    static constexpr int healthPerBar = 300;
 
     static const std::string overlayBackgroundAtlasKey;
     static const std::string healthBarAtlasKey;

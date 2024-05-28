@@ -13,14 +13,15 @@ class OwnerComponent : public EntityComponent
 {
 
 public:
-    static const std::string key;
-
     OwnerComponent(int playerId);
 
     int getPlayerId() const
     {
         return playerId;
     }
+
+public:
+    static const std::string key;
 
 private:
     int playerId;

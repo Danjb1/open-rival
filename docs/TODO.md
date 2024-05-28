@@ -5,12 +5,7 @@
 <!----------------------------------------------------------------------------->
 
 - Unit overlays
-    - Health bar size should depend on unit max health
-    - If units have upgrades, this background gets taller when units are hovered to show upgrades
-        - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
     - Health should turn red when depleted
-    - Units with more than 2 bars should display a plus sign
-    - Monsters should have a silver health bar that turns purple when depleted
     - Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
 - Show red hitbox when hovering over enemy-owned entities
@@ -46,7 +41,6 @@
 ### General
 
 - Add support for [Unicode filenames](http://utf8everywhere.org/)
-- Redirect stdout to log file
 - Save config.json / log files to AppData (or at least provide the option)
 
 ### Data Loading
@@ -62,20 +56,25 @@
 ### Gameplay
 
 - Store unit / building defaults
-- Mountains
-- Trees
-- Scenery
-- Chests
-- Info Points
-- Doors
+- Load map elements
+    - Mountains
+    - Trees
+    - Scenery
+    - Chests
+    - Info Points
+    - Doors
 - Building placement
-- Training
-- Resting
-- Attacking
+- Resource gathering
+- Training units
+- Resting (approx. 200 health in 30 seconds)
+- Don't kill friendly units when attacking them!
+- Prisoners & mercenaries
 - Upgrades
-- Experience
-- Food
+    - Overlay background gets taller for hovered units with upgrades
+    - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
+- Food consumption
 - Items
+- Experience & levelling
 - Spells
 - Effects (e.g. corpses / explosions)
 - Monster AI
@@ -84,7 +83,9 @@
 ### Multiplayer
 
 - Adjust net command delay dynamically based on ping
-- Send a checksum periodically to check that players are in-sync?
+    - If delay gets increased, clients should send empty commands for any "skipped" ticks
+    - If delay gets reduced, clients keep issuing commands for the next tick that was due, until the "current" tick catches up
+- Send a checksum periodically to check that players are in-sync? (debug mode only)
 - GameState should reject new players
 - Create standalone project to run dedicated server
 
@@ -109,6 +110,7 @@
 
 ### Rendering
 
+- Units with more than 2 bars should display a plus sign in their overlay
 - Respect monster color
 - Render interface
     - Resource icons
@@ -158,8 +160,7 @@
 
 ### Menus
 
-- Gold cursor in menus
-    - We may need to create new cursor images for this since the existing ones all use the wrong palette
+- Use gold cursor in menus
 - Main menu
 - Loading screen
 - Custom Map menu
@@ -227,7 +228,7 @@
 - [ ] Affordable Wall
 - [ ] Non-suicidal peasants (don't go looking for gold)
 - [ ] Rebalance abilities (Frozen Breath, Capture)
-- [ ] Disable friendly fire
+- [ ] Disable friendly fire from ranged attacks
 
 ### New Features
 

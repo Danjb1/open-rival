@@ -4,9 +4,16 @@ namespace Rival { namespace Palette {
 
 /* clang-format off */
 
-    // The palette used in-game.
-    // The first color is used by cursors for transparency, but should be opaque for rendering portraits.
-    // Colors 224-238 are used for water "animation". These colors are shifted left and right at runtime.
+    /**
+     * The palette used in-game.
+     *
+     * The first color is used by cursors for transparency, but should be opaque for rendering portraits.
+     * The last color is used by most images for transparency, but should be opaque for rendering overlays.
+     * The `transparent_index` uniform in the shader can be used to set which color is transparent.
+     *
+     * Colors 224-238 are used for water "animation". These colors are shifted left and right at runtime in the world
+     * shader.
+     */
     extern Palette paletteGame = {
         0x000000ff, 0xccb78fff, 0xa4a494ff, 0x8c846cff,    0x9c845cff, 0x9c7c54ff, 0x94744cff, 0x8c7454ff, // 0
         0x846c54ff, 0x7b6747ff, 0x74644cff, 0x6c6454ff,    0xeacf09ff, 0xf0a705ff, 0xfe7f31ff, 0xfe5027ff, // 8
