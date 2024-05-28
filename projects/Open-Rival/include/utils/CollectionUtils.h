@@ -13,7 +13,7 @@ using WeakPtrSet = std::set<std::weak_ptr<T>, std::owner_less<std::weak_ptr<T>>>
 namespace CollectionUtils {
 
 /**
- * Iterates over a list of weak_ptrs and calls a function for each valid item in the list.
+ * Iterates over a set of weak_ptrs and calls a function for each valid item in the list.
  * Expired pointers will be removed.
  *
  * USAGE:

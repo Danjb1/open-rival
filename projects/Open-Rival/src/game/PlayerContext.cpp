@@ -22,4 +22,18 @@ bool DragSelect::isValid() const
             && std::abs(endY - startY) > minDragSelectSize;
 }
 
+std::set<int> PlayerContext::getSelectedEntityIds() const
+{
+    std::set<int> entityIds;
+    for (const auto& weakSelectedEntity : weakSelectedEntities)
+    {
+        const auto& selectedEntity = weakSelectedEntity.lock();
+        if (selectedEntity)
+        {
+            entityIds.insert(selectedEntity->getId());
+        }
+    }
+    return entityIds;
+}
+
 }  // namespace Rival
