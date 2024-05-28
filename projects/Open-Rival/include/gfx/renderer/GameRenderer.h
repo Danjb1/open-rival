@@ -38,6 +38,7 @@ public:
 private:
     void renderGameViaFramebuffer(int delta);
     void renderGame(int viewportWidth, int viewportHeight, int delta);
+    void renderGameOverlays(const glm::mat4& viewProjMatrix);
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();

@@ -5,7 +5,7 @@
 <!----------------------------------------------------------------------------->
 
 - Unit overlays
-    - Render grey background behind health bars (big enough for 2 bars)
+    - Health bar size should depend on unit max health
     - If units have upgrades, this background gets taller when units are hovered to show upgrades
         - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
     - Health should turn red when depleted
