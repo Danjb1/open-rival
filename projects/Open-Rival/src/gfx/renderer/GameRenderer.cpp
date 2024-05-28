@@ -110,11 +110,23 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
     // Render Entities
     entityRenderer.render(camera, world, delta);
 
-    // Disable depth testing since overlays are always on top
+    // Render overlays
+    renderGameOverlays(viewProjMatrix);
+}
+
+void GameRenderer::renderGameOverlays(const glm::mat4& viewProjMatrix)
+{
+    // Disable depth testing since the overlays are always on top
     glDisable(GL_DEPTH_TEST);
 
-    // Render overlays
-    entityOverlayRenderer.render(world);
+    entityOverlayRenderer.prepare(world);
+
+    glUseProgram(Shaders::boxShader.programId);
+    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    entityOverlayRenderer.renderBoxes();
+
+    glUseProgram(Shaders::worldShader.programId);
+    entityOverlayRenderer.renderTextures();
 }
 
 void GameRenderer::renderFramebuffer(int srcWidth, int srcHeight) const

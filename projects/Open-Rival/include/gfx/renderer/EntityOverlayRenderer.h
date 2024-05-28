@@ -7,6 +7,7 @@
 
 #include "gfx/RenderUtils.h"
 #include "gfx/renderable/AtlasRenderable.h"
+#include "gfx/renderable/BoxRenderable.h"
 #include "utils/EntityUtils.h"
 
 namespace Rival {
@@ -27,14 +28,23 @@ public:
     EntityOverlayRenderer(const EntityOverlayRenderer&) = delete;
     EntityOverlayRenderer& operator=(const EntityOverlayRenderer&) = delete;
 
-    void render(const EntityContainer& entityContainer);
+    /** Prepares for rendering.
+     * This should always be called before calling renderBoxes / renderTextures. */
+    void prepare(const EntityContainer& entityContainer);
+
+    void renderBoxes();
+    void renderTextures();
 
 private:
-    void addEntityOverlayToBuffers(const Entity& entity, int& numSprites);
+    void addEntityOverlayToBuffers(const Entity& entity);
 
 private:
-    // TODO: This is an arbitrary value but we could run out!
-    static constexpr int maxImagesToRender = 1024;
+    // 2 x health bar + depleted health bar
+    static constexpr int maxSpritesPerEntity = 3;
+
+    // It's very unlikely we'll need to render more than this!
+    static constexpr int maxOverlaysToRender = 512;
+    static constexpr int maxImagesToRender = maxOverlaysToRender * maxSpritesPerEntity;
 
     // TODO: These were measured for a Centaur with 2 bars; should they vary based on unit hitbox / number of bars?
     static constexpr int healthBarDrawOffsetX = 19;
@@ -43,6 +53,7 @@ private:
     static constexpr float healthBarWidth = 25.f;
     static constexpr float healthBarHeight = 3.f;
 
+    static const std::string overlayBackgroundAtlasKey;
     static const std::string healthBarAtlasKey;
     static const std::string healthBarDepletedAtlasKey;
     static const std::string monsterHealthBarAtlasKey;
@@ -50,9 +61,17 @@ private:
 
     std::shared_ptr<const Texture> paletteTexture;
 
-    std::vector<GLfloat> vertexData;
-    std::vector<GLfloat> texCoordData;
+    std::vector<GLfloat> backgroundColor;
+    std::vector<GLfloat> boxVertexData;
+    std::vector<GLfloat> boxColorData;
+    BoxRenderable boxRenderable;
+
+    std::vector<GLfloat> atlasVertexData;
+    std::vector<GLfloat> atlasTexCoordData;
     AtlasRenderable overlayRenderable;
+
+    int numBoxes = 0;
+    int numSprites = 0;
 };
 
 }  // namespace Rival
