@@ -5,11 +5,11 @@
 <!----------------------------------------------------------------------------->
 
 - Unit overlays
-    - Render health bars using textures
     - Render grey background behind health bars (big enough for 2 bars)
     - If units have upgrades, this background gets taller when units are hovered to show upgrades
         - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
     - Health should turn red when depleted
+    - Units with more than 2 bars should display a plus sign
     - Monsters should have a silver health bar that turns purple when depleted
     - Only render health bars of *selected* or *hovered* units
 - Show attack cursor when hovering over enemy-owned entities
@@ -332,6 +332,7 @@
 - Defer loading MIDI files until needed to speed up initial load time
 - Eliminate branching in shaders
 - Revise `World::getEntityAt` to use a map or spartial partitioning
+- AtlasRenderables always use a z co-ordinate even though it is often not needed (e.g. UI, overlays)
 
 ### Portability
 

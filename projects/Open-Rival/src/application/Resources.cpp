@@ -171,7 +171,7 @@ std::vector<std::shared_ptr<const TextureAtlas>> Resources::loadTextureAtlases()
     std::vector<std::shared_ptr<const TextureAtlas>> texAtlasList;
     texAtlasList.reserve(numTextureAtlases);
 
-    std::vector<std::string> resourceNames = { "game_interface" };
+    std::vector<std::string> resourceNames = { "game_interface", "overlays" };
 
     for (const auto& resourceName : resourceNames)
     {
@@ -453,6 +453,11 @@ std::shared_ptr<const Texture> Resources::getPalette() const
 std::shared_ptr<const TextureAtlas> Resources::getUiTextureAtlas() const
 {
     return textureAtlases.at(0);
+}
+
+std::shared_ptr<const TextureAtlas> Resources::getOverlayTextureAtlas() const
+{
+    return textureAtlases.at(1);
 }
 
 std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const

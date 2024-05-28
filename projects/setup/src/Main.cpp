@@ -22,13 +22,13 @@ namespace fs = std::filesystem;
 using namespace Rival;
 
 // Configuration
-bool shouldCreateOutputDirectories = false;
-bool shouldExtractSounds = false;
-bool shouldExtractImages = false;
-bool shouldExtractInterface = false;
+bool shouldCreateOutputDirectories = true;
+bool shouldExtractSounds = true;
+bool shouldExtractImages = true;
+bool shouldExtractInterface = true;
 bool shouldMakeImages = true;
 bool shouldBuildTextures = true;
-bool shouldCopyVideos = false;
+bool shouldCopyVideos = true;
 
 void createOutputDirectories()
 {
