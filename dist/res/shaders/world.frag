@@ -3,7 +3,7 @@
 uniform sampler2D tex;
 uniform sampler2D palette;
 uniform float palette_txy;
-uniform int transparent_index = 0;
+uniform float transparent_index = 0;
 uniform int water_shift_1;
 uniform int water_shift_2;
 
@@ -35,8 +35,9 @@ int apply_water_shift(int palette_index) {
 }
 
 void main() {
+    // palette_index is a lookup into the palette texture (0-1)
     float palette_index = texture(tex, tex_coords).r;
-    if (palette_index == transparent_index || palette_index == 1)
+    if (palette_index == transparent_index)
     {
         discard;
     }

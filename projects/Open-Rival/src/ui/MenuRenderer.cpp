@@ -4,6 +4,7 @@
 
 #include "application/Window.h"
 #include "gfx/GLUtils.h"
+#include "gfx/Palette.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Shaders.h"
 #include "gfx/renderable/TextureRenderable.h"
@@ -101,6 +102,7 @@ void MenuRenderer::renderCursor(int delta)
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
     glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+    glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::cursorTransparentColor);
 
     // TMP: Use the game palette since we don't have menu cursor images yet
     float paletteTxY = PaletteUtils::getPaletteTxY(PaletteUtils::paletteIndexGame);

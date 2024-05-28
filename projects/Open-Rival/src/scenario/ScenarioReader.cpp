@@ -990,7 +990,6 @@ std::uint8_t ScenarioReader::readRivalByte(std::size_t offset) const
  */
 std::uint8_t ScenarioReader::fixRivalByte(std::uint8_t val) const
 {
-
     // Apply tiered offset
     if (val < 0x12)
     {

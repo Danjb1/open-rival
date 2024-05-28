@@ -100,6 +100,7 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
     glUniformMatrix4fv(Shaders::worldShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
     glUniform1i(Shaders::worldShader.texUnitUniformLoc, 0);
     glUniform1i(Shaders::worldShader.paletteTexUnitUniformLoc, 1);
+    glUniform1f(Shaders::worldShader.transparentIndex, Palette::globalTransparentColor);  // Enable transparency
 
     // Render Tiles
     tileRenderer.render(delta, camera, world.getTiles(), world.getWidth(), world.getHeight());
@@ -125,7 +126,9 @@ void GameRenderer::renderGameOverlays(const glm::mat4& viewProjMatrix)
     glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
     entityOverlayRenderer.renderBoxes();
 
-    glUseProgram(Shaders::worldShader.programId);
+    glUseProgram(Shaders::indexedTextureShader.programId);
+    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1f(Shaders::indexedTextureShader.transparentIndex, -1);  // Disable transparency
     entityOverlayRenderer.renderTextures();
 }
 
@@ -226,6 +229,7 @@ void GameRenderer::renderCursor(int delta)
     glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
     glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+    glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::cursorTransparentColor);
 
     // Render the cursor to the screen
     glViewport(0, 0, window->getWidth(), window->getHeight());

@@ -2,13 +2,16 @@
 
 #include "application/Resources.h"
 #include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "entity/components/HealthComponent.h"
+#include "entity/components/OwnerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "gfx/Camera.h"
 #include "gfx/Palette.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/Shaders.h"
 #include "utils/LogUtils.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 
@@ -67,7 +70,7 @@ void EntityOverlayRenderer::renderTextures()
     glBindVertexArray(overlayRenderable.getVao());
 
     // Set palette
-    glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, PaletteUtils::paletteIndexGame);
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, PaletteUtils::paletteIndexGame);
 
     // Use textures
     glActiveTexture(GL_TEXTURE0);
@@ -86,6 +89,18 @@ void EntityOverlayRenderer::renderTextures()
     // Render
     const int numIndices = overlayRenderable.getIndicesPerSprite() * numSprites;
     glDrawElements(overlayRenderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
+}
+
+// TODO: This should be a common utility function
+bool isMonster(const Entity& entity)
+{
+    if (const Unit* unit = entity.as<Unit>())
+    {
+        // Monsters have no owner
+        return unit->getComponent<OwnerComponent>(OwnerComponent::key) == nullptr;
+    }
+
+    return false;
 }
 
 void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity)
@@ -109,16 +124,18 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity)
     }
 
     const MapNode& pos = entity.getPos();
-    const float x1 = static_cast<float>(RenderUtils::tileToPx_X(pos.x))  //
-            + static_cast<float>(healthBarDrawOffsetX)                   //
+    const float originX = static_cast<float>(RenderUtils::tileToPx_X(pos.x))  //
+            + static_cast<float>(healthBarDrawOffsetX)                        //
             + spriteComponent->lastLerpOffset.x;
-    const float y1 = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
-            + static_cast<float>(healthBarDrawOffsetY)                          //
-            + spriteComponent->lastLerpOffset.y;                                //
+    const float originY = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
+            + static_cast<float>(healthBarDrawOffsetY)                               //
+            + spriteComponent->lastLerpOffset.y;                                     //
 
     // Background
     {
         // Define vertex positions
+        const float x1 = originX;
+        const float y1 = originY;
         const float x2 = x1 + healthBarWidth;
         const float y2 = y1 + 2 * healthBarHeight;
 
@@ -141,10 +158,20 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity)
         ++numBoxes;
     }
 
-    // Health bar
+    const bool bIsMonster = isMonster(entity);
+    const std::string currentHealthBarAtlasKey = bIsMonster ? monsterHealthBarAtlasKey : healthBarAtlasKey;
+    const std::string currentDepletedHealthBarAtlasKey =
+            bIsMonster ? monsterHealthBarDepletedAtlasKey : healthBarDepletedAtlasKey;
+
+    // Health bar 1
     {
+        const float widthRatio =
+                MathUtils::clampf(healthComponent->getHealth() / static_cast<float>(healthPerBar), 0.f, 1.f);
+
         // Define vertex positions
-        const float x2 = x1 + healthBarWidth;
+        const float x1 = originX;
+        const float y1 = originY;
+        const float x2 = x1 + healthBarWidth * widthRatio;
         const float y2 = y1 + healthBarHeight;
         const float z = 0.f;  // Unused
 
@@ -159,7 +186,38 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity)
         atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
 
         // Define texture co-ords
-        std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(healthBarAtlasKey);
+        std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentHealthBarAtlasKey);
+        atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
+
+        ++numSprites;
+    }
+
+    // Health bar 2
+    const bool hasSecondBar = healthComponent->getMaxHealth() > healthPerBar;
+    if (hasSecondBar)
+    {
+        const int healthThisBar = healthComponent->getHealth() - healthPerBar;
+        const float widthRatio = MathUtils::clampf(healthThisBar / static_cast<float>(healthPerBar), 0.f, 1.f);
+
+        // Define vertex positions
+        const float x1 = originX;
+        const float y1 = originY + healthBarHeight;
+        const float x2 = x1 + healthBarWidth * widthRatio;
+        const float y2 = y1 + healthBarHeight;
+        const float z = 0.f;  // Unused
+
+        std::vector<GLfloat> newVerts = {
+            /* clang-format off */
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+            /* clang-format on */
+        };
+        atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
+
+        // Define texture co-ords
+        std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentHealthBarAtlasKey);
         atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
 
         ++numSprites;
