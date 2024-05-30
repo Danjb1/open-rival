@@ -52,11 +52,21 @@ public:
 
     /**
      * Called when this Entity is selected.
+     *
+     * This could be called as a result of the entity being clicked directly, or a drag-select. In the case of a
+     * drag-select, isLeader will be true for only 1 unit.
      */
-    void onSelect(const PlayerStore& playerStore, bool isLeader);
+    void onSelected(const PlayerStore& playerStore, bool isLeader);
+
+    /**
+     * Called when this Entity is targeted by an action.
+     */
+    void onTargeted(GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const PlayerContext& playerContext);
 
     /**
      * Called when a tile is clicked, with this Entity selected.
+     *
+     * If a group is selected, this is only called for the group leader.
      */
     bool onTileClicked(
             GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const PlayerContext& playerContext);

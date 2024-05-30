@@ -105,10 +105,26 @@ void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& contex
     }
 }
 
+void MovementComponent::requestStop()
+{
+    if (route.isEmpty())
+    {
+        // Nothing to do!
+        return;
+    }
+
+    route = {};
+}
+
+bool MovementComponent::isCurrentlyMoving() const
+{
+    return movement.isInProgress();
+}
+
 MapNode MovementComponent::getStartPosForNextMovement() const
 {
     // If we are already moving between tiles, use the tile where we're about to end up
-    return movement.isInProgress() ? movement.destination : entity->getPos();
+    return isCurrentlyMoving() ? movement.destination : entity->getPos();
 }
 
 void MovementComponent::updateMovement()

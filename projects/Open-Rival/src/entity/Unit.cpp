@@ -14,6 +14,12 @@ void Unit::onReady()
     {
         movementComponent->addListener(getWeakThis());
     }
+
+    weakAttackComponent = getComponentWeak<AttackComponent>(AttackComponent::key);
+    if (auto attackComponent = weakAttackComponent.lock())
+    {
+        attackComponent->addListener(getWeakThis());
+    }
 }
 
 void Unit::onDestroy()
@@ -21,6 +27,12 @@ void Unit::onDestroy()
     if (auto movementComponent = weakMovementComponent.lock())
     {
         movementComponent->removeListener(getWeakThis());
+    }
+
+    weakAttackComponent = getComponentWeak<AttackComponent>(AttackComponent::key);
+    if (auto attackComponent = weakAttackComponent.lock())
+    {
+        attackComponent->removeListener(getWeakThis());
     }
 }
 
@@ -37,6 +49,16 @@ void Unit::onUnitPaused()
 void Unit::onUnitStopped()
 {
     setState(UnitState::Idle);
+}
+
+void Unit::onAttackStarted()
+{
+    setState(UnitState::Attacking);
+}
+
+void Unit::onAttackLaunched()
+{
+    // Do nothing
 }
 
 void Unit::addStateListener(UnitStateListener* listener)

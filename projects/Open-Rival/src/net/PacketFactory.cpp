@@ -11,6 +11,7 @@
 #include "net/packets/StartGamePacket.h"
 #include "utils/BufferUtils.h"
 #include "utils/EnumUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 

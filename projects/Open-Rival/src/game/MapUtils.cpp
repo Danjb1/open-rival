@@ -1,5 +1,8 @@
 #include "game/MapUtils.h"
 
+#include <algorithm>  // std::min
+#include <stdexcept>
+
 namespace Rival { namespace MapUtils {
 
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
@@ -94,6 +97,60 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
     return neighbors;
 }
 
+std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area)
+{
+    MapNode neighbour;
+
+    switch (dir)
+    {
+    case Facing::South:
+        neighbour = { node.x, node.y + 1 };
+        break;
+    case Facing::SouthWest:
+        neighbour = { node.x - 1, node.y };
+        break;
+    case Facing::West:
+        neighbour = { node.x - eastWestTileSpan, node.y };
+        break;
+    case Facing::NorthWest:
+        neighbour = { node.x - 1, node.y - 1 };
+        break;
+    case Facing::North:
+        neighbour = { node.x, node.y - 1 };
+        break;
+    case Facing::NorthEast:
+        neighbour = { node.x + 1, node.y - 1 };
+        break;
+    case Facing::East:
+        neighbour = { node.x + eastWestTileSpan, node.y };
+        break;
+    case Facing::SouthEast:
+        neighbour = { node.x + 1, node.y };
+        break;
+    default:
+        throw std::runtime_error("Invalid facing");
+    }
+
+    if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < area.getWidth() && neighbour.y < area.getHeight())
+    {
+        return neighbour;
+    }
+
+    return {};
+}
+
+bool isNeighbor(const MapNode& a, const MapNode& b)
+{
+    const int dist = getDistance(a, b);
+    if (dist == eastWestTileSpan)
+    {
+        // East-west tiles are still neighbours even though they have a distance of 2
+        return a.y == b.y;
+    }
+
+    return dist == 1;
+}
+
 Facing getDir(const MapNode& from, const MapNode& to)
 {
     // Let's get the easy ones out of the way first
@@ -170,6 +227,29 @@ Facing getDir(const MapNode& from, const MapNode& to)
             return dx < 0 ? Facing ::SouthWest : Facing::SouthEast;
         }
     }
+}
+
+int getDistance(const MapNode& a, const MapNode& b)
+{
+    int dx = abs(b.x - a.x);
+    int dy = abs(b.y - a.y);
+
+    // The common distance can be covered by diagonals
+    int dist = std::min(dx, dy);
+    dx -= dist;
+    dy -= dist;
+
+    // Whatever's left must be covered by straight lines
+    if (dx > 0)
+    {
+        dist += dx * eastWestTileSpan;
+    }
+    else if (dy > 0)
+    {
+        dist += dy;
+    }
+
+    return dist;
 }
 
 }}  // namespace Rival::MapUtils

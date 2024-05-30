@@ -10,6 +10,10 @@ function(add_spdlog project_name)
         set(_spdlog_lib_suffix "build/Win32")
     endif()
 
+    # Ensure we are using the compiled version
+    # https://github.com/gabime/spdlog/issues/1470#issuecomment-828524830
+    target_compile_definitions(${project_name} PUBLIC SPDLOG_COMPILED_LIB)
+
     # Include directory
     target_include_directories(${project_name} PRIVATE
         "${LIBS_DIR}/spdlog-${SPDLOG_VERSION}/include"

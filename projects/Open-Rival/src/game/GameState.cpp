@@ -7,6 +7,7 @@
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "entity/components/OwnerComponent.h"
 #include "game/GameInterface.h"
 #include "game/Race.h"
 #include "gfx/Image.h"
@@ -292,11 +293,22 @@ void GameState::keyUp(const SDL_Keycode keyCode)
         break;
 
     case SDLK_a:
-        playerContext.setCurrentMode(ActionMode::Attack);
+        requestAttackMode();
         break;
 
     default:
         break;
+    }
+}
+
+void GameState::requestAttackMode()
+{
+    std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
+    const auto selectedOwnerComp = selectedEntity ? selectedEntity->getComponent<OwnerComponent>() : nullptr;
+    const bool isOwnUnitSelected = selectedOwnerComp && isLocalPlayer(selectedOwnerComp->getPlayerId());
+    if (isOwnUnitSelected)
+    {
+        playerContext.setCurrentAction(PlayerAction::Attack);
     }
 }
 
@@ -312,7 +324,6 @@ void GameState::mouseUp(const SDL_MouseButtonEvent evt)
 
 void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
 {
-
     // Get the mouse position relative to the window, in pixels
     int mouseX;
     int mouseY;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>  // std::size_t
+#include <optional>
 #include <ostream>
 #include <vector>
 
@@ -86,6 +87,16 @@ inline bool isLowerTile(int tileX)
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area);
 
 /**
+ * Gets the neighbour in the given direction, if it exists.
+ */
+std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area);
+
+/**
+ * Determines if 2 tiles are neighbors.
+ */
+bool isNeighbor(const MapNode& a, const MapNode& b);
+
+/**
  * Gets the most pertinent direction between 2 neighbouring tiles.
  *
  * For example, if `to` is directly above `from`, this will return
@@ -94,6 +105,11 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area);
  * If the MapNodes are identical, this returns South.
  */
 Facing getDir(const MapNode& from, const MapNode& to);
+
+/**
+ * Gets the distance between 2 MapNodes.
+ */
+int getDistance(const MapNode& a, const MapNode& b);
 
 }  // namespace MapUtils
 }  // namespace Rival

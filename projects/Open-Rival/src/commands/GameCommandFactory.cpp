@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "commands/AttackCommand.h"
 #include "commands/GameCommand.h"
 #include "commands/MoveCommand.h"
 #include "utils/BufferUtils.h"
@@ -25,6 +26,8 @@ std::shared_ptr<GameCommand> GameCommandFactory::deserializeFromType(
     {
     case GameCommandType::Move:
         return MoveCommand::deserialize(buffer, offset);
+    case GameCommandType::Attack:
+        return AttackCommand::deserialize(buffer, offset);
     default:
         LOG_WARN("Unsupported GameCommand type received: {}", EnumUtils::toIntegral(type));
         return {};

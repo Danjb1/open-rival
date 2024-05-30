@@ -192,7 +192,7 @@ void GameRenderer::renderText()
 
 void GameRenderer::renderDragSelect()
 {
-    if (playerContext.getCurrentMode() != ActionMode::DragSelect)
+    if (playerContext.getCurrentAction() != PlayerAction::DragSelect)
     {
         return;
     }

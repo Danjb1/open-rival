@@ -6,7 +6,7 @@
 #include "application/ApplicationContext.h"
 #include "audio/MidsDecoder.h"
 #include "game/GameInterface.h"
-#include "game/PathUtils.h"
+#include "application/PathUtils.h"
 #include "game/UnitType.h"
 #include "gfx/RenderUtils.h"
 #include "utils/ConfigUtils.h"

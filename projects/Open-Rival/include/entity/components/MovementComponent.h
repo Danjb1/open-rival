@@ -60,9 +60,13 @@ public:
     /** Starts moving to the given node, if a route can be found. */
     void moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints = {});
 
-    /**
-     * Gets the movement that's currently in progress.
-     */
+    /** Cancels the current route (if present) as soon as we reach the next tile. */
+    void requestStop();
+
+    /** Determines if the unit is currently between tiles. */
+    bool isCurrentlyMoving() const;
+
+    /** Gets the movement that's currently in progress. */
     const Movement& getMovement() const
     {
         return movement;

@@ -11,7 +11,8 @@ namespace Rival {
 enum class GameCommandType : std::uint8_t
 {
     Invalid,
-    Move
+    Move,
+    Attack
 };
 
 /**

@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+ * N.B. Try to avoid including this from header files as it is fairly slow to compile!
+ */
+
 #pragma warning(push)
 #pragma warning(disable : 6285 26437 26450 26451 26495 26498 26800)
 #include <spdlog/spdlog.h>

@@ -5,6 +5,7 @@
 #include <unordered_set>
 
 #include "entity/Entity.h"
+#include "entity/components/AttackComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/UnitType.h"
 
@@ -31,6 +32,7 @@ public:
 class Unit
     : public Entity
     , public MovementListener
+    , public AttackListener
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
@@ -56,6 +58,11 @@ public:
     void onUnitPaused() override;
     void onUnitStopped() override;
     // End MovementListener override
+
+    // Begin AttackListener override
+    void onAttackStarted() override;
+    void onAttackLaunched() override;
+    // End AttackListener override
 
     void addStateListener(UnitStateListener* listener);
     void removeStateListener(UnitStateListener* listener);
@@ -91,6 +98,7 @@ private:
     std::unordered_set<UnitStateListener*> stateListeners;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
+    std::weak_ptr<AttackComponent> weakAttackComponent;
 
     UnitType type = UnitType::Invalid;
 
