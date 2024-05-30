@@ -9,22 +9,41 @@ namespace Rival {
 
 CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
-    if (playerContext.dragSelect.isValid())
+    // If we are in the middle of an action, show the appropriate cursor
+    const ActionMode currentMode = playerContext.getCurrentMode();
+    if (currentMode == ActionMode::DragSelect)
     {
         return dragSelect;
     }
+    else if (currentMode == ActionMode::Attack)
+    {
+        return attack;
+    }
 
-    // We only care about 1 of the selected Entities, doesn't matter which
+    // See if we have any units selected.
+    // We only care about 1 of the selected entities; doesn't matter which.
     const auto selectedEntity =
             playerContext.weakSelectedEntities.empty() ? nullptr : playerContext.weakSelectedEntities[0].lock();
-    const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();
 
+    // If an entity is hovered, show attack/harvest/whatever cursor (based on context)
+    const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();
     if (entityUnderMouse)
     {
-        // TODO: If an entity is selected, show attack/harvest/whatever cursor here based on context
+        const OwnerComponent* selectedOwnerComp =
+                selectedEntity ? selectedEntity->getComponent<OwnerComponent>() : nullptr;
+        const bool isOwnEntitySelected =
+                selectedOwnerComp && playerStore.isLocalPlayer(selectedOwnerComp->getPlayerId());
+
+        const OwnerComponent* targetOwnerComp = entityUnderMouse->getComponent<OwnerComponent>();
+        if (isOwnEntitySelected && targetOwnerComp && !playerStore.isSameTeam(targetOwnerComp->getPlayerId()))
+        {
+            return attack;
+        }
+
         return select;
     }
 
+    // If we have an entity selected, see if we can move
     if (selectedEntity)
     {
         const auto owner = selectedEntity->getComponent<OwnerComponent>(OwnerComponent::key);

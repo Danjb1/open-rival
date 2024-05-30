@@ -90,7 +90,6 @@ Thank you for your patience during these early stages of development!
 - (Not implemented) Units can walk through buildings and other objects.
 - (Not implemented) Buildings cannot be selected.
 - (Not implemented) Selected units do not flash orange.
-- (Not implemented) No rectangle is displayed when drag-select is held.
 - (Not implemented) Some objects (e.g. chests) are not yet loaded.
 - (Not implemented) Unit hitboxes are not accurate.
 - (Not implemented) Vehicles should have their inventories hidden.
@@ -98,7 +97,6 @@ Thank you for your patience during these early stages of development!
 - (Bug) Units can walk too close to the edge of the map.
 - (Bug) Cursor position should have a greater impact on zooming.
 - (Bug) Some animations look a little off (e.g. Snake).
-- (Bug) Drag-select rectangle disappears when shrunk to a small size.
 - (Bug) Pathfinding lags the game when moving very large groups of units.
 
 ================================================================================

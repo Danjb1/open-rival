@@ -34,6 +34,7 @@ public:
     virtual PlayerState& getLocalPlayerState() const = 0;
     virtual PlayerState* getPlayerState(int playerId) const = 0;
     virtual bool isLocalPlayer(int playerId) const = 0;
+    virtual bool isSameTeam(int playerId) const = 0;
 
 public:
     static constexpr int maxPlayers = 8;

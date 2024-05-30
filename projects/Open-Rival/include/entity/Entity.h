@@ -9,7 +9,7 @@
 #include "game/MapUtils.h"
 #include "utils/LogUtils.h"
 
-// Define type traits that can be used to determine if an Entity subclass has a `staticEntityType` member
+/** Type traits that can be used to determine if an Entity subclass has a `staticEntityType` member. */
 template <typename, typename = std::void_t<>>
 struct has_entity_type : std::false_type
 {
@@ -19,6 +19,18 @@ template <typename T>
 struct has_entity_type<T, std::void_t<decltype(T::staticEntityType)>> : std::true_type
 {
     // Specialization that will be used if T does have a member `staticEntityType`
+};
+
+/** Type traits that can be used to determine if an EntityComponent subclass has a static `key` member. */
+template <typename, typename = std::void_t<>>
+struct has_component_key : std::false_type
+{
+    // Primary template will be used if T does not have a member `key`
+};
+template <typename T>
+struct has_component_key<T, std::void_t<decltype(T::key)>> : std::true_type
+{
+    // Specialization that will be used if T does have a member `key`
 };
 
 namespace Rival {
@@ -197,6 +209,24 @@ public:
         static_assert(std::is_base_of<Entity, T>::value, "T must be a subclass of Entity");
         static_assert(has_entity_type<T>::value, "T must have a static member variable named 'staticEntityType'");
         return entityType == T::staticEntityType ? static_cast<const T*>(this) : nullptr;
+    }
+
+    /** Shorthand for `getComponent<MyComponent>(MyComponent::key)`. */
+    template <class T>
+    T* getComponent()
+    {
+        static_assert(std::is_base_of<EntityComponent, T>::value, "T must be a subclass of EntityComponent");
+        static_assert(has_component_key<T>::value, "T must have a static member variable named 'key'");
+        return getComponent<T>(T::key);
+    }
+
+    /** Shorthand for `getComponent<MyComponent>(MyComponent::key)`. */
+    template <class T>
+    const T* getComponent() const
+    {
+        static_assert(std::is_base_of<EntityComponent, T>::value, "T must be a subclass of EntityComponent");
+        static_assert(has_component_key<T>::value, "T must have a static member variable named 'key'");
+        return getComponent<T>(T::key);
     }
 
     /**

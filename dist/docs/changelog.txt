@@ -4,6 +4,7 @@ Changelog
 
 v0.4.0 (Combat demo)
 - Added health bars for units
+- Fixed drag-select rectangle disappearing when very small
 - The shareware version of the Procopius Regular font is now included in the download
 
 v0.3.0 (Multiplayer demo)
