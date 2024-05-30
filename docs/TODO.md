@@ -4,8 +4,8 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Most units do not have attack animations defined correctly
-- Units never attack from east/west
+- BUG: Units never attack from east/west
+- BUG: Units can attack from 2 spaces away (down + diagonally-down)
 - Damage target when an attack hits
     - Need to figure out damage calculation!
 - Play a sound when an attack hits

@@ -78,7 +78,7 @@
           "startIndex": 8
         },
         "attacking": {
-          "endIndex": 80,
+          "endIndex": 83,
           "startIndex": 72
         }
       },
@@ -139,8 +139,8 @@
           "startIndex": 8
         },
         "attacking": {
-          "endIndex": 58,
-          "startIndex": 55
+          "endIndex": 59,
+          "startIndex": 56
         }
       },
       "name": "Fire Master",
@@ -201,6 +201,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 75,
+          "startIndex": 72
         }
       },
       "name": "Light Cavalry",
@@ -239,10 +243,6 @@
           "startIndex": 64
         },
         "attacking": {
-          "endIndex": 118,
-          "startIndex": 112
-        },
-        "harvesting": {
           "endIndex": 115,
           "startIndex": 112
         }
@@ -306,6 +306,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Priest",
@@ -368,6 +372,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 59,
+          "startIndex": 56
         }
       },
       "name": "Thief",
@@ -490,7 +498,7 @@
         },
         "attacking": {
           "endIndex": 26,
-          "startIndex": 25
+          "startIndex": 24
         }
       },
       "name": "Catapult",
@@ -519,6 +527,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 59,
+          "startIndex": 56
         }
       },
       "name": "Gnome Boomer",
@@ -547,6 +559,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 57,
+          "startIndex": 56
         }
       },
       "name": "Horde Rider",
@@ -608,6 +624,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Necromancer",
@@ -636,6 +656,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Priest of Doom",
@@ -664,6 +688,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 75,
+          "startIndex": 72
         }
       },
       "name": "Rock Thrower",
@@ -692,6 +720,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Rogue",
@@ -730,10 +762,6 @@
           "startIndex": 64
         },
         "attacking": {
-          "endIndex": 118,
-          "startIndex": 112
-        },
-        "harvesting": {
           "endIndex": 115,
           "startIndex": 112
         }
@@ -764,6 +792,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 75,
+          "startIndex": 72
         }
       },
       "name": "Storm Trooper",
@@ -858,6 +890,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 80,
+          "startIndex": 72
         }
       },
       "name": "Warlord",
@@ -886,6 +922,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 81,
+          "startIndex": 72
         }
       },
       "name": "Archer",
@@ -914,6 +954,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 59,
+          "startIndex": 56
         }
       },
       "name": "Arquebusier",
@@ -1004,6 +1048,10 @@
         "moving": {
           "endIndex": 15,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 75,
+          "startIndex": 72
         }
       },
       "name": "Centaur",
@@ -1032,6 +1080,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Druid",
@@ -1060,6 +1112,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 60,
+          "startIndex": 56
         }
       },
       "name": "Dwarf Miner",
@@ -1088,6 +1144,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Enchanter",
@@ -1116,6 +1176,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 58,
+          "startIndex": 56
         }
       },
       "name": "Mage",
@@ -1173,6 +1237,10 @@
         "moving": {
           "endIndex": 13,
           "startIndex": 8
+        },
+        "attacking": {
+          "endIndex": 59,
+          "startIndex": 56
         }
       },
       "name": "Scout",
@@ -1277,7 +1345,7 @@
           "endIndex": 87,
           "startIndex": 80
         },
-        "harvesting": {
+        "attacking": {
           "endIndex": 147,
           "startIndex": 144
         },
