@@ -4,8 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Show attack cursor when hovering over enemy-owned entities
-- Show attack cursor after entering attack mode (press A)
 - Issue an AttackCommand when the selection is instructed to attack
 - Units instructed to attack should maintain a reference to the target
 - Units instructed to attack should move to the target
@@ -26,7 +24,6 @@
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - Units can walk through buildings and other objects
-- Drag-select cursor / outline should remain active when shrunk down to a small size
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
 
@@ -65,6 +62,7 @@
 - Resting (approx. 200 health in 30 seconds)
 - Don't kill friendly units when attacking them!
 - Prisoners & mercenaries
+- Teams
 - Upgrades
     - Overlay background gets taller for hovered units with upgrades
     - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle

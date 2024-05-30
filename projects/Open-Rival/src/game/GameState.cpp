@@ -291,6 +291,10 @@ void GameState::keyUp(const SDL_Keycode keyCode)
         input.lastDirectionX = InputUtils::isKeyDown(SDLK_LEFT) ? Direction::Increasing : Direction::None;
         break;
 
+    case SDLK_a:
+        playerContext.setCurrentMode(ActionMode::Attack);
+        break;
+
     default:
         break;
     }
@@ -398,6 +402,12 @@ PlayerState* GameState::getPlayerState(int playerId) const
 
 bool GameState::isLocalPlayer(int playerId) const
 {
+    return playerId == localPlayerId;
+}
+
+bool GameState::isSameTeam(int playerId) const
+{
+    // TODO: Support teams
     return playerId == localPlayerId;
 }
 

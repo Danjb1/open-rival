@@ -22,6 +22,16 @@ bool DragSelect::isValid() const
             && std::abs(endY - startY) > minDragSelectSize;
 }
 
+void PlayerContext::setCurrentMode(ActionMode newMode)
+{
+    currentMode = newMode;
+
+    if (newMode != ActionMode::DragSelect)
+    {
+        dragSelect.reset();
+    }
+}
+
 std::set<int> PlayerContext::getSelectedEntityIds() const
 {
     std::set<int> entityIds;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <set>
 
@@ -12,7 +13,7 @@ namespace Rival {
 struct DragSelect
 {
     /** Minimum size of one side of the drag-select area before it will be considered valid. */
-    static constexpr int minDragSelectSize = 8;
+    static constexpr int minDragSelectSize = 5;
 
     void reset();
     bool isActive() const;
@@ -25,9 +26,15 @@ struct DragSelect
     int endY = -1;
 };
 
-/**
- * Data relating to the current selection and actions of the local player.
- */
+/** A mode describing an action in progress. */
+enum class ActionMode : std::uint8_t
+{
+    Default,
+    DragSelect,
+    Attack
+};
+
+/** Data relating to the current selection and actions of the local player. */
 struct PlayerContext
 {
     DragSelect dragSelect;
@@ -35,7 +42,16 @@ struct PlayerContext
     std::weak_ptr<Entity> weakEntityUnderMouse;
     WeakMutableEntityList weakSelectedEntities;
 
+    void setCurrentMode(ActionMode newMode);
+    ActionMode getCurrentMode() const
+    {
+        return currentMode;
+    }
+
     std::set<int> getSelectedEntityIds() const;
+
+private:
+    ActionMode currentMode = ActionMode::Default;
 };
 
 }  // namespace Rival

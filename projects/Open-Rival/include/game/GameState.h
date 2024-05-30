@@ -80,6 +80,7 @@ public:
     PlayerState& getLocalPlayerState() const override;
     PlayerState* getPlayerState(int playerId) const override;
     bool isLocalPlayer(int playerId) const override;
+    bool isSameTeam(int playerId) const override;
     // End PlayerStore override
 
     // Begin GameCommandInvoker override

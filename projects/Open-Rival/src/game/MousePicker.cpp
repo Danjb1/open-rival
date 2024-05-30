@@ -57,11 +57,14 @@ void MousePicker::mouseDown(std::uint8_t button)
         return;
     }
 
-    // Start drag-select
-    playerContext.dragSelect.startX = mouseX;
-    playerContext.dragSelect.startY = mouseY;
-    playerContext.dragSelect.endX = mouseX;
-    playerContext.dragSelect.endY = mouseY;
+    if (playerContext.getCurrentMode() == ActionMode::Default)
+    {
+        // Start drag-select
+        playerContext.dragSelect.startX = mouseX;
+        playerContext.dragSelect.startY = mouseY;
+        playerContext.dragSelect.endX = mouseX;
+        playerContext.dragSelect.endY = mouseY;
+    }
 }
 
 void MousePicker::mouseUp(std::uint8_t button)
@@ -69,14 +72,12 @@ void MousePicker::mouseUp(std::uint8_t button)
     if (button == SDL_BUTTON_LEFT)
     {
         // Drag-select
-        if (playerContext.dragSelect.isValid())
+        if (playerContext.getCurrentMode() == ActionMode::DragSelect)
         {
             processDragSelectArea();
-            playerContext.dragSelect.reset();
+            playerContext.setCurrentMode(ActionMode::Default);
             return;
         }
-
-        playerContext.dragSelect.reset();
 
         // Get the mouse position relative to the window, in pixels
         int mouseX;
@@ -86,6 +87,7 @@ void MousePicker::mouseUp(std::uint8_t button)
         // Abort if the mouse is outside the viewport
         if (!viewport.contains(mouseX, mouseY))
         {
+            playerContext.setCurrentMode(ActionMode::Default);
             return;
         }
 
@@ -99,10 +101,13 @@ void MousePicker::mouseUp(std::uint8_t button)
         {
             tileSelected();
         }
+
+        playerContext.setCurrentMode(ActionMode::Default);
     }
     else if (button == SDL_BUTTON_RIGHT)
     {
         deselect();
+        playerContext.setCurrentMode(ActionMode::Default);
     }
 }
 
@@ -121,6 +126,12 @@ void MousePicker::handleMouse()
                 std::clamp(mouseX, static_cast<int>(viewport.x), static_cast<int>(viewport.x + viewport.width));
         playerContext.dragSelect.endY =
                 std::clamp(mouseY, static_cast<int>(viewport.y), static_cast<int>(viewport.y + viewport.height));
+
+        if (playerContext.dragSelect.isValid())
+        {
+            playerContext.setCurrentMode(ActionMode::DragSelect);
+        }
+
         return;
     }
 
