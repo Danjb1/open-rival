@@ -57,7 +57,7 @@ void MousePicker::mouseDown(std::uint8_t button)
         return;
     }
 
-    if (playerContext.getCurrentMode() == ActionMode::Default)
+    if (playerContext.getCurrentAction() == PlayerAction::None)
     {
         // Start drag-select
         playerContext.dragSelect.startX = mouseX;
@@ -72,10 +72,10 @@ void MousePicker::mouseUp(std::uint8_t button)
     if (button == SDL_BUTTON_LEFT)
     {
         // Drag-select
-        if (playerContext.getCurrentMode() == ActionMode::DragSelect)
+        if (playerContext.getCurrentAction() == PlayerAction::DragSelect)
         {
             processDragSelectArea();
-            playerContext.setCurrentMode(ActionMode::Default);
+            playerContext.setCurrentAction(PlayerAction::None);
             return;
         }
 
@@ -87,27 +87,26 @@ void MousePicker::mouseUp(std::uint8_t button)
         // Abort if the mouse is outside the viewport
         if (!viewport.contains(mouseX, mouseY))
         {
-            playerContext.setCurrentMode(ActionMode::Default);
+            playerContext.setCurrentAction(PlayerAction::None);
             return;
         }
 
         // Single click
         if (const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock())
         {
-            WeakMutableEntityList entityAsList = { playerContext.weakEntityUnderMouse };
-            selectEntities(entityAsList);
+            onEntityClicked(entityUnderMouse);
         }
         else
         {
-            tileSelected();
+            onTileClicked();
         }
 
-        playerContext.setCurrentMode(ActionMode::Default);
+        playerContext.setCurrentAction(PlayerAction::None);
     }
     else if (button == SDL_BUTTON_RIGHT)
     {
         deselect();
-        playerContext.setCurrentMode(ActionMode::Default);
+        playerContext.setCurrentAction(PlayerAction::None);
     }
 }
 
@@ -129,7 +128,7 @@ void MousePicker::handleMouse()
 
         if (playerContext.dragSelect.isValid())
         {
-            playerContext.setCurrentMode(ActionMode::DragSelect);
+            playerContext.setCurrentAction(PlayerAction::DragSelect);
         }
 
         return;
@@ -377,7 +376,7 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
         if (const auto mouseHandlerComponent =
                         selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
         {
-            mouseHandlerComponent->onSelect(playerStore, isLeader);
+            mouseHandlerComponent->onSelected(playerStore, isLeader);
         }
 
         // TMP: For now, the first unit in the selection is the leader
@@ -385,7 +384,46 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
     }
 }
 
-void MousePicker::tileSelected()
+void MousePicker::deselect()
+{
+    playerContext.weakSelectedEntities.clear();
+}
+
+void MousePicker::onEntityClicked(std::shared_ptr<Entity> clickedEntity)
+{
+    std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
+    const auto selectedOwnerComp = selectedEntity ? selectedEntity->getComponent<OwnerComponent>() : nullptr;
+    const bool isOwnUnitSelected = selectedOwnerComp && playerStore.isLocalPlayer(selectedOwnerComp->getPlayerId());
+
+    const auto targetOwnerComp = clickedEntity->getComponent<OwnerComponent>();
+    const bool wasOwnUnitClicked = targetOwnerComp && playerStore.isLocalPlayer(targetOwnerComp->getPlayerId());
+
+    // We can only perform an action if we have our own unit selected already
+    bool isPerformingAction = isOwnUnitSelected;
+
+    if (wasOwnUnitClicked && playerContext.getCurrentAction() == PlayerAction::None)
+    {
+        // We are just clicking from one unit to another
+        isPerformingAction = false;
+    }
+
+    if (isPerformingAction)
+    {
+        if (const auto mouseHandlerComponent =
+                        clickedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+        {
+            mouseHandlerComponent->onTargeted(cmdInvoker, playerStore, playerContext);
+        }
+    }
+    else
+    {
+        // Select the clicked entity
+        WeakMutableEntityList entityAsList = { playerContext.weakEntityUnderMouse };
+        selectEntities(entityAsList);
+    }
+}
+
+void MousePicker::onTileClicked()
 {
     // Inform the first entity of the input
     for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
@@ -407,11 +445,6 @@ void MousePicker::tileSelected()
             }
         }
     }
-}
-
-void MousePicker::deselect()
-{
-    playerContext.weakSelectedEntities.clear();
 }
 
 void MousePicker::processDragSelectArea()

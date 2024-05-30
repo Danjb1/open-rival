@@ -1,13 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 
 #include "entity/components/EntityComponent.h"
 #include "game/MapUtils.h"
-#include "utils/LogUtils.h"
 
 /** Type traits that can be used to determine if an Entity subclass has a `staticEntityType` member. */
 template <typename, typename = std::void_t<>>
@@ -342,7 +342,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }
@@ -354,7 +354,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }
@@ -366,7 +366,7 @@ public:
         auto result = getComponentShared<T>(key);
         if (!result)
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }
@@ -378,7 +378,7 @@ public:
         auto result = getComponentShared<const T>(key);
         if (!result)
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }
@@ -390,7 +390,7 @@ public:
         auto result = getComponentWeak<T>(key);
         if (!result.lock())
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }
@@ -402,7 +402,7 @@ public:
         auto result = getComponentWeak<const T>(key);
         if (!result.lock())
         {
-            LOG_WARN("No component found with key: {}", key);
+            throw std::runtime_error("No component found with key: " + key);
         }
         return result;
     }

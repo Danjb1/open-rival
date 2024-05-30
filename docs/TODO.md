@@ -4,14 +4,13 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Issue an AttackCommand when the selection is instructed to attack
-- Units instructed to attack should maintain a reference to the target
-- Units instructed to attack should move to the target
-- Units instructed to attack should update their route as the target moves
-- Units instructed to attack should play their attack animation when in range
-- Play a sound when an attack hits
+- Most units do not have attack animations defined correctly
+- Units never attack from east/west
 - Damage target when an attack hits
     - Need to figure out damage calculation!
+- Play a sound when an attack hits
+- Allow attacking an empty tile when in attack mode
+- When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
 
 <!----------------------------------------------------------------------------->
 ## Bugs

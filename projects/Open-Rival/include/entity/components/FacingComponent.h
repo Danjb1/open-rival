@@ -32,14 +32,14 @@ public:
     FacingComponent(Facing initialFacing);
 
     // Begin EntityComponent override
-    virtual void onEntityAddedToWorld(World* world) override;
-    virtual void destroy() override;
+    void onEntityAddedToWorld(World* world) override;
+    void destroy() override;
     // End EntityComponent override
 
     // Begin MovementComponent override
-    virtual void onUnitMoveStart(const MapNode* nextNode) override;
-    virtual void onUnitPaused() override;
-    virtual void onUnitStopped() override;
+    void onUnitMoveStart(const MapNode* nextNode) override;
+    void onUnitPaused() override;
+    void onUnitStopped() override;
     // End MovementComponent override
 
     void setListener(FacingListener* listener);

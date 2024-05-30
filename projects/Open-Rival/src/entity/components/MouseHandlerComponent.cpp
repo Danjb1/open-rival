@@ -5,6 +5,7 @@
 #include <memory>
 #include <set>
 
+#include "commands/AttackCommand.h"
 #include "commands/MoveCommand.h"
 #include "entity/Entity.h"
 #include "entity/components/MovementComponent.h"
@@ -80,25 +81,17 @@ bool MouseHandlerComponent::isSelectable() const
     return true;
 }
 
-void MouseHandlerComponent::onSelect(const PlayerStore& playerStore, bool isLeader)
+void MouseHandlerComponent::onSelected(const PlayerStore& playerStore, bool isLeader)
 {
-    // TODO: Depends on state and entity type
-    //
-    // For enemy units or when in attack mode:
-    // - Attack (depending on selection)
-    //
-    // For chests:
-    // - Move there (depending on selection)
-
-    // Check owner
     const auto ownerComponent = weakOwnerComponent.lock();
-    if (!ownerComponent || !playerStore.isLocalPlayer(ownerComponent->getPlayerId()))
+    const bool isEnemy = ownerComponent && !playerStore.isSameTeam(ownerComponent->getPlayerId());
+    if (isEnemy)
     {
-        // Other players' units cannot be controlled
+        // Do nothing when an enemy unit is selected
         return;
     }
 
-    // Leader should play a sound
+    // Leader should play a sound when selected
     if (isLeader)
     {
         const auto voiceComponent = weakVoiceComponent.lock();
@@ -106,6 +99,37 @@ void MouseHandlerComponent::onSelect(const PlayerStore& playerStore, bool isLead
         {
             voiceComponent->playSound(UnitSoundType::Select);
         }
+    }
+}
+
+void MouseHandlerComponent::onTargeted(
+        GameCommandInvoker& cmdInvoker, const PlayerStore& playerStore, const PlayerContext& playerContext)
+{
+    PlayerAction actionToPerform = playerContext.getCurrentAction();
+
+    if (actionToPerform == PlayerAction::None)
+    {
+        // No explicit action, but it can be inferred from the context
+        const auto ownerComponent = weakOwnerComponent.lock();
+        const bool isEnemy = ownerComponent && !playerStore.isSameTeam(ownerComponent->getPlayerId());
+        if (isEnemy)
+        {
+            actionToPerform = PlayerAction::Attack;
+        }
+    }
+
+    if (actionToPerform == PlayerAction::Attack)
+    {
+        // Play a sound (from a currently-selected unit)
+        std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
+        if (const auto voiceComponent = selectedEntity->getComponent<VoiceComponent>())
+        {
+            voiceComponent->playSound(UnitSoundType::Move);
+        }
+
+        // Issue an AttackCommand
+        std::vector<int> entityIds = playerContext.getSelectedEntityIdsVector();
+        cmdInvoker.dispatchCommand(std::make_shared<AttackCommand>(entityIds, entity->getId()));
     }
 }
 
@@ -131,12 +155,9 @@ bool MouseHandlerComponent::onTileClicked(
             voiceComponent->playSound(UnitSoundType::Move);
         }
 
-        // Find all entity IDs in the selection
-        std::set<int> entityIdsSet = playerContext.getSelectedEntityIds();
-        std::vector<int> entityIdsVector(entityIdsSet.cbegin(), entityIdsSet.cend());
-
         // Issue the MoveCommand
-        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entityIdsVector, playerContext.tileUnderMouse));
+        std::vector<int> entityIds = playerContext.getSelectedEntityIdsVector();
+        cmdInvoker.dispatchCommand(std::make_shared<MoveCommand>(entityIds, playerContext.tileUnderMouse));
         return true;
     }
 

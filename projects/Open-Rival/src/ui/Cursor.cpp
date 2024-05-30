@@ -10,20 +10,19 @@ namespace Rival {
 CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
     // If we are in the middle of an action, show the appropriate cursor
-    const ActionMode currentMode = playerContext.getCurrentMode();
-    if (currentMode == ActionMode::DragSelect)
+    const PlayerAction currentMode = playerContext.getCurrentAction();
+    if (currentMode == PlayerAction::DragSelect)
     {
         return dragSelect;
     }
-    else if (currentMode == ActionMode::Attack)
+    else if (currentMode == PlayerAction::Attack)
     {
         return attack;
     }
 
     // See if we have any units selected.
     // We only care about 1 of the selected entities; doesn't matter which.
-    const auto selectedEntity =
-            playerContext.weakSelectedEntities.empty() ? nullptr : playerContext.weakSelectedEntities[0].lock();
+    const auto selectedEntity = playerContext.getFirstSelectedEntity().lock();
 
     // If an entity is hovered, show attack/harvest/whatever cursor (based on context)
     const auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock();

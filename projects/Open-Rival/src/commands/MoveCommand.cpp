@@ -1,5 +1,6 @@
 #include "commands/MoveCommand.h"
 
+#include "entity/components/AttackComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 #include "game/Pathfinding.h"
@@ -82,6 +83,12 @@ void MoveCommand::execute(GameCommandContext& context)
         }
 
         moveComponent->moveTo(destination, pathfindingContext);
+
+        if (auto attackComponent = entity->getComponent<AttackComponent>(AttackComponent::key))
+        {
+            // Clear current target when a MoveCommand is issued
+            attackComponent->setTarget({});
+        }
     }
 }
 

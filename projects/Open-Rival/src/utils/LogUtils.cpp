@@ -1,9 +1,9 @@
 #include "utils/LogUtils.h"
 
-#include <memory>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include <memory>
 
 namespace Rival { namespace LogUtils {
 

@@ -61,7 +61,7 @@ void UnitAnimationComponent::update()
         return;
     }
 
-    int numAnimFrames = getNumAnimFrames();
+    const int numAnimFrames = getNumAnimFrames();
 
     if (numAnimFrames == 1)
     {
@@ -71,7 +71,7 @@ void UnitAnimationComponent::update()
 
     msPassedCurrentAnimFrame += TimeUtils::timeStepMs;
 
-    int msPerAnimFrame = getMsPerAnimFrame();
+    const int msPerAnimFrame = getMsPerAnimFrame();
     if (msPassedCurrentAnimFrame >= msPerAnimFrame)
     {
         advanceFrame(numAnimFrames, msPerAnimFrame);
@@ -88,6 +88,10 @@ void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
     {
         // TODO: Peasants may need to play the MovingWithBag animation
         setAnimation(unitDef.getAnimation(UnitAnimationType::Moving));
+    }
+    else if (newState == UnitState::Attacking)
+    {
+        setAnimation(unitDef.getAnimation(UnitAnimationType::Attacking));
     }
 }
 

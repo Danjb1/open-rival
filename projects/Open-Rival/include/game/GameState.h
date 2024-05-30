@@ -99,6 +99,7 @@ private:
     void sendOutgoingCommands();
     void processCommands();
     bool isNetGame() const;
+    void requestAttackMode();
 
 private:
     /** Player ID of the local player.

@@ -97,6 +97,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
         unit->attach(std::make_shared<WalkerComponent>());
     }
 
+    // AttackComponent
+    unit->attach(std::make_shared<AttackComponent>());
+
     // VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));
 

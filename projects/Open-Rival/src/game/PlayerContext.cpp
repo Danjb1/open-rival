@@ -22,11 +22,11 @@ bool DragSelect::isValid() const
             && std::abs(endY - startY) > minDragSelectSize;
 }
 
-void PlayerContext::setCurrentMode(ActionMode newMode)
+void PlayerContext::setCurrentAction(PlayerAction newAction)
 {
-    currentMode = newMode;
+    currentAction = newAction;
 
-    if (newMode != ActionMode::DragSelect)
+    if (newAction != PlayerAction::DragSelect)
     {
         dragSelect.reset();
     }
@@ -44,6 +44,22 @@ std::set<int> PlayerContext::getSelectedEntityIds() const
         }
     }
     return entityIds;
+}
+
+std::vector<int> PlayerContext::getSelectedEntityIdsVector() const
+{
+    std::set<int> entityIdsSet = getSelectedEntityIds();
+    std::vector<int> entityIdsVector(entityIdsSet.cbegin(), entityIdsSet.cend());
+    return entityIdsVector;
+}
+
+std::weak_ptr<Entity> PlayerContext::getFirstSelectedEntity() const
+{
+    if (weakSelectedEntities.empty())
+    {
+        return {};
+    }
+    return weakSelectedEntities[0];
 }
 
 }  // namespace Rival

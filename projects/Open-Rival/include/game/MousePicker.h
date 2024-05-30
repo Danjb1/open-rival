@@ -35,8 +35,7 @@ struct PlayerContext;
 class MousePicker
 {
 public:
-    MousePicker(
-            Camera& camera,
+    MousePicker(Camera& camera,
             Rect& viewport,
             World& world,
             PlayerContext& playerContext,
@@ -57,8 +56,10 @@ private:
     WeakMutableEntityList findEntitiesForDragSelect(const Rect& area) const;
 
     void selectEntities(WeakMutableEntityList& entities);
-    void tileSelected();
     void deselect();
+
+    void onEntityClicked(std::shared_ptr<Entity> clickedEntity);
+    void onTileClicked();
 
     void processDragSelectArea();
 

@@ -1,6 +1,7 @@
 set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/Application.cpp
     ${OPEN_RIVAL_DIR}/src/application/ApplicationContext.cpp
+    ${OPEN_RIVAL_DIR}/src/application/PathUtils.cpp
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/State.cpp
     ${OPEN_RIVAL_DIR}/src/application/Window.cpp
@@ -13,6 +14,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/audio/SoundSource.cpp
     ${OPEN_RIVAL_DIR}/src/audio/Sounds.cpp
     ${OPEN_RIVAL_DIR}/src/audio/WaveFile.cpp
+    ${OPEN_RIVAL_DIR}/src/commands/AttackCommand.cpp
     ${OPEN_RIVAL_DIR}/src/commands/GameCommand.cpp
     ${OPEN_RIVAL_DIR}/src/commands/GameCommandFactory.cpp
     ${OPEN_RIVAL_DIR}/src/commands/MoveCommand.cpp
@@ -22,6 +24,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/EntityFactory.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Palisade.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Unit.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/AttackComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FacingComponent.cpp
@@ -29,7 +32,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/HealthComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MouseHandlerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/MovementComponent.cpp
-    ${OPEN_RIVAL_DIR}/src/entity/components/MovementListener.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/OwnerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PassabilityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PortraitComponent.cpp
@@ -46,7 +48,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/game/InventoryComponent.cpp
     ${OPEN_RIVAL_DIR}/src/game/MapUtils.cpp
     ${OPEN_RIVAL_DIR}/src/game/MousePicker.cpp
-    ${OPEN_RIVAL_DIR}/src/game/PathUtils.cpp
     ${OPEN_RIVAL_DIR}/src/game/Pathfinding.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerContext.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerState.cpp
@@ -133,6 +134,7 @@ set(OPEN_RIVAL_SOURCES
 set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/application/Application.h
     ${OPEN_RIVAL_DIR}/include/application/ApplicationContext.h
+    ${OPEN_RIVAL_DIR}/include/application/PathUtils.h
     ${OPEN_RIVAL_DIR}/include/application/Resources.h
     ${OPEN_RIVAL_DIR}/include/application/State.h
     ${OPEN_RIVAL_DIR}/include/application/Window.h
@@ -145,6 +147,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/audio/SoundSource.h
     ${OPEN_RIVAL_DIR}/include/audio/Sounds.h
     ${OPEN_RIVAL_DIR}/include/audio/WaveFile.h
+    ${OPEN_RIVAL_DIR}/include/commands/AttackCommand.h
     ${OPEN_RIVAL_DIR}/include/commands/GameCommand.h
     ${OPEN_RIVAL_DIR}/include/commands/GameCommandFactory.h
     ${OPEN_RIVAL_DIR}/include/commands/MoveCommand.h
@@ -154,6 +157,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/EntityFactory.h
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
     ${OPEN_RIVAL_DIR}/include/entity/Unit.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/AttackComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h
@@ -179,7 +183,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/InventoryComponent.h
     ${OPEN_RIVAL_DIR}/include/game/MapUtils.h
     ${OPEN_RIVAL_DIR}/include/game/MousePicker.h
-    ${OPEN_RIVAL_DIR}/include/game/PathUtils.h
     ${OPEN_RIVAL_DIR}/include/game/Pathfinding.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerContext.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerState.h
