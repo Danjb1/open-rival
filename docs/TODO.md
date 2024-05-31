@@ -4,10 +4,9 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Show grey attack cursor in attack mode when no entity is hovered
-- Units should not be able to attack themselves!
-- MoveCommand should wait for the current attack to finish
-    - AttackCommand waits for movement already, but this is something we'll need a lot
+- Don't show attack cursor when trying to attack self? (what if multiple units are selected?)
+- MoveComponent should wait for the current attack to finish
+    - AttackComponent waits for movement already, but this is something we'll need a lot
     - Implement a generic "stop what you're doing and give me a callback" mechanism
 - Attack duration should be driven by animation data
 - Play a sound when an attack hits

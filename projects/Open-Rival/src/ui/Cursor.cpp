@@ -9,15 +9,11 @@ namespace Rival {
 
 CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerContext& playerContext)
 {
-    // If we are in the middle of an action, show the appropriate cursor
+    // Drag-select
     const PlayerAction currentMode = playerContext.getCurrentAction();
     if (currentMode == PlayerAction::DragSelect)
     {
         return dragSelect;
-    }
-    else if (currentMode == PlayerAction::Attack)
-    {
-        return attack;
     }
 
     // See if we have any units selected.
@@ -34,12 +30,20 @@ CursorDef Cursor::getCurrentCursor(const PlayerStore& playerStore, const PlayerC
                 selectedOwnerComp && playerStore.isLocalPlayer(selectedOwnerComp->getPlayerId());
 
         const OwnerComponent* targetOwnerComp = entityUnderMouse->getComponent<OwnerComponent>();
-        if (isOwnEntitySelected && targetOwnerComp && !playerStore.isSameTeam(targetOwnerComp->getPlayerId()))
+        const bool isEnemyHovered =
+                isOwnEntitySelected && targetOwnerComp && !playerStore.isSameTeam(targetOwnerComp->getPlayerId());
+        if (isEnemyHovered || currentMode == PlayerAction::Attack)
         {
             return attack;
         }
 
         return select;
+    }
+
+    // If we are in attack mode then we failed to find a target by this point
+    if (currentMode == PlayerAction::Attack)
+    {
+        return targetInvalid;
     }
 
     // If we have an entity selected, see if we can move

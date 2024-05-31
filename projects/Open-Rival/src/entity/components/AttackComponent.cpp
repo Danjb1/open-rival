@@ -124,6 +124,11 @@ void AttackComponent::deliverAttack()
     healthComp->addHealth(-10);  // TMP
 }
 
+void AttackComponent::switchToNewTarget()
+{
+    weakTargetEntity = weakRequestedTargetEntity;
+}
+
 void AttackComponent::updateCooldown(int delta)
 {
     cooldownTimeElapsed += delta;
@@ -131,6 +136,7 @@ void AttackComponent::updateCooldown(int delta)
     {
         cooldownTimeElapsed = 0;
         attackState = AttackState::None;
+        switchToNewTarget();
     }
 }
 
@@ -199,17 +205,19 @@ void AttackComponent::moveToTarget(const MapNode& node)
 
 void AttackComponent::setTarget(std::weak_ptr<Entity> weakNewTarget)
 {
-    std::shared_ptr<Entity> prevTarget = weakTargetEntity.lock();
     std::shared_ptr<Entity> newTarget = weakNewTarget.lock();
-
-    if (prevTarget && prevTarget == newTarget)
+    if (newTarget && newTarget->getId() == entity->getId())
     {
-        // No change
+        // Can't attack self
         return;
     }
 
-    weakTargetEntity = weakNewTarget;
-    attackState = AttackState::None;
+    weakRequestedTargetEntity = weakNewTarget;
+
+    if (attackState == AttackState::None)
+    {
+        switchToNewTarget();
+    }
 }
 
 void AttackComponent::addListener(std::weak_ptr<AttackListener> listener)
