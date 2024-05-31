@@ -13,6 +13,7 @@
 #include "gfx/Camera.h"
 #include "gfx/RenderUtils.h"
 #include "mocks/MockSDL.h"
+#include "utils/EntityTestUtils.h"
 #include "utils/Rect.h"
 
 using namespace Rival;
@@ -53,6 +54,11 @@ public:
     }
 
     bool isLocalPlayer(int playerId) const override
+    {
+        return playerId == 0;
+    }
+
+    bool isSameTeam(int playerId) const override
     {
         return playerId == 0;
     }
@@ -362,9 +368,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
     // Add a Unit with a MouseHandlerComponent
-    std::shared_ptr<Unit> unit = std::make_shared<Unit>(UnitType::Knight, "", false);
-    unit->attach(std::make_shared<MouseHandlerComponent>());
-    world.addEntity(unit, 4, 4);
+    std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
+    e->attach(std::make_shared<MouseHandlerComponent>());
+    world.addEntity(e, 4, 4);
 
     // Create a pixel-perfect Camera
     float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));

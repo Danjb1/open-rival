@@ -37,7 +37,7 @@ struct Animation
     /** Sprite index offset between different facings. */
     int facingStride;
 
-    Animation(int startIndex, int endIndex, int msPerFrame, int facingStride);
+    Animation(int startIndex, int endIndex, int msPerFrame = 60, int facingStride = 0);
 };
 
 /*

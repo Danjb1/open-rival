@@ -7,29 +7,15 @@
 #include "entity/components/UnitAnimationComponent.h"
 #include "game/Animations.h"
 #include "game/UnitDef.h"
+#include "game/World.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "utils/EntityTestUtils.h"
 #include "utils/TimeUtils.h"
 
 using namespace Rival;
 
 namespace TestAnimationComponent {
-
-json defaultUnitDefJson = R"(
-    {
-        "name": "Test Unit",
-        "portrait": 0,
-        "animations":
-        {
-            "standing":
-            {
-                "startIndex": 3,
-                "endIndex": 5
-            }
-        },
-        "sounds": {}
-    }
-)"_json;
 
 SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[components][animation-component]")
 {
@@ -38,37 +24,32 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
 
     GIVEN("An entity with an AnimationComponent, with a single-frame animation")
     {
-        /* clang-format off */
-        json unitDefJson = defaultUnitDefJson;
-        unitDefJson["animations"]["standing"] = {
-            { "startIndex", 3 },
-            { "endIndex", 5 }
-        };
-        /* clang-format on */
+        EntityTestUtils::UnitConfig unitCfg;
+        unitCfg.animations.insert({ UnitAnimationType::Standing, Animation(3, 3) });
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit(unitCfg);
 
-        Unit e(UnitType::Knight, "", false);
-        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
-
-        e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
-
-        const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
+        const SpriteComponent* spriteComponent = e->requireComponent<SpriteComponent>(SpriteComponent::key);
+        UnitAnimationComponent* animComponent =
+                e->requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 0);
 
         WHEN("the entity is spawned")
         {
-            e.addedToWorld(nullptr, 0, { 0, 0 });
+            World world(5, 5, false);
+            e->addedToWorld(&world, 0, { 0, 0 });
 
             THEN("the entity's SpriteComponent has its txIndex set")
             {
                 REQUIRE(spriteComponent->getTxIndex() == 3);
             }
 
-            AND_WHEN("the AnimationComponent is updated")
+            AND_WHEN("the AnimationComponent is updated until at least one animFrame has passed")
             {
-                animComponent->update();
+                for (int t = 0; t < Animation::defaultMsPerFrame; ++t)
+                {
+                    animComponent->update();
+                }
 
                 THEN("the txIndex of the entity's SpriteComponent is unchanged")
                 {
@@ -86,24 +67,17 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
     GIVEN("An entity with an AnimationComponent, where each frame of the animation lasts 1.5 * the time step")
     {
-        /* clang-format off */
-        json unitDefJson = defaultUnitDefJson;
-        unitDefJson["animations"]["standing"] = {
-            { "startIndex", 3 },
-            { "endIndex", 5 },
-            { "msPerFrame", static_cast<int>(1.5f * TimeUtils::timeStepMs) }
-        };
-        /* clang-format on */
+        EntityTestUtils::UnitConfig unitCfg;
+        unitCfg.animations.insert(
+                { UnitAnimationType::Standing, Animation(3, 5, static_cast<int>(1.5f * TimeUtils::timeStepMs)) });
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit(unitCfg);
 
-        Unit e(UnitType::Knight, "", false);
-        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
+        World world(5, 5, false);
+        e->addedToWorld(&world, 0, { 0, 0 });
 
-        e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
-        e.addedToWorld(nullptr, 0, { 0, 0 });
-
-        const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
+        const SpriteComponent* spriteComponent = e->requireComponent<SpriteComponent>(SpriteComponent::key);
+        UnitAnimationComponent* animComponent =
+                e->requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 
@@ -152,24 +126,17 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
 
     GIVEN("An entity with an AnimationComponent, and a 2-frame animation")
     {
-        /* clang-format off */
-        json unitDefJson = defaultUnitDefJson;
-        unitDefJson["animations"]["standing"] = {
-            { "startIndex", 3 },
-            { "endIndex", 4 },
-            { "msPerFrame", static_cast<int>(TimeUtils::timeStepMs) }
-        };
-        /* clang-format on */
+        EntityTestUtils::UnitConfig unitCfg;
+        unitCfg.animations.insert(
+                { UnitAnimationType::Standing, Animation(3, 4, static_cast<int>(TimeUtils::timeStepMs)) });
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit(unitCfg);
 
-        Unit e(UnitType::Knight, "", false);
-        UnitDef unitDef = UnitDef::fromJson(unitDefJson);
+        World world(5, 5, false);
+        e->addedToWorld(&world, 0, { 0, 0 });
 
-        e.attach(std::make_shared<SpriteComponent>(spritesheet));
-        e.attach(std::make_shared<UnitAnimationComponent>(unitDef));
-        e.addedToWorld(nullptr, 0, { 0, 0 });
-
-        const SpriteComponent* spriteComponent = e.requireComponent<SpriteComponent>(SpriteComponent::key);
-        UnitAnimationComponent* animComponent = e.requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
+        const SpriteComponent* spriteComponent = e->requireComponent<SpriteComponent>(SpriteComponent::key);
+        UnitAnimationComponent* animComponent =
+                e->requireComponent<UnitAnimationComponent>(UnitAnimationComponent::key);
 
         REQUIRE(spriteComponent->getTxIndex() == 3);
 

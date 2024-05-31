@@ -16,9 +16,9 @@ namespace Rival {
 
 const std::string UnitAnimationComponent::key = "unitAnimation";
 
-UnitAnimationComponent::UnitAnimationComponent(const UnitDef& unitDef)
+UnitAnimationComponent::UnitAnimationComponent(const AnimationContainer& animationContainer)
     : EntityComponent(key)
-    , unitDef(unitDef)
+    , animationContainer(animationContainer)
     , animation(nullptr)
 {
 }
@@ -82,16 +82,16 @@ void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
 {
     if (newState == UnitState::Idle)
     {
-        setAnimation(unitDef.getAnimation(UnitAnimationType::Standing));
+        setAnimation(animationContainer.getAnimation(UnitAnimationType::Standing));
     }
     else if (newState == UnitState::Moving)
     {
         // TODO: Peasants may need to play the MovingWithBag animation
-        setAnimation(unitDef.getAnimation(UnitAnimationType::Moving));
+        setAnimation(animationContainer.getAnimation(UnitAnimationType::Moving));
     }
     else if (newState == UnitState::Attacking)
     {
-        setAnimation(unitDef.getAnimation(UnitAnimationType::Attacking));
+        setAnimation(animationContainer.getAnimation(UnitAnimationType::Attacking));
     }
 }
 

@@ -10,7 +10,7 @@
 namespace Rival {
 
 class SpriteComponent;
-class UnitDef;
+class AnimationContainer;
 struct Animation;
 
 /**
@@ -23,7 +23,7 @@ class UnitAnimationComponent
 {
 
 public:
-    UnitAnimationComponent(const UnitDef& unitDef);
+    UnitAnimationComponent(const AnimationContainer& unitDef);
 
     // Begin EntityComponent override
     virtual void onEntityAddedToWorld(World* world) override;
@@ -59,7 +59,7 @@ private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<FacingComponent> weakFacingComponent;
 
-    const UnitDef& unitDef;
+    const AnimationContainer& animationContainer;
 
     const Animation* animation;
 

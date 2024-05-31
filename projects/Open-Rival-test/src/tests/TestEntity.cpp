@@ -4,6 +4,8 @@
 
 #include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
+#include "game/World.h"
+#include "utils/EntityTestUtils.h"
 
 using namespace Rival;
 
@@ -45,13 +47,13 @@ SCENARIO("Entities can have components attached to them", "[entity]")
 {
     GIVEN("An Entity")
     {
-        Unit e(UnitType::Knight, "", false);
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
 
         WHEN("attaching a component to the Entity")
         {
             int updateCount = 0;
-            e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
-            const ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
+            e->attach(std::make_shared<ExampleEntityComponent>(updateCount));
+            const ExampleEntityComponent* component = e->requireComponent<ExampleEntityComponent>("example_key");
 
             THEN("the component is attached to the Entity")
             {
@@ -70,17 +72,18 @@ SCENARIO("Entities should initialize their components when they spawn", "[entity
 {
     GIVEN("An Entity with a component")
     {
-        Unit e(UnitType::Knight, "", false);
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         int updateCount = 0;
-        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
+        e->attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is spawned")
         {
-            e.addedToWorld(nullptr, 0, { 0, 0 });
+            World world(5, 5, false);
+            e->addedToWorld(&world, 0, { 0, 0 });
 
             THEN("the component receives a callback")
             {
-                const ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
+                const ExampleEntityComponent* component = e->requireComponent<ExampleEntityComponent>("example_key");
                 REQUIRE(component->entitySpawned);
             }
         }
@@ -91,29 +94,29 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 {
     GIVEN("An Entity with a component")
     {
-        Unit e(UnitType::Knight, "", false);
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         int updateCount = 0;
-        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
+        e->attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("the Entity is updated")
         {
-            e.update();
+            e->update();
 
             THEN("the component receives a callback")
             {
-                const ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
+                const ExampleEntityComponent* component = e->requireComponent<ExampleEntityComponent>("example_key");
                 REQUIRE(component->updateCount == 1);
             }
         }
 
         AND_GIVEN("A component is deleted")
         {
-            ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
+            ExampleEntityComponent* component = e->requireComponent<ExampleEntityComponent>("example_key");
             component->markForDeletion();
 
             WHEN("the Entity is updated")
             {
-                e.update();
+                e->update();
 
                 THEN("the deleted component is not updated")
                 {
@@ -123,7 +126,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
                 THEN("the deleted component is removed from the Entity")
                 {
                     const ExampleEntityComponent* foundComponent =
-                            e.getComponent<ExampleEntityComponent>("example_key");
+                            e->getComponent<ExampleEntityComponent>("example_key");
                     REQUIRE(foundComponent == nullptr);
                 }
             }
@@ -135,13 +138,13 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 {
     GIVEN("An Entity with a component")
     {
-        Unit e(UnitType::Knight, "", false);
+        std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         int updateCount = 0;
-        e.attach(std::make_shared<ExampleEntityComponent>(updateCount));
+        e->attach(std::make_shared<ExampleEntityComponent>(updateCount));
 
         WHEN("retrieving the component by its key")
         {
-            const ExampleEntityComponent* component = e.requireComponent<ExampleEntityComponent>("example_key");
+            const ExampleEntityComponent* component = e->requireComponent<ExampleEntityComponent>("example_key");
 
             THEN("the component is returned")
             {
@@ -151,7 +154,7 @@ SCENARIO("Entities can return components by their keys", "[entity]")
 
         WHEN("trying to retrieve a non-existent component")
         {
-            const ExampleEntityComponent* component = e.getComponent<ExampleEntityComponent>("no_such_key");
+            const ExampleEntityComponent* component = e->getComponent<ExampleEntityComponent>("no_such_key");
 
             THEN("the a nullptr is returned")
             {
