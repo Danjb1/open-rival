@@ -231,25 +231,49 @@ Facing getDir(const MapNode& from, const MapNode& to)
 
 int getDistance(const MapNode& a, const MapNode& b)
 {
+    // Distance calculations are weird due to the zigzag tile layout.
+    // Check the unit tests for some examples based on real data.
     int dx = abs(b.x - a.x);
     int dy = abs(b.y - a.y);
 
-    // The common distance can be covered by diagonals
-    int dist = std::min(dx, dy);
-    dx -= dist;
-    dy -= dist;
+    // When travelling diagonally, the y-distance is greater because we traverse up to 2 tiles from each row
+    int dy_diag = dy * 2;
+    if (dy > 0)
+    {
+        // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile,
+        // we have less far to travel.
+        MapNode top = a;
+        MapNode bottom = b;
+        if (a.y > b.y)
+        {
+            std::swap(top, bottom);
+        }
+        const bool topIsLower = isLowerTile(top.x);
+        const bool bottomIsUpper = isUpperTile(bottom.x);
+        if (topIsLower && bottomIsUpper)
+        {
+            --dy_diag;
+        }
+    }
+
+    // First figure out how far we can travel diagonally
+    int numTiles = std::min(dx, dy_diag);
+    dx -= numTiles;
+    dy -= static_cast<int>(std::ceil(numTiles / 2.f));
 
     // Whatever's left must be covered by straight lines
+    if (dy > 0)
+    {
+        numTiles += dy;
+    }
     if (dx > 0)
     {
-        dist += dx * eastWestTileSpan;
-    }
-    else if (dy > 0)
-    {
-        dist += dy;
+        // We can cover 2 tiles with each horizontal movement.
+        // Round up because we might need 1 final diagonal movement to change between upper/lower tiles.
+        numTiles += static_cast<int>(std::ceil(static_cast<float>(dx) / eastWestTileSpan));
     }
 
-    return dist;
+    return numTiles;
 }
 
 }}  // namespace Rival::MapUtils

@@ -1,7 +1,5 @@
 #include "utils/EntityTestUtils.h"
 
-#include <iostream>  // tmp
-
 #include "entity/components/AttackComponent.h"
 #include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"

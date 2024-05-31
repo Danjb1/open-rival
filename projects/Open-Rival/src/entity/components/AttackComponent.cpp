@@ -83,13 +83,6 @@ void AttackComponent::update()
 
 bool AttackComponent::isInRange(const MapNode& node) const
 {
-    if (MapUtils::isNeighbor(entity->getPos(), node))
-    {
-        // This is important for melee attacks with a range of 1;
-        // we can't just do a distance check, since the horizontal distance between east-west neighbors is 2.
-        return true;
-    }
-
     // TODO: Pick an attack
     const int range = 1;  // TMP
     const int distToTarget = MapUtils::getDistance(entity->getPos(), node);

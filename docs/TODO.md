@@ -4,8 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- BUG: Units never attack from east/west
-- BUG: Units can attack from 2 spaces away (down + diagonally-down)
 - Damage target when an attack hits
     - Need to figure out damage calculation!
 - Play a sound when an attack hits
@@ -25,6 +23,7 @@
 - Units can walk through buildings and other objects
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
+- Units stop moving when they are obstructed, even when they are trying to attack and the target is reachable
 
 <!----------------------------------------------------------------------------->
 ## Features
