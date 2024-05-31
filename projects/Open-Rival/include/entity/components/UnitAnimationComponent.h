@@ -28,7 +28,7 @@ public:
     // Begin EntityComponent override
     virtual void onEntityAddedToWorld(World* world) override;
     virtual void destroy() override;
-    virtual void update() override;
+    virtual void update(int delta) override;
     // End EntityComponent override
 
     // Begin UnitStateListener override

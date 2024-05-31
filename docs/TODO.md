@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
 - Damage target when an attack hits
-    - Need to figure out damage calculation!
 - Play a sound when an attack hits
 - Allow attacking an empty tile when in attack mode
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)

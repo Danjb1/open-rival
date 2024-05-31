@@ -54,7 +54,7 @@ void UnitAnimationComponent::destroy()
     }
 }
 
-void UnitAnimationComponent::update()
+void UnitAnimationComponent::update(int delta)
 {
     if (!animation)
     {
@@ -69,7 +69,7 @@ void UnitAnimationComponent::update()
         return;
     }
 
-    msPassedCurrentAnimFrame += TimeUtils::timeStepMs;
+    msPassedCurrentAnimFrame += delta;
 
     const int msPerAnimFrame = getMsPerAnimFrame();
     if (msPassedCurrentAnimFrame >= msPerAnimFrame)

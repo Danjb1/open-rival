@@ -45,7 +45,7 @@ MovementComponent::MovementComponent(
 {
 }
 
-void MovementComponent::update()
+void MovementComponent::update(int delta)
 {
     // Prepare the next movement if we are not currently moving between tiles
     if (!movement.isValid())
@@ -56,7 +56,7 @@ void MovementComponent::update()
         }
     }
 
-    updateMovement();
+    updateMovement(delta);
     entity->moved = true;
 }
 
@@ -127,10 +127,10 @@ MapNode MovementComponent::getStartPosForNextMovement() const
     return isCurrentlyMoving() ? movement.destination : entity->getPos();
 }
 
-void MovementComponent::updateMovement()
+void MovementComponent::updateMovement(int delta)
 {
     const bool wasPastHalfway = movement.isPastHalfway();
-    movement.timeElapsed += TimeUtils::timeStepMs;
+    movement.timeElapsed += delta;
 
     if (movement.isFinished())
     {

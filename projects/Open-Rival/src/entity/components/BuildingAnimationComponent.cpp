@@ -6,8 +6,8 @@
 #include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
 #include "game/Animations.h"
-#include "game/UnitType.h"
 #include "game/UnitDef.h"
+#include "game/UnitType.h"
 #include "game/World.h"
 #include "utils/TimeUtils.h"
 
@@ -30,7 +30,7 @@ void BuildingAnimationComponent::onEntityAddedToWorld(World*)
     setAnimation(buildingDef.getAnimation(BuildingAnimationType::Built));
 }
 
-void BuildingAnimationComponent::update()
+void BuildingAnimationComponent::update(int delta)
 {
     if (!animation)
     {
@@ -45,7 +45,7 @@ void BuildingAnimationComponent::update()
         return;
     }
 
-    msPassedCurrentAnimFrame += TimeUtils::timeStepMs;
+    msPassedCurrentAnimFrame += delta;
 
     int msPerAnimFrame = getMsPerAnimFrame();
     if (msPassedCurrentAnimFrame >= msPerAnimFrame)

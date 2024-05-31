@@ -38,7 +38,7 @@ public:
     /**
      * Updates this EntityComponent by one frame.
      */
-    virtual void update() {};
+    virtual void update(int /*delta*/) {};
 
     /**
      * Determines if this EntityComponent has been marked for deletion.

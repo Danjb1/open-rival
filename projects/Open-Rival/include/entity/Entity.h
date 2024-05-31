@@ -108,7 +108,7 @@ public:
     void earlyUpdate();
 
     /** Updates this Entity by one frame. */
-    void update();
+    void update(int delta);
 
     /** Determines if this Entity has been marked for deletion. */
     const bool isDeleted() const

@@ -53,7 +53,7 @@ public:
      * It is assumed that a fixed amount of time has elapsed between calls
      * to this method, equal to TimeUtils::timeStepMs.
      */
-    virtual void update() = 0;
+    virtual void update(int /*delta*/) = 0;
 
     /**
      * Renders the current frame.

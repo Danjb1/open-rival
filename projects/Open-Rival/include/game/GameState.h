@@ -67,7 +67,7 @@ public:
     void mouseDown(const SDL_MouseButtonEvent event) override;
     void mouseUp(const SDL_MouseButtonEvent event) override;
     void mouseWheelMoved(const SDL_MouseWheelEvent event) override;
-    void update() override;
+    void update(int delta) override;
     void render(int delta) override;
     // End State override
 
@@ -94,7 +94,7 @@ private:
     bool isTickReady() const;
     void pollNetwork();
     void earlyUpdateEntities() const;
-    void updateEntities() const;
+    void updateEntities(int delta) const;
     void respondToInput();
     void sendOutgoingCommands();
     void processCommands();

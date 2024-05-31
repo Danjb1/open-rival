@@ -40,7 +40,7 @@ void Entity::earlyUpdate()
     moved = false;
 }
 
-void Entity::update()
+void Entity::update(int delta)
 {
     for (auto it = components.cbegin(); it != components.cend();)
     {
@@ -53,7 +53,7 @@ void Entity::update()
             continue;
         }
 
-        component->update();
+        component->update(delta);
         ++it;
     }
 }

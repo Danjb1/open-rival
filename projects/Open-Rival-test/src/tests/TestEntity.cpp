@@ -6,6 +6,7 @@
 #include "entity/components/EntityComponent.h"
 #include "game/World.h"
 #include "utils/EntityTestUtils.h"
+#include "utils/TimeUtils.h"
 
 using namespace Rival;
 
@@ -37,7 +38,7 @@ public:
         entitySpawned = true;
     }
 
-    void update() override
+    void update(int /*delta*/) override
     {
         ++updateCount;
     }
@@ -100,7 +101,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
         WHEN("the Entity is updated")
         {
-            e->update();
+            e->update(TimeUtils::timeStepMs);
 
             THEN("the component receives a callback")
             {
@@ -116,7 +117,7 @@ SCENARIO("Entities should update their components each frame", "[entity]")
 
             WHEN("the Entity is updated")
             {
-                e->update();
+                e->update(TimeUtils::timeStepMs);
 
                 THEN("the deleted component is not updated")
                 {

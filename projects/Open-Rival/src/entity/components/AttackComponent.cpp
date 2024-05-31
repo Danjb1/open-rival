@@ -53,7 +53,7 @@ void AttackComponent::onUnitStopped()
     }
 }
 
-void AttackComponent::update()
+void AttackComponent::update(int /*delta*/)
 {
     if (attackState == AttackState::Attacking)
     {
