@@ -4,10 +4,24 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Damage target when an attack hits
+- Show grey attack cursor in attack mode when no entity is hovered
+- Units should not be able to attack themselves!
+- MoveCommand should wait for the current attack to finish
+    - AttackCommand waits for movement already, but this is something we'll need a lot
+    - Implement a generic "stop what you're doing and give me a callback" mechanism
+- Attack duration should be driven by animation data
 - Play a sound when an attack hits
-- Allow attacking an empty tile when in attack mode
+- Remove units when their health is depleted
+- Play a sound when a unit dies
+- Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
+- Respect unit stats (accuracy, damage, armor, speed, range)
+- Allow attacking an empty tile when in attack mode (ranged attacks only!)
+    - For melee attacks it should display a message "Could not attack there !"
+- BUG: Units stop moving when they are obstructed, even when they are trying to attack and the target is reachable
+    - When attacking, need to change passability
+- Implement projectiles
+- Ensure all players share the same random seed (use this for SoundBanks as well!)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -22,7 +36,6 @@
 - Units can walk through buildings and other objects
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
-- Units stop moving when they are obstructed, even when they are trying to attack and the target is reachable
 
 <!----------------------------------------------------------------------------->
 ## Features

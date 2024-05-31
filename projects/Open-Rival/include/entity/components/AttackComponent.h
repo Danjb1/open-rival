@@ -33,9 +33,23 @@ public:
     /** Called when an entity starts attacking. */
     virtual void onAttackStarted() = 0;
 
-    /** Called when an entity's attack is "launched",
-     * e.g. a melee hit is attempted or a projectile is spawned. */
-    virtual void onAttackLaunched() = 0;
+    /** Called when an entity finishes an attack. */
+    virtual void onAttackFinished() = 0;
+};
+
+/** An attack that is currently being performed. */
+struct AttackInstance
+{
+    /** Time spent in this attack so far. */
+    int timeElapsed = 0;
+
+    /** Total duration of the attack. */
+    int duration = 0;
+
+    /** Determines whether this attack is fully completed. */
+    bool isFinished() const;
+
+    void reset();
 };
 
 /**
@@ -66,6 +80,9 @@ public:
     void removeListener(std::weak_ptr<AttackListener> listener);
 
 private:
+    void updateAttack(int delta);
+    void deliverAttack();
+    void updateCooldown(int delta);
     bool isInRange(const MapNode& node) const;
     void requestAttack(std::shared_ptr<Entity> targetEntity);
     void startAttack(std::shared_ptr<Entity> targetEntity);
@@ -81,6 +98,10 @@ private:
     std::weak_ptr<FacingComponent> weakFacingComp;
 
     AttackState attackState = AttackState::None;
+    AttackInstance attackInstance;
+
+    float cooldownTimeElapsed = 0;
+    float cooldownDuration = 200;  // TODO: Depends on unit's attack speed?
 };
 
 }  // namespace Rival

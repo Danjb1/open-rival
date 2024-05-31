@@ -61,7 +61,7 @@ public:
 
     // Begin AttackListener override
     void onAttackStarted() override;
-    void onAttackLaunched() override;
+    void onAttackFinished() override;
     // End AttackListener override
 
     void addStateListener(UnitStateListener* listener);
