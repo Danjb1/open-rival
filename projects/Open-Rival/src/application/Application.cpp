@@ -51,6 +51,12 @@ void Application::start(std::unique_ptr<State> initialState)
             // Handle events on the queue
             pollEvents();
 
+            // We can change the game speed by simulating more or less
+            // time in each tick. This should be done with caution as it
+            // could break determinism, and it will certainly break
+            // multiplayer.
+            int logicDelta = static_cast<int>(TimeUtils::timeStepMs * gameSpeed);
+
             // Update the game logic as many times as necessary to keep it
             // up to date with the current time. The idea is to run the
             // logic at a fixed rate, regardless of the game's framerate.
@@ -63,7 +69,7 @@ void Application::start(std::unique_ptr<State> initialState)
             // If vsync is disabled, this should run once per render.
             while (nextUpdateDue <= frameStartTime)
             {
-                state->update();
+                state->update(logicDelta);
                 nextUpdateDue += TimeUtils::timeStepMs;
             }
 

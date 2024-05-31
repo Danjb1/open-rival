@@ -51,7 +51,7 @@ public:
     // Begin EntityComponent override
     void onEntityAddedToWorld(World*) override;
     void destroy() override;
-    void update() override;
+    void update(int delta) override;
     // End EntityComponent override
 
     // Begin MovementComponent override

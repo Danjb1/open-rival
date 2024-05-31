@@ -23,7 +23,7 @@ public:
 
     // Begin EntityComponent override
     virtual void onEntityAddedToWorld(World* world) override;
-    virtual void update() override;
+    virtual void update(int delta) override;
     // End EntityComponent override
 
     void setAnimation(const Animation* newAnimation);

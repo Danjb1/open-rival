@@ -109,16 +109,16 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
             const MapNode destination = { 1, 2 };
             walkerComponent1->moveTo(destination, context);
             walkerComponent2->moveTo(destination, context);
-            walkerComponent1->update();
-            walkerComponent2->update();
+            walkerComponent1->update(TimeUtils::timeStepMs);
+            walkerComponent2->update(TimeUtils::timeStepMs);
 
             while (walkerComponent1->getMovement().timeElapsed < walkerComponent1->getMovement().timeRequired)
             {
-                walkerComponent1->update();
+                walkerComponent1->update(TimeUtils::timeStepMs);
             }
             while (walkerComponent2->getMovement().timeElapsed < walkerComponent2->getMovement().timeRequired)
             {
-                walkerComponent2->update();
+                walkerComponent2->update(TimeUtils::timeStepMs);
             }
 
             THEN("one unit has moved into the tile and the other has stayed put")
@@ -152,7 +152,7 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
         WHEN("the WalkerComponent is updated once")
         {
-            walkerComponent->update();
+            walkerComponent->update(TimeUtils::timeStepMs);
 
             THEN("the unit starts following the route")
             {
@@ -169,11 +169,11 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
         WHEN("the WalkerComponent is updated to completion")
         {
-            walkerComponent->update();
+            walkerComponent->update(TimeUtils::timeStepMs);
 
             while (walkerComponent->getMovement().timeElapsed < walkerComponent->getMovement().timeRequired)
             {
-                walkerComponent->update();
+                walkerComponent->update(TimeUtils::timeStepMs);
             }
 
             THEN("the unit reaches the destination")
@@ -207,7 +207,7 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
         WHEN("the WalkerComponent is updated")
         {
-            walkerComponent->update();
+            walkerComponent->update(TimeUtils::timeStepMs);
 
             THEN("the unit does not move")
             {

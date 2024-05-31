@@ -29,7 +29,7 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
         {
         }
 
-        void update() override
+        void update(int /*delta*/) override
         {
             updatesRun++;
         }

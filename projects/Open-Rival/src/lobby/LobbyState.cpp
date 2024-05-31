@@ -87,7 +87,7 @@ void LobbyState::onLoad()
     }
 }
 
-void LobbyState::update()
+void LobbyState::update(int /* delta */)
 {
     pollNetwork();
 }

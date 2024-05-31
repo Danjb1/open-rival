@@ -56,7 +56,7 @@ void GameState::onLoad()
     app.getContext().getAudioSystem().playMidi(res.getMidi(0));
 }
 
-void GameState::update()
+void GameState::update(int delta)
 {
     pollNetwork();
     if (!isTickReady())
@@ -70,7 +70,7 @@ void GameState::update()
     earlyUpdateEntities();
     respondToInput();
     sendOutgoingCommands();
-    updateEntities();
+    updateEntities(delta);
     processCommands();
     ++currentTick;
 }
@@ -171,7 +171,7 @@ void GameState::sendOutgoingCommands()
     outgoingCommands.clear();
 }
 
-void GameState::updateEntities() const
+void GameState::updateEntities(int delta) const
 {
     std::vector<std::shared_ptr<Entity>> deletedEntities;
 
@@ -182,7 +182,7 @@ void GameState::updateEntities() const
         }
         else
         {
-            entity->update();
+            entity->update(delta);
         }
     });
 

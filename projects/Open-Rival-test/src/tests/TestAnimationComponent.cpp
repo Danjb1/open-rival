@@ -48,7 +48,7 @@ SCENARIO("AnimationComponent sets the txIndex for a single-frame animation", "[c
             {
                 for (int t = 0; t < Animation::defaultMsPerFrame; ++t)
                 {
-                    animComponent->update();
+                    animComponent->update(TimeUtils::timeStepMs);
                 }
 
                 THEN("the txIndex of the entity's SpriteComponent is unchanged")
@@ -83,7 +83,7 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
         WHEN("the AnimationComponent is updated once")
         {
-            animComponent->update();
+            animComponent->update(TimeUtils::timeStepMs);
 
             THEN("the txIndex of the entity's SpriteComponent is unchanged")
             {
@@ -94,8 +94,8 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
         WHEN("the AnimationComponent is updated twice")
         {
-            animComponent->update();
-            animComponent->update();
+            animComponent->update(TimeUtils::timeStepMs);
+            animComponent->update(TimeUtils::timeStepMs);
 
             THEN("the txIndex of the entity's SpriteComponent has increased by 1")
             {
@@ -106,9 +106,9 @@ SCENARIO("AnimationComponent updates the txIndex at the right time", "[component
 
         WHEN("the AnimationComponent is updated three times")
         {
-            animComponent->update();
-            animComponent->update();
-            animComponent->update();
+            animComponent->update(TimeUtils::timeStepMs);
+            animComponent->update(TimeUtils::timeStepMs);
+            animComponent->update(TimeUtils::timeStepMs);
 
             THEN("the txIndex of the entity's SpriteComponent has increased by 2")
             {
@@ -142,7 +142,7 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
 
         WHEN("the AnimationComponent is updated once")
         {
-            animComponent->update();
+            animComponent->update(TimeUtils::timeStepMs);
 
             THEN("the txIndex of the entity's SpriteComponent is increased by 1")
             {
@@ -152,8 +152,8 @@ SCENARIO("AnimationComponent loops the animation back to the start", "[component
 
         WHEN("the AnimationComponent is updated twice")
         {
-            animComponent->update();
-            animComponent->update();
+            animComponent->update(TimeUtils::timeStepMs);
+            animComponent->update(TimeUtils::timeStepMs);
 
             THEN("the txIndex of the entity's SpriteComponent is back to the initial value")
             {

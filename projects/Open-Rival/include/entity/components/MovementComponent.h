@@ -48,7 +48,7 @@ public:
     virtual ~MovementComponent() = default;
 
     // Begin EntityComponent override
-    void update() override;
+    void update(int delta) override;
     // End EntityComponent override
 
     void addListener(std::weak_ptr<MovementListener> listener);
@@ -79,7 +79,7 @@ public:
 
 private:
     MapNode getStartPosForNextMovement() const;
-    void updateMovement();
+    void updateMovement(int delta);
     bool tryStartNextMovement();
     void startNextMovement(PathfindingMap& map);
     void resetPassability();

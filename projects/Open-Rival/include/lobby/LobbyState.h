@@ -31,7 +31,7 @@ public:
     // Begin State override
     void onLoad() override;
     void keyUp(const SDL_Keycode keyCode) override;
-    void update() override;
+    void update(int delta) override;
     void render(int delta) override;
     // End State override
 

@@ -74,6 +74,8 @@ private:
     std::optional<Server> server;
     std::optional<Connection> connection;
     std::shared_ptr<PacketFactory> packetFactory;
+
+    float gameSpeed = 1.f;
 };
 
 }  // namespace Rival
