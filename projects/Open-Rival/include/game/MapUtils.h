@@ -107,7 +107,13 @@ bool isNeighbor(const MapNode& a, const MapNode& b);
 Facing getDir(const MapNode& from, const MapNode& to);
 
 /**
- * Gets the distance between 2 MapNodes.
+ * Gets the distance between 2 MapNodes, in tiles.
+ *
+ * For this method, east-west travel still counts as 1 tile, even though such a movement actually represents a change
+ * of 2 units in the x-axis.
+ *
+ * The original game seems to use this approach in most cases, which is why units can see/shoot a lot further
+ * horizontally than vertically.
  */
 int getDistance(const MapNode& a, const MapNode& b);
 
