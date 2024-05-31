@@ -27,11 +27,11 @@ set(OPEN_RIVAL_RESOURCES
     "${CMAKE_CURRENT_LIST_DIR}/resource.h"
 )
 
-# Resources folder
-set(OPEN_RIVAL_RES_SRC_DIR "${CMAKE_SOURCE_DIR}/dist/res")
-
 # DLLs folder
 set(OPEN_RIVAL_DLL_SRC_DIR "${CMAKE_SOURCE_DIR}/dist")
+
+# Resources folder
+set(OPEN_RIVAL_RES_SRC_DIR "${CMAKE_SOURCE_DIR}/dist/res")
 
 # Config file
 set(OPEN_RIVAL_CONFIG_SRC "${CMAKE_SOURCE_DIR}/dist/config.json")
@@ -90,8 +90,36 @@ target_precompile_headers(Open-Rival PRIVATE
     <vector>
 )
 
-# Copy resources to build folder
-file(COPY ${OPEN_RIVAL_RES_SRC_DIR} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+################################################################################
+# Resources
+# ----------
+# These are copied to the build folder, and changes to these files will trigger
+# a new CMake build.
+################################################################################
+
+# Find all resources
+file(GLOB_RECURSE RESOURCE_LIST "${OPEN_RIVAL_RES_SRC_DIR}/*")
+
+# Create a custom command to copy resources
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${OPEN_RIVAL_RES_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${RESOURCE_LIST}
+    COMMENT "Copying resources to build directory"
+)
+
+# Create a custom target that depends on the custom command
+add_custom_target(copy_assets ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR})
+
+# Ensure the custom target runs before Open-Rival
+add_dependencies(Open-Rival copy_assets)
+
+################################################################################
+# Extra files
+# ------------
+# These are copied to the build folder when CMake runs, but changes to these
+# files will not trigger a new CMake build.
+################################################################################
 
 # Copy DLL files to build folder
 file(GLOB OPEN_RIVAL_DLL_FILES "${OPEN_RIVAL_DLL_SRC_DIR}/*.dll")

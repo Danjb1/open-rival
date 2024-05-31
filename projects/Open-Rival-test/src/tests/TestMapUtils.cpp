@@ -102,4 +102,34 @@ TEST_CASE("getDir should return the correct direction from an odd-column node", 
     }
 }
 
+TEST_CASE("getDistance should return the correct distance between 2 tiles", "[map-utils]")
+{
+    const MapNode start = { 5, 5 };
+
+    SECTION("other tile is directly north")
+    {
+        REQUIRE(MapUtils::getDistance(start, { start.x, start.y - 5 }) == 5);
+    }
+
+    SECTION("other tile is directly east")
+    {
+        REQUIRE(MapUtils::getDistance(start, { start.x + 5, start.y }) == 5 * MapUtils::eastWestTileSpan);
+    }
+
+    SECTION("other tile is directly south-east")
+    {
+        REQUIRE(MapUtils::getDistance(start, { start.x + 5, start.y + 5 }) == 5);
+    }
+
+    SECTION("other tile is south-east, and then a bit more east")
+    {
+        REQUIRE(MapUtils::getDistance(start, { start.x + 8, start.y + 5 }) == 5 + 3 * MapUtils::eastWestTileSpan);
+    }
+
+    SECTION("other tile is south-east, and then a bit more south")
+    {
+        REQUIRE(MapUtils::getDistance(start, { start.x + 5, start.y + 8 }) == 8);
+    }
+}
+
 }  // namespace TestMapUtils

@@ -18,6 +18,7 @@ list(REMOVE_ITEM OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityOverlayRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
@@ -54,6 +55,7 @@ set(OPEN_RIVAL_TEST_FRAMEWORK_HEADERS
 # Test Headers
 set(OPEN_RIVAL_TEST_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/mocks/MockSDL.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/utils/EntityTestUtils.h
 )
 
 # Test Sources
@@ -85,6 +87,7 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestRenderUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSpritesheet.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestWalkerComponent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/EntityTestUtils.cpp
 )
 
 # We include the test includes first so that they take precedence

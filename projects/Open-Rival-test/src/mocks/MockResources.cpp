@@ -180,6 +180,11 @@ std::shared_ptr<const TextureAtlas> Resources::getUiTextureAtlas() const
     return {};
 }
 
+std::shared_ptr<const TextureAtlas> Resources::getOverlayTextureAtlas() const
+{
+    return {};
+}
+
 std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const
 {
     return {};

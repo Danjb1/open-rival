@@ -18,7 +18,14 @@ enum class MovementMode : std::uint8_t
     Flying
 };
 
-class UnitDef
+/** Interface providing access to animations. */
+class AnimationContainer
+{
+public:
+    virtual const Animation* getAnimation(UnitAnimationType animType) const = 0;
+};
+
+class UnitDef final : public AnimationContainer
 {
 public:
     static UnitDef fromJson(const json& j);
@@ -29,7 +36,9 @@ public:
             std::unordered_map<UnitAnimationType, const Animation> animations,
             std::unordered_map<UnitSoundType, const SoundBank> soundBanks);
 
-    const Animation* getAnimation(UnitAnimationType animType) const;
+    // Begin AnimationContainer override
+    const Animation* getAnimation(UnitAnimationType animType) const override;
+    // End AnimationContainer override
 
     const SoundBank* getSoundBank(UnitSoundType soundType) const;
 
