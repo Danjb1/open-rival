@@ -152,6 +152,11 @@ TEST_CASE("getDistance should return the correct distance between 2 tiles", "[ma
         REQUIRE(MapUtils::getDistance(node2, node4) == 6);
     }
 
+    SECTION("tiles are somewhat diagonal, with some extra vertical distance (upper -> lower)")
+    {
+        REQUIRE(MapUtils::getDistance(node1, { node1.x + 1, node1.y + 1 }) == 2);
+    }
+
     SECTION("tiles are somewhat diagonal, with some extra horizontal distance (lower -> upper)")
     {
         REQUIRE(MapUtils::getDistance(node2, node6) == 11);

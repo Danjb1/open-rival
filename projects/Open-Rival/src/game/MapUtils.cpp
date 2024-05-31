@@ -236,12 +236,11 @@ int getDistance(const MapNode& a, const MapNode& b)
     int dx = abs(b.x - a.x);
     int dy = abs(b.y - a.y);
 
-    // When travelling diagonally, the y-distance is greater because we traverse up to 2 tiles from each row
-    int dy_diag = dy * 2;
+    // Determine if this is a "short journey".
+    // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile, we have less far to travel.
+    bool isShortJourney = false;
     if (dy > 0)
     {
-        // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile,
-        // we have less far to travel.
         MapNode top = a;
         MapNode bottom = b;
         if (a.y > b.y)
@@ -250,16 +249,28 @@ int getDistance(const MapNode& a, const MapNode& b)
         }
         const bool topIsLower = isLowerTile(top.x);
         const bool bottomIsUpper = isUpperTile(bottom.x);
-        if (topIsLower && bottomIsUpper)
-        {
-            --dy_diag;
-        }
+        isShortJourney = topIsLower && bottomIsUpper;
+    }
+
+    // When travelling diagonally, the y-distance is greater because we traverse up to 2 tiles from each row
+    int dy_diag = dy * 2;
+
+    // For short journeys, there is less potential for diagonal movement
+    if (isShortJourney)
+    {
+        --dy_diag;
     }
 
     // First figure out how far we can travel diagonally
     int numTiles = std::min(dx, dy_diag);
     dx -= numTiles;
-    dy -= static_cast<int>(std::ceil(numTiles / 2.f));
+    dy -= numTiles / 2;
+
+    // For short journeys, we cover more y-distance when travelling diagonally
+    if (isShortJourney)
+    {
+        --dy;
+    }
 
     // Whatever's left must be covered by straight lines
     if (dy > 0)
