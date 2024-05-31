@@ -2,12 +2,23 @@
 
 #include "entity/Entity.h"
 #include "entity/components/FacingComponent.h"
+#include "entity/components/HealthComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "game/World.h"
 
 namespace Rival {
 
 const std::string AttackComponent::key = "attack";
+
+bool AttackInstance::isFinished() const
+{
+    return timeElapsed >= duration;
+}
+
+void AttackInstance::reset()
+{
+    timeElapsed = 0;
+}
 
 AttackComponent::AttackComponent()
     : EntityComponent(key)
@@ -53,12 +64,17 @@ void AttackComponent::onUnitStopped()
     }
 }
 
-void AttackComponent::update(int /*delta*/)
+void AttackComponent::update(int delta)
 {
     if (attackState == AttackState::Attacking)
     {
-        // TODO: update attack
-        // TODO: need to do another range check after each attack ends!
+        updateAttack(delta);
+        return;
+    }
+
+    if (attackState == AttackState::Cooldown)
+    {
+        updateCooldown(delta);
         return;
     }
 
@@ -78,6 +94,43 @@ void AttackComponent::update(int /*delta*/)
         // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between units
         // that all start moving at the same time
         moveToTarget(targetEntity->getPos());
+    }
+}
+
+void AttackComponent::updateAttack(int delta)
+{
+    attackInstance.timeElapsed += delta;
+
+    if (attackInstance.isFinished())
+    {
+        deliverAttack();
+        attackState = AttackState::Cooldown;
+        attackInstance.reset();
+        CollectionUtils::forEachWeakPtr<AttackListener>(
+                listeners, [&](auto listener) { listener->onAttackFinished(); });
+    }
+}
+
+void AttackComponent::deliverAttack()
+{
+    std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
+    if (!targetEntity)
+    {
+        // Target no longer exists!
+        return;
+    }
+
+    HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
+    healthComp->addHealth(-10);  // TMP
+}
+
+void AttackComponent::updateCooldown(int delta)
+{
+    cooldownTimeElapsed += delta;
+    if (cooldownTimeElapsed >= cooldownDuration)
+    {
+        cooldownTimeElapsed = 0;
+        attackState = AttackState::None;
     }
 }
 
@@ -119,6 +172,9 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
 
     CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
     attackState = AttackState::Attacking;
+
+    // TODO: Get this data from the current attack ability / animation
+    attackInstance.duration = 600;
 }
 
 void AttackComponent::moveToTarget(const MapNode& node)

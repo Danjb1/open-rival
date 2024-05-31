@@ -56,9 +56,9 @@ void Unit::onAttackStarted()
     setState(UnitState::Attacking);
 }
 
-void Unit::onAttackLaunched()
+void Unit::onAttackFinished()
 {
-    // Do nothing
+    setState(UnitState::Idle);
 }
 
 void Unit::addStateListener(UnitStateListener* listener)
