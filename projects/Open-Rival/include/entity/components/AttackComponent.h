@@ -82,6 +82,7 @@ public:
 private:
     void updateAttack(int delta);
     void deliverAttack();
+    void switchToNewTarget();
     void updateCooldown(int delta);
     bool isInRange(const MapNode& node) const;
     void requestAttack(std::shared_ptr<Entity> targetEntity);
@@ -93,7 +94,12 @@ public:
 
 private:
     WeakPtrSet<AttackListener> listeners;
+
+    /** Target of the current attack. */
     std::weak_ptr<Entity> weakTargetEntity;
+    /** Requested target (next attack). */
+    std::weak_ptr<Entity> weakRequestedTargetEntity;
+
     std::weak_ptr<MovementComponent> weakMovementComp;
     std::weak_ptr<FacingComponent> weakFacingComp;
 
