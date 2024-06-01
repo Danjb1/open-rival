@@ -5,12 +5,13 @@
 #include <unordered_set>
 
 #include "entity/Entity.h"
-#include "entity/components/AttackComponent.h"
+#include "entity/components/AttackListener.h"
 #include "entity/components/MovementListener.h"
 #include "game/UnitType.h"
 
 namespace Rival {
 
+class AttackComponent;
 class MovementComponent;
 struct MapNode;
 

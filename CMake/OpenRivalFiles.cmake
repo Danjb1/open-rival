@@ -158,6 +158,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
     ${OPEN_RIVAL_DIR}/include/entity/Unit.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/AttackListener.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h

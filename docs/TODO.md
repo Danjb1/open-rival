@@ -4,8 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Don't show attack cursor when trying to attack self? (what if multiple units are selected?)
-- Attack duration should be driven by animation data
 - Play a sound when an attack hits
 - Remove units when their health is depleted
 - Play a sound when a unit dies
