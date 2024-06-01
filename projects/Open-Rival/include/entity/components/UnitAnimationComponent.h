@@ -6,12 +6,21 @@
 #include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/FacingComponent.h"
+#include "game/Animations.h"
+#include "utils/CollectionUtils.h"
 
 namespace Rival {
 
 class SpriteComponent;
 class AnimationContainer;
 struct Animation;
+
+/** Interface that allows a class to be notified of animation events. */
+class AnimationListener
+{
+public:
+    virtual void onAnimationFinished(UnitAnimationType animType) = 0;
+};
 
 /**
  * Component that controls the animation and facing of a unit's SpriteComponent.
@@ -39,7 +48,10 @@ public:
     void facingChanged(Facing newFacing) override;
     // End FacingListener override
 
-    void setAnimation(const Animation* newAnimation);
+    void addListener(std::weak_ptr<AnimationListener> listener);
+    void removeListener(std::weak_ptr<AnimationListener> listener);
+
+    void setAnimation(UnitAnimationType animType);
 
     int getCurrentSpriteIndex() const;
 
@@ -59,9 +71,12 @@ private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<FacingComponent> weakFacingComponent;
 
+    WeakPtrSet<AnimationListener> listeners;
+
     const AnimationContainer& animationContainer;
 
     const Animation* animation;
+    UnitAnimationType currentAnimType;
 
     int currentAnimFrame = 0;
 

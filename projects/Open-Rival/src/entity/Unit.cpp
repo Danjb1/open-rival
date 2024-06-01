@@ -1,6 +1,7 @@
 #include "entity/Unit.h"
 
 #include "entity/Entity.h"
+#include "entity/components/AttackComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 #include "game/World.h"

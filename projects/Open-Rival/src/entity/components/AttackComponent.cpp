@@ -2,6 +2,7 @@
 
 #include "entity/Entity.h"
 #include "entity/Unit.h"
+#include "entity/components/AttackListener.h"
 #include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MovementComponent.h"
@@ -10,16 +11,6 @@
 namespace Rival {
 
 const std::string AttackComponent::key = "attack";
-
-bool AttackInstance::isFinished() const
-{
-    return timeElapsed >= duration;
-}
-
-void AttackInstance::reset()
-{
-    timeElapsed = 0;
-}
 
 AttackComponent::AttackComponent()
     : EntityComponent(key)
@@ -30,6 +21,33 @@ void AttackComponent::onEntityAddedToWorld(World*)
 {
     weakMovementComp = entity->getComponentWeak<MovementComponent>(MovementComponent::key);
     weakFacingComp = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
+    weakAnimationComp = entity->getComponentWeak<UnitAnimationComponent>(UnitAnimationComponent::key);
+
+    if (auto animationComp = weakAnimationComp.lock())
+    {
+        std::weak_ptr<AttackComponent> weakThis = entity->getComponentWeak<AttackComponent>(key);
+        animationComp->addListener(weakThis);
+    }
+}
+
+void AttackComponent::destroy()
+{
+    if (auto animationComp = weakAnimationComp.lock())
+    {
+        std::weak_ptr<AttackComponent> weakThis = entity->getComponentWeak<AttackComponent>(key);
+        animationComp->removeListener(weakThis);
+    }
+}
+
+void AttackComponent::onAnimationFinished(UnitAnimationType animType)
+{
+    if (animType == UnitAnimationType::Attacking)
+    {
+        deliverAttack();
+        attackState = AttackState::Cooldown;
+        CollectionUtils::forEachWeakPtr<AttackListener>(
+                listeners, [&](auto listener) { listener->onAttackFinished(); });
+    }
 }
 
 void AttackComponent::update(int delta)
@@ -46,7 +64,7 @@ void AttackComponent::update(int delta)
 
     if (attackState == AttackState::Attacking)
     {
-        updateAttack(delta);
+        // Waiting for anim notify
         return;
     }
 
@@ -72,20 +90,6 @@ void AttackComponent::update(int delta)
         // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between units
         // that all start moving at the same time
         moveToTarget(targetEntity->getPos());
-    }
-}
-
-void AttackComponent::updateAttack(int delta)
-{
-    attackInstance.timeElapsed += delta;
-
-    if (attackInstance.isFinished())
-    {
-        deliverAttack();
-        attackState = AttackState::Cooldown;
-        attackInstance.reset();
-        CollectionUtils::forEachWeakPtr<AttackListener>(
-                listeners, [&](auto listener) { listener->onAttackFinished(); });
     }
 }
 
@@ -152,9 +156,6 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
 
     CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
     attackState = AttackState::Attacking;
-
-    // TODO: Get this data from the current attack ability / animation
-    attackInstance.duration = 600;
 }
 
 void AttackComponent::moveToTarget(const MapNode& node)

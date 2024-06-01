@@ -5,7 +5,6 @@
 #include "application/Resources.h"
 #include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
-#include "game/Animations.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
 #include "game/World.h"
@@ -82,16 +81,16 @@ void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
 {
     if (newState == UnitState::Idle)
     {
-        setAnimation(animationContainer.getAnimation(UnitAnimationType::Standing));
+        setAnimation(UnitAnimationType::Standing);
     }
     else if (newState == UnitState::Moving)
     {
         // TODO: Peasants may need to play the MovingWithBag animation
-        setAnimation(animationContainer.getAnimation(UnitAnimationType::Moving));
+        setAnimation(UnitAnimationType::Moving);
     }
     else if (newState == UnitState::Attacking)
     {
-        setAnimation(animationContainer.getAnimation(UnitAnimationType::Attacking));
+        setAnimation(UnitAnimationType::Attacking);
     }
 }
 
@@ -100,9 +99,29 @@ void UnitAnimationComponent::facingChanged(Facing)
     refreshSpriteComponent();
 }
 
-void UnitAnimationComponent::setAnimation(const Animation* newAnimation)
+void UnitAnimationComponent::addListener(std::weak_ptr<AnimationListener> listener)
 {
+    if (listener.expired())
+    {
+        return;
+    }
+    listeners.emplace(listener);
+}
+
+void UnitAnimationComponent::removeListener(std::weak_ptr<AnimationListener> listener)
+{
+    if (listener.expired())
+    {
+        return;
+    }
+    listeners.erase(listener);
+}
+
+void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
+{
+    const Animation* newAnimation = animationContainer.getAnimation(animType);
     animation = newAnimation;
+    currentAnimType = animType;
     msPassedCurrentAnimFrame = 0;
     setCurrentAnimFrame(0);
 }
@@ -128,9 +147,17 @@ void UnitAnimationComponent::refreshSpriteComponent() const
 
 void UnitAnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
 {
-    int newAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
+    const int prevAnimFrame = currentAnimFrame;
+    const int newAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
+
     setCurrentAnimFrame(newAnimFrame);
     msPassedCurrentAnimFrame -= msPerAnimFrame;
+
+    if (newAnimFrame < prevAnimFrame)
+    {
+        CollectionUtils::forEachWeakPtr<AnimationListener>(
+                listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
+    }
 }
 
 int UnitAnimationComponent::getCurrentSpriteIndex() const

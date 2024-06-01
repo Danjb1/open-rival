@@ -8,6 +8,7 @@
 #include "entity/Decoration.h"
 #include "entity/Palisade.h"
 #include "entity/Unit.h"
+#include "entity/components/AttackComponent.h"
 #include "entity/components/BuildingAnimationComponent.h"
 #include "entity/components/FlyerComponent.h"
 #include "entity/components/HealthComponent.h"
