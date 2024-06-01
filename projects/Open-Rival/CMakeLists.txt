@@ -102,14 +102,15 @@ file(GLOB_RECURSE RESOURCE_LIST "${OPEN_RIVAL_RES_SRC_DIR}/*")
 
 # Create a custom command to copy resources
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${OPEN_RIVAL_RES_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/res
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/res
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${OPEN_RIVAL_RES_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/res
     DEPENDS ${RESOURCE_LIST}
     COMMENT "Copying resources to build directory"
 )
 
 # Create a custom target that depends on the custom command
-add_custom_target(copy_assets ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_target(copy_assets ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/res)
 
 # Ensure the custom target runs before Open-Rival
 add_dependencies(Open-Rival copy_assets)
