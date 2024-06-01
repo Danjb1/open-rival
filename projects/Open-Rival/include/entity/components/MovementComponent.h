@@ -113,6 +113,8 @@ private:
     static constexpr int maxTicksToWaitForTileToClear = 4;
 
     int ticksSpentWaiting = 0;
+
+    bool isWaitingForIdle = false;
 };
 
 }  // namespace Rival

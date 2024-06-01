@@ -1,6 +1,7 @@
 #include "entity/components/AttackComponent.h"
 
 #include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MovementComponent.h"
@@ -28,44 +29,21 @@ AttackComponent::AttackComponent()
 void AttackComponent::onEntityAddedToWorld(World*)
 {
     weakMovementComp = entity->getComponentWeak<MovementComponent>(MovementComponent::key);
-    if (auto movementComponent = weakMovementComp.lock())
-    {
-        std::weak_ptr<AttackComponent> weakThis = entity->getComponentWeak<AttackComponent>(key);
-        movementComponent->addListener(weakThis);
-    }
-
     weakFacingComp = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
-}
-
-void AttackComponent::destroy()
-{
-    if (auto movementComponent = weakMovementComp.lock())
-    {
-        std::weak_ptr<AttackComponent> weakThis = entity->getComponentWeak<AttackComponent>(key);
-        movementComponent->removeListener(weakThis);
-    }
-}
-
-void AttackComponent::onUnitMoveStart(const MapNode*)
-{
-    // Do nothing
-}
-
-void AttackComponent::onUnitPaused()
-{
-    // Do nothing
-}
-
-void AttackComponent::onUnitStopped()
-{
-    if (attackState == AttackState::WaitingForMovement)
-    {
-        attackState = AttackState::None;
-    }
 }
 
 void AttackComponent::update(int delta)
 {
+    if (attackState == AttackState::WaitingForIdle)
+    {
+        Unit* unit = entity->as<Unit>();
+        if (unit->isBusy())
+        {
+            return;
+        }
+        attackState = AttackState::None;
+    }
+
     if (attackState == AttackState::Attacking)
     {
         updateAttack(delta);
@@ -150,16 +128,12 @@ bool AttackComponent::isInRange(const MapNode& node) const
 
 void AttackComponent::requestAttack(std::shared_ptr<Entity> targetEntity)
 {
-    if (attackState != AttackState::None)
+    Unit* unit = entity->as<Unit>();
+    if (unit->isBusy())
     {
-        return;
-    }
-
-    auto moveComponent = weakMovementComp.lock();
-    if (moveComponent && moveComponent->isCurrentlyMoving())
-    {
-        moveComponent->requestStop();
-        attackState = AttackState::WaitingForMovement;
+        // Don't interrupt another action
+        unit->abortAction();
+        attackState = AttackState::WaitingForIdle;
     }
     else
     {

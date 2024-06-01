@@ -5,9 +5,6 @@
 <!----------------------------------------------------------------------------->
 
 - Don't show attack cursor when trying to attack self? (what if multiple units are selected?)
-- MoveComponent should wait for the current attack to finish
-    - AttackComponent waits for movement already, but this is something we'll need a lot
-    - Implement a generic "stop what you're doing and give me a callback" mechanism
 - Attack duration should be driven by animation data
 - Play a sound when an attack hits
 - Remove units when their health is depleted
@@ -396,6 +393,7 @@
 - Provide an easier way to get components that are guaranteed to exist for a Unit
 - Revise usages of weakThis in EntityComponents (use std::enable_shared_from_this<EntityComponent>)
 - Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
+- Unit doesn't need to hold weak_ptrs since it outlives its components
 
 #### Rendering
 
