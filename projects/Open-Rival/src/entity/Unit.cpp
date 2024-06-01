@@ -100,4 +100,28 @@ std::weak_ptr<Unit> Unit::getWeakThis()
     return std::dynamic_pointer_cast<Unit>(shared_from_this());
 }
 
+bool Unit::isBusy() const
+{
+    return state != UnitState::Idle;
+}
+
+void Unit::abortAction()
+{
+    switch (state)
+    {
+    case UnitState::Moving:
+        if (auto movementComponent = weakMovementComponent.lock())
+        {
+            movementComponent->requestStop();
+        }
+        break;
+    case UnitState::Attacking:
+        if (auto attackComponent = weakAttackComponent.lock())
+        {
+            attackComponent->setTarget({});
+        }
+        break;
+    }
+}
+
 }  // namespace Rival

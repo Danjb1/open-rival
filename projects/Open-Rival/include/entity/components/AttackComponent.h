@@ -19,7 +19,7 @@ class World;
 enum class AttackState : std::uint8_t
 {
     None,
-    WaitingForMovement,
+    WaitingForIdle,
     Attacking,
     Cooldown
 };
@@ -55,24 +55,15 @@ struct AttackInstance
 /**
  * Component that allows an entity to attack.
  */
-class AttackComponent
-    : public EntityComponent
-    , public MovementListener
+class AttackComponent : public EntityComponent
 {
 public:
     AttackComponent();
 
     // Begin EntityComponent override
     void onEntityAddedToWorld(World*) override;
-    void destroy() override;
     void update(int delta) override;
     // End EntityComponent override
-
-    // Begin MovementComponent override
-    void onUnitMoveStart(const MapNode* nextNode) override;
-    void onUnitPaused() override;
-    void onUnitStopped() override;
-    // End MovementComponent override
 
     void setTarget(std::weak_ptr<Entity> newTarget);
 

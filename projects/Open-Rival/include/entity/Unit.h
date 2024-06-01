@@ -86,6 +86,12 @@ public:
     /** Sets this Unit's state. */
     void setState(UnitState state);
 
+    /** Determines if the Unit is currently moving or performing an action. */
+    bool isBusy() const;
+
+    /** Aborts the action currently in progress. */
+    void abortAction();
+
 private:
     /** Gets a weak pointer to this Unit.
      * NOTE: This requires that this Unit was created using std::make_shared. */

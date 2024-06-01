@@ -1,6 +1,7 @@
 #include "entity/components/MovementComponent.h"
 
 #include "entity/Entity.h"
+#include "entity/Unit.h"
 #include "game/World.h"
 #include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
@@ -47,6 +48,16 @@ MovementComponent::MovementComponent(
 
 void MovementComponent::update(int delta)
 {
+    if (isWaitingForIdle)
+    {
+        Unit* unit = entity->as<Unit>();
+        if (unit->isBusy())
+        {
+            return;
+        }
+        isWaitingForIdle = false;
+    }
+
     // Prepare the next movement if we are not currently moving between tiles
     if (!movement.isValid())
     {
@@ -193,6 +204,15 @@ bool MovementComponent::tryStartNextMovement()
             // Still can't move yet!
             return false;
         }
+    }
+
+    Unit* unit = entity->as<Unit>();
+    if (unit->getState() != UnitState::Moving && unit->isBusy())
+    {
+        // Don't interrupt another action
+        unit->abortAction();
+        isWaitingForIdle = true;
+        return false;
     }
 
     startNextMovement(*world);
