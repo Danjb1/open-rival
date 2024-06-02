@@ -3,7 +3,6 @@
 #include "entity/Entity.h"
 #include "entity/Unit.h"
 #include "game/World.h"
-#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -107,6 +106,7 @@ void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& contex
     prepareForMovement();
 
     const MapNode startPos = getStartPosForNextMovement();
+    cachedHints = hints;
     route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker, context, hints);
 
     if (route.isEmpty())
@@ -125,6 +125,13 @@ void MovementComponent::requestStop()
     }
 
     route = {};
+
+    if (!isCurrentlyMoving())
+    {
+        // It is necessary to call this in case `requestStop` is called immediately after we arrive at a new tile,
+        // in case we had more movement planned.
+        stopMovement();
+    }
 }
 
 bool MovementComponent::isCurrentlyMoving() const
@@ -244,25 +251,6 @@ void MovementComponent::startNextMovement(PathfindingMap& map)
             listeners, [&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
 }
 
-bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints)
-{
-    if (!tryRepath(hints))
-    {
-        // This should never happen, but just in case.
-        // At the very least we would expect a path to the obstruction to be returned.
-        return false;
-    }
-
-    const MapNode* nextNode = route.peek();
-    if (passabilityChecker.isNodeObstructed(map, *nextNode))
-    {
-        // Alternate route is still obstructed
-        return false;
-    }
-
-    return true;
-}
-
 bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap& map)
 {
     if (ticksSpentWaiting < maxTicksToWaitForTileToClear)
@@ -280,17 +268,43 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
     // Reset the timer so we don't try to repath every tick
     ticksSpentWaiting = 0;
 
-    // Repath, but treat the next node as an obstruction.
-    // This behavior is useful in several cases:
-    // 1) Units can pathfind around bottlenecks, e.g. when moving a group around a corner, units would otherwise try to
-    //    move in single-file and form a queue along the "optimal" route.
-    // 2) Units can overtake slower units.
-    // 3) Units can move out of each other's way if they are trying to walk through each other.
-    const MapNode* nextNode = route.peek();
-    Pathfinding::Hints hints;
-    hints.nodesToAvoid.insert(*nextNode);
+    return tryRepathAroundObstruction(map);
+}
 
-    return tryRepathAroundObstruction(map, hints);
+bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map)
+{
+    /*
+     * Repath, but treat the next node as an obstruction.
+     *
+     * This behavior is useful in several cases:
+     * 1) Units can pathfind around bottlenecks, e.g. when moving a group around a corner, units would otherwise try to
+     *    move in single-file and form a queue along the "optimal" route.
+     * 2) Units can overtake slower units.
+     * 3) Units can move out of each other's way if they are trying to walk through each other.
+     *
+     * Note that each time we attempt to repath around an obstruction, nodesToAvoid will grow. We should periodically
+     * check that these nodes are still obstructed, otherwise we may end up taking a sub-optimal route.
+     */
+    const MapNode* nextNode = route.peek();
+    cachedHints.nodesToAvoid.insert(*nextNode);
+
+    if (!tryRepath(cachedHints))
+    {
+        // This should never happen, but just in case.
+        // At the very least we would expect a path to the obstruction to be returned.
+        return false;
+    }
+
+    nextNode = route.peek();
+
+    if (!passabilityChecker.isNodeObstructed(map, *nextNode))
+    {
+        // We have found a way around the obstruction
+        return true;
+    }
+
+    // Alternate route is still obstructed
+    return false;
 }
 
 bool MovementComponent::tryRepath(Pathfinding::Hints hints)

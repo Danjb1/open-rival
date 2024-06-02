@@ -81,22 +81,6 @@ private:
     /** Base movement cost for moving between two tiles. */
     static constexpr float baseMovementCost = 1.f;
 
-    /**
-     * Movement cost when trying to move into a tile that is currently obstructed.
-     * Note that when moving a group, obstructions at the destination are inevitable.
-     *
-     * This is tricky to get right:
-     * - If this is too low, units will not be able to pathfind around obstructions in cases where the alternative route
-     *   is long.
-     * - If this is too high, group movement becomes computationally expensive because units will waste their time
-     *   trying long alternative routes to avoid (inevitable) obstructions.
-     *
-     * To help with this, we could make obstructions more expensive the further they are from the goal. This would mean
-     * that units try harder to pathfind around obstructions when they still have a long way to travel, but they
-     * become "lazier" as they near the destination.
-     */
-    static constexpr float obstructedMovementCost = 3.f;
-
     /*
      * Movement cost multiplier for horizontal movement.
      *
@@ -399,7 +383,7 @@ float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 {
     const bool shouldAvoidNode = hints.nodesToAvoid.find(to) != hints.nodesToAvoid.cend();
     const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
-    const float baseCost = (shouldAvoidNode || isObstructed) ? obstructedMovementCost : baseMovementCost;
+    const float baseCost = (shouldAvoidNode || isObstructed) ? hints.obstructedMovementCost : baseMovementCost;
 
     const Facing movementDir = MapUtils::getDir(from, to);
     const float dirMultiplier =

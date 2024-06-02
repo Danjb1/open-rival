@@ -84,8 +84,8 @@ private:
     void startNextMovement(PathfindingMap& map);
     void resetPassability();
 
-    bool tryRepathAroundObstruction(const PathfindingMap& map, Pathfinding::Hints hints = {});
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
+    bool tryRepathAroundObstruction(const PathfindingMap& map);
     bool tryRepath(Pathfinding::Hints hints = {});
 
     void onLeftPreviousTile();
@@ -111,6 +111,8 @@ protected:
 private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
     static constexpr int maxTicksToWaitForTileToClear = 4;
+
+    Pathfinding::Hints cachedHints;
 
     int ticksSpentWaiting = 0;
 
