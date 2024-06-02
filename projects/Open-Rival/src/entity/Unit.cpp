@@ -44,7 +44,7 @@ void Unit::onUnitMoveStart(const MapNode*)
 
 void Unit::onUnitPaused()
 {
-    setState(UnitState::Idle);
+    setState(UnitState::WaitingToMove);
 }
 
 void Unit::onUnitStopped()
@@ -103,7 +103,7 @@ std::weak_ptr<Unit> Unit::getWeakThis()
 
 bool Unit::isBusy() const
 {
-    return state != UnitState::Idle;
+    return state != UnitState::Idle && state != UnitState::WaitingToMove;
 }
 
 void Unit::abortAction()
@@ -111,6 +111,7 @@ void Unit::abortAction()
     switch (state)
     {
     case UnitState::Moving:
+    case UnitState::WaitingToMove:
         if (auto movementComponent = weakMovementComponent.lock())
         {
             movementComponent->requestStop();
