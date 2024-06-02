@@ -82,13 +82,13 @@ void MoveCommand::execute(GameCommandContext& context)
             continue;
         }
 
-        moveComponent->moveTo(destination, pathfindingContext);
-
         if (auto attackComponent = entity->getComponent<AttackComponent>(AttackComponent::key))
         {
             // Clear current target when a MoveCommand is issued
             attackComponent->setTarget({});
         }
+
+        moveComponent->moveTo(destination, pathfindingContext);
     }
 }
 

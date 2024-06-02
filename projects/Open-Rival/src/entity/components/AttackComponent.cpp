@@ -154,8 +154,8 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
         facingComponent->setFacing(newFacing);
     }
 
-    CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
     attackState = AttackState::Attacking;
+    CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
 }
 
 void AttackComponent::moveToTarget(const MapNode& node)
@@ -176,7 +176,7 @@ void AttackComponent::moveToTarget(const MapNode& node)
     // TODO: Avoid repathing every tick if the target is unreachable
     Pathfinding::Context context;
     Pathfinding::Hints hints;
-    // We wants units to make every effort to reach the destination;
+    // We want units to make every effort to reach the destination;
     // this forces them to pathfind reasonably far around obstructions.
     // TODO: This might not be enough, still.
     hints.obstructedMovementCost = 8;

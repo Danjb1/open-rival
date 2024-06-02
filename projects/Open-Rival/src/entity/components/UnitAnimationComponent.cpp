@@ -51,6 +51,11 @@ void UnitAnimationComponent::destroy()
     {
         facingComponent->setListener(nullptr);
     }
+
+    if (Unit* unit = entity->as<Unit>())
+    {
+        unit->removeStateListener(this);
+    }
 }
 
 void UnitAnimationComponent::update(int delta)
@@ -79,7 +84,7 @@ void UnitAnimationComponent::update(int delta)
 
 void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
 {
-    if (newState == UnitState::Idle)
+    if (newState == UnitState::Idle || newState == UnitState::WaitingToMove)
     {
         setAnimation(UnitAnimationType::Standing);
     }
@@ -119,6 +124,12 @@ void UnitAnimationComponent::removeListener(std::weak_ptr<AnimationListener> lis
 
 void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
 {
+    if (animType == currentAnimType)
+    {
+        // No change
+        return;
+    }
+
     const Animation* newAnimation = animationContainer.getAnimation(animType);
     animation = newAnimation;
     currentAnimType = animType;
@@ -155,6 +166,7 @@ void UnitAnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
 
     if (newAnimFrame < prevAnimFrame)
     {
+        // TODO: Don't bother emitting events unless they're needed (e.g. attacks)
         CollectionUtils::forEachWeakPtr<AnimationListener>(
                 listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
     }

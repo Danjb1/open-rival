@@ -18,6 +18,7 @@ struct MapNode;
 enum class UnitState : std::uint8_t
 {
     Idle,
+    WaitingToMove,
     Moving,
     Attacking
 };
@@ -84,7 +85,8 @@ public:
         return state;
     }
 
-    /** Sets this Unit's state. */
+    /** Sets this Unit's state.
+     * Be careful about calling this; some actions do not like to be interrupted. */
     void setState(UnitState state);
 
     /** Determines if the Unit is currently moving or performing an action. */

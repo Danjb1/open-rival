@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/Pathfinding.h"
@@ -40,7 +41,9 @@ struct Movement
 /**
  * Base class for a component that allows entities to move between tiles.
  */
-class MovementComponent : public EntityComponent
+class MovementComponent
+    : public EntityComponent
+    , public UnitStateListener
 {
 public:
     MovementComponent(const Pathfinding::PassabilityChecker& passabilityChecker,
@@ -48,8 +51,14 @@ public:
     virtual ~MovementComponent() = default;
 
     // Begin EntityComponent override
+    void onEntityAddedToWorld(World* world) override;
+    void destroy() override;
     void update(int delta) override;
     // End EntityComponent override
+
+    // Begin UnitStateListener override
+    void onUnitStateChanged(const UnitState newState) override;
+    // End UnitStateListener override
 
     void addListener(std::weak_ptr<MovementListener> listener);
     void removeListener(std::weak_ptr<MovementListener> listener);

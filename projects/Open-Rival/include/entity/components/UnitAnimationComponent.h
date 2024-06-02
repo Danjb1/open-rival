@@ -35,13 +35,13 @@ public:
     UnitAnimationComponent(const AnimationContainer& unitDef);
 
     // Begin EntityComponent override
-    virtual void onEntityAddedToWorld(World* world) override;
-    virtual void destroy() override;
-    virtual void update(int delta) override;
+    void onEntityAddedToWorld(World* world) override;
+    void destroy() override;
+    void update(int delta) override;
     // End EntityComponent override
 
     // Begin UnitStateListener override
-    virtual void onUnitStateChanged(const UnitState newState) override;
+    void onUnitStateChanged(const UnitState newState) override;
     // End UnitStateListener override
 
     // Begin FacingListener override
@@ -76,7 +76,7 @@ private:
     const AnimationContainer& animationContainer;
 
     const Animation* animation;
-    UnitAnimationType currentAnimType;
+    UnitAnimationType currentAnimType = UnitAnimationType::Standing;
 
     int currentAnimFrame = 0;
 

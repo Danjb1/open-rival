@@ -4,8 +4,13 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- BUG: Units sometimes get stuck in an Attacking state
-
+- Movement / actions are very fragile; if methods are called out of order, everything breaks
+    - Add unit tests
+    - Create function to wrap `state != UnitState::Moving && state != UnitState::WaitingToMove`
+    - MovementComponent::isWaitingForIdle is ugly
+    - Prevent illegal unit state changes
+- Transport vehicles should not be able to attack
+    - These break because they don't have animations!
 - Play a sound when an attack hits
 - Remove units when their health is depleted
 - Play a sound when a unit dies

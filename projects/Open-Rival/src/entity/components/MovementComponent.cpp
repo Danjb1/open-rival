@@ -3,6 +3,7 @@
 #include "entity/Entity.h"
 #include "entity/Unit.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace Rival {
@@ -43,6 +44,36 @@ MovementComponent::MovementComponent(
     , passabilityChecker(passabilityChecker)
     , passabilityUpdater(passabilityUpdater)
 {
+}
+
+void MovementComponent::onEntityAddedToWorld(World*)
+{
+    Unit* unit = entity->as<Unit>();
+    if (!unit)
+    {
+        LOG_WARN("UnitAnimationComponent must be attached to a Unit!");
+        return;
+    }
+
+    unit->addStateListener(this);
+}
+
+void MovementComponent::destroy()
+{
+    if (Unit* unit = entity->as<Unit>())
+    {
+        unit->removeStateListener(this);
+    }
+}
+
+void MovementComponent::onUnitStateChanged(const UnitState newState)
+{
+    if (newState != UnitState::Moving && newState != UnitState::WaitingToMove)
+    {
+        // It is possible that a route was planned but never started.
+        // We need to clear this route when we start a new action.
+        route = {};
+    }
 }
 
 void MovementComponent::update(int delta)
@@ -124,14 +155,16 @@ void MovementComponent::requestStop()
         return;
     }
 
+    // Clear the route to prevent further movement
     route = {};
 
-    if (!isCurrentlyMoving())
+    if (isCurrentlyMoving())
     {
-        // It is necessary to call this in case `requestStop` is called immediately after we arrive at a new tile,
-        // in case we had more movement planned.
-        stopMovement();
+        // Let the current movement finish naturally
+        return;
     }
+
+    stopMovement();
 }
 
 bool MovementComponent::isCurrentlyMoving() const
@@ -217,8 +250,8 @@ bool MovementComponent::tryStartNextMovement()
     if (unit->getState() != UnitState::Moving && unit->isBusy())
     {
         // Don't interrupt another action
-        unit->abortAction();
         isWaitingForIdle = true;
+        unit->abortAction();
         return false;
     }
 
