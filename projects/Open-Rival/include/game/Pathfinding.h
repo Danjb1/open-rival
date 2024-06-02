@@ -157,6 +157,26 @@ struct Hints
 {
     /** Nodes that should be treated as obstructed. */
     std::unordered_set<MapNode> nodesToAvoid;
+
+    /**
+     * Movement cost when trying to move into a tile that is currently obstructed.
+     *
+     * This should vary based on context. For example, units that are trying to attack should be more determined to
+     * reach the target.
+     *
+     * Note that when moving a group, obstructions at the destination are inevitable.
+     *
+     * This is tricky to get right:
+     * - If this is too low, units will not be able to pathfind around obstructions in cases where the alternative route
+     *   is long.
+     * - If this is too high, group movement becomes computationally expensive because units will waste their time
+     *   trying long alternative routes to avoid (inevitable) obstructions.
+     *
+     * To help with this, we could make obstructions more expensive the further they are from the goal. This would mean
+     * that units try harder to pathfind around obstructions when they still have a long way to travel, but they
+     * become "lazier" as they near the destination.
+     */
+    float obstructedMovementCost = 3.f;
 };
 
 /**

@@ -175,7 +175,12 @@ void AttackComponent::moveToTarget(const MapNode& node)
 
     // TODO: Avoid repathing every tick if the target is unreachable
     Pathfinding::Context context;
-    moveComponent->moveTo(node, context);
+    Pathfinding::Hints hints;
+    // We wants units to make every effort to reach the destination;
+    // this forces them to pathfind reasonably far around obstructions.
+    // TODO: This might not be enough, still.
+    hints.obstructedMovementCost = 8;
+    moveComponent->moveTo(node, context, hints);
 }
 
 void AttackComponent::setTarget(std::weak_ptr<Entity> weakNewTarget)

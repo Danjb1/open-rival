@@ -4,6 +4,8 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+- BUG: Units sometimes get stuck in an Attacking state
+
 - Play a sound when an attack hits
 - Remove units when their health is depleted
 - Play a sound when a unit dies
@@ -12,8 +14,6 @@
 - Respect unit stats (accuracy, damage, armor, speed, range)
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
-- BUG: Units stop moving when they are obstructed, even when they are trying to attack and the target is reachable
-    - When attacking, need to change passability
 - Implement projectiles
 - Ensure all players share the same random seed (use this for SoundBanks as well!)
 
@@ -130,6 +130,7 @@
 - Show "star" effect when sending troops somewhere
 - Passability debug visualisation
 - Pathfinding debug visualisation
+- Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
 
 ### Animations
 
