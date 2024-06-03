@@ -135,6 +135,14 @@ void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
     currentAnimType = animType;
     msPassedCurrentAnimFrame = 0;
     setCurrentAnimFrame(0);
+
+    const int numAnimFrames = getNumAnimFrames();
+    if (numAnimFrames == 1)
+    {
+        // A single-frame animation is finished immediately!
+        CollectionUtils::forEachWeakPtr<AnimationListener>(
+                listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
+    }
 }
 
 void UnitAnimationComponent::setCurrentAnimFrame(int newAnimFrame)

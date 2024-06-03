@@ -86,13 +86,16 @@ public:
     }
 
     /** Sets this Unit's state.
-     * Be careful about calling this; some actions do not like to be interrupted. */
+     * Normally, a Unit's state should not be changed if the Unit is busy.
+     * Call `abortAction` instead and wait for the Unit to become free. */
     void setState(UnitState state);
 
-    /** Determines if the Unit is currently moving or performing an action. */
+    /** Determines if the Unit is currently busy.
+     * Call `abortAction` to free up a busy Unit. */
     bool isBusy() const;
 
-    /** Aborts the action currently in progress. */
+    /** Aborts the action currently in progress.
+     * It may take some time for the action to be fully stopped. */
     void abortAction();
 
 private:

@@ -14,9 +14,8 @@ using namespace Rival;
 
 namespace TestWalkerComponent {
 
-SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
+SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
 {
-
     GIVEN("A unit with a WalkerComponent")
     {
         World world(5, 5, false);
@@ -136,7 +135,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][movement-component]")
     }
 }
 
-SCENARIO("WalkerComponent can move a unit according to its route", "[components][movement-component]")
+SCENARIO("WalkerComponent can move a unit according to its route", "[components][walker-component]")
 {
     World world(5, 5, false);
 

@@ -78,14 +78,14 @@ void MovementComponent::onUnitStateChanged(const UnitState newState)
 
 void MovementComponent::update(int delta)
 {
-    if (isWaitingForIdle)
+    if (wasAbortActionRequested)
     {
         Unit* unit = entity->as<Unit>();
         if (unit->isBusy())
         {
             return;
         }
-        isWaitingForIdle = false;
+        wasAbortActionRequested = false;
     }
 
     // Prepare the next movement if we are not currently moving between tiles
@@ -250,7 +250,7 @@ bool MovementComponent::tryStartNextMovement()
     if (unit->getState() != UnitState::Moving && unit->isBusy())
     {
         // Don't interrupt another action
-        isWaitingForIdle = true;
+        wasAbortActionRequested = true;
         unit->abortAction();
         return false;
     }
