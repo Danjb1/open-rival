@@ -13,7 +13,13 @@
 
 namespace EntityTestUtils {
 
-UnitConfig defaultUnitConfig;
+UnitConfig makeDefaultUnitConfig()
+{
+    UnitConfig cfg;
+    cfg.animations.insert({ UnitAnimationType::Attacking, Animation(0, 3) });
+    return cfg;
+}
+UnitConfig defaultUnitConfig = makeDefaultUnitConfig();
 
 const Animation* UnitConfig::getAnimation(UnitAnimationType animType) const
 {

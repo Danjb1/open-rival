@@ -125,7 +125,7 @@ private:
 
     int ticksSpentWaiting = 0;
 
-    bool isWaitingForIdle = false;
+    bool wasAbortActionRequested = false;
 };
 
 }  // namespace Rival

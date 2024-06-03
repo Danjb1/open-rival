@@ -76,7 +76,7 @@ private:
     const AnimationContainer& animationContainer;
 
     const Animation* animation;
-    UnitAnimationType currentAnimType = UnitAnimationType::Standing;
+    UnitAnimationType currentAnimType = UnitAnimationType::Uninitialized;
 
     int currentAnimFrame = 0;
 

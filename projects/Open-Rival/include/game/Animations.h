@@ -6,6 +6,7 @@ namespace Rival {
 
 enum class UnitAnimationType : std::uint8_t
 {
+    Uninitialized,
     Standing,
     StandingWithBag,
     Moving,
