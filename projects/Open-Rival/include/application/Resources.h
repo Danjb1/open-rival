@@ -58,8 +58,8 @@ public:
 class AudioStore
 {
 public:
-    virtual const WaveFile& getSound(int id) const = 0;
-    virtual const MidiFile& getMidi(int id) const = 0;
+    virtual std::shared_ptr<const WaveFile> getSound(int id) const = 0;
+    virtual std::shared_ptr<const MidiFile> getMidi(int id) const = 0;
 };
 
 /**
@@ -107,8 +107,8 @@ public:
     // End FontStore override
 
     // Begin SoundStore override
-    const WaveFile& getSound(int id) const override;
-    const MidiFile& getMidi(int id) const override;
+    std::shared_ptr<const WaveFile> getSound(int id) const override;
+    std::shared_ptr<const MidiFile> getMidi(int id) const override;
     // End SoundStore override
 
     // Begin DataStore override
@@ -131,8 +131,8 @@ private:
     Spritesheet initMapBorderSpritesheet();
     Spritesheet initPortraitSpritesheet();
     Spritesheet initHitboxSpritesheet();
-    std::vector<WaveFile> initSounds();
-    std::vector<MidiFile> initMidis();
+    std::vector<std::shared_ptr<const WaveFile>> initSounds();
+    std::vector<std::shared_ptr<const MidiFile>> initMidis();
     std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
     std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
 
@@ -192,10 +192,10 @@ private:
     std::vector<std::shared_ptr<const TextureAtlas>> textureAtlases;
 
     // Wave Files
-    std::vector<WaveFile> sounds;
+    std::vector<std::shared_ptr<const WaveFile>> sounds;
 
     // MIDI Files
-    std::vector<MidiFile> midis;
+    std::vector<std::shared_ptr<const MidiFile>> midis;
 
     // Data
     std::unordered_map<UnitType, UnitDef> unitDefs;

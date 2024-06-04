@@ -2,6 +2,7 @@
 
 #include <RtMidi.h>
 
+#include <memory>
 #include <mutex>
 
 #include "audio/MidiFile.h"
@@ -24,7 +25,7 @@ public:
      *
      * Throws an exception if the MidiPlayer is not initialized.
      */
-    void play(const MidiFile& midi);
+    void play(std::shared_ptr<const MidiFile> midi);
 
     /**
      * Stops the current track.

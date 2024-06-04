@@ -32,7 +32,6 @@ public:
 
 private:
     const AudioStore& audioStore;
-
     AudioSystem& audioSystem;
 
     const UnitDef& unitDef;

@@ -1,19 +1,25 @@
 #include "entity/components/AttackComponent.h"
 
+#include "application/Resources.h"
+#include "audio/AudioSystem.h"
+#include "audio/SoundSource.h"
 #include "entity/Entity.h"
 #include "entity/Unit.h"
 #include "entity/components/AttackListener.h"
 #include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MovementComponent.h"
+#include "game/UnitDef.h"
 #include "game/World.h"
 
 namespace Rival {
 
 const std::string AttackComponent::key = "attack";
 
-AttackComponent::AttackComponent()
+AttackComponent::AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem)
     : EntityComponent(key)
+    , audioStore(audioStore)
+    , audioSystem(audioSystem)
 {
 }
 
@@ -102,8 +108,16 @@ void AttackComponent::deliverAttack()
         return;
     }
 
+    // Damage target
     HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
     healthComp->addHealth(-50);  // TMP
+
+    // TMP: Hardcode hit sounds for now
+    const SoundBank soundBank({ 311, 349, 350, 351, 352, 353, 354 });
+
+    // Play hit sound
+    int soundId = soundBank.getRandomSound();
+    audioSystem.playSound(audioStore, soundId);
 }
 
 void AttackComponent::switchToNewTarget()

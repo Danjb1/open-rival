@@ -105,12 +105,12 @@ Spritesheet Resources::initHitboxSpritesheet()
     return Spritesheet(tex, 64, 64, 0);
 }
 
-std::vector<WaveFile> Resources::initSounds()
+std::vector<std::shared_ptr<const WaveFile>> Resources::initSounds()
 {
     return {};
 }
 
-std::vector<MidiFile> Resources::initMidis()
+std::vector<std::shared_ptr<const MidiFile>> Resources::initMidis()
 {
     return {};
 }
@@ -200,12 +200,12 @@ const Font& Resources::getFontRegular() const
     return fontRegular;
 }
 
-const WaveFile& Resources::getSound(int id) const
+std::shared_ptr<const WaveFile> Resources::getSound(int id) const
 {
     return sounds.at(id);
 }
 
-const MidiFile& Resources::getMidi(int id) const
+std::shared_ptr<const MidiFile> Resources::getMidi(int id) const
 {
     return midis.at(id);
 }

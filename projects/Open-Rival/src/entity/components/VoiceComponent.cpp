@@ -1,11 +1,7 @@
 #include "entity/components/VoiceComponent.h"
 
-#include <AL/al.h>
-
 #include "application/Resources.h"
 #include "audio/AudioSystem.h"
-#include "audio/SoundSource.h"
-#include "audio/WaveFile.h"
 #include "entity/Entity.h"
 #include "entity/Unit.h"
 #include "game/UnitDef.h"
@@ -43,11 +39,9 @@ void VoiceComponent::playSound(UnitSoundType soundType)
     }
 
     int soundId = soundBank->getRandomSound();
-    const WaveFile& waveFile = audioStore.getSound(soundId);
-    SoundSource soundSource = { waveFile };
-    soundSource.unitType = unit->getUnitType();
-
-    audioSystem.playSound(soundSource);
+    SoundConfig soundCfg;
+    soundCfg.unitType = unit->getUnitType();
+    audioSystem.playSound(audioStore, soundId, soundCfg);
 }
 
 bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
@@ -58,7 +52,7 @@ bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
     for (const auto& playedSound : playedSounds)
     {
         const SoundSource& source = playedSound.second;
-        if (source.unitType != unitType)
+        if (source.cfg.unitType != unitType)
         {
             continue;
         }

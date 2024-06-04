@@ -2,8 +2,10 @@
 
 #include <utility>
 
+#include "application/Resources.h"
 #include "audio/AudioUtils.h"
 #include "audio/MidiPlayer.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -35,7 +37,7 @@ void AudioSystem::midiThreadLoop()
 void AudioSystem::waitForMidi()
 {
     std::unique_lock<std::mutex> midiReadyLock(midiMutex);
-    while (midiActive && currentMidiTrack.isEmpty())
+    while (midiActive && currentMidiTrack->isEmpty())
     {
         midiReadyCondition.wait(midiReadyLock);
     }
@@ -74,7 +76,7 @@ void AudioSystem::destroyMidiSystem()
     midiThread.join();
 }
 
-void AudioSystem::playMidi(MidiFile midi)
+void AudioSystem::playMidi(std::shared_ptr<const MidiFile> midi)
 {
     if (!midiActive)
     {
@@ -170,6 +172,19 @@ void AudioSystem::destroySoundSystem()
 void AudioSystem::stopAllSounds()
 {
     // TODO
+}
+
+void AudioSystem::playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg)
+{
+    std::shared_ptr<const WaveFile> waveFile = audioStore.getSound(soundId);
+    if (!waveFile)
+    {
+        LOG_WARN("Tried to play invalid sound: {}", soundId);
+        return;
+    }
+
+    SoundSource soundSource = { waveFile, cfg };
+    playSound(soundSource);
 }
 
 void AudioSystem::playSound(SoundSource source)

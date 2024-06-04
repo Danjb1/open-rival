@@ -2,15 +2,9 @@
 
 namespace Rival {
 
-SoundSource::SoundSource(const WaveFile& waveFile)
+SoundSource::SoundSource(std::shared_ptr<const WaveFile> waveFile, SoundConfig cfg)
     : waveFile(waveFile)
-{
-}
-
-SoundSource::SoundSource(const WaveFile& waveFile, std::vector<float> position)
-    : waveFile(waveFile)
-    , position(position)
-    , positionRelativeToListener(false)
+    , cfg(cfg)
 {
 }
 
