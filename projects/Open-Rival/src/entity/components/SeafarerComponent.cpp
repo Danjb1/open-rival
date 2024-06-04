@@ -32,29 +32,30 @@ bool SeafarerPassability::isWater(TilePassability passability) const
 
 void SeafarerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitPendingMove);
+    map.removePassability(node, TilePassability::GroundUnit);
+    map.addPassability(node, TilePassability::GroundUnitPendingMove);
 }
 
 void SeafarerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnitLeaving);
+    map.removePassability(node, TilePassability::GroundUnitPendingMove);
+    map.setPassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void SeafarerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
-    const TilePassability newPassability =
-            isPassingThrough ? TilePassability::FlyingUnitLeaving : TilePassability::FlyingUnit;
-    map.setPassability(node, TilePassability::Water | newPassability);
+    map.addPassability(node, isPassingThrough ? TilePassability::GroundUnitLeaving : TilePassability::GroundUnit);
 }
 
 void SeafarerPassability::onUnitLeftTile(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::Water);
+    map.removePassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void SeafarerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::Water | TilePassability::GroundUnit);
+    map.removePassability(node, TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving);
+    map.addPassability(node, TilePassability::GroundUnit);
 }
 
 SeafarerComponent::SeafarerComponent()

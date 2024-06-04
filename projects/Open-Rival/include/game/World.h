@@ -19,8 +19,18 @@ class Entity;
 class PathfindingMap : public MapBounds
 {
 public:
+    /** Gets the passability of a tile. */
     virtual TilePassability getPassability(const MapNode& pos) const = 0;
+
+    /** Sets the passability of a tile.
+     * Use with caution; normally addPassability and removePassability are more appropriate. */
     virtual void setPassability(const MapNode& pos, TilePassability newPassability) = 0;
+
+    /** Adds one or more passability flags to a tile. */
+    virtual void addPassability(const MapNode& pos, TilePassability newPassability) = 0;
+
+    /** Removes one or more passability flags from a tile. */
+    virtual void removePassability(const MapNode& pos, TilePassability newPassability) = 0;
 };
 
 /**
@@ -57,6 +67,8 @@ public:
     int getHeight() const override;
     TilePassability getPassability(const MapNode& pos) const override;
     void setPassability(const MapNode& pos, TilePassability newPassability) override;
+    void addPassability(const MapNode& pos, TilePassability newPassability) override;
+    void removePassability(const MapNode& pos, TilePassability newPassability) override;
     // End PathfindingMap override
 
     const std::vector<Tile>& getTiles() const

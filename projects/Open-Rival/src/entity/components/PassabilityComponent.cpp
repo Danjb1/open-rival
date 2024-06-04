@@ -15,12 +15,12 @@ PassabilityComponent::PassabilityComponent(TilePassability passability)
 
 void PassabilityComponent::onEntityAddedToWorld(World* world)
 {
-    world->setPassability(entity->getPos(), passability);
+    world->addPassability(entity->getPos(), passability);
 }
 
 void PassabilityComponent::onEntityRemovedFromWorld(World* world)
 {
-    world->setPassability(entity->getPos(), TilePassability::Clear);
+    world->removePassability(entity->getPos(), passability);
 }
 
 TilePassability PassabilityComponent::getPassability() const

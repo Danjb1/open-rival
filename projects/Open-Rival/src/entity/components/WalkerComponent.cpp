@@ -29,27 +29,30 @@ bool WalkerPassability::isNodeTraversable(const PathfindingMap& map, const MapNo
 
 void WalkerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::GroundUnitPendingMove);
+    map.removePassability(node, TilePassability::GroundUnit);
+    map.addPassability(node, TilePassability::GroundUnitPendingMove);
 }
 
 void WalkerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
+    map.removePassability(node, TilePassability::GroundUnitPendingMove);
     map.setPassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void WalkerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
 {
-    map.setPassability(node, isPassingThrough ? TilePassability::GroundUnitLeaving : TilePassability::GroundUnit);
+    map.addPassability(node, isPassingThrough ? TilePassability::GroundUnitLeaving : TilePassability::GroundUnit);
 }
 
 void WalkerPassability::onUnitLeftTile(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::Clear);
+    map.removePassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void WalkerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
-    map.setPassability(node, TilePassability::GroundUnit);
+    map.removePassability(node, TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving);
+    map.addPassability(node, TilePassability::GroundUnit);
 }
 
 WalkerComponent::WalkerComponent()

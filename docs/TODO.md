@@ -4,7 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- setPassability is problematic (there may be a flying unit there!)
 - Transport vehicles should not be able to attack
 - Play a sound when an attack hits
 - Play a sound when a unit dies
@@ -15,6 +14,7 @@
     - For melee attacks it should display a message "Could not attack there !"
 - Implement projectiles
 - Ensure all players share the same random seed (use this for SoundBanks as well!)
+- Melee attacks should not be able to target flying units
 - Units should automatically target nearby enemies
 
 <!----------------------------------------------------------------------------->
