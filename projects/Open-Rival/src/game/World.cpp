@@ -194,4 +194,15 @@ void World::setPassability(const MapNode& pos, TilePassability passability)
     tilePassability[pos.y * width + pos.x] = passability;
 }
 
+void World::addPassability(const MapNode& pos, TilePassability flags)
+{
+    tilePassability[pos.y * width + pos.x] |= flags;
+}
+
+void World::removePassability(const MapNode& pos, TilePassability flags)
+{
+    // Use bitwise AND with the inverted flags to remove the specified flags
+    tilePassability[pos.y * width + pos.x] &= ~flags;
+}
+
 }  // namespace Rival
