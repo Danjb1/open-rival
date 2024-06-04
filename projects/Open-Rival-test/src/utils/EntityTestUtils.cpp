@@ -1,5 +1,7 @@
 #include "utils/EntityTestUtils.h"
 
+#include "application/Resources.h"
+#include "audio/AudioSystem.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"
@@ -37,6 +39,8 @@ std::shared_ptr<Unit> makeUnit(const UnitConfig& cfg)
     // Horrible hacks - these should live in some kind of TestResources or TestContext object
     static std::shared_ptr<Texture> texture = std::make_shared<Texture>(0, 64, 64);
     static Spritesheet spritesheet(texture, 32, 32, 0);
+    static AudioSystem mockAudioSystem;
+    static MockAudioStore mockAudioStore;
 
     auto unit = std::make_shared<Unit>(UnitType::Knight, "", false);
     unit->attach(std::make_shared<HealthComponent>(100));
@@ -46,7 +50,7 @@ std::shared_ptr<Unit> makeUnit(const UnitConfig& cfg)
     unit->attach(std::make_shared<UnitAnimationComponent>(cfg));
     unit->attach(std::make_shared<WalkerComponent>());
     unit->attach(std::make_shared<PassabilityComponent>(TilePassability::GroundUnit));
-    unit->attach(std::make_shared<AttackComponent>());
+    unit->attach(std::make_shared<AttackComponent>(mockAudioStore, mockAudioSystem));
     return unit;
 }
 

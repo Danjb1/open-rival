@@ -48,7 +48,7 @@ static int getMessageSize(uint8_t eventId)
     return 3;
 }
 
-void MidiPlayer::play(const MidiFile& file)
+void MidiPlayer::play(std::shared_ptr<const MidiFile> file)
 {
     const std::scoped_lock<std::mutex> lock(playingMutex);
 
@@ -59,7 +59,7 @@ void MidiPlayer::play(const MidiFile& file)
 
     stopped = false;
 
-    const std::vector<midi_stream_event>& events = file.getEvents();
+    const std::vector<midi_stream_event>& events = file->getEvents();
 
     // Play the file until completion
     Uint32 startTime = SDL_GetTicks();

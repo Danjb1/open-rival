@@ -99,7 +99,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     }
 
     // AttackComponent
-    unit->attach(std::make_shared<AttackComponent>());
+    unit->attach(std::make_shared<AttackComponent>(resources, audioSystem));
 
     // VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));

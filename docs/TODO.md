@@ -4,18 +4,36 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+### Basic Functionality
+
+- Melee attacks should not be able to target flying units
 - Transport vehicles should not be able to attack
-- Play a sound when an attack hits
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
-- Respect unit stats (accuracy, damage, armor, speed, range)
+
+### Attack Types & Stats
+
+- Support multiple attack types (get range, accuracy, damage and sounds from the chosen attack)
+    - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
+- Respect unit attack speed
+- Respect target's Armor
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
 - Implement projectiles
-- Ensure all players share the same random seed (use this for SoundBanks as well!)
-- Melee attacks should not be able to target flying units
-- Units should automatically target nearby enemies
+
+### Spatial Partitioning
+
+- Units should automatically target nearby enemies (needs spatial partitioning!)
+- New methods in World:
+    - getEntitiesInRadius(point, radius)
+    - getEntityAt(point)
+    - getEntitiesInArea(rect) - for drag select and camera
+- Divide the world into a grid and have a map of cell -> entities
+    - Only check the relevant cells when retrieving entities
+    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
+- World should handle spatial partitioning internally; caller does not care about the details
+- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -52,6 +70,7 @@
 
 ### Gameplay
 
+- Units should rotate randomly
 - Store unit / building defaults
 - Load map elements
     - Mountains
@@ -347,6 +366,8 @@
 
 ### Refactoring
 
+#### General
+
 - Separate Resources from resource *loading*
     - In tests, we only need to mock resource loading
 - Use some kind of "magic enum" library for enum-to-string functionality
@@ -423,6 +444,7 @@
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
 - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 - Delete all sound sources / buffers when exiting
+- Playing sounds is quite fiddly (need both AudioStore and AudioSystem)
 
 #### UI
 

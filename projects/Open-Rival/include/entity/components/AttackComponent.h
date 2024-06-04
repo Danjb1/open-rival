@@ -13,6 +13,8 @@
 namespace Rival {
 
 class AttackListener;
+class AudioStore;
+class AudioSystem;
 class Entity;
 class FacingComponent;
 class MovementComponent;
@@ -34,7 +36,7 @@ class AttackComponent
     , public AnimationListener
 {
 public:
-    AttackComponent();
+    AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World*) override;
@@ -64,6 +66,9 @@ public:
     static const std::string key;
 
 private:
+    const AudioStore& audioStore;
+    AudioSystem& audioSystem;
+
     WeakPtrSet<AttackListener> listeners;
 
     /** Target of the current attack. */

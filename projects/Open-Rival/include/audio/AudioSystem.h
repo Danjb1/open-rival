@@ -3,6 +3,7 @@
 #include <AL/al.h>
 
 #include <condition_variable>
+#include <memory>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -11,9 +12,14 @@
 #include "audio/MidiFile.h"
 #include "audio/MidiPlayer.h"
 #include "audio/SoundSource.h"
+#include "audio/Sounds.h"
 
 namespace Rival {
 
+class AudioStore;
+class WaveFile;
+
+/** Class responsible for playing music and sounds. */
 class AudioSystem
 {
 public:
@@ -41,7 +47,7 @@ public:
      *
      * Requires that MIDI playback is enabled.
      */
-    void playMidi(MidiFile midi);
+    void playMidi(std::shared_ptr<const MidiFile> midi);
 
 private:
     /**
@@ -61,7 +67,7 @@ private:
      * If this is an empty MidiFile, the MIDI thread will wait for
      * `midiReadyCondition` to be notified.
      */
-    MidiFile currentMidiTrack;
+    std::shared_ptr<const MidiFile> currentMidiTrack;
 
     /**
      * Background thread used to play MIDI files.
@@ -109,6 +115,13 @@ public:
      * Enables or disables sound playback.
      */
     void setSoundActive(bool active);
+
+    /**
+     * Finds and plays the given sound.
+     *
+     * Requires that sound playback is enabled.
+     */
+    void playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg = {});
 
     /**
      * Plays the given sound.

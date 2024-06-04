@@ -4,9 +4,9 @@
 #include <string>
 
 #include "application/ApplicationContext.h"
+#include "application/PathUtils.h"
 #include "audio/MidsDecoder.h"
 #include "game/GameInterface.h"
-#include "application/PathUtils.h"
 #include "game/UnitType.h"
 #include "gfx/RenderUtils.h"
 #include "utils/ConfigUtils.h"
@@ -283,24 +283,24 @@ Spritesheet Resources::initHitboxSpritesheet()
     return { textures.at(txIndexHitbox), RenderUtils::hitboxSpriteWidthPx, RenderUtils::hitboxSpriteHeightPx, 0 };
 }
 
-std::vector<WaveFile> Resources::initSounds()
+std::vector<std::shared_ptr<const WaveFile>> Resources::initSounds()
 {
-    std::vector<WaveFile> soundsRead;
+    std::vector<std::shared_ptr<const WaveFile>> soundsRead;
     soundsRead.reserve(numSounds);
 
     for (int i = 0; i < numSounds; ++i)
     {
         std::string fileNum = std::to_string(i);
         std::string filename = std::string(3 - fileNum.length(), '0') + fileNum + ".wav";
-        soundsRead.emplace_back(Resources::soundDir + filename);
+        soundsRead.push_back(std::make_shared<WaveFile>(Resources::soundDir + filename));
     }
 
     return soundsRead;
 }
 
-std::vector<MidiFile> Resources::initMidis()
+std::vector<std::shared_ptr<const MidiFile>> Resources::initMidis()
 {
-    std::vector<MidiFile> midisRead;
+    std::vector<std::shared_ptr<const MidiFile>> midisRead;
 
     for (int i = 0; i < numMidis; ++i)
     {
@@ -318,7 +318,7 @@ std::vector<MidiFile> Resources::initMidis()
             throw std::runtime_error("Failed to parse MIDI file!");
         }
 
-        midisRead.emplace_back(result);
+        midisRead.push_back(std::make_shared<const MidiFile>(result));
     }
 
     return midisRead;
@@ -465,12 +465,12 @@ std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const
     return textures.at(txIndexMenuBackground);
 }
 
-const WaveFile& Resources::getSound(int id) const
+std::shared_ptr<const WaveFile> Resources::getSound(int id) const
 {
     return sounds.at(id);
 }
 
-const MidiFile& Resources::getMidi(int id) const
+std::shared_ptr<const MidiFile> Resources::getMidi(int id) const
 {
     return midis.at(id);
 }

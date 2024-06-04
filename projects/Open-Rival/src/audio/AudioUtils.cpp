@@ -2,8 +2,10 @@
 
 #include <AL/alc.h>
 
+#include <memory>
 #include <stdexcept>
 
+#include "audio/Sounds.h"
 #include "utils/LogUtils.h"
 
 namespace Rival { namespace AudioUtils {
@@ -56,13 +58,13 @@ void destroyAL()
     }
 }
 
-void checkPlaySoundALError(const WaveFile& waveFile)
+void checkPlaySoundALError(std::shared_ptr<const WaveFile> waveFile)
 {
     ALenum error = alGetError();
     if (error != AL_NO_ERROR)
     {
         LOG_ERROR("OpenAL error: {}", error);
-        throw std::runtime_error("Error playing sound: " + waveFile.filename);
+        throw std::runtime_error("Error playing sound: " + waveFile->filename);
     }
 }
 
@@ -84,8 +86,7 @@ ALenum getAudioFormat(const WavHeader& waveHeader)
     {
         return AL_FORMAT_STEREO16;
     }
-    throw std::runtime_error(
-            "Unrecognised wave format: " + std::to_string(waveHeader.numChannels) + " channels, "
+    throw std::runtime_error("Unrecognised wave format: " + std::to_string(waveHeader.numChannels) + " channels, "
             + std::to_string(waveHeader.bitsPerSample) + " bps");
 }
 
@@ -97,25 +98,25 @@ ALuint playSound(const SoundSource& source)
     checkPlaySoundALError(source.waveFile);
 
     // Fill buffer
-    ALenum format = getAudioFormat(source.waveFile.header);
-    alBufferData(
-            buffer,
+    ALenum format = getAudioFormat(source.waveFile->header);
+    alBufferData(buffer,
             format,
-            source.waveFile.soundData.data(),
-            static_cast<ALsizei>(source.waveFile.soundData.size()),
-            source.waveFile.header.samplesPerSec);
+            source.waveFile->soundData.data(),
+            static_cast<ALsizei>(source.waveFile->soundData.size()),
+            source.waveFile->header.samplesPerSec);
     checkPlaySoundALError(source.waveFile);
 
     // Create sound source
+    const SoundConfig& cfg = source.cfg;
     ALuint sourceId;
     alGenSources(1, &sourceId);
     checkPlaySoundALError(source.waveFile);
-    alSourcef(sourceId, AL_PITCH, source.pitch);
-    alSourcef(sourceId, AL_GAIN, source.gain);
-    alSource3f(sourceId, AL_POSITION, source.position[0], source.position[1], source.position[2]);
-    alSourcei(sourceId, AL_SOURCE_RELATIVE, source.positionRelativeToListener ? AL_TRUE : AL_FALSE);
-    alSource3f(sourceId, AL_VELOCITY, source.velocity[0], source.velocity[1], source.velocity[2]);
-    alSourcei(sourceId, AL_LOOPING, source.looping ? AL_TRUE : AL_FALSE);
+    alSourcef(sourceId, AL_PITCH, cfg.pitch);
+    alSourcef(sourceId, AL_GAIN, cfg.gain);
+    alSource3f(sourceId, AL_POSITION, cfg.position[0], cfg.position[1], cfg.position[2]);
+    alSourcei(sourceId, AL_SOURCE_RELATIVE, cfg.positionRelativeToListener ? AL_TRUE : AL_FALSE);
+    alSource3f(sourceId, AL_VELOCITY, cfg.velocity[0], cfg.velocity[1], cfg.velocity[2]);
+    alSourcei(sourceId, AL_LOOPING, cfg.looping ? AL_TRUE : AL_FALSE);
     alSourcei(sourceId, AL_BUFFER, buffer);
     checkPlaySoundALError(source.waveFile);
 
