@@ -40,7 +40,7 @@ class WallComponent : public EntityComponent
 public:
     WallComponent(WallVariant variant);
 
-    void onEntityAddedToWorld(World* scenario) override;
+    void onEntityFirstAddedToWorld(World* scenario) override;
 
     WallVariant getVariant() const;
 

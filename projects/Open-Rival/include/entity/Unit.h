@@ -6,6 +6,7 @@
 
 #include "entity/Entity.h"
 #include "entity/components/AttackListener.h"
+#include "entity/components/HealthComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/UnitType.h"
 
@@ -35,6 +36,7 @@ class Unit
     : public Entity
     , public MovementListener
     , public AttackListener
+    , public HealthListener
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
@@ -65,6 +67,12 @@ public:
     void onAttackStarted() override;
     void onAttackFinished() override;
     // End AttackListener override
+
+    // Begin HealthListener override
+    void onHealthChanged(int prevValue, int newValue) override;
+    void onMaxHealthChanged(int prevValue, int newValue) override;
+    void onHealthDepleted() override;
+    // Begin HealthListener override
 
     void addStateListener(UnitStateListener* listener);
     void removeStateListener(UnitStateListener* listener);
@@ -111,6 +119,7 @@ private:
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
     std::weak_ptr<AttackComponent> weakAttackComponent;
+    std::weak_ptr<HealthComponent> weakHealthComponent;
 
     UnitType type = UnitType::Invalid;
 

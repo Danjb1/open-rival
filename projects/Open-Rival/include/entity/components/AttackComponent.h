@@ -37,7 +37,7 @@ public:
     AttackComponent();
 
     // Begin EntityComponent override
-    void onEntityAddedToWorld(World*) override;
+    void onEntityFirstAddedToWorld(World*) override;
     void destroy() override;
     void update(int delta) override;
     // End EntityComponent override

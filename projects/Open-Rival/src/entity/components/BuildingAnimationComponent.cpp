@@ -22,7 +22,7 @@ BuildingAnimationComponent::BuildingAnimationComponent(const BuildingDef& buildi
 {
 }
 
-void BuildingAnimationComponent::onEntityAddedToWorld(World*)
+void BuildingAnimationComponent::onEntityFirstAddedToWorld(World*)
 {
     weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 

@@ -46,7 +46,7 @@ MovementComponent::MovementComponent(
 {
 }
 
-void MovementComponent::onEntityAddedToWorld(World*)
+void MovementComponent::onEntityFirstAddedToWorld(World*)
 {
     Unit* unit = entity->as<Unit>();
     if (!unit)

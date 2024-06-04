@@ -21,6 +21,12 @@ void Unit::onReady()
     {
         attackComponent->addListener(getWeakThis());
     }
+
+    weakHealthComponent = requireComponentWeak<HealthComponent>(HealthComponent::key);
+    if (auto healthComponent = weakHealthComponent.lock())
+    {
+        healthComponent->addListener(getWeakThis());
+    }
 }
 
 void Unit::onDestroy()
@@ -60,6 +66,21 @@ void Unit::onAttackStarted()
 void Unit::onAttackFinished()
 {
     setState(UnitState::Idle);
+}
+
+void Unit::onHealthChanged(int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void Unit::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void Unit::onHealthDepleted()
+{
+    deleted = true;
 }
 
 void Unit::addStateListener(UnitStateListener* listener)

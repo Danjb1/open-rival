@@ -17,7 +17,7 @@ AttackComponent::AttackComponent()
 {
 }
 
-void AttackComponent::onEntityAddedToWorld(World*)
+void AttackComponent::onEntityFirstAddedToWorld(World*)
 {
     weakMovementComp = entity->getComponentWeak<MovementComponent>(MovementComponent::key);
     weakFacingComp = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
@@ -103,7 +103,7 @@ void AttackComponent::deliverAttack()
     }
 
     HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
-    healthComp->addHealth(-10);  // TMP
+    healthComp->addHealth(-50);  // TMP
 }
 
 void AttackComponent::switchToNewTarget()

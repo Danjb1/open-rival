@@ -16,7 +16,7 @@ WallComponent::WallComponent(WallVariant variant)
 {
 }
 
-void WallComponent::onEntityAddedToWorld(World*)
+void WallComponent::onEntityFirstAddedToWorld(World*)
 {
     // Set txIndex based on Wall type
     int baseTxIndex = 0;
