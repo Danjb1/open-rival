@@ -18,6 +18,11 @@ void PassabilityComponent::onEntityAddedToWorld(World* world)
     world->setPassability(entity->getPos(), passability);
 }
 
+void PassabilityComponent::onEntityRemovedFromWorld(World* world)
+{
+    world->setPassability(entity->getPos(), TilePassability::Clear);
+}
+
 TilePassability PassabilityComponent::getPassability() const
 {
     return passability;

@@ -28,10 +28,20 @@ public:
     virtual void onAttach(Entity* e);
 
     /**
-     * Callback for when the owning Entity is spawned.
+     * Callback for when the owning Entity is first added to the world.
      *
      * At this point, the Entity is guaranteed to have a valid ID and
      * position, and all initial components will have been attached.
+     */
+    virtual void onEntityFirstAddedToWorld(World*) {}
+
+    /**
+     * Callback for when the owning Entity is removed from the world.
+     */
+    virtual void onEntityRemovedFromWorld(World*) {}
+
+    /**
+     * Callback for when the owning Entity is added back to the world after being removed.
      */
     virtual void onEntityAddedToWorld(World*) {}
 

@@ -4,9 +4,9 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+- setPassability is problematic (there may be a flying unit there!)
 - Transport vehicles should not be able to attack
 - Play a sound when an attack hits
-- Remove units when their health is depleted
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
@@ -15,6 +15,7 @@
     - For melee attacks it should display a message "Could not attack there !"
 - Implement projectiles
 - Ensure all players share the same random seed (use this for SoundBanks as well!)
+- Units should automatically target nearby enemies
 
 <!----------------------------------------------------------------------------->
 ## Bugs

@@ -32,7 +32,7 @@ public:
     FacingComponent(Facing initialFacing);
 
     // Begin EntityComponent override
-    void onEntityAddedToWorld(World* world) override;
+    void onEntityFirstAddedToWorld(World* world) override;
     void destroy() override;
     // End EntityComponent override
 

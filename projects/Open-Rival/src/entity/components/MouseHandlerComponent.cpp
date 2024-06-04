@@ -24,7 +24,7 @@ MouseHandlerComponent::MouseHandlerComponent()
 {
 }
 
-void MouseHandlerComponent::onEntityAddedToWorld(World*)
+void MouseHandlerComponent::onEntityFirstAddedToWorld(World*)
 {
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())

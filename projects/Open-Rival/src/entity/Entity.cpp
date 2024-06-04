@@ -22,17 +22,39 @@ void Entity::attach(std::shared_ptr<EntityComponent> component)
 
 void Entity::addedToWorld(World* newWorld, int newId, MapNode newPos)
 {
+    const bool isFirstTime = (id == -1);
+
     world = newWorld;
     id = newId;
     pos = newPos;
 
-    for (const auto& kv : components)
+    if (isFirstTime)
     {
-        const auto& component = kv.second;
-        component->onEntityAddedToWorld(world);
+        for (const auto& kv : components)
+        {
+            const auto& component = kv.second;
+            component->onEntityFirstAddedToWorld(world);
+        }
+    }
+    else
+    {
+        for (const auto& kv : components)
+        {
+            const auto& component = kv.second;
+            component->onEntityAddedToWorld(world);
+        }
     }
 
     onReady();
+}
+
+void Entity::removedFromWorld()
+{
+    for (const auto& kv : components)
+    {
+        const auto& component = kv.second;
+        component->onEntityRemovedFromWorld(world);
+    }
 }
 
 void Entity::earlyUpdate()

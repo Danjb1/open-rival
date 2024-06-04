@@ -22,7 +22,7 @@ UnitAnimationComponent::UnitAnimationComponent(const AnimationContainer& animati
 {
 }
 
-void UnitAnimationComponent::onEntityAddedToWorld(World*)
+void UnitAnimationComponent::onEntityFirstAddedToWorld(World*)
 {
     Unit* unit = entity->as<Unit>();
     if (!unit)

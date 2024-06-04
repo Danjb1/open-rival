@@ -30,7 +30,7 @@ public:
     MouseHandlerComponent();
 
     // Begin EntityComponent override
-    virtual void onEntityAddedToWorld(World* world) override;
+    virtual void onEntityFirstAddedToWorld(World* world) override;
     virtual void destroy() override;
     // End EntityComponent override
 

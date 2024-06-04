@@ -35,7 +35,7 @@ public:
     UnitAnimationComponent(const AnimationContainer& unitDef);
 
     // Begin EntityComponent override
-    void onEntityAddedToWorld(World* world) override;
+    void onEntityFirstAddedToWorld(World* world) override;
     void destroy() override;
     void update(int delta) override;
     // End EntityComponent override

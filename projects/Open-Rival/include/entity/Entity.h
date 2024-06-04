@@ -69,17 +69,17 @@ const auto lastEntityType { static_cast<int>(EntityType::InfoPoint) };
  *     - attach() components
  *     - addedToWorld() when Entity is added to the world
  *         - id is assigned here
- *         - All components receive onEntityAddedToWorld() callback
+ *         - All components receive onEntityFirstAddedToWorld() callback
  *     - onReady() called (for subclasses)
  *
- *      Game Loop:
+ *     Game Loop:
  *
  *     - earlyUpdate()
  *     - update()
  *         - Components marked for delete receive destroy() callback
  *         - All components receive update() callback
  *
- *      Destruction:
+ *     Destruction:
  *
  *     - markForDelete() to mark an Entity for deletion
  *     - destroy() when Entity is actually deleted
@@ -103,6 +103,11 @@ public:
 
     /** Called when this Entity is added to the game world. */
     void addedToWorld(World* newScenario, int newId, MapNode newPos);
+
+    /** Called when this Entity is removed from the game world.
+     * This is guaranteed to be called before `destroy`, but an entity can be removed from the world without being
+     * destroyed. */
+    void removedFromWorld();
 
     /** Called once at the start of each frame. */
     void earlyUpdate();

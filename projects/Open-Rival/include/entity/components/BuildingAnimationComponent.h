@@ -22,7 +22,7 @@ public:
     BuildingAnimationComponent(const BuildingDef& buildingDef);
 
     // Begin EntityComponent override
-    virtual void onEntityAddedToWorld(World* world) override;
+    virtual void onEntityFirstAddedToWorld(World* world) override;
     virtual void update(int delta) override;
     // End EntityComponent override
 

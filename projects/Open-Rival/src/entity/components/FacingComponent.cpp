@@ -14,7 +14,7 @@ FacingComponent::FacingComponent(Facing initialFacing)
 {
 }
 
-void FacingComponent::onEntityAddedToWorld(World*)
+void FacingComponent::onEntityFirstAddedToWorld(World*)
 {
     weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
