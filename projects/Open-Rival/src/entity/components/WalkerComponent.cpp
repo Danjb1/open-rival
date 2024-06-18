@@ -56,7 +56,7 @@ void WalkerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 }
 
 WalkerComponent::WalkerComponent()
-    : MovementComponent(WalkerComponent::walkerPassability, WalkerComponent::walkerPassability)
+    : MovementComponent(MovementMode::Walking, WalkerComponent::walkerPassability, WalkerComponent::walkerPassability)
 {
 }
 

@@ -16,10 +16,13 @@ namespace Rival {
 
 const std::string AttackComponent::key = "attack";
 
-AttackComponent::AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem)
+AttackComponent::AttackComponent(const AudioStore& audioStore,
+        AudioSystem& audioSystem,
+        std::vector<std::shared_ptr<AttackDefinition>> attackDefinitions)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
+    , attackDefinitions(attackDefinitions)
 {
 }
 
@@ -87,7 +90,7 @@ void AttackComponent::update(int delta)
         return;
     }
 
-    if (isInRange(targetEntity->getPos()))
+    if (isInRange(targetEntity))
     {
         requestAttack(targetEntity);
     }
@@ -136,11 +139,24 @@ void AttackComponent::updateCooldown(int delta)
     }
 }
 
-bool AttackComponent::isInRange(const MapNode& node) const
+bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
 {
     // TODO: Pick an attack
     const int range = 1;  // TMP
-    const int distToTarget = MapUtils::getDistance(entity->getPos(), node);
+
+    // if (range == 1)
+    //{
+    //  Melee attacks cannot target flying units
+    if (const auto movementComp = target->getComponent<MovementComponent>())
+    {
+        if (movementComp->getMovementMode() == MovementMode::Flying)
+        {
+            return false;
+        }
+    }
+    //}
+
+    const int distToTarget = MapUtils::getDistance(entity->getPos(), target->getPos());
     return distToTarget <= range;
 }
 

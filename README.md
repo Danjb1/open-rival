@@ -25,6 +25,7 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 ## :link: Links
 
 - [Discord Server](https://discord.gg/R7E4KWT)
+- [Open-Rival Devlog](https://youtube.com/playlist?list=PLfJwVz0VSvZmjdt-UvKVJRiRbnjV5hjRY&si=06UNbANnAyoAw36y)
 - [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
 - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
 - [Upscaled Cutscenes](https://www.youtube.com/playlist?list=PLfJwVz0VSvZmUPemMtnYGT56MHwnnXZ9o)

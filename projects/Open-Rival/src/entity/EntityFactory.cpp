@@ -99,7 +99,8 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     }
 
     // AttackComponent
-    unit->attach(std::make_shared<AttackComponent>(resources, audioSystem));
+    std::vector<std::shared_ptr<AttackDefinition>> attackDefinitions;  // TODO: Get from ScenarioData -> WeaponDefaults
+    unit->attach(std::make_shared<AttackComponent>(resources, audioSystem, attackDefinitions));
 
     // VoiceComponent
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));

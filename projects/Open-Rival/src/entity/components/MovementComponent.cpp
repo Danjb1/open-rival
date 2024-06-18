@@ -37,9 +37,11 @@ bool Movement::isFinished() const
     return isValid() && timeElapsed >= timeRequired;
 }
 
-MovementComponent::MovementComponent(
-        const Pathfinding::PassabilityChecker& passabilityChecker, Pathfinding::PassabilityUpdater& passabilityUpdater)
+MovementComponent::MovementComponent(MovementMode movementMode,
+        const Pathfinding::PassabilityChecker& passabilityChecker,
+        Pathfinding::PassabilityUpdater& passabilityUpdater)
     : EntityComponent(key)
+    , movementMode(movementMode)
     , movement({ 0, 0 })
     , passabilityChecker(passabilityChecker)
     , passabilityUpdater(passabilityUpdater)

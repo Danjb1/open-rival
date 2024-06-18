@@ -1,0 +1,14 @@
+{
+  "attacks": [
+    {
+      "id": "worker_axe",
+      "damage": 0,
+      "range": 0,
+      "accuracy": 0,
+      "projectileSpeed": 0,
+      "splashRadius": 0,
+      "manaCost": 0,
+      "reloadTime": 0
+    }
+  ]
+}
