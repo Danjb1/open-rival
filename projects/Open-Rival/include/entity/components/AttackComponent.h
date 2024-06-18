@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementListener.h"
@@ -28,6 +29,17 @@ enum class AttackState : std::uint8_t
     Cooldown
 };
 
+struct AttackDefinition
+{
+    int damage = 0;
+    int range = 0;
+    int accuracy = 0;
+    int projectileSpeed = 0;
+    int splashRadius = 0;
+    int manaCost = 0;
+    int reloadTime = 0;
+};
+
 /**
  * Component that allows an entity to attack.
  */
@@ -36,7 +48,9 @@ class AttackComponent
     , public AnimationListener
 {
 public:
-    AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem);
+    AttackComponent(const AudioStore& audioStore,
+            AudioSystem& audioSystem,
+            std::vector<std::shared_ptr<AttackDefinition>> attackDefinitions);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World*) override;
@@ -57,7 +71,7 @@ private:
     void deliverAttack();
     void switchToNewTarget();
     void updateCooldown(int delta);
-    bool isInRange(const MapNode& node) const;
+    bool isInRange(const std::shared_ptr<Entity> target) const;
     void requestAttack(std::shared_ptr<Entity> targetEntity);
     void startAttack(std::shared_ptr<Entity> targetEntity);
     void moveToTarget(const MapNode& node);
@@ -79,6 +93,8 @@ private:
     std::weak_ptr<MovementComponent> weakMovementComp;
     std::weak_ptr<FacingComponent> weakFacingComp;
     std::weak_ptr<UnitAnimationComponent> weakAnimationComp;
+
+    std::vector<std::shared_ptr<AttackDefinition>> attackDefinitions;
 
     AttackState attackState = AttackState::None;
 

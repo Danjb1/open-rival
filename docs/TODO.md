@@ -6,15 +6,17 @@
 
 ### Basic Functionality
 
-- Melee attacks should not be able to target flying units
-- Transport vehicles should not be able to attack
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
 
 ### Attack Types & Stats
 
-- Support multiple attack types (get range, accuracy, damage and sounds from the chosen attack)
+- Parse attack definitions from JSON
+    - Some attack definitions are shared between multiple units!
+- Pick the most suitable attack when a new target is set
+- Units with no attacks (e.g. transport vehicles) should not be able to attack
+- Get range, accuracy, damage and sounds from the chosen attack
     - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
 - Respect unit attack speed
 - Respect target's Armor

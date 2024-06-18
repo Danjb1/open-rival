@@ -7,6 +7,7 @@
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/Pathfinding.h"
+#include "game/UnitDef.h"
 #include "utils/CollectionUtils.h"
 
 namespace Rival {
@@ -46,8 +47,10 @@ class MovementComponent
     , public UnitStateListener
 {
 public:
-    MovementComponent(const Pathfinding::PassabilityChecker& passabilityChecker,
+    MovementComponent(MovementMode movementMode,
+            const Pathfinding::PassabilityChecker& passabilityChecker,
             Pathfinding::PassabilityUpdater& passabilityUpdater);
+
     virtual ~MovementComponent() = default;
 
     // Begin EntityComponent override
@@ -86,6 +89,11 @@ public:
         return route;
     }
 
+    MovementMode getMovementMode() const
+    {
+        return movementMode;
+    }
+
 private:
     MapNode getStartPosForNextMovement() const;
     void updateMovement(int delta);
@@ -113,6 +121,8 @@ protected:
     Pathfinding::Route route;
 
     Movement movement;
+
+    MovementMode movementMode;
 
     // TMP: This should depend on the unit's speed
     int ticksPerMove = 30;

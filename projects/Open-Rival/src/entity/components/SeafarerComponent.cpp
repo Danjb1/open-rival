@@ -59,7 +59,8 @@ void SeafarerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node
 }
 
 SeafarerComponent::SeafarerComponent()
-    : MovementComponent(SeafarerComponent::seafarerPassability, SeafarerComponent::seafarerPassability)
+    : MovementComponent(
+            MovementMode::Seafaring, SeafarerComponent::seafarerPassability, SeafarerComponent::seafarerPassability)
 {
 }
 

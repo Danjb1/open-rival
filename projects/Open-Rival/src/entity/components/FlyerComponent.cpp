@@ -54,7 +54,7 @@ void FlyerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 }
 
 FlyerComponent::FlyerComponent()
-    : MovementComponent(FlyerComponent::flyerPassability, FlyerComponent::flyerPassability)
+    : MovementComponent(MovementMode::Flying, FlyerComponent::flyerPassability, FlyerComponent::flyerPassability)
 {
 }
 
