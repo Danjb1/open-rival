@@ -6,7 +6,6 @@
 
 ### Basic Functionality
 
-- BUG: Units do not always move if the order is given mid-attack
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)

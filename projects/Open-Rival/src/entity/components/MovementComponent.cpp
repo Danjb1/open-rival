@@ -70,10 +70,22 @@ void MovementComponent::destroy()
 
 void MovementComponent::onUnitStateChanged(const UnitState newState)
 {
+    if (route.isEmpty())
+    {
+        // Nothing to do!
+        return;
+    }
+
+    if (newState == UnitState::Idle && wasAbortActionRequested)
+    {
+        // The action we aborted has just finished, so we can now start moving
+        return;
+    }
+
     if (newState != UnitState::Moving && newState != UnitState::WaitingToMove)
     {
         // It is possible that a route was planned but never started.
-        // We need to clear this route when we start a new action.
+        // We need to clear this route when we start a new action otherwise the unit may start moving unexpectedly.
         route = {};
     }
 }
