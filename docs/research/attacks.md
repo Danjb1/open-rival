@@ -1,0 +1,100 @@
+# Attacks
+
+As listed in the Scenario Editor. Some are shared between multiple units.
+
+- **0:** Bomb
+- **1:** Trap
+- **2:** Worker Axe
+- **3:** Arrow
+- **4:** One Arrow - Pegas Rider
+- **5:** Three Arrows - Pegas Rider
+- **6:** Light Sword - Cavalry
+- **7:** Sword - Knight
+- **8:** Mace - Knight
+- **9:** Dagger - Fire Master
+- **10:** Dagger - Thief
+- **11:** Big Arrow - Ballista
+- **12:** Projectile - Battleship
+- **13:** Flash Light - Wizard
+- **14:** Fire Ball - Wizard
+- **15:** Frozen Breath - Wizard
+- **16:** Cursed Rain - Wizard
+- **17:** Flash Light - Priest
+- **18:** Dispel Mana - Priest
+- **19:** Reveal Traps - Priest
+- **20:** Poison Cropland - Priest
+- **21:** Stone - Rock Thrower
+- **22:** Spear - Horde Rider
+- **23:** Battle Axe - Warlord
+- **24:** Poison Spit - Warlord
+- **25:** Dagger - Gnome Boomer
+- **26:** Dagger - Rogue
+- **27:** War Stick - Storm Trooper
+- **28:** Giant Rocks - Catapult
+- **29:** Boulder - Troll Galley
+- **30:** Flames - War Bat
+- **31:** Flash Light - Priest of Doom
+- **32:** Death Typhoon - Priest of Doom
+- **33:** Hyena Howl - Priest of Doom
+- **34:** Poison Breath - Priest of Doom
+- **35:** Flash Light - Necromancer
+- **36:** Drain Life - Necromancer
+- **37:** Reveal Traps - Necromancer
+- **38:** Cursed Land - Necromancer
+- **39:** Arrow - Archer
+- **40:** Fire Arrow - Archer
+- **41:** Halberd - Centaur
+- **42:** Flame Ring - Centaur
+- **43:** Dagger - Dwarf Miner
+- **44:** Dagger - Scout
+- **45:** Cannon Ball - Bombard
+- **46:** Shell - Arquebusier
+- **47:** Projectile - Warship
+- **48:** Flash Light - Sky Rider
+- **49:** Lightning - Sky Rider
+- **50:** Flash Light - Mage
+- **51:** Touch of Chaos - Mage
+- **52:** Magic Barrier - Mage
+- **53:** Blindness - Mage
+- **54:** Flash Light - Druid
+- **55:** Berserk - Druid
+- **56:** Lightning Bolt - Druid
+- **57:** Flash Light - Enchanter
+- **58:** Reveal Traps - Enchanter
+- **59:** Healing - Enchanter
+- **60:** Light Defence Arrow
+- **61:** Black Sea Monster Weapon
+- **62:** Blue Sea Monster Weapon
+- **63:** Green Sea Monster Weapon
+- **64:** Black Snake Weapon
+- **65:** Red Snake Weapon
+- **66:** Green Snake Weapon
+- **67:** Yellow Snake Weapon
+- **68:** Black Gryphon Weapon
+- **69:** Yellow Gryphon Weapon
+- **70:** White Gryphon Weapon
+- **71:** Black Hydra Weapon
+- **72:** Blue Hydra Weapon
+- **73:** Green Hydra Weapon
+- **74:** Black Golem Weapon
+- **75:** Blue Golem Weapon
+- **76:** White Golem Weapon
+- **77:** Black Devil Weapon
+- **78:** Red Devil Weapon
+- **79:** Orange Devil Weapon
+- **80:** Yellow Devil Weapon
+- **81:** Black Skeleton Weapon
+- **82:** Red Skeleton Weapon
+- **83:** White Skeleton Weapon
+- **84:** Yellow Skeleton Weapon
+- **85:** Black Dragon Weapon
+- **86:** Red Dragon Weapon
+- **87:** Violet Dragon Weapon
+- **88:** Blue Dragon Weapon
+- **89:** Orange Dragon Weapon
+- **90:** Green Dragon Weapon
+- **91:** Key-Door Destroyer
+- **92:** Soul Damnation Scroll
+- **93:** Spiral Scroll
+- **94:** Wave Scroll
+- **95:** Teleport Scroll

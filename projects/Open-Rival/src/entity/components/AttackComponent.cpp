@@ -16,13 +16,10 @@ namespace Rival {
 
 const std::string AttackComponent::key = "attack";
 
-AttackComponent::AttackComponent(const AudioStore& audioStore,
-        AudioSystem& audioSystem,
-        std::vector<std::shared_ptr<AttackDefinition>> attackDefinitions)
+AttackComponent::AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
-    , attackDefinitions(attackDefinitions)
 {
 }
 
@@ -111,9 +108,12 @@ void AttackComponent::deliverAttack()
         return;
     }
 
+    // TMP: Assume the first attack was used
+    const AttackDef* attackToUse = attackDefinitions[0];
+
     // Damage target
     HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
-    healthComp->addHealth(-50);  // TMP
+    healthComp->addHealth(-attackToUse->damage);
 
     // TMP: Hardcode hit sounds for now
     const SoundBank soundBank({ 311, 349, 350, 351, 352, 353, 354 });
@@ -121,6 +121,10 @@ void AttackComponent::deliverAttack()
     // Play hit sound
     int soundId = soundBank.getRandomSound();
     audioSystem.playSound(audioStore, soundId);
+
+    // Start cooldown
+    // TODO: This should depend on the unit's attack speed
+    cooldownDuration = attackToUse->reloadTime;
 }
 
 void AttackComponent::switchToNewTarget()
@@ -141,20 +145,29 @@ void AttackComponent::updateCooldown(int delta)
 
 bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
 {
-    // TODO: Pick an attack
-    const int range = 1;  // TMP
-
-    // if (range == 1)
-    //{
-    //  Melee attacks cannot target flying units
-    if (const auto movementComp = target->getComponent<MovementComponent>())
+    if (attackDefinitions.empty())
     {
-        if (movementComp->getMovementMode() == MovementMode::Flying)
+        // No attacks; should never happen
+        return false;
+    }
+
+    // TMP: For now, always use the first attack.
+    //   Later, attacks with longer range and no mana cost should be preferred, as long as they are not on cooldown.
+    //   It is also possible to set a spell as the default attack, in which case this should be used instead.
+    const AttackDef* attackToUse = attackDefinitions[0];
+    const int range = attackToUse->range;
+
+    if (range == 1)
+    {
+        // Melee attacks cannot target flying units
+        if (const auto movementComp = target->getComponent<MovementComponent>())
         {
-            return false;
+            if (movementComp->getMovementMode() == MovementMode::Flying)
+            {
+                return false;
+            }
         }
     }
-    //}
 
     const int distToTarget = MapUtils::getDistance(entity->getPos(), target->getPos());
     return distToTarget <= range;
@@ -246,6 +259,11 @@ void AttackComponent::removeListener(std::weak_ptr<AttackListener> listener)
         return;
     }
     listeners.erase(listener);
+}
+
+void AttackComponent::registerAttack(const AttackDef* attackDefinition)
+{
+    attackDefinitions.push_back(attackDefinition);
 }
 
 }  // namespace Rival

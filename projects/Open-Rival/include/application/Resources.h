@@ -7,6 +7,7 @@
 
 #include "audio/MidiFile.h"
 #include "audio/WaveFile.h"
+#include "game/AttackDef.h"
 #include "game/BuildingDef.h"
 #include "game/BuildingType.h"
 #include "game/UnitDef.h"
@@ -70,6 +71,7 @@ class DataStore
 public:
     virtual const UnitDef* getUnitDef(UnitType unitType) const = 0;
     virtual const BuildingDef* getBuildingDef(BuildingType buildingType) const = 0;
+    virtual const AttackDef* getAttackDef(int attackId) const = 0;
 };
 
 /**
@@ -114,6 +116,7 @@ public:
     // Begin DataStore override
     const UnitDef* getUnitDef(UnitType unitType) const override;
     const BuildingDef* getBuildingDef(BuildingType buildingType) const override;
+    const AttackDef* getAttackDef(int attackId) const override;
     // End DataStore override
 
 private:
@@ -135,6 +138,7 @@ private:
     std::vector<std::shared_ptr<const MidiFile>> initMidis();
     std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
     std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
+    std::unordered_map<int, AttackDef> initAttackDefs() const;
 
 public:
     // Directories
@@ -200,6 +204,7 @@ private:
     // Data
     std::unordered_map<UnitType, UnitDef> unitDefs;
     std::unordered_map<BuildingType, BuildingDef> buildingDefs;
+    std::unordered_map<int, AttackDef> attackDefs;
 };
 
 }  // namespace Rival

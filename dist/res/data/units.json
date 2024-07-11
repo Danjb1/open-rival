@@ -16,7 +16,7 @@
           "startIndex": 24
         }
       },
-      "attacks": [],
+      "attack": 11,
       "name": "Ballista",
       "portrait": 42,
       "sounds": {
@@ -50,6 +50,7 @@
           "startIndex": 32
         }
       },
+      "attack": 12,
       "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
@@ -83,6 +84,7 @@
           "startIndex": 72
         }
       },
+      "attack": 3,
       "name": "Bowman",
       "portrait": 37,
       "sounds": {
@@ -144,6 +146,7 @@
           "startIndex": 56
         }
       },
+      "attack": 9,
       "name": "Fire Master",
       "portrait": 40,
       "sounds": {
@@ -176,6 +179,7 @@
           "startIndex": 72
         }
       },
+      "attack": 7,
       "name": "Knight",
       "portrait": 39,
       "sounds": {
@@ -208,6 +212,7 @@
           "startIndex": 72
         }
       },
+      "attack": 6,
       "name": "Light Cavalry",
       "portrait": 38,
       "sounds": {
@@ -248,6 +253,7 @@
           "startIndex": 112
         }
       },
+      "attack": 2,
       "name": "Peasant",
       "portrait": 36,
       "sounds": {
@@ -280,6 +286,7 @@
           "startIndex": 64
         }
       },
+      "attack": 4,
       "movement": "flying",
       "name": "Pegas Rider",
       "portrait": 48,
@@ -313,6 +320,7 @@
           "startIndex": 56
         }
       },
+      "attack": 17,
       "name": "Priest",
       "portrait": 45,
       "sounds": {
@@ -379,6 +387,7 @@
           "startIndex": 56
         }
       },
+      "attack": 10,
       "name": "Thief",
       "portrait": 41,
       "sounds": {
@@ -411,6 +420,7 @@
           "startIndex": 56
         }
       },
+      "attack": 13,
       "name": "Wizard",
       "portrait": 44,
       "sounds": {
@@ -502,6 +512,7 @@
           "startIndex": 24
         }
       },
+      "attack": 28,
       "name": "Catapult",
       "portrait": 56,
       "sounds": {
@@ -534,6 +545,7 @@
           "startIndex": 56
         }
       },
+      "attack": 25,
       "name": "Gnome Boomer",
       "portrait": 54,
       "sounds": {
@@ -566,6 +578,7 @@
           "startIndex": 56
         }
       },
+      "attack": 22,
       "name": "Horde Rider",
       "portrait": 52,
       "sounds": {
@@ -631,6 +644,7 @@
           "startIndex": 56
         }
       },
+      "attack": 35,
       "name": "Necromancer",
       "portrait": 59,
       "sounds": {
@@ -663,6 +677,7 @@
           "startIndex": 56
         }
       },
+      "attack": 31,
       "name": "Priest of Doom",
       "portrait": 58,
       "sounds": {
@@ -695,6 +710,7 @@
           "startIndex": 72
         }
       },
+      "attack": 21,
       "name": "Rock Thrower",
       "portrait": 51,
       "sounds": {
@@ -727,6 +743,7 @@
           "startIndex": 56
         }
       },
+      "attack": 26,
       "name": "Rogue",
       "portrait": 55,
       "sounds": {
@@ -767,6 +784,7 @@
           "startIndex": 112
         }
       },
+      "attack": 2,
       "name": "Serf",
       "portrait": 50,
       "sounds": {
@@ -799,6 +817,7 @@
           "startIndex": 72
         }
       },
+      "attack": 27,
       "name": "Storm Trooper",
       "portrait": 57,
       "sounds": {
@@ -864,6 +883,7 @@
           "startIndex": 32
         }
       },
+      "attack": 30,
       "movement": "flying",
       "name": "Warbat",
       "portrait": 62,
@@ -897,6 +917,7 @@
           "startIndex": 72
         }
       },
+      "attack": 23,
       "name": "Warlord",
       "portrait": 53,
       "sounds": {
@@ -929,6 +950,7 @@
           "startIndex": 72
         }
       },
+      "attack": 39,
       "name": "Archer",
       "portrait": 65,
       "sounds": {
@@ -961,6 +983,7 @@
           "startIndex": 56
         }
       },
+      "attack": 46,
       "name": "Arquebusier",
       "portrait": 71,
       "sounds": {
@@ -1023,6 +1046,7 @@
           "startIndex": 0
         }
       },
+      "attack": 45,
       "name": "Bombard",
       "portrait": 70,
       "sounds": {
@@ -1055,6 +1079,7 @@
           "startIndex": 72
         }
       },
+      "attack": 41,
       "name": "Centaur",
       "portrait": 67,
       "sounds": {
@@ -1087,6 +1112,7 @@
           "startIndex": 56
         }
       },
+      "attack": 54,
       "name": "Druid",
       "portrait": 66,
       "sounds": {
@@ -1119,6 +1145,7 @@
           "startIndex": 56
         }
       },
+      "attack": 43,
       "name": "Dwarf Miner",
       "portrait": 68,
       "sounds": {
@@ -1151,6 +1178,7 @@
           "startIndex": 56
         }
       },
+      "attack": 57,
       "name": "Enchanter",
       "portrait": 73,
       "sounds": {
@@ -1183,6 +1211,7 @@
           "startIndex": 56
         }
       },
+      "attack": 50,
       "name": "Mage",
       "portrait": 72,
       "sounds": {
@@ -1244,6 +1273,7 @@
           "startIndex": 56
         }
       },
+      "attack": 44,
       "name": "Scout",
       "portrait": 69,
       "sounds": {
@@ -1276,6 +1306,7 @@
           "startIndex": 64
         }
       },
+      "attack": 48,
       "movement": "flying",
       "name": "Sky Rider",
       "portrait": 76,
@@ -1310,6 +1341,7 @@
           "startIndex": 24
         }
       },
+      "attack": 47,
       "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,
@@ -1355,6 +1387,7 @@
           "startIndex": 176
         }
       },
+      "attack": 2,
       "name": "Yeoman",
       "portrait": 64,
       "sounds": {

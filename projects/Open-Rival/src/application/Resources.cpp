@@ -44,6 +44,7 @@ Resources::Resources(ApplicationContext& context)
     , midis(initMidis())
     , unitDefs(initUnitDefs())
     , buildingDefs(initBuildingDefs())
+    , attackDefs(initAttackDefs())
 {
 }
 
@@ -390,6 +391,32 @@ std::unordered_map<BuildingType, BuildingDef> Resources::initBuildingDefs() cons
     return allBuildingDefs;
 }
 
+std::unordered_map<int, AttackDef> Resources::initAttackDefs() const
+{
+    json rawData = JsonUtils::readJsonFile(Resources::dataDir + "attacks.json");
+    json attackList = rawData["attacks"];
+
+    std::unordered_map<int, AttackDef> allAttackDefs;
+    int nextAttackType = 0;
+
+    for (const auto& rawAttackDef : attackList)
+    {
+        try
+        {
+            allAttackDefs.insert({ nextAttackType, AttackDef::fromJson(rawAttackDef) });
+        }
+        catch (const json::exception&)
+        {
+            LOG_ERROR("Error parsing attack definition: %d", std::to_string(nextAttackType));
+            throw;
+        }
+
+        ++nextAttackType;
+    }
+
+    return allAttackDefs;
+}
+
 const Font& Resources::getFontSmall() const
 {
     return fontSmall;
@@ -485,6 +512,12 @@ const BuildingDef* Resources::getBuildingDef(BuildingType buildingType) const
 {
     auto iter = buildingDefs.find(buildingType);
     return iter == buildingDefs.cend() ? nullptr : &iter->second;
+}
+
+const AttackDef* Resources::getAttackDef(int attackId) const
+{
+    auto iter = attackDefs.find(attackId);
+    return iter == attackDefs.cend() ? nullptr : &iter->second;
 }
 
 }  // namespace Rival
