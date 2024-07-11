@@ -4,38 +4,16 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-### Basic Functionality
-
+- Get hit sounds from the current attack
+- Respect unit attack speed
+- Respect target's Armor
+- Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
+- Play death animations (these require special facing logic!)
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
-
-### Attack Types & Stats
-
-- Parse attack definitions from JSON
-    - Some attack definitions are shared between multiple units!
-- Pick the most suitable attack when a new target is set
-- Units with no attacks (e.g. transport vehicles) should not be able to attack
-- Get range, accuracy, damage and sounds from the chosen attack
-    - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
-- Respect unit attack speed
-- Respect target's Armor
-- Allow attacking an empty tile when in attack mode (ranged attacks only!)
-    - For melee attacks it should display a message "Could not attack there !"
-- Implement projectiles
-
-### Spatial Partitioning
-
-- Units should automatically target nearby enemies (needs spatial partitioning!)
-- New methods in World:
-    - getEntitiesInRadius(point, radius)
-    - getEntityAt(point)
-    - getEntitiesInArea(rect) - for drag select and camera
-- Divide the world into a grid and have a map of cell -> entities
-    - Only check the relevant cells when retrieving entities
-    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
-- World should handle spatial partitioning internally; caller does not care about the details
-- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
+- Don't kill friendly units when attacking them!
+- Add projectiles
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -50,114 +28,149 @@
 - Units can walk through buildings and other objects
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
+- Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
 
 <!----------------------------------------------------------------------------->
 ## Features
 <!----------------------------------------------------------------------------->
 
-### General
+### Combat
 
-- Add support for [Unicode filenames](http://utf8everywhere.org/)
-- Save config.json / log files to AppData (or at least provide the option)
+- Units should automatically target nearby enemies (needs spatial partitioning!)
+    - Respect "Fighting Area" - do not wander too far
+- Units should rest when idle (approx. 200 health in 30 seconds)
+- Allow attacking an empty tile when in attack mode (ranged attacks only!)
+    - For melee attacks it should display a message "Could not attack there !"
 
-### Data Loading
+### Spatial Partitioning
 
-- Some bytes of `Interfac.dat` are still unknown
-- Pack interface images into textures
-- Finish parsing Goals
-- Finish parsing Chests (contents)
-- Include missing alphabet entries (e.g. '!{})
-- Test resource extraction from other locales
-- Try reading the original font files
+- New methods in World to allow efficient retrieval of entities:
+    - getEntitiesInRadius(point, radius)
+    - getEntityAt(point)
+    - getEntitiesInArea(rect) - for drag select and camera
+- Divide the world into a grid and have a map of cell -> entities
+    - Only check the relevant cells when retrieving entities
+    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
+- World should handle spatial partitioning internally; caller does not care about the details
+- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
-### Gameplay
-
-- Units should rotate randomly
-- Store unit / building defaults
-- Load map elements
-    - Mountains
-    - Trees
-    - Scenery
-    - Chests
-    - Info Points
-    - Doors
-- Building placement
-- Resource gathering
-- Training units
-- Resting (approx. 200 health in 30 seconds)
-- Don't kill friendly units when attacking them!
-- Prisoners & mercenaries
-- Teams
-- Upgrades
-    - Overlay background gets taller for hovered units with upgrades
-    - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
-- Food consumption
-- Items
-- Experience & levelling
-- Spells
-- Effects (e.g. corpses / explosions)
-- Monster AI
-- Player AI
-
-### Multiplayer
-
-- Adjust net command delay dynamically based on ping
-    - If delay gets increased, clients should send empty commands for any "skipped" ticks
-    - If delay gets reduced, clients keep issuing commands for the next tick that was due, until the "current" tick catches up
-- Send a checksum periodically to check that players are in-sync? (debug mode only)
-- GameState should reject new players
-- Create standalone project to run dedicated server
-
-### Mouse Picking
-
-- Different units should have different hitboxes sizes
-- Flying units need a hitbox offset
-
-### Input
+### Input & Mouse Picking
 
 - Panning with the mouse at level edges
 - Panning with middle-mouse button (drag)
 - Smooth panning with the arrow keys (using acceleration)
 - Panning speed should depend on the zoom level
+- Different units should have different hitboxes sizes
+- Flying units need a hitbox offset
 
-### Fonts
+### HUD & Menus
 
-- Vanilla text seems more saturated because it uses darker pixels instead of translucency
-    - We should support 2 options:
-        - Vanilla: Uses premade bitmaps with no translucency
-        - Smooth: The current implementation
+- Revamp [menu system](/docs/design/menus.md)
+- Show resources in HUD
+- Show unit ID in HUD
+- Show unit stats in HUD
+- Show group info in HUD when multiple units are selected
+- Expand HUD to fit larger screen resolutions
+- On-screen message display (e.g. "We are under attack!")
+- Main menu
+- Loading screen
+- Custom Map menu
+- Pause menu
+- Postgame screen
+- Troop libraries
+- Lobby screen
+- Campaign text
+- Credits
 
-### Rendering
+### Town Building
+
+- Allow buildings to be selected
+    - Play a sound
+- Building construction
+- Resource gathering
+- Training new units
+- Food consumption
+
+### Items
+
+- Units should have an InventoryComponent
+- Allow picking up and dropping items
+- Items should affect unit stats
+- Some items can be used (e.g. scrolls, keys)
+- Units should drop their items on death
+
+### Experience & Levelling
+
+- Award experience when attacking
+- Increase max health when attacking
+- Show experience levels in the HUD
+- Gain items when levelling up
+- Unlock upgrades when levelling up
+
+### Fog & Minimap
+
+- Render darkness
+- Render fog of war
+- Uncover fog based on sight
+- Render minimap
+- Click on minimap to move the camera
+
+### Scenarios & Game Objects
+
+- Scenario file should be able to override unit stats
+- Scenario file should be able to override building stats
+- Scenario file should be able to override attack definitions
+- Win / loss conditions (goals)
+- Mountains
+- Trees
+- Scenery
+- Chests
+- Info Points
+- Doors
+- Prisoners
+- Mercenaries
+- Campaigns
+
+### Upgrades & Spells
+
+- Show upgrades in the HUD
+    - Overlay background gets taller for hovered units with upgrades
+    - Upgrade rectangles use 0xffffff for top/left edge, 0x616161 for bottom/right edge and 0xa2a2a2 in the middle
+- Register additional attacks when the relevant upgrades are unlocked
+    - Pick the most suitable attack when a new target is set
+    - Implement per-attack cooldowns
+- Some upgrades should modify unit stats
+- Thieving
+- Invisibility
+- Spying
+- Traps
+- Bombs
+- Place Land/Water ability
+- Implement spells
+- Allow spells to be set as the default attack
+
+### Monsters
+
+- Monsters should use the correct color
+- Monsters should use attacks based on their color
+
+### Miscellanous
+
+- Transporting units in vehicles
+- Shooting from vehicles
+- Unit groups (Ctrl + 1-9)
+- Units should rotate randomly when idle
+- Teams
+- Changing unit colours
+- Formations
+
+### Visuals
 
 - Units with more than 2 bars should display a plus sign in their overlay
 - Health bars should be rendered higher for flying units
-- Respect monster color
-- Render interface
-    - Resource icons
-    - Resource counts
-    - Unit ID
-    - Unit stats
-- Render minimap
-- Render info points
-- Render chests
-- Respect Gold tile variants
-- Fog of war
-- Boats should bob when stationary
-
-### Selection & Movement
-
 - Selected units should flash orange
-- Allow buildings to be selected
-- Show "star" effect when sending troops somewhere
-- Passability debug visualisation
-- Pathfinding debug visualisation
-- Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
-
-### Animations
-
-- Attack animations are missing in units.json
-- Death animations require special facing logic!
 - Trees should not all animate in-sync
+- Respect Gold tile variants
 - Gold tile animations
     - Each frame, call `Scenario.update`
     - This should pick 20 tiles randomly from those that are visible
@@ -166,31 +179,24 @@
         - Add an entry to this list
         - Re-use logic from AnimationComponent
     - Add an extra step to the TileRenderer to render these animations on top of the relevant gold tiles
+- Show "star" effect when sending troops somewhere
+- Boats should bob when stationary
 
-### Music
+### AI Players
 
+- Building
+- Resource gathering
+- Training units
+- Exploration
+- Combat
+- Transporting units
+
+### Music & Video
+
+- Play intro video
+- Play campaign videos
 - Add support for WMA music (or convert to another format)
     - [OGG support](https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/)
-
-### Audio
-
-- Clean up audio on exit
-    [ALSOFT] (WW) 1 Source not deleted
-    [ALSOFT] (WW) 1 Buffer not deleted
-
-### Menus
-
-- Use gold cursor in menus
-- Main menu
-- Loading screen
-- Custom Map menu
-- Pause menu
-- Troop libraries
-- Lobby screen
-
-### Editor
-
-- Create a ScenarioWriter class
 
 <!----------------------------------------------------------------------------->
 ## Enhancements
@@ -259,6 +265,7 @@
 - [ ] Replays
 - [ ] Random map generation
 - [ ] Placing beacons to alert teammates
+- [ ] Button on units to show lore from manual
 
 ### Map Editor
 
@@ -277,6 +284,7 @@
 - Setup utilities should log debug output to a file (currently they use cout)
 - Treat linker warnings as errors
 - Suppress warnings from JSON and spdlog libraries
+- Do not use header-only JSON library as it leads to longer compile times
 
 ### CMake
 
@@ -332,12 +340,22 @@
 - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
-- Add padding between spritesheet images to prevent any texure bleeding
+- Create (animated?) gold cursor for menus
+
+### Debugging
+
+- Passability debug visualisation
+- Pathfinding debug visualisation
 
 ### Fonts
 
 - How do we calculate the font size correctly?
     - https://stackoverflow.com/questions/68976859/how-to-calculate-size-of-windows-bitmap-font-using-freetype
+- Try reading the original font files
+- Vanilla text seems more saturated because it uses darker pixels instead of translucency
+    - We should support 2 options:
+        - Vanilla: Uses premade bitmaps with no translucency
+        - Smooth: The current implementation
 
 ### Optimisation
 
@@ -357,6 +375,9 @@
 
 ### Portability
 
+- Test resource extraction from other locales
+- Save config.json / log files to AppData (or at least provide the option)
+- Add support for [Unicode filenames](http://utf8everywhere.org/)
 - Read/write fixed-value types to packets instead of int, size_t, etc.
 - Read/write values to packets using a consistent endianness
     - "Before writing to any WinSock structure, always convert from host order to network order,
@@ -365,6 +386,15 @@
 - Move existing platform-specific functionality to platform folder and add Linux implementation:
     - Default font directories
     - Registry operations in setup project
+
+### Networking
+
+- Adjust net command delay dynamically based on ping
+    - If delay gets increased, clients should send empty commands for any "skipped" ticks
+    - If delay gets reduced, clients keep issuing commands for the next tick that was due, until the "current" tick catches up
+- Send a checksum periodically to check that players are in-sync? (debug mode only)
+- GameState should reject new players
+- Create standalone project to run dedicated server
 
 ### Refactoring
 
@@ -446,9 +476,6 @@
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
 - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 - Delete all sound sources / buffers when exiting
+    [ALSOFT] (WW) 1 Source not deleted
+    [ALSOFT] (WW) 1 Buffer not deleted
 - Playing sounds is quite fiddly (need both AudioStore and AudioSystem)
-
-#### UI
-
-- UI rendering is a total mess
-    - Create a hierarchical UiElement class

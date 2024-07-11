@@ -34,7 +34,8 @@ public:
             int portraitId,
             MovementMode movementMode,
             std::unordered_map<UnitAnimationType, const Animation> animations,
-            std::unordered_map<UnitSoundType, const SoundBank> soundBanks);
+            std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
+            int attackId);
 
     // Begin AnimationContainer override
     const Animation* getAnimation(UnitAnimationType animType) const override;
@@ -58,6 +59,9 @@ private:
 public:
     /** The default name for this unit type. */
     std::string name;
+
+    /** The attack ID of this unit's default attack. */
+    int attackId = -1;
 
     /** ID of this unit's portrait image. */
     int portraitId = 0;

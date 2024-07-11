@@ -1,14 +1,678 @@
 {
   "attacks": [
     {
-      "id": "worker_axe",
-      "damage": 0,
-      "range": 0,
-      "accuracy": 0,
-      "projectileSpeed": 0,
-      "splashRadius": 0,
-      "manaCost": 0,
-      "reloadTime": 0
+      "accuracy": 71,
+      "damage": 176,
+      "manaCost": 40,
+      "name": "Bomb",
+      "splashDamage": true
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "manaCost": 20,
+      "name": "Trap"
+    },
+    {
+      "accuracy": 25,
+      "damage": 4,
+      "name": "Worker Axe",
+      "reloadTime": 267
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Arrow",
+      "projectileSpeed": 15,
+      "range": 4,
+      "reloadTime": 1240
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "One Arrow - Pegas Rider",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 1040
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Three Arrows - Pegas Rider",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 1040
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "Light Sword - Cavalry",
+      "reloadTime": 380
+    },
+    {
+      "accuracy": 25,
+      "damage": 16,
+      "name": "Sword - Knight",
+      "reloadTime": 980
+    },
+    {
+      "accuracy": 25,
+      "damage": 16,
+      "name": "Mace - Knight",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 4840
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "Dagger - Fire Master",
+      "reloadTime": 380
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "Dagger - Thief",
+      "reloadTime": 480
+    },
+    {
+      "accuracy": 25,
+      "damage": 50,
+      "name": "Big Arrow - Ballista",
+      "projectileSpeed": 8,
+      "range": 7,
+      "reloadTime": 2900,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 25,
+      "damage": 40,
+      "name": "Projectile - Battleship",
+      "projectileSpeed": 10,
+      "range": 6,
+      "reloadTime": 4400,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Wizard",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 760
+    },
+    {
+      "accuracy": 25,
+      "damage": 52,
+      "manaCost": 10,
+      "name": "Fire Ball - Wizard",
+      "projectileSpeed": 15,
+      "range": 6,
+      "reloadTime": 2760
+    },
+    {
+      "manaCost": 20,
+      "name": "Frozen Breath - Wizard",
+      "range": 6,
+      "reloadTime": 7260
+    },
+    {
+      "accuracy": 25,
+      "damage": 30,
+      "manaCost": 15,
+      "name": "Cursed Rain - Wizard",
+      "range": 6,
+      "reloadTime": 3760
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Priest",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 760
+    },
+    {
+      "accuracy": 99,
+      "damage": 50,
+      "manaCost": 10,
+      "name": "Dispel Mana - Priest",
+      "range": 7,
+      "reloadTime": 3760
+    },
+    {
+      "manaCost": 10,
+      "name": "Reveal Traps - Priest",
+      "range": 7,
+      "reloadTime": 2760
+    },
+    {
+      "manaCost": 20,
+      "name": "Poison Cropland - Priest",
+      "range": 7,
+      "reloadTime": 6000
+    },
+    {
+      "accuracy": 25,
+      "damage": 13,
+      "name": "Stone - Rock Thrower",
+      "projectileSpeed": 10,
+      "range": 4,
+      "reloadTime": 1680
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Spear - Horde Rider",
+      "reloadTime": 940
+    },
+    {
+      "accuracy": 25,
+      "damage": 20,
+      "name": "Battle Axe - Warlord",
+      "reloadTime": 1380
+    },
+    {
+      "accuracy": 25,
+      "damage": 20,
+      "name": "Poison Spit - Warlord",
+      "projectileSpeed": 12,
+      "range": 5,
+      "reloadTime": 4840
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "Dagger - Gnome Boomer",
+      "reloadTime": 350
+    },
+    {
+      "accuracy": 25,
+      "damage": 7,
+      "name": "Dagger - Rogue",
+      "reloadTime": 430
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "War Stick - Storm Trooper",
+      "reloadTime": 780
+    },
+    {
+      "accuracy": 25,
+      "damage": 92,
+      "name": "Giant Rocks - Catapult",
+      "projectileSpeed": 10,
+      "range": 7,
+      "reloadTime": 2300,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 25,
+      "damage": 36,
+      "name": "Boulder - Troll Galley",
+      "projectileSpeed": 10,
+      "range": 6,
+      "reloadTime": 4700,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 25,
+      "damage": 10,
+      "name": "Flames - War Bat",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 1200
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Priest of Doom",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 860
+    },
+    {
+      "accuracy": 25,
+      "damage": 48,
+      "manaCost": 15,
+      "name": "Death Typhoon - Priest of Doom",
+      "range": 6,
+      "reloadTime": 3760
+    },
+    {
+      "manaCost": 10,
+      "name": "Hyena Howl - Priest of Doom",
+      "range": 7,
+      "reloadTime": 7260
+    },
+    {
+      "accuracy": 25,
+      "damage": 30,
+      "manaCost": 15,
+      "name": "Poison Breath - Priest of Doom",
+      "range": 6,
+      "reloadTime": 3760
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Necromancer",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 860
+    },
+    {
+      "accuracy": 100,
+      "damage": 60,
+      "manaCost": 20,
+      "name": "Drain Life - Necromancer",
+      "range": 6,
+      "reloadTime": 4260
+    },
+    {
+      "manaCost": 10,
+      "name": "Reveal Traps - Necromancer",
+      "range": 7,
+      "reloadTime": 2760
+    },
+    {
+      "accuracy": 50,
+      "damage": 100,
+      "manaCost": 20,
+      "name": "Cursed Land - Necromancer",
+      "range": 6,
+      "reloadTime": 4760
+    },
+    {
+      "accuracy": 25,
+      "damage": 14,
+      "name": "Arrow - Archer",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 1060
+    },
+    {
+      "accuracy": 75,
+      "damage": 21,
+      "name": "Fire Arrow - Archer",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 3260
+    },
+    {
+      "accuracy": 25,
+      "damage": 16,
+      "name": "Halberd - Centaur",
+      "reloadTime": 880
+    },
+    {
+      "accuracy": 25,
+      "damage": 16,
+      "name": "Flame Ring - Centaur",
+      "projectileSpeed": 12,
+      "range": 5,
+      "reloadTime": 4840
+    },
+    {
+      "accuracy": 25,
+      "damage": 8,
+      "name": "Dagger - Dwarf Miner",
+      "reloadTime": 450
+    },
+    {
+      "accuracy": 25,
+      "damage": 9,
+      "name": "Dagger - Scout",
+      "reloadTime": 520
+    },
+    {
+      "accuracy": 25,
+      "damage": 90,
+      "name": "Cannon Ball - Bombard",
+      "projectileSpeed": 10,
+      "range": 7,
+      "reloadTime": 4600,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 75,
+      "damage": 16,
+      "name": "Shell - Arquebusier",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 1100
+    },
+    {
+      "accuracy": 25,
+      "damage": 40,
+      "name": "Projectile - Warship",
+      "projectileSpeed": 10,
+      "range": 6,
+      "reloadTime": 4100,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 25,
+      "damage": 10,
+      "name": "Flash Light - Sky Rider",
+      "projectileSpeed": 18,
+      "range": 5,
+      "reloadTime": 1140
+    },
+    {
+      "accuracy": 75,
+      "damage": 15,
+      "name": "Lightning - Sky Rider",
+      "projectileSpeed": 10,
+      "range": 6,
+      "reloadTime": 3490
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Mage",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 710
+    },
+    {
+      "accuracy": 99,
+      "damage": 50,
+      "manaCost": 10,
+      "name": "Touch of Chaos - Mage",
+      "range": 7,
+      "reloadTime": 5760
+    },
+    {
+      "accuracy": 50,
+      "damage": 120,
+      "manaCost": 20,
+      "name": "Magic Barrier - Mage",
+      "range": 7,
+      "reloadTime": 4840
+    },
+    {
+      "manaCost": 30,
+      "name": "Blindness - Mage",
+      "range": 7,
+      "reloadTime": 30000
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Druid",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 710
+    },
+    {
+      "manaCost": 30,
+      "name": "Berserk - Druid",
+      "range": 7,
+      "reloadTime": 5760
+    },
+    {
+      "accuracy": 25,
+      "damage": 30,
+      "manaCost": 15,
+      "name": "Lightning Bolt - Druid",
+      "range": 6,
+      "reloadTime": 5760
+    },
+    {
+      "accuracy": 25,
+      "damage": 12,
+      "name": "Flash Light - Enchanter",
+      "projectileSpeed": 10,
+      "range": 5,
+      "reloadTime": 710
+    },
+    {
+      "manaCost": 10,
+      "name": "Reveal Traps - Enchanter",
+      "range": 7,
+      "reloadTime": 2760
+    },
+    {
+      "manaCost": 20,
+      "name": "Healing - Enchanter",
+      "range": 7,
+      "reloadTime": 5760
+    },
+    {
+      "accuracy": 25,
+      "damage": 32,
+      "name": "Light Defence Arrow",
+      "projectileSpeed": 15,
+      "range": 6,
+      "reloadTime": 1300
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Black Sea Monster Weapon",
+      "range": 2,
+      "reloadTime": 5000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Blue Sea Monster Weapon",
+      "range": 2,
+      "reloadTime": 5000
+    },
+    {
+      "accuracy": 50,
+      "damage": 60,
+      "name": "Green Sea Monster Weapon",
+      "range": 6,
+      "reloadTime": 4000
+    },
+    {
+      "accuracy": 50,
+      "damage": 60,
+      "name": "Black Snake Weapon",
+      "projectileSpeed": 15,
+      "range": 3,
+      "reloadTime": 4000,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Red Snake Weapon",
+      "projectileSpeed": 15,
+      "range": 5,
+      "reloadTime": 3000,
+      "splashDamage": true
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Green Snake Weapon",
+      "projectileSpeed": 15,
+      "range": 6,
+      "reloadTime": 2500
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Yellow Snake Weapon",
+      "reloadTime": 2000
+    },
+    {
+      "accuracy": 50,
+      "damage": 27,
+      "name": "Black Gryphon Weapon",
+      "reloadTime": 2000
+    },
+    {
+      "accuracy": 50,
+      "damage": 27,
+      "name": "Yellow Gryphon Weapon",
+      "reloadTime": 1800
+    },
+    {
+      "accuracy": 50,
+      "damage": 27,
+      "name": "White Gryphon Weapon",
+      "reloadTime": 1800
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Black Hydra Weapon",
+      "reloadTime": 2000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Blue Hydra Weapon",
+      "reloadTime": 2000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Green Hydra Weapon",
+      "reloadTime": 2000
+    },
+    {
+      "accuracy": 75,
+      "damage": 200,
+      "name": "Black Golem Weapon",
+      "reloadTime": 10000
+    },
+    {
+      "accuracy": 75,
+      "damage": 175,
+      "name": "Blue Golem Weapon",
+      "reloadTime": 8000
+    },
+    {
+      "accuracy": 75,
+      "damage": 150,
+      "name": "White Golem Weapon",
+      "reloadTime": 6000
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "name": "Black Devil Weapon",
+      "range": 6,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 50,
+      "damage": 60,
+      "name": "Red Devil Weapon",
+      "projectileSpeed": 15,
+      "range": 6,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Orange Devil Weapon",
+      "projectileSpeed": 15,
+      "range": 7,
+      "reloadTime": 2500
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "name": "Yellow Devil Weapon",
+      "range": 6,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Black Skeleton Weapon",
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "name": "Red Skeleton Weapon",
+      "range": 3,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 100,
+      "damage": 100,
+      "name": "White Skeleton Weapon",
+      "range": 7,
+      "reloadTime": 4000
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "name": "Yellow Skeleton Weapon",
+      "range": 5,
+      "reloadTime": 4000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Black Dragon Weapon",
+      "reloadTime": 4000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Red Dragon Weapon",
+      "range": 6,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 50,
+      "damage": 200,
+      "name": "Violet Dragon Weapon",
+      "range": 6,
+      "reloadTime": 6000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Blue Dragon Weapon",
+      "projectileSpeed": 15,
+      "range": 4,
+      "reloadTime": 3000
+    },
+    {
+      "accuracy": 50,
+      "damage": 100,
+      "name": "Orange Dragon Weapon",
+      "reloadTime": 4000
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Green Dragon Weapon",
+      "reloadTime": 5000
+    },
+    {
+      "name": "Key-Door Destroyer"
+    },
+    {
+      "accuracy": 56,
+      "damage": 90,
+      "name": "Soul Damnation Scroll",
+      "range": 6
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Spiral Scroll"
+    },
+    {
+      "accuracy": 50,
+      "damage": 40,
+      "name": "Wave Scroll"
+    },
+    {
+      "name": "Teleport Scroll"
     }
   ]
 }

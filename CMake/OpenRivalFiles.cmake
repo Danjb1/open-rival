@@ -42,6 +42,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/WalkerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/WallComponent.cpp
     ${OPEN_RIVAL_DIR}/src/game/Animations.cpp
+    ${OPEN_RIVAL_DIR}/src/game/AttackDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/BuildingDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameInterface.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameState.cpp
@@ -177,6 +178,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/WalkerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/WallComponent.h
     ${OPEN_RIVAL_DIR}/include/game/Animations.h
+    ${OPEN_RIVAL_DIR}/include/game/AttackDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingType.h
     ${OPEN_RIVAL_DIR}/include/game/GameInterface.h
