@@ -15,7 +15,7 @@ bool Shader::validateVertexAttribute(GLint attributeLoc, const std::string& attr
 {
     if (attributeLoc == -1)
     {
-        LOG_WARN("Could not locate vertex attribute {} for shader {}", attributeName, getName());
+        LOG_ERROR("Could not locate vertex attribute {} for shader {}", attributeName, getName());
         return false;
     }
     return true;
@@ -25,7 +25,7 @@ bool Shader::validateUniform(GLint uniformLoc, const std::string& uniformName) c
 {
     if (uniformLoc == -1)
     {
-        LOG_WARN("Could not locate uniform {} for shader {}", uniformName, getName());
+        LOG_ERROR("Could not locate uniform {} for shader {}", uniformName, getName());
         return false;
     }
     return true;
@@ -61,7 +61,7 @@ bool IndexedTextureShader::isValid() const
     // Validate program ID
     if (programId == 0)
     {
-        printf("Could not generate program ID\n");
+        LOG_ERROR("Could not generate program ID\n");
         return false;
     }
 
@@ -107,7 +107,7 @@ bool WorldShader::isValid() const
     // Validate program ID
     if (programId == 0)
     {
-        printf("Could not generate program ID\n");
+        LOG_ERROR("Could not generate program ID\n");
         return false;
     }
 
@@ -151,7 +151,7 @@ bool FontShader::isValid() const
     // Validate program ID
     if (programId == 0)
     {
-        printf("Could not generate program ID\n");
+        LOG_ERROR("Could not generate program ID\n");
         return false;
     }
 
@@ -190,7 +190,7 @@ bool TextureShader::isValid() const
     // Validate program ID
     if (programId == 0)
     {
-        printf("Could not generate program ID\n");
+        LOG_ERROR("Could not generate program ID\n");
         return false;
     }
 
@@ -227,7 +227,7 @@ bool BoxShader::isValid() const
     // Validate program ID
     if (programId == 0)
     {
-        printf("Could not generate program ID\n");
+        LOG_ERROR("Could not generate program ID\n");
         return false;
     }
 
@@ -270,7 +270,7 @@ GLuint createShader(const char* vertShader, const char* fragShader)
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
     if (vShaderCompiled != GL_TRUE)
     {
-        printf("Unable to compile vertex shader %d!\n", vertexShader);
+        LOG_ERROR("Unable to compile vertex shader {}!\n", vertexShader);
         ShaderUtils::printShaderLog(vertexShader);
         return 0;
     }
@@ -294,7 +294,7 @@ GLuint createShader(const char* vertShader, const char* fragShader)
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
     if (fShaderCompiled != GL_TRUE)
     {
-        printf("Unable to compile fragment shader %d!\n", fragmentShader);
+        LOG_ERROR("Unable to compile vertex shader {}!\n", fragmentShader);
         ShaderUtils::printShaderLog(fragmentShader);
         return 0;
     }
@@ -310,7 +310,7 @@ GLuint createShader(const char* vertShader, const char* fragShader)
     glGetProgramiv(programId, GL_LINK_STATUS, &programSuccess);
     if (programSuccess != GL_TRUE)
     {
-        printf("Error linking program %d!\n", programId);
+        LOG_ERROR("Error linking program {}!\n", programId);
         ShaderUtils::printProgramLog(programId);
         return 0;
     }

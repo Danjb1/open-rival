@@ -115,12 +115,13 @@ void AttackComponent::deliverAttack()
     HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
     healthComp->addHealth(-attackToUse->damage);
 
-    // TMP: Hardcode hit sounds for now
-    const SoundBank soundBank({ 311, 349, 350, 351, 352, 353, 354 });
-
     // Play hit sound
-    int soundId = soundBank.getRandomSound();
-    audioSystem.playSound(audioStore, soundId);
+    const SoundBank* soundBank = audioStore.getSoundBank(attackToUse->sound);
+    if (soundBank)
+    {
+        int soundId = soundBank->getRandomSound();
+        audioSystem.playSound(audioStore, soundId);
+    }
 
     // Start cooldown
     // TODO: This should depend on the unit's attack speed

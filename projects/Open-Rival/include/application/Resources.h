@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "audio/MidiFile.h"
+#include "audio/Sounds.h"
 #include "audio/WaveFile.h"
 #include "game/AttackDef.h"
 #include "game/BuildingDef.h"
@@ -61,6 +62,7 @@ class AudioStore
 public:
     virtual std::shared_ptr<const WaveFile> getSound(int id) const = 0;
     virtual std::shared_ptr<const MidiFile> getMidi(int id) const = 0;
+    virtual const SoundBank* getSoundBank(const std::string& soundId) const = 0;
 };
 
 /**
@@ -108,9 +110,10 @@ public:
     const Font& getFontRegular() const override;
     // End FontStore override
 
-    // Begin SoundStore override
+    // Begin AudioStore override
     std::shared_ptr<const WaveFile> getSound(int id) const override;
     std::shared_ptr<const MidiFile> getMidi(int id) const override;
+    const SoundBank* getSoundBank(const std::string& soundId) const override;
     // End SoundStore override
 
     // Begin DataStore override
@@ -139,6 +142,7 @@ private:
     std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
     std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
     std::unordered_map<int, AttackDef> initAttackDefs() const;
+    std::unordered_map<std::string, const SoundBank> initSoundBanks() const;
 
 public:
     // Directories
@@ -205,6 +209,7 @@ private:
     std::unordered_map<UnitType, UnitDef> unitDefs;
     std::unordered_map<BuildingType, BuildingDef> buildingDefs;
     std::unordered_map<int, AttackDef> attackDefs;
+    std::unordered_map<std::string, const SoundBank> soundBanks;
 };
 
 }  // namespace Rival

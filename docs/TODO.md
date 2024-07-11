@@ -4,7 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Get hit sounds from the current attack
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -41,6 +40,7 @@
 - Units should rest when idle (approx. 200 health in 30 seconds)
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
+- Attacks with splash damage should nearby damage units
 
 ### Spatial Partitioning
 
@@ -76,6 +76,7 @@
 - Loading screen
 - Custom Map menu
 - Pause menu
+- Spybook
 - Postgame screen
 - Troop libraries
 - Lobby screen
@@ -90,6 +91,7 @@
 - Resource gathering
 - Training new units
 - Food consumption
+- Watchtowers / main buildings should shoot
 
 ### Items
 
@@ -140,6 +142,7 @@
     - Pick the most suitable attack when a new target is set
     - Implement per-attack cooldowns
 - Some upgrades should modify unit stats
+- Magic shield
 - Thieving
 - Invisibility
 - Spying

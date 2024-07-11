@@ -17,7 +17,8 @@
       "accuracy": 25,
       "damage": 4,
       "name": "Worker Axe",
-      "reloadTime": 267
+      "reloadTime": 267,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -47,13 +48,15 @@
       "accuracy": 25,
       "damage": 8,
       "name": "Light Sword - Cavalry",
-      "reloadTime": 380
+      "reloadTime": 380,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 16,
       "name": "Sword - Knight",
-      "reloadTime": 980
+      "reloadTime": 980,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -67,13 +70,15 @@
       "accuracy": 25,
       "damage": 8,
       "name": "Dagger - Fire Master",
-      "reloadTime": 380
+      "reloadTime": 380,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 8,
       "name": "Dagger - Thief",
-      "reloadTime": 480
+      "reloadTime": 480,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -164,13 +169,15 @@
       "accuracy": 25,
       "damage": 12,
       "name": "Spear - Horde Rider",
-      "reloadTime": 940
+      "reloadTime": 940,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 20,
       "name": "Battle Axe - Warlord",
-      "reloadTime": 1380
+      "reloadTime": 1380,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -184,19 +191,22 @@
       "accuracy": 25,
       "damage": 8,
       "name": "Dagger - Gnome Boomer",
-      "reloadTime": 350
+      "reloadTime": 350,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 7,
       "name": "Dagger - Rogue",
-      "reloadTime": 430
+      "reloadTime": 430,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 12,
       "name": "War Stick - Storm Trooper",
-      "reloadTime": 780
+      "reloadTime": 780,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -304,7 +314,8 @@
       "accuracy": 25,
       "damage": 16,
       "name": "Halberd - Centaur",
-      "reloadTime": 880
+      "reloadTime": 880,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
@@ -318,13 +329,15 @@
       "accuracy": 25,
       "damage": 8,
       "name": "Dagger - Dwarf Miner",
-      "reloadTime": 450
+      "reloadTime": 450,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,
       "damage": 9,
       "name": "Dagger - Scout",
-      "reloadTime": 520
+      "reloadTime": 520,
+      "sound": "melee_hit"
     },
     {
       "accuracy": 25,

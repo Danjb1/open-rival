@@ -24,6 +24,7 @@ public:
     int projectileSpeed = 0;
     int manaCost = 0;
     int reloadTime = 0;
+    std::string sound;
     bool splashDamage = false;
 };
 

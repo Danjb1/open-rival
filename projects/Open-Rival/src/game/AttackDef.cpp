@@ -13,6 +13,7 @@ AttackDef AttackDef::fromJson(const json& j)
     attackDef.projectileSpeed = j.value("projectileSpeed", 0);
     attackDef.range = j.value("range", 1);
     attackDef.reloadTime = j.value("reloadTime", 0);
+    attackDef.sound = j.value("sound", "");
     attackDef.splashDamage = j.value("splashDamage", false);
 
     return attackDef;
