@@ -45,6 +45,7 @@ Resources::Resources(ApplicationContext& context)
     , unitDefs(initUnitDefs())
     , buildingDefs(initBuildingDefs())
     , attackDefs(initAttackDefs())
+    , soundBanks(initSoundBanks())
 {
 }
 
@@ -344,11 +345,11 @@ std::unordered_map<UnitType, UnitDef> Resources::initUnitDefs() const
 
         try
         {
-            allUnitDefs.insert({ unitType, UnitDef::fromJson(rawUnitDef) });
+            allUnitDefs.emplace(unitType, UnitDef::fromJson(rawUnitDef));
         }
         catch (const json::exception&)
         {
-            LOG_ERROR("Error parsing unit definition: %s", std::to_string(nextUnitType));
+            LOG_ERROR("Error parsing unit definition: {}", nextUnitType);
             throw;
         }
 
@@ -377,11 +378,11 @@ std::unordered_map<BuildingType, BuildingDef> Resources::initBuildingDefs() cons
 
         try
         {
-            allBuildingDefs.insert({ unitType, BuildingDef::fromJson(rawBuildingDef) });
+            allBuildingDefs.emplace(unitType, BuildingDef::fromJson(rawBuildingDef));
         }
         catch (const json::exception&)
         {
-            LOG_ERROR("Error parsing building definition: %s", std::to_string(nextBuildingType));
+            LOG_ERROR("Error parsing building definition: {}", nextBuildingType);
             throw;
         }
 
@@ -403,11 +404,11 @@ std::unordered_map<int, AttackDef> Resources::initAttackDefs() const
     {
         try
         {
-            allAttackDefs.insert({ nextAttackType, AttackDef::fromJson(rawAttackDef) });
+            allAttackDefs.emplace(nextAttackType, AttackDef::fromJson(rawAttackDef));
         }
         catch (const json::exception&)
         {
-            LOG_ERROR("Error parsing attack definition: %d", std::to_string(nextAttackType));
+            LOG_ERROR("Error parsing attack definition: {}", nextAttackType);
             throw;
         }
 
@@ -415,6 +416,31 @@ std::unordered_map<int, AttackDef> Resources::initAttackDefs() const
     }
 
     return allAttackDefs;
+}
+
+std::unordered_map<std::string, const SoundBank> Resources::initSoundBanks() const
+{
+    json rawData = JsonUtils::readJsonFile(Resources::dataDir + "sounds.json");
+    json soundList = rawData["sounds"];
+
+    std::unordered_map<std::string, const SoundBank> allSoundBanks;
+
+    for (json::iterator it = soundList.begin(); it != soundList.end(); ++it)
+    {
+        try
+        {
+            const std::string soundKey = it.key();
+            std::vector<int> soundIds = it.value();
+            allSoundBanks.emplace(soundKey, soundIds);
+        }
+        catch (const json::exception&)
+        {
+            LOG_ERROR("Error parsing sound bank");
+            throw;
+        }
+    }
+
+    return allSoundBanks;
 }
 
 const Font& Resources::getFontSmall() const
@@ -500,6 +526,12 @@ std::shared_ptr<const WaveFile> Resources::getSound(int id) const
 std::shared_ptr<const MidiFile> Resources::getMidi(int id) const
 {
     return midis.at(id);
+}
+
+const SoundBank* Resources::getSoundBank(const std::string& soundId) const
+{
+    auto iter = soundBanks.find(soundId);
+    return iter == soundBanks.cend() ? nullptr : &iter->second;
 }
 
 const UnitDef* Resources::getUnitDef(UnitType unitType) const
