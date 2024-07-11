@@ -41,7 +41,9 @@ public:
     virtual void onEntityRemovedFromWorld(World*) {}
 
     /**
-     * Callback for when the owning Entity is added back to the world after being removed.
+     * Callback for when the owning Entity is added to the world.
+     *
+     * This may be the first time the Entity has been added, or they may have been previously removed.
      */
     virtual void onEntityAddedToWorld(World*) {}
 

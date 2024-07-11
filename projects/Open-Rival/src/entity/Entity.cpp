@@ -36,13 +36,11 @@ void Entity::addedToWorld(World* newWorld, int newId, MapNode newPos)
             component->onEntityFirstAddedToWorld(world);
         }
     }
-    else
+
+    for (const auto& kv : components)
     {
-        for (const auto& kv : components)
-        {
-            const auto& component = kv.second;
-            component->onEntityAddedToWorld(world);
-        }
+        const auto& component = kv.second;
+        component->onEntityAddedToWorld(world);
     }
 
     onReady();
