@@ -2,6 +2,8 @@
 
 #include "entity/Entity.h"
 #include "game/World.h"
+#include "utils/EnumUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
