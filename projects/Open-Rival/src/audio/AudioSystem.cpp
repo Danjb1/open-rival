@@ -119,13 +119,22 @@ void AudioSystem::waitForSound()
 void AudioSystem::playNextSound()
 {
     const std::scoped_lock<std::mutex> lock(soundQueueMutex);
-    if (soundQueue.size() > 0)
+    if (soundQueue.empty())
     {
-        SoundSource& sound = soundQueue.front();
+        return;
+    }
+
+    SoundSource& sound = soundQueue.front();
+    try
+    {
         ALint sourceId = AudioUtils::playSound(sound);
         soundQueue.pop();
-
         playedSounds.emplace(sourceId, sound);
+    }
+    catch (const std::runtime_error& e)
+    {
+        // Don't crash the game because of an audio error
+        LOG_ERROR(e.what());
     }
 }
 
@@ -212,6 +221,7 @@ void AudioSystem::cleanUpPlayedSounds()
         }
         else
         {
+            alDeleteSources(1, &sourceId);
             it = playedSounds.erase(it);
         }
     }
