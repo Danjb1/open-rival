@@ -62,7 +62,7 @@ void MovementComponent::onEntityFirstAddedToWorld(World*)
 
 void MovementComponent::onEntityRemovedFromWorld(World*)
 {
-    resetPassability();
+    resetPassability(true);
 }
 
 void MovementComponent::destroy()
@@ -150,15 +150,26 @@ void MovementComponent::prepareForMovement()
     passabilityUpdater.onUnitPreparingMove(*world, entity->getPos());
 }
 
-void MovementComponent::resetPassability()
+void MovementComponent::resetPassability(bool wasRemoved)
 {
     World* world = entity->getWorld();
-    passabilityUpdater.onUnitStopped(*world, entity->getPos());
 
     // If we were moving to another tile, we should unblock it
-    if (movement.isValid())
+    if (movement.isValid() && entity->getPos() == movement.start)
     {
         passabilityUpdater.onUnitMoveAborted(*world, movement.destination);
+    }
+
+    if (wasRemoved)
+    {
+        // Reset the current tile's passability in case we were preparing to move out of it.
+        // Normally the PassabilityComponent would reset our current tile's passability but this does not consider
+        // passability flags relating to movement.
+        passabilityUpdater.onUnitMoveAborted(*world, entity->getPos());
+    }
+    else
+    {
+        passabilityUpdater.onUnitStopped(*world, entity->getPos());
     }
 }
 
@@ -174,7 +185,7 @@ void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& contex
     if (route.isEmpty())
     {
         // Failed to plan a route
-        resetPassability();
+        resetPassability(false);
     }
 }
 
@@ -439,7 +450,7 @@ void MovementComponent::onCompletedMoveToNewTile()
 
 void MovementComponent::stopMovement()
 {
-    resetPassability();
+    resetPassability(false);
     route = {};
     movement.clear();
     numFailedRepathAttempts = 0;

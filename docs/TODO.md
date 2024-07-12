@@ -4,7 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- BUG: Passability is not reset correctly when a unit dies
 - BUG: Crash once when trying to move (near top of map)
 - Avoid repathing every tick if the target is unreachable when attacking
 - Respect unit attack speed

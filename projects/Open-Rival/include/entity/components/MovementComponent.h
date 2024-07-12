@@ -100,7 +100,7 @@ private:
     void updateMovement(int delta);
     bool tryStartNextMovement();
     void startNextMovement(PathfindingMap& map);
-    void resetPassability();
+    void resetPassability(bool wasRemoved);
 
     bool tryRepathAroundNextNode(const PathfindingMap& map);
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
