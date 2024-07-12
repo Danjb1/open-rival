@@ -4,7 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- BUG: Music is crashing the game
 - BUG: Crash once when trying to move (near top of map)
 - BUG: Log file is empty in the event of a crash
 
