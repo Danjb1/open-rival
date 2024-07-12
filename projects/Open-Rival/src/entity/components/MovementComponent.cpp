@@ -53,11 +53,16 @@ void MovementComponent::onEntityFirstAddedToWorld(World*)
     Unit* unit = entity->as<Unit>();
     if (!unit)
     {
-        LOG_WARN("UnitAnimationComponent must be attached to a Unit!");
+        LOG_WARN("MovementComponent must be attached to a Unit!");
         return;
     }
 
     unit->addStateListener(this);
+}
+
+void MovementComponent::onEntityRemovedFromWorld(World*)
+{
+    resetPassability();
 }
 
 void MovementComponent::destroy()
@@ -135,6 +140,12 @@ void MovementComponent::removeListener(std::weak_ptr<MovementListener> listener)
 
 void MovementComponent::prepareForMovement()
 {
+    if (isCurrentlyMoving())
+    {
+        // If we're already moving then the passability is already set correctly
+        return;
+    }
+
     World* world = entity->getWorld();
     passabilityUpdater.onUnitPreparingMove(*world, entity->getPos());
 }
@@ -143,6 +154,12 @@ void MovementComponent::resetPassability()
 {
     World* world = entity->getWorld();
     passabilityUpdater.onUnitStopped(*world, entity->getPos());
+
+    // If we were moving to another tile, we should unblock it
+    if (movement.isValid())
+    {
+        passabilityUpdater.onUnitMoveAborted(*world, movement.destination);
+    }
 }
 
 void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints)
@@ -232,30 +249,8 @@ bool MovementComponent::tryStartNextMovement()
     // Check that the destination is traversable
     if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
     {
-        if (passabilityChecker.isNodeObstructed(*world, *nextNode))
+        if (!tryRepathAroundNextNode(*world))
         {
-            // Tile is obstructed, e.g. another unit has stopped there
-            if (!tryRepathAroundObstruction(*world))
-            {
-                // No way around the obstruction - give up
-                stopMovement();
-                return false;
-            }
-        }
-        else
-        {
-            // Tile is only temporarily obstructed, e.g. another unit is leaving the tile
-            if (!tryRepathAroundTemporaryObstruction(*world))
-            {
-                // We are either waiting to repath, or repathing failed
-                return false;
-            }
-        }
-
-        nextNode = route.peek();
-        if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
-        {
-            // Still can't move yet!
             return false;
         }
     }
@@ -275,6 +270,7 @@ bool MovementComponent::tryStartNextMovement()
 
 void MovementComponent::startNextMovement(PathfindingMap& map)
 {
+    numFailedRepathAttempts = 0;
     ticksSpentWaiting = 0;
 
     // Configure the new movement
@@ -298,9 +294,60 @@ void MovementComponent::startNextMovement(PathfindingMap& map)
             listeners, [&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
 }
 
+bool MovementComponent::tryRepathAroundNextNode(const PathfindingMap& map)
+{
+    const MapNode* nextNode = route.peek();
+    if (passabilityChecker.isNodeObstructed(map, *nextNode))
+    {
+        // Tile is obstructed, e.g. another unit has stopped there
+        if (!tryRepathAroundObstruction(map))
+        {
+            // No way around the obstruction - give up
+            stopMovement();
+            return false;
+        }
+    }
+    else
+    {
+        // Tile is only temporarily obstructed, e.g. another unit is leaving the tile
+        if (!tryRepathAroundTemporaryObstruction(map))
+        {
+            // We are either waiting to repath, or repathing failed
+            return false;
+        }
+    }
+
+    // We have found a route, but it might not currently be traversable
+    nextNode = route.peek();
+    if (!passabilityChecker.isNodeTraversable(map, *nextNode))
+    {
+        if (route.getSize() == 1)
+        {
+            // The pathfinder still returns a route of size 1 even if the destination is unreachable, which is
+            // probably what's happened here. In this case there is no point trying to repath because we're already
+            // about as close as we can get to destination.
+            stopMovement();
+        }
+        else
+        {
+            // Still can't move yet!
+            ++numFailedRepathAttempts;
+            if (numFailedRepathAttempts >= maxRepathAttempts)
+            {
+                LOG_DEBUG_CATEGORY("pathfinding", "Reached max repath attempts");
+                stopMovement();
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
 bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap& map)
 {
-    if (ticksSpentWaiting < maxTicksToWaitForTileToClear)
+    if (ticksSpentWaiting < numTicksToWaitForTileToClear)
     {
         // Wait a while to see if the obstruction clears
         if (ticksSpentWaiting == 0)
@@ -312,7 +359,6 @@ bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap
         return false;
     }
 
-    // Reset the timer so we don't try to repath every tick
     ticksSpentWaiting = 0;
 
     return tryRepathAroundObstruction(map);
@@ -329,8 +375,10 @@ bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map)
      * 2) Units can overtake slower units.
      * 3) Units can move out of each other's way if they are trying to walk through each other.
      *
-     * Note that each time we attempt to repath around an obstruction, nodesToAvoid will grow. We should periodically
-     * check that these nodes are still obstructed, otherwise we may end up taking a sub-optimal route.
+     * Note that each time we attempt to repath around an obstruction, nodesToAvoid will grow.
+     *
+     * TODO: We should periodically check that these nodes are still obstructed, otherwise we may end up taking a
+     * sub-optimal route.
      */
     const MapNode* nextNode = route.peek();
     cachedHints.nodesToAvoid.insert(*nextNode);
@@ -375,8 +423,6 @@ void MovementComponent::onLeftPreviousTile()
     passabilityUpdater.onUnitLeftTile(*world, entity->getPos());
 
     // Update entity position
-    // TODO: Currently, during movement, entities are considered to occupy their original tile until they have fully
-    // moved into the new tile. We may want to move the unit to the new tile once they are halfway through the movement.
     entity->setPos(movement.destination);
 }
 
@@ -393,9 +439,10 @@ void MovementComponent::onCompletedMoveToNewTile()
 
 void MovementComponent::stopMovement()
 {
+    resetPassability();
     route = {};
     movement.clear();
-    resetPassability();
+    numFailedRepathAttempts = 0;
     ticksSpentWaiting = 0;
     CollectionUtils::forEachWeakPtr<MovementListener>(listeners, [&](auto listener) { listener->onUnitStopped(); });
 }

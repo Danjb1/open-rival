@@ -9,12 +9,10 @@ class Palisade : public Entity
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Palisade;
-    static constexpr int width = 1;
-    static constexpr int height = 1;
 
 public:
     Palisade(bool isGrate)
-        : Entity(staticEntityType, width, height)
+        : Entity(staticEntityType, /* isBig = */ false)
         , isGrate(isGrate)
     {
     }

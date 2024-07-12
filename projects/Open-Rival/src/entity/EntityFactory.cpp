@@ -204,6 +204,9 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     // const Animation anim = getObjectAnimation(objPlacement.type, objPlacement.variant);
     // obj->attach(std::make_shared<AnimationComponent>(anim));
 
+    // PassabilityComponent
+    obj->attach(std::make_shared<PassabilityComponent>(TilePassability::Blocked));
+
     return obj;
 }
 

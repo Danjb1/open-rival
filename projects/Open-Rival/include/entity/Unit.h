@@ -40,12 +40,10 @@ class Unit
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
-    static constexpr int width = 1;
-    static constexpr int height = 1;
 
 public:
     Unit(UnitType type, std::string name, bool isNameUnique)
-        : Entity(staticEntityType, width, height)
+        : Entity(staticEntityType, /* isBig = */ false)
         , type(type)
         , name(name)
         , isNameUnique(isNameUnique)

@@ -2,10 +2,9 @@
 
 namespace Rival {
 
-Entity::Entity(EntityType entityType, int width, int height)
+Entity::Entity(EntityType entityType, bool isBig)
     : entityType(entityType)
-    , width(width)
-    , height(height)
+    , bIsBig(isBig)
     , pos({ -1, -1 })
     , world(nullptr)
     , deleted(false)

@@ -53,6 +53,12 @@ void FlyerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
     map.addPassability(node, TilePassability::FlyingUnit);
 }
 
+void FlyerPassability::onUnitMoveAborted(PathfindingMap& map, const MapNode& node)
+{
+    map.removePassability(node,
+            TilePassability::FlyingUnit | TilePassability::FlyingUnitPendingMove | TilePassability::FlyingUnitLeaving);
+}
+
 FlyerComponent::FlyerComponent()
     : MovementComponent(MovementMode::Flying, FlyerComponent::flyerPassability, FlyerComponent::flyerPassability)
 {

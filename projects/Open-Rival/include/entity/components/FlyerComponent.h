@@ -26,6 +26,7 @@ public:
     void onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough) override;
     void onUnitLeftTile(PathfindingMap& map, const MapNode& node) override;
     void onUnitStopped(PathfindingMap& map, const MapNode& node) override;
+    void onUnitMoveAborted(PathfindingMap& map, const MapNode& node) override;
     // End PassabilityUpdater override
 
 private:

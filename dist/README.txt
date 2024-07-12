@@ -87,7 +87,6 @@ Omitting the port parameter uses the default port of 25565.
 Thank you for your patience during these early stages of development!
 
 - (Not implemented) No visual effect is displayed when issuing a move command.
-- (Not implemented) Units can walk through buildings and other objects.
 - (Not implemented) Buildings cannot be selected.
 - (Not implemented) Selected units do not flash orange.
 - (Not implemented) Some objects (e.g. chests) are not yet loaded.

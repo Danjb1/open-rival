@@ -15,3 +15,5 @@ Many of these files need to be built and/or copied to this folder, which involve
 7. Copy `dist` to a temporary folder, and test that everything works.
 8. Package it up as **open-rival_vX.X.X_x64.zip**.
 9. Tag the repo with the latest version.
+
+> NOTE: The game cannot be run in "Debug" mode on machines without a development environment installed.
