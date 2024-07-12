@@ -97,6 +97,7 @@ Thank you for your patience during these early stages of development!
 - (Bug) Cursor position should have a greater impact on zooming.
 - (Bug) Some animations look a little off (e.g. Snake).
 - (Bug) Pathfinding lags the game when moving very large groups of units.
+- (Bug) Lag spike when trying to move a group to an unreachable destination.
 
 ================================================================================
 4. Settings

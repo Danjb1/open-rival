@@ -95,7 +95,7 @@ void AttackComponent::update(int delta)
     {
         // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between units
         // that all start moving at the same time
-        moveToTarget(targetEntity->getPos());
+        tryMoveToTarget(targetEntity->getPos());
     }
 }
 
@@ -130,6 +130,15 @@ void AttackComponent::deliverAttack()
 
 void AttackComponent::switchToNewTarget()
 {
+    auto currentTarget = weakTargetEntity.lock();
+    auto newTarget = weakRequestedTargetEntity.lock();
+    if (newTarget && newTarget != currentTarget)
+    {
+        // Reset movement restrictions when switching to a new target
+        moveToTargetCooldown = 0;
+        numMovementAttempts = 0;
+    }
+
     weakTargetEntity = weakRequestedTargetEntity;
 }
 
@@ -202,6 +211,30 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
     CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
 }
 
+void AttackComponent::tryMoveToTarget(const MapNode& node)
+{
+    if (numMovementAttempts > maxMovementAttempts)
+    {
+        // Give up
+        setTarget({});
+        return;
+    }
+
+    if (moveToTargetCooldown > 0)
+    {
+        // We have to wait before we can repath
+        --moveToTargetCooldown;
+        return;
+    }
+
+    moveToTarget(node);
+    ++numMovementAttempts;
+
+    // Avoid repathing every tick.
+    // This can happen if we fail to find a path, or the route is abandoned due to the target being obstructed.
+    moveToTargetCooldown = repathDelay;
+}
+
 void AttackComponent::moveToTarget(const MapNode& node)
 {
     auto moveComponent = weakMovementComp.lock();
@@ -211,18 +244,18 @@ void AttackComponent::moveToTarget(const MapNode& node)
         return;
     }
 
-    if (moveComponent->getRoute().getIntendedDestination() == node)
+    if (!moveComponent->getRoute().isEmpty() && moveComponent->getRoute().getIntendedDestination() == node)
     {
         // We are already moving towards the target
         return;
     }
 
-    // TODO: Avoid repathing every tick if the target is unreachable
     Pathfinding::Context context;
     Pathfinding::Hints hints;
     // We want units to make every effort to reach the destination;
     // this forces them to pathfind reasonably far around obstructions.
     // TODO: This might not be enough, still.
+    // TODO: This causes pathfinding to take a very long time if the target is surrounded by obstructions.
     hints.obstructedMovementCost = 8;
     moveComponent->moveTo(node, context, hints);
 }

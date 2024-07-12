@@ -64,12 +64,19 @@ private:
     bool isInRange(const std::shared_ptr<Entity> target) const;
     void requestAttack(std::shared_ptr<Entity> targetEntity);
     void startAttack(std::shared_ptr<Entity> targetEntity);
+    void tryMoveToTarget(const MapNode& node);
     void moveToTarget(const MapNode& node);
 
 public:
     static const std::string key;
 
 private:
+    /** Number of ticks to wait before trying to repath to an unreachable target. */
+    static constexpr int repathDelay = 60;
+
+    /** Number of attempts to plan a route to the target before giving up. */
+    static constexpr int maxMovementAttempts = 10;
+
     const AudioStore& audioStore;
     AudioSystem& audioSystem;
 
@@ -90,6 +97,9 @@ private:
 
     float cooldownTimeElapsed = 0;
     int cooldownDuration = 0;
+
+    int moveToTargetCooldown = 0;
+    int numMovementAttempts = 0;
 };
 
 }  // namespace Rival

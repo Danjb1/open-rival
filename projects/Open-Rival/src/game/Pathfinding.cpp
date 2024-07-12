@@ -223,7 +223,7 @@ std::deque<MapNode> Pathfinder::findPath()
         if (shouldCheckPerimeter() && isGoalInsideEnclosedPerimeter())
         {
             // Goal is inside an unreachable area; abort further pathfinding!
-            LOG_DEBUG_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
+            LOG_INFO_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
             break;
         }
 
@@ -232,7 +232,7 @@ std::deque<MapNode> Pathfinder::findPath()
         // See if we've reached the goal
         if (current.node == goal)
         {
-            LOG_DEBUG_CATEGORY("pathfinding", "Found goal in {} steps", nodesVisited);
+            LOG_INFO_CATEGORY("pathfinding", "Found goal in {} steps", nodesVisited);
             return reconstructPath(current.node, /* cachePaths = */ true);
         }
 
@@ -240,7 +240,7 @@ std::deque<MapNode> Pathfinder::findPath()
         if (cachedPath.has_value())
         {
             // Use the cached path to the goal from this node onwards
-            LOG_DEBUG_CATEGORY("pathfinding",
+            LOG_INFO_CATEGORY("pathfinding",
                     "Found goal in {} steps using cached path from ({}, {})",
                     nodesVisited,
                     current.node.x,
@@ -269,7 +269,7 @@ std::deque<MapNode> Pathfinder::findPath()
     // Note that, due to the fact that due to the fact that we do not set lowestCostToGoal for the start node,
     // we will always move at least 1 tile (if possible), even if it takes us further away than our starting
     // location. This is in keeping with the behavior of the original game.
-    LOG_DEBUG_CATEGORY("pathfinding", "Found best path towards goal in {} steps", nodesVisited);
+    LOG_INFO_CATEGORY("pathfinding", "Found best path towards goal in {} steps", nodesVisited);
     return reconstructPath(closestNodeToGoal);
 }
 
