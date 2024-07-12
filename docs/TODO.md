@@ -18,6 +18,7 @@
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
 - Add projectiles
+- Units should be able to walk over thin strips of water - test this!
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -45,6 +46,7 @@
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
 - Attacks with splash damage should nearby damage units
+- Destroying cropland
 
 ### Spatial Partitioning
 
@@ -95,16 +97,19 @@
 - Allow buildings to be selected
     - Play a sound
 - Building construction
+    - Buildings must be placed within 6 tiles of an existing building
+    - Shipyards must be placed on a coastline
 - Resource gathering
 - Training new units
 - Food consumption
-- Watchtowers / main buildings should shoot
+- Selling buildings
 - Repairing buildings
 
 ### Items
 
 - Units should have an InventoryComponent
-- Allow picking up and dropping items
+- Picking up and dropping items
+- Exchanging items with another unit
 - Items should affect unit stats
 - Some items can be used (e.g. scrolls, keys)
 - Units should drop their items on death
@@ -148,7 +153,9 @@
 - Register additional attacks when the relevant upgrades are unlocked
     - Pick the most suitable attack when a new target is set
     - Implement per-attack cooldowns
+- Sending units to get upgraded
 - Some upgrades should modify unit stats
+- Mana bar and mana consumption
 - Magic shield
 - Repairing vehicles
 - Thieving
@@ -157,6 +164,7 @@
 - Traps
 - Bombs
 - Place Land/Water ability
+- Defense (Watchtowers / town centers)
 - Implement spells
 - Allow spells to be set as the default attack
 
@@ -169,9 +177,10 @@
 
 - Starting locations (initial camera location per-player)
 - Transporting units in vehicles
-- Shooting from vehicles
+- Shooting from vehicles (toggleable game option)
+- Click on health bar to go get healed / repaired
 - Unit groups (Ctrl + 1-9)
-- Units should rotate randomly when idle
+- Units should rotate randomly when idle (except vehicles)
 - Teams
     - Shared fog of war
     - Flagging locations to allies
@@ -181,6 +190,7 @@
 - Replays
 - Chat
 - Cheat codes
+- Savegames
 
 ### Visuals
 
