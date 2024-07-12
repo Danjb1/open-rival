@@ -37,7 +37,7 @@ void AudioSystem::midiThreadLoop()
 void AudioSystem::waitForMidi()
 {
     std::unique_lock<std::mutex> midiReadyLock(midiMutex);
-    while (midiActive && currentMidiTrack->isEmpty())
+    while (midiActive && (!currentMidiTrack || currentMidiTrack->isEmpty()))
     {
         midiReadyCondition.wait(midiReadyLock);
     }
