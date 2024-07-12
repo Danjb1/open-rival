@@ -100,6 +100,7 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area)
 {
     MapNode neighbour;
+    const bool isUpper = isUpperTile(node.x);
 
     switch (dir)
     {
@@ -107,25 +108,53 @@ std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBou
         neighbour = { node.x, node.y + 1 };
         break;
     case Facing::SouthWest:
-        neighbour = { node.x - 1, node.y };
+        if (isUpper)
+        {
+            neighbour = { node.x - 1, node.y };
+        }
+        else
+        {
+            neighbour = { node.x - 1, node.y + 1 };
+        }
         break;
     case Facing::West:
         neighbour = { node.x - eastWestTileSpan, node.y };
         break;
     case Facing::NorthWest:
-        neighbour = { node.x - 1, node.y - 1 };
+        if (isUpper)
+        {
+            neighbour = { node.x - 1, node.y - 1 };
+        }
+        else
+        {
+            neighbour = { node.x - 1, node.y };
+        }
         break;
     case Facing::North:
         neighbour = { node.x, node.y - 1 };
         break;
     case Facing::NorthEast:
-        neighbour = { node.x + 1, node.y - 1 };
+        if (isUpper)
+        {
+            neighbour = { node.x + 1, node.y - 1 };
+        }
+        else
+        {
+            neighbour = { node.x + 1, node.y };
+        }
         break;
     case Facing::East:
         neighbour = { node.x + eastWestTileSpan, node.y };
         break;
     case Facing::SouthEast:
-        neighbour = { node.x + 1, node.y };
+        if (isUpper)
+        {
+            neighbour = { node.x + 1, node.y };
+        }
+        else
+        {
+            neighbour = { node.x + 1, node.y + 1 };
+        }
         break;
     default:
         throw std::runtime_error("Invalid facing");

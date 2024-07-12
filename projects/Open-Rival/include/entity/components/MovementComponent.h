@@ -55,6 +55,7 @@ public:
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World* world) override;
+    void onEntityRemovedFromWorld(World* world) override;
     void destroy() override;
     void update(int delta) override;
     // End EntityComponent override
@@ -101,6 +102,7 @@ private:
     void startNextMovement(PathfindingMap& map);
     void resetPassability();
 
+    bool tryRepathAroundNextNode(const PathfindingMap& map);
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
     bool tryRepathAroundObstruction(const PathfindingMap& map);
     bool tryRepath(Pathfinding::Hints hints = {});
@@ -128,11 +130,21 @@ protected:
     int ticksPerMove = 30;
 
 private:
+    /** Move time multiplier when performing a horizontal (east/west) movement. */
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
-    static constexpr int maxTicksToWaitForTileToClear = 4;
+
+    /** Maximum number of ticks to wait for a temporary obstruction to clear up before repathing.
+     * Consider that it might take a slow-moving unit ~60 ticks to move out of a tile. */
+    static constexpr int numTicksToWaitForTileToClear = 10;
+
+    /** Maximum number of repathing attempts around a temporary obstruction before giving up.
+     * This could result in units getting left behind when trying to move through a congested area, but we need some
+     * kind of limit to prevent units pathfinding indefinitely when an obstruction is not clearing. */
+    static constexpr int maxRepathAttempts = 20;
 
     Pathfinding::Hints cachedHints;
 
+    int numFailedRepathAttempts = 0;
     int ticksSpentWaiting = 0;
 
     bool wasAbortActionRequested = false;

@@ -4,6 +4,15 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+- BUG: Music is crashing the game
+- BUG: Crash once when trying to move (near top of map)
+- BUG: Log file is empty in the event of a crash
+
+- Fix logging:
+    - When logToConsole is false, spdlog uses default logging (warn, with colors)
+    - When logToConsole is true, spdlog respects log level but uses no colors and does not show category names!
+
+- Avoid repathing every tick if the target is unreachable when attacking
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -18,16 +27,14 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Lag spike when trying to move onto a wall
 - Some animations need attention (e.g. Snake)
 - "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Units can walk through buildings and other objects
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
-- Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
+- Lag spike when trying to move a group to an unreachable destination
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -38,6 +45,7 @@
 - Units should automatically target nearby enemies (needs spatial partitioning!)
     - Respect "Fighting Area" - do not wander too far
 - Units should rest when idle (approx. 200 health in 30 seconds)
+- Allow attacking buildings
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
 - Attacks with splash damage should nearby damage units
@@ -62,6 +70,9 @@
 - Panning speed should depend on the zoom level
 - Different units should have different hitboxes sizes
 - Flying units need a hitbox offset
+- Ctrl+click to select all units of type
+- Shift+click/drag to add more units to a selection
+- Shift+click a selected unit to remove it from the selection
 
 ### HUD & Menus
 
@@ -92,6 +103,7 @@
 - Training new units
 - Food consumption
 - Watchtowers / main buildings should shoot
+- Repairing buildings
 
 ### Items
 
@@ -143,6 +155,7 @@
     - Implement per-attack cooldowns
 - Some upgrades should modify unit stats
 - Magic shield
+- Repairing vehicles
 - Thieving
 - Invisibility
 - Spying
@@ -159,13 +172,18 @@
 
 ### Miscellanous
 
+- Starting locations (initial camera location per-player)
 - Transporting units in vehicles
 - Shooting from vehicles
 - Unit groups (Ctrl + 1-9)
 - Units should rotate randomly when idle
 - Teams
+    - Shared fog of war
+    - Flagging locations to allies
+    - Transferring peasants / resources to allies
 - Changing unit colours
-- Formations
+- Formations, Patrol and Stand Ground (see manual)
+- Replays
 
 ### Visuals
 
@@ -196,6 +214,7 @@
 
 ### Music & Video
 
+- Play the right music tracks based on context
 - Play intro video
 - Play campaign videos
 - Add support for WMA music (or convert to another format)
@@ -230,6 +249,7 @@
 - [ ] Allow troops to stop moving if they are dying to traps
 - [ ] Repairing allied siege units
 - [x] Remove 25-unit limit for selections
+- [ ] Modern RTS controls (right-click to move)
 
 ### Graphics
 
@@ -375,6 +395,8 @@
 - Eliminate branching in shaders
 - Revise `World::getEntityAt` to use a map or spartial partitioning
 - AtlasRenderables always use a z co-ordinate even though it is often not needed (e.g. UI, overlays)
+- When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
+- When pathfinding with a group, limit the search based on how long the first group member took to find a route
 
 ### Portability
 
@@ -449,6 +471,7 @@
 - Revise usages of weakThis in EntityComponents (use std::enable_shared_from_this<EntityComponent>)
 - Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
 - Unit doesn't need to hold weak_ptrs since it outlives its components
+- Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
 
 #### Rendering
 

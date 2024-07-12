@@ -179,16 +179,10 @@ public:
         return pos;
     }
 
-    /** Gets the number of tiles this Entity occupies in the x-axis. */
-    int getWidth() const
+    /** Determines if this is a "big" Entity (e.g. a building). */
+    bool isBig() const
     {
-        return width;
-    }
-
-    /** Gets the number of tiles this Entity occupies in the y-axis. */
-    int getHeight() const
-    {
-        return height;
+        return bIsBig;
     }
 
     /** Moves this Entity to a new position. */
@@ -424,7 +418,7 @@ public:
 
 protected:
     /** Creates an Entity with the given size. */
-    Entity(EntityType entityType, int width, int height);
+    Entity(EntityType entityType, bool isBig);
 
     /** Called when this Entity is added to the game world, after component initialization. */
     virtual void onReady() {}
@@ -455,16 +449,13 @@ protected:
     /** Co-ordinate of the tile the Entity is occupying. */
     MapNode pos;
 
-    /** Number of tiles this Entity occupies in the x-axis. */
-    int width;
-
-    /** Number of tiles this Entity occupies in the y-axis. */
-    int height;
-
     /** EntityComponents owned by this Entity.
      * We use shared_ptrs here so that we can create weak_ptrs to
      * components, although in practice the Entity is the sole owner. */
     std::unordered_map<std::string, std::shared_ptr<EntityComponent>> components;
+
+    /** Whether this is a "big" entity (e.g. a Building) */
+    bool bIsBig = false;
 };
 
 }  // namespace Rival

@@ -1,7 +1,5 @@
 #include "entity/components/WalkerComponent.h"
 
-#include <iostream>  // TMP
-
 #include "game/MapUtils.h"
 #include "game/World.h"
 
@@ -53,6 +51,12 @@ void WalkerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node)
 {
     map.removePassability(node, TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving);
     map.addPassability(node, TilePassability::GroundUnit);
+}
+
+void WalkerPassability::onUnitMoveAborted(PathfindingMap& map, const MapNode& node)
+{
+    map.removePassability(node,
+            TilePassability::GroundUnit | TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving);
 }
 
 WalkerComponent::WalkerComponent()

@@ -72,6 +72,9 @@ public:
 
     /** Called when a unit stops moving. */
     virtual void onUnitStopped(PathfindingMap& map, const MapNode& node) = 0;
+
+    /** Called when a units aborts a movement into a tile. */
+    virtual void onUnitMoveAborted(PathfindingMap& map, const MapNode& node) = 0;
 };
 
 /**
@@ -117,6 +120,11 @@ public:
      * Returns nullptr if the path is empty.
      */
     const MapNode* peek() const;
+
+    int getSize() const
+    {
+        return static_cast<int>(path.size());
+    }
 
 private:
     MapNode destination;

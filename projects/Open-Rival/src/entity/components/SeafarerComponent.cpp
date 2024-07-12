@@ -58,6 +58,12 @@ void SeafarerPassability::onUnitStopped(PathfindingMap& map, const MapNode& node
     map.addPassability(node, TilePassability::GroundUnit);
 }
 
+void SeafarerPassability::onUnitMoveAborted(PathfindingMap& map, const MapNode& node)
+{
+    map.removePassability(node,
+            TilePassability::GroundUnit | TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving);
+}
+
 SeafarerComponent::SeafarerComponent()
     : MovementComponent(
             MovementMode::Seafaring, SeafarerComponent::seafarerPassability, SeafarerComponent::seafarerPassability)
