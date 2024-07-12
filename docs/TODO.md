@@ -4,13 +4,8 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+- BUG: Passability is not reset correctly when a unit dies
 - BUG: Crash once when trying to move (near top of map)
-- BUG: Log file is empty in the event of a crash
-
-- Fix logging:
-    - When logToConsole is false, spdlog uses default logging (warn, with colors)
-    - When logToConsole is true, spdlog respects log level but uses no colors and does not show category names!
-
 - Avoid repathing every tick if the target is unreachable when attacking
 - Respect unit attack speed
 - Respect target's Armor
