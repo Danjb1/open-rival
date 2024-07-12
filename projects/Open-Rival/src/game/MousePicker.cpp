@@ -16,6 +16,7 @@
 #include "game/PlayerState.h"
 #include "game/World.h"
 #include "gfx/Camera.h"
+#include "utils/LogUtils.h"
 #include "utils/MathUtils.h"
 #include "utils/MouseUtils.h"
 #include "utils/Rect.h"
@@ -102,6 +103,13 @@ void MousePicker::mouseUp(std::uint8_t button)
         }
 
         playerContext.setCurrentAction(PlayerAction::None);
+    }
+    else if (button == SDL_BUTTON_MIDDLE)
+    {
+        LOG_DEBUG("tile at {}, {} has passability: {}",
+                playerContext.tileUnderMouse.x,
+                playerContext.tileUnderMouse.y,
+                EnumUtils::toIntegral(world.getPassability(playerContext.tileUnderMouse)));
     }
     else if (button == SDL_BUTTON_RIGHT)
     {
