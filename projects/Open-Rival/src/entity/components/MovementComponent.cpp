@@ -173,7 +173,7 @@ void MovementComponent::resetPassability(bool wasRemoved)
     }
 }
 
-void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints)
+bool MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints)
 {
     ticksSpentWaiting = 0;
     prepareForMovement();
@@ -186,7 +186,10 @@ void MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& contex
     {
         // Failed to plan a route
         resetPassability(false);
+        return false;
     }
+
+    return true;
 }
 
 void MovementComponent::requestStop()

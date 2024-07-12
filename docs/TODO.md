@@ -8,8 +8,6 @@
     - At the moment we are creating a buffer every time and these are never destroyed!
     - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 
-- Avoid repathing every tick if the target is unreachable when attacking (see TODOs in AttackComponent)
-
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -17,6 +15,7 @@
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
+    - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
 - Add projectiles
 
@@ -133,7 +132,6 @@
 - Scenario file should be able to override attack definitions
 - Win / loss conditions (goals)
 - Mountains
-- Trees
 - Scenery
 - Chests
 - Info Points
@@ -181,13 +179,15 @@
 - Changing unit colours
 - Formations, Patrol and Stand Ground (see manual)
 - Replays
+- Chat
+- Cheat codes
 
 ### Visuals
 
 - Units with more than 2 bars should display a plus sign in their overlay
 - Health bars should be rendered higher for flying units
 - Selected units should flash orange
-- Trees should not all animate in-sync
+- Trees should animate (but not all in-sync)
 - Respect Gold tile variants
 - Gold tile animations
     - Each frame, call `Scenario.update`

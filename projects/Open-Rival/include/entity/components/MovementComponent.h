@@ -70,8 +70,8 @@ public:
     /** Called before a group movement in order to help prevent units obstructing each other. */
     void prepareForMovement();
 
-    /** Starts moving to the given node, if a route can be found. */
-    void moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints = {});
+    /** Plans a route to the given node. */
+    bool moveTo(const MapNode& node, Pathfinding::Context& context, Pathfinding::Hints hints = {});
 
     /** Cancels the current route (if present) as soon as we reach the next tile. */
     void requestStop();
