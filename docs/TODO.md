@@ -4,8 +4,12 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- BUG: Crash once when trying to move (near top of map)
-- Avoid repathing every tick if the target is unreachable when attacking
+- Audio system will eventually crash
+    - At the moment we are creating a buffer every time and these are never destroyed!
+    - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
+
+- Avoid repathing every tick if the target is unreachable when attacking (see TODOs in AttackComponent)
+
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -493,7 +497,6 @@
 #### Sound
 
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
-- Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
 - Delete all sound sources / buffers when exiting
     [ALSOFT] (WW) 1 Source not deleted
     [ALSOFT] (WW) 1 Buffer not deleted
