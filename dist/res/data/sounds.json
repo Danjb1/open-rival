@@ -1,5 +1,21 @@
 {
   "sounds": {
-    "melee_hit": [311, 349, 350, 351, 352, 353, 354]
+    "arrow": [306, 307],
+    "arrow_hit": [308, 309],
+    "ballista_fire": [319],
+    "cannon": [330],
+    "click": [316],
+    "explosion": [362, 363],
+    "flame_ring": [331],
+    "flash_light": [306],
+    "flash_light_hit": [320],
+    "gun": [332],
+    "mace": [310],
+    "mace_hit": [311],
+    "melee_hit": [349, 350, 351, 352, 353, 354],
+    "place_trap": [314, 315],
+    "poison_spit": [326],
+    "rock_throw": [325],
+    "trap_activate": [317]
   }
 }
