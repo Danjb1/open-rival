@@ -4,6 +4,25 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
+### Projectiles
+
+- Initialise projectiles textures in Resources
+- Link projectiles to textures in JSON
+- Need to have access to the EntityFactory (currently discarded when LobbyState exits)
+    - Could store this in the World, OR create a separate EntityFactory class for entities created mid-game?
+- For ranged attacks, spawn a projectile in deliverAttack
+    - Should projectiles still be spawned if target is in melee range?
+- Projectiles should either be angled (e.g. arrows), animated (e.g. mace) or both (e.g. catapult)
+- Projectiles should lerp from the start tile to the end tile and then get destroyed
+- Projectiles should move according to projectileSpeed
+- Damage the unit in the end tile and play impact sound
+- Explosive projectiles
+    - Splash damage
+    - Explosion graphic
+    - Play impact sound always
+
+### Other
+
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -13,7 +32,6 @@
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
-- Add projectiles
 - Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
 
 <!----------------------------------------------------------------------------->
@@ -94,16 +112,16 @@
     - Play a sound
 - Building construction
     - Buildings must be placed within 6 tiles of an existing building
+
+### Items
+
+- Units should have an InventoryComponent
     - Shipyards must be placed on a coastline
 - Resource gathering
 - Training new units
 - Food consumption
 - Selling buildings
 - Repairing buildings
-
-### Items
-
-- Units should have an InventoryComponent
 - Picking up and dropping items
 - Exchanging items with another unit
 - Items should affect unit stats
@@ -125,6 +143,7 @@
 - Uncover fog based on sight
 - Render minimap
 - Click on minimap to move the camera
+- Fog is temporarily revealed in a small radius when a unit fires a projectile from out of sight
 
 ### Scenarios & Game Objects
 

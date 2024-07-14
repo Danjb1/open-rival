@@ -59,6 +59,8 @@ public:
 
 private:
     void deliverAttack();
+    void deliverMeleeAttack(const AttackDef& attack, Entity& targetEntity);
+    void spawnProjectile(const AttackDef& attack, Entity& targetEntity);
     void switchToNewTarget();
     void updateCooldown(int delta);
     bool isInRange(const std::shared_ptr<Entity> target) const;
