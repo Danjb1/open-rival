@@ -19,6 +19,7 @@ AudioSystem::~AudioSystem()
 {
     setMidiActive(false);
     setSoundActive(false);
+    destroyAllSounds();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -127,7 +128,14 @@ void AudioSystem::playNextSound()
     SoundSource& sound = soundQueue.front();
     try
     {
-        ALint sourceId = AudioUtils::playSound(sound);
+        const auto foundBuffer = buffers.find(sound.waveFile);
+        if (foundBuffer == buffers.cend())
+        {
+            LOG_WARN("Tried to play sound with no associated buffer: {}", sound.waveFile->filename);
+            return;
+        }
+        ALuint bufferId = foundBuffer->second;
+        ALint sourceId = AudioUtils::playSound(sound, bufferId);
         soundQueue.pop();
         playedSounds.emplace(sourceId, sound);
     }
@@ -180,7 +188,30 @@ void AudioSystem::destroySoundSystem()
 
 void AudioSystem::stopAllSounds()
 {
-    // TODO
+    for (const auto& sound : playedSounds)
+    {
+        ALuint sourceId = sound.first;
+        alDeleteSources(1, &sourceId);
+    }
+
+    playedSounds.clear();
+}
+
+void AudioSystem::prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sounds)
+{
+    for (const auto& sound : sounds)
+    {
+        ALuint bufferId = AudioUtils::createBuffer(sound);
+        buffers.insert({ sound, bufferId });
+    }
+}
+
+void AudioSystem::destroyAllSounds()
+{
+    for (const auto& buffer : buffers)
+    {
+        AudioUtils::destroyBuffer(buffer.second);
+    }
 }
 
 void AudioSystem::playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg)

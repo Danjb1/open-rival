@@ -45,9 +45,21 @@ public:
     void playMidi(std::shared_ptr<const MidiFile> midi);
 
 private:
-    /** Flag set when MIDI playback is enabled. */
-    bool midiActive;
+    /** Plays the current MIDI track on a loop, for as long as MIDI playback
+     * is enabled. */
+    void midiThreadLoop();
 
+    /** Causes the current thread to wait until `midiReadyCondition` is
+     * notified, and the current MIDI track is set to a non-empty file. */
+    void waitForMidi();
+
+    /** Initializes the MIDI device, and starts the MIDI thread. */
+    void startMidiSystem();
+
+    /** Cleans up all MIDI resources. */
+    void destroyMidiSystem();
+
+private:
     /** MidiPlayer used to play MIDI files synchronously in a background
      * thread. */
     MidiPlayer midiPlayer;
@@ -67,19 +79,8 @@ private:
     /** Mutex used to govern access to the current MIDI track. */
     std::mutex midiMutex;
 
-    /** Plays the current MIDI track on a loop, for as long as MIDI playback
-     * is enabled. */
-    void midiThreadLoop();
-
-    /** Causes the current thread to wait until `midiReadyCondition` is
-     * notified, and the current MIDI track is set to a non-empty file. */
-    void waitForMidi();
-
-    /** Initializes the MIDI device, and starts the MIDI thread. */
-    void startMidiSystem();
-
-    /** Cleans up all MIDI resources. */
-    void destroyMidiSystem();
+    /** Flag set when MIDI playback is enabled. */
+    bool midiActive;
 
     ///////////////////////////////////////////////////////////////////////
     // WAV playback
@@ -88,6 +89,10 @@ private:
 public:
     /** Enables or disables sound playback. */
     void setSoundActive(bool active);
+
+    /** Prepares a list of sounds for future playback.
+     * This must be called before any of these sounds can be played. */
+    void prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sounds);
 
     /** Finds and plays the given sound.
      * Requires that sound playback is enabled. */
@@ -108,24 +113,6 @@ public:
     }
 
 private:
-    /** Flag set when sound playback is enabled. */
-    bool soundActive;
-
-    /** Queue of sounds waiting to be played. */
-    std::queue<SoundSource> soundQueue;
-
-    /** Map of sounds that are currently playing. */
-    std::unordered_map<ALuint, SoundSource> playedSounds;
-
-    /** Background thread used to play sound files. */
-    std::thread soundThread;
-
-    /** Condition used to wait / notify the sound thread. */
-    std::condition_variable soundReadyCondition;
-
-    /** Mutex used to govern access to the sound queue. */
-    std::mutex soundQueueMutex;
-
     /** Plays sounds from the queue, for as long as sound playback is
      * enabled. */
     void soundThreadLoop();
@@ -148,6 +135,31 @@ private:
 
     /** Cleans up all sound sources that have finished playing. */
     void cleanUpPlayedSounds();
+
+    /** Destroys all prepared sounds.
+     * After this they can no longer be played. */
+    void destroyAllSounds();
+
+private:
+    /** Buffer IDs associated with each prepared sound. */
+    std::unordered_map<std::shared_ptr<const WaveFile>, ALuint> buffers;
+
+    /** Queue of sounds waiting to be played. */
+    std::queue<SoundSource> soundQueue;
+
+    /** Map of sounds that are currently playing. */
+    std::unordered_map<ALuint, SoundSource> playedSounds;
+
+    /** Background thread used to play sound files. */
+    std::thread soundThread;
+
+    /** Condition used to wait / notify the sound thread. */
+    std::condition_variable soundReadyCondition;
+
+    /** Mutex used to govern access to the sound queue. */
+    std::mutex soundQueueMutex;
+    /** Flag set when sound playback is enabled. */
+    bool soundActive;
 };
 
 }  // namespace Rival

@@ -523,6 +523,11 @@ std::shared_ptr<const WaveFile> Resources::getSound(int id) const
     return sounds.at(id);
 }
 
+std::vector<std::shared_ptr<const WaveFile>> Resources::getAllSounds() const
+{
+    return sounds;
+}
+
 std::shared_ptr<const MidiFile> Resources::getMidi(int id) const
 {
     return midis.at(id);

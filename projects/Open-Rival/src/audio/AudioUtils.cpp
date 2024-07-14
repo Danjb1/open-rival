@@ -68,6 +68,15 @@ void checkPlaySoundALError(std::shared_ptr<const WaveFile> waveFile)
     }
 }
 
+void checkOpenALError()
+{
+    ALenum error = alGetError();
+    if (error != AL_NO_ERROR)
+    {
+        throw std::runtime_error("OpenAL error: " + std::to_string(error));
+    }
+}
+
 ALenum getAudioFormat(const WavHeader& waveHeader)
 {
     if (waveHeader.numChannels == 1 && waveHeader.bitsPerSample == 8)
@@ -90,22 +99,33 @@ ALenum getAudioFormat(const WavHeader& waveHeader)
             + std::to_string(waveHeader.bitsPerSample) + " bps");
 }
 
-ALuint playSound(const SoundSource& source)
+ALuint createBuffer(std::shared_ptr<const WaveFile> waveFile)
 {
     // Generate buffer
     ALuint buffer;
     alGenBuffers(1, &buffer);
-    checkPlaySoundALError(source.waveFile);
+    checkOpenALError();
 
     // Fill buffer
-    ALenum format = getAudioFormat(source.waveFile->header);
+    ALenum format = getAudioFormat(waveFile->header);
     alBufferData(buffer,
             format,
-            source.waveFile->soundData.data(),
-            static_cast<ALsizei>(source.waveFile->soundData.size()),
-            source.waveFile->header.samplesPerSec);
-    checkPlaySoundALError(source.waveFile);
+            waveFile->soundData.data(),
+            static_cast<ALsizei>(waveFile->soundData.size()),
+            waveFile->header.samplesPerSec);
+    checkOpenALError();
 
+    return buffer;
+}
+
+void destroyBuffer(ALuint buffer)
+{
+    alDeleteBuffers(1, &buffer);
+    checkOpenALError();
+}
+
+ALuint playSound(const SoundSource& source, ALuint buffer)
+{
     // Create sound source
     const SoundConfig& cfg = source.cfg;
     ALuint sourceId;
