@@ -404,10 +404,14 @@ void createSpritesheetTexture(const std::string& outputDir,
     // Find the optimal texture size:
     // Start with a single long row of sprites, and keep splitting it until
     // we find a suitable size with minimal wasted space
-    int tmpWidth = MathUtils::nextPowerOf2(static_cast<int>(paddedSpriteWidth * sprites.size()));
+    int combinedSpriteWidth = static_cast<int>(paddedSpriteWidth * sprites.size());
+    int tmpWidth = MathUtils::nextPowerOf2(combinedSpriteWidth);
     int tmpHeight = paddedSpriteWidth;
-    int dataSize = tmpWidth * tmpHeight;
-    int best = dataSize;
+
+    int area = tmpWidth * tmpHeight;
+    int dataSize = combinedSpriteWidth * tmpHeight;
+    int best = area - dataSize;
+
     int txWidth = tmpWidth;
     int txHeight = tmpHeight;
 
@@ -416,8 +420,8 @@ void createSpritesheetTexture(const std::string& outputDir,
         tmpWidth /= 2;
         tmpHeight *= 2;
 
-        int area = tmpWidth * tmpHeight;
-        int wastedSpace = area - dataSize;
+        int newArea = tmpWidth * tmpHeight;
+        int wastedSpace = newArea - dataSize;
 
         if (txWidth > maxTextureSize || wastedSpace < best)
         {

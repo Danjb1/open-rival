@@ -111,11 +111,16 @@ void AttackComponent::deliverAttack()
     // TMP: Assume the first attack was used
     const AttackDef* attackToUse = attackDefinitions[0];
 
-    // Damage target
-    HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
-    healthComp->addHealth(-attackToUse->damage);
+    if (attackToUse->range <= 1)
+    {
+        deliverMeleeAttack(*attackToUse, *targetEntity);
+    }
+    else
+    {
+        spawnProjectile(*attackToUse, *targetEntity);
+    }
 
-    // Play hit sound
+    // Play sound
     const SoundBank* soundBank = audioStore.getSoundBank(attackToUse->sound);
     if (soundBank)
     {
@@ -126,6 +131,23 @@ void AttackComponent::deliverAttack()
     // Start cooldown
     // TODO: This should depend on the unit's attack speed
     cooldownDuration = attackToUse->reloadTime;
+}
+
+void AttackComponent::deliverMeleeAttack(const AttackDef& attack, Entity& targetEntity)
+{
+    // Damage target
+    HealthComponent* healthComp = targetEntity.getComponent<HealthComponent>();
+    healthComp->addHealth(-attack.damage);
+}
+
+void AttackComponent::spawnProjectile(const AttackDef& attack, Entity& targetEntity)
+{
+    // World* world = entity->getWorld();
+    //  auto projectile = getEntityFactory()->makeProjectile();
+    //  world->addEntity(projectile);
+
+    // TMP: Just deal some damage
+    deliverMeleeAttack(attack, targetEntity);
 }
 
 void AttackComponent::switchToNewTarget()

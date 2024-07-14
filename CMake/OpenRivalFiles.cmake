@@ -23,6 +23,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/Entity.cpp
     ${OPEN_RIVAL_DIR}/src/entity/EntityFactory.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Palisade.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/Projectile.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Unit.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/AttackComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
@@ -157,6 +158,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/Entity.h
     ${OPEN_RIVAL_DIR}/include/entity/EntityFactory.h
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
+    ${OPEN_RIVAL_DIR}/include/entity/Projectile.h
     ${OPEN_RIVAL_DIR}/include/entity/Unit.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackListener.h

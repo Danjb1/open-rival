@@ -7,6 +7,7 @@
 #include "entity/Building.h"
 #include "entity/Decoration.h"
 #include "entity/Palisade.h"
+#include "entity/Projectile.h"
 #include "entity/Unit.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/BuildingAnimationComponent.h"
@@ -208,6 +209,21 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     obj->attach(std::make_shared<PassabilityComponent>(TilePassability::Blocked));
 
     return obj;
+}
+
+std::shared_ptr<Entity> EntityFactory::createProjectile() const
+{
+    // Create Entity
+    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
+
+    // TODO: Start and end position
+    // TODO: Attack properties
+    // TODO: Projectile speed
+    // TODO: FacingComponent for rotational projectiles
+    // TODO: SpriteComponent
+    // TODO: ProjectileAnimationComponent for animated projectiles
+
+    return projectile;
 }
 
 UnitType EntityFactory::getUnitType(std::uint8_t unitType) const
