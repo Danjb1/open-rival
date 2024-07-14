@@ -88,6 +88,7 @@ void ApplicationContext::initAudio()
     AudioUtils::initAL();
     audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
     audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
+    audioSystem.prepareSounds(res.getAllSounds());
 }
 
 void ApplicationContext::initGLEW()

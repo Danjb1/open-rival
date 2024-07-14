@@ -4,10 +4,6 @@
 ## Combat Milestone
 <!----------------------------------------------------------------------------->
 
-- Audio system will eventually crash
-    - At the moment we are creating a buffer every time and these are never destroyed!
-    - Generate a buffer for each WaveFile up front and store them in a map instead of creating a buffer whenever we play a sound
-
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -507,8 +503,8 @@
 
 #### Sound
 
+- Separate music from AudioSystem
+- AudioSystem should not be "destroyed" when sound is disabled, because it could be re-enabled at any point
+    - We should stop all sounds but keep the buffers
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
-- Delete all sound sources / buffers when exiting
-    [ALSOFT] (WW) 1 Source not deleted
-    [ALSOFT] (WW) 1 Buffer not deleted
 - Playing sounds is quite fiddly (need both AudioStore and AudioSystem)

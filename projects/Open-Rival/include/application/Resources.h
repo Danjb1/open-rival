@@ -61,6 +61,7 @@ class AudioStore
 {
 public:
     virtual std::shared_ptr<const WaveFile> getSound(int id) const = 0;
+    virtual std::vector<std::shared_ptr<const WaveFile>> getAllSounds() const = 0;
     virtual std::shared_ptr<const MidiFile> getMidi(int id) const = 0;
     virtual const SoundBank* getSoundBank(const std::string& soundId) const = 0;
 };
@@ -112,6 +113,7 @@ public:
 
     // Begin AudioStore override
     std::shared_ptr<const WaveFile> getSound(int id) const override;
+    std::vector<std::shared_ptr<const WaveFile>> getAllSounds() const override;
     std::shared_ptr<const MidiFile> getMidi(int id) const override;
     const SoundBank* getSoundBank(const std::string& soundId) const override;
     // End SoundStore override
