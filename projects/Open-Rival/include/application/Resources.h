@@ -42,6 +42,7 @@ public:
     virtual std::shared_ptr<const Texture> getPalette() const = 0;
     virtual const Spritesheet& getTileSpritesheet(bool wilderness) const = 0;
     virtual const Spritesheet& getUnitSpritesheet(UnitType unitType) const = 0;
+    virtual const Spritesheet& getProjectileSpritesheet(const std::string& name) const = 0;
     virtual const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const = 0;
     virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
     virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
@@ -94,6 +95,7 @@ public:
     std::shared_ptr<const Texture> getPalette() const override;
     const Spritesheet& getTileSpritesheet(bool wilderness) const override;
     const Spritesheet& getUnitSpritesheet(UnitType unitType) const override;
+    const Spritesheet& getProjectileSpritesheet(const std::string& name) const override;
     const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const override;
     const Spritesheet& getCommonObjectSpritesheet() const override;
     const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
@@ -133,6 +135,7 @@ private:
     std::shared_ptr<const Texture> initPaletteTexture();
     std::unordered_map<BuildingType, Spritesheet> initBuildingSpritesheets();
     std::unordered_map<UnitType, Spritesheet> initUnitSpritesheets();
+    std::unordered_map<std::string, Spritesheet> initProjectileSpritesheets();
     std::vector<Spritesheet> initTileSpritesheets();
     std::vector<Spritesheet> initObjectSpritesheets();
     Spritesheet initCursorSpritesheet();
@@ -161,17 +164,18 @@ private:
 
     // Texture constants
     static constexpr int txIndexUnits = 0;
-    static constexpr int txIndexTiles = 50;
-    static constexpr int txIndexObjects = 54;
-    static constexpr int txIndexCursors = 57;
-    static constexpr int txIndexBuildings = 58;
-    static constexpr int txIndexPortraits = 61;
-    static constexpr int txIndexHitbox = 62;
-    static constexpr int txIndexMenuBackground = 63;
+    static constexpr int txIndexProjectiles = txIndexUnits + 50;
+    static constexpr int txIndexTiles = txIndexProjectiles + 17;
+    static constexpr int txIndexObjects = txIndexTiles + 4;
+    static constexpr int txIndexCursors = txIndexObjects + 3;
+    static constexpr int txIndexBuildings = txIndexCursors + 1;
+    static constexpr int txIndexPortraits = txIndexBuildings + 3;
+    static constexpr int txIndexHitbox = txIndexPortraits + 1;
+    static constexpr int txIndexMenuBackground = txIndexHitbox + 1;
 
     // Resource counts
-    static constexpr int numTextures = txIndexHitbox + 1;
-    static constexpr int numTextureAtlases = 1;
+    static constexpr int numTextures = txIndexMenuBackground + 1;
+    static constexpr int numTextureAtlases = 2;
     static constexpr int numSounds = 369;
     static constexpr int numMidis = 1;  // 13;
 
@@ -191,6 +195,7 @@ private:
     // Spritesheets
     std::unordered_map<UnitType, Spritesheet> unitSpritesheets;
     std::unordered_map<BuildingType, Spritesheet> buildingSpritesheets;
+    std::unordered_map<std::string, Spritesheet> projectileSpritesheets;
     std::vector<Spritesheet> tileSpritesheets;
     std::vector<Spritesheet> objectSpritesheets;
     Spritesheet cursorSpritesheet;
