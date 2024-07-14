@@ -6,7 +6,6 @@
 
 ### Projectiles
 
-- Initialise projectiles textures in Resources
 - Link projectiles to textures in JSON
 - Need to have access to the EntityFactory (currently discarded when LobbyState exits)
     - Could store this in the World, OR create a separate EntityFactory class for entities created mid-game?
@@ -419,6 +418,7 @@
 - AtlasRenderables always use a z co-ordinate even though it is often not needed (e.g. UI, overlays)
 - When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
 - When pathfinding with a group, limit the search based on how long the first group member took to find a route
+- Use emplace with std::piecewise_construct instead of insert where possible for maps
 
 ### Portability
 
