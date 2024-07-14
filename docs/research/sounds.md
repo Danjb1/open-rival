@@ -327,35 +327,35 @@ For units, the sounds seem to follow this format (offsets from the first sound):
 - **305:** Spell 1
 - **306:** Arrow 1
 - **307:** Arrow 2
-- **308:** Arrow 3
-- **309:** Click / Hit 1
-- **310:** Throw Flail
-- **311:** Hit 1
-- **312:** Click / Hit 1 (duplicate)
-- **313:** Click / Hit 2
-- **314:** Bing 1
-- **315:** Bing 2
-- **316:** Button Press
-- **317:** Trap?
-- **318:** Spell?
-- **319:** Ballista Fire?
-- **320:** Magic Hit
+- **308:** Arrow Hit 1
+- **309:** Arrow Hit 2
+- **310:** Throw Mace
+- **311:** Mace Hit
+- **312:** Arrow Hit 2 (duplicate)
+- **313:** Click (Low)
+- **314:** Bing (Low)
+- **315:** Bing (High)
+- **316:** Click / Button / Tick
+- **317:** Trap Activate
+- **318:** Repair Machine
+- **319:** Ballista Fire
+- **320:** Magic Projectile (Flash Light)
 - **321:** Forcefield
 - **322:** Spell?
-- **323:** Spell?
+- **323:** Frozen Breath
 - **324:** Spell?
-- **325:** Spell?
-- **326:** Spell?
+- **325:** Rock Throw
+- **326:** Poison Spit
 - **327:** Spell?
 - **328:** Spell?
 - **329:** Spell?
-- **330:** Spell?
-- **331:** Spell?
-- **332:** Spell?
+- **330:** Cannon
+- **331:** Flame Ring
+- **332:** Gun
 - **333:** Spell?
 - **334:** Spell?
 - **335:** Spell 1 (duplicate)
-- **336:** Spell?
+- **336:** Place Land/Water
 - **337:** Spell?
 - **338:** Alert
 - **339:** Spell?
@@ -374,17 +374,17 @@ For units, the sounds seem to follow this format (offsets from the first sound):
 - **352:** Hit 5
 - **353:** Hit 6
 - **354:** Hit 7
-- **355:** Spell?
+- **355:** Repair Machine (duplicate)
 - **356:** Building Construction
 - **357:** Building Destruction?
 - **358:** Building Destruction?
 - **359:** Building Destruction?
 - **360:** Building Destruction?
 - **361:** Beep
-- **362:** Explosion 1
-- **363:** Explosion 2
+- **362:** Explosion (Small)
+- **363:** Explosion (Big)
 - **364:** Woodcutting 1
 - **365:** Woodcutting 2
 - **366:** Woodcutting 3
 - **367:** Healing Potion (duplicate)
-- **368:** Button Press (duplicate)
+- **368:** Click / Button / Tick (duplicate)

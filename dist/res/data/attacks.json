@@ -3,15 +3,19 @@
     {
       "accuracy": 71,
       "damage": 176,
+      "impactSound": "explosion",
       "manaCost": 40,
       "name": "Bomb",
+      "sound": "click",
       "splashDamage": true
     },
     {
       "accuracy": 56,
       "damage": 90,
+      "impactSound": "trap_activate",
       "manaCost": 20,
-      "name": "Trap"
+      "name": "Trap",
+      "sound": "place_trap"
     },
     {
       "accuracy": 25,
@@ -23,26 +27,32 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "arrow_hit",
       "name": "Arrow",
       "projectileSpeed": 15,
       "range": 4,
-      "reloadTime": 1240
+      "reloadTime": 1240,
+      "sound": "arrow"
     },
     {
       "accuracy": 25,
       "damage": 8,
+      "impactSound": "arrow_hit",
       "name": "One Arrow - Pegas Rider",
       "projectileSpeed": 15,
       "range": 5,
-      "reloadTime": 1040
+      "reloadTime": 1040,
+      "sound": "arrow"
     },
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "arrow_hit",
       "name": "Three Arrows - Pegas Rider",
       "projectileSpeed": 15,
       "range": 5,
-      "reloadTime": 1040
+      "reloadTime": 1040,
+      "sound": "arrow"
     },
     {
       "accuracy": 25,
@@ -61,10 +71,12 @@
     {
       "accuracy": 25,
       "damage": 16,
+      "impactSound": "mace_hit",
       "name": "Mace - Knight",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 4840
+      "reloadTime": 4840,
+      "sound": "mace"
     },
     {
       "accuracy": 25,
@@ -83,28 +95,34 @@
     {
       "accuracy": 25,
       "damage": 50,
+      "impactSound": "explosion",
       "name": "Big Arrow - Ballista",
       "projectileSpeed": 8,
       "range": 7,
       "reloadTime": 2900,
+      "sound": "ballista_fire",
       "splashDamage": true
     },
     {
       "accuracy": 25,
       "damage": 40,
+      "impactSound": "explosion",
       "name": "Projectile - Battleship",
       "projectileSpeed": 10,
       "range": 6,
       "reloadTime": 4400,
+      "sound": "cannon",
       "splashDamage": true
     },
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Wizard",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 760
+      "reloadTime": 760,
+      "sound": "flash_light"
     },
     {
       "accuracy": 25,
@@ -132,10 +150,12 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Priest",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 760
+      "reloadTime": 760,
+      "sound": "flash_light"
     },
     {
       "accuracy": 99,
@@ -160,10 +180,12 @@
     {
       "accuracy": 25,
       "damage": 13,
+      "impactSound": "arrow_hit",
       "name": "Stone - Rock Thrower",
       "projectileSpeed": 10,
       "range": 4,
-      "reloadTime": 1680
+      "reloadTime": 1680,
+      "sound": "rock_throw"
     },
     {
       "accuracy": 25,
@@ -182,10 +204,12 @@
     {
       "accuracy": 25,
       "damage": 20,
+      "impactSound": "mace_hit",
       "name": "Poison Spit - Warlord",
       "projectileSpeed": 12,
       "range": 5,
-      "reloadTime": 4840
+      "reloadTime": 4840,
+      "sound": "poison_spit"
     },
     {
       "accuracy": 25,
@@ -237,10 +261,12 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Priest of Doom",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 860
+      "reloadTime": 860,
+      "sound": "flash_light"
     },
     {
       "accuracy": 25,
@@ -267,10 +293,12 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Necromancer",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 860
+      "reloadTime": 860,
+      "sound": "flash_light"
     },
     {
       "accuracy": 100,
@@ -297,18 +325,22 @@
     {
       "accuracy": 25,
       "damage": 14,
+      "impactSound": "arrow_hit",
       "name": "Arrow - Archer",
       "projectileSpeed": 15,
       "range": 5,
-      "reloadTime": 1060
+      "reloadTime": 1060,
+      "sound": "arrow"
     },
     {
       "accuracy": 75,
       "damage": 21,
+      "impactSound": "arrow_hit",
       "name": "Fire Arrow - Archer",
       "projectileSpeed": 15,
       "range": 5,
-      "reloadTime": 3260
+      "reloadTime": 3260,
+      "sound": "arrow"
     },
     {
       "accuracy": 25,
@@ -320,10 +352,12 @@
     {
       "accuracy": 25,
       "damage": 16,
+      "impactSound": "arrow_hit",
       "name": "Flame Ring - Centaur",
       "projectileSpeed": 12,
       "range": 5,
-      "reloadTime": 4840
+      "reloadTime": 4840,
+      "sound": "flame_ring"
     },
     {
       "accuracy": 25,
@@ -342,52 +376,64 @@
     {
       "accuracy": 25,
       "damage": 90,
+      "impactSound": "explosion",
       "name": "Cannon Ball - Bombard",
       "projectileSpeed": 10,
       "range": 7,
       "reloadTime": 4600,
+      "sound": "cannon",
       "splashDamage": true
     },
     {
       "accuracy": 75,
       "damage": 16,
+      "impactSound": "arrow_hit",
       "name": "Shell - Arquebusier",
       "projectileSpeed": 15,
       "range": 5,
-      "reloadTime": 1100
+      "reloadTime": 1100,
+      "sound": "gun"
     },
     {
       "accuracy": 25,
       "damage": 40,
+      "impactSound": "explosion",
       "name": "Projectile - Warship",
       "projectileSpeed": 10,
       "range": 6,
       "reloadTime": 4100,
+      "sound": "cannon",
       "splashDamage": true
     },
     {
       "accuracy": 25,
       "damage": 10,
-      "name": "Flash Light - Sky Rider",
+      "impactSound": "arrow_hit",
+      "name": "Arrow - Sky Rider",
       "projectileSpeed": 18,
       "range": 5,
-      "reloadTime": 1140
+      "reloadTime": 1140,
+      "sound": "arrow"
     },
     {
       "accuracy": 75,
       "damage": 15,
+      "impactSound": "flash_light_hit",
       "name": "Lightning - Sky Rider",
       "projectileSpeed": 10,
       "range": 6,
-      "reloadTime": 3490
+      "reloadTime": 3490,
+      "sound": "arrow"
     },
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Mage",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 710
+      "reloadTime": 710,
+      "sound": "flash_light"
     },
     {
       "accuracy": 99,
@@ -414,10 +460,12 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Druid",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 710
+      "reloadTime": 710,
+      "sound": "flash_light"
     },
     {
       "manaCost": 30,
@@ -436,10 +484,12 @@
     {
       "accuracy": 25,
       "damage": 12,
+      "impactSound": "flash_light_hit",
       "name": "Flash Light - Enchanter",
       "projectileSpeed": 10,
       "range": 5,
-      "reloadTime": 710
+      "reloadTime": 710,
+      "sound": "flash_light"
     },
     {
       "manaCost": 10,
@@ -456,10 +506,12 @@
     {
       "accuracy": 25,
       "damage": 32,
+      "impactSound": "arrow_hit",
       "name": "Light Defence Arrow",
       "projectileSpeed": 15,
       "range": 6,
-      "reloadTime": 1300
+      "reloadTime": 1300,
+      "sound": "arrow"
     },
     {
       "accuracy": 50,

@@ -18,7 +18,7 @@
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
 - Add projectiles
-- Units should be able to walk over thin strips of water - test this!
+- Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -479,6 +479,7 @@
 - Some properties (e.g. Name) should be shared by Units and Buildings (create a struct?)
 - Unit doesn't need to hold weak_ptrs since it outlives its components
 - Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
+- Catch exceptions when calling `JsonUtils::readJsonFile`
 
 #### Rendering
 
