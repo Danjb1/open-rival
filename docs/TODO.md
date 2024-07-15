@@ -22,6 +22,10 @@
 
 ### Other
 
+- BUG: Lag spike when trying to move a group to an unreachable destination
+    - When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
+    - When pathfinding with a group, limit the search based on how long the first group member took to find a route
+        OR just add the last node of the leader's route as a valid goal tile
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -44,7 +48,6 @@
 - Tiles covered by the map border should not be passable
 - Crash when closing game window (sometimes) (OpenAL32.dll)
 - Pathfinding lags the game when moving very large groups of units
-- Lag spike when trying to move a group to an unreachable destination
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -272,11 +275,12 @@
 - [x] Remove 25-unit limit for selections
 - [ ] Modern RTS controls (right-click to move)
 
-### Graphics
+### Assets
 
 - [ ] Translucent unit shadows (instead of solid black)
 - [ ] Real translucency for fog of war
 - [ ] Upscale graphics / videos using AI?
+- [ ] Remastered audio
 
 ### Menus
 
@@ -416,8 +420,6 @@
 - Eliminate branching in shaders
 - Revise `World::getEntityAt` to use a map or spartial partitioning
 - AtlasRenderables always use a z co-ordinate even though it is often not needed (e.g. UI, overlays)
-- When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
-- When pathfinding with a group, limit the search based on how long the first group member took to find a route
 - Use emplace with std::piecewise_construct instead of insert where possible for maps
 
 ### Portability
