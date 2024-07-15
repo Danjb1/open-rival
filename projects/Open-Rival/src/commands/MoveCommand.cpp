@@ -63,7 +63,7 @@ void MoveCommand::execute(GameCommandContext& context)
     }
 
     // Create a context to make group pathfinding more efficient
-    Pathfinding::Context pathfindingContext(numValidEntities > 1);
+    Pathfinding::Context pathfindingContext(numValidEntities);
 
     // Move entities
     for (int entityId : entityIds)

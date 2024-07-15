@@ -96,8 +96,8 @@ Thank you for your patience during these early stages of development!
 - (Bug) Units can walk too close to the edge of the map.
 - (Bug) Cursor position should have a greater impact on zooming.
 - (Bug) Some animations look a little off (e.g. Snake).
-- (Bug) Pathfinding lags the game when moving very large groups of units.
-- (Bug) Lag spike when trying to move a group to an unreachable destination.
+- (Bug) Lag when moving large groups or large distances.
+- (Bug) Some units get left behind when moving large distances.
 
 ================================================================================
 4. Settings

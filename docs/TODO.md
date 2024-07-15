@@ -22,10 +22,6 @@
 
 ### Other
 
-- BUG: Lag spike when trying to move a group to an unreachable destination
-    - When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
-    - When pathfinding with a group, limit the search based on how long the first group member took to find a route
-        OR just add the last node of the leader's route as a valid goal tile
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -47,7 +43,12 @@
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - Crash when closing game window (sometimes) (OpenAL32.dll)
-- Pathfinding lags the game when moving very large groups of units
+- Pathfinding lags the game when moving large groups of units
+    - Seems to be caused by units obstructing each other and then repathing (test with repathing disabled)
+- Some units get left behind when trying to move large distances
+    - Units who find only a partial path should continue pathfinding at a later point
+        - MovementComponent::onCompletedMoveToNewTile should check the route's intended destination and repath if necessary
+    - We should not abort repathing attempts so soon; units may take time to get out of the way
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -421,6 +422,9 @@
 - Revise `World::getEntityAt` to use a map or spartial partitioning
 - AtlasRenderables always use a z co-ordinate even though it is often not needed (e.g. UI, overlays)
 - Use emplace with std::piecewise_construct instead of insert where possible for maps
+- When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
+- When pathfinding with a group, limit the search based on how long the first group member took to find a route
+- Use pathfinding context when attack-moving a group
 
 ### Portability
 
