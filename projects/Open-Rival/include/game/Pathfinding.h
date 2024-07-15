@@ -140,7 +140,7 @@ private:
 class Context
 {
 public:
-    Context(bool isCacheEnabled = false);
+    Context(int numUnits = 1);
 
     /** Informs the context of a new pathfinding attempt. */
     void beginPathfinding();
@@ -151,10 +151,31 @@ public:
     /** Caches a path from start to goal. */
     void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path);
 
+    /** Registers a goal node to be considered for subsequent pathfinding attempts. */
+    void registerGoalNode(MapNode goal);
+
+    /** Adds all registered goal nodes to the given set. */
+    void addRegisteredGoalNodes(std::unordered_set<MapNode>& goalNodes);
+
+    /** Gets the maximum nodes of nodes that the pathfinder should visit on the current attempt. */
+    int getMaxNodesToVisit() const;
+
 private:
+    /** Maximum nodes that the pathfinder can visit before giving up.
+     * This is set low enough that it should not cause any lag spikes.
+     * In general we should not reach this limit unless pathfinding across vast distances;
+     * pathfinding in "normal" conditions typically requires 1000 or fewer nodes. */
+    static constexpr int maxNodesToVisitPerContext = 3000;
+
+    std::unordered_set<MapNode> registeredGoalNodes;
+
     std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
 
     int pathfindingAttempts = 0;
+
+    int numUnits = 0;
+
+    int maxNodesToVisitPerAttempt = 0;
 
     bool isCacheEnabled = false;
 };

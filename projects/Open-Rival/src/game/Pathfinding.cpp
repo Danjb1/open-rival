@@ -114,12 +114,6 @@ private:
      */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
 
-    /** Maximum nodes that the pathfinder can visit before giving up.
-     * This is set low enough that it should not cause any lag spikes.
-     * In general we should not reach this limit unless pathfinding across vast distances;
-     * pathfinding in "normal" conditions typically requires 1000 or fewer nodes. */
-    static constexpr int maxNodesToVisit = 3000;
-
     /** How often we should check to see if the destination is inside an enclosed perimeter.
      * For unreachable destinations, we can abort pathfinding early once we have visited a closed loop of nodes
      * surrounding it. */
@@ -215,14 +209,18 @@ std::deque<MapNode> Pathfinder::findPath()
     costToNode[start] = 0;
 
     // If the goal tile is not pathable, we should also consider its neighbors as valid goal tiles.
-    // If none of *those* tiles are pathable, then our flood fill algorithm will kick in later to detect the goal as
-    // being unreachable.
+    // If none of *those* tiles are pathable, then that's ok; our flood fill algorithm will kick in later to detect
+    // the goal as being unreachable.
     goalNodes = { goal };
     if (!passabilityChecker.isNodePathable(map, goal))
     {
         std::vector<MapNode> neighbors = findPathableNeighbors(goal);
         goalNodes.insert(neighbors.cbegin(), neighbors.cend());
     }
+
+    context.addRegisteredGoalNodes(goalNodes);
+
+    const int maxNodesToVisit = context.getMaxNodesToVisit();
 
     while (!isFinished())
     {
@@ -323,17 +321,25 @@ float Pathfinder::estimateCostToGoal(const MapNode& node)
         return iter->second;
     }
 
-    const int dx = abs(node.x - goal.x);
-    const int dy = abs(node.y - goal.y);
+    // Estimate the cost to each goal and pick the lowest
+    float best = std::numeric_limits<float>::max();
+    for (const auto& possibleGoal : goalNodes)
+    {
+        const int dx = abs(node.x - possibleGoal.x);
+        const int dy = abs(node.y - possibleGoal.y);
 
-    // Whatever distance x and y have in common can be covered diagonally
-    const int diagonalDistance = std::min(dx, dy);
-    const int remainingDistance = abs(dx - dy);
+        // Whatever distance x and y have in common can be covered diagonally
+        const int diagonalDistance = std::min(dx, dy);
+        const int remainingDistance = abs(dx - dy);
 
-    const float costToGoal = static_cast<float>(diagonalDistance + remainingDistance);
-    cachedCostToGoal.emplace(node, costToGoal);
+        const float costToGoal = static_cast<float>(diagonalDistance + remainingDistance);
 
-    return costToGoal;
+        best = std::min(costToGoal, best);
+    }
+
+    cachedCostToGoal.emplace(node, best);
+
+    return best;
 }
 
 /**
@@ -589,11 +595,28 @@ Route findPath(MapNode start,
         Context& context,
         const Hints hints)
 {
-    return Pathfinder(start, goal, map, passabilityChecker, context, hints).getRoute();
+    Route route = Pathfinder(start, goal, map, passabilityChecker, context, hints).getRoute();
+
+    if (!route.isEmpty())
+    {
+        const auto finalDestination = route.getFinalDestination();
+        if (finalDestination != route.getIntendedDestination())
+        {
+            // We did not find the intended destination, which means that either it was unreachable or pathfinding got
+            // cut short. Storing the final destination in the pathfinding context means that other group members can
+            // use it to save time, rather than having to put in all the work just to reach the same conclusion.
+            // Note that this doesn't help if group members are separated by an untraversable barrier, but this is rare.
+            context.registerGoalNode(finalDestination);
+        }
+    }
+
+    return route;
 }
 
-Context::Context(bool isCacheEnabled)
-    : isCacheEnabled(isCacheEnabled)
+Context::Context(int numUnits)
+    : numUnits(numUnits)
+    , maxNodesToVisitPerAttempt(static_cast<int>(maxNodesToVisitPerContext / numUnits))
+    , isCacheEnabled(numUnits > 1)
 {
 }
 
@@ -641,6 +664,26 @@ void Context::cachePath(const MapNode& start, const MapNode& goal, const std::de
         // No cached path found
         cachedPaths.emplace(key, path);
     }
+}
+
+void Context::registerGoalNode(MapNode goal)
+{
+    registeredGoalNodes.insert(goal);
+}
+
+void Context::addRegisteredGoalNodes(std::unordered_set<MapNode>& goalNodes)
+{
+    goalNodes.insert(registeredGoalNodes.cbegin(), registeredGoalNodes.cend());
+}
+
+int Context::getMaxNodesToVisit() const
+{
+    if (pathfindingAttempts == 1)
+    {
+        // Don't restrict the first attempt, as the results of this can assist with subsequent attempts
+        return maxNodesToVisitPerContext;
+    }
+    return maxNodesToVisitPerAttempt;
 }
 
 }}  // namespace Rival::Pathfinding
