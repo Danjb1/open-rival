@@ -136,6 +136,9 @@ private:
     /** The destination node. */
     MapNode goal;
 
+    /** All nodes that should be considered valid destinations. */
+    std::unordered_set<MapNode> goalNodes;
+
     /** The PathfindingMap used to find obstacles, etc. */
     const PathfindingMap& map;
 
@@ -211,6 +214,16 @@ std::deque<MapNode> Pathfinder::findPath()
     closestNodeToGoal = start;
     costToNode[start] = 0;
 
+    // If the goal tile is not pathable, we should also consider its neighbors as valid goal tiles.
+    // If none of *those* tiles are pathable, then our flood fill algorithm will kick in later to detect the goal as
+    // being unreachable.
+    goalNodes = { goal };
+    if (!passabilityChecker.isNodePathable(map, goal))
+    {
+        std::vector<MapNode> neighbors = findPathableNeighbors(goal);
+        goalNodes.insert(neighbors.cbegin(), neighbors.cend());
+    }
+
     while (!isFinished())
     {
         if (nodesVisited >= maxNodesToVisit)
@@ -230,7 +243,7 @@ std::deque<MapNode> Pathfinder::findPath()
         const ReachableNode current = popBestNode();
 
         // See if we've reached the goal
-        if (current.node == goal)
+        if (goalNodes.contains(current.node))
         {
             LOG_INFO_CATEGORY("pathfinding", "Found goal in {} steps", nodesVisited);
             return reconstructPath(current.node, /* cachePaths = */ true);
@@ -299,7 +312,7 @@ ReachableNode Pathfinder::popBestNode()
  */
 float Pathfinder::estimateCostToGoal(const MapNode& node)
 {
-    if (node == goal)
+    if (goalNodes.contains(node))
     {
         return 0.f;
     }
@@ -376,7 +389,7 @@ std::vector<MapNode> Pathfinder::findPathableNeighbors(const MapNode& node) cons
 {
     std::vector<MapNode> allNeighbors = MapUtils::findNeighbors(node, map);
 
-    // Filter out non-traversable neighbors
+    // Filter out non-pathable neighbors
     std::vector<MapNode> validNeighbors;
     validNeighbors.reserve(MapUtils::maxNeighbors);
     std::copy_if(allNeighbors.begin(), allNeighbors.end(), std::back_inserter(validNeighbors), [this](MapNode n) {
@@ -407,13 +420,20 @@ float Pathfinder::getCostToNode(const MapNode& node) const
  */
 float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
 {
-    const bool shouldAvoidNode = hints.nodesToAvoid.find(to) != hints.nodesToAvoid.cend();
-    const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
-    const float baseCost = (shouldAvoidNode || isObstructed) ? hints.obstructedMovementCost : baseMovementCost;
-
     const Facing movementDir = MapUtils::getDir(from, to);
     const float dirMultiplier =
             (movementDir == Facing::East || movementDir == Facing::West) ? horizontalMoveCostMultiplier : 1.f;
+
+    if (goalNodes.contains(to))
+    {
+        // We don't care if the goal is obstructed since there's no way around it,
+        // so just return the basic movement cost.
+        return baseMovementCost * dirMultiplier;
+    }
+
+    const bool shouldAvoidNode = hints.nodesToAvoid.find(to) != hints.nodesToAvoid.cend();
+    const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
+    const float baseCost = (shouldAvoidNode || isObstructed) ? hints.obstructedMovementCost : baseMovementCost;
 
     return baseCost * dirMultiplier;
 }

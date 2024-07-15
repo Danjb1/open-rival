@@ -154,8 +154,9 @@ public:
 private:
     std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
 
-    bool isCacheEnabled = false;
     int pathfindingAttempts = 0;
+
+    bool isCacheEnabled = false;
 };
 
 /**
