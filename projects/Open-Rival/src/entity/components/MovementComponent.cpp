@@ -423,11 +423,21 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
         return false;
     }
 
+    // Prefer nodes from our current route; this saves us finding the entire path again
+    auto existingPath = route.getPath();
+    hints.nodesToPrefer.insert(existingPath.cbegin(), existingPath.cend());
+
+    if (route.getFinalDestination() == route.getIntendedDestination())
+    {
+        // Limit path cost since we already have a good idea of the route
+        hints.maxPathCost = route.getMovementCost() + repathCostAllowance;
+    }
+
     Pathfinding::Context context;
     const MapNode destination = route.getIntendedDestination();
-    moveTo(destination, context, hints);
+    const bool success = moveTo(destination, context, hints);
 
-    return !route.isEmpty();
+    return success;
 }
 
 void MovementComponent::onLeftPreviousTile()

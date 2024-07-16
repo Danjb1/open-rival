@@ -3,7 +3,6 @@
 #include <algorithm>  // min, reverse
 #include <iterator>   // back_inserter
 #include <iterator>   // next
-#include <limits>     // numeric_limits
 #include <queue>
 #include <unordered_map>
 #include <vector>
@@ -71,7 +70,7 @@ private:
     ReachableNode popBestNode();
     float estimateCostToGoal(const MapNode& node);
     std::deque<MapNode> reconstructPath(const MapNode& node, bool shouldCachePaths = false) const;
-    std::deque<MapNode> reconstructPathWithCache(const MapNode& node, const std::deque<MapNode>& cachedPath) const;
+    std::deque<MapNode> reconstructPathWithCache(const MapNode& node, const std::deque<MapNode>& cachedPath);
     std::vector<MapNode> findPathableNeighbors(const MapNode& node) const;
     float getCostToNode(const MapNode& node) const;
     float getMovementCost(const MapNode& from, const MapNode& to) const;
@@ -113,6 +112,9 @@ private:
      * so.
      */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
+
+    /** Discount applied to the movement cost of nodes that should be preferred. */
+    static constexpr float preferredNodeDiscount = 0.1f;
 
     /** How often we should check to see if the destination is inside an enclosed perimeter.
      * For unreachable destinations, we can abort pathfinding early once we have visited a closed loop of nodes
@@ -189,7 +191,16 @@ Pathfinder::Pathfinder(MapNode start,
     , context(context)
     , hints(hints)
 {
-    route = { goal, findPath() };
+    const auto path = findPath();
+
+    float pathCost = 0;
+    if (!path.empty())
+    {
+        const auto destination = path.back();
+        pathCost = costToNode[destination];
+    }
+
+    route = { goal, path, pathCost };
 }
 
 /**
@@ -224,29 +235,23 @@ std::deque<MapNode> Pathfinder::findPath()
 
     while (!isFinished())
     {
+        // Abort if we've exceeded our pathfinding allowance
         if (nodesVisited >= maxNodesToVisit)
         {
-            LOG_WARN_CATEGORY("pathfinding", "Exceeded maximum nodes to visit");
-            break;
-        }
-
-        // Periodically check to see if the goal is inside an unreachable area
-        if (shouldCheckPerimeter() && isGoalInsideEnclosedPerimeter())
-        {
-            // Goal is inside an unreachable area; abort further pathfinding!
-            LOG_INFO_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
+            LOG_WARN_CATEGORY("pathfinding", "Exceeded maximum nodes to visit ({})", maxNodesToVisit);
             break;
         }
 
         const ReachableNode current = popBestNode();
 
-        // See if we've reached the goal
+        // Abort if we've reached the goal
         if (goalNodes.contains(current.node))
         {
             LOG_INFO_CATEGORY("pathfinding", "Found goal in {} steps", nodesVisited);
             return reconstructPath(current.node, /* cachePaths = */ true);
         }
 
+        // Abort if we've reached a tile which has a cached path to the goal
         auto cachedPath = context.getCachedPath(current.node, goal);
         if (cachedPath.has_value())
         {
@@ -257,6 +262,21 @@ std::deque<MapNode> Pathfinder::findPath()
                     current.node.x,
                     current.node.y);
             return reconstructPathWithCache(current.node, *cachedPath);
+        }
+
+        // Abort if our path has become too expensive
+        if (current.cost > hints.maxPathCost)
+        {
+            LOG_WARN_CATEGORY("pathfinding", "Exceeded maximum path cost: {} / {}", current.cost, hints.maxPathCost);
+            break;
+        }
+
+        // Periodically check to see if the goal is inside an unreachable area
+        if (shouldCheckPerimeter() && isGoalInsideEnclosedPerimeter())
+        {
+            // Goal is inside an unreachable area; abort further pathfinding!
+            LOG_INFO_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
+            break;
         }
 
         std::vector<MapNode> neighbors = findPathableNeighbors(current.node);
@@ -345,21 +365,25 @@ float Pathfinder::estimateCostToGoal(const MapNode& node)
 /**
  * Returns the path found from the start to the given MapNode.
  */
-std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node, bool shouldCachePaths) const
+std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& destination, bool shouldCachePaths) const
 {
     std::deque<MapNode> path = {};
-    MapNode currentNode = node;
+    MapNode currentNode = destination;
+    const float costToFinalNode = getCostToNode(destination);
 
     // Follow the previous nodes back to the start
     while (currentNode != start)
     {
         path.push_front(currentNode);
 
-        if (shouldCachePaths)
+        if (shouldCachePaths && currentNode != destination)
         {
-            // Cache every partial path that we have found.
-            // Note that cached paths always include the start node.
-            context.cachePath(currentNode, node, path);
+            // Cache every partial path that we find along the way.
+            // Note that cached paths always include the start node, e.g. a cached path from (2, 2) to (4, 4) starts
+            // with the node (2, 2).
+            const float costToCurrentNode = getCostToNode(currentNode);
+            const float partialPathCost = costToFinalNode - costToCurrentNode;
+            context.cachePath(currentNode, destination, path, partialPathCost);
         }
 
         const auto it = prevNode.find(currentNode);
@@ -376,14 +400,19 @@ std::deque<MapNode> Pathfinder::reconstructPath(const MapNode& node, bool should
 }
 
 std::deque<MapNode> Pathfinder::reconstructPathWithCache(
-        const MapNode& node, const std::deque<MapNode>& cachedPath) const
+        const MapNode& cachedPathStart, const std::deque<MapNode>& cachedPath)
 {
     // Get the path from start -> node
-    std::deque<MapNode> path = reconstructPath(node);
+    std::deque<MapNode> path = reconstructPath(cachedPathStart);
 
     // Append the path from next node -> goal.
     // This is the cached path minus the first element (which is node again).
     path.insert(path.end(), std::next(cachedPath.begin()), cachedPath.end());
+
+    // Determine the final path cost
+    const std::optional<float> cachedPathCost = context.getCachedPathCost(cachedPathStart, goal);
+    const float totalCost = costToNode[cachedPathStart] + *cachedPathCost;
+    costToNode[goal] = totalCost;
 
     return path;
 }
@@ -437,11 +466,20 @@ float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
         return baseMovementCost * dirMultiplier;
     }
 
-    const bool shouldAvoidNode = hints.nodesToAvoid.find(to) != hints.nodesToAvoid.cend();
+    // Cost is increased for obstructed nodes or nodes to avoid
+    const bool shouldAvoidNode = hints.nodesToAvoid.contains(to);
     const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
     const float baseCost = (shouldAvoidNode || isObstructed) ? hints.obstructedMovementCost : baseMovementCost;
+    float finalCost = baseCost * dirMultiplier;
 
-    return baseCost * dirMultiplier;
+    // Preferred nodes get a slight discount
+    const bool shouldPreferNode = !shouldAvoidNode && hints.nodesToPrefer.contains(to);
+    if (shouldPreferNode)
+    {
+        finalCost -= preferredNodeDiscount;
+    }
+
+    return finalCost;
 }
 
 /**
@@ -565,9 +603,10 @@ Route::Route()
 {
 }
 
-Route::Route(MapNode destination, std::deque<MapNode> path)
+Route::Route(MapNode destination, std::deque<MapNode> path, float cost)
     : destination(destination)
     , path(path)
+    , cost(cost)
 {
 }
 
@@ -650,7 +689,32 @@ std::optional<std::deque<MapNode>> Context::getCachedPath(const MapNode& start, 
     }
 }
 
-void Context::cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path)
+std::optional<float> Context::getCachedPathCost(const MapNode& start, const MapNode& goal) const
+{
+    if (!isCacheEnabled)
+    {
+        return {};
+    }
+
+    if (pathfindingAttempts == 1)
+    {
+        // Don't look up cached paths on the first pathfinding attempt within a context;
+        // the cache is only relevant for subsequent attempts
+        return {};
+    }
+
+    const auto iter = cachedPathCosts.find({ start, goal });
+    if (iter == cachedPathCosts.cend())
+    {
+        return {};
+    }
+    else
+    {
+        return { iter->second };
+    }
+}
+
+void Context::cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path, float pathCost)
 {
     if (!isCacheEnabled)
     {
@@ -661,9 +725,11 @@ void Context::cachePath(const MapNode& start, const MapNode& goal, const std::de
     const auto iter = cachedPaths.find(key);
     if (iter == cachedPaths.cend())
     {
-        // No cached path found
+        // No cached path found - let's add one
         cachedPaths.emplace(key, path);
+        cachedPathCosts.emplace(key, pathCost);
     }
+    // TODO: Should we replace already-cached paths if the new cost is lower?
 }
 
 void Context::registerGoalNode(MapNode goal)

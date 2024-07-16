@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <limits>  // numeric_limits
 #include <optional>
 #include <unordered_map>
 #include <unordered_set>
@@ -83,52 +84,55 @@ public:
 class Route
 {
 public:
-    /**
-     * Default constructor; makes a Route with an empty path.
-     */
+    /** Default constructor; makes a Route with an empty path. */
     Route();
 
-    /**
-     * Constructs a Route with a path and destination.
-     */
-    Route(MapNode destination, std::deque<MapNode> path);
+    /** Constructs a Route with a path and destination. */
+    Route(MapNode destination, std::deque<MapNode> path, float cost);
 
-    /**
-     * Determines if this Route is empty.
-     */
+    /** Determines if this Route is empty. */
     bool isEmpty() const;
 
+    /** Gets the destination that was originally intended when planning this route. */
     MapNode getIntendedDestination() const
     {
         return destination;
     }
 
+    /** Gets the destination that was ultimately found when planning this route. */
     MapNode getFinalDestination() const
     {
         return path.back();
     }
 
-    /**
-     * Removes the next MapNode from the path and returns it.
-     */
+    /** Removes the next MapNode from the path and returns it. */
     MapNode pop();
 
-    /**
-     * Returns a pointer to the next MapNode from the path, without removing
-     * it.
-     *
-     * Returns nullptr if the path is empty.
-     */
+    /** Returns a pointer to the next MapNode from the path, without removing it.
+     * Returns nullptr if the path is empty. */
     const MapNode* peek() const;
 
+    /** Gets the number of tiles traversed by this route. */
     int getSize() const
     {
         return static_cast<int>(path.size());
     }
 
+    /** Gets the movement cost of this route. */
+    float getMovementCost() const
+    {
+        return cost;
+    }
+
+    std::deque<MapNode> getPath() const
+    {
+        return path;
+    }
+
 private:
     MapNode destination;
     std::deque<MapNode> path;
+    float cost = 0;
 };
 
 /**
@@ -148,8 +152,11 @@ public:
     /** Gets the cached path from start to goal, if it exists. */
     std::optional<std::deque<MapNode>> getCachedPath(const MapNode& start, const MapNode& goal) const;
 
+    /** Gets the cost of the cached path from start to goal, if it exists. */
+    std::optional<float> getCachedPathCost(const MapNode& start, const MapNode& goal) const;
+
     /** Caches a path from start to goal. */
-    void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path);
+    void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path, float pathCost);
 
     /** Registers a goal node to be considered for subsequent pathfinding attempts. */
     void registerGoalNode(MapNode goal);
@@ -165,11 +172,12 @@ private:
      * This is set low enough that it should not cause any lag spikes.
      * In general we should not reach this limit unless pathfinding across vast distances;
      * pathfinding in "normal" conditions typically requires 1000 or fewer nodes. */
-    static constexpr int maxNodesToVisitPerContext = 3000;
+    static constexpr int maxNodesToVisitPerContext = 2000;
 
     std::unordered_set<MapNode> registeredGoalNodes;
 
     std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
+    std::unordered_map<std::pair<MapNode, MapNode>, float> cachedPathCosts;
 
     int pathfindingAttempts = 0;
 
@@ -188,6 +196,9 @@ struct Hints
     /** Nodes that should be treated as obstructed. */
     std::unordered_set<MapNode> nodesToAvoid;
 
+    /** Nodes that should be preferred (if they are not also present in nodesToAvoid). */
+    std::unordered_set<MapNode> nodesToPrefer;
+
     /**
      * Movement cost when trying to move into a tile that is currently obstructed.
      *
@@ -202,11 +213,14 @@ struct Hints
      * - If this is too high, group movement becomes computationally expensive because units will waste their time
      *   trying long alternative routes to avoid (inevitable) obstructions.
      *
-     * To help with this, we could make obstructions more expensive the further they are from the goal. This would mean
-     * that units try harder to pathfind around obstructions when they still have a long way to travel, but they
+     * TODO: To help with this, we could make obstructions more expensive the further they are from the goal. This would
+     * mean that units try harder to pathfind around obstructions when they still have a long way to travel, but they
      * become "lazier" as they near the destination.
      */
     float obstructedMovementCost = 3.f;
+
+    /** Maximum path cost before pathfinding will abort. */
+    float maxPathCost = std::numeric_limits<float>::max();
 };
 
 /**
