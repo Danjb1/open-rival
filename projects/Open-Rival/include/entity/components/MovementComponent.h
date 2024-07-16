@@ -134,13 +134,19 @@ private:
     static constexpr float horizontalMoveTimeMultiplier = 1.5f;
 
     /** Maximum number of ticks to wait for a temporary obstruction to clear up before repathing.
+     * If this is too low then we may burn through repath attempts very quickly, and it could cause lag.
+     * However, if this is too high then units may pause for an unnecessarily long time when waiting to repath.
      * Consider that it might take a slow-moving unit ~60 ticks to move out of a tile. */
-    static constexpr int numTicksToWaitForTileToClear = 10;
+    static constexpr int numTicksToWaitForTileToClear = 30;
 
     /** Maximum number of repathing attempts around a temporary obstruction before giving up.
      * This could result in units getting left behind when trying to move through a congested area, but we need some
      * kind of limit to prevent units pathfinding indefinitely when an obstruction is not clearing. */
     static constexpr int maxRepathAttempts = 20;
+
+    /** Extra movement cost allowance for repath attempts.
+     * At the moment this is quite generous because otherwise units seem to get left behind! */
+    static constexpr float repathCostAllowance = 20;
 
     Pathfinding::Hints cachedHints;
 

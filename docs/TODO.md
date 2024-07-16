@@ -6,13 +6,14 @@
 
 ### Projectiles
 
-- Link projectiles to textures in JSON
+- Read projectiles data from JSON
 - Need to have access to the EntityFactory (currently discarded when LobbyState exits)
     - Could store this in the World, OR create a separate EntityFactory class for entities created mid-game?
 - For ranged attacks, spawn a projectile in deliverAttack
     - Should projectiles still be spawned if target is in melee range?
 - Projectiles should either be angled (e.g. arrows), animated (e.g. mace) or both (e.g. catapult)
 - Projectiles should lerp from the start tile to the end tile and then get destroyed
+    - For flying units, projectiles also need to lerp "downwards"?
 - Projectiles should move according to projectileSpeed
 - Damage the unit in the end tile and play impact sound
 - Explosive projectiles
@@ -43,12 +44,9 @@
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - Crash when closing game window (sometimes) (OpenAL32.dll)
-- Pathfinding lags the game when moving large groups of units
-    - Seems to be caused by units obstructing each other and then repathing (test with repathing disabled)
 - Some units get left behind when trying to move large distances
     - Units who find only a partial path should continue pathfinding at a later point
-        - MovementComponent::onCompletedMoveToNewTile should check the route's intended destination and repath if necessary
-    - We should not abort repathing attempts so soon; units may take time to get out of the way
+    - MovementComponent::onCompletedMoveToNewTile should check the route's intended destination and repath if necessary
 
 <!----------------------------------------------------------------------------->
 ## Features
