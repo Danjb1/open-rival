@@ -106,6 +106,7 @@ private:
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
     bool tryRepathAroundObstruction(const PathfindingMap& map);
     bool tryRepath(Pathfinding::Hints hints = {});
+    bool tryRouteContinuation();
 
     void onLeftPreviousTile();
     void onCompletedMoveToNewTile();
@@ -144,9 +145,8 @@ private:
      * kind of limit to prevent units pathfinding indefinitely when an obstruction is not clearing. */
     static constexpr int maxRepathAttempts = 20;
 
-    /** Extra movement cost allowance for repath attempts.
-     * At the moment this is quite generous because otherwise units seem to get left behind! */
-    static constexpr float repathCostAllowance = 20;
+    /** Minimum size for a route continuation to be considered. */
+    static constexpr int minSizeForRouteContinuation = 4;
 
     Pathfinding::Hints cachedHints;
 

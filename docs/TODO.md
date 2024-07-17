@@ -23,6 +23,7 @@
 
 ### Other
 
+- Optimise findNeighbors!
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -43,10 +44,6 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Crash when closing game window (sometimes) (OpenAL32.dll)
-- Some units get left behind when trying to move large distances
-    - Units who find only a partial path should continue pathfinding at a later point
-    - MovementComponent::onCompletedMoveToNewTile should check the route's intended destination and repath if necessary
 
 <!----------------------------------------------------------------------------->
 ## Features

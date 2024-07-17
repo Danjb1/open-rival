@@ -348,7 +348,7 @@ bool MovementComponent::tryRepathAroundNextNode(const PathfindingMap& map)
             ++numFailedRepathAttempts;
             if (numFailedRepathAttempts >= maxRepathAttempts)
             {
-                LOG_DEBUG_CATEGORY("pathfinding", "Reached max repath attempts");
+                LOG_WARN_CATEGORY("pathfinding", "Reached max repath attempts");
                 stopMovement();
             }
         }
@@ -427,15 +427,48 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
     auto existingPath = route.getPath();
     hints.nodesToPrefer.insert(existingPath.cbegin(), existingPath.cend());
 
-    if (route.getFinalDestination() == route.getIntendedDestination())
+    Pathfinding::Context context;
+    // Don't try to repath to a destination that we know is unreachable
+    const MapNode destination =
+            route.isIntendedDestinationUnreachable() ? route.getFinalDestination() : route.getIntendedDestination();
+    const bool success = moveTo(destination, context, hints);
+
+    return success;
+}
+
+bool MovementComponent::tryRouteContinuation()
+{
+    const MapNode intendedDestination = route.getIntendedDestination();
+    if (route.getFinalDestination() == intendedDestination)
     {
-        // Limit path cost since we already have a good idea of the route
-        hints.maxPathCost = route.getMovementCost() + repathCostAllowance;
+        // Nothing to continue - we've reached our destination
+        return false;
     }
 
+    if (route.isIntendedDestinationUnreachable())
+    {
+        // Don't bother trying to continue if the destination is known to be unreachable
+        return false;
+    }
+
+    LOG_INFO_CATEGORY("pathfinding", "Reached end of route but did not reach the intended destination!");
+
+    // We have not yet reached our intended destination - try moving the rest of the way
     Pathfinding::Context context;
-    const MapNode destination = route.getIntendedDestination();
-    const bool success = moveTo(destination, context, hints);
+    Pathfinding::Hints hints;
+    // Most of the hints are no longer relevant but we still care about the obstructedMovementCost
+    hints.obstructedMovementCost = cachedHints.obstructedMovementCost;
+    const bool success = moveTo(intendedDestination, context, cachedHints);
+
+    if (success && route.getSize() < minSizeForRouteContinuation)
+    {
+        // Abort if the new route is sufficiently short.
+        // This suggests that either:
+        // 1) We are already very close to the intended destination.
+        // 2) The intended destination is unreachable and we are as close as we can be.
+        LOG_INFO_CATEGORY("pathfinding", "Aborting route continuation");
+        return false;
+    }
 
     return success;
 }
@@ -454,11 +487,20 @@ void MovementComponent::onCompletedMoveToNewTile()
 {
     movement.clear();
 
-    if (route.isEmpty())
+    if (!route.isEmpty())
     {
-        // Reached end of route
-        stopMovement();
+        // We still have more movement planned
+        return;
     }
+
+    if (tryRouteContinuation())
+    {
+        // We still have further to go
+        return;
+    }
+
+    // Reached end of route
+    stopMovement();
 }
 
 void MovementComponent::stopMovement()
