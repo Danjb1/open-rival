@@ -88,7 +88,11 @@ public:
     Route();
 
     /** Constructs a Route with a path and destination. */
-    Route(MapNode destination, std::deque<MapNode> path, float cost);
+    Route(MapNode start,
+            MapNode destination,
+            std::deque<MapNode> path,
+            float cost,
+            bool isIntendedDestinationUnreachable);
 
     /** Determines if this Route is empty. */
     bool isEmpty() const;
@@ -96,13 +100,13 @@ public:
     /** Gets the destination that was originally intended when planning this route. */
     MapNode getIntendedDestination() const
     {
-        return destination;
+        return intendedDestination;
     }
 
     /** Gets the destination that was ultimately found when planning this route. */
     MapNode getFinalDestination() const
     {
-        return path.back();
+        return foundDestination;
     }
 
     /** Removes the next MapNode from the path and returns it. */
@@ -124,15 +128,25 @@ public:
         return cost;
     }
 
+    /** Gets the full path for this route. */
     std::deque<MapNode> getPath() const
     {
         return path;
     }
 
+    /** Returns true if the intended destination was *definitely* unreachable.
+     * Note that even if this returns false, the destiantion might still be unreachable. */
+    bool isIntendedDestinationUnreachable()
+    {
+        return bIsIntendedDestinationUnreachable;
+    }
+
 private:
-    MapNode destination;
+    MapNode intendedDestination;
+    MapNode foundDestination;
     std::deque<MapNode> path;
     float cost = 0;
+    bool bIsIntendedDestinationUnreachable = false;
 };
 
 /**
@@ -173,6 +187,10 @@ private:
      * In general we should not reach this limit unless pathfinding across vast distances;
      * pathfinding in "normal" conditions typically requires 1000 or fewer nodes. */
     static constexpr int maxNodesToVisitPerContext = 2000;
+
+    /** Lower limit for maxNodesToVisitPerAttempt.
+     * This prevents pathfinding from becoming very bad when moving large groups. */
+    static constexpr int maxNodesLowerLimit = 100;
 
     std::unordered_set<MapNode> registeredGoalNodes;
 

@@ -173,6 +173,9 @@ private:
 
     /** Nodes visited during pathfinding. */
     int nodesVisited = 0;
+
+    /** Whether the goal was determined to be unreachable. */
+    bool wasGoalUnreachable = false;
 };
 
 /**
@@ -200,7 +203,7 @@ Pathfinder::Pathfinder(MapNode start,
         pathCost = costToNode[destination];
     }
 
-    route = { goal, path, pathCost };
+    route = { start, goal, path, pathCost, wasGoalUnreachable };
 }
 
 /**
@@ -276,6 +279,7 @@ std::deque<MapNode> Pathfinder::findPath()
         {
             // Goal is inside an unreachable area; abort further pathfinding!
             LOG_INFO_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
+            wasGoalUnreachable = true;
             break;
         }
 
@@ -599,14 +603,20 @@ bool Pathfinder::isGoalInsideEnclosedPerimeter() const
 }
 
 Route::Route()
-    : destination({ 0, 0 })
+    : intendedDestination({ 0, 0 })
 {
 }
 
-Route::Route(MapNode destination, std::deque<MapNode> path, float cost)
-    : destination(destination)
+Route::Route(MapNode start,
+        MapNode destination,
+        std::deque<MapNode> path,
+        float cost,
+        bool bIsIntendedDestinationUnreachable)
+    : intendedDestination(destination)
     , path(path)
     , cost(cost)
+    , foundDestination(path.empty() ? start : path.back())
+    , bIsIntendedDestinationUnreachable(bIsIntendedDestinationUnreachable)
 {
 }
 
@@ -654,7 +664,7 @@ Route findPath(MapNode start,
 
 Context::Context(int numUnits)
     : numUnits(numUnits)
-    , maxNodesToVisitPerAttempt(static_cast<int>(maxNodesToVisitPerContext / numUnits))
+    , maxNodesToVisitPerAttempt(std::max(static_cast<int>(maxNodesToVisitPerContext / numUnits), maxNodesLowerLimit))
     , isCacheEnabled(numUnits > 1)
 {
 }
