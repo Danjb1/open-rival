@@ -207,7 +207,7 @@ void GameState::render(int delta)
         // Same goes for the TextRenderer
         MenuTextRenderer textRenderer(window);
         std::vector<TextRenderable> textRenderables;
-        TextProperties nameProperties = { &res.getFontRegular() };
+        TextProperties nameProperties = { res.getFontRegular() };
         glm::vec2 renderPos = { 100, 100 };
         const float rowHeight = 32;
         const float indent = 32;

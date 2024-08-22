@@ -28,7 +28,7 @@ public:
     // The maximum number of tiles we can render at once
     static constexpr int maxTilesToRender = RenderUtils::maxTilesX * RenderUtils::maxTilesY;
 
-    TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const Texture> paletteTexture);
+    TileRenderer(std::shared_ptr<const Spritesheet> spritesheet, std::shared_ptr<const Texture> paletteTexture);
 
     void render(int delta, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight);
 

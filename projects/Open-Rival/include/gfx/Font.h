@@ -33,7 +33,7 @@ class FontFace
 public:
     FT_Face face;
 
-    FontFace(FT_Library& ft, std::string filename);
+    FontFace(FT_Library ft, std::string filename);
     ~FontFace();
 };
 
@@ -53,6 +53,22 @@ class Font
 {
 public:
     /**
+     * Loads a font and produces a Font object backed by a texture.
+     *
+     * This texture contains every supported character in a single row, with
+     * padding between them.
+     *
+     * If the font does not contain a glyph for one of our supported
+     * characters, then that character will be displayed as an empty space.
+     *
+     * @see https://learnopengl.com/In-Practice/Text-Rendering
+     */
+    static std::shared_ptr<const Font> loadFont(
+            FT_Library ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
+
+    Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, CharData> chars, int defaultSize);
+
+    /**
      * Gets the Texture that backs this Font.
      */
     std::shared_ptr<const Texture> getTexture() const
@@ -68,28 +84,13 @@ public:
     /**
      * Gets the data pertaining to the given character.
      */
-    const int getDefaultSize() const
+    int getDefaultSize() const
     {
         return defaultSize;
     }
 
-    /**
-     * Loads a font and produces a Font object backed by a texture.
-     *
-     * This texture contains every supported character in a single row, with
-     * padding between them.
-     *
-     * If the font does not contain a glyph for one of our supported
-     * characters, then that character will be displayed as an empty space.
-     *
-     * @see https://learnopengl.com/In-Practice/Text-Rendering
-     */
-    static Font loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
-
 private:
-    static Font loadFont(FT_Library& ft, std::string filename, int defaultSize);
-
-    Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, CharData> chars, int defaultSize);
+    static std::shared_ptr<const Font> loadFont(FT_Library ft, std::string filename, int defaultSize);
 
     static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
     static inline int makePrintable(unsigned char c);

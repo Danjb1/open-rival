@@ -31,6 +31,11 @@ public:
         return cfg;
     }
 
+    const json& getConfig() const
+    {
+        return cfg;
+    }
+
     AudioSystem& getAudioSystem()
     {
         return audioSystem;
@@ -41,7 +46,7 @@ public:
         return res;
     }
 
-    FT_Library& getFontLibrary()
+    FT_Library getFontLibrary() const
     {
         return fontLib;
     }

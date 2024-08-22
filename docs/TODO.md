@@ -453,8 +453,7 @@
 
 #### General
 
-- Separate Resources from resource *loading*
-    - In tests, we only need to mock resource loading
+- In tests, we only need to mock resource *loading*, but not Resources
 - Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?

@@ -2,6 +2,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/Application.cpp
     ${OPEN_RIVAL_DIR}/src/application/ApplicationContext.cpp
     ${OPEN_RIVAL_DIR}/src/application/PathUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/application/ResourceLoader.cpp
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/State.cpp
     ${OPEN_RIVAL_DIR}/src/application/Window.cpp
@@ -53,6 +54,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/game/Pathfinding.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerContext.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerState.cpp
+    ${OPEN_RIVAL_DIR}/src/game/ProjectileDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/Tile.cpp
     ${OPEN_RIVAL_DIR}/src/game/UnitDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/World.cpp
@@ -137,6 +139,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/application/Application.h
     ${OPEN_RIVAL_DIR}/include/application/ApplicationContext.h
     ${OPEN_RIVAL_DIR}/include/application/PathUtils.h
+    ${OPEN_RIVAL_DIR}/include/application/ResourceLoader.h
     ${OPEN_RIVAL_DIR}/include/application/Resources.h
     ${OPEN_RIVAL_DIR}/include/application/State.h
     ${OPEN_RIVAL_DIR}/include/application/Window.h
@@ -191,6 +194,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/Pathfinding.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerContext.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerState.h
+    ${OPEN_RIVAL_DIR}/include/game/ProjectileDef.h
     ${OPEN_RIVAL_DIR}/include/game/Race.h
     ${OPEN_RIVAL_DIR}/include/game/Tile.h
     ${OPEN_RIVAL_DIR}/include/game/UnitDef.h

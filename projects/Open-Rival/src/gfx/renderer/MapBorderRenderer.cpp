@@ -14,11 +14,10 @@
 
 namespace Rival {
 
-MapBorderRenderer::MapBorderRenderer(
-        Race race,
+MapBorderRenderer::MapBorderRenderer(Race race,
         int mapWidth,
         int mapHeight,
-        const Spritesheet& spritesheet,
+        std::shared_ptr<const Spritesheet> spritesheet,
         std::shared_ptr<const Texture> paletteTexture)
     : paletteTexture(paletteTexture)
     // This is calculated as follows:
@@ -139,14 +138,22 @@ void MapBorderRenderer::addDataToBuffers(
     float y2 = y1 + height;
     float z = RenderUtils::zMapBorder;
     std::vector<GLfloat> thisVertexData = {
-        x1, y1, z,  //
-        x2, y1, z,  //
-        x2, y2, z,  //
-        x1, y2, z   //
+        x1,
+        y1,
+        z,  //
+        x2,
+        y1,
+        z,  //
+        x2,
+        y2,
+        z,  //
+        x1,
+        y2,
+        z  //
     };
 
     // Determine texture co-ordinates
-    std::vector<GLfloat> thisTexCoords = renderable.spritesheet.getTexCoords(txIndex);
+    std::vector<GLfloat> thisTexCoords = renderable.spritesheet->getTexCoords(txIndex);
 
     // Copy this tile's data to the main buffers
     positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());

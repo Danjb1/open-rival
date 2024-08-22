@@ -3,6 +3,7 @@
 #include "gfx/GlewWrapper.h"
 #include <glm/vec2.hpp>
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -46,7 +47,7 @@ public:
     UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const std::string imageKey);
 
     /** Constructor for a UiImage that uses a Spritesheet. */
-    UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex);
+    UiImage(Rect pos, std::shared_ptr<const Spritesheet> spritesheet, int spriteIndex);
 
     /** Constructor for a UiImage that renders an entire texture. */
     UiImage(Rect pos);
@@ -61,7 +62,7 @@ private:
     const std::string imageKey;
 
     // Spritesheet version
-    const Spritesheet* spritesheet = nullptr;
+    std::shared_ptr<const Spritesheet> spritesheet;
     int spriteIndex = 0;
 };
 

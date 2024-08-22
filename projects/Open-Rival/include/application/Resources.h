@@ -5,23 +5,22 @@
 #include <unordered_map>
 #include <vector>
 
-#include "audio/MidiFile.h"
-#include "audio/Sounds.h"
-#include "audio/WaveFile.h"
+#include "application/ResourceLoader.h"
 #include "game/AttackDef.h"
 #include "game/BuildingDef.h"
 #include "game/BuildingType.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
-#include "gfx/Font.h"
-#include "gfx/PaletteUtils.h"
-#include "gfx/Spritesheet.h"
-#include "gfx/Texture.h"
-#include "gfx/TextureAtlas.h"
 
 namespace Rival {
 
-class ApplicationContext;
+class Font;
+class MidiFile;
+class SoundBank;
+class Spritesheet;
+class Texture;
+class TextureAtlas;
+class WaveFile;
 
 /**
  * Interface providing access to fonts.
@@ -29,8 +28,8 @@ class ApplicationContext;
 class FontStore
 {
 public:
-    virtual const Font& getFontSmall() const = 0;
-    virtual const Font& getFontRegular() const = 0;
+    virtual std::shared_ptr<const Font> getFontSmall() const = 0;
+    virtual std::shared_ptr<const Font> getFontRegular() const = 0;
 };
 
 /**
@@ -40,19 +39,20 @@ class TextureStore
 {
 public:
     virtual std::shared_ptr<const Texture> getPalette() const = 0;
-    virtual const Spritesheet& getTileSpritesheet(bool wilderness) const = 0;
-    virtual const Spritesheet& getUnitSpritesheet(UnitType unitType) const = 0;
-    virtual const Spritesheet& getProjectileSpritesheet(const std::string& name) const = 0;
-    virtual const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const = 0;
-    virtual const Spritesheet& getCommonObjectSpritesheet() const = 0;
-    virtual const Spritesheet& getObjectSpritesheet(bool wilderness) const = 0;
-    virtual const Spritesheet& getCursorSpritesheet() const = 0;
-    virtual const Spritesheet& getMapBorderSpritesheet() const = 0;
-    virtual const Spritesheet& getPortraitSpritesheet() const = 0;
-    virtual const Spritesheet& getHitboxSpritesheet() const = 0;
+    virtual std::shared_ptr<const Spritesheet> getTileSpritesheet(bool wilderness) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getUnitSpritesheet(UnitType unitType) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getProjectileSpritesheet(const std::string& name) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getBuildingSpritesheet(BuildingType buildingType) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getCommonObjectSpritesheet() const = 0;
+    virtual std::shared_ptr<const Spritesheet> getObjectSpritesheet(bool wilderness) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getCursorSpritesheet() const = 0;
+    virtual std::shared_ptr<const Spritesheet> getMapBorderSpritesheet() const = 0;
+    virtual std::shared_ptr<const Spritesheet> getPortraitSpritesheet() const = 0;
+    virtual std::shared_ptr<const Spritesheet> getHitboxSpritesheet() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const = 0;
     virtual std::shared_ptr<const Texture> getMenuBackgroundTexture() const = 0;
+    virtual std::shared_ptr<const Texture> getTexture(int id) const = 0;
 };
 
 /**
@@ -79,7 +79,8 @@ public:
 };
 
 /**
- * Class that holds all of the game's resources.
+ * Stores and provides access to all of the game's resources.
+ * Where possible, the narrower interface types should be used instead.
  */
 class Resources
     : public FontStore
@@ -87,30 +88,32 @@ class Resources
     , public AudioStore
     , public DataStore
 {
+    friend class ResourceLoader;
+
 public:
-    Resources(ApplicationContext& context);
     virtual ~Resources() = default;
 
     // Begin TextureStore override
     std::shared_ptr<const Texture> getPalette() const override;
-    const Spritesheet& getTileSpritesheet(bool wilderness) const override;
-    const Spritesheet& getUnitSpritesheet(UnitType unitType) const override;
-    const Spritesheet& getProjectileSpritesheet(const std::string& name) const override;
-    const Spritesheet& getBuildingSpritesheet(BuildingType buildingType) const override;
-    const Spritesheet& getCommonObjectSpritesheet() const override;
-    const Spritesheet& getObjectSpritesheet(bool wilderness) const override;
-    const Spritesheet& getCursorSpritesheet() const override;
-    const Spritesheet& getMapBorderSpritesheet() const override;
-    const Spritesheet& getPortraitSpritesheet() const override;
-    const Spritesheet& getHitboxSpritesheet() const override;
+    std::shared_ptr<const Spritesheet> getTileSpritesheet(bool wilderness) const override;
+    std::shared_ptr<const Spritesheet> getUnitSpritesheet(UnitType unitType) const override;
+    std::shared_ptr<const Spritesheet> getProjectileSpritesheet(const std::string& name) const override;
+    std::shared_ptr<const Spritesheet> getBuildingSpritesheet(BuildingType buildingType) const override;
+    std::shared_ptr<const Spritesheet> getCommonObjectSpritesheet() const override;
+    std::shared_ptr<const Spritesheet> getObjectSpritesheet(bool wilderness) const override;
+    std::shared_ptr<const Spritesheet> getCursorSpritesheet() const override;
+    std::shared_ptr<const Spritesheet> getMapBorderSpritesheet() const override;
+    std::shared_ptr<const Spritesheet> getPortraitSpritesheet() const override;
+    std::shared_ptr<const Spritesheet> getHitboxSpritesheet() const override;
     std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const override;
     std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const override;
     std::shared_ptr<const Texture> getMenuBackgroundTexture() const override;
+    std::shared_ptr<const Texture> getTexture(int id) const override;
     // End TextureStore override
 
     // Begin FontStore override
-    const Font& getFontSmall() const override;
-    const Font& getFontRegular() const override;
+    std::shared_ptr<const Font> getFontSmall() const override;
+    std::shared_ptr<const Font> getFontRegular() const override;
     // End FontStore override
 
     // Begin AudioStore override
@@ -127,81 +130,24 @@ public:
     // End DataStore override
 
 private:
-    // Initialization
-    Font initFontSmall();
-    Font initFontRegular();
-    std::vector<std::shared_ptr<const Texture>> loadTextures();
-    std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases();
-    std::shared_ptr<const Texture> initPaletteTexture();
-    std::unordered_map<BuildingType, Spritesheet> initBuildingSpritesheets();
-    std::unordered_map<UnitType, Spritesheet> initUnitSpritesheets();
-    std::unordered_map<std::string, Spritesheet> initProjectileSpritesheets();
-    std::vector<Spritesheet> initTileSpritesheets();
-    std::vector<Spritesheet> initObjectSpritesheets();
-    Spritesheet initCursorSpritesheet();
-    Spritesheet initMapBorderSpritesheet();
-    Spritesheet initPortraitSpritesheet();
-    Spritesheet initHitboxSpritesheet();
-    std::vector<std::shared_ptr<const WaveFile>> initSounds();
-    std::vector<std::shared_ptr<const MidiFile>> initMidis();
-    std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
-    std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
-    std::unordered_map<int, AttackDef> initAttackDefs() const;
-    std::unordered_map<std::string, const SoundBank> initSoundBanks() const;
-
-public:
-    // Directories
-    static const std::string dataDir;
-    static const std::string mapsDir;
-    static const std::string soundDir;
-    static const std::string txDir;
-
-private:
-    // Font settings
-    static const std::vector<std::string> defaultFontDirs;
-    static const std::string defaultFontSmall;
-    static const std::string defaultFontRegular;
-
-    // Texture constants
-    static constexpr int txIndexUnits = 0;
-    static constexpr int txIndexProjectiles = txIndexUnits + 50;
-    static constexpr int txIndexTiles = txIndexProjectiles + 17;
-    static constexpr int txIndexObjects = txIndexTiles + 4;
-    static constexpr int txIndexCursors = txIndexObjects + 3;
-    static constexpr int txIndexBuildings = txIndexCursors + 1;
-    static constexpr int txIndexPortraits = txIndexBuildings + 3;
-    static constexpr int txIndexHitbox = txIndexPortraits + 1;
-    static constexpr int txIndexMenuBackground = txIndexHitbox + 1;
-
-    // Resource counts
-    static constexpr int numTextures = txIndexMenuBackground + 1;
-    static constexpr int numTextureAtlases = 2;
-    static constexpr int numSounds = 369;
-    static constexpr int numMidis = 1;  // 13;
-
-    // MIDI constants
-    static constexpr int midiStartIndex = 369;
-
-    ApplicationContext& context;
-
     // Fonts
-    Font fontSmall;
-    Font fontRegular;
+    std::shared_ptr<const Font> fontSmall;
+    std::shared_ptr<const Font> fontRegular;
 
     // Loaded textures
     std::vector<std::shared_ptr<const Texture>> textures;
     std::shared_ptr<const Texture> paletteTexture;
 
     // Spritesheets
-    std::unordered_map<UnitType, Spritesheet> unitSpritesheets;
-    std::unordered_map<BuildingType, Spritesheet> buildingSpritesheets;
-    std::unordered_map<std::string, Spritesheet> projectileSpritesheets;
-    std::vector<Spritesheet> tileSpritesheets;
-    std::vector<Spritesheet> objectSpritesheets;
-    Spritesheet cursorSpritesheet;
-    Spritesheet mapBorderSpritesheet;
-    Spritesheet portraitSpritesheet;
-    Spritesheet hitboxSpritesheet;
+    std::unordered_map<UnitType, std::shared_ptr<const Spritesheet>> unitSpritesheets;
+    std::unordered_map<BuildingType, std::shared_ptr<const Spritesheet>> buildingSpritesheets;
+    std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> projectileSpritesheets;
+    std::vector<std::shared_ptr<const Spritesheet>> tileSpritesheets;
+    std::vector<std::shared_ptr<const Spritesheet>> objectSpritesheets;
+    std::shared_ptr<const Spritesheet> cursorSpritesheet;
+    std::shared_ptr<const Spritesheet> mapBorderSpritesheet;
+    std::shared_ptr<const Spritesheet> portraitSpritesheet;
+    std::shared_ptr<const Spritesheet> hitboxSpritesheet;
 
     // Texture Atlases
     std::vector<std::shared_ptr<const TextureAtlas>> textureAtlases;

@@ -3,6 +3,7 @@
 #include <glm/vec2.hpp>
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include "entity/components/EntityComponent.h"
@@ -21,7 +22,7 @@ namespace Rival {
 class SpriteComponent : public EntityComponent
 {
 public:
-    SpriteComponent(const Spritesheet& spritesheet);
+    SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet);
 
     const SpriteRenderable& getRenderable() const;
 

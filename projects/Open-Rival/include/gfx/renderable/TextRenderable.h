@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+#include <memory>
 #include <string>
 
 #include "gfx/Color.h"
@@ -26,7 +27,7 @@ struct TextProperties
     /**
      * Font to use when rendering the text.
      */
-    const Font* font = nullptr;
+    std::shared_ptr<const Font> font;
 
     /**
      * Scale at which to render the text.
@@ -100,7 +101,7 @@ public:
 
     GLuint getTextureId() const;
 
-    const Font* getFont() const
+    std::shared_ptr<const Font> getFont() const
     {
         return props.font;
     }

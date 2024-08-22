@@ -2,13 +2,14 @@
 
 #include "gfx/GlewWrapper.h"
 
+#include <memory>
+
 namespace Rival {
 
 class Spritesheet;
 
 /**
- * Class that allows one or more Sprites to be rendered from a Spritesheet
- * as textured quads.
+ * Class that allows one or more Sprites to be rendered from a Spritesheet as textured quads.
  *
  * This creates the VAO and all necessary buffers.
  */
@@ -19,7 +20,7 @@ public:
     static constexpr int numTexCoordDimensions = 2;  // u, v
     static constexpr int numVerticesPerSprite = 4;
 
-    const Spritesheet& spritesheet;
+    std::shared_ptr<const Spritesheet> spritesheet;
 
     /**
      * Constructs a SpriteRenderable.
@@ -27,7 +28,7 @@ public:
      * @param spritesheet
      * @param maxSprites The maximum number of Sprites that can be drawn.
      */
-    SpriteRenderable(const Spritesheet& spritesheet, int maxSprites);
+    SpriteRenderable(std::shared_ptr<const Spritesheet> spritesheet, int maxSprites);
 
     /** Deletes a SpriteRenderable. */
     ~SpriteRenderable();

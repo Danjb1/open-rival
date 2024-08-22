@@ -4,6 +4,7 @@
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "application/ResourceLoader.h"
 #include "entity/EntityFactory.h"
 #include "game/GameState.h"
 #include "game/PlayerState.h"
@@ -103,7 +104,7 @@ void LobbyState::renderText()
     // TMP: Hardcoded hacky rendering until we have a proper menu system.
     // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
     std::vector<TextRenderable> textRenderables;
-    TextProperties nameProperties = { &res.getFontRegular() };
+    TextProperties nameProperties = { res.getFontRegular() };
     glm::vec2 renderPos = { 100, 100 };
     const float rowHeight = 32;
     const float indent = 32;
@@ -297,7 +298,7 @@ int LobbyState::requestPlayerId()
 
 void LobbyState::loadLevel(const std::string& filename)
 {
-    ScenarioReader reader(Resources::mapsDir + filename);
+    ScenarioReader reader(ResourceLoader::mapsDir + filename);
     scenarioData = reader.readScenario();
 }
 
