@@ -24,11 +24,20 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 
 ## :link: Links
 
+### Open-Rival
+
 - [Discord Server](https://discord.gg/R7E4KWT)
 - [Open-Rival Devlog](https://youtube.com/playlist?list=PLfJwVz0VSvZmjdt-UvKVJRiRbnjV5hjRY&si=06UNbANnAyoAw36y)
+- [Upscaled Cutscenes](https://www.youtube.com/playlist?list=PLfJwVz0VSvZmUPemMtnYGT56MHwnnXZ9o)
+
+### Music
+
 - [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
 - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
-- [Upscaled Cutscenes](https://www.youtube.com/playlist?list=PLfJwVz0VSvZmUPemMtnYGT56MHwnnXZ9o)
+- [Lofi Title Theme](https://youtu.be/4tMEXANdk-g?si=qsY5VA-DeA_616cN)
+
+### Gameplay
+
 - [2016] [Gameplay + Commentary](https://youtu.be/bSefVvZnxKs)
 - [2019] [Multiplayer Gameplay & Set-up Guide](https://youtu.be/KzTm1MCKrLI)
 - [2019] [Gameplay](https://youtu.be/3VcExo3szcc)
