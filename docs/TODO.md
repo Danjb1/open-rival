@@ -44,6 +44,8 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
+- Units can get left behind when moving to an unreachable destination
+    - This is because we don't repath / continue a route when we know the destination to be unreachable
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -420,6 +422,9 @@
 - When pathfinding with a group, prioritise visiting nodes that were recently visited by other group members
 - When pathfinding with a group, limit the search based on how long the first group member took to find a route
 - Use pathfinding context when attack-moving a group
+- Pathfind from the destination to the start
+- Analyse the map to determine which areas are distinct and unreachable from each other
+- Use [heirarchical pathfinding](https://factorio.com/blog/post/fff-317)
 
 ### Portability
 

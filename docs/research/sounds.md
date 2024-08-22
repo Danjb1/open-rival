@@ -260,24 +260,24 @@ For units, the sounds seem to follow this format (offsets from the first sound):
 - **241:** Elf - Centaur 4
 - **242:** Elf - Centaur 5
 - **243:** Elf - Centaur 6
-- **244:** Elf - Bombard 1
-- **245:** Elf - Bombard 2
-- **246:** Elf - Bombard 3
-- **247:** Elf - Bombard 4
-- **248:** Elf - Bombard 5
-- **249:** Elf - Bombard 6
+- **244:** Elf - Dwarf Miner 1
+- **245:** Elf - Dwarf Miner 2
+- **246:** Elf - Dwarf Miner 3
+- **247:** Elf - Dwarf Miner 4
+- **248:** Elf - Dwarf Miner 5
+- **249:** Elf - Dwarf Miner 6
 - **250:** Elf - Scout 1
 - **251:** Elf - Scout 2
 - **252:** Elf - Scout 3
 - **253:** Elf - Scout 4
 - **254:** Elf - Scout 5
 - **255:** Elf - Scout 6
-- **256:** Elf - Dwarf Miner 1
-- **257:** Elf - Dwarf Miner 2
-- **258:** Elf - Dwarf Miner 3
-- **259:** Elf - Dwarf Miner 4
-- **260:** Elf - Dwarf Miner 5
-- **261:** Elf - Dwarf Miner 6
+- **256:** Elf - Bombard 1
+- **257:** Elf - Bombard 2
+- **258:** Elf - Bombard 3
+- **259:** Elf - Bombard 4
+- **260:** Elf - Bombard 5
+- **261:** Elf - Bombard 6
 - **262:** Elf - Arquebusier 1
 - **263:** Elf - Arquebusier 2
 - **264:** Elf - Arquebusier 3
