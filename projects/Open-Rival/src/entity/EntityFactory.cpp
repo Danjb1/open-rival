@@ -76,7 +76,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<FacingComponent>(facing));
 
     // SpriteComponent
-    const Spritesheet& spritesheet = resources.getUnitSpritesheet(unitType);
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getUnitSpritesheet(unitType);
     unit->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // UnitAnimationComponent
@@ -143,7 +143,7 @@ std::shared_ptr<Entity> EntityFactory::createBuilding(const BuildingPlacement& b
     building->attach(std::make_shared<OwnerComponent>(buildingPlacement.player));
 
     // SpriteComponent
-    const Spritesheet& spritesheet = resources.getBuildingSpritesheet(buildingType);
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getBuildingSpritesheet(buildingType);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     if (building->isWall())
@@ -171,7 +171,7 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(
     std::shared_ptr<Palisade> building = std::make_shared<Palisade>(isGrate);
 
     // SpriteComponent
-    const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getObjectSpritesheet(wilderness);
     building->attach(std::make_shared<SpriteComponent>(spritesheet));
 
     // WallComponent
@@ -192,12 +192,12 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     // SpriteComponent
     if (objPlacement.type == 0xAF)
     {
-        const Spritesheet& spritesheet = resources.getCommonObjectSpritesheet();
+        std::shared_ptr<const Spritesheet> spritesheet = resources.getCommonObjectSpritesheet();
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
     else
     {
-        const Spritesheet& spritesheet = resources.getObjectSpritesheet(wilderness);
+        std::shared_ptr<const Spritesheet> spritesheet = resources.getObjectSpritesheet(wilderness);
         obj->attach(std::make_shared<SpriteComponent>(spritesheet));
     }
 

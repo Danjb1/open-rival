@@ -36,9 +36,9 @@ UiImage::UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const s
 {
 }
 
-UiImage::UiImage(Rect pos, const Spritesheet& spritesheet, int spriteIndex)
+UiImage::UiImage(Rect pos, std::shared_ptr<const Spritesheet> spritesheet, int spriteIndex)
     : pos(pos)
-    , spritesheet(&spritesheet)
+    , spritesheet(spritesheet)
     , spriteIndex(spriteIndex)
 {
 }
@@ -62,10 +62,18 @@ void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>
     float y2 = y1 + pos.height;
     float z = 0;
     std::vector<GLfloat> thisVertexData = {
-        x1, y1, z,  //
-        x2, y1, z,  //
-        x2, y2, z,  //
-        x1, y2, z   //
+        x1,
+        y1,
+        z,  //
+        x2,
+        y1,
+        z,  //
+        x2,
+        y2,
+        z,  //
+        x1,
+        y2,
+        z  //
     };
 
     // Determine texture co-ordinates
@@ -86,10 +94,14 @@ void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>
         const float ty2 = 1.f;
 
         thisTexCoords = {
-            tx1, ty1,  //
-            tx2, ty1,  //
-            tx2, ty2,  //
-            tx1, ty2   //
+            tx1,
+            ty1,  //
+            tx2,
+            ty1,  //
+            tx2,
+            ty2,  //
+            tx1,
+            ty2  //
         };
     }
 

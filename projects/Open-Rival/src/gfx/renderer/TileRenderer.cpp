@@ -21,7 +21,8 @@ namespace Rival {
 const std::array<int, 4> TileRenderer::waterFrames1 = { 3, 2, 1, 0 };
 const std::array<int, 7> TileRenderer::waterFrames2 = { 6, 5, 4, 3, 2, 1, 0 };
 
-TileRenderer::TileRenderer(const Spritesheet& spritesheet, std::shared_ptr<const Texture> paletteTexture)
+TileRenderer::TileRenderer(
+        std::shared_ptr<const Spritesheet> spritesheet, std::shared_ptr<const Texture> paletteTexture)
     : paletteTexture(paletteTexture)
     , renderable { spritesheet, maxTilesToRender }
 {
@@ -165,7 +166,7 @@ void TileRenderer::sendDataToGpu(
             };
 
             // Determine texture co-ordinates
-            std::vector<GLfloat> thisTexCoords = renderable.spritesheet.getTexCoords(txIndex);
+            std::vector<GLfloat> thisTexCoords = renderable.spritesheet->getTexCoords(txIndex);
 
             // Copy this tile's data to the main buffers
             positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());

@@ -9,7 +9,7 @@
 
 namespace Rival {
 
-SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprites)
+SpriteRenderable::SpriteRenderable(std::shared_ptr<const Spritesheet> spritesheet, int maxSprites)
     : spritesheet(spritesheet)
 {
     // Generate VAO
@@ -30,8 +30,7 @@ SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprite
 
     // Initialize position buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-    glVertexAttribPointer(
-            Shaders::vertexAttribIndex,
+    glVertexAttribPointer(Shaders::vertexAttribIndex,
             numVertexDimensions,
             GL_FLOAT,
             GL_FALSE,
@@ -43,8 +42,7 @@ SpriteRenderable::SpriteRenderable(const Spritesheet& spritesheet, int maxSprite
     // Initialize tex co-ord buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
     int texCoordBufferSize = maxSprites * numTexCoordDimensions * indicesPerSprite * sizeof(GLfloat);
-    glVertexAttribPointer(
-            Shaders::texCoordAttribIndex,
+    glVertexAttribPointer(Shaders::texCoordAttribIndex,
             numTexCoordDimensions,
             GL_FLOAT,
             GL_FALSE,
@@ -128,7 +126,7 @@ GLuint SpriteRenderable::getIbo() const
 
 GLuint SpriteRenderable::getTextureId() const
 {
-    return spritesheet.texture->getId();
+    return spritesheet->texture->getId();
 }
 
 GLenum SpriteRenderable::getDrawMode() const

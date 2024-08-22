@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>  // std::move
 
+#include "application/ResourceLoader.h"
 #include "audio/AudioUtils.h"
 #include "game/GameState.h"
 #include "game/World.h"
@@ -29,8 +30,13 @@ ApplicationContext::ApplicationContext()
     /* We initialize logging as early as possible, but we need to read the config first to know the log level. */
     : cfg(readConfig())
     , window((initLogging(), initSDL(), createWindow()))
-    , res((initGLEW(), initGL(), initFonts(), *this))
 {
+    initGLEW();
+    initGL();
+    initFonts();
+
+    ResourceLoader(*this, res);  // Load resources
+
     initAudio();
     NetUtils::initNetworking();
 }
@@ -135,7 +141,7 @@ std::unique_ptr<Window> ApplicationContext::createWindow()
 
 void ApplicationContext::setWindowIcon(Window& window)
 {
-    std::string iconFilename = Resources::txDir + "icon.png";
+    std::string iconFilename = ResourceLoader::txDir + "icon.png";
     SDL_Surface* surface;
     surface = IMG_Load(iconFilename.c_str());
     window.setIcon(surface);

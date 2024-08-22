@@ -17,6 +17,7 @@
 #include "game/PlayerState.h"
 #include "gfx/Camera.h"
 #include "gfx/Palette.h"
+#include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Shaders.h"
 #include "gfx/Spritesheet.h"
@@ -156,7 +157,7 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
 
     // Determine texture co-ordinates
     const SpriteRenderable& renderable = spriteComponent.getRenderable();
-    std::vector<GLfloat> texCoords = renderable.spritesheet.getTexCoords(txIndex);
+    std::vector<GLfloat> texCoords = renderable.spritesheet->getTexCoords(txIndex);
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
@@ -312,7 +313,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 0);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet->getTexCoords(baseTexCoord + 0);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -333,7 +334,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 1);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet->getTexCoords(baseTexCoord + 1);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -354,7 +355,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 2);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet->getTexCoords(baseTexCoord + 2);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 
@@ -375,7 +376,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         };
         positions.insert(positions.cend(), newPositions.cbegin(), newPositions.cend());
 
-        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet.getTexCoords(baseTexCoord + 3);
+        std::vector<GLfloat> newTexCoords = hitboxRenderable.spritesheet->getTexCoords(baseTexCoord + 3);
         texCoords.insert(texCoords.cend(), newTexCoords.cbegin(), newTexCoords.cend());
     }
 

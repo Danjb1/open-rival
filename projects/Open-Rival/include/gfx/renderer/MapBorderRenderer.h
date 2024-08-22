@@ -18,34 +18,30 @@ class MapBorderRenderer
 {
 
 public:
-    MapBorderRenderer(
-            Race race,
+    MapBorderRenderer(Race race,
             int mapWidth,
             int mapHeight,
-            const Spritesheet& spritesheet,
+            std::shared_ptr<const Spritesheet> spritesheet,
             std::shared_ptr<const Texture> paletteTexture);
 
-    void
-    createLeftEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
+    void createLeftEdge(
+            std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapHeight);
 
     void createTopEdge(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords, int raceOffset, int mapWidth);
 
-    void createRightEdge(
-            std::vector<GLfloat>& positions,
+    void createRightEdge(std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,
             int mapHeight);
 
-    void createBottomEdge(
-            std::vector<GLfloat>& positions,
+    void createBottomEdge(std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,
             int mapHeight);
 
-    void createCorners(
-            std::vector<GLfloat>& positions,
+    void createCorners(std::vector<GLfloat>& positions,
             std::vector<GLfloat>& texCoords,
             int raceOffset,
             int mapWidth,

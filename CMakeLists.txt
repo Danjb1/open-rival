@@ -27,7 +27,7 @@ set(OPENAL_VERSION "1.23.1" CACHE STRING "OpenAL version number")
 set(RTMIDI_VERSION "5.0.0" CACHE STRING "RtMidi version number")
 set(SDL2_VERSION "2.28.0" CACHE STRING "SDL2 version number")
 set(SDL2_IMAGE_VERSION "2.6.3" CACHE STRING "SDL2_Image version number")
-set(SPDLOG_VERSION "1.12.0" CACHE STRING "spdlog version number")
+set(SPDLOG_VERSION "1.14.1" CACHE STRING "spdlog version number")
 
 # This is seemingly an empty interface which all projects depend on... remove?
 add_library(project_options INTERFACE)

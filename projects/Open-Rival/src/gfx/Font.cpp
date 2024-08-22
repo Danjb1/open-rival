@@ -52,7 +52,7 @@ const CharData* Font::getCharData(char c) const
     }
 }
 
-FontFace::FontFace(FT_Library& ft, std::string filename)
+FontFace::FontFace(FT_Library ft, std::string filename)
 {
     if (FT_New_Face(ft, filename.c_str(), 0, &face))
     {
@@ -70,7 +70,8 @@ FontLoadError::FontLoadError(const char* message)
 {
 }
 
-Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
+std::shared_ptr<const Font> Font::loadFont(
+        FT_Library ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
 {
     LOG_TRACE("Reading font: {}", filename);
 
@@ -90,7 +91,7 @@ Font Font::loadFont(FT_Library& ft, std::vector<std::string> fontDirs, std::stri
     throw std::runtime_error("Failed to load font: " + filename);
 }
 
-Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
+std::shared_ptr<const Font> Font::loadFont(FT_Library ft, std::string filename, int defaultSize)
 {
     FontFace faceWrapper(ft, filename);
     FT_Face& face = faceWrapper.face;
@@ -204,7 +205,7 @@ Font Font::loadFont(FT_Library& ft, std::string filename, int defaultSize)
     TextureProperties props = createTextureProperties(face);
     std::shared_ptr<const Texture> tex = Texture::wrap(std::move(fontBitmap), props);
 
-    return { tex, chars, defaultSize };
+    return std::make_shared<const Font>(tex, chars, defaultSize);
 }
 
 /**

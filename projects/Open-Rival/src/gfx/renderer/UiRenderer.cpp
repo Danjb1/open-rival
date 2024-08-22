@@ -44,7 +44,7 @@ UiRenderer::UiRenderer(const PlayerStore& playerStore,
     , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
 
     // Text
-    , nameProperties({ &fontStore.getFontSmall() })
+    , nameProperties({ fontStore.getFontSmall() })
     , nameRenderable(
               Entity::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
     , textRenderer(window)

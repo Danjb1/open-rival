@@ -5,6 +5,7 @@
 #include "application/Window.h"
 #include "gfx/GLUtils.h"
 #include "gfx/Palette.h"
+#include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Shaders.h"
 #include "gfx/renderable/TextureRenderable.h"

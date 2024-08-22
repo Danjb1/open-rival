@@ -1,5 +1,8 @@
 #include "gfx/renderer/TextRenderer.h"
 
+#include <memory>
+
+#include "gfx/Font.h"
 #include "gfx/Framebuffer.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/renderable/TextRenderable.h"
@@ -37,7 +40,7 @@ bool TextRenderer::needsUpdate(const TextRenderable& textRenderable) const
 void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
 {
     std::vector<TextSpan> spans = textRenderable.getTextSpans();
-    const Font* font = textRenderable.getFont();
+    std::shared_ptr<const Font> font = textRenderable.getFont();
     float scale = textRenderable.getScale() * font->getDefaultSize() / Font::fontHeight;
 
     // Create buffers
@@ -110,10 +113,18 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
                 float y2 = y1 + height;
                 float z = 0.0f;
                 std::vector<GLfloat> newVertexData = {
-                    x1, y1, z,  //
-                    x2, y1, z,  //
-                    x2, y2, z,  //
-                    x1, y2, z   //
+                    x1,
+                    y1,
+                    z,  //
+                    x2,
+                    y1,
+                    z,  //
+                    x2,
+                    y2,
+                    z,  //
+                    x1,
+                    y2,
+                    z  //
                 };
                 vertexData.insert(vertexData.end(), newVertexData.begin(), newVertexData.end());
 
@@ -123,10 +134,14 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
                 float tx2 = charData->txCoords[2];
                 float ty2 = charData->txCoords[3];
                 std::vector<GLfloat> newTexCoords = {
-                    tx1, ty1,  //
-                    tx2, ty1,  //
-                    tx2, ty2,  //
-                    tx1, ty2   //
+                    tx1,
+                    ty1,  //
+                    tx2,
+                    ty1,  //
+                    tx2,
+                    ty2,  //
+                    tx1,
+                    ty2  //
                 };
                 texCoords.insert(texCoords.end(), newTexCoords.begin(), newTexCoords.end());
 
