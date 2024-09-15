@@ -9,6 +9,7 @@
 #include "game/AttackDef.h"
 #include "game/BuildingDef.h"
 #include "game/BuildingType.h"
+#include "game/ProjectileDef.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
 
@@ -76,6 +77,7 @@ public:
     virtual const UnitDef* getUnitDef(UnitType unitType) const = 0;
     virtual const BuildingDef* getBuildingDef(BuildingType buildingType) const = 0;
     virtual const AttackDef* getAttackDef(int attackId) const = 0;
+    virtual const ProjectileDef* getProjectileDef(const std::string& projectileName) const = 0;
 };
 
 /**
@@ -127,6 +129,7 @@ public:
     const UnitDef* getUnitDef(UnitType unitType) const override;
     const BuildingDef* getBuildingDef(BuildingType buildingType) const override;
     const AttackDef* getAttackDef(int attackId) const override;
+    const ProjectileDef* getProjectileDef(const std::string& projectileName) const override;
     // End DataStore override
 
 private:
@@ -161,7 +164,8 @@ private:
     // Data
     std::unordered_map<UnitType, UnitDef> unitDefs;
     std::unordered_map<BuildingType, BuildingDef> buildingDefs;
-    std::unordered_map<int, AttackDef> attackDefs;
+    std::unordered_map<int, const AttackDef> attackDefs;
+    std::unordered_map<std::string, const ProjectileDef> projectileDefs;
     std::unordered_map<std::string, const SoundBank> soundBanks;
 };
 

@@ -17,6 +17,7 @@ class ApplicationContext;
 class AttackDef;
 class BuildingDef;
 class MidiFile;
+class ProjectileDef;
 class Resources;
 class Texture;
 class TextureAtlas;
@@ -64,7 +65,8 @@ private:
     // Data
     std::unordered_map<UnitType, UnitDef> initUnitDefs() const;
     std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
-    std::unordered_map<int, AttackDef> initAttackDefs() const;
+    std::unordered_map<int, const AttackDef> initAttackDefs() const;
+    std::unordered_map<std::string, const ProjectileDef> initProjectileDefs() const;
 
 public:
     // Directories

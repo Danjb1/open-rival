@@ -6,7 +6,6 @@
 
 ### Projectiles
 
-- Read projectiles data from JSON
 - Need to have access to the EntityFactory (currently discarded when LobbyState exits)
     - Could store this in the World, OR create a separate EntityFactory class for entities created mid-game?
 - For ranged attacks, spawn a projectile in deliverAttack
@@ -312,6 +311,7 @@
 - [ ] Random map generation
 - [ ] Placing beacons to alert teammates
 - [ ] Button on units to show lore from manual
+- [ ] Achievements
 
 ### Map Editor
 
