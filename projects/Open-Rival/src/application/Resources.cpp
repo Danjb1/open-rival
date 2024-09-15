@@ -139,4 +139,10 @@ const AttackDef* Resources::getAttackDef(int attackId) const
     return iter == attackDefs.cend() ? nullptr : &iter->second;
 }
 
+const ProjectileDef* Resources::getProjectileDef(const std::string& projectileName) const
+{
+    auto iter = projectileDefs.find(projectileName);
+    return iter == projectileDefs.cend() ? nullptr : &iter->second;
+}
+
 }  // namespace Rival

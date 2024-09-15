@@ -159,6 +159,7 @@ ResourceLoader::ResourceLoader(const ApplicationContext& context, Resources& res
     resources.unitDefs = initUnitDefs();
     resources.buildingDefs = initBuildingDefs();
     resources.attackDefs = initAttackDefs();
+    resources.projectileDefs = initProjectileDefs();
     resources.soundBanks = initSoundBanks();
 }
 
@@ -379,8 +380,8 @@ std::vector<std::shared_ptr<const MidiFile>> ResourceLoader::initMidis()
 
 std::unordered_map<UnitType, UnitDef> ResourceLoader::initUnitDefs() const
 {
-    json rawData = JsonUtils::readJsonFile(dataDir + "units.json");
-    json unitList = rawData["units"];
+    const json rawData = JsonUtils::readJsonFile(dataDir + "units.json");
+    json::const_reference unitList = rawData.at("units");
 
     std::unordered_map<UnitType, UnitDef> allUnitDefs;
     int nextUnitType = 0;
@@ -412,8 +413,8 @@ std::unordered_map<UnitType, UnitDef> ResourceLoader::initUnitDefs() const
 
 std::unordered_map<BuildingType, BuildingDef> ResourceLoader::initBuildingDefs() const
 {
-    json rawData = JsonUtils::readJsonFile(dataDir + "buildings.json");
-    json buildingList = rawData["buildings"];
+    const json rawData = JsonUtils::readJsonFile(dataDir + "buildings.json");
+    json::const_reference buildingList = rawData.at("buildings");
 
     std::unordered_map<BuildingType, BuildingDef> allBuildingDefs;
     int nextBuildingType = 0;
@@ -443,12 +444,12 @@ std::unordered_map<BuildingType, BuildingDef> ResourceLoader::initBuildingDefs()
     return allBuildingDefs;
 }
 
-std::unordered_map<int, AttackDef> ResourceLoader::initAttackDefs() const
+std::unordered_map<int, const AttackDef> ResourceLoader::initAttackDefs() const
 {
-    json rawData = JsonUtils::readJsonFile(dataDir + "attacks.json");
-    json attackList = rawData["attacks"];
+    const json rawData = JsonUtils::readJsonFile(dataDir + "attacks.json");
+    json::const_reference attackList = rawData.at("attacks");
 
-    std::unordered_map<int, AttackDef> allAttackDefs;
+    std::unordered_map<int, const AttackDef> allAttackDefs;
     int nextAttackType = 0;
 
     for (const auto& rawAttackDef : attackList)
@@ -469,14 +470,39 @@ std::unordered_map<int, AttackDef> ResourceLoader::initAttackDefs() const
     return allAttackDefs;
 }
 
+std::unordered_map<std::string, const ProjectileDef> ResourceLoader::initProjectileDefs() const
+{
+    const json rawData = JsonUtils::readJsonFile(dataDir + "projectiles.json");
+    json::const_reference projectileList = rawData.at("projectiles");
+
+    std::unordered_map<std::string, const ProjectileDef> allProjectileDefs;
+
+    for (const auto& entry : projectileList.items())
+    {
+        try
+        {
+            const std::string projectileName = entry.key();
+            const auto projectileDef = ProjectileDef::fromJson(entry.value());
+            allProjectileDefs.emplace(projectileName, projectileDef);
+        }
+        catch (const json::exception&)
+        {
+            LOG_ERROR("Error parsing projectile definition: {}", entry.key());
+            throw;
+        }
+    }
+
+    return allProjectileDefs;
+}
+
 std::unordered_map<std::string, const SoundBank> ResourceLoader::initSoundBanks() const
 {
     json rawData = JsonUtils::readJsonFile(dataDir + "sounds.json");
-    json soundList = rawData["sounds"];
+    json::const_reference soundList = rawData.at("sounds");
 
     std::unordered_map<std::string, const SoundBank> allSoundBanks;
 
-    for (json::iterator it = soundList.begin(); it != soundList.end(); ++it)
+    for (json::const_iterator it = soundList.cbegin(); it != soundList.cend(); ++it)
     {
         try
         {

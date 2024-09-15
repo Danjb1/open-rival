@@ -1,68 +1,67 @@
 {
-  "projectiles": [
-    {
-      "arrow": {
-        "texture": "projectile_arrow.png"
-      },
-      "ballista": {
-        "texture": "projectile_ballista.png"
-      },
-      "boulder": {
-        "animFrames": 4,
-        "texture": "projectile_boulder.png"
-      },
-      "cannonball": {
-        "animFrames": 3,
-        "rotation": false,
-        "texture": "projectile_cannonball.png"
-      },
-      "fire_arrow": {
-        "texture": "projectile_fire_arrow.png"
-      },
-      "fireball": {
-        "texture": "projectile_fireball.png"
-      },
-      "flame_ring": {
-        "animFrames": 4,
-        "rotation": false,
-        "texture": "projectile_flame_ring.png"
-      },
-      "flash_light_elf1": {
-        "animFrames": 6,
-        "texture": "projectile_flash_light_elf1.png"
-      },
-      "flash_light_elf2": {
-        "animFrames": 6,
-        "texture": "projectile_flash_light_elf2.png"
-      },
-      "flash_light_greenskin": {
-        "animFrames": 6,
-        "texture": "projectile_flash_light_greenskin.png"
-      },
-      "flash_light_human": {
-        "animFrames": 6,
-        "texture": "projectile_flash_light_human.png"
-      },
-      "gun": {
-        "texture": "projectile_gun.png"
-      },
-      "mace": {
-        "animFrames": 3,
-        "rotation": false,
-        "texture": "projectile_mace.png"
-      },
-      "pegas_3arrow": {
-        "texture": "projectile_pegas_3arrow.png"
-      },
-      "pegas_arrow": {
-        "texture": "projectile_pegas_arrow.png"
-      },
-      "poison_spit": {
-        "texture": "projectile_poison_spit.png"
-      },
-      "rock": {
-        "animFrames": 4,
-        "texture": "projectile_rock.png"
-      },
+  "projectiles": {
+    "arrow": {
+      "texture": "projectile_arrow.png"
+    },
+    "ballista": {
+      "texture": "projectile_ballista.png"
+    },
+    "boulder": {
+      "animFrames": 4,
+      "texture": "projectile_boulder.png"
+    },
+    "cannonball": {
+      "animFrames": 3,
+      "rotation": false,
+      "texture": "projectile_cannonball.png"
+    },
+    "fire_arrow": {
+      "texture": "projectile_fire_arrow.png"
+    },
+    "fireball": {
+      "texture": "projectile_fireball.png"
+    },
+    "flame_ring": {
+      "animFrames": 4,
+      "rotation": false,
+      "texture": "projectile_flame_ring.png"
+    },
+    "flash_light_elf1": {
+      "animFrames": 6,
+      "texture": "projectile_flash_light_elf1.png"
+    },
+    "flash_light_elf2": {
+      "animFrames": 6,
+      "texture": "projectile_flash_light_elf2.png"
+    },
+    "flash_light_greenskin": {
+      "animFrames": 6,
+      "texture": "projectile_flash_light_greenskin.png"
+    },
+    "flash_light_human": {
+      "animFrames": 6,
+      "texture": "projectile_flash_light_human.png"
+    },
+    "gun": {
+      "texture": "projectile_gun.png"
+    },
+    "mace": {
+      "animFrames": 3,
+      "rotation": false,
+      "texture": "projectile_mace.png"
+    },
+    "pegas_3arrow": {
+      "texture": "projectile_pegas_3arrow.png"
+    },
+    "pegas_arrow": {
+      "texture": "projectile_pegas_arrow.png"
+    },
+    "poison_spit": {
+      "texture": "projectile_poison_spit.png"
+    },
+    "rock": {
+      "animFrames": 4,
+      "texture": "projectile_rock.png"
     }
+  }
 }
