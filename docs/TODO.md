@@ -8,9 +8,8 @@
 
 - Instantly destroy projectiles if the target is in melee range
 - Support animated projectiles
-- Projectiles should lerp from the start tile to the end tile and then get destroyed
-    - For flying units, projectiles also need to lerp "downwards"?
-- Projectiles should move according to projectileSpeed
+- Projectiles are not quite offset correctly (need to stop BEFORE the destination tile?)
+- For flying units, projectiles also need to lerp "downwards"?
 - Damage the unit in the end tile and play impact sound
 - Explosive projectiles
     - Splash damage
@@ -44,6 +43,7 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
+- When the game is paused (at a breakpoint) it can take a long time to resume / catch up
 
 <!----------------------------------------------------------------------------->
 ## Features

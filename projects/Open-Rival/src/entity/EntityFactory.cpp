@@ -240,7 +240,7 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     }
 
     // ProjectileMovementComponent
-    projectile->attach(std::make_shared<ProjectileMovementComponent>());
+    projectile->attach(std::make_shared<ProjectileMovementComponent>(target));
 
     // Projectile animation
     if (isAnimated)

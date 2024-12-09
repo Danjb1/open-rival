@@ -2,7 +2,7 @@
 
 namespace Rival {
 
-Projectile::Projectile(const AttackDef& attackDef)
+Projectile::Projectile(AttackDef attackDef)
     : Entity(staticEntityType, /* isBig = */ false)
     , attackDef(attackDef)
 {

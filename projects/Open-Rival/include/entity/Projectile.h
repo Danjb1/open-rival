@@ -13,11 +13,15 @@ public:
     static constexpr EntityType staticEntityType = EntityType::Projectile;
 
 public:
-    Projectile(const AttackDef& attackDef);
+    Projectile(AttackDef attackDef);
+
+    const AttackDef* getAttackDef() const
+    {
+        return &attackDef;
+    }
 
 private:
     AttackDef attackDef;
-    MapNode target;
 };
 
 }  // namespace Rival
