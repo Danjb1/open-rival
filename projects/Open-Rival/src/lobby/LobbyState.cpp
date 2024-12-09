@@ -329,7 +329,8 @@ std::unique_ptr<State> LobbyState::createGameState() const
 
     // Create the world
     ScenarioBuilder scenarioBuilder(scenarioData);
-    EntityFactory entityFactory(context.getResources(), context.getAudioSystem());
+    std::shared_ptr<const EntityFactory> entityFactory =
+            std::make_shared<EntityFactory>(context.getResources(), context.getAudioSystem());
     std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
     // Initialize players

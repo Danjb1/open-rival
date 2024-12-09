@@ -6,8 +6,6 @@
 
 ### Projectiles
 
-- Need to have access to the EntityFactory (currently discarded when LobbyState exits)
-    - Could store this in the World, OR create a separate EntityFactory class for entities created mid-game?
 - For ranged attacks, spawn a projectile in deliverAttack
     - Should projectiles still be spawned if target is in melee range?
 - Projectiles should either be angled (e.g. arrows), animated (e.g. mace) or both (e.g. catapult)
@@ -45,6 +43,8 @@
 - Tiles covered by the map border should not be passable
 - Units can get left behind when moving to an unreachable destination
     - This is because we don't repath / continue a route when we know the destination to be unreachable
+- Sometimes units get confused and walk to (0, 0)
+- Wall is showing as Enchanters!!
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -259,7 +259,7 @@
 - [x] Camera zooming
 - [ ] Smooth camera panning
 - [ ] Middle-click camera panning
-- [ ] Modern RTS controls (right-click to move)
+- [ ] Modern RTS controls (right-click to move, double-tap group key to center)
 - [ ] Easy military drag-select
 - [ ] Rally points
 - [ ] Find idle workers
@@ -270,7 +270,7 @@
 - [ ] Allow troops to stop moving if they are dying to traps
 - [ ] Repairing allied siege units
 - [x] Remove 25-unit limit for selections
-- [ ] Modern RTS controls (right-click to move)
+- [ ] Allow AI players to be allied
 
 ### Assets
 

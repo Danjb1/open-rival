@@ -17,7 +17,7 @@ ScenarioBuilder::ScenarioBuilder(ScenarioData data)
 {
 }
 
-std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory)
+std::unique_ptr<World> ScenarioBuilder::build(std::shared_ptr<const EntityFactory> entityFactory)
 {
     // Initialize Tiles
     int numTiles = data.hdr.mapWidth * data.hdr.mapHeight;
@@ -34,7 +34,7 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
     // Initialize Units
     for (const UnitPlacement& unitPlacement : data.units)
     {
-        addUnit(world.get(), unitPlacement, entityFactory);
+        addUnit(world.get(), unitPlacement, *entityFactory);
     }
 
     // Initialize Buildings
@@ -43,12 +43,12 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         if (buildingPlacement.type == 0xAB)
         {
             // Palisade
-            addPalisade(world.get(), buildingPlacement, entityFactory);
+            addPalisade(world.get(), buildingPlacement, *entityFactory);
         }
         else if (buildingPlacement.type == 0xAC)
         {
             // Grate
-            addGrate(world.get(), buildingPlacement, entityFactory);
+            addGrate(world.get(), buildingPlacement, *entityFactory);
         }
         else if (buildingPlacement.type == 0xAD)
         {
@@ -58,14 +58,14 @@ std::unique_ptr<World> ScenarioBuilder::build(const EntityFactory& entityFactory
         else
         {
             // Player-owned building
-            addBuilding(world.get(), buildingPlacement, entityFactory);
+            addBuilding(world.get(), buildingPlacement, *entityFactory);
         }
     }
 
     // Initialize Objects
     for (const ObjectPlacement& objPlacement : data.objects)
     {
-        addObject(world.get(), objPlacement, entityFactory);
+        addObject(world.get(), objPlacement, *entityFactory);
     }
 
     return world;

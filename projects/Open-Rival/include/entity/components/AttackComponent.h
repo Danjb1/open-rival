@@ -18,6 +18,7 @@ class AttackListener;
 class AudioStore;
 class AudioSystem;
 class Entity;
+class EntityFactory;
 class FacingComponent;
 class MovementComponent;
 class World;
@@ -38,7 +39,8 @@ class AttackComponent
     , public AnimationListener
 {
 public:
-    AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem);
+    AttackComponent(
+            const AudioStore& audioStore, AudioSystem& audioSystem, std::shared_ptr<const EntityFactory> entityFactory);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World*) override;
@@ -81,6 +83,7 @@ private:
 
     const AudioStore& audioStore;
     AudioSystem& audioSystem;
+    std::shared_ptr<const EntityFactory> entityFactory;
 
     WeakPtrSet<AttackListener> listeners;
 

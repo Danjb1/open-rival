@@ -19,7 +19,7 @@ class ScenarioBuilder
 public:
     ScenarioBuilder(ScenarioData data);
 
-    std::unique_ptr<World> build(const EntityFactory& entityFactory);
+    std::unique_ptr<World> build(std::shared_ptr<const EntityFactory> entityFactory);
 
     Race getRace(std::uint8_t raceId) const;
 

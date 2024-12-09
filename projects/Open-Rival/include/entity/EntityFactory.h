@@ -13,7 +13,7 @@ class AudioSystem;
 class Entity;
 class Resources;
 
-class EntityFactory
+class EntityFactory : public std::enable_shared_from_this<EntityFactory>
 {
 public:
     EntityFactory(const Resources& resources, AudioSystem& audioSystem);
