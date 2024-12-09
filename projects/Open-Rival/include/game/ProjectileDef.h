@@ -19,7 +19,7 @@ public:
 public:
     std::string texture;
     int animFrames = 0;
-    bool useRotation = false;
+    bool shouldUseRotation = false;
 };
 
 }  // namespace Rival

@@ -12,16 +12,21 @@
 #include "entity/components/MovementComponent.h"
 #include "game/UnitDef.h"
 #include "game/World.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 const std::string AttackComponent::key = "attack";
 
-AttackComponent::AttackComponent(
-        const AudioStore& audioStore, AudioSystem& audioSystem, std::shared_ptr<const EntityFactory> entityFactory)
+AttackComponent::AttackComponent(const AudioStore& audioStore,
+        const DataStore& dataStore,
+        AudioSystem& audioSystem,
+        std::shared_ptr<const EntityFactory> entityFactory)
     : EntityComponent(key)
     , audioStore(audioStore)
+    , dataStore(dataStore)
     , audioSystem(audioSystem)
+    , entityFactory(entityFactory)
 {
 }
 
@@ -142,11 +147,18 @@ void AttackComponent::deliverMeleeAttack(const AttackDef& attack, Entity& target
     healthComp->addHealth(-attack.damage);
 }
 
-void AttackComponent::spawnProjectile(const AttackDef& /* attack */, Entity& /* targetEntity */)
+void AttackComponent::spawnProjectile(const AttackDef& attackDef, Entity& targetEntity)
 {
+    const ProjectileDef* projectileDef = dataStore.getProjectileDef(attackDef.projectile);
+    if (!projectileDef)
+    {
+        LOG_ERROR("Invalid projectile definition found for attack: {}", attackDef.name);
+    }
+
     World* world = entity->getWorld();
-    auto projectile = entityFactory->createProjectile();
-    world->addEntity(projectile, entity->getPos());
+    MapNode pos = entity->getPos();
+    auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, pos, targetEntity.getPos());
+    world->addEntity(projectile, pos);
 }
 
 void AttackComponent::switchToNewTarget()

@@ -2,6 +2,10 @@
 
 namespace Rival {
 
-    // TODO
+Projectile::Projectile(const AttackDef& attackDef)
+    : Entity(staticEntityType, /* isBig = */ false)
+    , attackDef(attackDef)
+{
+}
 
 }  // namespace Rival

@@ -9,8 +9,10 @@
 
 namespace Rival {
 
+class AttackDef;
 class AudioSystem;
 class Entity;
+class ProjectileDef;
 class Resources;
 
 class EntityFactory : public std::enable_shared_from_this<EntityFactory>
@@ -32,7 +34,10 @@ public:
     std::shared_ptr<Entity> createObject(const ObjectPlacement& objPlacement, bool wilderness) const;
 
     /** Creates a projectile with the given properties. */
-    std::shared_ptr<Entity> createProjectile() const;
+    std::shared_ptr<Entity> createProjectile(const AttackDef& attack,
+            const ProjectileDef& projectileDef,
+            const MapNode& pos,
+            const MapNode& target) const;
 
 private:
     UnitType getUnitType(std::uint8_t unitType) const;

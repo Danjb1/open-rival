@@ -8,7 +8,7 @@ ProjectileDef ProjectileDef::fromJson(const json& j)
 
     ProjectileDef projectileDef(texture);
     projectileDef.animFrames = j.value("animFrames", 0);
-    projectileDef.useRotation = j.value("rotation", false);
+    projectileDef.shouldUseRotation = j.value("rotation", true);
 
     return projectileDef;
 }

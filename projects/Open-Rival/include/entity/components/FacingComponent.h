@@ -51,6 +51,11 @@ public:
         return facing;
     }
 
+    int getFacingIndex() const
+    {
+        return static_cast<int>(facing);
+    }
+
     void rotateLeft();
 
     void rotateRight();

@@ -17,6 +17,7 @@ namespace Rival {
 class AttackListener;
 class AudioStore;
 class AudioSystem;
+class DataStore;
 class Entity;
 class EntityFactory;
 class FacingComponent;
@@ -39,8 +40,10 @@ class AttackComponent
     , public AnimationListener
 {
 public:
-    AttackComponent(
-            const AudioStore& audioStore, AudioSystem& audioSystem, std::shared_ptr<const EntityFactory> entityFactory);
+    AttackComponent(const AudioStore& audioStore,
+            const DataStore& dataStore,
+            AudioSystem& audioSystem,
+            std::shared_ptr<const EntityFactory> entityFactory);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World*) override;
@@ -82,6 +85,7 @@ private:
     static constexpr int maxMovementAttempts = 10;
 
     const AudioStore& audioStore;
+    const DataStore& dataStore;
     AudioSystem& audioSystem;
     std::shared_ptr<const EntityFactory> entityFactory;
 
