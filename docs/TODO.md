@@ -44,7 +44,6 @@
 - Units can get left behind when moving to an unreachable destination
     - This is because we don't repath / continue a route when we know the destination to be unreachable
 - Sometimes units get confused and walk to (0, 0)
-- Wall is showing as Enchanters!!
 
 <!----------------------------------------------------------------------------->
 ## Features

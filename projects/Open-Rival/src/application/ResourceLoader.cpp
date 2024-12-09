@@ -225,7 +225,7 @@ std::unordered_map<BuildingType, std::shared_ptr<const Spritesheet>> ResourceLoa
         {
             BuildingType buildingType = static_cast<BuildingType>(i);
             auto spritesheet = std::make_shared<const Spritesheet>(
-                    textureStore.getTexture(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0);
+                    textureStore.getTexture(nextIndex), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0);
             spritesheets.insert({ buildingType, spritesheet });
         }
     };
