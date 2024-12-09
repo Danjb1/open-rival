@@ -63,6 +63,8 @@ void ApplicationContext::initLogging()
     LogUtils::initLogging(logLevel, logToConsole, logToFile, "Open-Rival");
 
     // Categories
+    LogUtils::makeLogCategory("attack", ConfigUtils::get(cfg, "logLevelAttack", defaultLogLevel));
+    LogUtils::makeLogCategory("movement", ConfigUtils::get(cfg, "logLevelMovement", defaultLogLevel));
     LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
 }
 

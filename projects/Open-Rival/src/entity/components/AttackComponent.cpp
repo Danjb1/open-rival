@@ -249,6 +249,7 @@ void AttackComponent::tryMoveToTarget(const MapNode& node)
     if (numMovementAttempts > maxMovementAttempts)
     {
         // Give up
+        LOG_DEBUG_CATEGORY("movement", "Giving up reaching target at ({}, {})", node.x, node.y);
         setTarget({});
         return;
     }
@@ -260,6 +261,7 @@ void AttackComponent::tryMoveToTarget(const MapNode& node)
         return;
     }
 
+    LOG_DEBUG_CATEGORY("movement", "Trying to reach target at ({}, {})", node.x, node.y);
     moveToTarget(node);
     ++numMovementAttempts;
 

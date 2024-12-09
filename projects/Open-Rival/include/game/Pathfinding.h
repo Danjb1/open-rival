@@ -84,8 +84,8 @@ public:
 class Route
 {
 public:
-    /** Default constructor; makes a Route with an empty path. */
-    Route();
+    /** Default constructor; makes a Route with an empty path and invalid destination. */
+    Route() {}
 
     /** Constructs a Route with a path and destination. */
     Route(MapNode start,
@@ -142,8 +142,8 @@ public:
     }
 
 private:
-    MapNode intendedDestination;
-    MapNode foundDestination;
+    MapNode intendedDestination = { -1, -1 };
+    MapNode foundDestination = { -1, -1 };
     std::deque<MapNode> path;
     float cost = 0;
     bool bIsIntendedDestinationUnreachable = false;

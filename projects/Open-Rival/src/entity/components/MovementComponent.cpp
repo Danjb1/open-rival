@@ -348,7 +348,7 @@ bool MovementComponent::tryRepathAroundNextNode(const PathfindingMap& map)
             ++numFailedRepathAttempts;
             if (numFailedRepathAttempts >= maxRepathAttempts)
             {
-                LOG_WARN_CATEGORY("pathfinding", "Reached max repath attempts");
+                LOG_WARN_CATEGORY("movement", "Reached max repath attempts");
                 stopMovement();
             }
         }
@@ -439,19 +439,19 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
 bool MovementComponent::tryRouteContinuation()
 {
     const MapNode intendedDestination = route.getIntendedDestination();
+    if (!intendedDestination.isValid())
+    {
+        // Route has been cleared, so we no longer have a valid destination
+        return false;
+    }
+
     if (route.getFinalDestination() == intendedDestination)
     {
         // Nothing to continue - we've reached our destination
         return false;
     }
 
-    if (route.isIntendedDestinationUnreachable())
-    {
-        // Don't bother trying to continue if the destination is known to be unreachable
-        return false;
-    }
-
-    LOG_INFO_CATEGORY("pathfinding", "Reached end of route but did not reach the intended destination!");
+    LOG_INFO_CATEGORY("movement", "Reached end of route but did not reach the intended destination!");
 
     // We have not yet reached our intended destination - try moving the rest of the way
     Pathfinding::Context context;
@@ -466,7 +466,7 @@ bool MovementComponent::tryRouteContinuation()
         // This suggests that either:
         // 1) We are already very close to the intended destination.
         // 2) The intended destination is unreachable and we are as close as we can be.
-        LOG_INFO_CATEGORY("pathfinding", "Aborting route continuation");
+        LOG_INFO_CATEGORY("movement", "Aborting route continuation");
         return false;
     }
 
@@ -505,6 +505,7 @@ void MovementComponent::onCompletedMoveToNewTile()
 
 void MovementComponent::stopMovement()
 {
+    LOG_DEBUG_CATEGORY("movement", "Stopping movement");
     resetPassability(false);
     route = {};
     movement.clear();

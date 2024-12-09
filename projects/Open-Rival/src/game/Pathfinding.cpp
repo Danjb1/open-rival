@@ -218,6 +218,8 @@ std::deque<MapNode> Pathfinder::findPath()
         return {};
     }
 
+    LOG_DEBUG_CATEGORY("pathfinding", "Planning route to ({}, {})", goal.x, goal.y);
+
     discoveredNodes.push_back({ start, 0 });
     closestNodeToGoal = start;
     costToNode[start] = 0;
@@ -600,11 +602,6 @@ bool Pathfinder::isGoalInsideEnclosedPerimeter() const
     }
 
     return true;
-}
-
-Route::Route()
-    : intendedDestination({ 0, 0 })
-{
 }
 
 Route::Route(MapNode start,
