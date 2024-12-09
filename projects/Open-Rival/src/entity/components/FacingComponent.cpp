@@ -16,7 +16,8 @@ FacingComponent::FacingComponent(Facing initialFacing)
 
 void FacingComponent::onEntityFirstAddedToWorld(World*)
 {
-    weakMovementComponent = entity->requireComponentWeak<MovementComponent>(MovementComponent::key);
+    // Some entities (e.g. projectiles) do not have a MovementComponent
+    weakMovementComponent = entity->getComponentWeak<MovementComponent>(MovementComponent::key);
     if (auto movementComponent = weakMovementComponent.lock())
     {
         std::weak_ptr<FacingComponent> weakThis = entity->getComponentWeak<FacingComponent>(key);

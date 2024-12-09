@@ -37,6 +37,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/OwnerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PassabilityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/PortraitComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/ProjectileMovementComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/SeafarerComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/SpriteComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/UnitAnimationComponent.cpp
@@ -176,6 +177,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/OwnerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/PassabilityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/PortraitComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/ProjectileMovementComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/SeafarerComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/SpriteComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/UnitAnimationComponent.h

@@ -17,6 +17,7 @@
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/PassabilityComponent.h"
 #include "entity/components/PortraitComponent.h"
+#include "entity/components/ProjectileMovementComponent.h"
 #include "entity/components/SeafarerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitAnimationComponent.h"
@@ -26,6 +27,7 @@
 #include "game/Animations.h"
 #include "game/InventoryComponent.h"
 #include "game/PlayerState.h"
+#include "game/ProjectileDef.h"
 #include "game/Tile.h"
 #include "game/UnitType.h"
 
@@ -103,7 +105,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     int defaultAttackId = unitDef->attackId;
     if (defaultAttackId >= 0)
     {
-        auto attackComponent = std::make_shared<AttackComponent>(resources, audioSystem, shared_from_this());
+        auto attackComponent = std::make_shared<AttackComponent>(resources, resources, audioSystem, shared_from_this());
         attackComponent->registerAttack(resources.getAttackDef(defaultAttackId));
         unit->attach(attackComponent);
     }
@@ -211,17 +213,40 @@ std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPl
     return obj;
 }
 
-std::shared_ptr<Entity> EntityFactory::createProjectile() const
+std::shared_ptr<Entity> EntityFactory::createProjectile(
+        const AttackDef& attackDef, const ProjectileDef& projectileDef, const MapNode& pos, const MapNode& target) const
 {
     // Create Entity
-    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
+    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(attackDef);
 
-    // TODO: Start and end position
-    // TODO: Attack properties
-    // TODO: Projectile speed
-    // TODO: FacingComponent for rotational projectiles
-    // TODO: SpriteComponent
-    // TODO: ProjectileAnimationComponent for animated projectiles
+    // SpriteComponent
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getProjectileSpritesheet(projectileDef.texture);
+    auto spriteComponent = std::make_shared<SpriteComponent>(spritesheet);
+    projectile->attach(spriteComponent);
+
+    // FacingComponent
+    const bool isAnimated = projectileDef.animFrames > 0;
+    if (projectileDef.shouldUseRotation)
+    {
+        const Facing facing = MapUtils::getDir(pos, target);
+        auto facingComponent = std::make_shared<FacingComponent>(facing);
+        projectile->attach(facingComponent);
+
+        if (!isAnimated)
+        {
+            // Just set the txOffset as a one-off; no need for an animation component
+            spriteComponent->setTxIndex(facingComponent->getFacingIndex());
+        }
+    }
+
+    // ProjectileMovementComponent
+    projectile->attach(std::make_shared<ProjectileMovementComponent>());
+
+    // Projectile animation
+    if (isAnimated)
+    {
+        // TODO: ProjectileAnimationComponent
+    }
 
     return projectile;
 }

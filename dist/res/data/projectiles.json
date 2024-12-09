@@ -1,67 +1,67 @@
 {
   "projectiles": {
     "arrow": {
-      "texture": "projectile_arrow.png"
+      "texture": "projectile_arrow.tga"
     },
     "ballista": {
-      "texture": "projectile_ballista.png"
+      "texture": "projectile_ballista.tga"
     },
     "boulder": {
       "animFrames": 4,
-      "texture": "projectile_boulder.png"
+      "texture": "projectile_boulder.tga"
     },
     "cannonball": {
       "animFrames": 3,
       "rotation": false,
-      "texture": "projectile_cannonball.png"
+      "texture": "projectile_cannonball.tga"
     },
     "fire_arrow": {
-      "texture": "projectile_fire_arrow.png"
+      "texture": "projectile_fire_arrow.tga"
     },
     "fireball": {
-      "texture": "projectile_fireball.png"
+      "texture": "projectile_fireball.tga"
     },
     "flame_ring": {
       "animFrames": 4,
       "rotation": false,
-      "texture": "projectile_flame_ring.png"
+      "texture": "projectile_flame_ring.tga"
     },
     "flash_light_elf1": {
       "animFrames": 6,
-      "texture": "projectile_flash_light_elf1.png"
+      "texture": "projectile_flash_light_elf1.tga"
     },
     "flash_light_elf2": {
       "animFrames": 6,
-      "texture": "projectile_flash_light_elf2.png"
+      "texture": "projectile_flash_light_elf2.tga"
     },
     "flash_light_greenskin": {
       "animFrames": 6,
-      "texture": "projectile_flash_light_greenskin.png"
+      "texture": "projectile_flash_light_greenskin.tga"
     },
     "flash_light_human": {
       "animFrames": 6,
-      "texture": "projectile_flash_light_human.png"
+      "texture": "projectile_flash_light_human.tga"
     },
     "gun": {
-      "texture": "projectile_gun.png"
+      "texture": "projectile_gun.tga"
     },
     "mace": {
       "animFrames": 3,
       "rotation": false,
-      "texture": "projectile_mace.png"
+      "texture": "projectile_mace.tga"
     },
     "pegas_3arrow": {
-      "texture": "projectile_pegas_3arrow.png"
+      "texture": "projectile_pegas_3arrow.tga"
     },
     "pegas_arrow": {
-      "texture": "projectile_pegas_arrow.png"
+      "texture": "projectile_pegas_arrow.tga"
     },
     "poison_spit": {
-      "texture": "projectile_poison_spit.png"
+      "texture": "projectile_poison_spit.tga"
     },
     "rock": {
       "animFrames": 4,
-      "texture": "projectile_rock.png"
+      "texture": "projectile_rock.tga"
     }
   }
 }

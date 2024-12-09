@@ -221,7 +221,7 @@ int UnitAnimationComponent::getFacingOffset() const
 
     int facingStride = getFacingStride();
     int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
-    int facingIndex = static_cast<int>(facingComponent->getFacing()) - static_cast<int>(Facing::South);
+    int facingIndex = facingComponent->getFacingIndex();
     return facingIndex * stride;
 }
 
