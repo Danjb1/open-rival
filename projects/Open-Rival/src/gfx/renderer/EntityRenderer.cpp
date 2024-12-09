@@ -8,9 +8,10 @@
 #include "application/Resources.h"
 #include "entity/Entity.h"
 #include "entity/components/MouseHandlerComponent.h"
+#include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
+#include "entity/components/ProjectileMovementComponent.h"
 #include "entity/components/SpriteComponent.h"
-#include "entity/components/WalkerComponent.h"
 #include "game/MapUtils.h"
 #include "game/Pathfinding.h"
 #include "game/PlayerContext.h"
@@ -174,18 +175,24 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
 }
 
 /**
- * Gets the pixel offset to apply to an Entity's position to account for
- * movement between tiles.
+ * Gets the pixel offset to apply to an Entity's position to account for movement between tiles.
  *
- * This takes into account the Entity's current movement and also the amount
- * of time that has elapsed since the last logical update.
+ * For units, this takes into account the unit's current movement and also the amount of time that has elapsed since the
+ * last logical update (to support high refresh rates).
  *
- * Due to the way tiles overlap, diagonal moves only actually span half a
- * tile, in terms of pixels.
+ * Due to the way tiles overlap, diagonal moves only actually span half a tile, in terms of pixels.
  */
 glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
 {
     glm::vec2 offset = { 0, 0 };
+
+    // Special handling for projectiles
+    const ProjectileMovementComponent* projectileMoveComponent =
+            entity.getComponent<ProjectileMovementComponent>(ProjectileMovementComponent::key);
+    if (projectileMoveComponent)
+    {
+        return projectileMoveComponent->getRenderOffset(delta);
+    }
 
     // See if the Entity can move
     const MovementComponent* moveComponent = entity.getComponent<MovementComponent>(MovementComponent::key);
