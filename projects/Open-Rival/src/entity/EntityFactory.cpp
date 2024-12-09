@@ -103,7 +103,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     int defaultAttackId = unitDef->attackId;
     if (defaultAttackId >= 0)
     {
-        auto attackComponent = std::make_shared<AttackComponent>(resources, audioSystem);
+        auto attackComponent = std::make_shared<AttackComponent>(resources, audioSystem, shared_from_this());
         attackComponent->registerAttack(resources.getAttackDef(defaultAttackId));
         unit->attach(attackComponent);
     }

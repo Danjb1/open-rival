@@ -4,6 +4,7 @@
 #include "audio/AudioSystem.h"
 #include "audio/SoundSource.h"
 #include "entity/Entity.h"
+#include "entity/EntityFactory.h"
 #include "entity/Unit.h"
 #include "entity/components/AttackListener.h"
 #include "entity/components/FacingComponent.h"
@@ -16,7 +17,8 @@ namespace Rival {
 
 const std::string AttackComponent::key = "attack";
 
-AttackComponent::AttackComponent(const AudioStore& audioStore, AudioSystem& audioSystem)
+AttackComponent::AttackComponent(
+        const AudioStore& audioStore, AudioSystem& audioSystem, std::shared_ptr<const EntityFactory> entityFactory)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
@@ -140,14 +142,11 @@ void AttackComponent::deliverMeleeAttack(const AttackDef& attack, Entity& target
     healthComp->addHealth(-attack.damage);
 }
 
-void AttackComponent::spawnProjectile(const AttackDef& attack, Entity& targetEntity)
+void AttackComponent::spawnProjectile(const AttackDef& /* attack */, Entity& /* targetEntity */)
 {
-    // World* world = entity->getWorld();
-    //  auto projectile = getEntityFactory()->makeProjectile();
-    //  world->addEntity(projectile);
-
-    // TMP: Just deal some damage
-    deliverMeleeAttack(attack, targetEntity);
+    World* world = entity->getWorld();
+    auto projectile = entityFactory->createProjectile();
+    world->addEntity(projectile, entity->getPos());
 }
 
 void AttackComponent::switchToNewTarget()

@@ -1,5 +1,7 @@
 #include "entity/Entity.h"
 
+#include <game/World.h>
+
 namespace Rival {
 
 Entity::Entity(EntityType entityType, bool isBig)

@@ -91,6 +91,13 @@ public:
     void addEntity(std::shared_ptr<Entity> entity, int x, int y);
 
     /**
+     * Adds an Entity to the world immediately.
+     *
+     * Should not be called while iterating over Entities.
+     */
+    void addEntity(std::shared_ptr<Entity> entity, const MapNode& pos);
+
+    /**
      * Schedules an Entity to be added to the world.
      *
      * The Entity will be added the next time `addPendingEntities` is called.

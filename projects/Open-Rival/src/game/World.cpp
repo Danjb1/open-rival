@@ -58,9 +58,14 @@ Tile World::getTile(int x, int y) const
 
 void World::addEntity(std::shared_ptr<Entity> entity, int x, int y)
 {
+    addEntity(entity, { x, y });
+}
+
+void World::addEntity(std::shared_ptr<Entity> entity, const MapNode& pos)
+{
     entitiesList.push_back(entity);
     entitiesById[nextId] = entity;
-    entity->addedToWorld(this, nextId, { x, y });
+    entity->addedToWorld(this, nextId, pos);
     ++nextId;
 }
 
