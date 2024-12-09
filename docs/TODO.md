@@ -6,9 +6,8 @@
 
 ### Projectiles
 
-- For ranged attacks, spawn a projectile in deliverAttack
-    - Should projectiles still be spawned if target is in melee range?
-- Projectiles should either be angled (e.g. arrows), animated (e.g. mace) or both (e.g. catapult)
+- Instantly destroy projectiles if the target is in melee range
+- Support animated projectiles
 - Projectiles should lerp from the start tile to the end tile and then get destroyed
     - For flying units, projectiles also need to lerp "downwards"?
 - Projectiles should move according to projectileSpeed
@@ -18,7 +17,7 @@
     - Explosion graphic
     - Play impact sound always
 
-### Other
+### Combat
 
 - Optimise findNeighbors!
 - Respect unit attack speed
@@ -30,6 +29,10 @@
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
+- When issuing a MoveCommand to an attacking unit, they should respond more quickly
+
+### Other
+
 - Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
 
 <!----------------------------------------------------------------------------->
@@ -41,9 +44,6 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- Units can get left behind when moving to an unreachable destination
-    - This is because we don't repath / continue a route when we know the destination to be unreachable
-- Sometimes units get confused and walk to (0, 0)
 
 <!----------------------------------------------------------------------------->
 ## Features

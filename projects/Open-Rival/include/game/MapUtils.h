@@ -34,6 +34,11 @@ struct MapNode
     {
         return !(*this == other);
     }
+
+    bool isValid() const
+    {
+        return x >= 0 && y >= 0;
+    }
 };
 
 /**
