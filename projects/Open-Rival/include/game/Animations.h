@@ -27,17 +27,18 @@ struct Animation
     static constexpr int defaultMsPerFrame = 60;
 
     /** First sprite index of the animation. */
-    int startIndex;
+    int startIndex = 0;
 
     /** Last sprite index of the animation. */
-    int endIndex;
+    int endIndex = 0;
 
     /** How long to show each sprite index, in milliseconds. */
-    int msPerFrame;
+    int msPerFrame = 0;
 
     /** Sprite index offset between different facings. */
-    int facingStride;
+    int facingStride = 0;
 
+    Animation() {}
     Animation(int startIndex, int endIndex, int msPerFrame = 60, int facingStride = 0);
 };
 
@@ -76,5 +77,13 @@ static const std::map<ObjectVariantPair, const Animation> objectAnimationLookup 
     { { std::uint8_t(0xAF), std::uint8_t(7) }, { 13, 13, 60, 0 } },  // Beige rock
 };
 */
+
+/** Interface providing access to animations. */
+template <typename T>
+class AnimationContainer
+{
+public:
+    virtual const Animation* getAnimation(T animType) const = 0;
+};
 
 }  // namespace Rival

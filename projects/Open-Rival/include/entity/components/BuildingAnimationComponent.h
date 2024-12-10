@@ -5,6 +5,7 @@
 
 #include "entity/components/EntityComponent.h"
 #include "entity/components/FacingComponent.h"
+#include "game/Animations.h"
 
 namespace Rival {
 
@@ -19,7 +20,7 @@ class BuildingAnimationComponent : public EntityComponent
 {
 
 public:
-    BuildingAnimationComponent(const BuildingDef& buildingDef);
+    BuildingAnimationComponent(const AnimationContainer<BuildingAnimationType>& animContainer);
 
     // Begin EntityComponent override
     virtual void onEntityFirstAddedToWorld(World* world) override;
@@ -43,7 +44,7 @@ public:
 private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
 
-    const BuildingDef& buildingDef;
+    const AnimationContainer<BuildingAnimationType>& animContainer;
 
     const Animation* animation;
 

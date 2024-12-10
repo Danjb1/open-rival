@@ -54,6 +54,8 @@ glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
 {
     // TODO: We never actually move the projectile, we just simulate the movement with a render offset.
     // This may cause problems later down the line with fog of war.
+    // The original game seems to get around this by revealing a small area around the projectile,
+    // provided the target is visible.
 
     // Calculate the start and end position, in pixels.
     // This doesn't have to be precise, as long as the distances are correct; we only need the render offset relative to

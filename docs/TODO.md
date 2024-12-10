@@ -7,7 +7,6 @@
 ### Projectiles
 
 - Instantly destroy projectiles if the target is in melee range
-- Support animated projectiles
 - Projectiles are not quite offset correctly (need to stop BEFORE the destination tile?)
 - For flying units, projectiles also need to lerp "downwards"?
 - Damage the unit in the end tile and play impact sound

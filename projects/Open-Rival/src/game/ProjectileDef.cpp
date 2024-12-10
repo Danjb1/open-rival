@@ -7,7 +7,7 @@ ProjectileDef ProjectileDef::fromJson(const json& j)
     const std::string texture = j.at("texture");
 
     ProjectileDef projectileDef(texture);
-    projectileDef.animFrames = j.value("animFrames", 0);
+    projectileDef.numAnimFrames = j.value("animFrames", 0);
     projectileDef.shouldUseRotation = j.value("rotation", true);
 
     return projectileDef;

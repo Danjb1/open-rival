@@ -17,6 +17,7 @@
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/PassabilityComponent.h"
 #include "entity/components/PortraitComponent.h"
+#include "entity/components/ProjectileAnimationComponent.h"
 #include "entity/components/ProjectileMovementComponent.h"
 #include "entity/components/SeafarerComponent.h"
 #include "entity/components/SpriteComponent.h"
@@ -225,7 +226,7 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     projectile->attach(spriteComponent);
 
     // FacingComponent
-    const bool isAnimated = projectileDef.animFrames > 0;
+    const bool isAnimated = projectileDef.numAnimFrames > 0;
     if (projectileDef.shouldUseRotation)
     {
         const Facing facing = MapUtils::getDir(pos, target);
@@ -245,7 +246,7 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     // Projectile animation
     if (isAnimated)
     {
-        // TODO: ProjectileAnimationComponent
+        projectile->attach(std::make_shared<ProjectileAnimationComponent>(projectileDef));
     }
 
     return projectile;

@@ -15,9 +15,9 @@ namespace Rival {
 
 const std::string UnitAnimationComponent::key = "unitAnimation";
 
-UnitAnimationComponent::UnitAnimationComponent(const AnimationContainer& animationContainer)
+UnitAnimationComponent::UnitAnimationComponent(const AnimationContainer<UnitAnimationType>& animContainer)
     : EntityComponent(key)
-    , animationContainer(animationContainer)
+    , animContainer(animContainer)
     , animation(nullptr)
 {
 }
@@ -130,7 +130,7 @@ void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
         return;
     }
 
-    const Animation* newAnimation = animationContainer.getAnimation(animType);
+    const Animation* newAnimation = animContainer.getAnimation(animType);
     animation = newAnimation;
     currentAnimType = animType;
     msPassedCurrentAnimFrame = 0;
@@ -219,9 +219,9 @@ int UnitAnimationComponent::getFacingOffset() const
         return 0;
     }
 
-    int facingStride = getFacingStride();
-    int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
-    int facingIndex = facingComponent->getFacingIndex();
+    const int facingStride = getFacingStride();
+    const int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
+    const int facingIndex = facingComponent->getFacingIndex();
     return facingIndex * stride;
 }
 
