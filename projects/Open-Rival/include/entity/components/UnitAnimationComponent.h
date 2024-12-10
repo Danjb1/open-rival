@@ -12,7 +12,6 @@
 namespace Rival {
 
 class SpriteComponent;
-class AnimationContainer;
 struct Animation;
 
 /** Interface that allows a class to be notified of animation events. */
@@ -32,7 +31,7 @@ class UnitAnimationComponent
 {
 
 public:
-    UnitAnimationComponent(const AnimationContainer& unitDef);
+    UnitAnimationComponent(const AnimationContainer<UnitAnimationType>& animContainer);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World* world) override;
@@ -73,7 +72,7 @@ private:
 
     WeakPtrSet<AnimationListener> listeners;
 
-    const AnimationContainer& animationContainer;
+    const AnimationContainer<UnitAnimationType>& animContainer;
 
     const Animation* animation;
     UnitAnimationType currentAnimType = UnitAnimationType::Uninitialized;

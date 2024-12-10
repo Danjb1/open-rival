@@ -10,30 +10,29 @@
 
 namespace Rival {
 
-class BuildingDef
+class BuildingDef final : public AnimationContainer<BuildingAnimationType>
 {
 public:
     static BuildingDef fromJson(const json& j);
 
-    BuildingDef(
-            std::string name,
+    BuildingDef(std::string name,
             int portraitId,
             std::unordered_map<BuildingAnimationType, const Animation> animations,
             std::unordered_map<BuildingSoundType, const SoundBank> soundBanks);
 
-    const Animation* getAnimation(BuildingAnimationType animType) const;
+    // Begin AnimationContainer override
+    const Animation* getAnimation(BuildingAnimationType animType) const override;
+    // End AnimationContainer override
 
     const SoundBank* getSoundBank(BuildingSoundType soundType) const;
 
 private:
-    static void tryReadAnimation(
-            const json& rawAnims,
+    static void tryReadAnimation(const json& rawAnims,
             const std::string& key,
             BuildingAnimationType animType,
             std::unordered_map<BuildingAnimationType, const Animation>& animations);
 
-    static void tryReadSoundBank(
-            const json& rawSounds,
+    static void tryReadSoundBank(const json& rawSounds,
             const std::string& key,
             BuildingSoundType soundType,
             std::unordered_map<BuildingSoundType, const SoundBank>& soundBanks);

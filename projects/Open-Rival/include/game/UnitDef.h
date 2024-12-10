@@ -18,14 +18,7 @@ enum class MovementMode : std::uint8_t
     Flying
 };
 
-/** Interface providing access to animations. */
-class AnimationContainer
-{
-public:
-    virtual const Animation* getAnimation(UnitAnimationType animType) const = 0;
-};
-
-class UnitDef final : public AnimationContainer
+class UnitDef final : public AnimationContainer<UnitAnimationType>
 {
 public:
     static UnitDef fromJson(const json& j);

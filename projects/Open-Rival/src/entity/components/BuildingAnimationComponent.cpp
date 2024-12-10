@@ -5,7 +5,6 @@
 #include "application/Resources.h"
 #include "entity/Entity.h"
 #include "entity/components/SpriteComponent.h"
-#include "game/Animations.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
 #include "game/World.h"
@@ -15,9 +14,9 @@ namespace Rival {
 
 const std::string BuildingAnimationComponent::key = "buildingAnimation";
 
-BuildingAnimationComponent::BuildingAnimationComponent(const BuildingDef& buildingDef)
+BuildingAnimationComponent::BuildingAnimationComponent(const AnimationContainer<BuildingAnimationType>& animContainer)
     : EntityComponent(key)
-    , buildingDef(buildingDef)
+    , animContainer(animContainer)
     , animation(nullptr)
 {
 }
@@ -27,7 +26,7 @@ void BuildingAnimationComponent::onEntityFirstAddedToWorld(World*)
     weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
 
     // TMP: Build immediately
-    setAnimation(buildingDef.getAnimation(BuildingAnimationType::Built));
+    setAnimation(animContainer.getAnimation(BuildingAnimationType::Built));
 }
 
 void BuildingAnimationComponent::update(int delta)

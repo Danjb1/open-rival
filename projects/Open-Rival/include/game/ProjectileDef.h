@@ -18,7 +18,7 @@ public:
 
 public:
     std::string texture;
-    int animFrames = 0;
+    int numAnimFrames = 0;
     bool shouldUseRotation = false;
 };
 
