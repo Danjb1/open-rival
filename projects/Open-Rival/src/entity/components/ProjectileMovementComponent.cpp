@@ -1,6 +1,13 @@
 #include "entity/components/ProjectileMovementComponent.h"
 
+#include <memory>
+
+#include "application/Resources.h"
+#include "audio/AudioSystem.h"
+#include "audio/SoundSource.h"
 #include "entity/Projectile.h"
+#include "entity/components/HealthComponent.h"
+#include "game/World.h"
 #include "gfx/RenderUtils.h"
 #include "utils/LogUtils.h"
 #include "utils/MathUtils.h"
@@ -9,14 +16,19 @@ namespace Rival {
 
 const std::string ProjectileMovementComponent::key = "projectile_movement";
 
-ProjectileMovementComponent::ProjectileMovementComponent(MapNode target)
+ProjectileMovementComponent::ProjectileMovementComponent(
+        const AudioStore& audioStore, AudioSystem& audioSystem, MapNode target)
     : EntityComponent(key)
+    , audioStore(audioStore)
+    , audioSystem(audioSystem)
     , target(target)
 {
 }
 
-void ProjectileMovementComponent::onEntityFirstAddedToWorld(World*)
+void ProjectileMovementComponent::onEntityFirstAddedToWorld(World* world)
 {
+    entityContainer = world;
+
     Projectile* projectile = entity->as<Projectile>();
     if (!projectile)
     {
@@ -24,10 +36,23 @@ void ProjectileMovementComponent::onEntityFirstAddedToWorld(World*)
         return;
     }
 
-    // Calculate projectile lifetime based on speed
+    // Calculate the travel distance.
+    // We subtract 1 because projectile graphics are designed to finish in the tile BEFORE the destination.
     const AttackDef* attackDef = projectile->getAttackDef();
     const MapNode pos = projectile->getPos();
-    const int distance = MapUtils::getDistance(pos, target);
+    const int distance = MapUtils::getDistance(pos, target) - 1;
+
+    // This is used to ensure the projectile *visually* stops at the right place
+    visualDistanceMultiplier = static_cast<float>(distance) / static_cast<float>(distance + 1);
+
+    if (distance == 0)
+    {
+        // Projectile has arrived immediately, i.e. target is in an adjacent tile.
+        onProjectileArrived();
+        return;
+    }
+
+    // Calculate projectile lifetime based on speed
     const float speed = attackDef->projectileSpeed * 0.001f;  // TMP speed modifier
     lifetime = static_cast<int>(distance / speed);
 }
@@ -46,7 +71,38 @@ void ProjectileMovementComponent::update(int delta)
 
 void ProjectileMovementComponent::onProjectileArrived()
 {
-    // TODO: damage target (if present)
+    Projectile* projectile = entity->as<Projectile>();
+    const AttackDef* attackDef = projectile->getAttackDef();
+    bool shouldPlayImpactSound = false;
+
+    // Damage target (if present)
+    std::shared_ptr<Entity> targetEntity = entityContainer->getMutableEntityAt(target);
+    if (targetEntity)
+    {
+        // TODO: This duplicates logic in AttackComponent::deliverMeleeAttack
+        HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
+        healthComp->addHealth(-attackDef->damage);
+        shouldPlayImpactSound = true;
+    }
+
+    // Deal splash damage
+    if (attackDef->hasSplashDamage)
+    {
+        // TODO: Damage surrounding targets
+        shouldPlayImpactSound = true;
+    }
+
+    // Play impact sound
+    if (shouldPlayImpactSound)
+    {
+        const SoundBank* soundBank = audioStore.getSoundBank(attackDef->impactSound);
+        if (soundBank)
+        {
+            int soundId = soundBank->getRandomSound();
+            audioSystem.playSound(audioStore, soundId);
+        }
+    }
+
     entity->markForDeletion();
 }
 
@@ -70,11 +126,15 @@ glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
         static_cast<float>(RenderUtils::tileToPx_Y(target.x, target.y))
     };
 
-    const glm::vec2 journey = end - start;
+    // Calculate the final render offset
+    const glm::vec2 startToEnd = end - start;
+    const glm::vec2 finalOffset = startToEnd * visualDistanceMultiplier;
+
+    // Calculate current progress through the projectile's journey
     const float timeElapsedWithDelta = static_cast<float>(timeElapsed + delta);
     const float progress = MathUtils::clampf(timeElapsedWithDelta / lifetime, 0.f, 1.f);
 
-    return journey * progress;
+    return finalOffset * progress;
 }
 
 }  // namespace Rival

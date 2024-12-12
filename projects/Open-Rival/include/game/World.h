@@ -60,6 +60,10 @@ public:
     // Begin EntityContainer override
     void forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func) override;
     void forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const override;
+    SharedEntityList getEntitiesInRadius(const MapNode& pos, int radius) const override;
+    SharedMutableEntityList getMutableEntitiesInRadius(const MapNode& pos, int radius) override;
+    std::shared_ptr<const Entity> getEntityAt(const MapNode& pos) const override;
+    std::shared_ptr<Entity> getMutableEntityAt(const MapNode& pos) override;
     // End EntityContainer override
 
     // Begin PathfindingMap override
@@ -145,11 +149,6 @@ public:
      * Read-only version of `getMutableEntity`.
      */
     const Entity* getEntity(int id) const;
-
-    /**
-     * Gets the entity at the given tile position.
-     */
-    const Entity* getEntityAt(const MapNode& pos) const;
 
     /**
      * Gets a shared pointer to the Entity with the given key (mutable version).

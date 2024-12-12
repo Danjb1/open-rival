@@ -121,6 +121,62 @@ void World::forEachEntity(const std::function<void(std::shared_ptr<const Entity>
     }
 }
 
+SharedEntityList World::getEntitiesInRadius(const MapNode& pos, int radius) const
+{
+    // TODO: Use spatial partitioning
+    SharedEntityList entitiesInRadius;
+    for (const auto& entity : entitiesList)
+    {
+        const int distance = MapUtils::getDistance(pos, entity->getPos());
+        if (distance <= radius)
+        {
+            entitiesInRadius.push_back(entity);
+        }
+    }
+    return entitiesInRadius;
+}
+
+SharedMutableEntityList World::getMutableEntitiesInRadius(const MapNode& pos, int radius)
+{
+    // TODO: Use spatial partitioning
+    SharedMutableEntityList entitiesInRadius;
+    for (const auto& entity : entitiesList)
+    {
+        const int distance = MapUtils::getDistance(pos, entity->getPos());
+        if (distance <= radius)
+        {
+            entitiesInRadius.push_back(entity);
+        }
+    }
+    return entitiesInRadius;
+}
+
+std::shared_ptr<const Entity> World::getEntityAt(const MapNode& pos) const
+{
+    // TODO: Use spatial partitioning
+    for (const auto& entity : entitiesList)
+    {
+        if (entity->getPos() == pos)
+        {
+            return entity;
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Entity> World::getMutableEntityAt(const MapNode& pos)
+{
+    // TODO: Use spatial partitioning
+    for (const auto& entity : entitiesList)
+    {
+        if (entity->getPos() == pos)
+        {
+            return entity;
+        }
+    }
+    return nullptr;
+}
+
 Entity* World::getMutableEntity(int id) const
 {
     const auto iter = entitiesById.find(id);
@@ -133,26 +189,7 @@ Entity* World::getMutableEntity(int id) const
 
 const Entity* World::getEntity(int id) const
 {
-    const auto iter = entitiesById.find(id);
-    if (iter == entitiesById.cend())
-    {
-        return nullptr;
-    }
-    return (iter->second).get();
-}
-
-const Entity* World::getEntityAt(const MapNode& pos) const
-{
-    // TODO: Add a more efficient way to retrieve entities by position
-    // TODO: Add shared/mutable variants
-    for (const auto& entity : entitiesList)
-    {
-        if (entity->getPos() == pos)
-        {
-            return entity.get();
-        }
-    }
-    return nullptr;
+    return getMutableEntity(id);
 }
 
 std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
@@ -163,8 +200,7 @@ std::shared_ptr<Entity> World::getMutableEntityShared(int id) const
 
 std::shared_ptr<const Entity> World::getEntityShared(int id) const
 {
-    const auto iter = entitiesById.find(id);
-    return iter == entitiesById.cend() ? std::shared_ptr<Entity>() : iter->second;
+    return getMutableEntityShared(id);
 }
 
 std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
@@ -175,8 +211,7 @@ std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
 
 std::weak_ptr<const Entity> World::getEntityWeak(int id) const
 {
-    const auto iter = entitiesById.find(id);
-    return iter == entitiesById.cend() ? std::weak_ptr<Entity>() : iter->second;
+    return getMutableEntityWeak(id);
 }
 
 int Rival::World::getWidth() const

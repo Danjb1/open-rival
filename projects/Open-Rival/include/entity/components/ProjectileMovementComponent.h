@@ -6,8 +6,12 @@
 
 #include "entity/components/EntityComponent.h"
 #include "game/MapUtils.h"
+#include "utils/EntityUtils.h"
 
 namespace Rival {
+
+class AudioStore;
+class AudioSystem;
 
 /**
  * Component that moves a projectile to its destination.
@@ -16,7 +20,7 @@ class ProjectileMovementComponent : public EntityComponent
 {
 
 public:
-    ProjectileMovementComponent(MapNode target);
+    ProjectileMovementComponent(const AudioStore& audioStore, AudioSystem& audioSystem, MapNode target);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World* world) override;
@@ -32,9 +36,15 @@ public:
     static const std::string key;
 
 private:
+    const AudioStore& audioStore;
+    AudioSystem& audioSystem;
+
+    EntityContainer* entityContainer = nullptr;
+
     MapNode target;
     int lifetime = 0;
     int timeElapsed = 0;
+    float visualDistanceMultiplier = 0.f;
 };
 
 }  // namespace Rival

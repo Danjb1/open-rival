@@ -4,9 +4,9 @@
 #include <memory>
 #include <vector>
 
-namespace Rival {
+#include "entity/Entity.h"
 
-class Entity;
+namespace Rival {
 
 // Use these when Entity references need to be kept alive
 using SharedEntityList = std::vector<std::shared_ptr<const Entity>>;
@@ -22,15 +22,23 @@ using WeakMutableEntityList = std::vector<std::weak_ptr<Entity>>;
 class EntityContainer
 {
 public:
-    /**
-     * Calls a function for each entity within the container (read-only version).
-     */
+    /** Calls a function for each entity within the container (read-only version). */
     virtual void forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func) = 0;
 
-    /**
-     * Calls a function for each entity within the container (mutable version).
-     */
+    /** Calls a function for each entity within the container (mutable version). */
     virtual void forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const = 0;
+
+    /** Retrieves all entities within the given radius of a position (read-only version). */
+    virtual SharedEntityList getEntitiesInRadius(const MapNode& pos, int radius) const = 0;
+
+    /** Retrieves all entities within the given radius of a position (mutable version). */
+    virtual SharedMutableEntityList getMutableEntitiesInRadius(const MapNode& pos, int radius) = 0;
+
+    /** Gets the entity at the given position (read-only version). */
+    virtual std::shared_ptr<const Entity> getEntityAt(const MapNode& pos) const = 0;
+
+    /** Gets the entity at the given position (mutable version). */
+    virtual std::shared_ptr<Entity> getMutableEntityAt(const MapNode& pos) = 0;
 };
 
 }  // namespace Rival

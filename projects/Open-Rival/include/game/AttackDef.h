@@ -55,7 +55,7 @@ public:
     std::string impactSound;
 
     /** Whether this attack's projectile should damage to the surrounding tiles (only relevant for projectiles). */
-    bool splashDamage = false;
+    bool hasSplashDamage = false;
 };
 
 }  // namespace Rival

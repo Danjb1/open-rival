@@ -1,23 +1,11 @@
 ﻿# To Do
 
 <!----------------------------------------------------------------------------->
-## Combat Milestone
+## Next Up
 <!----------------------------------------------------------------------------->
-
-### Projectiles
-
-- Instantly destroy projectiles if the target is in melee range
-- Projectiles are not quite offset correctly (need to stop BEFORE the destination tile?)
-- For flying units, projectiles also need to lerp "downwards"?
-- Damage the unit in the end tile and play impact sound
-- Explosive projectiles
-    - Splash damage
-    - Explosion graphic
-    - Play impact sound always
 
 ### Combat
 
-- Optimise findNeighbors!
 - Respect unit attack speed
 - Respect target's Armor
 - Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
@@ -28,10 +16,16 @@
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - Don't kill friendly units when attacking them!
 - When issuing a MoveCommand to an attacking unit, they should respond more quickly
+- Projectiles: implement splash damage
 
-### Other
+### Spatial Partitioning
 
-- Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
+- Modify methods in World to allow efficient retrieval of entities
+- Divide the world into a grid and have a map of cell -> entities
+    - Only check the relevant cells when retrieving entities
+    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
+- World should handle spatial partitioning internally; caller does not care about the details
+- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -42,11 +36,16 @@
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
-- When the game is paused (at a breakpoint) it can take a long time to resume / catch up
+- When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
+- Projectiles should have a higher z-order than other entities
 
 <!----------------------------------------------------------------------------->
 ## Features
 <!----------------------------------------------------------------------------->
+
+### Movement
+
+- Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
 
 ### Combat
 
@@ -58,18 +57,7 @@
     - For melee attacks it should display a message "Could not attack there !"
 - Attacks with splash damage should nearby damage units
 - Destroying cropland
-
-### Spatial Partitioning
-
-- New methods in World to allow efficient retrieval of entities:
-    - getEntitiesInRadius(point, radius)
-    - getEntityAt(point)
-    - getEntitiesInArea(rect) - for drag select and camera
-- Divide the world into a grid and have a map of cell -> entities
-    - Only check the relevant cells when retrieving entities
-    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
-- World should handle spatial partitioning internally; caller does not care about the details
-- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
+- For flying units, projectiles also need to lerp "downwards"?
 
 ### Input & Mouse Picking
 
@@ -221,6 +209,7 @@
     - Add an extra step to the TileRenderer to render these animations on top of the relevant gold tiles
 - Show "star" effect when sending troops somewhere
 - Boats should bob when stationary
+- Projectile impact / explosion graphics
 
 ### AI Players
 
@@ -423,6 +412,8 @@
 - Pathfind from the destination to the start
 - Analyse the map to determine which areas are distinct and unreachable from each other
 - Use [heirarchical pathfinding](https://factorio.com/blog/post/fff-317)
+- Optimise MapUtils::findNeighbors
+- getEntitiesInArea - for finding entities in the camera / drag-select Rect
 
 ### Portability
 
@@ -498,6 +489,7 @@
 - Unit doesn't need to hold weak_ptrs since it outlives its components
 - Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
 - Catch exceptions when calling `JsonUtils::readJsonFile`
+- Use a std::span to enforce immutability of a container (instead of duplicating logic in World::getEntitiesInRadius)
 
 #### Rendering
 
