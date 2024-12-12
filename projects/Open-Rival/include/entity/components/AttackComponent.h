@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -43,7 +44,8 @@ public:
     AttackComponent(const AudioStore& audioStore,
             const DataStore& dataStore,
             AudioSystem& audioSystem,
-            std::shared_ptr<const EntityFactory> entityFactory);
+            std::shared_ptr<const EntityFactory> entityFactory,
+            std::shared_ptr<std::mt19937> randomizer);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World*) override;
@@ -64,7 +66,6 @@ public:
 
 private:
     void deliverAttack();
-    void deliverMeleeAttack(const AttackDef& attack, Entity& targetEntity);
     void spawnProjectile(const AttackDef& attack, Entity& targetEntity);
     void switchToNewTarget();
     void updateCooldown(int delta);
@@ -88,6 +89,7 @@ private:
     const DataStore& dataStore;
     AudioSystem& audioSystem;
     std::shared_ptr<const EntityFactory> entityFactory;
+    std::shared_ptr<std::mt19937> randomizer;
 
     WeakPtrSet<AttackListener> listeners;
 

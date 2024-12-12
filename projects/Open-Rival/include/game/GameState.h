@@ -3,6 +3,7 @@
 #include "utils/SDLWrapper.h"
 
 #include <memory>
+#include <random>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -58,7 +59,8 @@ public:
             std::unique_ptr<World> world,
             std::unordered_map<int, PlayerState>& playerStates,
             std::unordered_map<int, ClientInfo> clients,
-            int localPlayerId);
+            int localPlayerId,
+            std::shared_ptr<std::mt19937> randomizer);
 
     // Begin State override
     void onLoad() override;
@@ -115,6 +117,9 @@ private:
 
     /** The current World. */
     std::unique_ptr<World> world;
+
+    /** Random engine used to generate random numbers. */
+    std::shared_ptr<std::mt19937> randomizer;
 
     /** The rectangle on the screen to which the game is rendered (pixels). */
     Rect viewport;

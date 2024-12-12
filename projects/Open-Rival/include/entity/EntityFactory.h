@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <random>
 
 #include "game/BuildingType.h"
 #include "game/MapUtils.h"
@@ -18,7 +19,7 @@ class Resources;
 class EntityFactory : public std::enable_shared_from_this<EntityFactory>
 {
 public:
-    EntityFactory(const Resources& resources, AudioSystem& audioSystem);
+    EntityFactory(const Resources& resources, AudioSystem& audioSystem, std::shared_ptr<std::mt19937> randomizer);
 
     /** Creates a Unit from raw data (e.g. read from a Scenario file). */
     std::shared_ptr<Entity> createUnit(const UnitPlacement& unitPlacement) const;
@@ -48,6 +49,7 @@ private:
 private:
     const Resources& resources;
     AudioSystem& audioSystem;
+    std::shared_ptr<std::mt19937> randomizer;
 };
 
 }  // namespace Rival

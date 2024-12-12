@@ -34,9 +34,11 @@
 
 namespace Rival {
 
-EntityFactory::EntityFactory(const Resources& resources, AudioSystem& audioSystem)
+EntityFactory::EntityFactory(
+        const Resources& resources, AudioSystem& audioSystem, std::shared_ptr<std::mt19937> randomizer)
     : resources(resources)
     , audioSystem(audioSystem)
+    , randomizer(randomizer)
 {
 }
 
@@ -106,7 +108,8 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     int defaultAttackId = unitDef->attackId;
     if (defaultAttackId >= 0)
     {
-        auto attackComponent = std::make_shared<AttackComponent>(resources, resources, audioSystem, shared_from_this());
+        auto attackComponent =
+                std::make_shared<AttackComponent>(resources, resources, audioSystem, shared_from_this(), randomizer);
         attackComponent->registerAttack(resources.getAttackDef(defaultAttackId));
         unit->attach(attackComponent);
     }
@@ -241,7 +244,7 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     }
 
     // ProjectileMovementComponent
-    projectile->attach(std::make_shared<ProjectileMovementComponent>(resources, audioSystem, target));
+    projectile->attach(std::make_shared<ProjectileMovementComponent>(resources, audioSystem, target, randomizer));
 
     // Projectile animation
     if (isAnimated)

@@ -1,12 +1,11 @@
 #include "entity/components/ProjectileMovementComponent.h"
 
-#include <memory>
-
 #include "application/Resources.h"
 #include "audio/AudioSystem.h"
 #include "audio/SoundSource.h"
 #include "entity/Projectile.h"
 #include "entity/components/HealthComponent.h"
+#include "game/AttackUtils.h"
 #include "game/World.h"
 #include "gfx/RenderUtils.h"
 #include "utils/LogUtils.h"
@@ -16,12 +15,15 @@ namespace Rival {
 
 const std::string ProjectileMovementComponent::key = "projectile_movement";
 
-ProjectileMovementComponent::ProjectileMovementComponent(
-        const AudioStore& audioStore, AudioSystem& audioSystem, MapNode target)
+ProjectileMovementComponent::ProjectileMovementComponent(const AudioStore& audioStore,
+        AudioSystem& audioSystem,
+        MapNode target,
+        std::shared_ptr<std::mt19937> randomizer)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
     , target(target)
+    , randomizer(randomizer)
 {
 }
 
@@ -79,9 +81,7 @@ void ProjectileMovementComponent::onProjectileArrived()
     std::shared_ptr<Entity> targetEntity = entityContainer->getMutableEntityAt(target);
     if (targetEntity)
     {
-        // TODO: This duplicates logic in AttackComponent::deliverMeleeAttack
-        HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
-        healthComp->addHealth(-attackDef->damage);
+        AttackUtils::applyAttack(*attackDef, *targetEntity, *randomizer);
         shouldPlayImpactSound = true;
     }
 
