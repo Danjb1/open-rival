@@ -52,7 +52,9 @@ private:
     bool isNetGame() const;
 
 private:
-    bool host;
+    unsigned int randomSeed = 0;
+
+    bool isHost;
     int nextPlayerId = 1;
     int joinRequestId = 0;
 

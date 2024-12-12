@@ -1,6 +1,8 @@
 #include "lobby/LobbyState.h"
 
+#include <chrono>
 #include <cstdlib>  // std::rand
+#include <random>
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
@@ -35,9 +37,9 @@ Rect makeViewport(const Window* window)
     return { 0, 0, window->getWidth(), window->getHeight() };
 }
 
-LobbyState::LobbyState(Application& app, std::string playerName, bool host)
+LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     : State(app)
-    , host(host)
+    , isHost(isHost)
     , localPlayerName(playerName)
     , menuRenderer(res, window, makeViewport(window))
     , textRenderer(window)
@@ -49,6 +51,10 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool host)
     packetHandlers.insert({ PacketType::LobbyWelcome, std::make_unique<LobbyWelcomePacketHandler>() });
     packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
+
+    // Determine the seed that we will use for all our random numbers once the game starts.
+    // It is imperative that all players generate the same sequence of random numbers.
+    randomSeed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
 void LobbyState::onLoad()
@@ -65,7 +71,7 @@ void LobbyState::onLoad()
 
     if (isNetGame())
     {
-        if (host)
+        if (isHost)
         {
             // Add ourselves to the lobby.
             // The host should always have a client ID and player ID of 0.
@@ -118,7 +124,7 @@ void LobbyState::renderText()
     }
 
     // Local player (if hosting, should always come first)
-    if (host)
+    if (isHost)
     {
         std::string name = localPlayerName;
         TextSpan textSpan = { name, TextRenderable::defaultColor };
@@ -136,7 +142,7 @@ void LobbyState::renderText()
     }
 
     // Local player (if not hosting, always comes last for now; later we will sort by player ID)
-    if (!host)
+    if (!isHost)
     {
         std::string name = localPlayerName;
         TextSpan textSpan = { name, TextRenderable::defaultColor };
@@ -160,7 +166,7 @@ void LobbyState::keyUp(const SDL_Keycode keyCode)
     case SDLK_SPACE:
     case SDLK_RETURN:
         // TMP: For now, just start the game when pressing Space or Enter
-        if (host)
+        if (isHost)
         {
             requestStartGame();
         }
@@ -204,7 +210,7 @@ void LobbyState::pollNetwork()
 
 void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName)
 {
-    if (!host)
+    if (!isHost)
     {
         // Only the host has the authority to accept other players
         return;
@@ -238,13 +244,13 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
 
     LOG_INFO("Player {} has joined", client.getName());
 
-    if (host)
+    if (isHost)
     {
         // Inform joining player about the current lobby state
         std::unordered_map<int, ClientInfo> clientsIncludingHost = clients;
         ClientInfo localClient(0, localPlayerName);
         clientsIncludingHost.insert({ 0, localClient });
-        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clientsIncludingHost);
+        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clientsIncludingHost, randomSeed);
         app.getConnection()->send(welcomePacket);
     }
 
@@ -304,7 +310,7 @@ void LobbyState::loadLevel(const std::string& filename)
 
 void LobbyState::requestStartGame()
 {
-    if (!host)
+    if (!isHost)
     {
         LOG_WARN("Non-host player tried to start the game");
         return;
@@ -327,10 +333,12 @@ std::unique_ptr<State> LobbyState::createGameState() const
 {
     ApplicationContext& context = app.getContext();
 
+    std::shared_ptr<std::mt19937> randomizer = std::make_shared<std::mt19937>(randomSeed);
+
     // Create the world
     ScenarioBuilder scenarioBuilder(scenarioData);
     std::shared_ptr<const EntityFactory> entityFactory =
-            std::make_shared<EntityFactory>(context.getResources(), context.getAudioSystem());
+            std::make_shared<EntityFactory>(context.getResources(), context.getAudioSystem(), randomizer);
     std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
     // Initialize players
@@ -347,7 +355,7 @@ std::unique_ptr<State> LobbyState::createGameState() const
                         static_cast<int>(playerProps.startingFood)));
     }
 
-    return std::make_unique<GameState>(app, std::move(world), playerStates, clients, localPlayerId);
+    return std::make_unique<GameState>(app, std::move(world), playerStates, clients, localPlayerId, randomizer);
 }
 
 bool LobbyState::isNetGame() const

@@ -8,10 +8,12 @@
 
 namespace Rival {
 
-LobbyWelcomePacket::LobbyWelcomePacket(int playerId, std::unordered_map<int, ClientInfo> clients)
+LobbyWelcomePacket::LobbyWelcomePacket(
+        int playerId, std::unordered_map<int, ClientInfo> clients, unsigned int randomSeed)
     : Packet(PacketType::LobbyWelcome)
     , playerId(playerId)
     , clients(clients)
+    , randomSeed(randomSeed)
 {
 }
 
@@ -31,6 +33,8 @@ void LobbyWelcomePacket::serialize(std::vector<char>& buffer) const
         BufferUtils::addToBuffer(buffer, client.getPlayerId());
         BufferUtils::addStringToBuffer(buffer, client.getName());
     }
+
+    BufferUtils::addToBuffer(buffer, randomSeed);
 }
 
 std::shared_ptr<LobbyWelcomePacket> LobbyWelcomePacket::deserialize(const std::vector<char> buffer)
@@ -60,7 +64,10 @@ std::shared_ptr<LobbyWelcomePacket> LobbyWelcomePacket::deserialize(const std::v
         clients.insert({ thisClientId, client });
     }
 
-    return std::make_shared<LobbyWelcomePacket>(playerId, clients);
+    unsigned int randomSeed = 0;
+    BufferUtils::readFromBuffer(buffer, offset, randomSeed);
+
+    return std::make_shared<LobbyWelcomePacket>(playerId, clients, randomSeed);
 }
 
 }  // namespace Rival

@@ -16,7 +16,7 @@ namespace Rival {
 class LobbyWelcomePacket : public Packet
 {
 public:
-    LobbyWelcomePacket(int playerId, std::unordered_map<int, ClientInfo> clients);
+    LobbyWelcomePacket(int playerId, std::unordered_map<int, ClientInfo> clients, unsigned int randomSeed);
 
     void serialize(std::vector<char>& buffer) const override;
     static std::shared_ptr<LobbyWelcomePacket> deserialize(const std::vector<char> buffer);
@@ -34,6 +34,7 @@ public:
 private:
     int playerId;
     std::unordered_map<int, ClientInfo> clients;
+    unsigned int randomSeed;
 };
 
 }  // namespace Rival

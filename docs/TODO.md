@@ -8,7 +8,6 @@
 
 - Respect unit attack speed
 - Respect target's Armor
-- Damage should be random; ensure all players share the same random seed (use this for SoundBanks as well!)
 - Play death animations (these require special facing logic!)
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
@@ -58,6 +57,10 @@
 - Attacks with splash damage should nearby damage units
 - Destroying cropland
 - For flying units, projectiles also need to lerp "downwards"?
+- Scale damage based on the "Fighting Speed" setting
+    - The Fighting Speed slider goes from 0.5 to 2.0
+    - At 0.5, all damage is halved, and at 2.0, all damage is doubled
+    - It is not possible to set Fighting Speed to exactly 1! The default value is around 0.875
 
 ### Input & Mouse Picking
 
@@ -84,6 +87,7 @@
 - Loading screen
 - Custom Map menu
 - Pause menu
+- Settings menu
 - Spybook
 - Postgame screen
 - Troop libraries
@@ -220,13 +224,14 @@
 - Combat
 - Transporting units
 
-### Music & Video
+### Audio & Video
 
 - Play the right music tracks based on context
 - Play intro video
 - Play campaign videos
 - Add support for WMA music (or convert to another format)
     - [OGG support](https://indiegamedev.net/2020/02/25/the-complete-guide-to-openal-with-c-part-2-streaming-audio/)
+- Use seeded randomizer for SoundBanks so all players hear the same audio? (be careful if this happens on another thread!)
 
 <!----------------------------------------------------------------------------->
 ## Enhancements

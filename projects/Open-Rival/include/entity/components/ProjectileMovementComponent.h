@@ -2,6 +2,8 @@
 
 #include <glm/vec2.hpp>
 
+#include <memory>
+#include <random>
 #include <string>
 
 #include "entity/components/EntityComponent.h"
@@ -20,7 +22,10 @@ class ProjectileMovementComponent : public EntityComponent
 {
 
 public:
-    ProjectileMovementComponent(const AudioStore& audioStore, AudioSystem& audioSystem, MapNode target);
+    ProjectileMovementComponent(const AudioStore& audioStore,
+            AudioSystem& audioSystem,
+            MapNode target,
+            std::shared_ptr<std::mt19937> randomizer);
 
     // Begin EntityComponent override
     void onEntityFirstAddedToWorld(World* world) override;
@@ -38,6 +43,7 @@ public:
 private:
     const AudioStore& audioStore;
     AudioSystem& audioSystem;
+    std::shared_ptr<std::mt19937> randomizer;
 
     EntityContainer* entityContainer = nullptr;
 

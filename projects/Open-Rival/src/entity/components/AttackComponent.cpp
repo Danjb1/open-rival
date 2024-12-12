@@ -8,11 +8,12 @@
 #include "entity/Unit.h"
 #include "entity/components/AttackListener.h"
 #include "entity/components/FacingComponent.h"
-#include "entity/components/HealthComponent.h"
 #include "entity/components/MovementComponent.h"
+#include "game/AttackUtils.h"
 #include "game/UnitDef.h"
 #include "game/World.h"
 #include "utils/LogUtils.h"
+#include "utils/MathUtils.h"
 
 namespace Rival {
 
@@ -21,12 +22,14 @@ const std::string AttackComponent::key = "attack";
 AttackComponent::AttackComponent(const AudioStore& audioStore,
         const DataStore& dataStore,
         AudioSystem& audioSystem,
-        std::shared_ptr<const EntityFactory> entityFactory)
+        std::shared_ptr<const EntityFactory> entityFactory,
+        std::shared_ptr<std::mt19937> randomizer)
     : EntityComponent(key)
     , audioStore(audioStore)
     , dataStore(dataStore)
     , audioSystem(audioSystem)
     , entityFactory(entityFactory)
+    , randomizer(randomizer)
 {
 }
 
@@ -117,10 +120,11 @@ void AttackComponent::deliverAttack()
 
     // TMP: Assume the first attack was used
     const AttackDef* attackToUse = attackDefinitions[0];
+    const bool isMelee = attackToUse->range <= 1;
 
-    if (attackToUse->range <= 1)
+    if (isMelee)
     {
-        deliverMeleeAttack(*attackToUse, *targetEntity);
+        AttackUtils::applyAttack(*attackToUse, *targetEntity, *randomizer);
     }
     else
     {
@@ -138,13 +142,6 @@ void AttackComponent::deliverAttack()
     // Start cooldown
     // TODO: This should depend on the unit's attack speed
     cooldownDuration = attackToUse->reloadTime;
-}
-
-void AttackComponent::deliverMeleeAttack(const AttackDef& attack, Entity& targetEntity)
-{
-    // Damage target
-    HealthComponent* healthComp = targetEntity.getComponent<HealthComponent>();
-    healthComp->addHealth(-attack.damage);
 }
 
 void AttackComponent::spawnProjectile(const AttackDef& attackDef, Entity& targetEntity)
