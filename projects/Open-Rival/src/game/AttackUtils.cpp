@@ -1,6 +1,9 @@
 #include "game/AttackUtils.h"
 
+#include <algorithm>  // std::max
+
 #include "entity/Entity.h"
+#include "entity/components/ArmorComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "game/AttackDef.h"
 #include "utils/MathUtils.h"
@@ -13,9 +16,14 @@ void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& rando
     const float accuracyRatio = MathUtils::clampf(attackDef.accuracy / 100.f, 0.f, 100.f);
     const int minDamage = static_cast<int>(attackDef.damage * accuracyRatio);
     std::uniform_int_distribution<int> distribution(minDamage, attackDef.damage);
-    const int damage = distribution(randomizer);
+    int damage = distribution(randomizer);
 
-    // TODO: Reduce damage by the target's armor
+    // Reduce damage by the target's armor
+    if (ArmorComponent* armorComp = target.getComponent<ArmorComponent>())
+    {
+        const int armor = armorComp->getArmor();
+        damage = std::max(damage - armor, 0);
+    }
 
     // Damage target
     HealthComponent* healthComp = target.getComponent<HealthComponent>();

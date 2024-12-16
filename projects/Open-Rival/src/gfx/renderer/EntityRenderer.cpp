@@ -7,6 +7,7 @@
 
 #include "application/Resources.h"
 #include "entity/Entity.h"
+#include "entity/Projectile.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
@@ -141,12 +142,18 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
     x1 += lerpOffset.x;
     y1 += lerpOffset.y;
 
-    float width = static_cast<float>(RenderUtils::entityWidthPx);
-    float height = static_cast<float>(RenderUtils::entityHeightPx);
-    float x2 = x1 + width;
-    float y2 = y1 + height;
-
+    const float width = static_cast<float>(RenderUtils::entityWidthPx);
+    const float height = static_cast<float>(RenderUtils::entityHeightPx);
+    const float x2 = x1 + width;
+    const float y2 = y1 + height;
     float z = RenderUtils::getEntityZ(pos.x, pos.y);
+
+    if (entity.as<Projectile>())
+    {
+        // Projectiles should be rendered on top of other entities!
+        z += RenderUtils::zProjectilesDelta;
+    }
+
     std::vector<GLfloat> vertexData = {
         /* clang-format off */
         x1, y1, z,
@@ -162,12 +169,12 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-    int positionBufferSize = static_cast<int>(vertexData.size() * sizeof(GLfloat));
+    const int positionBufferSize = static_cast<int>(vertexData.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, vertexData.data());
 
     // Upload tex co-ord data
     glBindBuffer(GL_ARRAY_BUFFER, renderable.getTexCoordVbo());
-    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
+    const int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 
     // Clear the dirty flag now that the GPU is up to date
@@ -297,11 +304,11 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
 
     // Prepare data for GPU
     std::vector<GLfloat> positions;
-    positions.reserve(
-            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numVertexDimensions * numHitboxSprites);
+    positions.reserve(static_cast<std::size_t>(
+            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numVertexDimensions * numHitboxSprites));
     std::vector<GLfloat> texCoords;
-    texCoords.reserve(
-            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numTexCoordDimensions * numHitboxSprites);
+    texCoords.reserve(static_cast<std::size_t>(
+            SpriteRenderable::numVerticesPerSprite * SpriteRenderable::numTexCoordDimensions * numHitboxSprites));
 
     // Top-left corner
     {

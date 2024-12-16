@@ -150,6 +150,7 @@ void AttackComponent::spawnProjectile(const AttackDef& attackDef, Entity& target
     if (!projectileDef)
     {
         LOG_ERROR("Invalid projectile definition found for attack: {}", attackDef.name);
+        return;
     }
 
     World* world = entity->getWorld();

@@ -42,7 +42,10 @@ public:
     /** Mana cost of the attack. */
     int manaCost = 0;
 
-    /** Reload time between attacks, in ms. */
+    /** Reload time between attacks, in ms.
+     * Even though the Scenario Editor gives these values in milliseconds, there seems to be some discrepancy compared
+     * to the measured values in-game. For example, the Wizard's Flash Light has a Reload Time of 760ms, but in practice
+     * it only fires every ~1200ms. */
     int reloadTime = 0;
 
     /** Name of the projectile to spawn when the attack is initiated (for projectile attacks). */

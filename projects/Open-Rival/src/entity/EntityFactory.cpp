@@ -9,6 +9,7 @@
 #include "entity/Palisade.h"
 #include "entity/Projectile.h"
 #include "entity/Unit.h"
+#include "entity/components/ArmorComponent.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/BuildingAnimationComponent.h"
 #include "entity/components/FlyerComponent.h"
@@ -69,6 +70,9 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
     // HealthComponent
     unit->attach(std::make_shared<HealthComponent>(unitPlacement.hitpoints));
+
+    // ArmorComponent
+    unit->attach(std::make_shared<ArmorComponent>(unitPlacement.armor));
 
     // OwnerComponent (note: monsters use player = 8)
     if (unitPlacement.player < PlayerStore::maxPlayers)
