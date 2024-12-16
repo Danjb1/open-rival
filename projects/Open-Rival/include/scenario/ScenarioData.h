@@ -54,7 +54,7 @@ struct TroopDefaults
 {  // also used for Monster Defaults
     std::uint16_t hitpoints {};
     std::uint16_t magic {};
-    std::uint8_t armour {};
+    std::uint8_t armor {};
     // 2 bytes: unknown
     std::uint8_t sight {};
     std::uint8_t range {};
@@ -160,7 +160,7 @@ struct BuildingPlacement
     std::uint16_t y {};
     std::uint8_t player {};
     std::uint16_t hitpoints {};
-    std::uint16_t armour {};
+    std::uint16_t armor {};
     // 1 byte: empty
     //     Always 0 in buildings example
     std::uint8_t sight {};
@@ -185,7 +185,7 @@ struct UnitPlacement
     std::uint8_t player {};
     std::uint16_t hitpoints {};
     std::uint8_t magic {};
-    std::uint16_t armour {};
+    std::uint16_t armor {};
     // 1 bytes: empty
     std::uint8_t type2 {};
     std::uint8_t sight {};

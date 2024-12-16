@@ -500,7 +500,7 @@ TroopDefaults ScenarioReader::parseTroopDefaults()
 
     troop.hitpoints = readShort();
     troop.magic = readShort();
-    troop.armour = readByte();
+    troop.armor = readByte();
     skip(2, false);
     troop.sight = readByte();
     troop.range = readByte();
@@ -726,7 +726,7 @@ BuildingPlacement ScenarioReader::parseBuilding()
     bldg.y = readShort();
     bldg.player = readByte();
     bldg.hitpoints = readShort();
-    bldg.armour = readShort();
+    bldg.armor = readShort();
     skip(1, false);
     bldg.sight = readByte();
     bldg.range = readByte();
@@ -768,7 +768,7 @@ UnitPlacement ScenarioReader::parseUnit()
     unit.player = readByte();
     unit.hitpoints = readShort();
     unit.magic = readByte();
-    unit.armour = readShort();
+    unit.armor = readShort();
     skip(1, false);
     unit.type2 = readByte();
     unit.sight = readByte();
@@ -1246,7 +1246,7 @@ void ScenarioReader::print(const TroopDefaults& troop) const
 {
     log << "Hitpoints: " << troop.hitpoints << '\n'
         << "Magic:     " << troop.magic << '\n'
-        << "Armour:    " << static_cast<int>(troop.armour) << '\n'
+        << "Armour:    " << static_cast<int>(troop.armor) << '\n'
         << "Sight:     " << static_cast<int>(troop.sight) << '\n'
         << "Range:     " << static_cast<int>(troop.range) << '\n';
 }
@@ -1337,7 +1337,7 @@ void ScenarioReader::print(const BuildingPlacement& bldg) const
         << "X:              " << bldg.x << '\n'
         << "Y:              " << bldg.y << '\n'
         << "Hitpoints:      " << bldg.hitpoints << '\n'
-        << "Armour:         " << bldg.armour << '\n'
+        << "Armour:         " << bldg.armor << '\n'
         << "Sight:          " << static_cast<int>(bldg.sight) << '\n'
         << "Range:          " << static_cast<int>(bldg.range) << '\n'
         << "Upgrade 1:      " << bldg.upgrade1Enabled << '\n'
@@ -1356,7 +1356,7 @@ void ScenarioReader::print(const UnitPlacement& unit) const
         << "Player:         " << static_cast<int>(unit.player) << '\n'
         << "Hitpoints:      " << unit.hitpoints << '\n'
         << "Magic:          " << static_cast<int>(unit.magic) << '\n'
-        << "Armour:         " << unit.armour << '\n'
+        << "Armour:         " << unit.armor << '\n'
         << "Type2:          " << static_cast<int>(unit.type2) << '\n'
         << "Sight:          " << static_cast<int>(unit.sight) << '\n'
         << "Range:          " << static_cast<int>(unit.range) << '\n'

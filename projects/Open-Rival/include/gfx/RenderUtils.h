@@ -63,9 +63,14 @@ static constexpr float zMapBorder = zStart;
 static constexpr float zOverlays = zMapBorder + 1;
 static constexpr float zHitbox = zOverlays + 1;
 static constexpr float zFog = zHitbox + 1.f;
-static constexpr float zEntityNearest = zFog + 1.f;
+static constexpr float zProjectileNearest = zFog + 1.f;
+static constexpr float zProjectileFurthest = zProjectileNearest + maxTilesY;
+static constexpr float zEntityNearest = zProjectileFurthest + 1.f;
 static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
 static constexpr float zTiles = zEntityFurthest + 1.f;
+
+// Z-position delta applied to projectiles
+static constexpr float zProjectilesDelta = zProjectileNearest - zEntityNearest;
 
 // Camera far plane.
 // This is the maximum distance from the camera that we can render.

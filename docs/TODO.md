@@ -6,25 +6,13 @@
 
 ### Combat
 
-- Respect unit attack speed
-- Respect target's Armor
 - Play death animations (these require special facing logic!)
 - Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
     - BUG: Cursor sometimes resets to default when one of the selected units dies
-- Don't kill friendly units when attacking them!
 - When issuing a MoveCommand to an attacking unit, they should respond more quickly
 - Projectiles: implement splash damage
-
-### Spatial Partitioning
-
-- Modify methods in World to allow efficient retrieval of entities
-- Divide the world into a grid and have a map of cell -> entities
-    - Only check the relevant cells when retrieving entities
-    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
-- World should handle spatial partitioning internally; caller does not care about the details
-- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -36,11 +24,19 @@
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
-- Projectiles should have a higher z-order than other entities
 
 <!----------------------------------------------------------------------------->
 ## Features
 <!----------------------------------------------------------------------------->
+
+### Spatial Partitioning
+
+- Modify methods in World to allow efficient retrieval of entities
+- Divide the world into a grid and have a map of cell -> entities
+    - Only check the relevant cells when retrieving entities
+    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
+- World should handle spatial partitioning internally; caller does not care about the details
+- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
 ### Movement
 
@@ -61,6 +57,7 @@
     - The Fighting Speed slider goes from 0.5 to 2.0
     - At 0.5, all damage is halved, and at 2.0, all damage is doubled
     - It is not possible to set Fighting Speed to exactly 1! The default value is around 0.875
+- Don't kill friendly units when attacking them!
 
 ### Input & Mouse Picking
 
