@@ -11,15 +11,9 @@
 
 namespace Rival {
 
+template class AnimationListener<UnitAnimationType>;
 class SpriteComponent;
 struct Animation;
-
-/** Interface that allows a class to be notified of animation events. */
-class AnimationListener
-{
-public:
-    virtual void onAnimationFinished(UnitAnimationType animType) = 0;
-};
 
 /**
  * Component that controls the animation and facing of a unit's SpriteComponent.
@@ -47,8 +41,8 @@ public:
     void facingChanged(Facing newFacing) override;
     // End FacingListener override
 
-    void addListener(std::weak_ptr<AnimationListener> listener);
-    void removeListener(std::weak_ptr<AnimationListener> listener);
+    void addListener(std::weak_ptr<AnimationListener<UnitAnimationType>> listener);
+    void removeListener(std::weak_ptr<AnimationListener<UnitAnimationType>> listener);
 
     void setAnimation(UnitAnimationType animType);
 
@@ -70,7 +64,7 @@ private:
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<FacingComponent> weakFacingComponent;
 
-    WeakPtrSet<AnimationListener> listeners;
+    WeakPtrSet<AnimationListener<UnitAnimationType>> listeners;
 
     const AnimationContainer<UnitAnimationType>& animContainer;
 

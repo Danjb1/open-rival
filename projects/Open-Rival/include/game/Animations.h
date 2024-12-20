@@ -35,7 +35,9 @@ struct Animation
     /** How long to show each sprite index, in milliseconds. */
     int msPerFrame = 0;
 
-    /** Sprite index offset between different facings. */
+    /** Sprite index offset between different facings.
+     * This is used by some vehicles, where the idle poses are taken from the first frame of the movement animations
+     * instead of being grouped together. */
     int facingStride = 0;
 
     Animation() {}

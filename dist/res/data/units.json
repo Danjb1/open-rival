@@ -82,6 +82,11 @@
         "attacking": {
           "endIndex": 83,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 170,
+          "startIndex": 168,
+          "msPerFrame": 180
         }
       },
       "attack": 3,

@@ -1,6 +1,6 @@
 #include "entity/Entity.h"
 
-#include <game/World.h>
+#include "game/World.h"
 
 namespace Rival {
 
@@ -63,6 +63,11 @@ void Entity::earlyUpdate()
 
 void Entity::update(int delta)
 {
+    if (isDeleted())
+    {
+        return;
+    }
+
     for (auto it = components.cbegin(); it != components.cend();)
     {
         const auto& component = it->second;

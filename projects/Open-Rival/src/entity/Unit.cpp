@@ -3,6 +3,7 @@
 #include "entity/Entity.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/MovementComponent.h"
+#include "entity/components/UnitAnimationComponent.h"
 #include "game/MapUtils.h"
 #include "game/World.h"
 
@@ -27,6 +28,8 @@ void Unit::onReady()
     {
         healthComponent->addListener(getWeakThis());
     }
+
+    weakAnimationComp = getComponentWeak<UnitAnimationComponent>(UnitAnimationComponent::key);
 }
 
 void Unit::onDestroy()
@@ -36,10 +39,19 @@ void Unit::onDestroy()
         movementComponent->removeListener(getWeakThis());
     }
 
-    weakAttackComponent = getComponentWeak<AttackComponent>(AttackComponent::key);
     if (auto attackComponent = weakAttackComponent.lock())
     {
         attackComponent->removeListener(getWeakThis());
+    }
+
+    if (auto healthComponent = weakHealthComponent.lock())
+    {
+        healthComponent->removeListener(getWeakThis());
+    }
+
+    if (auto animationComp = weakAnimationComp.lock())
+    {
+        animationComp->removeListener(getWeakThis());
     }
 }
 
@@ -80,7 +92,17 @@ void Unit::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
 
 void Unit::onHealthDepleted()
 {
-    deleted = true;
+    if (auto animationComp = weakAnimationComp.lock())
+    {
+        // We delete the unit in the onAnimationFinished callback
+        animationComp->addListener(getWeakThis());
+    }
+    else
+    {
+        markForDeletion();
+    }
+
+    setState(UnitState::Dying);
 }
 
 void Unit::addStateListener(UnitStateListener* listener)
@@ -144,6 +166,14 @@ void Unit::abortAction()
             attackComponent->setTarget({});
         }
         break;
+    }
+}
+
+void Unit::onAnimationFinished(UnitAnimationType animType)
+{
+    if (animType == UnitAnimationType::Dying)
+    {
+        markForDeletion();
     }
 }
 

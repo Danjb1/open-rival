@@ -47,10 +47,10 @@ void UnitDef::tryReadAnimation(const json& rawAnims,
         return;
     }
 
-    int startIndex = iter->at("startIndex");
-    int endIndex = iter->at("endIndex");
-    int msPerFrame = JsonUtils::getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
-    int facingStride = JsonUtils::getOrDefault(iter, "facingStride", 0);
+    const int startIndex = iter->at("startIndex");
+    const int endIndex = iter->at("endIndex");
+    const int msPerFrame = JsonUtils::getOrDefault(iter, "msPerFrame", Animation::defaultMsPerFrame);
+    const int facingStride = JsonUtils::getOrDefault(iter, "facingStride", 0);
 
     animations.emplace(std::piecewise_construct,
             std::forward_as_tuple(animType),
