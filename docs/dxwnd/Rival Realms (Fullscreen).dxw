@@ -1,5 +1,5 @@
 [target]
-title0=Rival Realms
+title0=Rival Realms (Fullscreen)
 path0=?\Rival.exe
 startfolder0=
 launchpath0=""
@@ -14,8 +14,8 @@ ver0=0
 monitorid0=-1
 filterid0=0
 renderer0=3
-coord0=0
-flag0=673185824
+coord0=1
+flag0=136314912
 flagg0=1140854784
 flagh0=1042
 flagi0=1212153860
@@ -67,7 +67,5 @@ commitaddress0=0
 commitlength0=0
 [stamp]
 version=v2.06.06
-time=Sat Nov 30 14:09:59 2024
-
-
+time=Fri Dec 20 12:00:39 2024
 
