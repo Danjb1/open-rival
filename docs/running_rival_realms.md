@@ -10,7 +10,7 @@ Rival Realms can be freely downloaded [here](https://www.old-games.com/download/
 
 ## DxWnd Configuration
 
-A configuration file is provided [here](docs/dxwnd/Rival Realms.dxw) that can be imported into DxWnd directly. See the Notes tab in DxWnd for more information about the fixes.
+Two configuration files are provided [here](docs/dxwnd) that can be imported into DxWnd directly (one for fullscreen, one for windowed). See the **Notes** tab in DxWnd for more information about the fixes.
 
 ## Multiplayer
 
