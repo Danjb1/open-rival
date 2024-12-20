@@ -7,6 +7,7 @@
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "entity/components/HealthComponent.h"  // TMP
 #include "entity/components/OwnerComponent.h"
 #include "game/GameInterface.h"
 #include "game/Race.h"
@@ -177,14 +178,12 @@ void GameState::updateEntities(int delta) const
 {
     std::vector<std::shared_ptr<Entity>> deletedEntities;
 
+    // Update entities and check for deletions
     world->forEachMutableEntity([&](const auto& entity) {
+        entity->update(delta);
         if (entity->isDeleted())
         {
             deletedEntities.push_back(entity);
-        }
-        else
-        {
-            entity->update(delta);
         }
     });
 
@@ -269,6 +268,19 @@ void GameState::keyDown(const SDL_Keycode keyCode)
     case SDLK_RIGHT:
         input.lastDirectionX = Direction::Increasing;
         break;
+
+    case SDLK_DELETE: {
+        // TMP: Kill selected unit
+        auto weakSelectedEntity = playerContext.getFirstSelectedEntity();
+        if (auto selectedEntity = weakSelectedEntity.lock())
+        {
+            if (HealthComponent* health = selectedEntity->getComponent<HealthComponent>())
+            {
+                health->addHealth(-9999);
+            }
+        }
+        break;
+    }
 
     default:
         break;

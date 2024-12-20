@@ -5,6 +5,7 @@
 #include <unordered_set>
 
 #include "entity/Entity.h"
+#include "entity/components/AnimationListener.h"
 #include "entity/components/AttackListener.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MovementListener.h"
@@ -14,6 +15,7 @@ namespace Rival {
 
 class AttackComponent;
 class MovementComponent;
+class UnitAnimationComponent;
 struct MapNode;
 
 enum class UnitState : std::uint8_t
@@ -21,7 +23,8 @@ enum class UnitState : std::uint8_t
     Idle,
     WaitingToMove,
     Moving,
-    Attacking
+    Attacking,
+    Dying
 };
 
 /** Interface used to listen to unit state changes. */
@@ -37,6 +40,7 @@ class Unit
     , public MovementListener
     , public AttackListener
     , public HealthListener
+    , public AnimationListener<UnitAnimationType>
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
@@ -71,6 +75,10 @@ public:
     void onMaxHealthChanged(int prevValue, int newValue) override;
     void onHealthDepleted() override;
     // Begin HealthListener override
+
+    // Begin AnimationListener override
+    void onAnimationFinished(UnitAnimationType animType) override;
+    // End AnimationListener override
 
     void addStateListener(UnitStateListener* listener);
     void removeStateListener(UnitStateListener* listener);
@@ -118,6 +126,7 @@ private:
     std::weak_ptr<MovementComponent> weakMovementComponent;
     std::weak_ptr<AttackComponent> weakAttackComponent;
     std::weak_ptr<HealthComponent> weakHealthComponent;
+    std::weak_ptr<UnitAnimationComponent> weakAnimationComp;
 
     UnitType type = UnitType::Invalid;
 

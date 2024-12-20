@@ -56,6 +56,9 @@ public:
         return static_cast<int>(facing);
     }
 
+    /** Gets the facing index to use for the death animation, as this requires custom logic. */
+    int getDeathFacingIndex() const;
+
     void rotateLeft();
 
     void rotateRight();

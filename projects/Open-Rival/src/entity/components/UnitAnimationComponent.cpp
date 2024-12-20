@@ -4,6 +4,7 @@
 
 #include "application/Resources.h"
 #include "entity/Entity.h"
+#include "entity/components/AnimationListener.h"
 #include "entity/components/SpriteComponent.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
@@ -97,6 +98,10 @@ void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
     {
         setAnimation(UnitAnimationType::Attacking);
     }
+    else if (newState == UnitState::Dying)
+    {
+        setAnimation(UnitAnimationType::Dying);
+    }
 }
 
 void UnitAnimationComponent::facingChanged(Facing)
@@ -104,7 +109,7 @@ void UnitAnimationComponent::facingChanged(Facing)
     refreshSpriteComponent();
 }
 
-void UnitAnimationComponent::addListener(std::weak_ptr<AnimationListener> listener)
+void UnitAnimationComponent::addListener(std::weak_ptr<AnimationListener<UnitAnimationType>> listener)
 {
     if (listener.expired())
     {
@@ -113,7 +118,7 @@ void UnitAnimationComponent::addListener(std::weak_ptr<AnimationListener> listen
     listeners.emplace(listener);
 }
 
-void UnitAnimationComponent::removeListener(std::weak_ptr<AnimationListener> listener)
+void UnitAnimationComponent::removeListener(std::weak_ptr<AnimationListener<UnitAnimationType>> listener)
 {
     if (listener.expired())
     {
@@ -140,7 +145,7 @@ void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
     if (numAnimFrames == 1)
     {
         // A single-frame animation is finished immediately!
-        CollectionUtils::forEachWeakPtr<AnimationListener>(
+        CollectionUtils::forEachWeakPtr<AnimationListener<UnitAnimationType>>(
                 listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
     }
 }
@@ -175,7 +180,7 @@ void UnitAnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
     if (newAnimFrame < prevAnimFrame)
     {
         // TODO: Don't bother emitting events unless they're needed (e.g. attacks)
-        CollectionUtils::forEachWeakPtr<AnimationListener>(
+        CollectionUtils::forEachWeakPtr<AnimationListener<UnitAnimationType>>(
                 listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
     }
 }
@@ -219,9 +224,11 @@ int UnitAnimationComponent::getFacingOffset() const
         return 0;
     }
 
+    const bool isDeathAnim = (currentAnimType == UnitAnimationType::Dying);
     const int facingStride = getFacingStride();
     const int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
-    const int facingIndex = facingComponent->getFacingIndex();
+    const int facingIndex = isDeathAnim ? facingComponent->getDeathFacingIndex() : facingComponent->getFacingIndex();
+
     return facingIndex * stride;
 }
 

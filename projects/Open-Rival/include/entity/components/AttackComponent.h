@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "entity/components/AnimationListener.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementListener.h"
 #include "entity/components/UnitAnimationComponent.h"
@@ -38,7 +39,7 @@ enum class AttackState : std::uint8_t
  */
 class AttackComponent
     : public EntityComponent
-    , public AnimationListener
+    , public AnimationListener<UnitAnimationType>
 {
 public:
     AttackComponent(const AudioStore& audioStore,

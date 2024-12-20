@@ -167,6 +167,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
     ${OPEN_RIVAL_DIR}/include/entity/Projectile.h
     ${OPEN_RIVAL_DIR}/include/entity/Unit.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/AnimationListener.h
     ${OPEN_RIVAL_DIR}/include/entity/components/ArmorComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackListener.h
