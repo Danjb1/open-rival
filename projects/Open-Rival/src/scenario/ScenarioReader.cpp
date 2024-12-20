@@ -768,7 +768,8 @@ UnitPlacement ScenarioReader::parseUnit()
     unit.player = readByte();
     unit.hitpoints = readShort();
     unit.magic = readByte();
-    unit.armor = readShort();
+    skip(1, false);
+    unit.armor = readByte();
     skip(1, false);
     unit.type2 = readByte();
     unit.sight = readByte();
