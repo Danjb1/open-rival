@@ -6,12 +6,12 @@
 
 ### Combat
 
-- Play a sound when a unit dies
 - Spawn a corpse when a unit dies
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
     - BUG: Cursor sometimes resets to default when one of the selected units dies
 - When issuing a MoveCommand to an attacking unit, they should respond more quickly
 - Projectiles: implement splash damage
+- Death effects (explosions) for vehicles, wizards, etc.
 
 <!----------------------------------------------------------------------------->
 ## Bugs

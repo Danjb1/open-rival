@@ -31,6 +31,7 @@ UnitDef UnitDef::fromJson(const json& j)
     tryReadSoundBank(rawSounds, "select", UnitSoundType::Select, soundBanks);
     tryReadSoundBank(rawSounds, "train", UnitSoundType::Train, soundBanks);
     tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, soundBanks);
+    tryReadSoundBank(rawSounds, "die", UnitSoundType::Die, soundBanks);
 
     return { name, portraitId, movementMode, animations, soundBanks, attackId };
 }

@@ -12,4 +12,9 @@ void EntityComponent::onAttach(Entity* e)
     entity = e;
 }
 
+std::weak_ptr<EntityComponent> EntityComponent::getWeakThis()
+{
+    return std::dynamic_pointer_cast<EntityComponent>(shared_from_this());
+}
+
 }  // namespace Rival
