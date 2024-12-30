@@ -47,7 +47,8 @@
         },
         "dying": {
           "endIndex": 33,
-          "startIndex": 32
+          "startIndex": 32,
+          "msPerFrame": 180
         }
       },
       "attack": 12,
@@ -149,6 +150,11 @@
         "attacking": {
           "endIndex": 59,
           "startIndex": 56
+        },
+        "placing": {
+          "endIndex": 90,
+          "startIndex": 88,
+          "msPerFrame": 180
         }
       },
       "attack": 9,
@@ -182,6 +188,11 @@
         "attacking": {
           "endIndex": 84,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 178,
+          "startIndex": 176,
+          "msPerFrame": 180
         }
       },
       "attack": 7,
@@ -215,6 +226,11 @@
         "attacking": {
           "endIndex": 75,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 106,
+          "startIndex": 104,
+          "msPerFrame": 180
         }
       },
       "attack": 6,
@@ -256,6 +272,11 @@
         "attacking": {
           "endIndex": 115,
           "startIndex": 112
+        },
+        "dying": {
+          "endIndex": 146,
+          "startIndex": 144,
+          "msPerFrame": 180
         }
       },
       "attack": 2,
@@ -356,7 +377,8 @@
         },
         "dying": {
           "endIndex": 33,
-          "startIndex": 32
+          "startIndex": 32,
+          "msPerFrame": 180
         }
       },
       "movement": "seafaring",
@@ -390,6 +412,11 @@
         "attacking": {
           "endIndex": 59,
           "startIndex": 56
+        },
+        "dying": {
+          "endIndex": 90,
+          "startIndex": 88,
+          "msPerFrame": 180
         }
       },
       "attack": 10,
@@ -581,6 +608,11 @@
         "attacking": {
           "endIndex": 57,
           "startIndex": 56
+        },
+        "dying": {
+          "endIndex": 74,
+          "startIndex": 72,
+          "msPerFrame": 180
         }
       },
       "attack": 22,
@@ -613,7 +645,8 @@
         },
         "dying": {
           "endIndex": 9,
-          "startIndex": 8
+          "startIndex": 8,
+          "msPerFrame": 180
         }
       },
       "movement": "seafaring",
@@ -713,6 +746,11 @@
         "attacking": {
           "endIndex": 75,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 106,
+          "startIndex": 104,
+          "msPerFrame": 180
         }
       },
       "attack": 21,
@@ -746,6 +784,11 @@
         "attacking": {
           "endIndex": 58,
           "startIndex": 56
+        },
+        "dying": {
+          "endIndex": 82,
+          "startIndex": 80,
+          "msPerFrame": 180
         }
       },
       "attack": 26,
@@ -787,6 +830,11 @@
         "attacking": {
           "endIndex": 115,
           "startIndex": 112
+        },
+        "dying": {
+          "endIndex": 146,
+          "startIndex": 144,
+          "msPerFrame": 180
         }
       },
       "attack": 2,
@@ -820,6 +868,11 @@
         "attacking": {
           "endIndex": 75,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 106,
+          "startIndex": 104,
+          "msPerFrame": 180
         }
       },
       "attack": 27,
@@ -852,7 +905,8 @@
         },
         "dying": {
           "endIndex": 9,
-          "startIndex": 8
+          "startIndex": 8,
+          "msPerFrame": 180
         }
       },
       "movement": "seafaring",
@@ -920,6 +974,11 @@
         "attacking": {
           "endIndex": 80,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 146,
+          "startIndex": 144,
+          "msPerFrame": 180
         }
       },
       "attack": 23,
@@ -953,6 +1012,11 @@
         "attacking": {
           "endIndex": 81,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 154,
+          "startIndex": 152,
+          "msPerFrame": 180
         }
       },
       "attack": 39,
@@ -986,6 +1050,11 @@
         "attacking": {
           "endIndex": 59,
           "startIndex": 56
+        },
+        "dying": {
+          "endIndex": 90,
+          "startIndex": 88,
+          "msPerFrame": 180
         }
       },
       "attack": 46,
@@ -1018,7 +1087,8 @@
         },
         "dying": {
           "endIndex": 9,
-          "startIndex": 8
+          "startIndex": 8,
+          "msPerFrame": 180
         }
       },
       "movement": "seafaring",
@@ -1082,6 +1152,11 @@
         "attacking": {
           "endIndex": 75,
           "startIndex": 72
+        },
+        "dying": {
+          "endIndex": 106,
+          "startIndex": 104,
+          "msPerFrame": 180
         }
       },
       "attack": 41,
@@ -1276,6 +1351,11 @@
         "attacking": {
           "endIndex": 59,
           "startIndex": 56
+        },
+        "dying": {
+          "endIndex": 90,
+          "startIndex": 88,
+          "msPerFrame": 180
         }
       },
       "attack": 44,
@@ -1343,7 +1423,8 @@
         },
         "dying": {
           "endIndex": 25,
-          "startIndex": 24
+          "startIndex": 24,
+          "msPerFrame": 180
         }
       },
       "attack": 47,
@@ -1389,7 +1470,8 @@
         },
         "dying": {
           "endIndex": 178,
-          "startIndex": 176
+          "startIndex": 176,
+          "msPerFrame": 180
         }
       },
       "attack": 2,
