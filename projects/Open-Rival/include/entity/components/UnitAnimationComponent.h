@@ -48,6 +48,8 @@ public:
 
     int getCurrentSpriteIndex() const;
 
+    bool hasAnimation(UnitAnimationType animType) const;
+
 private:
     void setCurrentAnimFrame(int newAnimFrame);
     void refreshSpriteComponent() const;

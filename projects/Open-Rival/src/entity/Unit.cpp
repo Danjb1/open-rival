@@ -92,17 +92,21 @@ void Unit::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
 
 void Unit::onHealthDepleted()
 {
-    if (auto animationComp = weakAnimationComp.lock())
+    bool hasDeathAnim = false;
+
+    auto animationComp = weakAnimationComp.lock();
+    if (animationComp && animationComp->hasAnimation(UnitAnimationType::Dying))
     {
-        // We delete the unit in the onAnimationFinished callback
         animationComp->addListener(getWeakThis());
-    }
-    else
-    {
-        markForDeletion();
+        hasDeathAnim = true;
     }
 
     setState(UnitState::Dying);
+
+    if (!hasDeathAnim)
+    {
+        markForDeletion();
+    }
 }
 
 void Unit::addStateListener(UnitStateListener* listener)

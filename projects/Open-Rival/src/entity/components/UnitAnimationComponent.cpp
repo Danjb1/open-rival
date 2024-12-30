@@ -232,4 +232,9 @@ int UnitAnimationComponent::getFacingOffset() const
     return facingIndex * stride;
 }
 
+bool UnitAnimationComponent::hasAnimation(UnitAnimationType animType) const
+{
+    return animContainer.getAnimation(animType) != nullptr;
+}
+
 }  // namespace Rival
