@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 namespace Rival {
@@ -14,7 +15,7 @@ class World;
  * which EntityComponents of a given Entity receive lifecycle callbacks,
  * except that this order will always be deterministic.
  */
-class EntityComponent
+class EntityComponent : public std::enable_shared_from_this<EntityComponent>
 {
     friend class Entity;
 
@@ -85,6 +86,10 @@ protected:
      * Callback for when this EntityComponent is destroyed.
      */
     virtual void destroy() {};
+
+    /** Gets a weak pointer to this EntityComponent.
+     * NOTE: This requires that this EntityComponent was created using std::make_shared. */
+    std::weak_ptr<EntityComponent> getWeakThis();
 
 protected:
     /**

@@ -18,6 +18,23 @@ VoiceComponent::VoiceComponent(const AudioStore& audioStore, AudioSystem& audioS
 {
 }
 
+void VoiceComponent::onEntityFirstAddedToWorld(World*)
+{
+    weakHealthComponent = entity->requireComponentWeak<HealthComponent>(HealthComponent::key);
+    if (auto healthComponent = weakHealthComponent.lock())
+    {
+        healthComponent->addListener(std::dynamic_pointer_cast<HealthListener>(shared_from_this()));
+    }
+}
+
+void VoiceComponent::destroy()
+{
+    if (auto healthComponent = weakHealthComponent.lock())
+    {
+        healthComponent->removeListener(std::dynamic_pointer_cast<HealthListener>(shared_from_this()));
+    }
+}
+
 void VoiceComponent::playSound(UnitSoundType soundType)
 {
     const SoundBank* soundBank = unitDef.getSoundBank(soundType);
@@ -67,6 +84,36 @@ bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
     // TODO: what about buildings?
 
     return false;
+}
+
+void VoiceComponent::onHealthChanged(int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void VoiceComponent::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void VoiceComponent::onHealthDepleted()
+{
+    Unit* unit = entity->as<Unit>();
+    if (!unit)
+    {
+        return;
+    }
+
+    const SoundBank* soundBank = unitDef.getSoundBank(UnitSoundType::Die);
+    if (!soundBank)
+    {
+        return;
+    }
+
+    int soundId = soundBank->getRandomSound();
+    SoundConfig soundCfg;
+    soundCfg.unitType = unit->getUnitType();
+    audioSystem.playSound(audioStore, soundId, soundCfg);
 }
 
 }  // namespace Rival

@@ -11,7 +11,8 @@ enum class UnitSoundType : std::uint8_t
 {
     Train,
     Select,
-    Move
+    Move,
+    Die
 };
 
 enum class BuildingSoundType : std::uint8_t
