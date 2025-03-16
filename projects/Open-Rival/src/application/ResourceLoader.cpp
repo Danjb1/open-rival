@@ -160,6 +160,7 @@ ResourceLoader::ResourceLoader(const ApplicationContext& context, Resources& res
     resources.buildingDefs = initBuildingDefs();
     resources.attackDefs = initAttackDefs();
     resources.projectileDefs = initProjectileDefs();
+    resources.effectDefs = initEffectDefs();
     resources.soundBanks = initSoundBanks();
 }
 
@@ -493,6 +494,31 @@ std::unordered_map<std::string, const ProjectileDef> ResourceLoader::initProject
     }
 
     return allProjectileDefs;
+}
+
+std::unordered_map<std::string, const EffectDef> ResourceLoader::initEffectDefs() const
+{
+    const json rawData = JsonUtils::readJsonFile(dataDir + "effects.json");
+    json::const_reference effectList = rawData.at("effects");
+
+    std::unordered_map<std::string, const EffectDef> allEffectDefs;
+
+    for (const auto& entry : effectList.items())
+    {
+        try
+        {
+            const std::string effectName = entry.key();
+            const auto effectDef = EffectDef::fromJson(entry.value());
+            allEffectDefs.emplace(effectName, effectDef);
+        }
+        catch (const json::exception&)
+        {
+            LOG_ERROR("Error parsing effect definition: {}", entry.key());
+            throw;
+        }
+    }
+
+    return allEffectDefs;
 }
 
 std::unordered_map<std::string, const SoundBank> ResourceLoader::initSoundBanks() const

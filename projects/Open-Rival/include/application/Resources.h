@@ -9,6 +9,7 @@
 #include "game/AttackDef.h"
 #include "game/BuildingDef.h"
 #include "game/BuildingType.h"
+#include "game/EffectDef.h"
 #include "game/ProjectileDef.h"
 #include "game/UnitDef.h"
 #include "game/UnitType.h"
@@ -166,6 +167,7 @@ private:
     std::unordered_map<BuildingType, BuildingDef> buildingDefs;
     std::unordered_map<int, const AttackDef> attackDefs;
     std::unordered_map<std::string, const ProjectileDef> projectileDefs;
+    std::unordered_map<std::string, const EffectDef> effectDefs;
     std::unordered_map<std::string, const SoundBank> soundBanks;
 };
 

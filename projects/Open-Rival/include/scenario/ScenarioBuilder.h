@@ -38,7 +38,7 @@ private:
     void addBuilding(
             World* world, const BuildingPlacement& buildingPlacement, const EntityFactory& entityFactory) const;
 
-    void addObject(World* world, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
+    void addDecoration(World* world, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const;
 };
 
 }  // namespace Rival

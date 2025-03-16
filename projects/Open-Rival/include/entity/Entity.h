@@ -50,7 +50,8 @@ enum class EntityType : std::uint8_t
     Door,
     Decoration,
     Chest,
-    InfoPoint
+    InfoPoint,
+    Effect
 };
 
 const auto firstEntityType { static_cast<int>(EntityType::Unknown) };

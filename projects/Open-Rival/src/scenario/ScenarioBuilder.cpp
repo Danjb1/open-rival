@@ -65,7 +65,7 @@ std::unique_ptr<World> ScenarioBuilder::build(std::shared_ptr<const EntityFactor
     // Initialize Objects
     for (const ObjectPlacement& objPlacement : data.objects)
     {
-        addObject(world.get(), objPlacement, *entityFactory);
+        addDecoration(world.get(), objPlacement, *entityFactory);
     }
 
     return world;
@@ -270,10 +270,10 @@ void ScenarioBuilder::addBuilding(
     world->addEntity(building, buildingPlacement.x, buildingPlacement.y);
 }
 
-void ScenarioBuilder::addObject(
+void ScenarioBuilder::addDecoration(
         World* world, const ObjectPlacement& objPlacement, const EntityFactory& entityFactory) const
 {
-    std::shared_ptr<Entity> obj = entityFactory.createObject(objPlacement, world->isWilderness());
+    std::shared_ptr<Entity> obj = entityFactory.createDecoration(objPlacement, world->isWilderness());
     world->addEntity(obj, objPlacement.x, objPlacement.y);
 }
 

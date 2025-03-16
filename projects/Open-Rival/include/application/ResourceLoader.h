@@ -16,6 +16,7 @@ namespace Rival {
 class ApplicationContext;
 class AttackDef;
 class BuildingDef;
+class EffectDef;
 class MidiFile;
 class ProjectileDef;
 class Resources;
@@ -67,6 +68,7 @@ private:
     std::unordered_map<BuildingType, BuildingDef> initBuildingDefs() const;
     std::unordered_map<int, const AttackDef> initAttackDefs() const;
     std::unordered_map<std::string, const ProjectileDef> initProjectileDefs() const;
+    std::unordered_map<std::string, const EffectDef> initEffectDefs() const;
 
 public:
     // Directories
