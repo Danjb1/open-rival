@@ -1,0 +1,54 @@
+{
+  "effects": {
+    "corpse": {
+      "animation": {
+        "endIndex": 52,
+        "startIndex": 51
+      },
+      "texture": "effects_common.tga",
+      "useAngle": true
+    },
+    "explosion_monster": {
+      "animation": {
+        "endIndex": 52,
+        "startIndex": 51
+      },
+      "texture": "effects_explosion.tga"
+    },
+    "explosion_small": {
+      "animation": {
+        "endIndex": 52,
+        "startIndex": 96
+      },
+      "texture": "effects_explosion.tga"
+    },
+    "fire1": {
+      "animation": {
+        "endIndex": 32,
+        "startIndex": 24
+      },
+      "texture": "effects_common.tga"
+    },
+    "fire2": {
+      "animation": {
+        "endIndex": 41,
+        "startIndex": 33
+      },
+      "texture": "effects_common.tga"
+    },
+    "fire3": {
+      "animation": {
+        "endIndex": 50,
+        "startIndex": 42
+      },
+      "texture": "effects_common.tga"
+    },
+    "sink": {
+      "animation": {
+        "endIndex": 23,
+        "startIndex": 20
+      },
+      "texture": "effects_common.tga"
+    }
+  }
+}

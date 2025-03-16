@@ -1,7 +1,5 @@
 #include "entity/components/UnitAnimationComponent.h"
 
-#include <stdexcept>
-
 #include "application/Resources.h"
 #include "entity/Entity.h"
 #include "entity/components/AnimationListener.h"
@@ -17,13 +15,12 @@ namespace Rival {
 const std::string UnitAnimationComponent::key = "unitAnimation";
 
 UnitAnimationComponent::UnitAnimationComponent(const AnimationContainer<UnitAnimationType>& animContainer)
-    : EntityComponent(key)
+    : BasicAnimationComponent(key)
     , animContainer(animContainer)
-    , animation(nullptr)
 {
 }
 
-void UnitAnimationComponent::onEntityFirstAddedToWorld(World*)
+void UnitAnimationComponent::onEntityFirstAddedToWorld(World* world)
 {
     Unit* unit = entity->as<Unit>();
     if (!unit)
@@ -32,13 +29,7 @@ void UnitAnimationComponent::onEntityFirstAddedToWorld(World*)
         return;
     }
 
-    weakSpriteComponent = entity->requireComponentWeak<SpriteComponent>(SpriteComponent::key);
-
-    weakFacingComponent = entity->getComponentWeak<FacingComponent>(FacingComponent::key);
-    if (auto facingComponent = weakFacingComponent.lock())
-    {
-        facingComponent->setListener(this);
-    }
+    BasicAnimationComponent::onEntityFirstAddedToWorld(world);
 
     unit->addStateListener(this);
 
@@ -48,38 +39,11 @@ void UnitAnimationComponent::onEntityFirstAddedToWorld(World*)
 
 void UnitAnimationComponent::destroy()
 {
-    if (auto facingComponent = weakFacingComponent.lock())
-    {
-        facingComponent->setListener(nullptr);
-    }
+    BasicAnimationComponent::destroy();
 
     if (Unit* unit = entity->as<Unit>())
     {
         unit->removeStateListener(this);
-    }
-}
-
-void UnitAnimationComponent::update(int delta)
-{
-    if (!animation)
-    {
-        return;
-    }
-
-    const int numAnimFrames = getNumAnimFrames();
-
-    if (numAnimFrames == 1)
-    {
-        // Nothing to animate
-        return;
-    }
-
-    msPassedCurrentAnimFrame += delta;
-
-    const int msPerAnimFrame = getMsPerAnimFrame();
-    if (msPassedCurrentAnimFrame >= msPerAnimFrame)
-    {
-        advanceFrame(numAnimFrames, msPerAnimFrame);
     }
 }
 
@@ -102,11 +66,6 @@ void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
     {
         setAnimation(UnitAnimationType::Dying);
     }
-}
-
-void UnitAnimationComponent::facingChanged(Facing)
-{
-    refreshSpriteComponent();
 }
 
 void UnitAnimationComponent::addListener(std::weak_ptr<AnimationListener<UnitAnimationType>> listener)
@@ -135,101 +94,35 @@ void UnitAnimationComponent::setAnimation(UnitAnimationType animType)
         return;
     }
 
-    const Animation* newAnimation = animContainer.getAnimation(animType);
-    animation = newAnimation;
     currentAnimType = animType;
-    msPassedCurrentAnimFrame = 0;
-    setCurrentAnimFrame(0);
+    const Animation* newAnimation = animContainer.getAnimation(animType);
+    setAnimationData(newAnimation);
 
     const int numAnimFrames = getNumAnimFrames();
     if (numAnimFrames == 1)
     {
         // A single-frame animation is finished immediately!
-        CollectionUtils::forEachWeakPtr<AnimationListener<UnitAnimationType>>(
-                listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
+        animationFinished();
     }
 }
 
-void UnitAnimationComponent::setCurrentAnimFrame(int newAnimFrame)
+void UnitAnimationComponent::animationFinished()
 {
-    currentAnimFrame = newAnimFrame;
-    refreshSpriteComponent();
-}
-
-void UnitAnimationComponent::refreshSpriteComponent() const
-{
-    auto spriteComponent = weakSpriteComponent.lock();
-    if (!spriteComponent)
-    {
-        return;
-    }
-
-    // Update the SpriteComponent, if present.
-    // This is what actually causes the rendered image to change.
-    spriteComponent->setTxIndex(getCurrentSpriteIndex());
-}
-
-void UnitAnimationComponent::advanceFrame(int numAnimFrames, int msPerAnimFrame)
-{
-    const int prevAnimFrame = currentAnimFrame;
-    const int newAnimFrame = (currentAnimFrame + 1) % numAnimFrames;
-
-    setCurrentAnimFrame(newAnimFrame);
-    msPassedCurrentAnimFrame -= msPerAnimFrame;
-
-    if (newAnimFrame < prevAnimFrame)
-    {
-        // TODO: Don't bother emitting events unless they're needed (e.g. attacks)
-        CollectionUtils::forEachWeakPtr<AnimationListener<UnitAnimationType>>(
-                listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
-    }
-}
-
-int UnitAnimationComponent::getCurrentSpriteIndex() const
-{
-    if (!animation)
-    {
-        return 0;
-    }
-
-    return animation->startIndex + getFacingOffset() + currentAnimFrame;
-}
-
-int UnitAnimationComponent::getNumAnimFrames() const
-{
-    if (!animation)
-    {
-        return 0;
-    }
-
-    return animation->endIndex - animation->startIndex + 1;
+    // TODO: Don't bother emitting events unless they're needed (e.g. attacks)
+    CollectionUtils::forEachWeakPtr<AnimationListener<UnitAnimationType>>(
+            listeners, [&](auto listener) { listener->onAnimationFinished(currentAnimType); });
 }
 
 int UnitAnimationComponent::getMsPerAnimFrame() const
 {
     // TODO: This should vary based on a Unit's speed
-    return animation ? animation->msPerFrame : 0;
+    return BasicAnimationComponent::getMsPerAnimFrame();
 }
 
-int UnitAnimationComponent::getFacingStride() const
+int UnitAnimationComponent::getFacingIndex(std::shared_ptr<FacingComponent> facingComponent) const
 {
-    return animation ? animation->facingStride : 0;
-}
-
-int UnitAnimationComponent::getFacingOffset() const
-{
-    auto facingComponent = weakFacingComponent.lock();
-    if (!facingComponent)
-    {
-        return 0;
-    }
-
     const bool isDeathAnim = (currentAnimType == UnitAnimationType::Dying);
-    const int facingStride = getFacingStride();
-    const int stride = facingStride > 0 ? facingStride : getNumAnimFrames();
-    const int facingIndex = isDeathAnim ? facingComponent->getDeathFacingIndex() : facingComponent->getFacingIndex();
-
-    return facingIndex * stride;
+    return isDeathAnim ? facingComponent->getDeathFacingIndex() : facingComponent->getFacingIndex();
 }
 
 bool UnitAnimationComponent::hasAnimation(UnitAnimationType animType) const

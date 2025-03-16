@@ -6,12 +6,9 @@
 
 ### Combat
 
-- Spawn a corpse when a unit dies
+- DeathEffectComponent which spawns an effect on death
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
-    - BUG: Cursor sometimes resets to default when one of the selected units dies
-- When issuing a MoveCommand to an attacking unit, they should respond more quickly
 - Projectiles: implement splash damage
-- Death effects (explosions) for vehicles, wizards, etc.
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -23,6 +20,8 @@
 - Flying units need a higher z-position so that they appear on top of units below them
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
+- Attacking units are slow to respond to MoveCommands
+- Cursor sometimes resets to default when one of the selected units dies
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -491,6 +490,7 @@
 - Units sometimes take a suboptimal route (see note about `nodesToAvoid`)
 - Catch exceptions when calling `JsonUtils::readJsonFile`
 - Use a std::span to enforce immutability of a container (instead of duplicating logic in World::getEntitiesInRadius)
+- Improve compile times!
 
 #### Rendering
 

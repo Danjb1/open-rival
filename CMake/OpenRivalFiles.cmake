@@ -21,6 +21,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/commands/MoveCommand.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Building.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Decoration.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/Effect.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Entity.cpp
     ${OPEN_RIVAL_DIR}/src/entity/EntityFactory.cpp
     ${OPEN_RIVAL_DIR}/src/entity/Palisade.cpp
@@ -28,6 +29,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/Unit.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/ArmorComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/AttackComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/BasicAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FacingComponent.cpp
@@ -50,6 +52,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/game/AttackDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/AttackUtils.cpp
     ${OPEN_RIVAL_DIR}/src/game/BuildingDef.cpp
+    ${OPEN_RIVAL_DIR}/src/game/EffectDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameInterface.cpp
     ${OPEN_RIVAL_DIR}/src/game/GameState.cpp
     ${OPEN_RIVAL_DIR}/src/game/InventoryComponent.cpp
@@ -162,6 +165,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/commands/MoveCommand.h
     ${OPEN_RIVAL_DIR}/include/entity/Building.h
     ${OPEN_RIVAL_DIR}/include/entity/Decoration.h
+    ${OPEN_RIVAL_DIR}/include/entity/Effect.h
     ${OPEN_RIVAL_DIR}/include/entity/Entity.h
     ${OPEN_RIVAL_DIR}/include/entity/EntityFactory.h
     ${OPEN_RIVAL_DIR}/include/entity/Palisade.h
@@ -171,6 +175,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/ArmorComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackListener.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/BasicAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h
@@ -196,6 +201,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/BuildingDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingType.h
     ${OPEN_RIVAL_DIR}/include/game/DamageUtils.h
+    ${OPEN_RIVAL_DIR}/include/game/EffectDef.h
     ${OPEN_RIVAL_DIR}/include/game/GameInterface.h
     ${OPEN_RIVAL_DIR}/include/game/GameState.h
     ${OPEN_RIVAL_DIR}/include/game/InventoryComponent.h

@@ -17,6 +17,7 @@
         }
       },
       "attack": 11,
+      "deathEffect": "explosion",
       "name": "Ballista",
       "portrait": 42,
       "sounds": {
@@ -55,6 +56,7 @@
         }
       },
       "attack": 12,
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
@@ -97,6 +99,7 @@
         }
       },
       "attack": 3,
+      "deathEffect": "corpse",
       "name": "Bowman",
       "portrait": 37,
       "sounds": {
@@ -129,6 +132,7 @@
           "startIndex": 0
         }
       },
+      "deathEffect": "explosion",
       "name": "Chariot of War",
       "portrait": 43,
       "sounds": {
@@ -167,6 +171,7 @@
         }
       },
       "attack": 9,
+      "deathEffect": "explosion",
       "name": "Fire Master",
       "portrait": 40,
       "sounds": {
@@ -205,6 +210,7 @@
         }
       },
       "attack": 7,
+      "deathEffect": "corpse",
       "name": "Knight",
       "portrait": 39,
       "sounds": {
@@ -246,6 +252,7 @@
         }
       },
       "attack": 6,
+      "deathEffect": "corpse",
       "name": "Light Cavalry",
       "portrait": 38,
       "sounds": {
@@ -295,6 +302,7 @@
         }
       },
       "attack": 2,
+      "deathEffect": "corpse",
       "name": "Peasant",
       "portrait": 36,
       "sounds": {
@@ -331,6 +339,7 @@
         }
       },
       "attack": 4,
+      "deathEffect": "fire1",
       "movement": "flying",
       "name": "Pegas Rider",
       "portrait": 48,
@@ -365,6 +374,7 @@
         }
       },
       "attack": 17,
+      "deathEffect": "fire1",
       "name": "Priest",
       "portrait": 45,
       "sounds": {
@@ -399,6 +409,7 @@
           "msPerFrame": 180
         }
       },
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Sea Barge",
       "portrait": 46,
@@ -441,6 +452,7 @@
         }
       },
       "attack": 10,
+      "deathEffect": "corpse",
       "name": "Thief",
       "portrait": 41,
       "sounds": {
@@ -477,6 +489,7 @@
         }
       },
       "attack": 13,
+      "deathEffect": "fire1",
       "name": "Wizard",
       "portrait": 44,
       "sounds": {
@@ -505,6 +518,7 @@
           "startIndex": 0
         }
       },
+      "deathEffect": "explosion",
       "movement": "flying",
       "name": "Zeppelin",
       "portrait": 49,
@@ -534,6 +548,7 @@
           "startIndex": 0
         }
       },
+      "deathEffect": "explosion",
       "movement": "flying",
       "name": "Balloon",
       "portrait": 63,
@@ -569,6 +584,7 @@
         }
       },
       "attack": 28,
+      "deathEffect": "explosion",
       "name": "Catapult",
       "portrait": 56,
       "sounds": {
@@ -602,6 +618,7 @@
         }
       },
       "attack": 25,
+      "deathEffect": "explosion",
       "name": "Gnome Boomer",
       "portrait": 54,
       "sounds": {
@@ -640,6 +657,7 @@
         }
       },
       "attack": 22,
+      "deathEffect": "corpse",
       "name": "Horde Rider",
       "portrait": 52,
       "sounds": {
@@ -676,6 +694,7 @@
           "msPerFrame": 180
         }
       },
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Landing Craft",
       "portrait": 60,
@@ -713,6 +732,7 @@
         }
       },
       "attack": 35,
+      "deathEffect": "fire1",
       "name": "Necromancer",
       "portrait": 59,
       "sounds": {
@@ -746,6 +766,7 @@
         }
       },
       "attack": 31,
+      "deathEffect": "fire1",
       "name": "Priest of Doom",
       "portrait": 58,
       "sounds": {
@@ -784,6 +805,7 @@
         }
       },
       "attack": 21,
+      "deathEffect": "corpse",
       "name": "Rock Thrower",
       "portrait": 51,
       "sounds": {
@@ -825,6 +847,7 @@
         }
       },
       "attack": 26,
+      "deathEffect": "corpse",
       "name": "Rogue",
       "portrait": 55,
       "sounds": {
@@ -874,6 +897,7 @@
         }
       },
       "attack": 2,
+      "deathEffect": "corpse",
       "name": "Serf",
       "portrait": 50,
       "sounds": {
@@ -915,6 +939,7 @@
         }
       },
       "attack": 27,
+      "deathEffect": "corpse",
       "name": "Storm Trooper",
       "portrait": 57,
       "sounds": {
@@ -951,6 +976,7 @@
           "msPerFrame": 180
         }
       },
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Troll Galley",
       "portrait": 61,
@@ -988,6 +1014,7 @@
         }
       },
       "attack": 30,
+      "deathEffect": "explosion",
       "movement": "flying",
       "name": "Warbat",
       "portrait": 62,
@@ -1027,6 +1054,7 @@
         }
       },
       "attack": 23,
+      "deathEffect": "corpse",
       "name": "Warlord",
       "portrait": 53,
       "sounds": {
@@ -1068,6 +1096,7 @@
         }
       },
       "attack": 39,
+      "deathEffect": "corpse",
       "name": "Archer",
       "portrait": 65,
       "sounds": {
@@ -1109,6 +1138,7 @@
         }
       },
       "attack": 46,
+      "deathEffect": "corpse",
       "name": "Arquebusier",
       "portrait": 71,
       "sounds": {
@@ -1145,6 +1175,7 @@
           "msPerFrame": 180
         }
       },
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Bark",
       "portrait": 74,
@@ -1179,6 +1210,7 @@
         }
       },
       "attack": 45,
+      "deathEffect": "explosion",
       "name": "Bombard",
       "portrait": 70,
       "sounds": {
@@ -1217,6 +1249,7 @@
         }
       },
       "attack": 41,
+      "deathEffect": "corspe",
       "name": "Centaur",
       "portrait": 67,
       "sounds": {
@@ -1253,6 +1286,7 @@
         }
       },
       "attack": 54,
+      "deathEffect": "fire1",
       "name": "Druid",
       "portrait": 66,
       "sounds": {
@@ -1286,6 +1320,7 @@
         }
       },
       "attack": 43,
+      "deathEffect": "explosion",
       "name": "Dwarf Miner",
       "portrait": 68,
       "sounds": {
@@ -1319,6 +1354,7 @@
         }
       },
       "attack": 57,
+      "deathEffect": "fire1",
       "name": "Enchanter",
       "portrait": 73,
       "sounds": {
@@ -1352,6 +1388,7 @@
         }
       },
       "attack": 50,
+      "deathEffect": "fire1",
       "name": "Mage",
       "portrait": 72,
       "sounds": {
@@ -1380,6 +1417,7 @@
           "startIndex": 0
         }
       },
+      "deathEffect": "explosion",
       "movement": "flying",
       "name": "Magic Chopper",
       "portrait": 77,
@@ -1419,6 +1457,7 @@
         }
       },
       "attack": 44,
+      "deathEffect": "corpse",
       "name": "Scout",
       "portrait": 69,
       "sounds": {
@@ -1455,6 +1494,7 @@
         }
       },
       "attack": 48,
+      "deathEffect": "fire1",
       "movement": "flying",
       "name": "Sky Rider",
       "portrait": 76,
@@ -1491,6 +1531,7 @@
         }
       },
       "attack": 47,
+      "deathEffect": "explosion",
       "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,
@@ -1541,6 +1582,7 @@
         }
       },
       "attack": 2,
+      "deathEffect": "corpse",
       "name": "Yeoman",
       "portrait": 64,
       "sounds": {
@@ -1572,6 +1614,7 @@
           "startIndex": 8
         }
       },
+      "deathEffect": "explosion_monster",
       "name": "Devil",
       "portrait": 94,
       "sounds": {
@@ -1588,6 +1631,7 @@
           "startIndex": 8
         }
       },
+      "deathEffect": "explosion_monster",
       "name": "Dragon",
       "portrait": 102,
       "sounds": {
@@ -1604,6 +1648,7 @@
           "startIndex": 8
         }
       },
+      "deathEffect": "explosion_monster",
       "name": "Golem",
       "portrait": 91,
       "sounds": {
@@ -1624,6 +1669,7 @@
           "startIndex": 32
         }
       },
+      "deathEffect": "explosion_monster",
       "movement": "flying",
       "name": "Gryphon",
       "portrait": 85,
@@ -1645,6 +1691,7 @@
           "startIndex": 40
         }
       },
+      "deathEffect": "explosion_monster",
       "name": "Hydra",
       "portrait": 88,
       "sounds": {
@@ -1665,6 +1712,7 @@
           "startIndex": 16
         }
       },
+      "deathEffect": "explosion_monster",
       "movement": "seafaring",
       "name": "Sea Monster",
       "portrait": 78,
@@ -1686,6 +1734,7 @@
           "startIndex": 72
         }
       },
+      "deathEffect": "explosion_monster",
       "name": "Skeleton",
       "portrait": 98,
       "sounds": {
@@ -1706,6 +1755,7 @@
           "startIndex": 16
         }
       },
+      "deathEffect": "explosion_monster",
       "movement": "flying",
       "name": "Snake",
       "portrait": 81,

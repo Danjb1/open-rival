@@ -3,14 +3,15 @@
 #include <stdexcept>
 #include <string>
 
-#include "application/Resources.h"
 #include "entity/Building.h"
 #include "entity/Decoration.h"
+#include "entity/Effect.h"
 #include "entity/Palisade.h"
 #include "entity/Projectile.h"
 #include "entity/Unit.h"
 #include "entity/components/ArmorComponent.h"
 #include "entity/components/AttackComponent.h"
+#include "entity/components/BasicAnimationComponent.h"
 #include "entity/components/BuildingAnimationComponent.h"
 #include "entity/components/FlyerComponent.h"
 #include "entity/components/HealthComponent.h"
@@ -29,7 +30,6 @@
 #include "game/Animations.h"
 #include "game/InventoryComponent.h"
 #include "game/PlayerState.h"
-#include "game/ProjectileDef.h"
 #include "game/Tile.h"
 #include "game/UnitType.h"
 
@@ -194,7 +194,7 @@ std::shared_ptr<Entity> EntityFactory::createPalisade(
     return building;
 }
 
-std::shared_ptr<Entity> EntityFactory::createObject(const ObjectPlacement& objPlacement, bool wilderness) const
+std::shared_ptr<Entity> EntityFactory::createDecoration(const ObjectPlacement& objPlacement, bool wilderness) const
 {
     // Create Entity
     std::shared_ptr<Decoration> obj = std::make_shared<Decoration>();
@@ -257,6 +257,29 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     }
 
     return projectile;
+}
+
+std::shared_ptr<Entity> EntityFactory::createEffect(const EffectDef& effectDef, Facing facing) const
+{
+    // Create Entity
+    std::shared_ptr<Effect> effect = std::make_shared<Effect>(effectDef);
+
+    // SpriteComponent
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getProjectileSpritesheet(effectDef.texture);
+    auto spriteComponent = std::make_shared<SpriteComponent>(spritesheet);
+    effect->attach(spriteComponent);
+
+    // FacingComponent
+    if (effectDef.shouldUseAngle)
+    {
+        auto facingComponent = std::make_shared<FacingComponent>(facing);
+        effect->attach(facingComponent);
+    }
+
+    // Animation
+    // effect->attach(std::make_shared<EffectAnimationComponent>(effectDef));
+
+    return effect;
 }
 
 UnitType EntityFactory::getUnitType(std::uint8_t unitType) const
