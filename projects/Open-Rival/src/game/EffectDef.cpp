@@ -24,9 +24,8 @@ Animation EffectDef::tryReadAnimation(const json& j)
     return { startIndex, endIndex, msPerFrame, facingStride };
 }
 
-const Animation* EffectDef::getAnimation(EffectAnimationType) const
+const Animation* EffectDef::getAnimation() const
 {
-    // Effects only support a single animation!
     return &animation;
 }
 

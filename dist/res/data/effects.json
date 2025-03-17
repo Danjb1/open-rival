@@ -3,24 +3,25 @@
     "corpse": {
       "animation": {
         "endIndex": 52,
-        "startIndex": 51
+        "startIndex": 51,
+        "msPerFrame": 120
       },
       "texture": "effects_common.tga",
       "useAngle": true
     },
     "explosion_monster": {
       "animation": {
-        "endIndex": 52,
-        "startIndex": 51
+        "endIndex": 134,
+        "startIndex": 105
       },
-      "texture": "effects_explosion.tga"
+      "texture": "effects_explosions.tga"
     },
     "explosion_small": {
       "animation": {
-        "endIndex": 52,
-        "startIndex": 96
+        "endIndex": 104,
+        "startIndex": 89
       },
-      "texture": "effects_explosion.tga"
+      "texture": "effects_explosions.tga"
     },
     "fire1": {
       "animation": {

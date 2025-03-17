@@ -31,6 +31,8 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/entity/components/AttackComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BasicAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/BuildingAnimationComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/DeathEffectComponent.cpp
+    ${OPEN_RIVAL_DIR}/src/entity/components/EffectAnimationComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/EntityComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FacingComponent.cpp
     ${OPEN_RIVAL_DIR}/src/entity/components/FlyerComponent.cpp
@@ -177,6 +179,8 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/entity/components/AttackListener.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BasicAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/BuildingAnimationComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/DeathEffectComponent.h
+    ${OPEN_RIVAL_DIR}/include/entity/components/EffectAnimationComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/EntityComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FacingComponent.h
     ${OPEN_RIVAL_DIR}/include/entity/components/FlyerComponent.h

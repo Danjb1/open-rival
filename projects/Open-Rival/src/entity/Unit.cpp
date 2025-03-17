@@ -1,8 +1,11 @@
 #include "entity/Unit.h"
 
+#include "entity/Effect.h"
 #include "entity/Entity.h"
 #include "entity/components/AttackComponent.h"
+#include "entity/components/DeathEffectComponent.h"
 #include "entity/components/MovementComponent.h"
+#include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitAnimationComponent.h"
 #include "game/MapUtils.h"
 #include "game/World.h"
@@ -29,7 +32,10 @@ void Unit::onReady()
         healthComponent->addListener(getWeakThis());
     }
 
-    weakAnimationComp = getComponentWeak<UnitAnimationComponent>(UnitAnimationComponent::key);
+    weakFacingComponent = getComponentWeak<FacingComponent>(FacingComponent::key);
+    weakSpriteComponent = getComponentWeak<SpriteComponent>(SpriteComponent::key);
+    weakAnimationComponent = getComponentWeak<UnitAnimationComponent>(UnitAnimationComponent::key);
+    weakDeathEffectComponent = getComponentWeak<DeathEffectComponent>(DeathEffectComponent::key);
 }
 
 void Unit::onDestroy()
@@ -49,7 +55,7 @@ void Unit::onDestroy()
         healthComponent->removeListener(getWeakThis());
     }
 
-    if (auto animationComp = weakAnimationComp.lock())
+    if (auto animationComp = weakAnimationComponent.lock())
     {
         animationComp->removeListener(getWeakThis());
     }
@@ -94,9 +100,10 @@ void Unit::onHealthDepleted()
 {
     bool hasDeathAnim = false;
 
-    auto animationComp = weakAnimationComp.lock();
+    auto animationComp = weakAnimationComponent.lock();
     if (animationComp && animationComp->hasAnimation(UnitAnimationType::Dying))
     {
+        // If the Unit has a death animation, we await a callback to `onAnimationFinished`
         animationComp->addListener(getWeakThis());
         hasDeathAnim = true;
     }
@@ -105,22 +112,22 @@ void Unit::onHealthDepleted()
 
     if (!hasDeathAnim)
     {
-        markForDeletion();
+        trySpawnDeathEffect();
     }
 }
 
-void Unit::addStateListener(UnitStateListener* listener)
+void Unit::addStateListener(std::weak_ptr<UnitStateListener> listener)
 {
-    if (!listener)
+    if (listener.expired())
     {
         return;
     }
     stateListeners.emplace(listener);
 }
 
-void Unit::removeStateListener(UnitStateListener* listener)
+void Unit::removeStateListener(std::weak_ptr<UnitStateListener> listener)
 {
-    if (!listener)
+    if (listener.expired())
     {
         return;
     }
@@ -137,10 +144,8 @@ void Unit::setState(UnitState newState)
 
     state = newState;
 
-    for (UnitStateListener* listener : stateListeners)
-    {
-        listener->onUnitStateChanged(newState);
-    }
+    CollectionUtils::forEachWeakPtr<UnitStateListener>(
+            stateListeners, [&](auto listener) { listener->onUnitStateChanged(newState); });
 }
 
 std::weak_ptr<Unit> Unit::getWeakThis()
@@ -177,8 +182,44 @@ void Unit::onAnimationFinished(UnitAnimationType animType)
 {
     if (animType == UnitAnimationType::Dying)
     {
-        markForDeletion();
+        trySpawnDeathEffect();
     }
+}
+
+void Unit::trySpawnDeathEffect()
+{
+    setVisible(false);
+
+    if (auto deathEffectComponent = weakDeathEffectComponent.lock())
+    {
+        // We have to wait until the death effect finishes before triggering the death event
+        Facing facing = Facing::North;
+        if (auto facingComponent = weakFacingComponent.lock())
+        {
+            facing = facingComponent->getDeathFacing();
+        }
+        std::shared_ptr<Entity> deathEffect = deathEffectComponent->spawnEffect(facing);
+        if (Effect* effect = deathEffect->as<Effect>())
+        {
+            effect->addListener(getWeakThis());
+        }
+    }
+    else
+    {
+        triggerDeathEvent();
+    }
+}
+
+void Unit::onEffectFinished(Effect*)
+{
+    // The death effect has just finished, now the Unit is well and truly dead
+    triggerDeathEvent();
+}
+
+void Unit::triggerDeathEvent()
+{
+    // TODO: drop items
+    markForDeletion();
 }
 
 }  // namespace Rival

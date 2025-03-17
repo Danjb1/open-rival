@@ -49,6 +49,8 @@ private:
             const TextureStore& textureStore);
     std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> initProjectileSpritesheets(
             const TextureStore& textureStore);
+    std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> initEffectSpritesheets(
+            const TextureStore& textureStore);
     std::vector<std::shared_ptr<const Spritesheet>> initTileSpritesheets(const TextureStore& textureStore);
     std::vector<std::shared_ptr<const Spritesheet>> initObjectSpritesheets(const TextureStore& textureStore);
     std::shared_ptr<const Spritesheet> initCursorSpritesheet(const TextureStore& textureStore);
@@ -82,7 +84,8 @@ public:
     static constexpr int txIndexProjectiles = txIndexUnits + 50;
     static constexpr int txIndexTiles = txIndexProjectiles + 17;
     static constexpr int txIndexObjects = txIndexTiles + 4;
-    static constexpr int txIndexCursors = txIndexObjects + 3;
+    static constexpr int txIndexEffects = txIndexObjects + 3;
+    static constexpr int txIndexCursors = txIndexEffects + 2;
     static constexpr int txIndexBuildings = txIndexCursors + 1;
     static constexpr int txIndexPortraits = txIndexBuildings + 3;
     static constexpr int txIndexHitbox = txIndexPortraits + 1;

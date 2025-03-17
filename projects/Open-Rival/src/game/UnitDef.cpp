@@ -13,6 +13,7 @@ UnitDef UnitDef::fromJson(const json& j)
     int portraitId = j.at("portrait");
     std::string movementModeStr = j.value("movement", "ground");
     MovementMode movementMode = getMovementMode(movementModeStr);
+    std::string deathEffectName = j.value("deathEffect", "");
 
     // Animations
     const auto& rawAnims = j.at("animations");
@@ -33,7 +34,7 @@ UnitDef UnitDef::fromJson(const json& j)
     tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, soundBanks);
     tryReadSoundBank(rawSounds, "die", UnitSoundType::Die, soundBanks);
 
-    return { name, portraitId, movementMode, animations, soundBanks, attackId };
+    return { name, portraitId, movementMode, animations, soundBanks, attackId, deathEffectName };
 }
 
 void UnitDef::tryReadAnimation(const json& rawAnims,
@@ -94,13 +95,15 @@ UnitDef::UnitDef(std::string name,
         MovementMode movementMode,
         std::unordered_map<UnitAnimationType, const Animation> animations,
         std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
-        int attackId)
+        int attackId,
+        std::string deathEffectName)
     : name(name)
     , portraitId(portraitId)
     , movementMode(movementMode)
     , animations(animations)
     , soundBanks(soundBanks)
     , attackId(attackId)
+    , deathEffectName(deathEffectName)
 {
 }
 

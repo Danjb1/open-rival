@@ -17,7 +17,7 @@
         }
       },
       "attack": 11,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Ballista",
       "portrait": 42,
       "sounds": {
@@ -56,7 +56,7 @@
         }
       },
       "attack": 12,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
@@ -132,7 +132,7 @@
           "startIndex": 0
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Chariot of War",
       "portrait": 43,
       "sounds": {
@@ -171,7 +171,7 @@
         }
       },
       "attack": 9,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Fire Master",
       "portrait": 40,
       "sounds": {
@@ -409,7 +409,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Sea Barge",
       "portrait": 46,
@@ -518,7 +518,7 @@
           "startIndex": 0
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "flying",
       "name": "Zeppelin",
       "portrait": 49,
@@ -548,7 +548,7 @@
           "startIndex": 0
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "flying",
       "name": "Balloon",
       "portrait": 63,
@@ -584,7 +584,7 @@
         }
       },
       "attack": 28,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Catapult",
       "portrait": 56,
       "sounds": {
@@ -618,7 +618,7 @@
         }
       },
       "attack": 25,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Gnome Boomer",
       "portrait": 54,
       "sounds": {
@@ -694,7 +694,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Landing Craft",
       "portrait": 60,
@@ -976,7 +976,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Troll Galley",
       "portrait": 61,
@@ -1014,7 +1014,7 @@
         }
       },
       "attack": 30,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "flying",
       "name": "Warbat",
       "portrait": 62,
@@ -1175,7 +1175,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Bark",
       "portrait": 74,
@@ -1210,7 +1210,7 @@
         }
       },
       "attack": 45,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Bombard",
       "portrait": 70,
       "sounds": {
@@ -1320,7 +1320,7 @@
         }
       },
       "attack": 43,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "name": "Dwarf Miner",
       "portrait": 68,
       "sounds": {
@@ -1417,7 +1417,7 @@
           "startIndex": 0
         }
       },
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "flying",
       "name": "Magic Chopper",
       "portrait": 77,
@@ -1531,7 +1531,7 @@
         }
       },
       "attack": 47,
-      "deathEffect": "explosion",
+      "deathEffect": "explosion_small",
       "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,

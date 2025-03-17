@@ -40,6 +40,11 @@ std::shared_ptr<const Spritesheet> Resources::getProjectileSpritesheet(const std
     return projectileSpritesheets.at(name);
 }
 
+std::shared_ptr<const Spritesheet> Resources::getEffectSpritesheet(const std::string& name) const
+{
+    return effectSpritesheets.at(name);
+}
+
 std::shared_ptr<const Spritesheet> Resources::getBuildingSpritesheet(BuildingType buildingType) const
 {
     return buildingSpritesheets.at(buildingType);
@@ -143,6 +148,12 @@ const ProjectileDef* Resources::getProjectileDef(const std::string& projectileNa
 {
     auto iter = projectileDefs.find(projectileName);
     return iter == projectileDefs.cend() ? nullptr : &iter->second;
+}
+
+const EffectDef* Resources::getEffectDef(const std::string& effectName) const
+{
+    auto iter = effectDefs.find(effectName);
+    return iter == effectDefs.cend() ? nullptr : &iter->second;
 }
 
 }  // namespace Rival

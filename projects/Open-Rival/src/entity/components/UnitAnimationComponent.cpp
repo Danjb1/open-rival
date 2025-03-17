@@ -31,7 +31,7 @@ void UnitAnimationComponent::onEntityFirstAddedToWorld(World* world)
 
     BasicAnimationComponent::onEntityFirstAddedToWorld(world);
 
-    unit->addStateListener(this);
+    unit->addStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
 
     // Determine animation based on initial state
     onUnitStateChanged(unit->getState());
@@ -43,7 +43,7 @@ void UnitAnimationComponent::destroy()
 
     if (Unit* unit = entity->as<Unit>())
     {
-        unit->removeStateListener(this);
+        unit->removeStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
     }
 }
 

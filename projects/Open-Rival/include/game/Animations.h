@@ -22,11 +22,6 @@ enum class BuildingAnimationType : std::uint8_t
     Built
 };
 
-enum class EffectAnimationType : std::uint8_t
-{
-    Animating
-};
-
 struct Animation
 {
     static constexpr int defaultMsPerFrame = 60;

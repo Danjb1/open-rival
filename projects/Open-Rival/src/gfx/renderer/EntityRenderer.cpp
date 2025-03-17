@@ -52,6 +52,11 @@ void EntityRenderer::render(const Camera& camera, const EntityContainer& entityC
 
 bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const
 {
+    if (!entity.isVisible())
+    {
+        return false;
+    }
+
     // Find the centre of this Entity's tile, in Camera units
     const MapNode& pos = entity.getPos();
     float x = static_cast<float>(pos.x + Camera::tileWidth / 2.0f);

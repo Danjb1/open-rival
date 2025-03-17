@@ -28,7 +28,8 @@ public:
             MovementMode movementMode,
             std::unordered_map<UnitAnimationType, const Animation> animations,
             std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
-            int attackId);
+            int attackId,
+            std::string deathEffectName);
 
     // Begin AnimationContainer override
     const Animation* getAnimation(UnitAnimationType animType) const override;
@@ -61,6 +62,9 @@ public:
 
     /** How this unit moves around the map. */
     MovementMode movementMode;
+
+    /** Name of the effect to spawn on death. */
+    std::string deathEffectName;
 
 private:
     /**
