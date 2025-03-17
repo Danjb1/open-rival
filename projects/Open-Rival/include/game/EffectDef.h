@@ -7,14 +7,12 @@
 
 namespace Rival {
 
-class EffectDef final : public AnimationContainer<EffectAnimationType>
+class EffectDef final
 {
 public:
     static EffectDef fromJson(const json& j);
 
-    // Begin AnimationContainer override
-    const Animation* getAnimation(EffectAnimationType animType) const override;
-    // End AnimationContainer override
+    const Animation* getAnimation() const;
 
 private:
     static Animation tryReadAnimation(const json& j);

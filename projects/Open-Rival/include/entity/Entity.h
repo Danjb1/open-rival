@@ -417,6 +417,16 @@ public:
         return !(*this == other);
     }
 
+    bool isVisible() const
+    {
+        return bIsVisible;
+    }
+
+    void setVisible(bool newVisible)
+    {
+        bIsVisible = newVisible;
+    }
+
 protected:
     /** Creates an Entity with the given size. */
     Entity(EntityType entityType, bool isBig);
@@ -457,6 +467,8 @@ protected:
 
     /** Whether this is a "big" entity (e.g. a Building) */
     bool bIsBig = false;
+
+    bool bIsVisible = true;
 };
 
 }  // namespace Rival

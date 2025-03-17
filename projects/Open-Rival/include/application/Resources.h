@@ -44,6 +44,7 @@ public:
     virtual std::shared_ptr<const Spritesheet> getTileSpritesheet(bool wilderness) const = 0;
     virtual std::shared_ptr<const Spritesheet> getUnitSpritesheet(UnitType unitType) const = 0;
     virtual std::shared_ptr<const Spritesheet> getProjectileSpritesheet(const std::string& name) const = 0;
+    virtual std::shared_ptr<const Spritesheet> getEffectSpritesheet(const std::string& name) const = 0;
     virtual std::shared_ptr<const Spritesheet> getBuildingSpritesheet(BuildingType buildingType) const = 0;
     virtual std::shared_ptr<const Spritesheet> getCommonObjectSpritesheet() const = 0;
     virtual std::shared_ptr<const Spritesheet> getObjectSpritesheet(bool wilderness) const = 0;
@@ -79,6 +80,7 @@ public:
     virtual const BuildingDef* getBuildingDef(BuildingType buildingType) const = 0;
     virtual const AttackDef* getAttackDef(int attackId) const = 0;
     virtual const ProjectileDef* getProjectileDef(const std::string& projectileName) const = 0;
+    virtual const EffectDef* getEffectDef(const std::string& effectName) const = 0;
 };
 
 /**
@@ -101,6 +103,7 @@ public:
     std::shared_ptr<const Spritesheet> getTileSpritesheet(bool wilderness) const override;
     std::shared_ptr<const Spritesheet> getUnitSpritesheet(UnitType unitType) const override;
     std::shared_ptr<const Spritesheet> getProjectileSpritesheet(const std::string& name) const override;
+    std::shared_ptr<const Spritesheet> getEffectSpritesheet(const std::string& name) const override;
     std::shared_ptr<const Spritesheet> getBuildingSpritesheet(BuildingType buildingType) const override;
     std::shared_ptr<const Spritesheet> getCommonObjectSpritesheet() const override;
     std::shared_ptr<const Spritesheet> getObjectSpritesheet(bool wilderness) const override;
@@ -131,6 +134,7 @@ public:
     const BuildingDef* getBuildingDef(BuildingType buildingType) const override;
     const AttackDef* getAttackDef(int attackId) const override;
     const ProjectileDef* getProjectileDef(const std::string& projectileName) const override;
+    const EffectDef* getEffectDef(const std::string& effectName) const override;
     // End DataStore override
 
 private:
@@ -146,6 +150,7 @@ private:
     std::unordered_map<UnitType, std::shared_ptr<const Spritesheet>> unitSpritesheets;
     std::unordered_map<BuildingType, std::shared_ptr<const Spritesheet>> buildingSpritesheets;
     std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> projectileSpritesheets;
+    std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> effectSpritesheets;
     std::vector<std::shared_ptr<const Spritesheet>> tileSpritesheets;
     std::vector<std::shared_ptr<const Spritesheet>> objectSpritesheets;
     std::shared_ptr<const Spritesheet> cursorSpritesheet;

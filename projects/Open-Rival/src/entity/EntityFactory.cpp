@@ -13,6 +13,8 @@
 #include "entity/components/AttackComponent.h"
 #include "entity/components/BasicAnimationComponent.h"
 #include "entity/components/BuildingAnimationComponent.h"
+#include "entity/components/DeathEffectComponent.h"
+#include "entity/components/EffectAnimationComponent.h"
 #include "entity/components/FlyerComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MouseHandlerComponent.h"
@@ -70,6 +72,15 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
 
     // HealthComponent
     unit->attach(std::make_shared<HealthComponent>(unitPlacement.hitpoints));
+
+    // DeathEffectComponent
+    if (!unitDef->deathEffectName.empty())
+    {
+        if (const EffectDef* deathEffectDef = resources.getEffectDef(unitDef->deathEffectName))
+        {
+            unit->attach(std::make_shared<DeathEffectComponent>(*deathEffectDef, shared_from_this()));
+        }
+    }
 
     // ArmorComponent
     unit->attach(std::make_shared<ArmorComponent>(unitPlacement.armor));
@@ -265,7 +276,7 @@ std::shared_ptr<Entity> EntityFactory::createEffect(const EffectDef& effectDef, 
     std::shared_ptr<Effect> effect = std::make_shared<Effect>(effectDef);
 
     // SpriteComponent
-    std::shared_ptr<const Spritesheet> spritesheet = resources.getProjectileSpritesheet(effectDef.texture);
+    std::shared_ptr<const Spritesheet> spritesheet = resources.getEffectSpritesheet(effectDef.texture);
     auto spriteComponent = std::make_shared<SpriteComponent>(spritesheet);
     effect->attach(spriteComponent);
 
@@ -277,7 +288,7 @@ std::shared_ptr<Entity> EntityFactory::createEffect(const EffectDef& effectDef, 
     }
 
     // Animation
-    // effect->attach(std::make_shared<EffectAnimationComponent>(effectDef));
+    effect->attach(std::make_shared<EffectAnimationComponent>(effectDef));
 
     return effect;
 }

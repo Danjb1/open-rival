@@ -118,6 +118,10 @@ const std::vector<std::string> textureNames = {
     "objects_meadow.tga",
     "objects_wilderness.tga",
 
+    // Effects
+    "effects_common.tga",
+    "effects_explosions.tga",
+
     // Cursors
     "game_cursors.tga",
 
@@ -147,6 +151,7 @@ ResourceLoader::ResourceLoader(const ApplicationContext& context, Resources& res
     resources.paletteTexture = initPaletteTexture();
     resources.unitSpritesheets = initUnitSpritesheets(resources);
     resources.projectileSpritesheets = initProjectileSpritesheets(resources);
+    resources.effectSpritesheets = initEffectSpritesheets(resources);
     resources.buildingSpritesheets = initBuildingSpritesheets(resources);
     resources.tileSpritesheets = initTileSpritesheets(resources);
     resources.objectSpritesheets = initObjectSpritesheets(resources);
@@ -262,6 +267,22 @@ std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> ResourceLoad
     std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> spritesheets;
 
     for (int i = txIndexProjectiles; i < txIndexTiles; ++i)
+    {
+        std::string texName = textureNames[i];
+        auto spritesheet = std::make_shared<const Spritesheet>(
+                textureStore.getTexture(i), RenderUtils::entityWidthPx, RenderUtils::entityHeightPx, 0);
+        spritesheets.insert({ texName, spritesheet });
+    }
+
+    return spritesheets;
+}
+
+std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> ResourceLoader::initEffectSpritesheets(
+        const TextureStore& textureStore)
+{
+    std::unordered_map<std::string, std::shared_ptr<const Spritesheet>> spritesheets;
+
+    for (int i = txIndexEffects; i < txIndexCursors; ++i)
     {
         std::string texName = textureNames[i];
         auto spritesheet = std::make_shared<const Spritesheet>(

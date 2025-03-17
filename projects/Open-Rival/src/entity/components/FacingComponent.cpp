@@ -62,35 +62,34 @@ void FacingComponent::setFacing(Facing newFacing)
     notifyListener();
 }
 
-int FacingComponent::getDeathFacingIndex() const
+Facing FacingComponent::getDeathFacing() const
 {
     /*
      * Death animations only support 4 different facings,
      * so dying units need to "snap" to one of these directions.
-     *
-     * Return values:
-     *   0 = south-west
-     *   1 = north-west
-     *   2 = north-east
-     *   3 = south-east
      */
     switch (facing)
     {
     case Facing::South:
     case Facing::SouthWest:
-        return 0;
+        return Facing::SouthWest;
     case Facing::West:
     case Facing::NorthWest:
-        return 1;
+        return Facing::NorthWest;
     case Facing::North:
     case Facing::NorthEast:
-        return 2;
+        return Facing::NorthEast;
     case Facing::East:
     case Facing::SouthEast:
-        return 3;
+        return Facing::SouthEast;
     }
 
     throw std::runtime_error("Unsupported facing: " + std::to_string(EnumUtils::toIntegral(facing)));
+}
+
+int FacingComponent::getDeathFacingIndex() const
+{
+    return EnumUtils::toIntegral(getDeathFacing());
 }
 
 void FacingComponent::rotateLeft()

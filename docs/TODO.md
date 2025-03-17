@@ -6,7 +6,7 @@
 
 ### Combat
 
-- DeathEffectComponent which spawns an effect on death
+- Ensure all units are using the correct death effect and death sound
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
 - Projectiles: implement splash damage
 
@@ -18,6 +18,7 @@
 - "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
+- Flying units should play their death effect higher up
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
 - Attacking units are slow to respond to MoveCommands
@@ -491,6 +492,7 @@
 - Catch exceptions when calling `JsonUtils::readJsonFile`
 - Use a std::span to enforce immutability of a container (instead of duplicating logic in World::getEntitiesInRadius)
 - Improve compile times!
+    - Move some stuff out of headers, e.g. constants in ResourceLoader
 
 #### Rendering
 

@@ -57,7 +57,7 @@ void MovementComponent::onEntityFirstAddedToWorld(World*)
         return;
     }
 
-    unit->addStateListener(this);
+    unit->addStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
 }
 
 void MovementComponent::onEntityRemovedFromWorld(World*)
@@ -69,7 +69,7 @@ void MovementComponent::destroy()
 {
     if (Unit* unit = entity->as<Unit>())
     {
-        unit->removeStateListener(this);
+        unit->removeStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
     }
 }
 

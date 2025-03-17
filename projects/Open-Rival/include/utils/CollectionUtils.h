@@ -6,7 +6,8 @@
 #include <vector>
 
 // Second parameter tells the set to use a custom comparison function,
-// which uses the comparison functions of the pointed-to values
+// which uses the comparison functions of the pointed-to values.
+// Having a deterministic order is important so that all clients simulate the game in the exact same way.
 template <class T>
 using WeakPtrSet = std::set<std::weak_ptr<T>, std::owner_less<std::weak_ptr<T>>>;
 

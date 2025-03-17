@@ -2,19 +2,24 @@
 
 #include <memory>
 #include <string>
-#include <unordered_set>
 
+#include "entity/Effect.h"
 #include "entity/Entity.h"
 #include "entity/components/AnimationListener.h"
 #include "entity/components/AttackListener.h"
+#include "entity/components/FacingComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/UnitType.h"
+#include "utils/CollectionUtils.h"
 
 namespace Rival {
 
 class AttackComponent;
+class DeathEffectComponent;
+class FacingComponent;
 class MovementComponent;
+class SpriteComponent;
 class UnitAnimationComponent;
 struct MapNode;
 
@@ -41,6 +46,7 @@ class Unit
     , public AttackListener
     , public HealthListener
     , public AnimationListener<UnitAnimationType>
+    , public EffectListener
 {
 public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
@@ -80,8 +86,12 @@ public:
     void onAnimationFinished(UnitAnimationType animType) override;
     // End AnimationListener override
 
-    void addStateListener(UnitStateListener* listener);
-    void removeStateListener(UnitStateListener* listener);
+    // Begin EffectListener override
+    void onEffectFinished(Effect* effect) override;
+    // End EffectListener override
+
+    void addStateListener(std::weak_ptr<UnitStateListener> listener);
+    void removeStateListener(std::weak_ptr<UnitStateListener> listener);
 
     UnitType getUnitType() const
     {
@@ -117,16 +127,22 @@ private:
      * NOTE: This requires that this Unit was created using std::make_shared. */
     std::weak_ptr<Unit> getWeakThis();
 
+    void trySpawnDeathEffect();
+    void triggerDeathEvent();
+
 private:
     std::string name;
     bool isNameUnique;
 
-    std::unordered_set<UnitStateListener*> stateListeners;
+    WeakPtrSet<UnitStateListener> stateListeners;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
     std::weak_ptr<AttackComponent> weakAttackComponent;
     std::weak_ptr<HealthComponent> weakHealthComponent;
-    std::weak_ptr<UnitAnimationComponent> weakAnimationComp;
+    std::weak_ptr<FacingComponent> weakFacingComponent;
+    std::weak_ptr<SpriteComponent> weakSpriteComponent;
+    std::weak_ptr<UnitAnimationComponent> weakAnimationComponent;
+    std::weak_ptr<DeathEffectComponent> weakDeathEffectComponent;
 
     UnitType type = UnitType::Invalid;
 

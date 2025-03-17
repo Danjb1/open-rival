@@ -50,6 +50,11 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
 
     // Fill buffers
     entityContainer.forEachEntity([&](const auto& entity) {
+        if (!entity->isVisible())
+        {
+            return;
+        }
+
         const bool isHovered = (entity == hoveredEntity);
         const bool isSelected = selectedEntityIds.contains(entity->getId());
         if (!isHovered && !isSelected)
