@@ -61,7 +61,7 @@ std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::st
     std::ifstream reader(atlasName);
     if (!reader)
     {
-        throw std::runtime_error("Failed to load atlas!");
+        throw std::runtime_error("Failed to load atlas: " + atlasName);
     }
 
     while (reader.good())

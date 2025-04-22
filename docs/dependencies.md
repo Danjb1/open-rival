@@ -77,6 +77,7 @@
 - Needs to be built from source to create `spdlogd.lib` / `spdlog.lib` (Debug / Release).
     - A Visual Studio solution must be generated using CMake.
     - Set the Runtime Library property (C/C++ > Code Generation) to "Multi-threaded Debug DLL (/MDd)" (Debug) or "Multi-threaded DLL (/MD)" (Release) to avoid linker warnings.
+    - Output files are moved into an architecture-specific directory, e.g. from `spdlog-1.14.1\build\Debug` to `spdlog-1.14.1\build\x64\Debug`.
 
 ### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 

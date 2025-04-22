@@ -12,6 +12,13 @@ namespace Rival { namespace AttackUtils {
 
 void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& randomizer)
 {
+    HealthComponent* healthComp = target.getComponent<HealthComponent>();
+    if (!healthComp)
+    {
+        // Entity cannot be harmed
+        return;
+    }
+
     // Damage dealt is random based on the attack accuracy
     const float accuracyRatio = MathUtils::clampf(attackDef.accuracy / 100.f, 0.f, 100.f);
     const int minDamage = static_cast<int>(attackDef.damage * accuracyRatio);
@@ -26,7 +33,6 @@ void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& rando
     }
 
     // Damage target
-    HealthComponent* healthComp = target.getComponent<HealthComponent>();
     healthComp->addHealth(-damage);
 }
 

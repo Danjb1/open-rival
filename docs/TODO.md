@@ -8,7 +8,8 @@
 
 - Ensure all units are using the correct death effect and death sound
 - When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
-- Projectiles: implement splash damage
+- Attacks (projectiles) with splash damage should nearby damage units
+- Projectile impact / explosion graphics
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -21,8 +22,13 @@
 - Flying units should play their death effect higher up
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
-- Attacking units are slow to respond to MoveCommands
+- Attacking units are slow to respond to MoveCommands (e.g. very noticeable when their target moves away)
 - Cursor sometimes resets to default when one of the selected units dies
+- Occasional desyncs when moving/attacking with groups in multiplayer
+- Sometimes death sound plays multiple times in multiplayer (once per attacking unit?)
+- Bombards cannot attack
+- We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
+- Ranged units sometimes keep attacking after the target dies
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -49,7 +55,6 @@
 - Allow attacking buildings
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
-- Attacks with splash damage should nearby damage units
 - Destroying cropland
 - For flying units, projectiles also need to lerp "downwards"?
 - Scale damage based on the "Fighting Speed" setting
@@ -209,7 +214,6 @@
     - Add an extra step to the TileRenderer to render these animations on top of the relevant gold tiles
 - Show "star" effect when sending troops somewhere
 - Boats should bob when stationary
-- Projectile impact / explosion graphics
 
 ### AI Players
 
@@ -315,7 +319,6 @@
 - Consider moving some docs to GitHub wiki
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
-- Setup utilities should log debug output to a file (currently they use cout)
 - Treat linker warnings as errors
 - Suppress warnings from JSON and spdlog libraries
 - Do not use header-only JSON library as it leads to longer compile times
@@ -368,6 +371,12 @@
 <!----------------------------------------------------------------------------->
 ## Tech Debt
 <!----------------------------------------------------------------------------->
+
+### Setup
+
+- Setup utilities should log debug output to a file (currently they use cout)
+- Graphical setup utility
+- Ability to re-run individual steps of the setup program
 
 ### Assets
 

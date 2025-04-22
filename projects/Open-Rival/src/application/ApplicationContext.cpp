@@ -43,6 +43,7 @@ ApplicationContext::ApplicationContext()
 
 ApplicationContext::~ApplicationContext()
 {
+    LOG_DEBUG("Performing clean-up...");
     NetUtils::destroyNetworking();
     FT_Done_FreeType(fontLib);
     AudioUtils::destroyAL();

@@ -375,8 +375,7 @@ void createTextureAtlas(const std::string& outputDir,
     // Save the final texture
     fs::path tgaFilename = definitionFilename;
     tgaFilename.replace_extension(".tga");
-    std::cout << "Saving atlas texture: " << tgaFilename << "\n";
-    std::cout << "  >> size = " << texWidth << ", " << texHeight << "\n";
+    std::cout << "Saving atlas texture: " << tgaFilename << " (" << texWidth << "x" << texHeight << ")\n ";
     const std::string txFilename = outputDir + "\\" + tgaFilename.string();
     writeImage(texture, palette, txFilename);
 
