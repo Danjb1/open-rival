@@ -250,6 +250,15 @@ bool MovementComponent::tryStartNextMovement()
         return false;
     }
 
+    // Check that we are free to start moving
+    Unit* unit = entity->as<Unit>();
+    if (unit->getState() != UnitState::Moving && unit->isBusy())
+    {
+        wasAbortActionRequested = true;
+        unit->abortAction();
+        return false;
+    }
+
     // Check that the destination is still pathable
     World* world = entity->getWorld();
     const MapNode* nextNode = route.peek();
@@ -267,15 +276,6 @@ bool MovementComponent::tryStartNextMovement()
         {
             return false;
         }
-    }
-
-    Unit* unit = entity->as<Unit>();
-    if (unit->getState() != UnitState::Moving && unit->isBusy())
-    {
-        // Don't interrupt another action
-        wasAbortActionRequested = true;
-        unit->abortAction();
-        return false;
     }
 
     startNextMovement(*world);
