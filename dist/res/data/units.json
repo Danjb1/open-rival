@@ -36,7 +36,8 @@
         "die": [
           37
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -76,7 +77,8 @@
         "die": [
           36
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -148,7 +150,8 @@
         "train": [
           84
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -429,7 +432,8 @@
         "die": [
           36
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -535,7 +539,8 @@
         "train": [
           120
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -565,7 +570,8 @@
         "train": [
           209
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -600,7 +606,8 @@
         "train": [
           167
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -714,7 +721,8 @@
         "die": [
           127
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -996,7 +1004,8 @@
         "die": [
           127
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -1195,7 +1204,8 @@
         "die": [
           216
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -1231,7 +1241,8 @@
         "train": [
           256
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -1439,7 +1450,8 @@
         "train": [
           298
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -1556,7 +1568,8 @@
         "die": [
           216
         ]
-      }
+      },
+      "vehicle": true
     },
     {
       "animations": {
@@ -1663,15 +1676,18 @@
       "animations": {
         "standing": {
           "endIndex": 3,
-          "startIndex": 0
+          "startIndex": 0,
+          "msPerFrame": 120
         },
         "moving": {
           "endIndex": 3,
-          "startIndex": 0
+          "startIndex": 0,
+          "msPerFrame": 120
         },
         "attacking": {
           "endIndex": 35,
-          "startIndex": 32
+          "startIndex": 32,
+          "msPerFrame": 120
         }
       },
       "deathEffect": "explosion_monster",
@@ -1749,15 +1765,18 @@
       "animations": {
         "standing": {
           "endIndex": 3,
-          "startIndex": 0
+          "startIndex": 0,
+          "msPerFrame": 120
         },
         "moving": {
           "endIndex": 3,
-          "startIndex": 0
+          "startIndex": 0,
+          "msPerFrame": 120
         },
         "attacking": {
           "endIndex": 19,
-          "startIndex": 16
+          "startIndex": 16,
+          "msPerFrame": 120
         }
       },
       "deathEffect": "explosion_monster",

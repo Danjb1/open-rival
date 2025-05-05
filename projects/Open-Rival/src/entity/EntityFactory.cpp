@@ -136,7 +136,10 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<MouseHandlerComponent>());
 
     // InventoryComponent
-    unit->attach(std::make_shared<InventoryComponent>());
+    if (!unitDef->isVehicle)
+    {
+        unit->attach(std::make_shared<InventoryComponent>());
+    }
 
     // PortraitComponent
     unit->attach(std::make_shared<PortraitComponent>(unitDef->portraitId));
