@@ -29,7 +29,8 @@ public:
             std::unordered_map<UnitAnimationType, const Animation> animations,
             std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
             int attackId,
-            std::string deathEffectName);
+            std::string deathEffectName,
+            bool isVehicle);
 
     // Begin AnimationContainer override
     const Animation* getAnimation(UnitAnimationType animType) const override;
@@ -61,10 +62,13 @@ public:
     int portraitId = 0;
 
     /** How this unit moves around the map. */
-    MovementMode movementMode;
+    MovementMode movementMode = MovementMode::Walking;
 
     /** Name of the effect to spawn on death. */
     std::string deathEffectName;
+
+    /** Whether this unit is a vehicle (no inventory, cannot heal, does not rotate when idle). */
+    bool isVehicle = false;
 
 private:
     /**

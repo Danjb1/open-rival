@@ -15,8 +15,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Some animations need attention (e.g. Snake)
-- "Vehicles" should not have an inventory
 - Zooming in does not zoom towards the cursor as much as it should
 - Flying units need a higher z-position so that they appear on top of units below them
 - Flying units should play their death effect higher up
