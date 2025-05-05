@@ -1204,6 +1204,11 @@
           "startIndex": 0,
           "facingStride": 3
         },
+        "attacking": {
+          "endIndex": 0,
+          "startIndex": 0,
+          "facingStride": 3
+        },
         "moving": {
           "endIndex": 2,
           "startIndex": 0
