@@ -26,9 +26,9 @@
 - Cursor sometimes resets to default when one of the selected units dies
 - Occasional desyncs when moving/attacking with groups in multiplayer
 - Sometimes death sound plays multiple times in multiplayer (once per attacking unit?)
-- Bombards cannot attack
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
 - Ranged units sometimes keep attacking after the target dies
+- Trying to attack an empty tile with a ranged unit just moves there instead
 
 <!----------------------------------------------------------------------------->
 ## Features
