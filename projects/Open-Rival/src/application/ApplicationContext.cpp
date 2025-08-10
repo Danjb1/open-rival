@@ -46,7 +46,6 @@ ApplicationContext::~ApplicationContext()
     LOG_DEBUG("Performing clean-up...");
     NetUtils::destroyNetworking();
     FT_Done_FreeType(fontLib);
-    AudioUtils::destroyAL();
     SDL_Quit();
 }
 
@@ -94,7 +93,6 @@ void ApplicationContext::initSDL()
 
 void ApplicationContext::initAudio()
 {
-    AudioUtils::initAL();
     audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
     audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
     audioSystem.prepareSounds(res.getAllSounds());
