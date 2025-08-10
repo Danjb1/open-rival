@@ -27,15 +27,6 @@
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
 - Ranged units sometimes keep attacking after the target dies
 - Trying to attack an empty tile with a ranged unit just moves there instead
-- Crash on exit when destroying the AudioSystem:
-	[ALSOFT] (WW) 1 Source not deleted
-	[ALSOFT] (WW) 369 Buffers not deleted
-	[ALSOFT] (WW) Querying error state on null context (implicitly 0xa004)
- 	Open-Rival.exe!Rival::AudioUtils::checkOpenALError() Line 76	C++
- 	Open-Rival.exe!Rival::AudioUtils::destroyBuffer(unsigned int buffer) Line 124	C++
- 	Open-Rival.exe!Rival::AudioSystem::destroyAllSounds() Line 213	C++
- 	Open-Rival.exe!Rival::AudioSystem::~AudioSystem() Line 22	C++
- 	Open-Rival.exe!Rival::ApplicationContext::~ApplicationContext() Line 51	C++
 
 <!----------------------------------------------------------------------------->
 ## Features

@@ -13,6 +13,7 @@ AudioSystem::AudioSystem()
     : midiActive(false)
     , soundActive(false)
 {
+    AudioUtils::initAL();
 }
 
 AudioSystem::~AudioSystem()
@@ -20,6 +21,8 @@ AudioSystem::~AudioSystem()
     setMidiActive(false);
     setSoundActive(false);
     destroyAllSounds();
+
+    AudioUtils::destroyAL();
 }
 
 ///////////////////////////////////////////////////////////////////////////
