@@ -340,68 +340,62 @@ void GameState::mouseUp(const SDL_MouseButtonEvent evt)
 void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
 {
     // Get the mouse position relative to the window, in pixels
-    int mouseX;
-    int mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
+    int mouseInViewportX;
+    int mouseInViewportY;
+    SDL_GetMouseState(&mouseInViewportX, &mouseInViewportY);
 
     // Abort if the mouse is outside the viewport
-    if (!viewport.contains(mouseX, mouseY))
+    if (!viewport.contains(mouseInViewportX, mouseInViewportY))
     {
         return;
     }
 
     // Check if any scrolling took place
-    int scrollAmount = evt.y;
-    if (scrollAmount == 0)
+    int scrollDelta = evt.y;
+    if (scrollDelta == 0)
     {
         return;
     }
 
-    // Determine the normalized scroll amount
+    // Determine the scroll direction
     if (evt.direction == SDL_MOUSEWHEEL_FLIPPED)
     {
-        scrollAmount *= -1;
+        scrollDelta *= -1;
     }
+
+    // Find the mouse position in scaled pixels before the zoom
+    float cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
+    float cameraY_px = RenderUtils::cameraToPx_Y(camera.getTop());
+    const float zoomBefore = camera.getZoom();
+    const float mouseXBefore = cameraX_px + (mouseInViewportX / zoomBefore);
+    const float mouseYBefore = cameraY_px + (mouseInViewportY / zoomBefore);
 
     // Zoom
-    float zoomBefore = camera.getZoom();
-    if (scrollAmount > 0)
-    {
-        camera.modZoom(Camera::zoomInterval);
-    }
-    else
-    {
-        camera.modZoom(-Camera::zoomInterval);
-    }
-    float zoomAfter = camera.getZoom();
+    camera.applyZoom(static_cast<float>(scrollDelta));
 
-    // If the zoom level hasn't changed, there is no need to translate
-    // the camera
+    // If the zoom level hasn't changed, there is no need to translate the camera
+    const float zoomAfter = camera.getZoom();
     if (zoomBefore == zoomAfter)
     {
         return;
     }
 
-    // Calculate mouse position relative to the viewport, in the range 0-1
-    float normalizedMouseX = MouseUtils::getNormalizedMouseInViewportX(mouseX, viewport);
-    float normalizedMouseY = MouseUtils::getNormalizedMouseInViewportY(mouseY, viewport);
+    // Find the mouse position in scaled pixels after the zoom
+    cameraX_px = RenderUtils::cameraToPx_X(camera.getLeft());
+    cameraY_px = RenderUtils::cameraToPx_Y(camera.getTop());
+    float mouseXAfter = cameraX_px + (mouseInViewportX / zoomAfter);
+    float mouseYAfter = cameraY_px + (mouseInViewportY / zoomAfter);
 
-    // Calculate mouse position relative to the viewport centre, in the
-    // range -1 to 1
-    float relativeMouseX = (2 * normalizedMouseX) - 1;
-    float relativeMouseY = (2 * normalizedMouseY) - 1;
+    // Determine how much the mouse has moved in scaled pixels
+    const float mouseDx = mouseXBefore - mouseXAfter;
+    const float mouseDy = mouseYBefore - mouseYAfter;
 
-    // Move the camera based on the cursor position.
-    // We move towards the cursor when zooming in, and away from the cursor
-    // when zooming out.
-    if (scrollAmount > 0)
-    {
-        camera.translate(relativeMouseX, relativeMouseY);
-    }
-    else
-    {
-        camera.translate(-relativeMouseX, -relativeMouseY);
-    }
+    // Convert back to camera co-ordinates
+    const float mouseDxCamera = RenderUtils::pxToCamera_X(mouseDx);
+    const float mouseDyCamera = RenderUtils::pxToCamera_Y(mouseDy);
+
+    // Translate the camera to keep the mouse at the same world co-ordinates
+    camera.translate(mouseDxCamera, mouseDyCamera);
 }
 
 World& GameState::getWorld()

@@ -4,9 +4,10 @@ Changelog
 
 v0.4.0 (Combat demo)
 - Added health bars for units
-- Units can now attack each other (no projectiles yet!)
+- Units can now attack each other
 - Fixed units being able to walk through buildings and other objects
 - Fixed drag-select rectangle disappearing when very small
+- Fixed zoom not correctly factoring in the cursor position
 - The shareware version of the Procopius Regular font is now included
 
 v0.3.0 (Multiplayer demo)
