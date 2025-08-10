@@ -64,7 +64,7 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGameRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGLEW.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGL.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFont.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFramebuffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFreeType.cpp
@@ -133,13 +133,16 @@ target_include_directories(Open-Rival-test PRIVATE
     ${OPEN_RIVAL_TEST_LIBARY_INCLUDES}
 )
 
-# Dependencies (these ones are pretty lightweight so we just use them directly)
-add_glm(Open-Rival-test)
-add_json(Open-Rival-test)
-add_spdlog(Open-Rival-test)
+# Find dependencies (these ones are pretty lightweight so we just use them directly)
+find_package(glm CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 
 # Adds the libraries it must link against to find the symbols
 target_link_libraries(Open-Rival-test PRIVATE
+    glm::glm
+    nlohmann_json::nlohmann_json
+    spdlog::spdlog
     winmm
     Ws2_32
     project_options

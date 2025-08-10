@@ -225,7 +225,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/Font.h
     ${OPEN_RIVAL_DIR}/include/gfx/Framebuffer.h
     ${OPEN_RIVAL_DIR}/include/gfx/GLUtils.h
-    ${OPEN_RIVAL_DIR}/include/gfx/GlewWrapper.h
+    ${OPEN_RIVAL_DIR}/include/gfx/GLWrapper.h
     ${OPEN_RIVAL_DIR}/include/gfx/Image.h
     ${OPEN_RIVAL_DIR}/include/gfx/Palette.h
     ${OPEN_RIVAL_DIR}/include/gfx/PaletteUtils.h
@@ -275,6 +275,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/net/packets/RelayedPacket.h
     ${OPEN_RIVAL_DIR}/include/net/packets/RequestJoinPacket.h
     ${OPEN_RIVAL_DIR}/include/net/packets/StartGamePacket.h
+    ${OPEN_RIVAL_DIR}/include/platform/WindowsWrapper.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioBuilder.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioData.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioReader.h

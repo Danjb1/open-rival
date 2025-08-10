@@ -1,6 +1,6 @@
 #include "gfx/renderer/UiRenderer.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include "application/Resources.h"
 #include "entity/Unit.h"

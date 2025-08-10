@@ -44,10 +44,11 @@ target_include_directories(interface-extractor PUBLIC
     ${OPEN_RIVAL_INTERFACE_EXTRACTOR_EXTERNAL_DIRS}
 )
 
-# Dependencies
-add_spdlog(interface-extractor)
+# Find dependencies
+find_package(spdlog CONFIG REQUIRED)
 
 target_link_libraries(interface-extractor PRIVATE
+    spdlog::spdlog
     project_options
     project_warnings
 )

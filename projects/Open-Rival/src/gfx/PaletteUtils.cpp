@@ -1,6 +1,6 @@
 #include "gfx/PaletteUtils.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include <cstdint>
 #include <vector>

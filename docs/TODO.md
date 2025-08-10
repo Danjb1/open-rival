@@ -27,6 +27,15 @@
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
 - Ranged units sometimes keep attacking after the target dies
 - Trying to attack an empty tile with a ranged unit just moves there instead
+- Crash on exit when destroying the AudioSystem:
+	[ALSOFT] (WW) 1 Source not deleted
+	[ALSOFT] (WW) 369 Buffers not deleted
+	[ALSOFT] (WW) Querying error state on null context (implicitly 0xa004)
+ 	Open-Rival.exe!Rival::AudioUtils::checkOpenALError() Line 76	C++
+ 	Open-Rival.exe!Rival::AudioUtils::destroyBuffer(unsigned int buffer) Line 124	C++
+ 	Open-Rival.exe!Rival::AudioSystem::destroyAllSounds() Line 213	C++
+ 	Open-Rival.exe!Rival::AudioSystem::~AudioSystem() Line 22	C++
+ 	Open-Rival.exe!Rival::ApplicationContext::~ApplicationContext() Line 51	C++
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -315,19 +324,19 @@
 ### General
 
 - Consider moving some docs to GitHub wiki
+- Treat linker warnings as errors
+
+### Dependencies
+
+- Is GLEW actually needed?
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
-- Treat linker warnings as errors
 - Suppress warnings from JSON and spdlog libraries
 - Do not use header-only JSON library as it leads to longer compile times
 
 ### CMake
 
 - Make some settings common to all projects (e.g. Unicode)
-- Why do additional library directories also have a `/$(Configuration)` variant?
-- Include libraries in a better way
-    - https://stackoverflow.com/a/61708554/1624459
-    - https://github.com/g-truc/glm/blob/master/manual.md#-15-finding-glm-with-cmake
 - Copy required files to setup build directory automatically (`build\x64\projects\setup`)
     - `setup` folder
     - `res` folder also needs to exist!

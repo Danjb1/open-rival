@@ -67,10 +67,11 @@ target_include_directories(setup PRIVATE
     ${OPEN_RIVAL_INC_DIR}
 )
 
-# Dependencies
-add_spdlog(setup)
+# Find dependencies
+find_package(spdlog CONFIG REQUIRED)
 
 target_link_libraries(setup PRIVATE
+    spdlog::spdlog
     project_options
     project_warnings
 )

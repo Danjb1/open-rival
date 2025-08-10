@@ -1,6 +1,6 @@
 #include "gfx/renderer/FramebufferRenderer.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include <vector>
 

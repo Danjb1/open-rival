@@ -4,99 +4,77 @@
 
 ### [FreeType](https://www.freetype.org/download.html)
 
-> **Used for:** Font rendering
-
-- Dynamically-linked.
-- Needs to be built from source to create `freetype.lib`.
-    - A Visual Studio project is included in the download (`builds/windows/vc2010`).
-    - "Debug" and "Release" configurations are provided.
+> **Used for:** Font rendering.
 
 ### [glew](http://glew.sourceforge.net/)
 
-> **Used for:** OpenGL functionality (rendering)
-
-[Install guide](https://glew.sourceforge.net/install.html)
-
-- Statically-linked (as recommended [here](https://stackoverflow.com/a/20873711/1624459)).
-- Needs to be built from source to create `glew32sd.lib` / `glew32s.lib` (Debug / Release).
-    - A Visual Studio project is included in the download (`build/vc12`).
-    - Set the Runtime Library property (C/C++ > Code Generation) to "Multi-threaded Debug DLL (/MDd)" (Debug) or "Multi-threaded DLL (/MD)" (Release) to avoid linker warnings.
-        - GLEW does not actually require a C runtime but it is still recommended for all libraries to share the same runtime.
+> **Used for:** Determining supported OpenGL extensions.
 
 ### [GLM](https://github.com/g-truc/glm)
 
-> **Used for:** Matrix operations
-
-[Install guide](https://github.com/g-truc/glm/blob/master/manual.md#-1-getting-started)
-
-- Header-only library.
+> **Used for:** Matrix operations.
 
 ### [json](https://github.com/nlohmann/json)
 
-> **Used for:** JSON parsing
-
-- Header-only library (single header).
+> **Used for:** JSON parsing.
 
 ### [OpenAL Soft](https://github.com/kcat/openal-soft)
 
-> **Used for:** OpenAL functionality (playing sounds)
+> **Used for:** OpenAL functionality (playing sounds).
 
-- Dynamically-linked.
-- Needs to be built from source to create `OpenAL32.lib` (yes, even for 64-bit).
-    - A Visual Studio solution must be generated using CMake.
+### [OpenGL](https://learn.microsoft.com/en-us/windows/win32/opengl/opengl)
+
+> **Used for:** Rendering.
+
+- Included with Windows.
 
 ### [RtMidi](https://github.com/thestk/rtmidi)
 
-> **Used for:** MIDI playback
-
-- Dynamically-linked.
-- Needs to be built from source to create `rtmidi.lib`.
-    - A Visual Studio solution must be generated using CMake.
+> **Used for:** MIDI playback.
 
 ### [SDL2](https://github.com/libsdl-org/SDL)
 
-> **Used for:** Window creation and input
+> **Used for:** Window creation and input.
 
 [Install guide](https://wiki.libsdl.org/SDL2/Installation)
 
-- Dynamically-linked (as recommended by the [library authors](https://wiki.libsdl.org/SDL2/Installation#static_linking)).
-- On Windows, Debug and Release versions use [the same `.lib` file](https://wiki.libsdl.org/SDL2/Installation#windows_xpvista7810)!
-
 ### [SDL_image](https://github.com/libsdl-org/SDL_image)
 
-> **Used for:** PNG image loading
-
-- Dynamically-linked.
-[Install guide](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/windows/msvc2019/index.php)
+> **Used for:** PNG image loading.
 
 ### [spdlog](https://github.com/gabime/spdlog)
 
-> **Used for:** Logging
-
-- Statically-linked.
-- Needs to be built from source to create `spdlogd.lib` / `spdlog.lib` (Debug / Release).
-    - A Visual Studio solution must be generated using CMake.
-    - Set the Runtime Library property (C/C++ > Code Generation) to "Multi-threaded Debug DLL (/MDd)" (Debug) or "Multi-threaded DLL (/MD)" (Release) to avoid linker warnings.
-    - Output files are moved into an architecture-specific directory, e.g. from `spdlog-1.14.1\build\Debug` to `spdlog-1.14.1\build\x64\Debug`.
+> **Used for:** Logging.
 
 ### [Windows Multimedia API](https://docs.microsoft.com/en-us/windows/win32/multimedia/windows-multimedia-start-page)
 
-> **Used for:** High-precision timers, MIDI playback (Windows only)
+> **Used for:** High-precision timers, MIDI playback (Windows only).
 
-- This library is included by default on Windows machines.
+- Included with Windows.
 
 ### [Winsock](https://learn.microsoft.com/en-us/windows/win32/winsock/about-winsock)
 
-> **Used for:** Networking (Windows only)
+> **Used for:** Networking (Windows only).
 
-- This library is included by default on Windows machines.
+- Included with Windows.
 
 ## DLL Files
 
+These are the DLL files that should be shipped with the game. They can all be found in the output directory after building.
+
 ```
-freetype.dll
 OpenAL32.dll
-rtmidi.dll
-SDL2.dll
 SDL2_image.dll
+SDL2.dll
+brotlicommon.dll
+brotlidec.dll
+bz2.dll
+fmt.dll
+freetype.dll
+glew32.dll
+libpng16.dll
+spdlog.dll
+zlib1.dll
 ```
+
+> Some of these are transitive dependencies. These can be identified by running, for example, `vcpkg depend-info freetype`.

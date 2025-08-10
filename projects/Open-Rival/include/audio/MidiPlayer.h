@@ -1,6 +1,6 @@
 #pragma once
 
-#include <RtMidi.h>
+#include <RTMidi/RtMidi.h>
 
 #include <memory>
 #include <mutex>

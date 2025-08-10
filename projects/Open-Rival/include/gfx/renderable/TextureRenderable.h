@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include <memory>
 

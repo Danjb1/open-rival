@@ -2,7 +2,7 @@
 
 #include "utils/SDLWrapper.h"
 #include <SDL_image.h>
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include <chrono>
 #include <format>

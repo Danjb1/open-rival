@@ -35,6 +35,7 @@ void createOutputDirectories()
     LOG_INFO("Creating output directories");
     std::vector<std::string> directories = {
         "setup\\images",  //
+        "res",            //
         "res\\sound",     //
         "res\\textures",  //
         "res\\video"      //
@@ -68,7 +69,7 @@ void extractInterface(std::string gameDir)
     imageExtractor.extractImages("setup\\images");
 }
 
-void makeImages(std::string gameDir)
+void makeImages()
 {
     LOG_INFO("Making procedural images");
     Setup::makeProceduralImages("setup\\images");
@@ -188,7 +189,7 @@ int main(int argc, char* argv[])
         // Procedural images
         if (shouldMakeImages)
         {
-            makeImages(gameDir);
+            makeImages();
         }
 
         // Build textures

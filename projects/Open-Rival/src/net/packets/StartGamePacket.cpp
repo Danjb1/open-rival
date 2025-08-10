@@ -12,7 +12,7 @@ StartGamePacket::StartGamePacket()
 {
 }
 
-std::shared_ptr<StartGamePacket> StartGamePacket::deserialize(const std::vector<char> buffer)
+std::shared_ptr<StartGamePacket> StartGamePacket::deserialize(const std::vector<char> /*buffer*/)
 {
     return std::make_shared<StartGamePacket>();
 }

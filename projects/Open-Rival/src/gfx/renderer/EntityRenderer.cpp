@@ -1,6 +1,6 @@
 #include "gfx/renderer/EntityRenderer.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include <algorithm>  // std::min
 #include <vector>
