@@ -18,6 +18,8 @@ class World;
  * and pixel positioning is not straightforward. If we tried to position
  * the camera in tile space, it would bob up and down while panning left
  * and right!
+ *
+ * See RenderUtils::pxToCamera_[XY].
  */
 class Camera
 {
@@ -59,7 +61,7 @@ public:
         return zoom;
     }
 
-    void modZoom(float zoomInterval);
+    void applyZoom(float zoomDelta);
 
     bool contains(float px, float py) const;
 
@@ -68,12 +70,12 @@ public:
     static constexpr int tileWidth = 2;
     static constexpr int tileHeight = 1;
 
+private:
     // Zoom behaviour
-    static constexpr float zoomInterval = 0.1f;
+    static constexpr float zoomFactor = 1.1f;
     static constexpr float zoomMin = 0.5f;
     static constexpr float zoomMax = 2.0f;
 
-private:
     // Extra distance the camera is allowed to travel at the bottom of the
     // map. This is necessary because a row of tiles actually spans more
     // than 1 tile height due to their zigzagging y-positioning.

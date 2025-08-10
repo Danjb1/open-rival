@@ -93,7 +93,6 @@ Thank you for your patience during these early stages of development!
 - (Not implemented) Unit hitboxes are not accurate.
 - (Bug) Flying units sometimes appear behind units they should be in front of.
 - (Bug) Units can walk too close to the edge of the map.
-- (Bug) Cursor position should have a greater impact on zooming.
 - (Bug) Lag when moving large groups or large distances.
 - (Bug) Some units get left behind when moving large distances.
 

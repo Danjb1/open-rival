@@ -81,9 +81,11 @@ float Camera::getBottom() const
     return position.y + getHeight() / 2;
 }
 
-void Camera::modZoom(float interval)
+void Camera::applyZoom(float zoomDelta)
 {
-    zoom = MathUtils::clampf(zoom + interval, zoomMin, zoomMax);
+    // We zoom in/out exponentially as this feels better than a linear zoom
+    const float desiredZoom = zoom * std::powf(zoomFactor, zoomDelta);
+    zoom = MathUtils::clampf(desiredZoom, zoomMin, zoomMax);
 
     // We call `centreOnPoint` here to perform a bounds check, since the
     // size of the visible region has now changed

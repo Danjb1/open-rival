@@ -312,8 +312,8 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
 
     // Find the mouse position in the world by reversing the camera transform
     float zoom = camera.getZoom();
-    float mouseInWorldX = (mouseInViewportX / zoom) + cameraX_px;
-    float mouseInWorldY = (mouseInViewportY / zoom) + cameraY_px;
+    float mouseInWorldX = cameraX_px + (mouseInViewportX / zoom);
+    float mouseInWorldY = cameraY_px + (mouseInViewportY / zoom);
 
     // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
     const auto entities = world.getMutableEntities();
