@@ -8,9 +8,14 @@
 // Ideally we would not have any platform-specific stuff here,
 // but this seems unavoidable since we need to know the underlying type!
 #ifdef _WIN32
-#include <winsock2.h>
+typedef unsigned long long SOCKET;
 #else
 typedef int SOCKET;
+#endif
+
+// Borrowed from WinSock but should also work for Unix (~0 is equal to -1)
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET (SOCKET)(~0)
 #endif
 
 namespace Rival {

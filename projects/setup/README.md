@@ -32,14 +32,7 @@ setup.exe -d "C:\Rival Realms"
 
 ### Requirements
 
-This requires the following directories to be present:
-
-```
-res
-setup/definitions
-```
-
-`setup/definitions` should contain definition files for all textures to be generated. These can be found in the [`dist`](/dist/setup/definitions) folder.
+This requires the `setup/definitions` directory to be present alongside the executable, containing definition files for all textures to be generated. This should be automatically copied to the output directory by CMake.
 
 ### Output
 

@@ -1,6 +1,6 @@
 #include "gfx/Font.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 #include <freetype/ftfntfmt.h>
 #include <freetype/ftwinfnt.h>
 

@@ -1,6 +1,6 @@
 #include "ui/MenuRenderer.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 
 #include "application/Window.h"
 #include "gfx/GLUtils.h"

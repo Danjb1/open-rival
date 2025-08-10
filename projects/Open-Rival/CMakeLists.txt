@@ -56,19 +56,31 @@ target_include_directories(Open-Rival PRIVATE
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
 )
 
-# Dependencies
-add_freetype(Open-Rival)
-add_glew(Open-Rival)
-add_glm(Open-Rival)
-add_json(Open-Rival)
-add_openal(Open-Rival)
-add_rtmidi(Open-Rival)
-add_sdl2(Open-Rival)
-add_sdl2_image(Open-Rival)
-add_spdlog(Open-Rival)
+# Find dependencies
+find_package(Freetype REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glm REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(rtmidi REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(spdlog REQUIRED)
 
-# Libraries to link against
+# Link dependencies
 target_link_libraries(Open-Rival PRIVATE
+    Freetype::Freetype
+    GLEW::glew
+    glm::glm
+	glu32
+    nlohmann_json::nlohmann_json
+    OpenAL::OpenAL
+	opengl32
+    RtMidi::rtmidi
+    SDL2::SDL2
+    SDL2::SDL2main
+    SDL2_image::SDL2_image
+    spdlog::spdlog
     winmm
     Ws2_32
     project_options

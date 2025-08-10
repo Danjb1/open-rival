@@ -1,6 +1,6 @@
 #include "gfx/renderer/GameRenderer.h"
 
-#include "gfx/GlewWrapper.h"
+#include "gfx/GLWrapper.h"
 #include <glm/vec3.hpp>
 #pragma warning(push)
 #pragma warning(disable : 4127)

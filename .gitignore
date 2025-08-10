@@ -12,8 +12,8 @@ Thumbs.db
 /dist/*.dll
 /dist/*.zip
 
-# Libraries
-/libs/
+# Dependencies
+/vcpkg_installed/
 
 # Other
 /misc/

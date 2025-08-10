@@ -75,8 +75,8 @@ IncludeCategories:
     Priority:        1
     SortPriority:    21
     CaseSensitive:   true
-  ## GLEW
-  - Regex:           '^\".*\/?GlewWrapper\.h\"'
+  ## OpenGL / GLEW
+  - Regex:           '^\".*\/?GLWrapper\.h\"'
     Priority:        1
     SortPriority:    30
     CaseSensitive:   true

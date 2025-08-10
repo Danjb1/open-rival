@@ -3,7 +3,8 @@
 echo "Copying binaries to dist folder"
 
 cd ..
-cp build/x64/projects/Open-Rival/Release/Open-Rival.exe dist
-cp build/x64/projects/setup/Release/setup.exe dist
+cp build/windows-vs2022-x64/projects/Open-Rival/Release/Open-Rival.exe dist
+cp build/windows-vs2022-x64/projects/Open-Rival/Release/*.dll dist
+cp build/windows-vs2022-x64/projects/setup/Release/setup.exe dist
 
 echo "Success!"

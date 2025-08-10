@@ -45,10 +45,11 @@ target_include_directories(texture-builder PUBLIC
     ${OPEN_RIVAL_TEXTURE_BUILDER_EXTERNAL_DIRS}
 )
 
-# Dependencies
-add_spdlog(texture-builder)
+# Find dependencies
+find_package(spdlog CONFIG REQUIRED)
 
 target_link_libraries(texture-builder PRIVATE
+    spdlog::spdlog
     project_options
     project_warnings
 )

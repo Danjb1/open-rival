@@ -1,7 +1,7 @@
 #include "audio/MidiPlayer.h"
 
+#include <RTMidi/RtMidi.h>
 #include "utils/SDLWrapper.h"
-#include <RtMidi.h>
 
 #include <chrono>
 #include <stdexcept>
