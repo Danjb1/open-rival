@@ -20,6 +20,8 @@ public:
         return &attackDef;
     }
 
+    float getZOffset() const override;
+
 private:
     AttackDef attackDef;
 };

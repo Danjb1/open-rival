@@ -151,13 +151,7 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
     const float height = static_cast<float>(RenderUtils::entityHeightPx);
     const float x2 = x1 + width;
     const float y2 = y1 + height;
-    float z = RenderUtils::getEntityZ(pos.x, pos.y);
-
-    if (entity.as<Projectile>())
-    {
-        // Projectiles should be rendered on top of other entities!
-        z += RenderUtils::zProjectilesDelta;
-    }
+    float z = RenderUtils::getEntityZ(pos.x, pos.y) + entity.getZOffset();
 
     std::vector<GLfloat> vertexData = {
         /* clang-format off */
