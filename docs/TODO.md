@@ -15,7 +15,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Flying units need a higher z-position so that they appear on top of units below them
 - Flying units should play their death effect higher up
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)

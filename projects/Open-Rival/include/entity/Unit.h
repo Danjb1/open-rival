@@ -63,6 +63,7 @@ public:
     // Begin Entity override
     void onReady() override;
     void onDestroy() override;
+    float getZOffset() const override;
     // End Entity override
 
     // Begin MovementListener override
@@ -136,13 +137,13 @@ private:
 
     WeakPtrSet<UnitStateListener> stateListeners;
 
-    std::weak_ptr<MovementComponent> weakMovementComponent;
-    std::weak_ptr<AttackComponent> weakAttackComponent;
-    std::weak_ptr<HealthComponent> weakHealthComponent;
-    std::weak_ptr<FacingComponent> weakFacingComponent;
-    std::weak_ptr<SpriteComponent> weakSpriteComponent;
-    std::weak_ptr<UnitAnimationComponent> weakAnimationComponent;
-    std::weak_ptr<DeathEffectComponent> weakDeathEffectComponent;
+    std::shared_ptr<MovementComponent> movementComponent;
+    std::shared_ptr<AttackComponent> attackComponent;
+    std::shared_ptr<HealthComponent> healthComponent;
+    std::shared_ptr<FacingComponent> facingComponent;
+    std::shared_ptr<SpriteComponent> spriteComponent;
+    std::shared_ptr<UnitAnimationComponent> animationComponent;
+    std::shared_ptr<DeathEffectComponent> deathEffectComponent;
 
     UnitType type = UnitType::Invalid;
 

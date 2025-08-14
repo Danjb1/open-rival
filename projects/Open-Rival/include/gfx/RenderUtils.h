@@ -70,7 +70,11 @@ static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
 static constexpr float zTiles = zEntityFurthest + 1.f;
 
 // Z-position delta applied to projectiles
-static constexpr float zProjectilesDelta = zProjectileNearest - zEntityNearest;
+static constexpr float zOffsetProjectiles = zProjectileNearest - zEntityNearest;
+
+// Z-position delta applied to flying units
+// (for now just use the same offset as projectiles as both are a "layer above" the world)
+static constexpr float zOffsetFlyers = zOffsetProjectiles;
 
 // Camera far plane.
 // This is the maximum distance from the camera that we can render.

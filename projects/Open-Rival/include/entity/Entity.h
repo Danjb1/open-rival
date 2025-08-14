@@ -268,8 +268,10 @@ public:
     /**
      * Gets a shared pointer to the EntityComponent with the given key (mutable version).
      *
-     * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
-     * needs to be kept alive.
+     * This should be safe to call from the Entity itself, assuming the component shares the Entity's lifetime.
+     * 
+     * From outside the Entity, the weak pointer version should generally be preferred to avoid memory leaks, unless a
+     * component explicitly needs to be kept alive.
      *
      * Returns an empty shared_ptr if no matching EntityComponent is found.
      */
@@ -287,8 +289,10 @@ public:
     /**
      * Gets a shared pointer to the EntityComponent with the given key (read-only version).
      *
-     * The weak pointer version should generally be preferred to avoid memory leaks, unless a component explicitly
-     * needs to be kept alive.
+     * This should be safe to call from the Entity itself, assuming the component shares the Entity's lifetime.
+     * 
+     * From outside the Entity, the weak pointer version should generally be preferred to avoid memory leaks, unless a
+     * component explicitly needs to be kept alive.
      *
      * Returns an empty shared_ptr if no matching EntityComponent is found.
      */
@@ -425,6 +429,11 @@ public:
     void setVisible(bool newVisible)
     {
         bIsVisible = newVisible;
+    }
+
+    virtual float getZOffset() const
+    {
+        return 0.f;
     }
 
 protected:

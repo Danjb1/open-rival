@@ -9,56 +9,56 @@
 #include "entity/components/UnitAnimationComponent.h"
 #include "game/MapUtils.h"
 #include "game/World.h"
+#include "gfx/RenderUtils.h"
 
 namespace Rival {
 
 void Unit::onReady()
 {
-    weakMovementComponent = requireComponentWeak<MovementComponent>(MovementComponent::key);
-    if (auto movementComponent = weakMovementComponent.lock())
-    {
-        movementComponent->addListener(getWeakThis());
-    }
+    movementComponent = requireComponentShared<MovementComponent>(MovementComponent::key);
+    movementComponent->addListener(getWeakThis());
 
-    weakAttackComponent = getComponentWeak<AttackComponent>(AttackComponent::key);
-    if (auto attackComponent = weakAttackComponent.lock())
+    attackComponent = getComponentShared<AttackComponent>(AttackComponent::key);
+    if (attackComponent)
     {
         attackComponent->addListener(getWeakThis());
     }
 
-    weakHealthComponent = requireComponentWeak<HealthComponent>(HealthComponent::key);
-    if (auto healthComponent = weakHealthComponent.lock())
+    healthComponent = requireComponentShared<HealthComponent>(HealthComponent::key);
+    if (healthComponent)
     {
         healthComponent->addListener(getWeakThis());
     }
 
-    weakFacingComponent = getComponentWeak<FacingComponent>(FacingComponent::key);
-    weakSpriteComponent = getComponentWeak<SpriteComponent>(SpriteComponent::key);
-    weakAnimationComponent = getComponentWeak<UnitAnimationComponent>(UnitAnimationComponent::key);
-    weakDeathEffectComponent = getComponentWeak<DeathEffectComponent>(DeathEffectComponent::key);
+    facingComponent = getComponentShared<FacingComponent>(FacingComponent::key);
+    spriteComponent = getComponentShared<SpriteComponent>(SpriteComponent::key);
+    animationComponent = getComponentShared<UnitAnimationComponent>(UnitAnimationComponent::key);
+    deathEffectComponent = getComponentShared<DeathEffectComponent>(DeathEffectComponent::key);
 }
 
 void Unit::onDestroy()
 {
-    if (auto movementComponent = weakMovementComponent.lock())
-    {
-        movementComponent->removeListener(getWeakThis());
-    }
+    movementComponent->removeListener(getWeakThis());
 
-    if (auto attackComponent = weakAttackComponent.lock())
+    if (attackComponent)
     {
         attackComponent->removeListener(getWeakThis());
     }
 
-    if (auto healthComponent = weakHealthComponent.lock())
+    if (healthComponent)
     {
         healthComponent->removeListener(getWeakThis());
     }
 
-    if (auto animationComp = weakAnimationComponent.lock())
+    if (animationComponent)
     {
-        animationComp->removeListener(getWeakThis());
+        animationComponent->removeListener(getWeakThis());
     }
+}
+
+float Unit::getZOffset() const
+{
+    return movementComponent->getMovementMode() == MovementMode::Flying ? RenderUtils::zOffsetFlyers : 0.0f;
 }
 
 void Unit::onUnitMoveStart(const MapNode*)
@@ -100,11 +100,10 @@ void Unit::onHealthDepleted()
 {
     bool hasDeathAnim = false;
 
-    auto animationComp = weakAnimationComponent.lock();
-    if (animationComp && animationComp->hasAnimation(UnitAnimationType::Dying))
+    if (animationComponent && animationComponent->hasAnimation(UnitAnimationType::Dying))
     {
         // If the Unit has a death animation, we await a callback to `onAnimationFinished`
-        animationComp->addListener(getWeakThis());
+        animationComponent->addListener(getWeakThis());
         hasDeathAnim = true;
     }
 
@@ -164,13 +163,10 @@ void Unit::abortAction()
     {
     case UnitState::Moving:
     case UnitState::WaitingToMove:
-        if (auto movementComponent = weakMovementComponent.lock())
-        {
-            movementComponent->requestStop();
-        }
+        movementComponent->requestStop();
         break;
     case UnitState::Attacking:
-        if (auto attackComponent = weakAttackComponent.lock())
+        if (attackComponent)
         {
             attackComponent->setTarget({});
         }
@@ -190,11 +186,11 @@ void Unit::trySpawnDeathEffect()
 {
     setVisible(false);
 
-    if (auto deathEffectComponent = weakDeathEffectComponent.lock())
+    if (deathEffectComponent)
     {
         // We have to wait until the death effect finishes before triggering the death event
         Facing facing = Facing::North;
-        if (auto facingComponent = weakFacingComponent.lock())
+        if (facingComponent)
         {
             facing = facingComponent->getDeathFacing();
         }
