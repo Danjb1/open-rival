@@ -6,9 +6,10 @@ namespace Rival {
 
 const std::string SpriteComponent::key = "sprite";
 
-SpriteComponent::SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet)
+SpriteComponent::SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet, float offsetY)
     : EntityComponent(key)
     , renderable(spritesheet, 1)
+    , offsetY(offsetY)
 {
 }
 

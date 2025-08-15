@@ -15,7 +15,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Flying units should play their death effect higher up
 - Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
 - Attacking units are slow to respond to MoveCommands (e.g. very noticeable when their target moves away)
@@ -23,8 +22,12 @@
 - Occasional desyncs when moving/attacking with groups in multiplayer
 - Sometimes death sound plays multiple times in multiplayer (once per attacking unit?)
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
+- When attacking a flying unit, don't hit the ground unit underneath it!
 - Ranged units sometimes keep attacking after the target dies
 - Trying to attack an empty tile with a ranged unit just moves there instead
+- Ground units should not move when commanded to attack a flying unit
+- Flying unit hitboxes should take precedence over ground units behind them
+- Flying units clear passability when leaving a tile even if it still occupied by a ground unit
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -66,7 +69,6 @@
 - Smooth panning with the arrow keys (using acceleration)
 - Panning speed should depend on the zoom level
 - Different units should have different hitboxes sizes
-- Flying units need a hitbox offset
 - Ctrl+click to select all units of type
 - Shift+click/drag to add more units to a selection
 - Shift+click a selected unit to remove it from the selection
@@ -196,7 +198,6 @@
 ### Visuals
 
 - Units with more than 2 bars should display a plus sign in their overlay
-- Health bars should be rendered higher for flying units
 - Selected units should flash orange
 - Trees should animate (but not all in-sync)
 - Respect Gold tile variants
@@ -498,6 +499,7 @@
 - Use a std::span to enforce immutability of a container (instead of duplicating logic in World::getEntitiesInRadius)
 - Improve compile times!
     - Move some stuff out of headers, e.g. constants in ResourceLoader
+- Create unit components from JSON?
 
 #### Rendering
 

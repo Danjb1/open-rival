@@ -68,7 +68,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
         name = unitPlacement.name;
         isNameUnique = true;
     }
-    std::shared_ptr<Unit> unit = std::make_shared<Unit>(unitType, name, isNameUnique);
+    std::shared_ptr<Unit> unit = std::make_shared<Unit>(unitType, name, isNameUnique, unitDef->offsetY);
 
     // HealthComponent
     unit->attach(std::make_shared<HealthComponent>(unitPlacement.hitpoints));
@@ -273,14 +273,14 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     return projectile;
 }
 
-std::shared_ptr<Entity> EntityFactory::createEffect(const EffectDef& effectDef, Facing facing) const
+std::shared_ptr<Entity> EntityFactory::createEffect(const EffectDef& effectDef, Facing facing, float offsetY) const
 {
     // Create Entity
     std::shared_ptr<Effect> effect = std::make_shared<Effect>(effectDef);
 
     // SpriteComponent
     std::shared_ptr<const Spritesheet> spritesheet = resources.getEffectSpritesheet(effectDef.texture);
-    auto spriteComponent = std::make_shared<SpriteComponent>(spritesheet);
+    auto spriteComponent = std::make_shared<SpriteComponent>(spritesheet, offsetY);
     effect->attach(spriteComponent);
 
     // FacingComponent

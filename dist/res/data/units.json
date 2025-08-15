@@ -344,6 +344,7 @@
       "attack": 4,
       "deathEffect": "fire1",
       "movement": "flying",
+	  "offsetY": -32,
       "name": "Pegas Rider",
       "portrait": 48,
       "sounds": {

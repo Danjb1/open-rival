@@ -16,10 +16,10 @@ DeathEffectComponent::DeathEffectComponent(
 {
 }
 
-std::shared_ptr<Entity> DeathEffectComponent::spawnEffect(Facing facing)
+std::shared_ptr<Entity> DeathEffectComponent::spawnEffect(Facing facing, float offsetY)
 {
     // Create the effect
-    std::shared_ptr<Entity> effect = entityFactory->createEffect(effectDef, facing);
+    std::shared_ptr<Entity> effect = entityFactory->createEffect(effectDef, facing, offsetY);
 
     // Spawn it in the world
     World* world = entity->getWorld();

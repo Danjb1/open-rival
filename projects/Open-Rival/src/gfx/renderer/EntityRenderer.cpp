@@ -141,6 +141,7 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
     float y1 = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y));
     x1 += static_cast<float>(RenderUtils::entityDrawOffsetX);
     y1 += static_cast<float>(RenderUtils::entityDrawOffsetY);
+    y1 += spriteComponent.getOffsetY();
 
     glm::vec2 lerpOffset = getLerpOffset(entity, delta);
     spriteComponent.lastLerpOffset = lerpOffset;

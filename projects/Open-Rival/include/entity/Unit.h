@@ -52,11 +52,12 @@ public:
     static constexpr EntityType staticEntityType = EntityType::Unit;
 
 public:
-    Unit(UnitType type, std::string name, bool isNameUnique)
+    Unit(UnitType type, std::string name, bool isNameUnique, float offsetY)
         : Entity(staticEntityType, /* isBig = */ false)
         , type(type)
         , name(name)
         , isNameUnique(isNameUnique)
+        , offsetY(offsetY)
     {
     }
 
@@ -104,6 +105,12 @@ public:
         return name;
     }
 
+    /** Gets the y-offset (pixels) that should be applied to this unit's hitbox, health bar and death effect. */
+    float getOffsetY() const
+    {
+        return offsetY;
+    }
+
     /** Gets the Unit's current state. */
     UnitState getState() const
     {
@@ -133,7 +140,9 @@ private:
 
 private:
     std::string name;
-    bool isNameUnique;
+    bool isNameUnique = false;
+
+    float offsetY = 0.f;
 
     WeakPtrSet<UnitStateListener> stateListeners;
 
