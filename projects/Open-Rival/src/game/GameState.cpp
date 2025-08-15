@@ -44,7 +44,7 @@ GameState::GameState(Application& app,
               RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
               *world)
     , playerContext()
-    , mousePicker(camera, viewport, *world, playerContext, *this, *this)
+    , mousePicker(std::make_shared<MousePicker>(camera, viewport, *world, playerContext, *this, *this))
     , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
     , clients(clients)
     , localPlayerId(localPlayerId)
@@ -133,7 +133,7 @@ void GameState::earlyUpdateEntities() const
 
 void GameState::respondToInput()
 {
-    mousePicker.handleMouse();
+    mousePicker->handleMouse();
 
     // Move camera
     if (input.lastDirectionX == Direction::Decreasing)
@@ -329,12 +329,12 @@ void GameState::requestAttackMode()
 
 void GameState::mouseDown(const SDL_MouseButtonEvent evt)
 {
-    mousePicker.mouseDown(evt.button);
+    mousePicker->mouseDown(evt.button);
 }
 
 void GameState::mouseUp(const SDL_MouseButtonEvent evt)
 {
-    mousePicker.mouseUp(evt.button);
+    mousePicker->mouseUp(evt.button);
 }
 
 void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)

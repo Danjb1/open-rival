@@ -7,7 +7,6 @@
 ### Combat
 
 - Ensure all units are using the correct death effect and death sound
-- When a unit dies, refresh the player context (update group leader portrait, end attack mode if dead, etc.)
 - Attacks (projectiles) with splash damage should nearby damage units
 - Projectile impact / explosion graphics
 

@@ -31,9 +31,9 @@ public:
     // End EntityComponent override
 
     // Begin HealthListener override
-    void onHealthChanged(int prevValue, int newValue) override;
-    void onMaxHealthChanged(int prevValue, int newValue) override;
-    void onHealthDepleted() override;
+    void onHealthChanged(Entity* entity, int prevValue, int newValue) override;
+    void onMaxHealthChanged(Entity* entity, int prevValue, int newValue) override;
+    void onHealthDepleted(Entity* entity) override;
     // Begin HealthListener override
 
     void playSound(UnitSoundType soundType);

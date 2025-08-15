@@ -4,8 +4,8 @@
 #include <memory>
 #include <utility>
 
+#include "entity/components/HealthComponent.h"
 #include "game/MapUtils.h"
-#include "gfx/RenderUtils.h"
 #include "utils/EntityUtils.h"
 
 namespace Rival {
@@ -33,6 +33,8 @@ struct PlayerContext;
  * game world).
  */
 class MousePicker
+    : public std::enable_shared_from_this<MousePicker>
+    , public HealthListener
 {
 public:
     MousePicker(Camera& camera,
@@ -42,11 +44,23 @@ public:
             PlayerStore& playerStore,
             GameCommandInvoker& cmdInvoker);
 
+    virtual ~MousePicker() = default;
+
     void mouseDown(std::uint8_t button);
     void mouseUp(std::uint8_t button);
     void handleMouse();
 
+    // Begin HealthListener override
+    void onHealthChanged(Entity* entity, int prevValue, int newValue) override;
+    void onMaxHealthChanged(Entity* entity, int prevValue, int newValue) override;
+    void onHealthDepleted(Entity* entity) override;
+    // Begin HealthListener override
+
 private:
+    /** Gets a weak pointer to this MousePicker.
+     * NOTE: This requires that this MousePicker was created using std::make_shared. */
+    std::weak_ptr<MousePicker> getWeakThis();
+
     float getMouseInCameraX(float normalizedMouseX);
     float getMouseInCameraY(float normalizedMouseY);
 

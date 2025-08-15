@@ -131,7 +131,7 @@ private:
     PlayerContext playerContext;
 
     /** Object used to find what's under the mouse. */
-    MousePicker mousePicker;
+    std::shared_ptr<MousePicker> mousePicker;
 
     /** Object that renders the game. */
     GameRenderer gameRenderer;

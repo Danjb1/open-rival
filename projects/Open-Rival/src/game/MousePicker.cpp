@@ -16,6 +16,7 @@
 #include "game/PlayerState.h"
 #include "game/World.h"
 #include "gfx/Camera.h"
+#include "gfx/RenderUtils.h"
 #include "utils/LogUtils.h"
 #include "utils/MathUtils.h"
 #include "utils/MouseUtils.h"
@@ -38,6 +39,11 @@ MousePicker::MousePicker(Camera& camera,
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
 {
+}
+
+std::weak_ptr<MousePicker> MousePicker::getWeakThis()
+{
+    return std::dynamic_pointer_cast<MousePicker>(shared_from_this());
 }
 
 void MousePicker::mouseDown(std::uint8_t button)
@@ -369,9 +375,26 @@ WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) c
 
 void MousePicker::selectEntities(WeakMutableEntityList& entities)
 {
+    // Clean up the old selection
+    for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
+    {
+        const auto& selectedEntity = weakSelectedEntity.lock();
+        if (!selectedEntity)
+        {
+            // Selected entity no longer exists
+            continue;
+        }
+
+        if (const auto healthComponent = selectedEntity->getComponent<HealthComponent>())
+        {
+            healthComponent->removeListener(getWeakThis());
+        }
+    }
+
     playerContext.weakSelectedEntities = entities;
     bool isLeader = true;
 
+    // Prepare the new selection
     for (const auto& weakSelectedEntity : playerContext.weakSelectedEntities)
     {
         const auto& selectedEntity = weakSelectedEntity.lock();
@@ -381,11 +404,17 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
             continue;
         }
 
-        if (const auto mouseHandlerComponent =
-                        selectedEntity->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key))
+        if (const auto mouseHandlerComponent = selectedEntity->getComponent<MouseHandlerComponent>())
         {
             mouseHandlerComponent->onSelected(playerStore, isLeader);
         }
+
+        if (const auto healthComponent = selectedEntity->getComponent<HealthComponent>())
+        {
+            healthComponent->addListener(getWeakThis());
+        }
+
+        // TODO: Also listen for when entity is removed from world (e.g. boarding a vehicle)
 
         // TMP: For now, the first unit in the selection is the leader
         isLeader = false;
@@ -479,6 +508,21 @@ void MousePicker::processDragSelectArea()
     float height = endYWorld - startYWorld;
     auto entitiesInArea = findEntitiesForDragSelect({ startXWorld, startYWorld, width, height });
     selectEntities(entitiesInArea);
+}
+
+void MousePicker::onHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void MousePicker::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
+{
+    // Nothing to do
+}
+
+void MousePicker::onHealthDepleted(Entity* entity)
+{
+    playerContext.deselectEntity(entity->getId());
 }
 
 }  // namespace Rival

@@ -13,9 +13,9 @@ namespace Rival {
 class HealthListener
 {
 public:
-    virtual void onHealthChanged(int prevValue, int newValue) = 0;
-    virtual void onMaxHealthChanged(int prevValue, int newValue) = 0;
-    virtual void onHealthDepleted() = 0;
+    virtual void onHealthChanged(Entity* entity, int prevValue, int newValue) = 0;
+    virtual void onMaxHealthChanged(Entity* entity, int prevValue, int newValue) = 0;
+    virtual void onHealthDepleted(Entity* entity) = 0;
 };
 
 /**

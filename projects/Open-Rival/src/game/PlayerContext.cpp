@@ -37,8 +37,7 @@ std::set<int> PlayerContext::getSelectedEntityIds() const
     std::set<int> entityIds;
     for (const auto& weakSelectedEntity : weakSelectedEntities)
     {
-        const auto& selectedEntity = weakSelectedEntity.lock();
-        if (selectedEntity)
+        if (const auto& selectedEntity = weakSelectedEntity.lock())
         {
             entityIds.insert(selectedEntity->getId());
         }
@@ -51,6 +50,30 @@ std::vector<int> PlayerContext::getSelectedEntityIdsVector() const
     std::set<int> entityIdsSet = getSelectedEntityIds();
     std::vector<int> entityIdsVector(entityIdsSet.cbegin(), entityIdsSet.cend());
     return entityIdsVector;
+}
+
+void PlayerContext::deselectEntity(int entityId)
+{
+    for (auto it = weakSelectedEntities.cbegin(); it != weakSelectedEntities.cend(); ++it)
+    {
+        if (const auto& selectedEntity = it->lock())
+        {
+            if (selectedEntity->getId() == entityId)
+            {
+                weakSelectedEntities.erase(it);
+                break;
+            }
+        }
+    }
+
+    // Cancel the attack action if we no longer have a selection
+    if (weakSelectedEntities.size() == 0)
+    {
+        if (currentAction == PlayerAction::Attack)
+        {
+            currentAction = PlayerAction::None;
+        }
+    }
 }
 
 std::weak_ptr<Entity> PlayerContext::getFirstSelectedEntity() const
