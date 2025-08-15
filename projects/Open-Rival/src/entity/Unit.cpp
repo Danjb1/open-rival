@@ -86,17 +86,17 @@ void Unit::onAttackFinished()
     setState(UnitState::Idle);
 }
 
-void Unit::onHealthChanged(int /*prevValue*/, int /*newValue*/)
+void Unit::onHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
 {
     // Nothing to do
 }
 
-void Unit::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
+void Unit::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
 {
     // Nothing to do
 }
 
-void Unit::onHealthDepleted()
+void Unit::onHealthDepleted(Entity* /*entity*/)
 {
     bool hasDeathAnim = false;
 

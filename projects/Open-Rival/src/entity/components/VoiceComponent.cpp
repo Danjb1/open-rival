@@ -86,17 +86,17 @@ bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
     return false;
 }
 
-void VoiceComponent::onHealthChanged(int /*prevValue*/, int /*newValue*/)
+void VoiceComponent::onHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
 {
     // Nothing to do
 }
 
-void VoiceComponent::onMaxHealthChanged(int /*prevValue*/, int /*newValue*/)
+void VoiceComponent::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
 {
     // Nothing to do
 }
 
-void VoiceComponent::onHealthDepleted()
+void VoiceComponent::onHealthDepleted(Entity* /*entity*/)
 {
     Unit* unit = entity->as<Unit>();
     if (!unit)

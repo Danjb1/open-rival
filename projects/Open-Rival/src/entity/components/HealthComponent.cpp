@@ -38,12 +38,12 @@ void HealthComponent::addHealth(int amount)
     currentHealth = MathUtils::clampi(currentHealth + amount, 0, maxHealth);
 
     CollectionUtils::forEachWeakPtr<HealthListener>(
-            listeners, [&](auto listener) { listener->onHealthChanged(prevHealth, currentHealth); });
+            listeners, [&](auto listener) { listener->onHealthChanged(entity, prevHealth, currentHealth); });
 
     if (currentHealth == 0)
     {
         CollectionUtils::forEachWeakPtr<HealthListener>(
-                listeners, [&](auto listener) { listener->onHealthDepleted(); });
+                listeners, [&](auto listener) { listener->onHealthDepleted(entity); });
     }
 }
 

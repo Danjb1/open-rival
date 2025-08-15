@@ -52,6 +52,7 @@ struct PlayerContext
     std::set<int> getSelectedEntityIds() const;
     std::vector<int> getSelectedEntityIdsVector() const;
     std::weak_ptr<Entity> getFirstSelectedEntity() const;
+    void deselectEntity(int entityId);
 
 private:
     PlayerAction currentAction = PlayerAction::None;
