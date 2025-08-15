@@ -148,9 +148,15 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
     const float originX = static_cast<float>(RenderUtils::tileToPx_X(pos.x))  //
             + static_cast<float>(healthBarDrawOffsetX)                        //
             + spriteComponent->lastLerpOffset.x;
-    const float originY = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
-            + static_cast<float>(healthBarDrawOffsetY)                               //
-            + spriteComponent->lastLerpOffset.y;                                     //
+    float originY = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
+            + static_cast<float>(healthBarDrawOffsetY)                         //
+            + spriteComponent->lastLerpOffset.y;                               //
+
+    // Add a y-offset for flying Units
+    if (const Unit* unit = entity.as<Unit>())
+    {
+        originY += unit->getOffsetY();
+    }
 
     ////////////////
     // Background //

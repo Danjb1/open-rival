@@ -91,7 +91,6 @@ Thank you for your patience during these early stages of development!
 - (Not implemented) Selected units do not flash orange.
 - (Not implemented) Some objects (e.g. chests) are not yet loaded.
 - (Not implemented) Unit hitboxes are not accurate.
-- (Bug) Flying units sometimes appear behind units they should be in front of.
 - (Bug) Units can walk too close to the edge of the map.
 - (Bug) Lag when moving large groups or large distances.
 - (Bug) Some units get left behind when moving large distances.

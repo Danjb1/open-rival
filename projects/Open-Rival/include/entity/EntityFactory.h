@@ -41,7 +41,8 @@ public:
             const MapNode& target) const;
 
     /** Creates an Effect at the given location. */
-    std::shared_ptr<Entity> createEffect(const EffectDef& effectDef, Facing facing = Facing::North) const;
+    std::shared_ptr<Entity> createEffect(
+            const EffectDef& effectDef, Facing facing = Facing::North, float offsetY = 0.f) const;
 
 private:
     UnitType getUnitType(std::uint8_t unitType) const;

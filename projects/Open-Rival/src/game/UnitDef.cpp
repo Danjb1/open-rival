@@ -7,35 +7,36 @@ namespace Rival {
 
 UnitDef UnitDef::fromJson(const json& j)
 {
+    UnitDef unitDef;
+
     // Basic properties
-    std::string name = j.at("name");
-    int attackId = j.value("attack", -1);
-    int portraitId = j.at("portrait");
+    unitDef.name = j.at("name");
+    unitDef.attackId = j.value("attack", -1);
+    unitDef.portraitId = j.at("portrait");
     std::string movementModeStr = j.value("movement", "ground");
-    MovementMode movementMode = getMovementMode(movementModeStr);
-    std::string deathEffectName = j.value("deathEffect", "");
-    bool isVehicle = j.value("vehicle", false);
+    unitDef.movementMode = getMovementMode(movementModeStr);
+    unitDef.deathEffectName = j.value("deathEffect", "");
+    unitDef.offsetY = j.value("offsetY", 0.f);
+    unitDef.isVehicle = j.value("vehicle", false);
 
     // Animations
     const auto& rawAnims = j.at("animations");
-    std::unordered_map<UnitAnimationType, const Animation> animations;
-    tryReadAnimation(rawAnims, "standing", UnitAnimationType::Standing, animations);
-    tryReadAnimation(rawAnims, "standingWithBag", UnitAnimationType::StandingWithBag, animations);
-    tryReadAnimation(rawAnims, "moving", UnitAnimationType::Moving, animations);
-    tryReadAnimation(rawAnims, "movingWithBag", UnitAnimationType::MovingWithBag, animations);
-    tryReadAnimation(rawAnims, "attacking", UnitAnimationType::Attacking, animations);
-    tryReadAnimation(rawAnims, "harvesting", UnitAnimationType::Harvesting, animations);
-    tryReadAnimation(rawAnims, "dying", UnitAnimationType::Dying, animations);
+    tryReadAnimation(rawAnims, "standing", UnitAnimationType::Standing, unitDef.animations);
+    tryReadAnimation(rawAnims, "standingWithBag", UnitAnimationType::StandingWithBag, unitDef.animations);
+    tryReadAnimation(rawAnims, "moving", UnitAnimationType::Moving, unitDef.animations);
+    tryReadAnimation(rawAnims, "movingWithBag", UnitAnimationType::MovingWithBag, unitDef.animations);
+    tryReadAnimation(rawAnims, "attacking", UnitAnimationType::Attacking, unitDef.animations);
+    tryReadAnimation(rawAnims, "harvesting", UnitAnimationType::Harvesting, unitDef.animations);
+    tryReadAnimation(rawAnims, "dying", UnitAnimationType::Dying, unitDef.animations);
 
     // Sounds
     const auto& rawSounds = j.at("sounds");
-    std::unordered_map<UnitSoundType, const SoundBank> soundBanks;
-    tryReadSoundBank(rawSounds, "select", UnitSoundType::Select, soundBanks);
-    tryReadSoundBank(rawSounds, "train", UnitSoundType::Train, soundBanks);
-    tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, soundBanks);
-    tryReadSoundBank(rawSounds, "die", UnitSoundType::Die, soundBanks);
+    tryReadSoundBank(rawSounds, "select", UnitSoundType::Select, unitDef.soundBanks);
+    tryReadSoundBank(rawSounds, "train", UnitSoundType::Train, unitDef.soundBanks);
+    tryReadSoundBank(rawSounds, "move", UnitSoundType::Move, unitDef.soundBanks);
+    tryReadSoundBank(rawSounds, "die", UnitSoundType::Die, unitDef.soundBanks);
 
-    return { name, portraitId, movementMode, animations, soundBanks, attackId, deathEffectName, isVehicle };
+    return unitDef;
 }
 
 void UnitDef::tryReadAnimation(const json& rawAnims,
@@ -89,25 +90,6 @@ MovementMode UnitDef::getMovementMode(const std::string& s)
     {
         return MovementMode::Walking;
     }
-}
-
-UnitDef::UnitDef(std::string name,
-        int portraitId,
-        MovementMode movementMode,
-        std::unordered_map<UnitAnimationType, const Animation> animations,
-        std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
-        int attackId,
-        std::string deathEffectName,
-        bool isVehicle)
-    : name(name)
-    , portraitId(portraitId)
-    , movementMode(movementMode)
-    , animations(animations)
-    , soundBanks(soundBanks)
-    , attackId(attackId)
-    , deathEffectName(deathEffectName)
-    , isVehicle(isVehicle)
-{
 }
 
 const Animation* UnitDef::getAnimation(UnitAnimationType animType) const

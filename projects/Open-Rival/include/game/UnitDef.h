@@ -23,15 +23,6 @@ class UnitDef final : public AnimationContainer<UnitAnimationType>
 public:
     static UnitDef fromJson(const json& j);
 
-    UnitDef(std::string name,
-            int portraitId,
-            MovementMode movementMode,
-            std::unordered_map<UnitAnimationType, const Animation> animations,
-            std::unordered_map<UnitSoundType, const SoundBank> soundBanks,
-            int attackId,
-            std::string deathEffectName,
-            bool isVehicle);
-
     // Begin AnimationContainer override
     const Animation* getAnimation(UnitAnimationType animType) const override;
     // End AnimationContainer override
@@ -51,6 +42,8 @@ private:
 
     static MovementMode getMovementMode(const std::string& s);
 
+    UnitDef() {}
+
 public:
     /** The default name for this unit type. */
     std::string name;
@@ -66,6 +59,9 @@ public:
 
     /** Name of the effect to spawn on death. */
     std::string deathEffectName;
+
+    /** Y-offset (pixels) applied to the unit's hitbox, health bar and death effect. */
+    float offsetY = 0.f;
 
     /** Whether this unit is a vehicle (no inventory, cannot heal, does not rotate when idle). */
     bool isVehicle = false;

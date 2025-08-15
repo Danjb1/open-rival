@@ -20,7 +20,7 @@ class DeathEffectComponent : public EntityComponent
 public:
     DeathEffectComponent(const EffectDef& effectDef, std::shared_ptr<const EntityFactory> entityFactory);
 
-    std::shared_ptr<Entity> spawnEffect(Facing facing = Facing::North);
+    std::shared_ptr<Entity> spawnEffect(Facing facing = Facing::North, float offsetY = 0.f);
 
 public:
     static const std::string key;

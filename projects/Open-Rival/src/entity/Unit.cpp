@@ -194,7 +194,7 @@ void Unit::trySpawnDeathEffect()
         {
             facing = facingComponent->getDeathFacing();
         }
-        std::shared_ptr<Entity> deathEffect = deathEffectComponent->spawnEffect(facing);
+        std::shared_ptr<Entity> deathEffect = deathEffectComponent->spawnEffect(facing, offsetY);
         if (Effect* effect = deathEffect->as<Effect>())
         {
             effect->addListener(getWeakThis());

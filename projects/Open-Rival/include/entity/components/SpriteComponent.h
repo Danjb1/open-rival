@@ -22,13 +22,18 @@ namespace Rival {
 class SpriteComponent : public EntityComponent
 {
 public:
-    SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet);
+    SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet, float offsetY = 0.f);
 
     const SpriteRenderable& getRenderable() const;
 
     int getTxIndex() const;
 
     void setTxIndex(int txIndex);
+
+    float getOffsetY() const
+    {
+        return offsetY;
+    }
 
 public:
     static const std::string key;
@@ -39,6 +44,7 @@ public:
 private:
     const SpriteRenderable renderable;
 
+    float offsetY = 0.f;
     int txIndex = 0;
 };
 

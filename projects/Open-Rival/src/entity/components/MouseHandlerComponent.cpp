@@ -213,6 +213,12 @@ const Rect MouseHandlerComponent::createHitbox() const
     // TMP: For now we use a fixed height for all entities
     float y1 = y2 - unitHitboxHeight;
 
+    // Add a y-offset for flying Units
+    if (Unit* unit = entity->as<Unit>())
+    {
+        y1 += unit->getOffsetY();
+    }
+
     // Add the last lerp offset that was used to render the entity
     if (moving)
     {
