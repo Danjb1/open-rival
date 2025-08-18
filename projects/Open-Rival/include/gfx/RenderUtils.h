@@ -24,12 +24,16 @@ static constexpr int entityHeightPx = 128;
 
 // Offset applied to align an Entity's sprite correctly within a tile,
 // in pixels.
-static constexpr int entityDrawOffsetX = -33;
+static constexpr int entityDrawOffsetX = -34;
 static constexpr int entityDrawOffsetY = -89;
 
 // Size of the hitbox sprites, in pixels.
 static constexpr int hitboxSpriteWidthPx = 16;
 static constexpr int hitboxSpriteHeightPx = 16;
+
+// Size of the non-empty portion of the hitbox sprites, in pixels.
+static constexpr int hitboxSpriteUsefulWidthPx = 10;
+static constexpr int hitboxSpriteUsefulHeightPx = 10;
 
 // Size of the cursor sprites, in pixels.
 static constexpr int cursorWidthPx = 32;

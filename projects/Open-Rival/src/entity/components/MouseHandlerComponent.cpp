@@ -19,8 +19,10 @@ namespace Rival {
 
 const std::string MouseHandlerComponent::key = "mouse_handler";
 
-MouseHandlerComponent::MouseHandlerComponent()
+MouseHandlerComponent::MouseHandlerComponent(int hitboxWidth, int hitboxHeight)
     : EntityComponent(key)
+    , hitboxWidth(hitboxWidth)
+    , hitboxHeight(hitboxHeight)
 {
 }
 
@@ -196,27 +198,20 @@ const Rect MouseHandlerComponent::createHitbox() const
      * work properly for buildings.
      */
 
-    // Find the rendered position of the top-left corner of the entity's
-    // tile, in pixels
+    // Find the rendered position of the top-left corner of the entity's tile, in pixels
     const MapNode& pos = entity->getPos();
     float tileX_px = static_cast<float>(RenderUtils::tileToPx_X(pos.x));
     float tileY_px = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y));
 
-    // Find the bottom-left corner of the entity's hitbox. This is the
-    // easiest corner to find, since it is always a fixed offset from the
-    // containing tile, regardless of the height of the entity (except
-    // perhaps for flying units!).
-    float x1 = tileX_px + (unitHitboxOffsetX);
-    float y2 = tileY_px + (unitHitboxOffsetY);
-
-    // Now we can find the top-left corner
-    // TMP: For now we use a fixed height for all entities
-    float y1 = y2 - unitHitboxHeight;
+    // Now we can find the center-bottom of the entity's hitbox
+    // (this point never changes, regardless of the hitbox size).
+    float hitboxOriginX = tileX_px + (unitHitboxOffsetX);
+    float hitboxOriginY = tileY_px + (unitHitboxOffsetY);
 
     // Add a y-offset for flying Units
     if (Unit* unit = entity->as<Unit>())
     {
-        y1 += unit->getOffsetY();
+        hitboxOriginY += unit->getOffsetY();
     }
 
     // Add the last lerp offset that was used to render the entity
@@ -225,12 +220,17 @@ const Rect MouseHandlerComponent::createHitbox() const
         if (auto spriteComponent = weakSpriteComponent.lock())
         {
             glm::vec2 lerpOffset = spriteComponent->lastLerpOffset;
-            x1 += lerpOffset.x;
-            y1 += lerpOffset.y;
+            hitboxOriginX += lerpOffset.x;
+            hitboxOriginY += lerpOffset.y;
         }
     }
 
-    return { x1, y1, unitHitboxWidth, unitHitboxHeight };
+    return { //
+        hitboxOriginX - static_cast<float>(hitboxWidth) / 2.f,
+        hitboxOriginY - static_cast<float>(hitboxHeight),
+        static_cast<float>(hitboxWidth),
+        static_cast<float>(hitboxHeight)
+    };
 }
 
 }  // namespace Rival

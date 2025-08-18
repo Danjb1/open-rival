@@ -16,6 +16,8 @@ UnitDef UnitDef::fromJson(const json& j)
     std::string movementModeStr = j.value("movement", "ground");
     unitDef.movementMode = getMovementMode(movementModeStr);
     unitDef.deathEffectName = j.value("deathEffect", "");
+    unitDef.hitboxWidth = j.value("hitboxWidth", 24);
+    unitDef.hitboxHeight = j.value("hitboxHeight", 40);
     unitDef.offsetY = j.value("offsetY", 0.f);
     unitDef.isVehicle = j.value("vehicle", false);
 

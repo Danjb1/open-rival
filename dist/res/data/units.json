@@ -34,7 +34,7 @@
           81
         ],
         "die": [
-          37
+          362
         ]
       },
       "vehicle": true
@@ -57,7 +57,7 @@
         }
       },
       "attack": 12,
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
@@ -102,6 +102,8 @@
       },
       "attack": 3,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 50,
       "name": "Bowman",
       "portrait": 37,
       "sounds": {
@@ -149,6 +151,9 @@
         ],
         "train": [
           84
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -189,6 +194,9 @@
         ],
         "train": [
           66
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -342,7 +350,7 @@
         }
       },
       "attack": 4,
-      "deathEffect": "fire1",
+      "deathEffect": "explosion_small",
       "movement": "flying",
 	  "offsetY": -32,
       "name": "Pegas Rider",
@@ -359,6 +367,9 @@
         ],
         "train": [
           114
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -393,6 +404,9 @@
         ],
         "train": [
           96
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -413,7 +427,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Sea Barge",
       "portrait": 46,
@@ -509,6 +523,9 @@
         ],
         "train": [
           90
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -539,6 +556,9 @@
         ],
         "train": [
           120
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -570,6 +590,9 @@
         ],
         "train": [
           209
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -606,6 +629,9 @@
         ],
         "train": [
           167
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -641,6 +667,9 @@
         ],
         "train": [
           155
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -702,7 +731,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Landing Craft",
       "portrait": 60,
@@ -756,6 +785,9 @@
         ],
         "train": [
           179
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -790,6 +822,9 @@
         ],
         "train": [
           185
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -985,7 +1020,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Troll Galley",
       "portrait": 61,
@@ -1040,6 +1075,9 @@
         ],
         "train": [
           203
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1185,7 +1223,7 @@
           "msPerFrame": 180
         }
       },
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Bark",
       "portrait": 74,
@@ -1241,6 +1279,9 @@
         ],
         "train": [
           256
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -1318,6 +1359,9 @@
         ],
         "train": [
           274
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1352,6 +1396,9 @@
         ],
         "train": [
           244
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1386,6 +1433,9 @@
         ],
         "train": [
           232
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1420,6 +1470,9 @@
         ],
         "train": [
           268
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1450,6 +1503,9 @@
         ],
         "train": [
           298
+        ],
+        "die": [
+          362
         ]
       },
       "vehicle": true
@@ -1528,6 +1584,9 @@
         ],
         "train": [
           292
+        ],
+        "die": [
+          362
         ]
       }
     },
@@ -1549,7 +1608,7 @@
         }
       },
       "attack": 47,
-      "deathEffect": "explosion_small",
+      "deathEffect": "sink",
       "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,

@@ -47,9 +47,10 @@ private:
     static constexpr int maxOverlaysToRender = 512;
     static constexpr int maxImagesToRender = maxOverlaysToRender * maxSpritesPerEntity;
 
-    // TODO: These were measured for a Centaur with 2 bars; should they vary based on unit hitbox / number of bars?
+    // TODO: These were measured for a Centaur with 2 bars (and later tweaked for an Bowman with 1 bar);
+    // should they vary based on unit hitbox / number of bars?
     static constexpr int healthBarDrawOffsetX = 19;
-    static constexpr int healthBarDrawOffsetY = -43;
+    static constexpr int healthBarDrawOffsetY = -40;
 
     static constexpr float healthBarWidth = 25.f;
     static constexpr float healthBarHeight = 3.f;
