@@ -60,6 +60,10 @@ public:
     /** Name of the effect to spawn on death. */
     std::string deathEffectName;
 
+    /** Size of the hitbox, in pixels. */
+    int hitboxWidth = 0;
+    int hitboxHeight = 0;
+
     /** Y-offset (pixels) applied to the unit's hitbox, health bar and death effect. */
     float offsetY = 0.f;
 

@@ -27,7 +27,7 @@ class MouseHandlerComponent
     , public MovementListener
 {
 public:
-    MouseHandlerComponent();
+    MouseHandlerComponent(int hitboxWidth, int hitboxHeight);
 
     // Begin EntityComponent override
     virtual void onEntityFirstAddedToWorld(World* world) override;
@@ -78,14 +78,10 @@ public:
     static const std::string key;
 
 private:
-    // Offset of a Unit's hitbox, measured from the top-left corner of the
-    // containing tile to the bottom-left of the hitbox, in px
-    static constexpr int unitHitboxOffsetX = 20;
-    static constexpr int unitHitboxOffsetY = 25;
-
-    // Size of a Unit's hitbox
-    static constexpr float unitHitboxWidth = RenderUtils::tileWidthPx - (2 * unitHitboxOffsetX);
-    static constexpr float unitHitboxHeight = 40.f;
+    // Offset of a Unit's hitbox, measured from the top-left corner of the containing tile to the center of the bottom
+    // edge of the hitbox, in px.
+    static constexpr int unitHitboxOffsetX = 31;
+    static constexpr int unitHitboxOffsetY = 22;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
     std::weak_ptr<OwnerComponent> weakOwnerComponent;
@@ -93,6 +89,8 @@ private:
     std::weak_ptr<VoiceComponent> weakVoiceComponent;
 
     mutable Rect hitbox;
+    int hitboxWidth;
+    int hitboxHeight;
 
     mutable bool dirty = true;
     bool moving = true;

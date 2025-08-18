@@ -4,9 +4,12 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
+### WIP
+
+- Different units should have different hitboxes sizes
+
 ### Combat
 
-- Ensure all units are using the correct death effect and death sound
 - Attacks (projectiles) with splash damage should nearby damage units
 - Projectile impact / explosion graphics
 
@@ -27,6 +30,8 @@
 - Ground units should not move when commanded to attack a flying unit
 - Flying unit hitboxes should take precedence over ground units behind them
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
+- Minimap bottom border is missing
+- Hitboxes should not be rendered in Attack mode
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -54,7 +59,7 @@
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
 - Destroying cropland
-- For flying units, projectiles also need to lerp "downwards"?
+- Projectiles fired from/at a flying unit need to lerp with a vertical offset
 - Scale damage based on the "Fighting Speed" setting
     - The Fighting Speed slider goes from 0.5 to 2.0
     - At 0.5, all damage is halved, and at 2.0, all damage is doubled
@@ -67,7 +72,6 @@
 - Panning with middle-mouse button (drag)
 - Smooth panning with the arrow keys (using acceleration)
 - Panning speed should depend on the zoom level
-- Different units should have different hitboxes sizes
 - Ctrl+click to select all units of type
 - Shift+click/drag to add more units to a selection
 - Shift+click a selected unit to remove it from the selection

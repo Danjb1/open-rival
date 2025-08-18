@@ -333,7 +333,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
 
     // Top-right corner
     {
-        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteWidthPx;
+        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteUsefulWidthPx;
         float y1 = hitbox.y;
         float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
@@ -354,8 +354,8 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
 
     // Bottom-right corner
     {
-        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteWidthPx;
-        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteHeightPx;
+        float x1 = hitbox.x + hitbox.width - RenderUtils::hitboxSpriteUsefulWidthPx;
+        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteUsefulHeightPx;
         float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;
@@ -376,7 +376,7 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
     // Bottom-left corner
     {
         float x1 = hitbox.x;
-        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteHeightPx;
+        float y1 = hitbox.y + hitbox.height - RenderUtils::hitboxSpriteUsefulHeightPx;
         float x2 = x1 + RenderUtils::hitboxSpriteWidthPx;
         float y2 = y1 + RenderUtils::hitboxSpriteHeightPx;
         float z = RenderUtils::zHitbox;

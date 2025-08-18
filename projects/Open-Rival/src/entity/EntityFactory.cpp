@@ -133,7 +133,7 @@ std::shared_ptr<Entity> EntityFactory::createUnit(const UnitPlacement& unitPlace
     unit->attach(std::make_shared<VoiceComponent>(resources, audioSystem, *unitDef));
 
     // MouseHandlerComponent
-    unit->attach(std::make_shared<MouseHandlerComponent>());
+    unit->attach(std::make_shared<MouseHandlerComponent>(unitDef->hitboxWidth, unitDef->hitboxHeight));
 
     // InventoryComponent
     if (!unitDef->isVehicle)
