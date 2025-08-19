@@ -4,6 +4,7 @@
 #include "entity/Entity.h"
 #include "entity/Unit.h"
 #include "entity/components/HealthComponent.h"
+#include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "game/PlayerContext.h"
@@ -132,25 +133,33 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
         return;
     }
 
-    const HealthComponent* healthComponent = entity.getComponent<HealthComponent>(HealthComponent::key);
+    const HealthComponent* healthComponent = entity.getComponent<HealthComponent>();
     if (!healthComponent)
     {
         return;
     }
 
-    const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
+    const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>();
     if (!spriteComponent)
     {
         return;
     }
 
+    const MouseHandlerComponent* mouseHandlerComponent = entity.getComponent<MouseHandlerComponent>();
+    if (!mouseHandlerComponent)
+    {
+        return;
+    }
+
+    const Rect& hitbox = mouseHandlerComponent->getHitbox();
+
     const MapNode& pos = entity.getPos();
-    const float originX = static_cast<float>(RenderUtils::tileToPx_X(pos.x))  //
-            + static_cast<float>(healthBarDrawOffsetX)                        //
-            + spriteComponent->lastLerpOffset.x;
-    float originY = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))  //
-            + static_cast<float>(healthBarDrawOffsetY)                         //
-            + spriteComponent->lastLerpOffset.y;                               //
+    const float tileX = static_cast<float>(RenderUtils::tileToPx_X(pos.x));
+    const float tileY = static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y));
+
+    // The overlay is always rendered a fixed distance above a unit's hitbox
+    const float originX = tileX + healthBarDrawOffsetX + spriteComponent->lastLerpOffset.x;
+    float originY = tileY + (-hitbox.height) + healthBarDrawOffsetY + spriteComponent->lastLerpOffset.y;
 
     // Add a y-offset for flying Units
     if (const Unit* unit = entity.as<Unit>())

@@ -3,8 +3,9 @@ Changelog
 ================================================================================
 
 v0.4.0 (Combat demo)
-- Added health bars for units
 - Units can now attack each other
+- Added health bars for units
+- Added correct hitbox sizes for all units
 - Fixed units being able to walk through buildings and other objects
 - Fixed drag-select rectangle disappearing when very small
 - Fixed zoom not correctly factoring in the cursor position
