@@ -11,13 +11,12 @@ class ProjectileDef final
 public:
     static ProjectileDef fromJson(const json& j);
 
-    ProjectileDef(std::string texture)
-        : texture(texture)
-    {
-    }
+private:
+    ProjectileDef() {}
 
 public:
     std::string texture;
+    std::string impactEffectName;
     int numAnimFrames = 0;
     bool shouldUseRotation = false;
 };

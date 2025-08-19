@@ -96,11 +96,11 @@ const std::vector<std::string> textureNames = {
     "projectile_fire_arrow.tga",
     "projectile_fireball.tga",
     "projectile_flame_ring.tga",
-    "projectile_flash_light_elf1.tga",
-    "projectile_flash_light_elf2.tga",
+    "projectile_flash_light_elf.tga",
     "projectile_flash_light_greenskin.tga",
     "projectile_flash_light_human.tga",
     "projectile_gun.tga",
+    "projectile_lightning.tga",
     "projectile_mace.tga",
     "projectile_pegas_3arrow.tga",
     "projectile_pegas_arrow.tga",
@@ -121,6 +121,7 @@ const std::vector<std::string> textureNames = {
     // Effects
     "effects_common.tga",
     "effects_explosions.tga",
+    "effects_explosions_magic.tga",
 
     // Cursors
     "game_cursors.tga",

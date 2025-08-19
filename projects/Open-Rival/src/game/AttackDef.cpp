@@ -4,9 +4,8 @@ namespace Rival {
 
 AttackDef AttackDef::fromJson(const json& j)
 {
-    const std::string name = j.at("name");
-
-    AttackDef attackDef(name);
+    AttackDef attackDef;
+    attackDef.name = j.at("name");
     attackDef.accuracy = j.value("accuracy", 0);
     attackDef.damage = j.value("damage", 0);
     attackDef.impactSound = j.value("impactSound", "");

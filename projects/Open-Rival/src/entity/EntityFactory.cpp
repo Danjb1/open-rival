@@ -262,7 +262,13 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     }
 
     // ProjectileMovementComponent
-    projectile->attach(std::make_shared<ProjectileMovementComponent>(resources, audioSystem, target, randomizer));
+    const EffectDef* impactEffectDef = nullptr;
+    if (!projectileDef.impactEffectName.empty())
+    {
+        impactEffectDef = resources.getEffectDef(projectileDef.impactEffectName);
+    }
+    projectile->attach(std::make_shared<ProjectileMovementComponent>(
+            resources, audioSystem, target, impactEffectDef, randomizer, shared_from_this()));
 
     // Projectile animation
     if (isAnimated)

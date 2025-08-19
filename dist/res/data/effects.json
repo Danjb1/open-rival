@@ -9,6 +9,13 @@
       "texture": "effects_common.tga",
       "useAngle": true
     },
+    "explosion_fireball": {
+      "animation": {
+        "endIndex": 31,
+        "startIndex": 16
+      },
+      "texture": "effects_explosions_magic.tga"
+    },
     "explosion_monster": {
       "animation": {
         "endIndex": 134,
@@ -43,6 +50,34 @@
         "startIndex": 42
       },
       "texture": "effects_common.tga"
+    },
+    "flash_light_impact_elf": {
+      "animation": {
+        "endIndex": 107,
+        "startIndex": 88
+      },
+      "texture": "effects_explosions_magic.tga"
+    },
+    "flash_light_impact_greenskin": {
+      "animation": {
+        "endIndex": 87,
+        "startIndex": 68
+      },
+      "texture": "effects_explosions_magic.tga"
+    },
+    "flash_light_impact_human": {
+      "animation": {
+        "endIndex": 50,
+        "startIndex": 32
+      },
+      "texture": "effects_explosions_magic.tga"
+    },
+    "lightning_impact": {
+      "animation": {
+        "endIndex": 127,
+        "startIndex": 108
+      },
+      "texture": "effects_explosions_magic.tga"
     },
     "sink": {
       "animation": {

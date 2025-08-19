@@ -124,7 +124,7 @@ void AttackComponent::deliverAttack()
 
     if (isMelee)
     {
-        AttackUtils::applyAttack(*attackToUse, *targetEntity, *randomizer);
+        AttackUtils::tryApplyAttack(*attackToUse, *targetEntity, *randomizer);
     }
     else
     {

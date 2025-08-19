@@ -1,6 +1,7 @@
 #include "game/AttackUtils.h"
 
 #include <algorithm>  // std::max
+#include <cmath>      // std::floor
 
 #include "entity/Entity.h"
 #include "entity/components/ArmorComponent.h"
@@ -10,20 +11,27 @@
 
 namespace Rival { namespace AttackUtils {
 
-void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& randomizer)
+bool tryApplyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& randomizer, float damageMultiplier)
 {
     HealthComponent* healthComp = target.getComponent<HealthComponent>();
     if (!healthComp)
     {
         // Entity cannot be harmed
-        return;
+        return false;
     }
 
-    // Damage dealt is random based on the attack accuracy
+    // Calculate the base damage.
+    // Damage dealt is random based on the attack accuracy; with 50 Accuracy, 50-100 % of damage is dealt
     const float accuracyRatio = MathUtils::clampf(attackDef.accuracy / 100.f, 0.f, 100.f);
     const int minDamage = static_cast<int>(attackDef.damage * accuracyRatio);
     std::uniform_int_distribution<int> distribution(minDamage, attackDef.damage);
     int damage = distribution(randomizer);
+
+    // Apply damage multiplier
+    if (damageMultiplier != 1.f)
+    {
+        damage = static_cast<int>(std::floor(damage * damageMultiplier));
+    }
 
     // Reduce damage by the target's armor
     if (ArmorComponent* armorComp = target.getComponent<ArmorComponent>())
@@ -34,6 +42,8 @@ void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& rando
 
     // Damage target
     healthComp->addHealth(-damage);
+
+    return true;
 }
 
 }}  // namespace Rival::AttackUtils

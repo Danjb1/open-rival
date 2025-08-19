@@ -4,14 +4,17 @@
       "texture": "projectile_arrow.tga"
     },
     "ballista": {
+	  "impactEffect": "explosion_small",
       "texture": "projectile_ballista.tga"
     },
     "boulder": {
       "animFrames": 4,
+	  "impactEffect": "explosion_small",
       "texture": "projectile_boulder.tga"
     },
     "cannonball": {
       "animFrames": 3,
+	  "impactEffect": "explosion_small",
       "rotation": false,
       "texture": "projectile_cannonball.tga"
     },
@@ -19,6 +22,7 @@
       "texture": "projectile_fire_arrow.tga"
     },
     "fireball": {
+	  "impactEffect": "explosion_fireball",
       "texture": "projectile_fireball.tga"
     },
     "flame_ring": {
@@ -26,24 +30,28 @@
       "rotation": false,
       "texture": "projectile_flame_ring.tga"
     },
-    "flash_light_elf1": {
+    "flash_light_elf": {
       "animFrames": 6,
-      "texture": "projectile_flash_light_elf1.tga"
-    },
-    "flash_light_elf2": {
-      "animFrames": 6,
-      "texture": "projectile_flash_light_elf2.tga"
+	  "impactEffect": "flash_light_impact_elf",
+      "texture": "projectile_flash_light_elf.tga"
     },
     "flash_light_greenskin": {
       "animFrames": 6,
+	  "impactEffect": "flash_light_impact_greenskin",
       "texture": "projectile_flash_light_greenskin.tga"
     },
     "flash_light_human": {
       "animFrames": 6,
+	  "impactEffect": "flash_light_impact_human",
       "texture": "projectile_flash_light_human.tga"
     },
     "gun": {
       "texture": "projectile_gun.tga"
+    },
+    "lightning": {
+      "animFrames": 6,
+	  "impactEffect": "lightning_impact",
+      "texture": "projectile_lightning.tga"
     },
     "mace": {
       "animFrames": 3,

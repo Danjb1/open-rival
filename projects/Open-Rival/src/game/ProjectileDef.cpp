@@ -4,9 +4,9 @@ namespace Rival {
 
 ProjectileDef ProjectileDef::fromJson(const json& j)
 {
-    const std::string texture = j.at("texture");
-
-    ProjectileDef projectileDef(texture);
+    ProjectileDef projectileDef;
+    projectileDef.texture = j.at("texture");
+    projectileDef.impactEffectName = j.value("impactEffect", "");
     projectileDef.numAnimFrames = j.value("animFrames", 0);
     projectileDef.shouldUseRotation = j.value("rotation", true);
 
