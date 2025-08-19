@@ -18,6 +18,8 @@
       },
       "attack": 11,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 40,
+	  "hitboxHeight": 39,
       "name": "Ballista",
       "portrait": 42,
       "sounds": {
@@ -58,6 +60,8 @@
       },
       "attack": 12,
       "deathEffect": "sink",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 44,
       "movement": "seafaring",
       "name": "Battleship",
       "portrait": 47,
@@ -137,6 +141,8 @@
         }
       },
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 50,
       "name": "Chariot of War",
       "portrait": 43,
       "sounds": {
@@ -180,6 +186,8 @@
       },
       "attack": 9,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 42,
       "name": "Fire Master",
       "portrait": 40,
       "sounds": {
@@ -222,6 +230,8 @@
       },
       "attack": 7,
       "deathEffect": "corpse",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 54,
       "name": "Knight",
       "portrait": 39,
       "sounds": {
@@ -264,6 +274,8 @@
       },
       "attack": 6,
       "deathEffect": "corpse",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 51,
       "name": "Light Cavalry",
       "portrait": 38,
       "sounds": {
@@ -314,6 +326,8 @@
       },
       "attack": 2,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 40,
       "name": "Peasant",
       "portrait": 36,
       "sounds": {
@@ -351,6 +365,8 @@
       },
       "attack": 4,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 38,
+	  "hitboxHeight": 35,
       "movement": "flying",
 	  "offsetY": -32,
       "name": "Pegas Rider",
@@ -390,6 +406,8 @@
       },
       "attack": 17,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 45,
       "name": "Priest",
       "portrait": 45,
       "sounds": {
@@ -428,6 +446,8 @@
         }
       },
       "deathEffect": "sink",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 44,
       "movement": "seafaring",
       "name": "Sea Barge",
       "portrait": 46,
@@ -472,6 +492,8 @@
       },
       "attack": 10,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 42,
       "name": "Thief",
       "portrait": 41,
       "sounds": {
@@ -509,6 +531,8 @@
       },
       "attack": 13,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 45,
       "name": "Wizard",
       "portrait": 44,
       "sounds": {
@@ -541,8 +565,11 @@
         }
       },
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 42,
       "movement": "flying",
       "name": "Zeppelin",
+	  "offsetY": -40,
       "portrait": 49,
       "sounds": {
         "move": [
@@ -575,8 +602,11 @@
         }
       },
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 58,
       "movement": "flying",
       "name": "Balloon",
+	  "offsetY": -40,
       "portrait": 63,
       "sounds": {
         "move": [
@@ -615,6 +645,8 @@
       },
       "attack": 28,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 42,
       "name": "Catapult",
       "portrait": 56,
       "sounds": {
@@ -653,6 +685,8 @@
       },
       "attack": 25,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 40,
       "name": "Gnome Boomer",
       "portrait": 54,
       "sounds": {
@@ -695,6 +729,8 @@
       },
       "attack": 22,
       "deathEffect": "corpse",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 58,
       "name": "Horde Rider",
       "portrait": 52,
       "sounds": {
@@ -732,6 +768,8 @@
         }
       },
       "deathEffect": "sink",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 40,
       "movement": "seafaring",
       "name": "Landing Craft",
       "portrait": 60,
@@ -771,6 +809,8 @@
       },
       "attack": 35,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 50,
       "name": "Necromancer",
       "portrait": 59,
       "sounds": {
@@ -808,6 +848,8 @@
       },
       "attack": 31,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 52,
       "name": "Priest of Doom",
       "portrait": 58,
       "sounds": {
@@ -850,6 +892,8 @@
       },
       "attack": 21,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 45,
       "name": "Rock Thrower",
       "portrait": 51,
       "sounds": {
@@ -892,6 +936,8 @@
       },
       "attack": 26,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 42,
       "name": "Rogue",
       "portrait": 55,
       "sounds": {
@@ -942,6 +988,8 @@
       },
       "attack": 2,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 38,
       "name": "Serf",
       "portrait": 50,
       "sounds": {
@@ -984,6 +1032,8 @@
       },
       "attack": 27,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 48,
       "name": "Storm Trooper",
       "portrait": 57,
       "sounds": {
@@ -1021,6 +1071,8 @@
         }
       },
       "deathEffect": "sink",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 44,
       "movement": "seafaring",
       "name": "Troll Galley",
       "portrait": 61,
@@ -1060,8 +1112,11 @@
       },
       "attack": 30,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 38,
+	  "hitboxHeight": 41,
       "movement": "flying",
       "name": "Warbat",
+	  "offsetY": -33,
       "portrait": 62,
       "sounds": {
         "move": [
@@ -1103,6 +1158,8 @@
       },
       "attack": 23,
       "deathEffect": "corpse",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 52,
       "name": "Warlord",
       "portrait": 53,
       "sounds": {
@@ -1145,6 +1202,8 @@
       },
       "attack": 39,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 48,
       "name": "Archer",
       "portrait": 65,
       "sounds": {
@@ -1187,6 +1246,8 @@
       },
       "attack": 46,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 34,
       "name": "Arquebusier",
       "portrait": 71,
       "sounds": {
@@ -1224,6 +1285,8 @@
         }
       },
       "deathEffect": "sink",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 44,
       "movement": "seafaring",
       "name": "Bark",
       "portrait": 74,
@@ -1265,6 +1328,8 @@
       },
       "attack": 45,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 40,
+	  "hitboxHeight": 43,
       "name": "Bombard",
       "portrait": 70,
       "sounds": {
@@ -1308,6 +1373,8 @@
       },
       "attack": 41,
       "deathEffect": "corspe",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 54,
       "name": "Centaur",
       "portrait": 67,
       "sounds": {
@@ -1345,6 +1412,8 @@
       },
       "attack": 54,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 50,
       "name": "Druid",
       "portrait": 66,
       "sounds": {
@@ -1382,6 +1451,8 @@
       },
       "attack": 43,
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 34,
       "name": "Dwarf Miner",
       "portrait": 68,
       "sounds": {
@@ -1419,6 +1490,8 @@
       },
       "attack": 57,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 45,
       "name": "Enchanter",
       "portrait": 73,
       "sounds": {
@@ -1456,6 +1529,8 @@
       },
       "attack": 50,
       "deathEffect": "fire1",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 45,
       "name": "Mage",
       "portrait": 72,
       "sounds": {
@@ -1488,8 +1563,11 @@
         }
       },
       "deathEffect": "explosion_small",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 38,
       "movement": "flying",
       "name": "Magic Chopper",
+	  "offsetY": -40,
       "portrait": 77,
       "sounds": {
         "move": [
@@ -1532,6 +1610,8 @@
       },
       "attack": 44,
       "deathEffect": "corpse",
+	  "hitboxWidth": 26,
+	  "hitboxHeight": 36,
       "name": "Scout",
       "portrait": 69,
       "sounds": {
@@ -1569,8 +1649,11 @@
       },
       "attack": 48,
       "deathEffect": "fire1",
+	  "hitboxWidth": 38,
+	  "hitboxHeight": 40,
       "movement": "flying",
       "name": "Sky Rider",
+	  "offsetY": -20,
       "portrait": 76,
       "sounds": {
         "move": [
@@ -1609,6 +1692,8 @@
       },
       "attack": 47,
       "deathEffect": "sink",
+	  "hitboxWidth": 54,
+	  "hitboxHeight": 44,
       "movement": "seafaring",
       "name": "Warship",
       "portrait": 75,
@@ -1661,6 +1746,8 @@
       },
       "attack": 2,
       "deathEffect": "corpse",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 43,
       "name": "Yeoman",
       "portrait": 64,
       "sounds": {
@@ -1693,6 +1780,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 24,
+	  "hitboxHeight": 64,
       "name": "Devil",
       "portrait": 94,
       "sounds": {
@@ -1710,6 +1799,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 32,
+	  "hitboxHeight": 74,
       "name": "Dragon",
       "portrait": 102,
       "sounds": {
@@ -1727,6 +1818,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 34,
+	  "hitboxHeight": 68,
       "name": "Golem",
       "portrait": 91,
       "sounds": {
@@ -1751,8 +1844,11 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 40,
       "movement": "flying",
       "name": "Gryphon",
+	  "offsetY": -24,
       "portrait": 85,
       "sounds": {
       }
@@ -1773,6 +1869,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 48,
+	  "hitboxHeight": 48,
       "name": "Hydra",
       "portrait": 88,
       "sounds": {
@@ -1794,6 +1892,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 50,
+	  "hitboxHeight": 40,
       "movement": "seafaring",
       "name": "Sea Monster",
       "portrait": 78,
@@ -1816,6 +1916,8 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 30,
+	  "hitboxHeight": 80,
       "name": "Skeleton",
       "portrait": 98,
       "sounds": {
@@ -1840,8 +1942,11 @@
         }
       },
       "deathEffect": "explosion_monster",
+	  "hitboxWidth": 46,
+	  "hitboxHeight": 57,
       "movement": "flying",
       "name": "Snake",
+	  "offsetY": -10,
       "portrait": 81,
       "sounds": {
       }

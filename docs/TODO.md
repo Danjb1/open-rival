@@ -4,10 +4,6 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
-### WIP
-
-- Different units should have different hitboxes sizes
-
 ### Combat
 
 - Attacks (projectiles) with splash damage should nearby damage units
