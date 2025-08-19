@@ -3,6 +3,7 @@
 #include "application/Resources.h"
 #include "audio/AudioSystem.h"
 #include "audio/SoundSource.h"
+#include "entity/EntityFactory.h"
 #include "entity/Projectile.h"
 #include "entity/components/HealthComponent.h"
 #include "game/AttackUtils.h"
@@ -18,12 +19,16 @@ const std::string ProjectileMovementComponent::key = "projectile_movement";
 ProjectileMovementComponent::ProjectileMovementComponent(const AudioStore& audioStore,
         AudioSystem& audioSystem,
         MapNode target,
-        std::shared_ptr<std::mt19937> randomizer)
+        const EffectDef* impactEffectDef,
+        std::shared_ptr<std::mt19937> randomizer,
+        std::shared_ptr<const EntityFactory> entityFactory)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
     , target(target)
+    , impactEffectDef(impactEffectDef)
     , randomizer(randomizer)
+    , entityFactory(entityFactory)
 {
 }
 
@@ -75,35 +80,61 @@ void ProjectileMovementComponent::onProjectileArrived()
 {
     Projectile* projectile = entity->as<Projectile>();
     const AttackDef* attackDef = projectile->getAttackDef();
-    bool shouldPlayImpactSound = false;
 
-    // Damage target (if present)
-    std::shared_ptr<Entity> targetEntity = entityContainer->getMutableEntityAt(target);
-    if (targetEntity)
-    {
-        AttackUtils::applyAttack(*attackDef, *targetEntity, *randomizer);
-        shouldPlayImpactSound = true;
-    }
+    bool wasAnyTargetHit = tryDamageEntityAtTarget(attackDef);
+    wasAnyTargetHit |= tryApplySplashDamage(attackDef);
 
-    // Deal splash damage
-    if (attackDef->hasSplashDamage)
-    {
-        // TODO: Damage surrounding targets
-        shouldPlayImpactSound = true;
-    }
+    spawnImpactEffect();
 
-    // Play impact sound
-    if (shouldPlayImpactSound)
+    if (wasAnyTargetHit)
     {
-        const SoundBank* soundBank = audioStore.getSoundBank(attackDef->impactSound);
-        if (soundBank)
-        {
-            int soundId = soundBank->getRandomSound();
-            audioSystem.playSound(audioStore, soundId);
-        }
+        playImpactSound(attackDef->impactSound);
     }
 
     entity->markForDeletion();
+}
+
+bool ProjectileMovementComponent::tryApplySplashDamage(const AttackDef* attackDef) const
+{
+    bool wasAnyEntityDamaged = false;
+    if (attackDef->hasSplashDamage)
+    {
+        SharedMutableEntityList splashTargets = entityContainer->getMutableEntitiesInRadius(target, 1);
+        for (std::shared_ptr<Entity> splashTarget : splashTargets)
+        {
+            wasAnyEntityDamaged |=
+                    AttackUtils::tryApplyAttack(*attackDef, *splashTarget, *randomizer, splashDamageMultiplier);
+        }
+    }
+    return wasAnyEntityDamaged;
+}
+
+bool ProjectileMovementComponent::tryDamageEntityAtTarget(const AttackDef* attackDef) const
+{
+    std::shared_ptr<Entity> targetEntity = entityContainer->getMutableEntityAt(target);
+    if (targetEntity)
+    {
+        return AttackUtils::tryApplyAttack(*attackDef, *targetEntity, *randomizer);
+    }
+    return false;
+}
+
+void ProjectileMovementComponent::spawnImpactEffect() const
+{
+    // Facing is irrelevant!
+    std::shared_ptr<Entity> effect = entityFactory->createEffect(*impactEffectDef, Facing::North);
+    World* world = entity->getWorld();
+    world->addEntity(effect, target);
+}
+
+void ProjectileMovementComponent::playImpactSound(const std::string& soundName) const
+{
+    const SoundBank* soundBank = audioStore.getSoundBank(soundName);
+    if (soundBank)
+    {
+        int soundId = soundBank->getRandomSound();
+        audioSystem.playSound(audioStore, soundId);
+    }
 }
 
 glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const

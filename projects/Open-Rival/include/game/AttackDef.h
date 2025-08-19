@@ -11,10 +11,8 @@ class AttackDef final
 public:
     static AttackDef fromJson(const json& j);
 
-    AttackDef(std::string name)
-        : name(name)
-    {
-    }
+private:
+    AttackDef() {}
 
 public:
     /** Name of the attack (not shown in-game). */

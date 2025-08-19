@@ -85,7 +85,7 @@ public:
     static constexpr int txIndexTiles = txIndexProjectiles + 17;
     static constexpr int txIndexObjects = txIndexTiles + 4;
     static constexpr int txIndexEffects = txIndexObjects + 3;
-    static constexpr int txIndexCursors = txIndexEffects + 2;
+    static constexpr int txIndexCursors = txIndexEffects + 3;
     static constexpr int txIndexBuildings = txIndexCursors + 1;
     static constexpr int txIndexPortraits = txIndexBuildings + 3;
     static constexpr int txIndexHitbox = txIndexPortraits + 1;

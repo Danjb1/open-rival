@@ -84,15 +84,13 @@ Omitting the port parameter uses the default port of 25565.
 3. Known Issues
 ================================================================================
 
-Thank you for your patience during these early stages of development!
+Progress and bugs are currently tracked in GitHub:
+https://github.com/Danjb1/open-rival/blob/master/docs/TODO.md
 
-- (Not implemented) No visual effect is displayed when issuing a move command.
-- (Not implemented) Buildings cannot be selected.
-- (Not implemented) Selected units do not flash orange.
-- (Not implemented) Some objects (e.g. chests) are not yet loaded.
-- (Bug) Units can walk too close to the edge of the map.
-- (Bug) Lag when moving large groups or large distances.
-- (Bug) Some units get left behind when moving large distances.
+Many features are still missing, but if you encounter anything that you believe
+to be a bug, please report it to the development team.
+
+Thank you for your patience during these early stages of development!
 
 ================================================================================
 4. Settings

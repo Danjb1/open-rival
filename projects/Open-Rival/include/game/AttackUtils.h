@@ -9,7 +9,7 @@ class Entity;
 
 namespace AttackUtils {
 
-void applyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& randomizer);
+bool tryApplyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& randomizer, float damageMultiplier = 1.f);
 
 }
 }  // namespace Rival

@@ -4,10 +4,7 @@
 ## Next Up
 <!----------------------------------------------------------------------------->
 
-### Combat
-
-- Attacks (projectiles) with splash damage should nearby damage units
-- Projectile impact / explosion graphics
+-
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -28,6 +25,8 @@
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
 - Minimap bottom border is missing
 - Hitboxes should not be rendered in Attack mode
+- Projectile impact effect should inherit the y-offset of the projectile
+- Projectile impact effect should be rendered on top of units
 
 <!----------------------------------------------------------------------------->
 ## Features
