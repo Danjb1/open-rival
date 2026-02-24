@@ -32,9 +32,18 @@ std::vector<TilePassability> World::createPassability() const
     std::vector<TilePassability> passability;
     passability.reserve(tiles.size());
 
-    for (const auto& tile : tiles)
+    for (int i = 0; i < tiles.size(); ++i)
     {
-        if (tile.type == TileType::Water)
+        const auto& tile = tiles[i];
+        int x = i % width;
+        int y = i / width;
+
+        if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+        {
+            // Tiles at the edge of the map are impassable
+            passability.push_back(TilePassability::Blocked);
+        }
+        else if (tile.type == TileType::Water)
         {
             passability.push_back(TilePassability::Water);
         }

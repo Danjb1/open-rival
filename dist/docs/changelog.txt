@@ -11,6 +11,7 @@ v0.4.0 (Combat demo)
 - Fixed zoom not correctly factoring in the cursor position
 - Fixed flying units sometimes being rendered behind ground units
 - Fixed flying unit hitbox and health bar positions
+- Fixed map edges being traversable
 - The shareware version of the Procopius Regular font is now included
 
 v0.3.0 (Multiplayer demo)
