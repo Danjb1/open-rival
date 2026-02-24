@@ -80,14 +80,14 @@ void AttackComponent::update(int delta)
 
     if (attackState == AttackState::Attacking)
     {
-        // Waiting for anim notify
+        // Mid-attack (waiting for anim notify)
         return;
     }
 
-    if (attackState == AttackState::Cooldown)
+    bool isOnCooldown = (attackState == AttackState::Cooldown);
+    if (isOnCooldown)
     {
         updateCooldown(delta);
-        return;
     }
 
     std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
@@ -99,13 +99,16 @@ void AttackComponent::update(int delta)
 
     if (isInRange(targetEntity))
     {
-        requestAttack(targetEntity);
+        if (!isOnCooldown)
+        {
+            requestAttack(targetEntity);
+        }
     }
     else
     {
         // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between units
         // that all start moving at the same time
-        tryMoveToTarget(targetEntity->getPos());
+        tryMoveToTarget(targetEntity);
     }
 }
 
@@ -242,12 +245,22 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
     CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
 }
 
-void AttackComponent::tryMoveToTarget(const MapNode& node)
+void AttackComponent::tryMoveToTarget(std::shared_ptr<Entity> targetEntity)
 {
+    MapNode targetPos = targetEntity->getPos();
+    if (targetPos != lastTargetPosition)
+    {
+        // If the target has moved, reset our pathfinding restrictions
+        // so we can immediately try moving towards it
+        lastTargetPosition = targetPos;
+        numMovementAttempts = 0;
+        moveToTargetCooldown = 0;
+    }
+
     if (numMovementAttempts > maxMovementAttempts)
     {
         // Give up
-        LOG_DEBUG_CATEGORY("movement", "Giving up reaching target at ({}, {})", node.x, node.y);
+        LOG_DEBUG_CATEGORY("movement", "Giving up reaching target at ({}, {})", targetPos.x, targetPos.y);
         setTarget({});
         return;
     }
@@ -259,8 +272,8 @@ void AttackComponent::tryMoveToTarget(const MapNode& node)
         return;
     }
 
-    LOG_DEBUG_CATEGORY("movement", "Trying to reach target at ({}, {})", node.x, node.y);
-    moveToTarget(node);
+    LOG_DEBUG_CATEGORY("movement", "Trying to reach target at ({}, {})", targetPos.x, targetPos.y);
+    moveToTarget(targetPos);
     ++numMovementAttempts;
 
     // Avoid repathing every tick.
@@ -296,6 +309,7 @@ void AttackComponent::moveToTarget(const MapNode& node)
 void AttackComponent::setTarget(std::weak_ptr<Entity> weakNewTarget)
 {
     std::shared_ptr<Entity> newTarget = weakNewTarget.lock();
+
     if (newTarget && newTarget->getId() == entity->getId())
     {
         // Can't attack self

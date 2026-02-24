@@ -4,8 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
-- Attacking units are slow to respond to MoveCommands (e.g. very noticeable when their target moves away)
 - Cursor sometimes resets to default when one of the selected units dies
 - Occasional desyncs when moving/attacking with groups in multiplayer
 - Sometimes death sound plays multiple times in multiplayer (once per attacking unit?)
