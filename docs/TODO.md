@@ -4,7 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Cursor sometimes resets to default when one of the selected units dies
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
 - When attacking a flying unit, don't hit the ground unit underneath it!
 - Ranged units sometimes keep attacking after the target dies
@@ -12,7 +11,6 @@
 - Ground units should not move when commanded to attack a flying unit
 - Flying unit hitboxes should take precedence over ground units behind them
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
-- Minimap bottom border is missing
 - Hitboxes should not be rendered in Attack mode
 - Projectile impact effect should inherit the y-offset of the projectile
 - Projectile impact effect should be rendered on top of units

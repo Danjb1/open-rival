@@ -14,7 +14,7 @@ const Rect cursor(0, 0, RenderUtils::cursorWidthPx, RenderUtils::cursorHeightPx)
 // Minimap
 const Rect minimapLeftBorder(0, uiPosY, 5, uiHeight);
 const Rect minimapTopBorder(static_cast<int>(minimapLeftBorder.x + minimapLeftBorder.width), uiPosY, 210, 5);
-const Rect minimapBottomBorder(0, uiPosY + 205, 210, 5);
+const Rect minimapBottomBorder(5, uiPosY + uiHeight - 5, 210, 5);
 
 // Main panel
 const Rect mainPanel(static_cast<int>(minimapTopBorder.x + minimapTopBorder.width), uiPosY, 425, uiHeight);
