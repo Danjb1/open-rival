@@ -11,7 +11,7 @@ void LobbyWelcomePacketHandler::onPacketReceived(std::shared_ptr<const Packet> p
             std::static_pointer_cast<const LobbyWelcomePacket>(packet);
 
     LobbyState& lobby = static_cast<LobbyState&>(state);
-    lobby.onWelcomeReceived(welcomePacket->getPlayerId(), welcomePacket->getClients());
+    lobby.onWelcomeReceived(welcomePacket->getPlayerId(), welcomePacket->getClients(), welcomePacket->getRandomSeed());
 }
 
 }  // namespace Rival
