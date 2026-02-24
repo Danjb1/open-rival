@@ -34,6 +34,11 @@ void HealthComponent::removeListener(std::weak_ptr<HealthListener> listener)
 
 void HealthComponent::addHealth(int amount)
 {
+    if (isDead())
+    {
+        return;
+    }
+
     int prevHealth = currentHealth;
     currentHealth = MathUtils::clampi(currentHealth + amount, 0, maxHealth);
 
@@ -45,6 +50,11 @@ void HealthComponent::addHealth(int amount)
         CollectionUtils::forEachWeakPtr<HealthListener>(
                 listeners, [&](auto listener) { listener->onHealthDepleted(entity); });
     }
+}
+
+bool HealthComponent::isDead() const
+{
+    return currentHealth <= 0;
 }
 
 }  // namespace Rival

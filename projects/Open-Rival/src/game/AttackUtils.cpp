@@ -16,7 +16,13 @@ bool tryApplyAttack(const AttackDef& attackDef, Entity& target, std::mt19937& ra
     HealthComponent* healthComp = target.getComponent<HealthComponent>();
     if (!healthComp)
     {
-        // Entity cannot be harmed
+        // Only Entities with a HealthComponent can be harmed
+        return false;
+    }
+
+    if (healthComp->isDead())
+    {
+        // Entity is already dead
         return false;
     }
 
