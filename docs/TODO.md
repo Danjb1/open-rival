@@ -4,7 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Tiles covered by the map border should not be passable
 - When the game is paused (at a breakpoint) it can take a long time to resume / catch up (when playing sounds?)
 - Attacking units are slow to respond to MoveCommands (e.g. very noticeable when their target moves away)
 - Cursor sometimes resets to default when one of the selected units dies
