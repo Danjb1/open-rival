@@ -47,6 +47,8 @@ public:
         return static_cast<float>(currentHealth) / maxHealth;
     }
 
+    bool isDead() const;
+
 public:
     static const std::string key;
 

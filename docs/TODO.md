@@ -4,9 +4,9 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Cursor sometimes resets to default when one of the selected units dies
 - Occasional desyncs when moving/attacking with groups in multiplayer
-- Sometimes death sound plays multiple times in multiplayer (once per attacking unit?)
+    - Most likely to do with random damage values not being consistent
+- Cursor sometimes resets to default when one of the selected units dies
 - We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
 - When attacking a flying unit, don't hit the ground unit underneath it!
 - Ranged units sometimes keep attacking after the target dies

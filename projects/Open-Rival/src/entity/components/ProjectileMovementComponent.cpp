@@ -121,6 +121,12 @@ bool ProjectileMovementComponent::tryDamageEntityAtTarget(const AttackDef* attac
 
 void ProjectileMovementComponent::spawnImpactEffect() const
 {
+    if (!impactEffectDef)
+    {
+        // Projectile has no impact effect
+        return;
+    }
+
     // Facing is irrelevant!
     std::shared_ptr<Entity> effect = entityFactory->createEffect(*impactEffectDef, Facing::North);
     World* world = entity->getWorld();
