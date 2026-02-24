@@ -38,7 +38,7 @@ public:
     void onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName);
     void onPlayerAccepted(int requestId, int clientId, const ClientInfo& client);
     void onPlayerRejected(int requestId, const std::string& playerName);
-    void onWelcomeReceived(int playerId, std::unordered_map<int, ClientInfo> clients);
+    void onWelcomeReceived(int playerId, std::unordered_map<int, ClientInfo> clients, unsigned int randomSeed);
     void onPlayerKicked(int playerId);
     void startGame();
 

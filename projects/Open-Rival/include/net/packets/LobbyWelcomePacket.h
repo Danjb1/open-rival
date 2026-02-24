@@ -31,6 +31,11 @@ public:
         return clients;
     }
 
+    unsigned int getRandomSeed() const
+    {
+        return randomSeed;
+    }
+
 private:
     int playerId;
     std::unordered_map<int, ClientInfo> clients;

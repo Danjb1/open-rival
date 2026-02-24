@@ -52,9 +52,12 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
 
-    // Determine the seed that we will use for all our random numbers once the game starts.
-    // It is imperative that all players generate the same sequence of random numbers.
-    randomSeed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+    if (isHost)
+    {
+        // Determine the seed that we will use for all our random numbers once the game starts.
+        // It is imperative that all players generate the same sequence of random numbers.
+        randomSeed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+    }
 }
 
 void LobbyState::onLoad()
@@ -269,7 +272,8 @@ void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)
     }
 }
 
-void LobbyState::onWelcomeReceived(int playerId, std::unordered_map<int, ClientInfo> newClients)
+void LobbyState::onWelcomeReceived(
+        int playerId, std::unordered_map<int, ClientInfo> newClients, unsigned int newRandomSeed)
 {
     if (playerId != localPlayerId)
     {
@@ -280,6 +284,7 @@ void LobbyState::onWelcomeReceived(int playerId, std::unordered_map<int, ClientI
     LOG_INFO("Received lobby state from host");
 
     clients = newClients;
+    randomSeed = newRandomSeed;
 }
 
 void LobbyState::onPlayerKicked(int playerId)
@@ -333,6 +338,7 @@ std::unique_ptr<State> LobbyState::createGameState() const
 {
     ApplicationContext& context = app.getContext();
 
+    LOG_INFO("Using random seed: {}", randomSeed);
     std::shared_ptr<std::mt19937> randomizer = std::make_shared<std::mt19937>(randomSeed);
 
     // Create the world
