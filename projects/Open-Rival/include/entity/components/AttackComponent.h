@@ -73,7 +73,7 @@ private:
     bool isInRange(const std::shared_ptr<Entity> target) const;
     void requestAttack(std::shared_ptr<Entity> targetEntity);
     void startAttack(std::shared_ptr<Entity> targetEntity);
-    void tryMoveToTarget(const MapNode& node);
+    void tryMoveToTarget(std::shared_ptr<Entity> targetEntity);
     void moveToTarget(const MapNode& node);
 
 public:
@@ -110,6 +110,7 @@ private:
     float cooldownTimeElapsed = 0;
     int cooldownDuration = 0;
 
+    MapNode lastTargetPosition;
     int moveToTargetCooldown = 0;
     int numMovementAttempts = 0;
 };
