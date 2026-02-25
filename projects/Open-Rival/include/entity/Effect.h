@@ -33,6 +33,8 @@ public:
 
     void onAnimationFinished();
 
+    float getZOffset() const override;
+
 private:
     const EffectDef& effectDef;
 

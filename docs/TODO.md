@@ -4,16 +4,12 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- We need to rework `getMutableEntityAt` because one tile can contain *multiple* entities!
-- When attacking a flying unit, don't hit the ground unit underneath it!
 - Ranged units sometimes keep attacking after the target dies
 - Trying to attack an empty tile with a ranged unit just moves there instead
 - Ground units should not move when commanded to attack a flying unit
 - Flying unit hitboxes should take precedence over ground units behind them
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
 - Hitboxes should not be rendered in Attack mode
-- Projectile impact effect should inherit the y-offset of the projectile
-- Projectile impact effect should be rendered on top of units
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -41,7 +37,6 @@
 - Allow attacking an empty tile when in attack mode (ranged attacks only!)
     - For melee attacks it should display a message "Could not attack there !"
 - Destroying cropland
-- Projectiles fired from/at a flying unit need to lerp with a vertical offset
 - Scale damage based on the "Fighting Speed" setting
     - The Fighting Speed slider goes from 0.5 to 2.0
     - At 0.5, all damage is halved, and at 2.0, all damage is doubled

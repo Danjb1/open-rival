@@ -27,7 +27,7 @@ class ProjectileMovementComponent : public EntityComponent
 public:
     ProjectileMovementComponent(const AudioStore& audioStore,
             AudioSystem& audioSystem,
-            MapNode target,
+            MapNode targetNode,
             const EffectDef* impactEffectDef,
             std::shared_ptr<std::mt19937> randomizer,
             std::shared_ptr<const EntityFactory> entityFactory);
@@ -60,7 +60,7 @@ private:
 
     EntityContainer* entityContainer = nullptr;
 
-    MapNode target;
+    MapNode targetNode;
     const EffectDef* impactEffectDef;
     int lifetime = 0;
     int timeElapsed = 0;

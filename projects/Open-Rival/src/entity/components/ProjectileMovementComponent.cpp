@@ -5,6 +5,8 @@
 #include "audio/SoundSource.h"
 #include "entity/EntityFactory.h"
 #include "entity/Projectile.h"
+#include "entity/Unit.h"
+#include "entity/components/FlyerComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "game/AttackUtils.h"
 #include "game/World.h"
@@ -18,14 +20,14 @@ const std::string ProjectileMovementComponent::key = "projectile_movement";
 
 ProjectileMovementComponent::ProjectileMovementComponent(const AudioStore& audioStore,
         AudioSystem& audioSystem,
-        MapNode target,
+        MapNode targetNode,
         const EffectDef* impactEffectDef,
         std::shared_ptr<std::mt19937> randomizer,
         std::shared_ptr<const EntityFactory> entityFactory)
     : EntityComponent(key)
     , audioStore(audioStore)
     , audioSystem(audioSystem)
-    , target(target)
+    , targetNode(targetNode)
     , impactEffectDef(impactEffectDef)
     , randomizer(randomizer)
     , entityFactory(entityFactory)
@@ -47,7 +49,7 @@ void ProjectileMovementComponent::onEntityFirstAddedToWorld(World* world)
     // We subtract 1 because projectile graphics are designed to finish in the tile BEFORE the destination.
     const AttackDef* attackDef = projectile->getAttackDef();
     const MapNode pos = projectile->getPos();
-    const int distance = MapUtils::getDistance(pos, target) - 1;
+    const int distance = MapUtils::getDistance(pos, targetNode) - 1;
 
     // This is used to ensure the projectile *visually* stops at the right place
     visualDistanceMultiplier = static_cast<float>(distance) / static_cast<float>(distance + 1);
@@ -99,7 +101,7 @@ bool ProjectileMovementComponent::tryApplySplashDamage(const AttackDef* attackDe
     bool wasAnyEntityDamaged = false;
     if (attackDef->hasSplashDamage)
     {
-        SharedMutableEntityList splashTargets = entityContainer->getMutableEntitiesInRadius(target, 1);
+        SharedMutableEntityList splashTargets = entityContainer->getMutableEntitiesInRadius(targetNode, 1);
         for (std::shared_ptr<Entity> splashTarget : splashTargets)
         {
             wasAnyEntityDamaged |=
@@ -111,11 +113,30 @@ bool ProjectileMovementComponent::tryApplySplashDamage(const AttackDef* attackDe
 
 bool ProjectileMovementComponent::tryDamageEntityAtTarget(const AttackDef* attackDef) const
 {
-    std::shared_ptr<Entity> targetEntity = entityContainer->getMutableEntityAt(target);
+    std::shared_ptr<Entity> targetEntity;
+
+    SharedMutableEntityList entitiesAtTarget = entityContainer->getMutableEntitiesAt(targetNode);
+    for (auto possibleTarget : entitiesAtTarget)
+    {
+        if (entity->as<Unit>())
+        {
+            // Any unit is a valid target
+            targetEntity = possibleTarget;
+
+            if (entity->getComponent<FlyerComponent>())
+            {
+                // As per the original game, we prefer to target flying units.
+                // So, if we've found a flying unit, we're done.
+                break;
+            }
+        }
+    }
+
     if (targetEntity)
     {
         return AttackUtils::tryApplyAttack(*attackDef, *targetEntity, *randomizer);
     }
+
     return false;
 }
 
@@ -127,10 +148,14 @@ void ProjectileMovementComponent::spawnImpactEffect() const
         return;
     }
 
+    // TODO: In theory we could apply an offset if the projectile is coming from or targeting a flying unit.
+    //   However, the original game doesn't seem to bother with this!
+    float offsetY = 0;
+
     // Facing is irrelevant!
-    std::shared_ptr<Entity> effect = entityFactory->createEffect(*impactEffectDef, Facing::North);
+    std::shared_ptr<Entity> effect = entityFactory->createEffect(*impactEffectDef, Facing::North, offsetY);
     World* world = entity->getWorld();
-    world->addEntity(effect, target);
+    world->addEntity(effect, targetNode);
 }
 
 void ProjectileMovementComponent::playImpactSound(const std::string& soundName) const
@@ -145,10 +170,10 @@ void ProjectileMovementComponent::playImpactSound(const std::string& soundName) 
 
 glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
 {
-    // TODO: We never actually move the projectile, we just simulate the movement with a render offset.
-    // This may cause problems later down the line with fog of war.
-    // The original game seems to get around this by revealing a small area around the projectile,
-    // provided the target is visible.
+    // NOTE: We don't technically move the projectile, we just simulate the movement with a render offset.
+    //   This may cause problems later down the line with fog of war.
+    //   The original game seems to get around this by revealing a small area around a projectile when it first spawns,
+    //   provided the target is visible.
 
     // Calculate the start and end position, in pixels.
     // This doesn't have to be precise, as long as the distances are correct; we only need the render offset relative to
@@ -159,8 +184,8 @@ glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
         static_cast<float>(RenderUtils::tileToPx_Y(pos.x, pos.y))
     };
     const glm::vec2 end = { //
-        static_cast<float>(RenderUtils::tileToPx_X(target.x)),
-        static_cast<float>(RenderUtils::tileToPx_Y(target.x, target.y))
+        static_cast<float>(RenderUtils::tileToPx_X(targetNode.x)),
+        static_cast<float>(RenderUtils::tileToPx_Y(targetNode.x, targetNode.y))
     };
 
     // Calculate the final render offset

@@ -39,7 +39,8 @@ private:
             | TilePassability::Coastline                //
             | TilePassability::SoftMountain             //
             | TilePassability::Tree                     //
-            | TilePassability::Water;
+            | TilePassability::Water                    //
+            | TilePassability::Impassable;
 
     /** TilePassability values that signify an obstruction. */
     static constexpr TilePassability obstructedFlags = TilePassability::GroundUnit;

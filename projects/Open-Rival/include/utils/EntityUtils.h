@@ -34,11 +34,11 @@ public:
     /** Retrieves all entities within the given radius of a position (mutable version). */
     virtual SharedMutableEntityList getMutableEntitiesInRadius(const MapNode& pos, int radius) = 0;
 
-    /** Gets the entity at the given position (read-only version). */
-    virtual std::shared_ptr<const Entity> getEntityAt(const MapNode& pos) const = 0;
+    /** Gets the entities at the given position (read-only version). */
+    virtual SharedEntityList getEntitiesAt(const MapNode& pos) const = 0;
 
-    /** Gets the entity at the given position (mutable version). */
-    virtual std::shared_ptr<Entity> getMutableEntityAt(const MapNode& pos) = 0;
+    /** Gets the entities at the given position (mutable version). */
+    virtual SharedMutableEntityList getMutableEntitiesAt(const MapNode& pos) = 0;
 };
 
 }  // namespace Rival
