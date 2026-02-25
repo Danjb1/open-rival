@@ -105,7 +105,12 @@ public:
         return name;
     }
 
-    /** Gets the y-offset (pixels) that should be applied to this unit's hitbox, health bar and death effect. */
+    /** Gets the y-offset (pixels) of flying units.
+     * This affects various things, such as:
+     * - The unit's hitbox
+     * - The unit's health bar
+     * - The destination of projectiles
+     * - The position of the death effect */
     float getOffsetY() const
     {
         return offsetY;

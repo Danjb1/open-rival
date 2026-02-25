@@ -67,18 +67,24 @@ static constexpr float zMapBorder = zStart;
 static constexpr float zOverlays = zMapBorder + 1;
 static constexpr float zHitbox = zOverlays + 1;
 static constexpr float zFog = zHitbox + 1.f;
-static constexpr float zProjectileNearest = zFog + 1.f;
+static constexpr float zEffectsNearest = zFog + 1.f;
+static constexpr float zEffectsFurthest = zEffectsNearest + maxTilesY;
+static constexpr float zProjectileNearest = zEffectsFurthest + 1.f;
 static constexpr float zProjectileFurthest = zProjectileNearest + maxTilesY;
+static constexpr float zFlyerNearest = zProjectileFurthest + 1.f;
+static constexpr float zFlyerFurthest = zFlyerNearest + maxTilesY;
 static constexpr float zEntityNearest = zProjectileFurthest + 1.f;
 static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
 static constexpr float zTiles = zEntityFurthest + 1.f;
 
-// Z-position delta applied to projectiles
+// Z-position offset applied to projectiles
 static constexpr float zOffsetProjectiles = zProjectileNearest - zEntityNearest;
 
-// Z-position delta applied to flying units
-// (for now just use the same offset as projectiles as both are a "layer above" the world)
-static constexpr float zOffsetFlyers = zOffsetProjectiles;
+// Z-position offset applied to flying units
+static constexpr float zOffsetFlyers = zFlyerNearest - zEntityNearest;
+
+// Z-position offset applied to effects
+static constexpr float zOffsetEffects = zEffectsNearest - zEntityNearest;
 
 // Camera far plane.
 // This is the maximum distance from the camera that we can render.

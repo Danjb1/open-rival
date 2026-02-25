@@ -12,6 +12,7 @@
 
 ## Quality of Life
 
+- [x] Improved pathfinding
 - [ ] UI scaling
 - [x] Camera zooming
 - [ ] Smooth camera panning
@@ -25,12 +26,15 @@
 - [ ] Using abilities with a group selected
 - [x] High-res fonts
 - [ ] Allow troops to stop moving if they are dying to traps
+- [ ] Non-suicidal peasants (don't go looking for gold)
 - [ ] Repairing allied siege units
 - [x] Remove 25-unit limit for selections
 - [ ] Allow AI players to be allied
+- [ ] Better targeting when a tile contains both a Flying Unit and a Ground Unit
 
-## Assets
+## Assets & Rendering
 
+- [ ] Visually offset projectiles when targeting flying units
 - [ ] Translucent unit shadows (instead of solid black)
 - [ ] Real translucency for fog of war
 - [ ] Upscale graphics / videos using AI?
@@ -50,11 +54,9 @@
 
 ## Balance
 
-- [x] Improved pathfinding
 - [ ] Configurable Gold multiplier
 - [ ] Configurable XP multiplier
 - [ ] Affordable Wall
-- [ ] Non-suicidal peasants (don't go looking for gold)
 - [ ] Rebalance abilities (Frozen Breath, Capture)
 - [ ] Disable friendly fire from ranged attacks
 

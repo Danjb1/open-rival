@@ -62,8 +62,8 @@ public:
     void forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const override;
     SharedEntityList getEntitiesInRadius(const MapNode& pos, int radius) const override;
     SharedMutableEntityList getMutableEntitiesInRadius(const MapNode& pos, int radius) override;
-    std::shared_ptr<const Entity> getEntityAt(const MapNode& pos) const override;
-    std::shared_ptr<Entity> getMutableEntityAt(const MapNode& pos) override;
+    SharedEntityList getEntitiesAt(const MapNode& pos) const override;
+    SharedMutableEntityList getMutableEntitiesAt(const MapNode& pos) override;
     // End EntityContainer override
 
     // Begin PathfindingMap override

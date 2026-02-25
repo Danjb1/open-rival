@@ -30,16 +30,17 @@ public:
     // End PassabilityUpdater override
 
 private:
-    /** TilePassability values that block pathfinding.
-     * Using a value of "Clear" here is equivalent to "none"; flying units can pathfind anywhere. */
-    static constexpr TilePassability unpathableFlags = TilePassability::Clear;
+    /** TilePassability values that block pathfinding. */
+    static constexpr TilePassability unpathableFlags = TilePassability::Impassable;
 
     /** TilePassability values that signify an obstruction. */
     static constexpr TilePassability obstructedFlags = TilePassability::FlyingUnit;
 
     /** TilePassability values that block traversal. */
-    static constexpr TilePassability untraversableFlags =
-            TilePassability::FlyingUnit | TilePassability::FlyingUnitPendingMove | TilePassability::FlyingUnitLeaving;
+    static constexpr TilePassability untraversableFlags = unpathableFlags  //
+            | TilePassability::FlyingUnit                                  //
+            | TilePassability::FlyingUnitPendingMove                       //
+            | TilePassability::FlyingUnitLeaving;
 };
 
 /**

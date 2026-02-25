@@ -86,7 +86,12 @@ enum class TilePassability : std::uint16_t
     /**
      * Flag set when a tile contains a coastline.
      */
-    Coastline = 1 << 12
+    Coastline = 1 << 12,
+
+    /**
+     * Flag set when a tile is impassable, even to flying units (e.g. the map edges).
+     */
+    Impassable = 1 << 13
 };
 MAKE_ENUM_FLAGS(TilePassability)
 

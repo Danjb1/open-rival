@@ -9,7 +9,7 @@
 namespace Rival {
 
 /**
- * PassabilityChecker that treats empty ground tiles as traversable.
+ * PassabilityChecker that treats empty water tiles as traversable.
  */
 class SeafarerPassability
     : public Pathfinding::PassabilityChecker
@@ -36,16 +36,17 @@ private:
 
 private:
     /** TilePassability values that block pathfinding.
-     * Using a value of "Clear" here is equivalent to "none"; seafaring units can pathfind anywhere on water
-     * (this requirement is enforced elsewhere). */
-    static constexpr TilePassability unpathableFlags = TilePassability::Clear;
+     * (The requirement that tiles are water is enforced elsewhere.) */
+    static constexpr TilePassability unpathableFlags = TilePassability::Impassable;
 
     /** TilePassability values that signify an obstruction. */
     static constexpr TilePassability obstructedFlags = TilePassability::GroundUnit;
 
     /** TilePassability values that block traversal. */
-    static constexpr TilePassability untraversableFlags =
-            TilePassability::GroundUnit | TilePassability::GroundUnitPendingMove | TilePassability::GroundUnitLeaving;
+    static constexpr TilePassability untraversableFlags = unpathableFlags  //
+            | TilePassability::GroundUnit                                  //
+            | TilePassability::GroundUnitPendingMove                       //
+            | TilePassability::GroundUnitLeaving;
 };
 
 /**

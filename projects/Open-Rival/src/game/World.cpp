@@ -41,7 +41,7 @@ std::vector<TilePassability> World::createPassability() const
         if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
         {
             // Tiles at the edge of the map are impassable
-            passability.push_back(TilePassability::Blocked);
+            passability.push_back(TilePassability::Impassable);
         }
         else if (tile.type == TileType::Water)
         {
@@ -160,30 +160,32 @@ SharedMutableEntityList World::getMutableEntitiesInRadius(const MapNode& pos, in
     return entitiesInRadius;
 }
 
-std::shared_ptr<const Entity> World::getEntityAt(const MapNode& pos) const
+SharedEntityList World::getEntitiesAt(const MapNode& pos) const
 {
     // TODO: Use spatial partitioning
+    SharedEntityList entities;
     for (const auto& entity : entitiesList)
     {
         if (entity->getPos() == pos)
         {
-            return entity;
+            entities.push_back(entity);
         }
     }
-    return nullptr;
+    return entities;
 }
 
-std::shared_ptr<Entity> World::getMutableEntityAt(const MapNode& pos)
+SharedMutableEntityList World::getMutableEntitiesAt(const MapNode& pos)
 {
     // TODO: Use spatial partitioning
+    SharedMutableEntityList entities;
     for (const auto& entity : entitiesList)
     {
         if (entity->getPos() == pos)
         {
-            return entity;
+            entities.push_back(entity);
         }
     }
-    return nullptr;
+    return entities;
 }
 
 Entity* World::getMutableEntity(int id) const
