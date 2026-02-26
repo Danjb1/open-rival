@@ -36,7 +36,6 @@ private:
     static constexpr TilePassability unpathableFlags =  //
             TilePassability::Blocked                    //
             | TilePassability::Building                 //
-            | TilePassability::Coastline                //
             | TilePassability::SoftMountain             //
             | TilePassability::Tree                     //
             | TilePassability::Water                    //

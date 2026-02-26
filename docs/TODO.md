@@ -24,10 +24,6 @@
 - World should handle spatial partitioning internally; caller does not care about the details
 - Can also store lists of entities by type in World for quick filtering (e.g. get only units)
 
-### Movement
-
-- Ground units should be able to traverse thin strips of water, and NOT sea units - test this!
-
 ### Combat
 
 - Units should automatically target nearby enemies (needs spatial partitioning!)
