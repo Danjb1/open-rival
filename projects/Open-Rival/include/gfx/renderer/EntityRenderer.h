@@ -39,6 +39,7 @@ private:
     void renderEntity(const Entity& entity, int delta) const;
     bool needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const;
     void sendDataToGpu(const Entity& entity, const SpriteComponent& spriteComponent, int delta) const;
+    bool shouldRenderHitboxes() const;
     bool isEntityUnderMouse(const Entity& entity) const;
     void renderHitbox(const Entity& entity) const;
 

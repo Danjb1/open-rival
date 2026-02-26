@@ -12,6 +12,9 @@ v0.4.0 (Combat demo)
 - Fixed flying units sometimes being rendered behind ground units
 - Fixed flying unit hitbox and health bar positions
 - Fixed map edges being traversable
+- Fixed ground units not being able to traverse coastlines
+- Fixed missing minimap border
+- Fixed unit hitboxes showing during drag-select
 - The shareware version of the Procopius Regular font is now included
 
 v0.3.0 (Multiplayer demo)

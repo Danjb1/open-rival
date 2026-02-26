@@ -118,7 +118,7 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
 
     // Render hitbox
-    if (isEntityUnderMouse(entity))
+    if (shouldRenderHitboxes() && isEntityUnderMouse(entity))
     {
         glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);  // Use default palette for hitboxes
         renderHitbox(entity);
@@ -267,6 +267,11 @@ glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
     }
 
     return offset;
+}
+
+bool EntityRenderer::shouldRenderHitboxes() const
+{
+    return playerContext.getCurrentAction() == PlayerAction::None;
 }
 
 bool EntityRenderer::isEntityUnderMouse(const Entity& entity) const
