@@ -66,6 +66,7 @@ public:
     void registerAttack(const AttackDef* attackDefinition);
 
 private:
+    bool isValidTarget(std::shared_ptr<Entity> targetEntity);
     void deliverAttack();
     void spawnProjectile(const AttackDef& attack, Entity& targetEntity);
     void switchToNewTarget();
