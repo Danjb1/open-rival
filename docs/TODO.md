@@ -4,7 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Ranged units sometimes keep attacking after the target dies
 - Trying to attack an empty tile with a ranged unit just moves there instead
 - Ground units should not move when commanded to attack a flying unit
 - Flying unit hitboxes should take precedence over ground units behind them

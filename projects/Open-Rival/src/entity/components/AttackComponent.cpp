@@ -91,7 +91,7 @@ void AttackComponent::update(int delta)
     }
 
     std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
-    if (!targetEntity)
+    if (!isValidTarget(targetEntity))
     {
         // No valid target!
         return;
@@ -112,12 +112,25 @@ void AttackComponent::update(int delta)
     }
 }
 
+bool AttackComponent::isValidTarget(std::shared_ptr<Entity> targetEntity)
+{
+    if (!targetEntity)
+    {
+        return false;
+    }
+
+    HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
+    return healthComp && !healthComp->isDead();
+}
+
 void AttackComponent::deliverAttack()
 {
     std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
-    if (!targetEntity)
+    if (!isValidTarget(targetEntity))
     {
-        // Target no longer exists!
+        // Target is no longer valid - abort!
+        // This may result in ranged units performing their attack animation and then no projectile spawning,
+        // but this is less strange than a projectile being fired long after the target is dead!
         return;
     }
 

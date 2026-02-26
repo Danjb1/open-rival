@@ -118,12 +118,12 @@ bool ProjectileMovementComponent::tryDamageEntityAtTarget(const AttackDef* attac
     SharedMutableEntityList entitiesAtTarget = entityContainer->getMutableEntitiesAt(targetNode);
     for (auto possibleTarget : entitiesAtTarget)
     {
-        if (entity->as<Unit>())
+        if (possibleTarget->as<Unit>())
         {
             // Any unit is a valid target
             targetEntity = possibleTarget;
 
-            if (entity->getComponent<FlyerComponent>())
+            if (possibleTarget->getComponent<FlyerComponent>())
             {
                 // As per the original game, we prefer to target flying units.
                 // So, if we've found a flying unit, we're done.
