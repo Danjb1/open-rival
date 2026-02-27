@@ -73,7 +73,7 @@ static constexpr float zProjectileNearest = zEffectsFurthest + 1.f;
 static constexpr float zProjectileFurthest = zProjectileNearest + maxTilesY;
 static constexpr float zFlyerNearest = zProjectileFurthest + 1.f;
 static constexpr float zFlyerFurthest = zFlyerNearest + maxTilesY;
-static constexpr float zEntityNearest = zProjectileFurthest + 1.f;
+static constexpr float zEntityNearest = zFlyerFurthest + 1.f;
 static constexpr float zEntityFurthest = zEntityNearest + maxTilesY;
 static constexpr float zTiles = zEntityFurthest + 1.f;
 

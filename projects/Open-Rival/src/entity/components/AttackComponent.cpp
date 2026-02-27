@@ -118,10 +118,35 @@ bool AttackComponent::hasValidTarget() const
     return targetTile.isValid();
 }
 
-bool AttackComponent::isValidTarget(std::shared_ptr<Entity> targetEntity) const
+bool AttackComponent::isValidTarget(std::shared_ptr<const Entity> targetEntity) const
 {
-    HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
-    return healthComp && !healthComp->isDead();
+    const HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
+    if (!healthComp)
+    {
+        // Can't target entities without health
+        return false;
+    }
+
+    if (healthComp->isDead())
+    {
+        // Can't target dead entities
+        return false;
+    }
+
+    const Unit* targetUnit = targetEntity->as<Unit>();
+    bool isTargetFlying = targetUnit && targetUnit->isFlying();
+    if (isTargetFlying)
+    {
+        // TODO: For now, just check the first attack
+        const AttackDef* attackToUse = attackDefinitions[0];
+        if (attackToUse->isMelee())
+        {
+            // Melee units can't target flying units
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void AttackComponent::deliverAttack()
@@ -184,16 +209,19 @@ void AttackComponent::spawnProjectile(const AttackDef& attackDef, const MapNode&
 
 void AttackComponent::switchToNewTarget()
 {
-    auto currentTarget = weakTargetEntity.lock();
-    auto newTarget = weakRequestedTargetEntity.lock();
-    if (newTarget && newTarget != currentTarget)
+    auto currentTargetEntity = weakTargetEntity.lock();
+    auto newTargetEntity = weakRequestedTargetEntity.lock();
+    bool hasChangedTarget = (currentTargetEntity != newTargetEntity) || (targetTile != requestedTargetTile);
+
+    weakTargetEntity = weakRequestedTargetEntity;
+    targetTile = requestedTargetTile;
+
+    if (hasChangedTarget && hasValidTarget())
     {
         // Reset movement restrictions when switching to a new target
         moveToTargetCooldown = 0;
         numMovementAttempts = 0;
     }
-
-    weakTargetEntity = weakRequestedTargetEntity;
 }
 
 void AttackComponent::updateCooldown(int delta)
@@ -217,7 +245,7 @@ bool AttackComponent::isTargetInRange() const
     return isTargetTileInRange();
 }
 
-bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
+bool AttackComponent::isInRange(const std::shared_ptr<const Entity> target) const
 {
     if (attackDefinitions.empty())
     {
@@ -368,14 +396,18 @@ void AttackComponent::clearTarget()
 void AttackComponent::setTargetEntity(std::weak_ptr<Entity> weakNewTarget)
 {
     std::shared_ptr<Entity> newTarget = weakNewTarget.lock();
-
-    if (newTarget && newTarget->getId() == entity->getId())
+    if (!isValidTarget(newTarget))
     {
-        // Can't attack self
         return;
     }
 
-    clearTarget();
+    if (newTarget && newTarget->getId() == entity->getId())
+    {
+        // Can't attack self!
+        return;
+    }
+
+    requestedTargetTile = MapNode::Invalid;
     weakRequestedTargetEntity = weakNewTarget;
 
     if (attackState == AttackState::None)
@@ -402,8 +434,8 @@ void AttackComponent::setTargetTile(const MapNode& newTargetTile)
         return;
     }
 
-    clearTarget();
-    targetTile = newTargetTile;
+    weakRequestedTargetEntity.reset();
+    requestedTargetTile = newTargetTile;
 
     if (attackState == AttackState::None)
     {
