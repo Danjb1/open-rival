@@ -78,6 +78,8 @@ private:
     bool attackTile(GameCommandInvoker& cmdInvoker, const PlayerContext& playerContext);
     bool moveToTile(GameCommandInvoker& cmdInvoker, const PlayerContext& playerContext);
 
+    bool isEntityTargetableBySelection(const PlayerContext& playerContext) const;
+
 public:
     static const std::string key;
 

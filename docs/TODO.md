@@ -4,7 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Ground units should not move when commanded to attack a flying unit
 - Flying unit hitboxes should take precedence over ground units behind them
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
 

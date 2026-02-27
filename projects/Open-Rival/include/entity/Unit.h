@@ -135,6 +135,9 @@ public:
      * It may take some time for the action to be fully stopped. */
     void abortAction();
 
+    /** Returns true for Units with a FlyerComponent. */
+    bool isFlying() const;
+
 private:
     /** Gets a weak pointer to this Unit.
      * NOTE: This requires that this Unit was created using std::make_shared. */

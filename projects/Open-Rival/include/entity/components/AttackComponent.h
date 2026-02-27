@@ -59,6 +59,7 @@ public:
     // End AnimationListener override
 
     void clearTarget();
+    bool isValidTarget(std::shared_ptr<const Entity> targetEntity) const;
     void setTargetEntity(std::weak_ptr<Entity> newTarget);
     void setTargetTile(const MapNode& newTargetTile);
 
@@ -68,19 +69,14 @@ public:
     void registerAttack(const AttackDef* attackDefinition);
 
 private:
-    bool hasValidTarget() const;
-    bool isValidTarget(std::shared_ptr<Entity> targetEntity) const;
-
-    void tryAttackTargetEntity(std::shared_ptr<Entity> targetEntity);
-    void tryAttackTargetTile();
-
     void spawnProjectile(const AttackDef& attack, const MapNode& targetPos);
 
+    bool hasValidTarget() const;
     void switchToNewTarget();
     void updateCooldown(int delta);
 
     bool isTargetInRange() const;
-    bool isInRange(const std::shared_ptr<Entity> target) const;
+    bool isInRange(const std::shared_ptr<const Entity> target) const;
     bool isTargetTileInRange() const;
     MapNode getTargetPos() const;
 
@@ -111,6 +107,7 @@ private:
 
     /** Target of the current attack. */
     std::weak_ptr<Entity> weakTargetEntity;
+
     /** Requested target (next attack). */
     std::weak_ptr<Entity> weakRequestedTargetEntity;
 
@@ -119,6 +116,9 @@ private:
      * (Melee units trying to attack thin air should get the message "Could not attack there!".)
      * If another unit walks into this tile, they should still take projectile damage! */
     MapNode targetTile = MapNode::Invalid;
+
+    /** Requested target tile (next attack). */
+    MapNode requestedTargetTile = MapNode::Invalid;
 
     std::weak_ptr<MovementComponent> weakMovementComp;
     std::weak_ptr<FacingComponent> weakFacingComp;

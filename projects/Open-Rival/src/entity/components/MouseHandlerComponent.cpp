@@ -191,17 +191,38 @@ void MouseHandlerComponent::onTargeted(
 
     if (actionToPerform == PlayerAction::Attack)
     {
-        // Play a sound (from a currently-selected unit)
-        std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
-        if (const auto voiceComponent = selectedEntity->getComponent<VoiceComponent>())
+        /*
+         * This is a little complicated.
+         * Whether or not we play a voice clip here depends on the leader of the selection.
+         * BUT, we need to issue an AttackCommand either way, because other entities in the selection might still be
+         * able to attack us.
+         */
+
+        if (isEntityTargetableBySelection(playerContext))
         {
-            voiceComponent->playSound(UnitSoundType::Move);
+            // Play a sound (from a currently-selected unit)
+            std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
+            if (const auto voiceComponent = selectedEntity->getComponent<VoiceComponent>())
+            {
+                voiceComponent->playSound(UnitSoundType::Move);
+            }
         }
 
         // Issue an AttackCommand
         std::vector<int> entityIds = playerContext.getSelectedEntityIdsVector();
         cmdInvoker.dispatchCommand(std::make_shared<AttackCommand>(entityIds, entity->getId()));
     }
+}
+
+bool MouseHandlerComponent::isEntityTargetableBySelection(const PlayerContext& playerContext) const
+{
+    std::shared_ptr<Entity> selectedEntity = playerContext.getFirstSelectedEntity().lock();
+    if (const auto attackComponent = selectedEntity->getComponent<AttackComponent>())
+    {
+        return attackComponent->isValidTarget(entity->shared_from_this());
+    }
+
+    return false;
 }
 
 bool MouseHandlerComponent::onTileClicked(

@@ -4,6 +4,7 @@
 #include "entity/Entity.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/DeathEffectComponent.h"
+#include "entity/components/FlyerComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/UnitAnimationComponent.h"
@@ -216,6 +217,11 @@ void Unit::triggerDeathEvent()
 {
     // TODO: drop items
     markForDeletion();
+}
+
+bool Unit::isFlying() const
+{
+    return std::dynamic_pointer_cast<FlyerComponent>(movementComponent) != nullptr;
 }
 
 }  // namespace Rival
