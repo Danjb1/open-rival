@@ -58,7 +58,9 @@ public:
     void onAnimationFinished(UnitAnimationType animType) override;
     // End AnimationListener override
 
-    void setTarget(std::weak_ptr<Entity> newTarget);
+    void clearTarget();
+    void setTargetEntity(std::weak_ptr<Entity> newTarget);
+    void setTargetTile(const MapNode& newTargetTile);
 
     void addListener(std::weak_ptr<AttackListener> listener);
     void removeListener(std::weak_ptr<AttackListener> listener);
@@ -66,15 +68,27 @@ public:
     void registerAttack(const AttackDef* attackDefinition);
 
 private:
-    bool isValidTarget(std::shared_ptr<Entity> targetEntity);
-    void deliverAttack();
-    void spawnProjectile(const AttackDef& attack, Entity& targetEntity);
+    bool hasValidTarget() const;
+    bool isValidTarget(std::shared_ptr<Entity> targetEntity) const;
+
+    void tryAttackTargetEntity(std::shared_ptr<Entity> targetEntity);
+    void tryAttackTargetTile();
+
+    void spawnProjectile(const AttackDef& attack, const MapNode& targetPos);
+
     void switchToNewTarget();
     void updateCooldown(int delta);
+
+    bool isTargetInRange() const;
     bool isInRange(const std::shared_ptr<Entity> target) const;
-    void requestAttack(std::shared_ptr<Entity> targetEntity);
-    void startAttack(std::shared_ptr<Entity> targetEntity);
-    void tryMoveToTarget(std::shared_ptr<Entity> targetEntity);
+    bool isTargetTileInRange() const;
+    MapNode getTargetPos() const;
+
+    void requestAttack();
+    void startAttack();
+    void deliverAttack();
+
+    void tryMoveToTarget();
     void moveToTarget(const MapNode& node);
 
 public:
@@ -99,6 +113,12 @@ private:
     std::weak_ptr<Entity> weakTargetEntity;
     /** Requested target (next attack). */
     std::weak_ptr<Entity> weakRequestedTargetEntity;
+
+    /** Target tile, in case an attack is directed at thin air.
+     * Only ranged units can ever have a target tile.
+     * (Melee units trying to attack thin air should get the message "Could not attack there!".)
+     * If another unit walks into this tile, they should still take projectile damage! */
+    MapNode targetTile = MapNode::Invalid;
 
     std::weak_ptr<MovementComponent> weakMovementComp;
     std::weak_ptr<FacingComponent> weakFacingComp;

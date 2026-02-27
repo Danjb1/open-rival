@@ -85,7 +85,7 @@ void MoveCommand::execute(GameCommandContext& context)
         if (auto attackComponent = entity->getComponent<AttackComponent>(AttackComponent::key))
         {
             // Clear current target when a MoveCommand is issued
-            attackComponent->setTarget({});
+            attackComponent->clearTarget();
         }
 
         moveComponent->moveTo(destination, pathfindingContext);

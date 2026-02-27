@@ -11,6 +11,11 @@ class AttackDef final
 public:
     static AttackDef fromJson(const json& j);
 
+    bool isMelee() const
+    {
+        return range == 1;
+    }
+
 private:
     AttackDef() {}
 

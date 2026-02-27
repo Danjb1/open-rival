@@ -11,6 +11,7 @@
 
 namespace Rival {
 
+class AttackComponent;
 class Camera;
 class MovementComponent;
 class OwnerComponent;
@@ -74,6 +75,9 @@ public:
 private:
     const Rect createHitbox() const;
 
+    bool attackTile(GameCommandInvoker& cmdInvoker, const PlayerContext& playerContext);
+    bool moveToTile(GameCommandInvoker& cmdInvoker, const PlayerContext& playerContext);
+
 public:
     static const std::string key;
 
@@ -84,6 +88,7 @@ private:
     static constexpr int unitHitboxOffsetY = 22;
 
     std::weak_ptr<MovementComponent> weakMovementComponent;
+    std::weak_ptr<AttackComponent> weakAttackComponent;
     std::weak_ptr<OwnerComponent> weakOwnerComponent;
     std::weak_ptr<SpriteComponent> weakSpriteComponent;
     std::weak_ptr<VoiceComponent> weakVoiceComponent;

@@ -13,6 +13,15 @@ AttackCommand::AttackCommand(std::vector<int> entityIds, int targetEntityId)
     : GameCommand(GameCommandType::Attack)
     , entityIds(entityIds)
     , targetEntityId(targetEntityId)
+    , targetTile(MapNode::Invalid)
+{
+}
+
+AttackCommand::AttackCommand(std::vector<int> entityIds, MapNode targetTile)
+    : GameCommand(GameCommandType::Attack)
+    , entityIds(entityIds)
+    , targetEntityId(-1)
+    , targetTile(targetTile)
 {
 }
 
@@ -22,6 +31,7 @@ void AttackCommand::serialize(std::vector<char>& buffer) const
 
     BufferUtils::addVectorToBuffer(buffer, entityIds);
     BufferUtils::addToBuffer(buffer, targetEntityId);
+    BufferUtils::addToBuffer(buffer, targetTile);
 }
 
 std::shared_ptr<AttackCommand> AttackCommand::deserialize(std::vector<char> buffer, std::size_t& offset)
@@ -31,22 +41,33 @@ std::shared_ptr<AttackCommand> AttackCommand::deserialize(std::vector<char> buff
     int targetEntityId;
     BufferUtils::readFromBuffer(buffer, offset, targetEntityId);
 
-    return std::make_shared<AttackCommand>(entityIds, targetEntityId);
+    MapNode targetTile;
+    BufferUtils::readFromBuffer(buffer, offset, targetTile);
+
+    if (targetEntityId >= 0)
+    {
+        return std::make_shared<AttackCommand>(entityIds, targetEntityId);
+    }
+
+    return std::make_shared<AttackCommand>(entityIds, targetTile);
 }
 
 void AttackCommand::execute(GameCommandContext& context)
 {
     World& world = context.getWorld();
 
-    std::weak_ptr<Entity> targetEntityWeak = world.getMutableEntityWeak(targetEntityId);
-    std::shared_ptr<Entity> targetEntity = targetEntityWeak.lock();
-    if (!targetEntity)
+    // Validate the target entity
+    std::weak_ptr<Entity> targetEntityWeak;
+    if (targetEntityId >= 0)
     {
-        // Target entity has been deleted since this command was issued
-        return;
+        targetEntityWeak = world.getMutableEntityWeak(targetEntityId);
+        std::shared_ptr<Entity> targetEntity = targetEntityWeak.lock();
+        if (!targetEntity)
+        {
+            // Target entity has been deleted since this command was issued
+            return;
+        }
     }
-
-    // TODO: Verify that target entity can be attacked
 
     // Set the target for our attack
     for (int entityId : entityIds)
@@ -65,7 +86,14 @@ void AttackCommand::execute(GameCommandContext& context)
             continue;
         }
 
-        attackComponent->setTarget(targetEntityWeak);
+        if (targetEntityId >= 0)
+        {
+            attackComponent->setTargetEntity(targetEntityWeak);
+        }
+        else
+        {
+            attackComponent->setTargetTile(targetTile);
+        }
     }
 }
 

@@ -84,49 +84,49 @@ void AttackComponent::update(int delta)
         return;
     }
 
-    bool isOnCooldown = (attackState == AttackState::Cooldown);
-    if (isOnCooldown)
+    if (attackState == AttackState::Cooldown)
     {
+        // Don't return here - we can still move towards the target even if we're on cooldown
         updateCooldown(delta);
     }
 
-    std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
-    if (!isValidTarget(targetEntity))
+    if (hasValidTarget())
     {
-        // No valid target!
-        return;
-    }
-
-    if (isInRange(targetEntity))
-    {
-        if (!isOnCooldown)
+        if (isTargetInRange())
         {
-            requestAttack(targetEntity);
+            if (attackState != AttackState::Cooldown)
+            {
+                requestAttack();
+            }
         }
-    }
-    else
-    {
-        // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between units
-        // that all start moving at the same time
-        tryMoveToTarget(targetEntity);
+        else
+        {
+            // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between
+            // units that all start moving at the same time
+            tryMoveToTarget();
+        }
     }
 }
 
-bool AttackComponent::isValidTarget(std::shared_ptr<Entity> targetEntity)
+bool AttackComponent::hasValidTarget() const
 {
-    if (!targetEntity)
+    if (std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock())
     {
-        return false;
+        return isValidTarget(targetEntity);
     }
 
+    return targetTile.isValid();
+}
+
+bool AttackComponent::isValidTarget(std::shared_ptr<Entity> targetEntity) const
+{
     HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
     return healthComp && !healthComp->isDead();
 }
 
 void AttackComponent::deliverAttack()
 {
-    std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
-    if (!isValidTarget(targetEntity))
+    if (!hasValidTarget())
     {
         // Target is no longer valid - abort!
         // This may result in ranged units performing their attack animation and then no projectile spawning,
@@ -134,17 +134,24 @@ void AttackComponent::deliverAttack()
         return;
     }
 
+    std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
+    MapNode targetPos = getTargetPos();
+
     // TMP: Assume the first attack was used
     const AttackDef* attackToUse = attackDefinitions[0];
     const bool isMelee = attackToUse->range <= 1;
 
     if (isMelee)
     {
-        AttackUtils::tryApplyAttack(*attackToUse, *targetEntity, *randomizer);
+        // targetEntity *should* always be valid at this point, since melee attacks can't target tiles
+        if (targetEntity)
+        {
+            AttackUtils::tryApplyAttack(*attackToUse, *targetEntity, *randomizer);
+        }
     }
     else
     {
-        spawnProjectile(*attackToUse, *targetEntity);
+        spawnProjectile(*attackToUse, targetPos);
     }
 
     // Play sound
@@ -160,7 +167,7 @@ void AttackComponent::deliverAttack()
     cooldownDuration = attackToUse->reloadTime;
 }
 
-void AttackComponent::spawnProjectile(const AttackDef& attackDef, Entity& targetEntity)
+void AttackComponent::spawnProjectile(const AttackDef& attackDef, const MapNode& targetPos)
 {
     const ProjectileDef* projectileDef = dataStore.getProjectileDef(attackDef.projectile);
     if (!projectileDef)
@@ -171,7 +178,7 @@ void AttackComponent::spawnProjectile(const AttackDef& attackDef, Entity& target
 
     World* world = entity->getWorld();
     MapNode pos = entity->getPos();
-    auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, pos, targetEntity.getPos());
+    auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, pos, targetPos);
     world->addEntity(projectile, pos);
 }
 
@@ -200,6 +207,16 @@ void AttackComponent::updateCooldown(int delta)
     }
 }
 
+bool AttackComponent::isTargetInRange() const
+{
+    if (std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock())
+    {
+        return isInRange(targetEntity);
+    }
+
+    return isTargetTileInRange();
+}
+
 bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
 {
     if (attackDefinitions.empty())
@@ -212,9 +229,8 @@ bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
     //   Later, attacks with longer range and no mana cost should be preferred, as long as they are not on cooldown.
     //   It is also possible to set a spell as the default attack, in which case this should be used instead.
     const AttackDef* attackToUse = attackDefinitions[0];
-    const int range = attackToUse->range;
 
-    if (range == 1)
+    if (attackToUse->isMelee())
     {
         // Melee attacks cannot target flying units
         if (const auto movementComp = target->getComponent<MovementComponent>())
@@ -227,10 +243,30 @@ bool AttackComponent::isInRange(const std::shared_ptr<Entity> target) const
     }
 
     const int distToTarget = MapUtils::getDistance(entity->getPos(), target->getPos());
+    const int range = attackToUse->range;
     return distToTarget <= range;
 }
 
-void AttackComponent::requestAttack(std::shared_ptr<Entity> targetEntity)
+bool AttackComponent::isTargetTileInRange() const
+{
+    // TMP: For now, always use the first attack
+    const AttackDef* attackToUse = attackDefinitions[0];
+    const int distToTarget = MapUtils::getDistance(entity->getPos(), targetTile);
+    const int range = attackToUse->range;
+    return distToTarget <= range;
+}
+
+MapNode AttackComponent::getTargetPos() const
+{
+    if (std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock())
+    {
+        return targetEntity->getPos();
+    }
+
+    return targetTile;
+}
+
+void AttackComponent::requestAttack()
 {
     Unit* unit = entity->as<Unit>();
     if (unit->isBusy())
@@ -241,16 +277,18 @@ void AttackComponent::requestAttack(std::shared_ptr<Entity> targetEntity)
     }
     else
     {
-        startAttack(targetEntity);
+        startAttack();
     }
 }
 
-void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
+void AttackComponent::startAttack()
 {
+    MapNode targetPos = getTargetPos();
+
     // Face the target
     if (auto facingComponent = weakFacingComp.lock())
     {
-        const Facing newFacing = MapUtils::getDir(entity->getPos(), targetEntity->getPos());
+        const Facing newFacing = MapUtils::getDir(entity->getPos(), targetPos);
         facingComponent->setFacing(newFacing);
     }
 
@@ -258,9 +296,10 @@ void AttackComponent::startAttack(std::shared_ptr<Entity> targetEntity)
     CollectionUtils::forEachWeakPtr<AttackListener>(listeners, [&](auto listener) { listener->onAttackStarted(); });
 }
 
-void AttackComponent::tryMoveToTarget(std::shared_ptr<Entity> targetEntity)
+void AttackComponent::tryMoveToTarget()
 {
-    MapNode targetPos = targetEntity->getPos();
+    MapNode targetPos = getTargetPos();
+
     if (targetPos != lastTargetPosition)
     {
         // If the target has moved, reset our pathfinding restrictions
@@ -274,7 +313,7 @@ void AttackComponent::tryMoveToTarget(std::shared_ptr<Entity> targetEntity)
     {
         // Give up
         LOG_DEBUG_CATEGORY("movement", "Giving up reaching target at ({}, {})", targetPos.x, targetPos.y);
-        setTarget({});
+        clearTarget();
         return;
     }
 
@@ -319,7 +358,14 @@ void AttackComponent::moveToTarget(const MapNode& node)
     moveComponent->moveTo(node, context, hints);
 }
 
-void AttackComponent::setTarget(std::weak_ptr<Entity> weakNewTarget)
+void AttackComponent::clearTarget()
+{
+    weakRequestedTargetEntity.reset();
+    weakTargetEntity.reset();
+    targetTile = MapNode::Invalid;
+}
+
+void AttackComponent::setTargetEntity(std::weak_ptr<Entity> weakNewTarget)
 {
     std::shared_ptr<Entity> newTarget = weakNewTarget.lock();
 
@@ -329,7 +375,35 @@ void AttackComponent::setTarget(std::weak_ptr<Entity> weakNewTarget)
         return;
     }
 
+    clearTarget();
     weakRequestedTargetEntity = weakNewTarget;
+
+    if (attackState == AttackState::None)
+    {
+        switchToNewTarget();
+    }
+}
+
+void AttackComponent::setTargetTile(const MapNode& newTargetTile)
+{
+    if (newTargetTile == entity->getPos())
+    {
+        // Can't attack our own tile
+        return;
+    }
+
+    // TODO: For now, just check the first attack.
+    //   Units with ranged special attacks (e.g. flail) should be able to target tiles,
+    //   but the target tile should be cleared after a single attack.
+    const AttackDef* attackToUse = attackDefinitions[0];
+    if (attackToUse->isMelee())
+    {
+        // Melee units cannot target tiles
+        return;
+    }
+
+    clearTarget();
+    targetTile = newTargetTile;
 
     if (attackState == AttackState::None)
     {

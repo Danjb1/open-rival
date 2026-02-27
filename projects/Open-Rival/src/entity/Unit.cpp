@@ -168,7 +168,7 @@ void Unit::abortAction()
     case UnitState::Attacking:
         if (attackComponent)
         {
-            attackComponent->setTarget({});
+            attackComponent->clearTarget();
         }
         break;
     }

@@ -3,7 +3,11 @@
 #include <algorithm>  // std::min
 #include <stdexcept>
 
-namespace Rival { namespace MapUtils {
+namespace Rival {
+
+constexpr MapNode MapNode::Invalid { -1, -1 };
+
+namespace MapUtils {
 
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 {
@@ -316,4 +320,5 @@ int getDistance(const MapNode& a, const MapNode& b)
     return numTiles;
 }
 
-}}  // namespace Rival::MapUtils
+}  // namespace MapUtils
+}  // namespace Rival
