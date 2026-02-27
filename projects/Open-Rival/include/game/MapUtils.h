@@ -22,6 +22,8 @@ public:
  */
 struct MapNode
 {
+    static const MapNode Invalid;
+
     int x;
     int y;
 
