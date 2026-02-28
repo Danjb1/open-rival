@@ -8,6 +8,7 @@
 
 #include "commands/GameCommand.h"
 #include "entity/Entity.h"
+#include "entity/components/FlyerComponent.h"
 #include "entity/components/MouseHandlerComponent.h"
 #include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
@@ -321,8 +322,10 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     float mouseInWorldX = cameraX_px + (mouseInViewportX / zoom);
     float mouseInWorldY = cameraY_px + (mouseInViewportY / zoom);
 
-    // TODO: We could optimise this by considering only Entities that were rendered in the previous frame.
+    // TODO: We could optimise this by considering only Entities that were rendered in the previous frame
+    //   (or using spatial partitioning around the mouse position)
     const auto entities = world.getMutableEntities();
+    std::weak_ptr<Entity> selectedEntity;
     for (const auto& e : entities)
     {
         MouseHandlerComponent* mouseHandlerComponent =
@@ -335,11 +338,19 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
         const Rect& hitbox = mouseHandlerComponent->getHitbox();
         if (hitbox.contains(mouseInWorldX, mouseInWorldY))
         {
-            return e;
+            selectedEntity = e;
+
+            // Flying unit hitboxes may overlap with units behind them.
+            // In this case, the flying unit should take priority.
+            // So, we only stop searching if we've found a flying unit.
+            if (auto* flyer = e->getComponent<FlyerComponent>())
+            {
+                break;
+            }
         }
     }
 
-    return {};
+    return selectedEntity;
 }
 
 WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) const

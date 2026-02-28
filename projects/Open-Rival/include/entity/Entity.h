@@ -244,7 +244,7 @@ public:
         {
             return nullptr;
         }
-        return static_cast<T*>((iter->second).get());
+        return dynamic_cast<T*>((iter->second).get());
     }
 
     /**
@@ -262,14 +262,14 @@ public:
         {
             return nullptr;
         }
-        return static_cast<T*>((iter->second).get());
+        return dynamic_cast<T*>((iter->second).get());
     }
 
     /**
      * Gets a shared pointer to the EntityComponent with the given key (mutable version).
      *
      * This should be safe to call from the Entity itself, assuming the component shares the Entity's lifetime.
-     * 
+     *
      * From outside the Entity, the weak pointer version should generally be preferred to avoid memory leaks, unless a
      * component explicitly needs to be kept alive.
      *
@@ -290,7 +290,7 @@ public:
      * Gets a shared pointer to the EntityComponent with the given key (read-only version).
      *
      * This should be safe to call from the Entity itself, assuming the component shares the Entity's lifetime.
-     * 
+     *
      * From outside the Entity, the weak pointer version should generally be preferred to avoid memory leaks, unless a
      * component explicitly needs to be kept alive.
      *
