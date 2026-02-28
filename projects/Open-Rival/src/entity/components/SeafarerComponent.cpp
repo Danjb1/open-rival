@@ -39,7 +39,7 @@ void SeafarerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode
 void SeafarerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.removePassability(node, TilePassability::GroundUnitPendingMove);
-    map.setPassability(node, TilePassability::GroundUnitLeaving);
+    map.addPassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void SeafarerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
@@ -66,7 +66,7 @@ void SeafarerPassability::onUnitMoveAborted(PathfindingMap& map, const MapNode& 
 
 SeafarerComponent::SeafarerComponent()
     : MovementComponent(
-            MovementMode::Seafaring, SeafarerComponent::seafarerPassability, SeafarerComponent::seafarerPassability)
+              MovementMode::Seafaring, SeafarerComponent::seafarerPassability, SeafarerComponent::seafarerPassability)
 {
 }
 

@@ -11,6 +11,7 @@ v0.4.0 (Combat demo)
 - Fixed zoom not correctly factoring in the cursor position
 - Fixed flying units sometimes being rendered behind ground units
 - Fixed flying unit hitbox and health bar positions
+- Fixed passability issues when flying/ground units share a tile
 - Fixed map edges being traversable
 - Fixed ground units not being able to traverse coastlines
 - Fixed missing minimap border
