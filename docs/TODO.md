@@ -4,7 +4,7 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Flying units clear passability when leaving a tile even if it still occupied by a ground unit
+-
 
 <!----------------------------------------------------------------------------->
 ## Features

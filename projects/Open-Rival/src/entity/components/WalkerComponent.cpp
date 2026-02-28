@@ -34,7 +34,7 @@ void WalkerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& 
 void WalkerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.removePassability(node, TilePassability::GroundUnitPendingMove);
-    map.setPassability(node, TilePassability::GroundUnitLeaving);
+    map.addPassability(node, TilePassability::GroundUnitLeaving);
 }
 
 void WalkerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)

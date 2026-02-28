@@ -34,7 +34,7 @@ void FlyerPassability::onUnitPreparingMove(PathfindingMap& map, const MapNode& n
 void FlyerPassability::onUnitLeavingTile(PathfindingMap& map, const MapNode& node)
 {
     map.removePassability(node, TilePassability::FlyingUnitPendingMove);
-    map.setPassability(node, TilePassability::FlyingUnitLeaving);
+    map.addPassability(node, TilePassability::FlyingUnitLeaving);
 }
 
 void FlyerPassability::onUnitEnteringTile(PathfindingMap& map, const MapNode& node, bool isPassingThrough)
