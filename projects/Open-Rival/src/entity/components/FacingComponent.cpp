@@ -4,6 +4,7 @@
 #include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 #include "utils/EnumUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -62,7 +63,7 @@ void FacingComponent::setFacing(Facing newFacing)
     notifyListener();
 }
 
-Facing FacingComponent::getDeathFacing() const
+int FacingComponent::getDeathFacingIndex() const
 {
     /*
      * Death animations only support 4 different facings,
@@ -72,24 +73,19 @@ Facing FacingComponent::getDeathFacing() const
     {
     case Facing::South:
     case Facing::SouthWest:
-        return Facing::SouthWest;
+        return 0;
     case Facing::West:
     case Facing::NorthWest:
-        return Facing::NorthWest;
+        return 1;
     case Facing::North:
     case Facing::NorthEast:
-        return Facing::NorthEast;
+        return 2;
     case Facing::East:
     case Facing::SouthEast:
-        return Facing::SouthEast;
+        return 3;
     }
 
     throw std::runtime_error("Unsupported facing: " + std::to_string(EnumUtils::toIntegral(facing)));
-}
-
-int FacingComponent::getDeathFacingIndex() const
-{
-    return EnumUtils::toIntegral(getDeathFacing());
 }
 
 void FacingComponent::rotateLeft()

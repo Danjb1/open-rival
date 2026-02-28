@@ -56,9 +56,6 @@ public:
         return static_cast<int>(facing);
     }
 
-    /** Gets the current facing, snapped to the nearest supported facing for death animations. */
-    Facing getDeathFacing() const;
-
     /** Gets the facing index to use for the death animation, as this requires custom logic. */
     int getDeathFacingIndex() const;
 

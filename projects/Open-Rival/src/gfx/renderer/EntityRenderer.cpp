@@ -293,6 +293,13 @@ void EntityRenderer::renderHitbox(const Entity& entity) const
         return;
     }
 
+    auto* healthComponent = entity.getComponent<HealthComponent>();
+    if (healthComponent && healthComponent->isDead())
+    {
+        // Don't render hitboxes for dead entities
+        return;
+    }
+
     const Rect& hitbox = mouseHandler->getHitbox();
     const OwnerComponent* ownerComp = entity.getComponent<OwnerComponent>(OwnerComponent::key);
     const bool isSelf = ownerComp && playerStore.isLocalPlayer(ownerComp->getPlayerId());

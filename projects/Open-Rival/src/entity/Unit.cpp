@@ -193,7 +193,7 @@ void Unit::trySpawnDeathEffect()
         Facing facing = Facing::North;
         if (facingComponent)
         {
-            facing = facingComponent->getDeathFacing();
+            facing = facingComponent->getFacing();
         }
         std::shared_ptr<Entity> deathEffect = deathEffectComponent->spawnEffect(facing, offsetY);
         if (Effect* effect = deathEffect->as<Effect>())
