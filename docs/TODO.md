@@ -4,7 +4,6 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Flying unit hitboxes should take precedence over ground units behind them
 - Flying units clear passability when leaving a tile even if it still occupied by a ground unit
 
 <!----------------------------------------------------------------------------->
