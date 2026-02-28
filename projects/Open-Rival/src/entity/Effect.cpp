@@ -31,8 +31,8 @@ void Effect::onAnimationFinished()
 
 float Effect::getZOffset() const
 {
-    // Effects should be rendered on top of other entities!
-    return RenderUtils::zOffsetEffects;
+    // Overlay effects should be rendered on top of other entities!
+    return effectDef.layer == EffectDef::Layer::Overlay ? RenderUtils::zOffsetEffects : 0.f;
 }
 
 }  // namespace Rival

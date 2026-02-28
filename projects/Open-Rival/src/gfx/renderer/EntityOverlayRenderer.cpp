@@ -63,6 +63,13 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
             return;
         }
 
+        auto* healthComponent = entity->getComponent<HealthComponent>();
+        if (healthComponent && healthComponent->isDead())
+        {
+            // Don't render overlays for dead entities
+            return;
+        }
+
         addEntityOverlayToBuffers(*entity, isHovered);
     });
 }

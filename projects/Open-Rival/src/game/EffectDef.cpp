@@ -9,6 +9,9 @@ EffectDef EffectDef::fromJson(const json& j)
     effectDef.texture = j.value("texture", "");
     effectDef.shouldUseAngle = j.value("useAngle", false);
 
+    const std::string layerStr = j.value("layer", "");
+    effectDef.layer = (layerStr == "ground") ? Layer::Ground : Layer::Overlay;
+
     return effectDef;
 }
 

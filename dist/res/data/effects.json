@@ -6,6 +6,7 @@
         "startIndex": 51,
         "msPerFrame": 120
       },
+      "layer": "ground",
       "texture": "effects_common.tga",
       "useAngle": true
     },
@@ -84,6 +85,7 @@
         "endIndex": 23,
         "startIndex": 20
       },
+      "layer": "ground",
       "texture": "effects_common.tga"
     }
   }

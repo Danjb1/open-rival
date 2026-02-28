@@ -328,10 +328,22 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     std::weak_ptr<Entity> selectedEntity;
     for (const auto& e : entities)
     {
-        MouseHandlerComponent* mouseHandlerComponent =
-                e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
+        if (!e->isVisible())
+        {
+            // Ignore invisible entities
+            continue;
+        }
+
+        auto* mouseHandlerComponent = e->getComponent<MouseHandlerComponent>();
         if (!mouseHandlerComponent)
         {
+            continue;
+        }
+
+        auto* healthComponent = e->getComponent<HealthComponent>();
+        if (healthComponent && healthComponent->isDead())
+        {
+            // Ignore dead entities
             continue;
         }
 
