@@ -10,15 +10,6 @@
 ## Features
 <!----------------------------------------------------------------------------->
 
-### Spatial Partitioning
-
-- Modify methods in World to allow efficient retrieval of entities
-- Divide the world into a grid and have a map of cell -> entities
-    - Only check the relevant cells when retrieving entities
-    - Whenever an entity moves, spatial partitioning should handle moving entities between cells
-- World should handle spatial partitioning internally; caller does not care about the details
-- Can also store lists of entities by type in World for quick filtering (e.g. get only units)
-
 ### Combat
 
 - Units should automatically target nearby enemies (needs spatial partitioning!)

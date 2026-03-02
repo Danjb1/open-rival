@@ -187,7 +187,7 @@ public:
     }
 
     /** Moves this Entity to a new position. */
-    void setPos(MapNode newPos);
+    void setPos(const MapNode& newPos);
 
     /** Casts this Entity to the given subclass, if it is safe to do so.
      * Subclasses MUST have a `staticEntityType` member variable in order for this to work.
