@@ -64,6 +64,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/game/PlayerContext.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerState.cpp
     ${OPEN_RIVAL_DIR}/src/game/ProjectileDef.cpp
+    ${OPEN_RIVAL_DIR}/src/game/SpatialIndex.cpp
     ${OPEN_RIVAL_DIR}/src/game/Tile.cpp
     ${OPEN_RIVAL_DIR}/src/game/UnitDef.cpp
     ${OPEN_RIVAL_DIR}/src/game/World.cpp
@@ -204,7 +205,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/AttackUtils.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingType.h
-    ${OPEN_RIVAL_DIR}/include/game/DamageUtils.h
     ${OPEN_RIVAL_DIR}/include/game/EffectDef.h
     ${OPEN_RIVAL_DIR}/include/game/GameInterface.h
     ${OPEN_RIVAL_DIR}/include/game/GameState.h
@@ -216,6 +216,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/PlayerState.h
     ${OPEN_RIVAL_DIR}/include/game/ProjectileDef.h
     ${OPEN_RIVAL_DIR}/include/game/Race.h
+    ${OPEN_RIVAL_DIR}/include/game/SpatialIndex.h
     ${OPEN_RIVAL_DIR}/include/game/Tile.h
     ${OPEN_RIVAL_DIR}/include/game/UnitDef.h
     ${OPEN_RIVAL_DIR}/include/game/UnitType.h
