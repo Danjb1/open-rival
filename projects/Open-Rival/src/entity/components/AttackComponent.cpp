@@ -391,6 +391,7 @@ void AttackComponent::clearTarget()
     weakRequestedTargetEntity.reset();
     weakTargetEntity.reset();
     targetTile = MapNode::Invalid;
+    requestedTargetTile = MapNode::Invalid;
 }
 
 void AttackComponent::setTargetEntity(std::weak_ptr<Entity> weakNewTarget)
