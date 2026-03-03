@@ -14,7 +14,7 @@
 #include "game/PlayerState.h"
 #include "game/World.h"
 #include "gfx/Camera.h"
-#include "gfx/renderer/GameRenderer.h"
+#include "gfx/Renderer.h"
 #include "net/ClientInfo.h"
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/Packet.h"
@@ -57,7 +57,7 @@ class GameState
 public:
     GameState(Application& app,
             std::unique_ptr<World> world,
-            std::unordered_map<int, PlayerState>& playerStates,
+            std::unordered_map<int, PlayerState> playerStates,
             std::unordered_map<int, ClientInfo> clients,
             int localPlayerId,
             std::shared_ptr<std::mt19937> randomizer);
@@ -79,8 +79,8 @@ public:
 
     // Begin PlayerStore override
     int getNumPlayers() const override;
-    PlayerState& getLocalPlayerState() const override;
-    PlayerState* getPlayerState(int playerId) const override;
+    const PlayerState& getLocalPlayerState() const override;
+    const PlayerState* getPlayerState(int playerId) const override;
     bool isLocalPlayer(int playerId) const override;
     bool isSameTeam(int playerId) const override;
     // End PlayerStore override
@@ -91,6 +91,12 @@ public:
 
     void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
     void onClientReady(int tick, int clientId);
+    bool isWaitingForPlayers() const;
+    std::vector<ClientInfo> getNotReadyClients() const;
+
+    const Camera& getCamera() const;
+    const Rect& getViewport() const;
+    const PlayerContext& getPlayerContext() const;
 
 private:
     bool isTickReady() const;
@@ -113,7 +119,7 @@ private:
     std::unordered_map<int, ClientInfo> clients;
 
     /** Map of player ID -> player state. */
-    std::unordered_map<int, PlayerState>& playerStates;
+    std::unordered_map<int, PlayerState> playerStates;
 
     /** The current World. */
     std::unique_ptr<World> world;
@@ -132,9 +138,6 @@ private:
 
     /** Object used to find what's under the mouse. */
     std::shared_ptr<MousePicker> mousePicker;
-
-    /** Object that renders the game. */
-    GameRenderer gameRenderer;
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
@@ -155,7 +158,7 @@ private:
     int currentTick = 0;
 
     /** Flag set to true when waiting for network player input. */
-    bool isWaitingForPlayers = false;
+    bool bIsWaitingForPlayers = false;
 };
 
 }  // namespace Rival

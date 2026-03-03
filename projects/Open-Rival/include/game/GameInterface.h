@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gfx/GLWrapper.h"
 #include <glm/vec2.hpp>
 
 #include <memory>
@@ -41,8 +40,6 @@ extern const Rect statsPanel;
 class UiImage
 {
 public:
-    Rect pos;
-
     /** Constructor for a UiImage that uses a TextureAtlas. */
     UiImage(Rect pos, std::shared_ptr<const TextureAtlas> texAtlas, const std::string imageKey);
 
@@ -54,12 +51,36 @@ public:
 
     void setSpriteIndex(int newSpriteIndex);
 
-    void addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const;
+    Rect getPos() const;
+
+    void setPos(const Rect& newPos);
+
+    std::shared_ptr<const TextureAtlas> getTexAtlas() const
+    {
+        return texAtlas;
+    }
+
+    std::string getImageKey() const
+    {
+        return imageKey;
+    }
+
+    std::shared_ptr<const Spritesheet> getSpritesheet() const
+    {
+        return spritesheet;
+    }
+
+    int getSpriteIndex() const
+    {
+        return spriteIndex;
+    }
 
 private:
+    Rect pos;
+
     // TextureAtlas version
     std::shared_ptr<const TextureAtlas> texAtlas;
-    const std::string imageKey;
+    std::string imageKey;
 
     // Spritesheet version
     std::shared_ptr<const Spritesheet> spritesheet;

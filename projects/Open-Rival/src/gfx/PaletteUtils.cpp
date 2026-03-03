@@ -1,11 +1,10 @@
 #include "gfx/PaletteUtils.h"
 
-#include "gfx/GLWrapper.h"
-
 #include <cstdint>
 #include <vector>
 
 #include "gfx/Palette.h"
+#include "gfx/Renderer.h"
 #include "gfx/Texture.h"
 #include "utils/MathUtils.h"
 
@@ -28,7 +27,7 @@ void addColorToPalette(std::vector<std::uint8_t>& data, std::uint32_t col)
     data.push_back(static_cast<std::uint8_t>(col & 0x000000ff));
 }
 
-std::shared_ptr<const Texture> createPaletteTexture()
+std::shared_ptr<const Texture> createPaletteTexture(Renderer* renderer)
 {
     // Number of bytes required for all palettes
     const int paletteTextureBytes = Palette::numBytesSinglePalette * texHeight;
@@ -88,17 +87,10 @@ std::shared_ptr<const Texture> createPaletteTexture()
     // Default-initialize any remaining elements to fill out the texture
     data.resize(paletteTextureBytes);
 
-    GLuint textureId = 0;
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    return std::make_shared<const Texture>(textureId, texWidth, texHeight);
+    Image paletteImage = Image::createByMove(texWidth, texHeight, std::move(data));
+    TextureProperties txProps;
+    txProps.format = TexturePixelFormat::RGBA;
+    return renderer->createTexture(paletteImage, txProps);
 }
 
 float getPaletteTxY(int paletteIndex)
@@ -106,12 +98,12 @@ float getPaletteTxY(int paletteIndex)
     return static_cast<float>(paletteIndex) / texHeight;
 }
 
-GLfloat byteToFloat(std::uint8_t byte)
+float byteToFloat(std::uint8_t byte)
 {
-    return static_cast<GLfloat>(byte) / 255.f;
+    return static_cast<float>(byte) / 255.f;
 }
 
-std::vector<GLfloat> fromHex(std::uint32_t hexValue)
+std::vector<float> fromHex(std::uint32_t hexValue)
 {
     // Extract each byte from the hexadecimal value
     std::uint8_t byte1 = (hexValue >> 24) & 0xFF;

@@ -1,5 +1,7 @@
 #include "application/ResourceLoader.h"
 
+#include <gfx/Renderer.h>
+
 #include "application/ApplicationContext.h"
 #include "application/PathUtils.h"
 #include "application/Resources.h"
@@ -141,15 +143,15 @@ const std::vector<std::string> textureNames = {
     "menu_bg_dark.tga",
 };
 
-ResourceLoader::ResourceLoader(const ApplicationContext& context, Resources& resources)
+ResourceLoader::ResourceLoader(const json& cfg, Renderer* renderer, FT_Library fontLib, Resources& resources)
 {
     // For now we can set these properties directly because we are a friend class.
     // Later, Resources should expose public methods to register fonts, textures, spritesheets, etc.
-    resources.fontSmall = initFontSmall(context);
-    resources.fontRegular = initFontRegular(context);
-    resources.textures = loadTextures();
-    resources.textureAtlases = loadTextureAtlases();
-    resources.paletteTexture = initPaletteTexture();
+    resources.fontSmall = initFontSmall(cfg, fontLib, renderer);
+    resources.fontRegular = initFontRegular(cfg, fontLib, renderer);
+    resources.textures = loadTextures(renderer);
+    resources.textureAtlases = loadTextureAtlases(renderer);
+    resources.paletteTexture = initPaletteTexture(renderer);
     resources.unitSpritesheets = initUnitSpritesheets(resources);
     resources.projectileSpritesheets = initProjectileSpritesheets(resources);
     resources.effectSpritesheets = initEffectSpritesheets(resources);
@@ -170,38 +172,37 @@ ResourceLoader::ResourceLoader(const ApplicationContext& context, Resources& res
     resources.soundBanks = initSoundBanks();
 }
 
-std::shared_ptr<const Font> ResourceLoader::initFontSmall(const ApplicationContext& context)
+std::shared_ptr<const Font> ResourceLoader::initFontSmall(const json& cfg, FT_Library fontLib, Renderer* renderer)
 {
-    const json& cfg = context.getConfig();
     std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
     std::string fontName = ConfigUtils::get(cfg, "fontSmall", defaultFontSmall);
     int fontSize = ConfigUtils::get(cfg, "fontSmallSize", 32);
-    return Font::loadFont(context.getFontLibrary(), fontDirs, fontName, fontSize);
+    return Font::loadFont(fontLib, fontDirs, fontName, fontSize, renderer);
 }
 
-std::shared_ptr<const Font> ResourceLoader::initFontRegular(const ApplicationContext& context)
+std::shared_ptr<const Font> ResourceLoader::initFontRegular(const json& cfg, FT_Library fontLib, Renderer* renderer)
 {
-    const json& cfg = context.getConfig();
     std::vector<std::string> fontDirs = ConfigUtils::get(cfg, "fontDirs", defaultFontDirs);
     std::string fontName = ConfigUtils::get(cfg, "fontRegular", defaultFontRegular);
     int fontSize = ConfigUtils::get(cfg, "fontRegularSize", 16);
-    return Font::loadFont(context.getFontLibrary(), fontDirs, fontName, fontSize);
+    return Font::loadFont(fontLib, fontDirs, fontName, fontSize, renderer);
 }
 
-std::vector<std::shared_ptr<const Texture>> ResourceLoader::loadTextures()
+std::vector<std::shared_ptr<const Texture>> ResourceLoader::loadTextures(Renderer* renderer)
 {
     std::vector<std::shared_ptr<const Texture>> texList;
     texList.reserve(numTextures);
 
     for (const auto& textureName : textureNames)
     {
-        texList.push_back(Texture::loadTexture(txDir + textureName));
+        auto tex = renderer->loadTexture(txDir + textureName);
+        texList.push_back(tex);
     }
 
     return texList;
 }
 
-std::vector<std::shared_ptr<const TextureAtlas>> ResourceLoader::loadTextureAtlases()
+std::vector<std::shared_ptr<const TextureAtlas>> ResourceLoader::loadTextureAtlases(Renderer* renderer)
 {
     std::vector<std::shared_ptr<const TextureAtlas>> texAtlasList;
     texAtlasList.reserve(numTextureAtlases);
@@ -210,15 +211,15 @@ std::vector<std::shared_ptr<const TextureAtlas>> ResourceLoader::loadTextureAtla
 
     for (const auto& resourceName : resourceNames)
     {
-        texAtlasList.push_back(TextureAtlas::loadTextureAtlas(txDir + resourceName));
+        texAtlasList.push_back(TextureAtlas::loadTextureAtlas(txDir + resourceName, renderer));
     }
 
     return texAtlasList;
 }
 
-std::shared_ptr<const Texture> ResourceLoader::initPaletteTexture()
+std::shared_ptr<const Texture> ResourceLoader::initPaletteTexture(Renderer* renderer)
 {
-    return PaletteUtils::createPaletteTexture();
+    return PaletteUtils::createPaletteTexture(renderer);
 }
 
 std::unordered_map<BuildingType, std::shared_ptr<const Spritesheet>> ResourceLoader::initBuildingSpritesheets(

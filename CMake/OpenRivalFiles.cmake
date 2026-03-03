@@ -1,6 +1,5 @@
 set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/Application.cpp
-    ${OPEN_RIVAL_DIR}/src/application/ApplicationContext.cpp
     ${OPEN_RIVAL_DIR}/src/application/PathUtils.cpp
     ${OPEN_RIVAL_DIR}/src/application/ResourceLoader.cpp
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
@@ -71,32 +70,36 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/Camera.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Color.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Font.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Framebuffer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/GLUtils.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Image.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Palette.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/PaletteUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Renderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/RenderUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/ShaderUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Shaders.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Spritesheet.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/TextureAtlas.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/AtlasRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/BoxRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityOverlayRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MenuTextRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TextRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TileRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/UiRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/Framebuffer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/GLRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/GLUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/ShaderUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/Shaders.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/AtlasRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/BoxRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/SpriteRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/TextRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/CursorRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/EntityOverlayRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/EntityRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/FramebufferRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/GameRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MapBorderRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuTextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TileRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/UiRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/lobby/LobbyState.cpp
     ${OPEN_RIVAL_DIR}/src/main/Main.cpp
     ${OPEN_RIVAL_DIR}/src/main/ProgramOptions.cpp
@@ -129,8 +132,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/scenario/ScenarioBuilder.cpp
     ${OPEN_RIVAL_DIR}/src/scenario/ScenarioReader.cpp
     ${OPEN_RIVAL_DIR}/src/ui/Cursor.cpp
-    ${OPEN_RIVAL_DIR}/src/ui/CursorRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/ui/MenuRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/utils/BinaryFileReader.cpp
     ${OPEN_RIVAL_DIR}/src/utils/BufferUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/FileUtils.cpp
@@ -147,7 +148,6 @@ set(OPEN_RIVAL_SOURCES
 
 set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/application/Application.h
-    ${OPEN_RIVAL_DIR}/include/application/ApplicationContext.h
     ${OPEN_RIVAL_DIR}/include/application/PathUtils.h
     ${OPEN_RIVAL_DIR}/include/application/ResourceLoader.h
     ${OPEN_RIVAL_DIR}/include/application/Resources.h
@@ -224,33 +224,37 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/Camera.h
     ${OPEN_RIVAL_DIR}/include/gfx/Color.h
     ${OPEN_RIVAL_DIR}/include/gfx/Font.h
-    ${OPEN_RIVAL_DIR}/include/gfx/Framebuffer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/GLUtils.h
-    ${OPEN_RIVAL_DIR}/include/gfx/GLWrapper.h
     ${OPEN_RIVAL_DIR}/include/gfx/Image.h
     ${OPEN_RIVAL_DIR}/include/gfx/Palette.h
     ${OPEN_RIVAL_DIR}/include/gfx/PaletteUtils.h
+    ${OPEN_RIVAL_DIR}/include/gfx/Renderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/RenderUtils.h
-    ${OPEN_RIVAL_DIR}/include/gfx/ShaderUtils.h
-    ${OPEN_RIVAL_DIR}/include/gfx/Shaders.h
     ${OPEN_RIVAL_DIR}/include/gfx/Spritesheet.h
     ${OPEN_RIVAL_DIR}/include/gfx/Texture.h
     ${OPEN_RIVAL_DIR}/include/gfx/TextureAtlas.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/AtlasRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/BoxRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/SpriteRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderable/TextureRenderable.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/DragSelectRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/EntityOverlayRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/EntityRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/FramebufferRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/GameRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/MapBorderRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/MenuTextRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/TextRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/TileRenderer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/renderer/UiRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/Framebuffer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLUtils.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLWrapper.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/ShaderUtils.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/Shaders.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderable/AtlasRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderable/BoxRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderable/SpriteRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderable/TextRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderable/TextureRenderable.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/CursorRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/DragSelectRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/EntityOverlayRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/EntityRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/FramebufferRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/GameRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MapBorderRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MenuRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MenuTextRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/TextRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/TileRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/UiRenderer.h
     ${OPEN_RIVAL_DIR}/include/lobby/LobbyState.h
     ${OPEN_RIVAL_DIR}/include/main/ProgramOptions.h
     ${OPEN_RIVAL_DIR}/include/net/ClientInfo.h
@@ -281,8 +285,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioData.h
     ${OPEN_RIVAL_DIR}/include/scenario/ScenarioReader.h
     ${OPEN_RIVAL_DIR}/include/ui/Cursor.h
-    ${OPEN_RIVAL_DIR}/include/ui/CursorRenderer.h
-    ${OPEN_RIVAL_DIR}/include/ui/MenuRenderer.h
     ${OPEN_RIVAL_DIR}/include/utils/BinaryFileReader.h
     ${OPEN_RIVAL_DIR}/include/utils/BufferUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/CollectionUtils.h

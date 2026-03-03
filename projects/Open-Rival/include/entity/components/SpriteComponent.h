@@ -8,7 +8,7 @@
 
 #include "entity/components/EntityComponent.h"
 #include "game/UnitType.h"
-#include "gfx/renderable/SpriteRenderable.h"
+#include "gfx/opengl/renderable/SpriteRenderable.h"
 
 namespace Rival {
 

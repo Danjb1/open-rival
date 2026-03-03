@@ -1,6 +1,6 @@
 #include "gfx/Font.h"
 
-#include "gfx/GLWrapper.h"
+#include "gfx/opengl/GLWrapper.h"
 #include <freetype/ftfntfmt.h>
 #include <freetype/ftwinfnt.h>
 
@@ -10,8 +10,8 @@
 #include <utility>    // std::move, std::pair
 
 #include "application/Resources.h"
-#include "gfx/GLUtils.h"
 #include "gfx/Image.h"
+#include "gfx/opengl/GLUtils.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
@@ -71,7 +71,7 @@ FontLoadError::FontLoadError(const char* message)
 }
 
 std::shared_ptr<const Font> Font::loadFont(
-        FT_Library ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize)
+        FT_Library ft, std::vector<std::string> fontDirs, std::string filename, int defaultSize, Renderer* renderer)
 {
     LOG_TRACE("Reading font: {}", filename);
 
@@ -79,7 +79,7 @@ std::shared_ptr<const Font> Font::loadFont(
     {
         try
         {
-            return loadFont(ft, fontDir + filename, defaultSize);
+            return loadFont(ft, fontDir + filename, defaultSize, renderer);
         }
         catch (const FontLoadError&)
         {
@@ -91,7 +91,7 @@ std::shared_ptr<const Font> Font::loadFont(
     throw std::runtime_error("Failed to load font: " + filename);
 }
 
-std::shared_ptr<const Font> Font::loadFont(FT_Library ft, std::string filename, int defaultSize)
+std::shared_ptr<const Font> Font::loadFont(FT_Library ft, std::string filename, int defaultSize, Renderer* renderer)
 {
     FontFace faceWrapper(ft, filename);
     FT_Face& face = faceWrapper.face;
@@ -203,7 +203,7 @@ std::shared_ptr<const Font> Font::loadFont(FT_Library ft, std::string filename, 
 
     // Generate texture to hold this font
     TextureProperties props = createTextureProperties(face);
-    std::shared_ptr<const Texture> tex = Texture::wrap(std::move(fontBitmap), props);
+    std::shared_ptr<const Texture> tex = renderer->createTexture(std::move(fontBitmap), props);
 
     return std::make_shared<const Font>(tex, chars, defaultSize);
 }
@@ -338,15 +338,15 @@ TextureProperties Font::createTextureProperties(const FT_Face& face)
     {
         // For 1-bit fonts, use nearest neighbor interpolation otherwise
         // they become blurry
-        props.minFilter = GL_NEAREST;
-        props.magFilter = GL_NEAREST;
+        props.minFilter = TextureFilterMode::Nearest;
+        props.magFilter = TextureFilterMode::Nearest;
     }
     else
     {
         // For regular fonts, use linear interpolation so that we can
         // upscale or downscale the font without it looking terrible
-        props.minFilter = GL_LINEAR;
-        props.magFilter = GL_LINEAR;
+        props.minFilter = TextureFilterMode::Linear;
+        props.magFilter = TextureFilterMode::Linear;
     }
     return props;
 }

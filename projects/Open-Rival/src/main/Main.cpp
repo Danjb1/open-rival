@@ -9,11 +9,29 @@
 
 #include "application/Application.h"
 #include "application/ApplicationContext.h"
+#include "application/Window.h"
+#include "gfx/opengl/GLRenderer.h"
 #include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
+#include "net/NetUtils.h"
+#include "utils/ConfigUtils.h"
 #include "utils/LogUtils.h"
 
 using namespace Rival;
+
+void initLogging(const json& cfg)
+{
+    const std::string defaultLogLevel = "info";
+    const std::string logLevel = ConfigUtils::get(cfg, "logLevel", defaultLogLevel);
+    const bool logToConsole = ConfigUtils::get(cfg, "logToConsole", false);
+    const bool logToFile = ConfigUtils::get(cfg, "logToFile", true);
+    LogUtils::initLogging(logLevel, logToConsole, logToFile, "Open-Rival");
+
+    // Categories
+    LogUtils::makeLogCategory("attack", ConfigUtils::get(cfg, "logLevelAttack", defaultLogLevel));
+    LogUtils::makeLogCategory("movement", ConfigUtils::get(cfg, "logLevelMovement", defaultLogLevel));
+    LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
+}
 
 /**
  * Entry point for the application.
@@ -36,8 +54,40 @@ int main(int argc, char* argv[])
     {
 #endif
 
-        ApplicationContext context;
-        Application app(context);
+        // Read the config file first, since this determines our logging capabilities
+        json cfg = JsonUtils::readJsonFile("config.json");
+
+        // Initialize logging nice and early
+        initLogging(cfg);
+
+        // Initialize engine subsystems
+        // --- Window ---
+        Window window(800, 600, "Rival Realms");
+
+        // --- Rendering ---
+        GLRenderer renderer(&window);
+
+        // --- Fonts ---
+        FT_Library fontLib;
+        if (FT_Error err = FT_Init_FreeType(&fontLib))
+        {
+            throw std::runtime_error("Failed to initialize FreeType library: " + std::to_string(err));
+        }
+
+        // Load resources
+        Resources res;
+        ResourceLoader(cfg, &renderer, fontLib, res);
+
+        // --- Audio ---
+        AudioSystem audioSystem;
+        audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
+        audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
+        audioSystem.prepareSounds(res.getAllSounds());
+
+        NetUtils::initNetworking();
+
+        // Create the application
+        Application app(cfg, &window, &renderer, audioSystem, res, fontLib);
 
         // Host or join a game;
         // eventually this will be handled before we enter the LobbyState
@@ -64,6 +114,11 @@ int main(int argc, char* argv[])
         exitCode = 1;
     }
 #endif
+
+    LOG_DEBUG("Performing clean-up...");
+    NetUtils::destroyNetworking();
+    FT_Done_FreeType(fontLib);
+    SDL_Quit();
 
     return exitCode;
 }
