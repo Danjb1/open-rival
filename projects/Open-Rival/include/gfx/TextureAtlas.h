@@ -1,7 +1,5 @@
 #pragma once
 
-#include "gfx/GLWrapper.h"
-
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -11,18 +9,19 @@
 
 namespace Rival {
 
+class Renderer;
+
 class TextureAtlas
 {
-
 public:
     TextureAtlas(std::shared_ptr<const Texture> texture, std::unordered_map<std::string, Rect> imagePlacements);
 
     const int getImageWidth(std::string key) const;
     const int getImageHeight(std::string key) const;
 
-    const std::vector<GLfloat> getTexCoords(const std::string& key) const;
+    const std::vector<float> getTexCoords(const std::string& key) const;
 
-    static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string& filename);
+    static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string& filename, Renderer* renderer);
 
 public:
     std::shared_ptr<const Texture> texture;

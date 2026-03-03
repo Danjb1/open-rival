@@ -8,11 +8,10 @@
 
 #include "application/State.h"
 #include "game/PlayerState.h"
-#include "gfx/renderer/MenuTextRenderer.h"
+#include "gfx/opengl/renderer/MenuTextRenderer.h"
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "scenario/ScenarioData.h"
-#include "ui/MenuRenderer.h"
 
 namespace Rival {
 
@@ -43,7 +42,6 @@ public:
     void startGame();
 
 private:
-    void renderText();
     void pollNetwork();
     int requestPlayerId();
     void loadLevel(const std::string& filename);
@@ -70,9 +68,6 @@ private:
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
-
-    MenuRenderer menuRenderer;
-    MenuTextRenderer textRenderer;
 
     bool isGameStarted = false;
 };

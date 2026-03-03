@@ -1,6 +1,15 @@
 ﻿# To Do
 
 <!----------------------------------------------------------------------------->
+## WIP
+<!----------------------------------------------------------------------------->
+
+- Fix lobby rendering
+- GLRenderer should call `glDeleteTextures` when a Texture is no longer needed
+- Get tests working again!
+    - Write tests for SpatialIndex
+
+<!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
@@ -12,7 +21,7 @@
 
 ### Combat
 
-- Units should automatically target nearby enemies (needs spatial partitioning!)
+- Units should automatically target nearby enemies
     - Respect "Fighting Area" - do not wander too far
 - Units should rest when idle (approx. 200 health in 30 seconds)
 - Allow attacking buildings

@@ -10,6 +10,7 @@
 #include "game/UnitType.h"
 #include "gfx/Font.h"
 #include "gfx/Spritesheet.h"
+#include "utils/JsonUtils.h"
 
 namespace Rival {
 
@@ -19,6 +20,7 @@ class BuildingDef;
 class EffectDef;
 class MidiFile;
 class ProjectileDef;
+class Renderer;
 class Resources;
 class Texture;
 class TextureAtlas;
@@ -30,17 +32,17 @@ class WaveFile;
 class ResourceLoader
 {
 public:
-    ResourceLoader(const ApplicationContext& context, Resources& resources);
+    ResourceLoader(const json& cfg, Renderer* renderer, FT_Library fontLib, Resources& resources);
 
 private:
     // Fonts
-    std::shared_ptr<const Font> initFontSmall(const ApplicationContext& context);
-    std::shared_ptr<const Font> initFontRegular(const ApplicationContext& context);
+    std::shared_ptr<const Font> initFontSmall(const json& cfg, FT_Library fontLib, Renderer* renderer);
+    std::shared_ptr<const Font> initFontRegular(const json& cfg, FT_Library fontLib, Renderer* renderer);
 
     // Textures
-    std::vector<std::shared_ptr<const Texture>> loadTextures();
-    std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases();
-    std::shared_ptr<const Texture> initPaletteTexture();
+    std::vector<std::shared_ptr<const Texture>> loadTextures(Renderer* renderer);
+    std::vector<std::shared_ptr<const TextureAtlas>> loadTextureAtlases(Renderer* renderer);
+    std::shared_ptr<const Texture> initPaletteTexture(Renderer* renderer);
 
     // Spritesheets
     std::unordered_map<BuildingType, std::shared_ptr<const Spritesheet>> initBuildingSpritesheets(

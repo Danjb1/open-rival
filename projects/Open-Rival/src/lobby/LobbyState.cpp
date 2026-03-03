@@ -11,7 +11,7 @@
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "game/World.h"
-#include "gfx/renderable/TextRenderable.h"
+#include "gfx/Renderer.h"
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
 #include "net/packet-handlers/LobbyWelcomePacketHandler.h"
@@ -41,8 +41,6 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     : State(app)
     , isHost(isHost)
     , localPlayerName(playerName)
-    , menuRenderer(res, window, makeViewport(window))
-    , textRenderer(window)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
@@ -64,8 +62,7 @@ void LobbyState::onLoad()
 {
     // Load the initial level
     // TODO: Clients should wait to receive the level name from the host
-    ApplicationContext& context = app.getContext();
-    const std::string levelName = ConfigUtils::get(context.getConfig(), "levelName", std::string());
+    const std::string levelName = ConfigUtils::get(app.getConfig(), "levelName", std::string());
     if (levelName.empty())
     {
         throw std::runtime_error("No level name found in config.json ");
@@ -104,62 +101,8 @@ void LobbyState::update(int /* delta */)
 
 void LobbyState::render(int delta)
 {
-    menuRenderer.render(delta);
-    renderText();
-}
-
-void LobbyState::renderText()
-{
-    // TMP: Hardcoded hacky rendering until we have a proper menu system.
-    // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
-    std::vector<TextRenderable> textRenderables;
-    TextProperties nameProperties = { res.getFontRegular() };
-    glm::vec2 renderPos = { 100, 100 };
-    const float rowHeight = 32;
-    const float indent = 32;
-
-    // Header
-    {
-        TextSpan textSpan = { "Connected Players:", TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.x += indent;
-        renderPos.y += rowHeight;
-    }
-
-    // Local player (if hosting, should always come first)
-    if (isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Other players
-    for (const auto& entry : clients)
-    {
-        std::string name = entry.second.getName();
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Local player (if not hosting, always comes last for now; later we will sort by player ID)
-    if (!isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Render the text!
-    std::vector<const TextRenderable*> textRenderablePtrs;
-    for (const auto& textRenderable : textRenderables)
-    {
-        textRenderablePtrs.push_back(&textRenderable);
-    }
-    textRenderer.render(textRenderablePtrs);
+    Renderer* renderer = app.getRenderer();
+    renderer->renderLobby(delta);
 }
 
 void LobbyState::keyUp(const SDL_Keycode keyCode)
@@ -336,15 +279,13 @@ void LobbyState::startGame()
 
 std::unique_ptr<State> LobbyState::createGameState() const
 {
-    ApplicationContext& context = app.getContext();
-
     LOG_INFO("Using random seed: {}", randomSeed);
     std::shared_ptr<std::mt19937> randomizer = std::make_shared<std::mt19937>(randomSeed);
 
     // Create the world
     ScenarioBuilder scenarioBuilder(scenarioData);
     std::shared_ptr<const EntityFactory> entityFactory =
-            std::make_shared<EntityFactory>(context.getResources(), context.getAudioSystem(), randomizer);
+            std::make_shared<EntityFactory>(res, app.getAudioSystem(), randomizer);
     std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
     // Initialize players
