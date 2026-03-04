@@ -41,6 +41,10 @@ public:
     void onPlayerKicked(int playerId);
     void startGame();
 
+    bool isHost() const;
+    std::string getLocalPlayerName() const;
+    std::unordered_map<int, ClientInfo> getClients() const;
+
 private:
     void pollNetwork();
     int requestPlayerId();
@@ -52,7 +56,7 @@ private:
 private:
     unsigned int randomSeed = 0;
 
-    bool isHost;
+    bool bIsHost;
     int nextPlayerId = 1;
     int joinRequestId = 0;
 

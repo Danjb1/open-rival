@@ -8,7 +8,6 @@
 #include <utility>  // std::move, std::piecewise_construct
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "application/Window.h"
 #include "gfx/opengl/GLRenderer.h"
 #include "lobby/LobbyState.h"

@@ -4,7 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-- Fix lobby rendering
 - GLRenderer should call `glDeleteTextures` when a Texture is no longer needed
 - Get tests working again!
     - Write tests for SpatialIndex

@@ -5,6 +5,7 @@
 namespace Rival {
 
 class GameState;
+class LobbyState;
 
 /** Abstract base class for a rendering subsystem.
  * The idea is that game logic should depend on this class rather than any specific library.
@@ -15,10 +16,13 @@ class Renderer
 public:
     virtual ~Renderer() {}
 
+    /** Called whenever we enter the LobbyState. */
+    virtual void onEnterLobby(LobbyState* lobbyState) = 0;
+
     /** Renders the LobbyState. */
     virtual void renderLobby(int delta) = 0;
 
-    /** Sets the GameState for subsequent calls to `renderGame`. */
+    /** Called whenever we enter the GameState. */
     virtual void onEnterGame(GameState* game) = 0;
 
     /** Renders the GameState. */

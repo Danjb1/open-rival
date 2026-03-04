@@ -2,7 +2,6 @@
 
 #include <gfx/Renderer.h>
 
-#include "application/ApplicationContext.h"
 #include "application/PathUtils.h"
 #include "application/Resources.h"
 #include "audio/MidiFile.h"
