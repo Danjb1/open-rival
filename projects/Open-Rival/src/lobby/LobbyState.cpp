@@ -5,7 +5,6 @@
 #include <random>
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "application/ResourceLoader.h"
 #include "entity/EntityFactory.h"
 #include "game/GameState.h"
@@ -31,15 +30,9 @@
 
 namespace Rival {
 
-Rect makeViewport(const Window* window)
-{
-    // Fill the screen
-    return { 0, 0, window->getWidth(), window->getHeight() };
-}
-
-LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
+LobbyState::LobbyState(Application& app, std::string playerName, bool bIsHost)
     : State(app)
-    , isHost(isHost)
+    , bIsHost(bIsHost)
     , localPlayerName(playerName)
 {
     // Register PacketHandlers
@@ -50,7 +43,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
 
-    if (isHost)
+    if (bIsHost)
     {
         // Determine the seed that we will use for all our random numbers once the game starts.
         // It is imperative that all players generate the same sequence of random numbers.
@@ -60,6 +53,8 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
 
 void LobbyState::onLoad()
 {
+    app.getRenderer()->onEnterLobby(this);
+
     // Load the initial level
     // TODO: Clients should wait to receive the level name from the host
     const std::string levelName = ConfigUtils::get(app.getConfig(), "levelName", std::string());
@@ -71,7 +66,7 @@ void LobbyState::onLoad()
 
     if (isNetGame())
     {
-        if (isHost)
+        if (bIsHost)
         {
             // Add ourselves to the lobby.
             // The host should always have a client ID and player ID of 0.
@@ -112,7 +107,7 @@ void LobbyState::keyUp(const SDL_Keycode keyCode)
     case SDLK_SPACE:
     case SDLK_RETURN:
         // TMP: For now, just start the game when pressing Space or Enter
-        if (isHost)
+        if (bIsHost)
         {
             requestStartGame();
         }
@@ -156,7 +151,7 @@ void LobbyState::pollNetwork()
 
 void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName)
 {
-    if (!isHost)
+    if (!bIsHost)
     {
         // Only the host has the authority to accept other players
         return;
@@ -190,7 +185,7 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
 
     LOG_INFO("Player {} has joined", client.getName());
 
-    if (isHost)
+    if (bIsHost)
     {
         // Inform joining player about the current lobby state
         std::unordered_map<int, ClientInfo> clientsIncludingHost = clients;
@@ -258,7 +253,7 @@ void LobbyState::loadLevel(const std::string& filename)
 
 void LobbyState::requestStartGame()
 {
-    if (!isHost)
+    if (!bIsHost)
     {
         LOG_WARN("Non-host player tried to start the game");
         return;
@@ -308,6 +303,21 @@ std::unique_ptr<State> LobbyState::createGameState() const
 bool LobbyState::isNetGame() const
 {
     return app.getConnection().has_value();
+}
+
+bool LobbyState::isHost() const
+{
+    return bIsHost;
+}
+
+std::string LobbyState::getLocalPlayerName() const
+{
+    return localPlayerName;
+}
+
+std::unordered_map<int, ClientInfo> LobbyState::getClients() const
+{
+    return clients;
 }
 
 }  // namespace Rival

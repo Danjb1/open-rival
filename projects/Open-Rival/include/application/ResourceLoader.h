@@ -14,7 +14,6 @@
 
 namespace Rival {
 
-class ApplicationContext;
 class AttackDef;
 class BuildingDef;
 class EffectDef;

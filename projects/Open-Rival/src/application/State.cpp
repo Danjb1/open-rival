@@ -1,7 +1,6 @@
 #include "application/State.h"
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 
 namespace Rival {
 

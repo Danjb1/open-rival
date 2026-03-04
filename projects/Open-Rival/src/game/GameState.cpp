@@ -6,7 +6,6 @@
 #include <utility>  // std::move
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "entity/components/HealthComponent.h"  // TMP
 #include "entity/components/OwnerComponent.h"
 #include "game/GameInterface.h"

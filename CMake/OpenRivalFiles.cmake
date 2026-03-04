@@ -73,8 +73,8 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/Image.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Palette.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/PaletteUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Renderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/RenderUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/Renderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Spritesheet.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/TextureAtlas.cpp
@@ -94,6 +94,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/EntityRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/FramebufferRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/GameRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/LobbyRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MapBorderRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuTextRenderer.cpp
@@ -227,14 +228,14 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/Image.h
     ${OPEN_RIVAL_DIR}/include/gfx/Palette.h
     ${OPEN_RIVAL_DIR}/include/gfx/PaletteUtils.h
-    ${OPEN_RIVAL_DIR}/include/gfx/Renderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/RenderUtils.h
+    ${OPEN_RIVAL_DIR}/include/gfx/Renderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/Spritesheet.h
     ${OPEN_RIVAL_DIR}/include/gfx/Texture.h
     ${OPEN_RIVAL_DIR}/include/gfx/TextureAtlas.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/Framebuffer.h
-    ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLUtils.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLUtils.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/GLWrapper.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/ShaderUtils.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/Shaders.h
@@ -249,6 +250,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/EntityRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/FramebufferRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/GameRenderer.h
+    ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/LobbyRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MapBorderRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MenuRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/MenuTextRenderer.h

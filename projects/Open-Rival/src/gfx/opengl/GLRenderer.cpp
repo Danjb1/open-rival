@@ -1,8 +1,9 @@
 #include "gfx/opengl/GLRenderer.h"
 
 #include "game/GameState.h"
-#include "gfx/opengl//GLUtils.h"
+#include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
+#include "lobby/LobbyState.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
@@ -33,67 +34,23 @@ GLRenderer::GLRenderer(Window* window)
     initGL();
 }
 
-void GLRenderer::renderLobby(int)
+void GLRenderer::onEnterLobby(LobbyState* lobby)
 {
-    // TODO: we need to get a reference to the LobbyState and create a MenuRenderer!
-    // lobbyMenuRenderer->render(delta);
+    if (gameRenderer)
+    {
+        gameRenderer.reset();
+    }
+
+    lobbyRenderer = std::make_unique<LobbyRenderer>(*lobby, window);
 }
 
-/* TODO -- deleted lobby code
-void LobbyState::renderText()
+void GLRenderer::renderLobby(int delta)
 {
-    // TMP: Hardcoded hacky rendering until we have a proper menu system.
-    // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
-    std::vector<TextRenderable> textRenderables;
-    TextProperties nameProperties = { res.getFontRegular() };
-    glm::vec2 renderPos = { 100, 100 };
-    const float rowHeight = 32;
-    const float indent = 32;
-
-    // Header
+    if (lobbyRenderer)
     {
-        TextSpan textSpan = { "Connected Players:", TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.x += indent;
-        renderPos.y += rowHeight;
+        lobbyRenderer->render(delta);
     }
-
-    // Local player (if hosting, should always come first)
-    if (isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Other players
-    for (const auto& entry : clients)
-    {
-        std::string name = entry.second.getName();
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Local player (if not hosting, always comes last for now; later we will sort by player ID)
-    if (!isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Render the text!
-    std::vector<const TextRenderable*> textRenderablePtrs;
-    for (const auto& textRenderable : textRenderables)
-    {
-        textRenderablePtrs.push_back(&textRenderable);
-    }
-    textRenderer.render(textRenderablePtrs);
 }
-*/
 
 void GLRenderer::initGLEW()
 {
@@ -174,6 +131,11 @@ std::shared_ptr<const Texture> GLRenderer::createTexture(const Image& img, const
 
 void GLRenderer::onEnterGame(GameState* game)
 {
+    if (lobbyRenderer)
+    {
+        lobbyRenderer.reset();
+    }
+
     const World& world = game->getWorld();
     const Camera& camera = game->getCamera();
     const Rect& viewport = game->getViewport();

@@ -5,7 +5,6 @@
 #include <memory>
 #include <utility>  // std::in_place, std::move
 
-#include "application/ApplicationContext.h"
 #include "application/State.h"
 #include "game/PlayerState.h"
 #include "net/Socket.h"

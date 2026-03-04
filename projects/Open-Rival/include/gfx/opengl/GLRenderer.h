@@ -8,6 +8,7 @@
 #include "gfx/Renderer.h"
 #include "gfx/Texture.h"
 #include "gfx/opengl/renderer/GameRenderer.h"
+#include "gfx/opengl/renderer/LobbyRenderer.h"
 
 namespace Rival {
 
@@ -19,9 +20,10 @@ class GLRenderer : public Renderer
 public:
     GLRenderer(Window* window);
 
+    void onEnterLobby(LobbyState* lobby) override;
     void renderLobby(int delta) override;
 
-    void onEnterGame(GameState* gameState) override;
+    void onEnterGame(GameState* game) override;
     void renderGame(int delta) override;
 
     std::shared_ptr<const Texture> loadTexture(
@@ -33,6 +35,7 @@ private:
     static void initGL();
 
     Window* window;
+    std::unique_ptr<LobbyRenderer> lobbyRenderer;
     std::unique_ptr<GameRenderer> gameRenderer;
 };
 }  // namespace Rival
