@@ -68,7 +68,7 @@ public:
 class DummyGameCommandInvoker : public GameCommandInvoker
 {
 public:
-    void dispatchCommand(std::shared_ptr<GameCommand> command) override {}
+    void dispatchCommand(std::shared_ptr<GameCommand>) override {}
 };
 
 const int viewportWidth = 800;
@@ -133,7 +133,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
         AND_GIVEN("the camera is zoomed in at the centre of the map")
         {
             camera.centreOnTile(25, 25);
-            camera.modZoom(0.5f);
+            camera.applyZoom(0.5f);
             mousePicker.handleMouse();
 
             WHEN("getting the tile under the mouse")
@@ -152,7 +152,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
         AND_GIVEN("the camera is zoomed out at the centre of the map")
         {
             camera.centreOnTile(25, 25);
-            camera.modZoom(-0.5f);
+            camera.applyZoom(-0.5f);
             mousePicker.handleMouse();
 
             WHEN("getting the tile under the mouse")
@@ -369,7 +369,7 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
     // Add a Unit with a MouseHandlerComponent
     std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
-    e->attach(std::make_shared<MouseHandlerComponent>());
+    e->attach(std::make_shared<MouseHandlerComponent>(40, 40));
     world.addEntity(e, 4, 4);
 
     // Create a pixel-perfect Camera
