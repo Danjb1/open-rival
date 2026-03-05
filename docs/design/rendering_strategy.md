@@ -1,13 +1,12 @@
 # Rendering Strategy
 
-## Overall Aims
+## Aims
 
 - Game logic and rendering should be completely separate.
     - No game logic should include any OpenGL dependencies.
     - Rendering logic should be completely separate from any game state.
     - It should be possible to swap out the renderer (e.g. headless, OpenGL, Vulkan) from a single point in the code.
-- Animation data can be part of the game model.
-    - Renderers can determine the texture co-ordinates based on the sprite and current animation frame.
+- Game logic includes the spritesheet and animation data, but no VAOs.
 
 ## OpenGL Strategy
 
@@ -22,9 +21,15 @@
 
 ### VAOs
 
-- 1 VAO shared by all Tiles.
+Currently we use:
+
+- 1 VAO to render all Tiles.
+- 1 VAO per Entity.
+
+Later, we could optimise this, e.g. by grouping together similar objects:
+
 - 1 VAO shared by "common" objects (info points, rocks, chests, bags).
 - 1 VAO shared by all tileset-specific objects (trees, mountains, dungeon wall, doors).
-- 1 VAO per Unit.
-    - When a unit is deleted, the corresponding VAO must be deleted too!
-- 1 VAO per team.
+- 1 VAO shared by all buildings of each race.
+
+Essentially, anything that shares a texture can share a VAO.
