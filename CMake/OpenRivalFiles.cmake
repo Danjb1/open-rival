@@ -204,7 +204,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/AttackUtils.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingDef.h
     ${OPEN_RIVAL_DIR}/include/game/BuildingType.h
-    ${OPEN_RIVAL_DIR}/include/game/DamageUtils.h
     ${OPEN_RIVAL_DIR}/include/game/EffectDef.h
     ${OPEN_RIVAL_DIR}/include/game/GameInterface.h
     ${OPEN_RIVAL_DIR}/include/game/GameState.h
