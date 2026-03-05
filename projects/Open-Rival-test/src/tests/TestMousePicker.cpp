@@ -367,18 +367,21 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
 
 SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
+    // Create the world fresh each time so that no entities are lingering from previous tests
+    World cleanWorld(50, 50, false);
+
     // Add a Unit with a MouseHandlerComponent
     std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
     e->attach(std::make_shared<MouseHandlerComponent>(40, 40));
-    world.addEntity(e, 4, 4);
+    cleanWorld.addEntity(e, 4, 4);
 
     // Create a pixel-perfect Camera
     float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));
-    Camera camera(0.0f, 0.0f, width, width / aspectRatio, world);
+    Camera camera(0.0f, 0.0f, width, width / aspectRatio, cleanWorld);
 
     GIVEN("the mouse is not over a unit")
     {
-        MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker);
+        MousePicker mousePicker(camera, viewport, cleanWorld, playerContext, playerStore, cmdInvoker);
         MockSDL::mouseX = 0;
         MockSDL::mouseY = 0;
 
@@ -395,7 +398,7 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
     }
     GIVEN("the mouse is over a unit")
     {
-        MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker);
+        MousePicker mousePicker(camera, viewport, cleanWorld, playerContext, playerStore, cmdInvoker);
         MockSDL::mouseX = static_cast<int>(RenderUtils::tileWidthPx * 2.5f);
         MockSDL::mouseY = static_cast<int>(RenderUtils::tileHeightPx * 4.5f);
 

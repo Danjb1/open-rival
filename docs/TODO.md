@@ -7,9 +7,6 @@
 - Clean up render data properly:
     - GLRenderer should call `glDeleteTextures` when a Texture is no longer needed
     - Destroy SpriteRenderable when an Entity is destroyed
-- Fix tests:
-    - Tests need a MockWindow (right now Window is nullptr!)
-    - Probably need a NullRenderer too!
 - Write tests for SpatialIndex
 
 <!----------------------------------------------------------------------------->
