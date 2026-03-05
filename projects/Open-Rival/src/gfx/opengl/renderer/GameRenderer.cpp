@@ -21,7 +21,7 @@
 
 namespace Rival {
 
-GameRenderer::GameRenderer(GameState& game,
+GameRenderer::GameRenderer(const GameState& game,
         const Window* window,
         const World& world,
         const PlayerStore& playerStore,

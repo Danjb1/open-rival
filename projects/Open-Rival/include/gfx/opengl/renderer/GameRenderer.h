@@ -26,7 +26,7 @@ struct PlayerContext;
 class GameRenderer
 {
 public:
-    GameRenderer(GameState& game,
+    GameRenderer(const GameState& game,
             const Window* window,
             const World& world,
             const PlayerStore& playerStore,

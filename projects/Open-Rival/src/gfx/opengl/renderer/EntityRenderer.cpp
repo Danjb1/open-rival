@@ -21,9 +21,9 @@
 #include "gfx/Palette.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
-#include "gfx/opengl/Shaders.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "gfx/opengl/Shaders.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
@@ -37,7 +37,7 @@ EntityRenderer::EntityRenderer(
 {
 }
 
-void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, int delta) const
+void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, int delta)
 {
     entityContainer.forEachEntity([&](const auto& entity) {
         if (isEntityVisible(*entity, camera))
@@ -77,13 +77,27 @@ bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera)
     return camera.contains(x1, y1) || camera.contains(x2, y1) || camera.contains(x2, y2) || camera.contains(x1, y2);
 }
 
-void EntityRenderer::renderEntity(const Entity& entity, int delta) const
+SpriteRenderable* EntityRenderer::findOrCreateSpriteRenderable(int entityId, const SpriteComponent* spriteComponent)
+{
+    auto [iter, inserted] = entitySpriteRenderables.try_emplace(
+            entityId, std::make_unique<SpriteRenderable>(spriteComponent->getSpritesheet(), 1));
+    return iter->second.get();
+}
+
+void EntityRenderer::renderEntity(const Entity& entity, int delta)
 {
     // Get this Entity's SpriteComponent
     const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
 
     // Entities without a SpriteComponent cannot be rendered
     if (!spriteComponent)
+    {
+        return;
+    }
+
+    // Retrieve or create a SpriteRenderable for this Entity
+    const SpriteRenderable* renderable = findOrCreateSpriteRenderable(entity.getId(), spriteComponent);
+    if (!renderable)
     {
         return;
     }
@@ -99,23 +113,22 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta) const
     glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, paletteTxy);
 
     // Use textures
-    const SpriteRenderable& renderable = spriteComponent->getRenderable();
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, renderable.getTextureId());
+    glBindTexture(GL_TEXTURE_2D, renderable->getTextureId());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
     // Bind vertex array
-    glBindVertexArray(renderable.getVao());
+    glBindVertexArray(renderable->getVao());
 
     // Update the data on the GPU
     if (needsUpdate(entity, *spriteComponent))
     {
-        sendDataToGpu(entity, *spriteComponent, delta);
+        sendDataToGpu(entity, *spriteComponent, *renderable, delta);
     }
 
     // Render
-    glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(renderable->getDrawMode(), renderable->getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
 
     // Render hitbox
     if (shouldRenderHitboxes() && isEntityUnderMouse(entity))
@@ -130,7 +143,10 @@ bool EntityRenderer::needsUpdate(const Entity& entity, const SpriteComponent& sp
     return entity.moved || spriteComponent.dirty;
 }
 
-void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& spriteComponent, int delta) const
+void EntityRenderer::sendDataToGpu(const Entity& entity,
+        const SpriteComponent& spriteComponent,
+        const SpriteRenderable& renderable,
+        int delta) const
 {
     // Determine the frame of the texture to be rendered
     int txIndex = spriteComponent.getTxIndex();
@@ -164,7 +180,6 @@ void EntityRenderer::sendDataToGpu(const Entity& entity, const SpriteComponent& 
     };
 
     // Determine texture co-ordinates
-    const SpriteRenderable& renderable = spriteComponent.getRenderable();
     std::vector<GLfloat> texCoords = renderable.spritesheet->getTexCoords(txIndex);
 
     // Upload position data
