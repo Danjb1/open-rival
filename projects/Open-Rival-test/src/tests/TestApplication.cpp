@@ -2,6 +2,7 @@
 
 #include "application/Application.h"
 #include "application/State.h"
+#include "application/Window.h"
 #include "mocks/MockSDL.h"
 #include "utils/TimeUtils.h"
 
@@ -50,12 +51,12 @@ SCENARIO("Logic is run multiple times if we are running behind", "[application][
     GIVEN("An Application that has not yet started")
     {
         json cfg;
-        Window* window = nullptr;
+        Window window(800, 600, "");
         Renderer* renderer = nullptr;
         AudioSystem audioSystem;
         Resources res;
         FT_Library fontLib = nullptr;
-        Application app(cfg, window, renderer, audioSystem, res, fontLib);
+        Application app(cfg, &window, renderer, audioSystem, res, fontLib);
 
         WHEN("the game ticks, and the first render takes too long")
         {

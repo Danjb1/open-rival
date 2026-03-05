@@ -118,9 +118,9 @@ SCENARIO("Camera should be the correct size", "[camera]")
             }
         }
 
-        AND_GIVEN("The camera is zoomed out")
+        AND_GIVEN("The camera is fully zoomed out")
         {
-            camera.applyZoom(-0.5f);
+            camera.applyZoom(-100.f);
 
             WHEN("getting the camera size")
             {
@@ -129,7 +129,7 @@ SCENARIO("Camera should be the correct size", "[camera]")
 
                 THEN("the correct dimensions are returned")
                 {
-                    // At a zoom level of 0.5,
+                    // At the min zoom level (0.5),
                     // twice as many tiles should be visible
                     REQUIRE(cameraWidth == 40.0f);
                     REQUIRE(cameraHeight == 22.5f);
@@ -137,9 +137,9 @@ SCENARIO("Camera should be the correct size", "[camera]")
             }
         }
 
-        AND_GIVEN("The camera is zoomed in")
+        AND_GIVEN("The camera is fully zoomed in")
         {
-            camera.applyZoom(0.5f);
+            camera.applyZoom(100.f);
 
             WHEN("getting the camera size")
             {
@@ -148,10 +148,10 @@ SCENARIO("Camera should be the correct size", "[camera]")
 
                 THEN("the correct dimensions are returned")
                 {
-                    // At a zoom level of 1.5 (3/2),
-                    // 2/3 of the tiles should be visible
-                    REQUIRE(cameraWidth == Approx(13.3333f));
-                    REQUIRE(cameraHeight == Approx(7.5f));
+                    // At the max zoom level (2.0),
+                    // half as many tiles should be visible
+                    REQUIRE(cameraWidth == 10.f);
+                    REQUIRE(cameraHeight == Approx(5.625f));
                 }
             }
         }
