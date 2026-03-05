@@ -6,11 +6,7 @@
 
 #include "mocks/MockSDL.h"
 
-#define SDL_MAIN_HANDLED
-#pragma warning(push)
-#pragma warning(disable : 26819)
-#include <SDL.h>
-#pragma warning(pop)
+#include "utils/SDLWrapper.h"
 
 void SDL_SetMainReady(void) {}
 

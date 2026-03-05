@@ -6,6 +6,8 @@
 
 - GLRenderer should call `glDeleteTextures` when a Texture is no longer needed
 - Get tests working again!
+    - SpriteComponent still references SpriteRenderable!
+    - Need to write a NullRenderer
     - Write tests for SpatialIndex
 
 <!----------------------------------------------------------------------------->

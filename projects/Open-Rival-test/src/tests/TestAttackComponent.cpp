@@ -29,7 +29,7 @@ SCENARIO("AttackComponent can initiate an attack", "[components][attack-componen
             std::shared_ptr<Unit> target = EntityTestUtils::makeUnit();
             world.addEntity(target, 2, 1);
 
-            attackComponent->setTarget(target);
+            attackComponent->setTargetEntity(target);
 
             attacker->update(TimeUtils::timeStepMs);
 
@@ -62,7 +62,7 @@ SCENARIO("AttackComponent does not interrupt movement", "[components][attack-com
             std::shared_ptr<Unit> target = EntityTestUtils::makeUnit();
             world.addEntity(target, 2, 1);
 
-            attackComponent->setTarget(target);
+            attackComponent->setTargetEntity(target);
 
             THEN("an attack is NOT initiated")
             {

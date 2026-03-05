@@ -1,82 +1,74 @@
 cmake_minimum_required (VERSION 3.16)
 
+# --- Retrieve Open-Rival files ---
 # Pull in auto-generated list of source/header files
 set(OPEN_RIVAL_DIR ${CMAKE_SOURCE_DIR}/projects/Open-Rival)
 include(${CMAKE_SOURCE_DIR}/CMake/OpenRivalFiles.cmake)
 
-# Remove Open-Rival sources that we don't need or that we are replacing
+# --- Exclude some .cpp files ---
+# Remove Open-Rival sources that we don't need or that we are replacing.
+# In particular, all OpenGL files should be removed!
 list(REMOVE_ITEM OPEN_RIVAL_SOURCES
-    ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/Window.cpp
     ${OPEN_RIVAL_DIR}/src/audio/AudioSystem.cpp
     ${OPEN_RIVAL_DIR}/src/audio/AudioUtils.cpp
     ${OPEN_RIVAL_DIR}/src/audio/MidiPlayer.cpp
-    ${OPEN_RIVAL_DIR}/src/entity/EntityRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/AtlasRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/BoxRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/SpriteRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderable/TextureRenderable.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/DragSelectRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityOverlayRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/EntityRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/FramebufferRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/GameRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MapBorderRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/MenuTextRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TextRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/TileRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/renderer/UiRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/Framebuffer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/GLRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/GLUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/ShaderUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/Shaders.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/AtlasRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/BoxRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/SpriteRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/TextRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderable/TextureRenderable.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/CursorRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/DragSelectRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/EntityOverlayRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/EntityRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/FramebufferRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/GameRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/LobbyRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MapBorderRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/MenuTextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TextRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TileRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/UiRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/Font.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Framebuffer.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/PaletteUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Shaders.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/ShaderUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/gfx/Texture.cpp
-    ${OPEN_RIVAL_DIR}/src/ui/CursorRenderer.cpp
-    ${OPEN_RIVAL_DIR}/src/ui/MenuRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/main/Main.cpp
 )
 
-# Replacement Headers
+# --- Replacement Headers ---
+# These are test-only header files intended to replace their "real" counterparts.
 set(OPEN_RIVAL_REPLACEMENT_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/audio/AudioSystem.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/renderer/GameRenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/gfx/renderer/MenuTextRenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/gl/glew.h
     ${CMAKE_CURRENT_LIST_DIR}/include/ui/MenuRenderer.h
 )
 
-# Test Framework
+# --- Test Framework ---
 set(OPEN_RIVAL_TEST_FRAMEWORK_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/catch2/catch.h
 )
 
-# Test Headers
+# --- Test Headers ---
+# These are header files that exist only in the test project.
 set(OPEN_RIVAL_TEST_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/mocks/MockSDL.h
     ${CMAKE_CURRENT_LIST_DIR}/include/utils/EntityTestUtils.h
 )
 
-# Test Sources
+# --- Test Sources ---
+# These are .cpp files that exist only in the test project,
+# including the tests themselves.
 set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/main/Main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockAudioUtils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGameRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockGL.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFont.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFramebuffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockFreeType.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockMenuRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockMenuTextRenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockResources.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDL.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSDLImage.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockShaders.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockSpriteRenderable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTextRenderable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockTexture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/mocks/MockWindow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAnimationComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestApplication.cpp

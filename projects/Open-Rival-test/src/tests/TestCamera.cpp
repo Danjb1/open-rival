@@ -120,7 +120,7 @@ SCENARIO("Camera should be the correct size", "[camera]")
 
         AND_GIVEN("The camera is zoomed out")
         {
-            camera.modZoom(-0.5f);
+            camera.applyZoom(-0.5f);
 
             WHEN("getting the camera size")
             {
@@ -139,7 +139,7 @@ SCENARIO("Camera should be the correct size", "[camera]")
 
         AND_GIVEN("The camera is zoomed in")
         {
-            camera.modZoom(0.5f);
+            camera.applyZoom(0.5f);
 
             WHEN("getting the camera size")
             {
