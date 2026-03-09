@@ -1,3 +1,4 @@
+#include "utils/SDLWrapper.h"  // Needed for SDL_MAIN_HANDLED
 #include <spdlog/spdlog.h>
 
 #include <memory>
@@ -32,6 +33,21 @@ void initLogging(const json& cfg)
     LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
 }
 
+/*
+ * Call our normal main function from WinMain.
+ * WinMain is used when building with the WIN32_EXECUTABLE flag.
+ */
+#ifdef _WIN32
+#include <windows.h>
+
+extern int main(int argc, char** argv);
+
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+{
+    return main(__argc, __argv);
+}
+#endif
+
 /**
  * Entry point for the application.
  */
@@ -46,6 +62,7 @@ int main(int argc, char* argv[])
     }
 
     int exitCode = 0;
+    FT_Library fontLib = nullptr;
 
 #if !DEBUG
     // Fail gracefully if we are not debugging
@@ -72,7 +89,6 @@ int main(int argc, char* argv[])
         GLRenderer renderer(&window);
 
         // --- Fonts ---
-        FT_Library fontLib;
         if (FT_Error err = FT_Init_FreeType(&fontLib))
         {
             throw std::runtime_error("Failed to initialize FreeType library: " + std::to_string(err));
