@@ -23,6 +23,8 @@ public:
 
     void swapBuffers() const;
 
+    void setPos(int x, int y);
+
     void setIcon(SDL_Surface* surface);
 
     int getWidth() const

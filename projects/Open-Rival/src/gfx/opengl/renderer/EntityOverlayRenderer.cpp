@@ -53,6 +53,7 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
     entityContainer.forEachEntity([&](const auto& entity) {
         if (!entity->isVisible())
         {
+            // Don't render overlays for invisible Entities
             return;
         }
 
@@ -63,11 +64,14 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
             return;
         }
 
-        auto* healthComponent = entity->getComponent<HealthComponent>();
-        if (healthComponent && healthComponent->isDead())
+        if (const Unit* unit = entity->as<Unit>())
         {
-            // Don't render overlays for dead entities
-            return;
+            // Special case for Units:
+            // do not render the overlay when they are playing their death animation
+            if (unit->getState() == UnitState::Dying)
+            {
+                return;
+            }
         }
 
         addEntityOverlayToBuffers(*entity, isHovered);

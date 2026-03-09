@@ -38,10 +38,12 @@ void MoveCommand::execute(GameCommandContext& context)
 {
     World& world = context.getWorld();
 
+    std::vector<Entity*> validEntities;
+    validEntities.reserve(entityIds.size());
+
     // Prepare all entities for movement.
     // This needs to be called for all entities *before* any are moved, so that we can take measures to prevent them
     // from obstructing each other.
-    int numValidEntities = 0;
     for (int entityId : entityIds)
     {
         Entity* entity = world.getMutableEntity(entityId);
@@ -51,38 +53,42 @@ void MoveCommand::execute(GameCommandContext& context)
             continue;
         }
 
-        auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
+        auto moveComponent = entity->getComponent<MovementComponent>();
         if (!moveComponent)
         {
             LOG_WARN("Tried to move an immovable entity");
             continue;
         }
 
+        // Don't ever issue commands to dead Units
+        if (Unit* unit = entity->as<Unit>())
+        {
+            if (unit->isEffectivelyDead())
+            {
+                continue;
+            }
+        }
+
+        // At this point the MoveCommand is considered valid for this Entity
         moveComponent->prepareForMovement();
-        ++numValidEntities;
+        validEntities.push_back(entity);
+    }
+
+    if (validEntities.empty())
+    {
+        // No entities to move!
+        return;
     }
 
     // Create a context to make group pathfinding more efficient
-    Pathfinding::Context pathfindingContext(numValidEntities);
+    Pathfinding::Context pathfindingContext(static_cast<int>(validEntities.size()));
 
     // Move entities
-    for (int entityId : entityIds)
+    for (Entity* entity : validEntities)
     {
-        Entity* entity = world.getMutableEntity(entityId);
-        if (!entity)
-        {
-            // Entity has been deleted since this command was issued
-            continue;
-        }
+        auto moveComponent = entity->getComponent<MovementComponent>();
 
-        auto moveComponent = entity->getComponent<MovementComponent>(MovementComponent::key);
-        if (!moveComponent)
-        {
-            LOG_WARN("Tried to move an immovable entity");
-            continue;
-        }
-
-        if (auto attackComponent = entity->getComponent<AttackComponent>(AttackComponent::key))
+        if (auto attackComponent = entity->getComponent<AttackComponent>())
         {
             // Clear current target when a MoveCommand is issued
             attackComponent->clearTarget();

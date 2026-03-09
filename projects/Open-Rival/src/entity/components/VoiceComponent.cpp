@@ -25,6 +25,11 @@ void VoiceComponent::onEntityFirstAddedToWorld(World*)
     {
         healthComponent->addListener(std::dynamic_pointer_cast<HealthListener>(shared_from_this()));
     }
+
+    if (Unit* unit = entity->as<Unit>())
+    {
+        unit->addStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
+    }
 }
 
 void VoiceComponent::destroy()
@@ -32,6 +37,11 @@ void VoiceComponent::destroy()
     if (auto healthComponent = weakHealthComponent.lock())
     {
         healthComponent->removeListener(std::dynamic_pointer_cast<HealthListener>(shared_from_this()));
+    }
+
+    if (Unit* unit = entity->as<Unit>())
+    {
+        unit->removeStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
     }
 }
 
@@ -86,17 +96,15 @@ bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
     return false;
 }
 
-void VoiceComponent::onHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
+void VoiceComponent::onUnitStateChanged(Unit*, const UnitState newState)
 {
-    // Nothing to do
+    if (newState == UnitState::Dying)
+    {
+        playDeathSound();
+    }
 }
 
-void VoiceComponent::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newValue*/)
-{
-    // Nothing to do
-}
-
-void VoiceComponent::onHealthDepleted(Entity* /*entity*/)
+void VoiceComponent::playDeathSound()
 {
     Unit* unit = entity->as<Unit>();
     if (!unit)

@@ -34,7 +34,7 @@ void UnitAnimationComponent::onEntityFirstAddedToWorld(World* world)
     unit->addStateListener(std::dynamic_pointer_cast<UnitStateListener>(shared_from_this()));
 
     // Determine animation based on initial state
-    onUnitStateChanged(unit->getState());
+    onUnitStateChanged(unit, unit->getState());
 }
 
 void UnitAnimationComponent::destroy()
@@ -47,7 +47,7 @@ void UnitAnimationComponent::destroy()
     }
 }
 
-void UnitAnimationComponent::onUnitStateChanged(const UnitState newState)
+void UnitAnimationComponent::onUnitStateChanged(Unit*, const UnitState newState)
 {
     if (newState == UnitState::Idle || newState == UnitState::WaitingToMove)
     {

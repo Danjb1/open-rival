@@ -25,10 +25,22 @@ struct MapNode;
 
 enum class UnitState : std::uint8_t
 {
+    /** Unit is standing idle, or possibly waiting for their attack cooldown. */
     Idle,
+
+    /** Unit wants to move, but is currently obstructed by another Unit. */
     WaitingToMove,
+
+    /** Unit is currently moving between tiles. */
     Moving,
+
+    /** Unit is currently moving between tiles, but will transition to Dying upon arriving at the destination. */
+    MovingToDeath,
+
+    /** Unit is currently mid-attack. */
     Attacking,
+
+    /** Unit has lost all health and is performing their death animation. */
     Dying
 };
 
@@ -36,7 +48,7 @@ enum class UnitState : std::uint8_t
 class UnitStateListener
 {
 public:
-    virtual void onUnitStateChanged(const UnitState newState) = 0;
+    virtual void onUnitStateChanged(class Unit* unit, const UnitState newState) = 0;
 };
 
 /** A Unit that can be added to the world. */
@@ -127,6 +139,9 @@ public:
      * Call `abortAction` instead and wait for the Unit to become free. */
     void setState(UnitState state);
 
+    /** Returns true if this Unit is dying or due to die. */
+    bool isEffectivelyDead() const;
+
     /** Determines if the Unit is currently busy.
      * Call `abortAction` to free up a busy Unit. */
     bool isBusy() const;
@@ -143,7 +158,8 @@ private:
      * NOTE: This requires that this Unit was created using std::make_shared. */
     std::weak_ptr<Unit> getWeakThis();
 
-    void trySpawnDeathEffect();
+    void startDeathAnimation();
+    void onDeathAnimationFinished();
     void triggerDeathEvent();
 
 private:

@@ -74,7 +74,14 @@ void Unit::onUnitPaused()
 
 void Unit::onUnitStopped()
 {
-    setState(UnitState::Idle);
+    if (state == UnitState::MovingToDeath)
+    {
+        startDeathAnimation();
+    }
+    else
+    {
+        setState(UnitState::Idle);
+    }
 }
 
 void Unit::onAttackStarted()
@@ -99,6 +106,17 @@ void Unit::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int /*newVa
 
 void Unit::onHealthDepleted(Entity* /*entity*/)
 {
+    if (movementComponent->isCurrentlyMoving())
+    {
+        setState(UnitState::MovingToDeath);
+        return;
+    }
+
+    startDeathAnimation();
+}
+
+void Unit::startDeathAnimation()
+{
     bool hasDeathAnim = false;
 
     if (animationComponent && animationComponent->hasAnimation(UnitAnimationType::Dying))
@@ -112,7 +130,8 @@ void Unit::onHealthDepleted(Entity* /*entity*/)
 
     if (!hasDeathAnim)
     {
-        trySpawnDeathEffect();
+        // Just pretend the animation finished immediately
+        onDeathAnimationFinished();
     }
 }
 
@@ -145,7 +164,12 @@ void Unit::setState(UnitState newState)
     state = newState;
 
     CollectionUtils::forEachWeakPtr<UnitStateListener>(
-            stateListeners, [&](auto listener) { listener->onUnitStateChanged(newState); });
+            stateListeners, [&](auto listener) { listener->onUnitStateChanged(this, newState); });
+}
+
+bool Unit::isEffectivelyDead() const
+{
+    return state == UnitState::MovingToDeath || state == UnitState::Dying;
 }
 
 std::weak_ptr<Unit> Unit::getWeakThis()
@@ -179,11 +203,11 @@ void Unit::onAnimationFinished(UnitAnimationType animType)
 {
     if (animType == UnitAnimationType::Dying)
     {
-        trySpawnDeathEffect();
+        onDeathAnimationFinished();
     }
 }
 
-void Unit::trySpawnDeathEffect()
+void Unit::onDeathAnimationFinished()
 {
     setVisible(false);
 

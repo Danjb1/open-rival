@@ -12,6 +12,11 @@ ProgramOptions::ProgramOptions(int argc, char* argv[])
     error = parseArgs(argc, argv);
 }
 
+bool ProgramOptions::hasWindowPosition() const
+{
+    return windowPos.x > 0 && windowPos.y > 0;
+}
+
 const std::string ProgramOptions::parseArgs(int argc, char* argv[])
 {
     for (int i = 1; i < argc; ++i)
@@ -45,7 +50,7 @@ const std::string ProgramOptions::parseArgs(int argc, char* argv[])
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // host
+        // port
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         else if (arg == "-port")
@@ -58,6 +63,23 @@ const std::string ProgramOptions::parseArgs(int argc, char* argv[])
             catch (const std::runtime_error& e)
             {
                 return std::string(e.what()) + "\nExpected: -port [port]";
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // pos
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        else if (arg == "-pos")
+        {
+            try
+            {
+                windowPos = parseVec2i(argc, argv, i + 1);
+                ++i;  // Skip next argument
+            }
+            catch (const std::runtime_error& e)
+            {
+                return std::string(e.what()) + "\nExpected: -pos [x,y]";
             }
         }
 
@@ -98,13 +120,12 @@ int ProgramOptions::parseInt(int argc, char* argv[], int index, int min, int max
     }
     catch (const std::invalid_argument&)
     {
-        throw std::runtime_error("Invalid value supplied for argument");
+        throw std::runtime_error("Invalid value supplied for integer argument");
     }
     catch (const std::out_of_range&)
     {
-        throw std::runtime_error(
-                "Value must be between "         //
-                + std::to_string(min) + " and "  //
+        throw std::runtime_error("Value must be between "  //
+                + std::to_string(min) + " and "            //
                 + std::to_string(max));
     }
 }
@@ -121,6 +142,36 @@ std::string ProgramOptions::parseString(int argc, char* argv[], int index) const
         throw std::runtime_error("No value supplied for argument");
     }
     return argv[index];
+}
+
+glm::ivec2 ProgramOptions::parseVec2i(int argc, char* argv[], int index) const
+{
+    if (index >= argc)
+    {
+        throw std::runtime_error("No value supplied for argument");
+    }
+
+    const std::string argStr = argv[index];
+
+    const auto commaPos = argStr.find(',');
+    if (commaPos == std::string::npos)
+    {
+        throw std::runtime_error("No comma found in vector argument");
+    }
+
+    const std::string xStr = argStr.substr(0, commaPos);
+    const std::string yStr = argStr.substr(commaPos + 1);
+
+    try
+    {
+        int x = std::stoi(xStr);
+        int y = std::stoi(yStr);
+        return { x, y };
+    }
+    catch (const std::invalid_argument&)
+    {
+        throw std::runtime_error("Invalid integer value in vector argument");
+    }
 }
 
 }  // namespace Rival

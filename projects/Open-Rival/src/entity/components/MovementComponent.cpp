@@ -73,7 +73,7 @@ void MovementComponent::destroy()
     }
 }
 
-void MovementComponent::onUnitStateChanged(const UnitState newState)
+void MovementComponent::onUnitStateChanged(Unit*, const UnitState newState)
 {
     if (route.isEmpty())
     {
@@ -89,8 +89,17 @@ void MovementComponent::onUnitStateChanged(const UnitState newState)
 
     if (newState != UnitState::Moving && newState != UnitState::WaitingToMove)
     {
-        // It is possible that a route was planned but never started.
-        // We need to clear this route when we start a new action otherwise the unit may start moving unexpectedly.
+        /*
+         * There are 2 possibilities here:
+         *
+         *   1) The Unit died while moving.
+         *      In this case we clear the route, and the Unit should play their death animation when they reach their
+         *      new tile.
+         *
+         *   2) A route was planned but never started.
+         *      In this case we need to clear this route when we start a new action otherwise the unit may start moving
+         *      unexpectedly.
+         */
         route = {};
     }
 }
