@@ -61,7 +61,7 @@ public:
     // End EntityComponent override
 
     // Begin UnitStateListener override
-    void onUnitStateChanged(const UnitState newState) override;
+    void onUnitStateChanged(Unit* unit, const UnitState newState) override;
     // End UnitStateListener override
 
     void addListener(std::weak_ptr<MovementListener> listener);

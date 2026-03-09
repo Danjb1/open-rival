@@ -62,6 +62,11 @@ int main(int argc, char* argv[])
         // Initialize engine subsystems
         // --- Window ---
         Window window(800, 600, "Rival Realms");
+        if (options.hasWindowPosition())
+        {
+            auto windowPos = options.getWindowPos();
+            window.setPos(windowPos.x, windowPos.y);
+        }
 
         // --- Rendering ---
         GLRenderer renderer(&window);

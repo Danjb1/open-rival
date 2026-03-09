@@ -13,7 +13,9 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
--
+- Release build should not open a console window
+- Some players could not connect in a 4-player game
+    - Received unexpected packet of type 7
 
 <!----------------------------------------------------------------------------->
 ## Features

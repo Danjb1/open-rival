@@ -100,6 +100,11 @@ void Window::swapBuffers() const
     SDL_GL_SwapWindow(sdlWindow);
 }
 
+void Window::setPos(int x, int y)
+{
+    SDL_SetWindowPosition(sdlWindow, x, y);
+}
+
 void Window::setIcon(SDL_Surface* surface)
 {
     SDL_SetWindowIcon(sdlWindow, surface);
