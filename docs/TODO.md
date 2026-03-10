@@ -4,9 +4,7 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-- Clean up render data properly:
-    - GLRenderer should call `glDeleteTextures` when a Texture is no longer needed
-    - Destroy SpriteRenderable when an Entity is destroyed
+- Destroy SpriteRenderable when an Entity is destroyed
 - Write tests for SpatialIndex
 
 <!----------------------------------------------------------------------------->
