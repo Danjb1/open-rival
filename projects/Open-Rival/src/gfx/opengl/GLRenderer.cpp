@@ -8,25 +8,6 @@
 
 namespace Rival {
 
-/*
-
-Texture ::~Texture()
-{
-if (id == 0)
-{
-    return;
-}
-
-glDeleteTextures(1, &id);
-}
-
-const GLuint Texture::getId() const
-{
-return id;
-}
-
-*/
-
 GLRenderer::GLRenderer(Window* window)
     : window(window)
 {
@@ -92,6 +73,18 @@ std::shared_ptr<const Texture> GLRenderer::loadTexture(const std::string& filena
     return createTexture(Image::readImage(filename), props);
 }
 
+// This is intended to be used as a custom deleter for a shared_ptr<const Texture> and should not be called manually
+static void deleteTexture(const Texture* texture)
+{
+    const auto id = texture->getId();
+    if (id > 0)
+    {
+        glDeleteTextures(1, &id);
+    }
+
+    delete texture;
+}
+
 std::shared_ptr<const Texture> GLRenderer::createTexture(const Image& img, const TextureProperties& props)
 {
     // Generate texture
@@ -126,7 +119,8 @@ std::shared_ptr<const Texture> GLRenderer::createTexture(const Image& img, const
         throw std::runtime_error("Failed to load texture");
     }
 
-    return std::make_shared<const Texture>(textureId, img.getWidth(), img.getHeight());
+    // shared_ptr ctor with a custom deleter for when the Texture is no longer referenced
+    return std::shared_ptr<const Texture>(new Texture(textureId, img.getWidth(), img.getHeight()), deleteTexture);
 }
 
 void GLRenderer::onEnterGame(GameState* game)
