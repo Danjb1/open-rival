@@ -5,6 +5,7 @@
 
 #include "net/packets/RelayedPacket.h"
 #include "utils/BufferUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -16,6 +17,7 @@ Connection::Connection(
     , listener(listener)
     , sendThread(&Connection::sendThreadLoop, this)
     , receiveThread(&Connection::receiveThreadLoop, this)
+    , state(ConnectionState::Open)
 {
     sendBuffer.reserve(maxBufferSize);
     recvBuffer.reserve(maxBufferSize);
@@ -24,8 +26,6 @@ Connection::Connection(
 Connection::~Connection()
 {
     close();
-    sendThread.join();
-    receiveThread.join();
 }
 
 bool Connection::operator==(const Connection& other) const
@@ -40,7 +40,42 @@ bool Connection::operator!=(const Connection& other) const
 
 void Connection::close() noexcept
 {
+    if (state != ConnectionState::Open)
+    {
+        // Close has already been requested
+        return;
+    }
+
+    LOG_DEBUG("Closing connection...");
+    state = ConnectionState::Closing;
+
+    // Try to close the underlying socket, although it may well be closed already
     socket.close();
+
+    // Forcibly wake the send thread so it can re-evaluate its end condition
+    {
+        // The mutex is necessary here to avoid the "lost wake-up" problem, where we send the notify in the instant
+        // before the call to `wait` and it gets missed.
+        std::lock_guard<std::mutex> lock(packetsToSendMutex);
+        sendReadyCondition.notify_all();
+    }
+
+    // Stop send thread
+    if (sendThread.joinable())
+    {
+        LOG_TRACE("Waiting for connection send thread to finish");
+        sendThread.join();
+    }
+
+    // Stop receive thread
+    if (receiveThread.joinable())
+    {
+        LOG_TRACE("Waiting for connection receive thread to finish");
+        receiveThread.join();
+    }
+
+    state = ConnectionState::Closed;
+    LOG_DEBUG("Connection successfully closed!");
 }
 
 bool Connection::isOpen() const
