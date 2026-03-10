@@ -18,8 +18,8 @@ void Packet::serialize(std::vector<char>& buffer) const
 void Packet::finalize(std::vector<char>& buffer) const
 {
     // Overwrite the placeholder packet size in the buffer
-    int packetSize = static_cast<int>(buffer.size() - sizeof(packetSize));
-    std::memcpy(buffer.data(), &packetSize, sizeof(packetSize));
+    int packetSize = static_cast<int>(buffer.size() - sizeBytes);
+    std::memcpy(buffer.data(), &packetSize, sizeBytes);
 }
 
 }  // namespace Rival

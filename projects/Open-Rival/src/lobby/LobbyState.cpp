@@ -85,7 +85,7 @@ void LobbyState::onLoad()
         else
         {
             joinRequestId = generateJoinRequestId();
-            RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
+            auto joinPacket = std::make_shared<RequestJoinPacket>(joinRequestId, localPlayerName);
             app.getConnection()->send(joinPacket);
         }
     }
@@ -170,7 +170,7 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     {
         LOG_INFO("Assigned player ID {} to {}", playerId, playerName);
 
-        AcceptPlayerPacket acceptPacket(requestId, clientId, playerName, playerId);
+        auto acceptPacket = std::make_shared<AcceptPlayerPacket>(requestId, clientId, playerName, playerId);
         app.getConnection()->send(acceptPacket);
 
         ClientInfo client = { playerId, playerName };
@@ -178,7 +178,7 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     }
     else
     {
-        RejectPlayerPacket rejectPacket(requestId, playerName);
+        auto rejectPacket = std::make_shared<RejectPlayerPacket>(requestId, playerName);
         app.getConnection()->send(rejectPacket);
         onPlayerRejected(requestId, playerName);
     }
@@ -202,7 +202,8 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
         std::unordered_map<int, ClientInfo> clientsIncludingHost = clients;
         ClientInfo localClient(0, localPlayerName);
         clientsIncludingHost.insert({ 0, localClient });
-        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clientsIncludingHost, randomSeed);
+        auto welcomePacket =
+                std::make_shared<LobbyWelcomePacket>(client.getPlayerId(), clientsIncludingHost, randomSeed);
         app.getConnection()->send(welcomePacket);
     }
 
@@ -270,8 +271,8 @@ void LobbyState::requestStartGame()
         return;
     }
 
-    StartGamePacket packet;
-    app.getConnection()->send(packet);
+    auto startGamePacket = std::make_shared<StartGamePacket>();
+    app.getConnection()->send(startGamePacket);
     startGame();
 }
 

@@ -14,6 +14,7 @@ Connection::Connection(
     , packetFactory(packetFactory)
     , remoteClientId(remoteClientId)
     , listener(listener)
+    , sendThread(&Connection::sendThreadLoop, this)
     , receiveThread(&Connection::receiveThreadLoop, this)
 {
     sendBuffer.reserve(maxBufferSize);
@@ -23,6 +24,7 @@ Connection::Connection(
 Connection::~Connection()
 {
     close();
+    sendThread.join();
     receiveThread.join();
 }
 
@@ -44,6 +46,45 @@ void Connection::close() noexcept
 bool Connection::isOpen() const
 {
     return socket.isOpen();
+}
+
+void Connection::send(const std::shared_ptr<const Packet> packet)
+{
+    {
+        std::scoped_lock lock(packetsToSendMutex);
+        packetsToSend.push_back(packet);
+    }
+
+    // Wake up the send thread
+    sendReadyCondition.notify_one();
+}
+
+void Connection::sendThreadLoop()
+{
+    while (isOpen())
+    {
+        std::shared_ptr<const Packet> packet;
+
+        {
+            std::unique_lock<std::mutex> lock(packetsToSendMutex);
+
+            // Wait until we have a packet to send OR the connection closes
+            sendReadyCondition.wait(lock, [this] { return !packetsToSend.empty() || !isOpen(); });
+
+            if (!isOpen())
+            {
+                break;
+            }
+
+            packet = packetsToSend.front();
+            packetsToSend.pop_front();
+        }
+
+        if (packet)
+        {
+            sendNow(packet);
+        }
+    }
 }
 
 void Connection::receiveThreadLoop()
@@ -106,14 +147,16 @@ bool Connection::readFromSocket(std::size_t numBytes)
     return success;
 }
 
-void Connection::send(const Packet& packet)
+void Connection::sendNow(std::shared_ptr<const Packet> packet)
 {
-    packet.serialize(sendBuffer);
-    packet.finalize(sendBuffer);
+    packet->serialize(sendBuffer);
+    packet->finalize(sendBuffer);
+
     if (sendBuffer.empty())
     {
         throw std::runtime_error("Tried to send empty buffer");
     }
+
     socket.send(sendBuffer);
     sendBuffer.clear();
 }
