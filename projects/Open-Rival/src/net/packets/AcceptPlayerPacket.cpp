@@ -8,9 +8,10 @@
 
 namespace Rival {
 
-AcceptPlayerPacket::AcceptPlayerPacket(int requestId, std::string playerName, int playerId)
+AcceptPlayerPacket::AcceptPlayerPacket(int requestId, int acceptedClientId, std::string playerName, int playerId)
     : Packet(PacketType::AcceptPlayer)
     , requestId(requestId)
+    , acceptedClientId(acceptedClientId)
     , playerName(playerName)
     , playerId(playerId)
 {
@@ -21,6 +22,7 @@ void AcceptPlayerPacket::serialize(std::vector<char>& buffer) const
     Packet::serialize(buffer);
 
     BufferUtils::addToBuffer(buffer, requestId);
+    BufferUtils::addToBuffer(buffer, acceptedClientId);
     BufferUtils::addStringToBuffer(buffer, playerName);
     BufferUtils::addToBuffer(buffer, playerId);
 }
@@ -32,12 +34,15 @@ std::shared_ptr<AcceptPlayerPacket> AcceptPlayerPacket::deserialize(const std::v
     int requestId = 0;
     BufferUtils::readFromBuffer(buffer, offset, requestId);
 
-    std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
+    int acceptedClientId = 0;
+    BufferUtils::readFromBuffer(buffer, offset, acceptedClientId);
+
+    const std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
 
     int playerId = 0;
     BufferUtils::readFromBuffer(buffer, offset, playerId);
 
-    return std::make_shared<AcceptPlayerPacket>(requestId, playerName, playerId);
+    return std::make_shared<AcceptPlayerPacket>(requestId, acceptedClientId, playerName, playerId);
 }
 
 }  // namespace Rival

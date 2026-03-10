@@ -30,7 +30,7 @@ std::shared_ptr<RequestJoinPacket> RequestJoinPacket::deserialize(const std::vec
     int requestId = 0;
     BufferUtils::readFromBuffer(buffer, offset, requestId);
 
-    std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
+    const std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
 
     return std::make_shared<RequestJoinPacket>(requestId, playerName);
 }

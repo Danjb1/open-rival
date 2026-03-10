@@ -1,7 +1,6 @@
 #include "lobby/LobbyState.h"
 
 #include <chrono>
-#include <cstdlib>  // std::rand
 #include <random>
 
 #include "application/Application.h"
@@ -51,6 +50,16 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool bIsHost)
     }
 }
 
+static int generateJoinRequestId()
+{
+    // This only matters if 2 players try to join with the same name.
+    // In this case, we need to come up with unique identifiers to differentiate them.
+    auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    static std::mt19937_64 rng(seed);
+    std::uniform_int_distribution<int> dist;
+    return dist(rng);
+}
+
 void LobbyState::onLoad()
 {
     app.getRenderer()->onEnterLobby(this);
@@ -75,8 +84,7 @@ void LobbyState::onLoad()
         }
         else
         {
-            // We generate a random request ID, just in case 2 players try to join with the same name
-            joinRequestId = std::rand();
+            joinRequestId = generateJoinRequestId();
             RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
             app.getConnection()->send(joinPacket);
         }
@@ -160,7 +168,9 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     int playerId = requestPlayerId();
     if (playerId >= 0)
     {
-        AcceptPlayerPacket acceptPacket(requestId, playerName, playerId);
+        LOG_INFO("Assigned player ID {} to {}", playerId, playerName);
+
+        AcceptPlayerPacket acceptPacket(requestId, clientId, playerName, playerId);
         app.getConnection()->send(acceptPacket);
 
         ClientInfo client = { playerId, playerName };
@@ -180,10 +190,11 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
     {
         // Our request to join was the one that got accepted, which means this is our player ID!
         localPlayerId = client.getPlayerId();
+        LOG_INFO("Assigned player ID: {}", localPlayerId);
         return;
     }
 
-    LOG_INFO("Player {} has joined", client.getName());
+    LOG_INFO("Player {} has joined the lobby (client {})", client.getName(), clientId);
 
     if (bIsHost)
     {
@@ -267,6 +278,13 @@ void LobbyState::requestStartGame()
 void LobbyState::startGame()
 {
     LOG_INFO("Starting game!");
+
+    LOG_DEBUG("Connected clients:");
+    for (const auto& client : clients)
+    {
+        LOG_DEBUG("  Client {} -> Player {} ({})", client.first, client.second.getPlayerId(), client.second.getName());
+    }
+
     std::unique_ptr<State> game = createGameState();
     app.setState(std::move(game));
     isGameStarted = true;

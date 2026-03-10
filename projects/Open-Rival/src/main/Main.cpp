@@ -40,7 +40,7 @@ void initLogging(const json& cfg)
 #ifdef _WIN32
 #include <windows.h>
 
-extern int main(int argc, char** argv);
+extern int main(int argc, char* argv[]);
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -13,8 +13,8 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Some players could not connect in a 4-player game
-    - Received unexpected packet of type 7
+- Host sometimes crashes in a 3+ player game
+    - "Duplicate player ready received for client ... for tick ..."
 
 <!----------------------------------------------------------------------------->
 ## Features
