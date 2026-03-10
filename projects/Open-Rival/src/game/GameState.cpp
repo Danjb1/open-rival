@@ -420,25 +420,16 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
 
 void GameState::onClientReady(int tick, int clientId)
 {
-    const auto iter = clientsReady.find(tick);
-    if (iter == clientsReady.cend())
+    // Ensure `clientsReady` has an entry for the tick in question
+    auto [iter, inserted] = clientsReady.try_emplace(tick);
+    auto& clientsReadyForTick = iter->second;
+
+    // Add the given client to the ready list
+    auto [_, added] = clientsReadyForTick.insert(clientId);
+    if (!added)
     {
-        // This is the first player ready for this tick
-        std::unordered_set<int> clientsReadyForTick;
-        clientsReadyForTick.insert(clientId);
-        clientsReady.insert({ tick, clientsReadyForTick });
-    }
-    else
-    {
-        // Add to the players already ready
-        std::unordered_set<int>& playersReadyForTick = iter->second;
-        const auto result = playersReadyForTick.insert(clientId);
-        if (!result.second)
-        {
-            // result is a pair <iter, bool> where bool is false if the element was already present in the set
-            throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
-                    + " for tick: " + std::to_string(tick));
-        }
+        throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
+                + " for tick: " + std::to_string(tick));
     }
 }
 

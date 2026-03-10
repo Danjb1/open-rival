@@ -38,11 +38,13 @@ public:
         return type;
     }
 
+    /** Sets the sender's client ID (should only be called by the relay server). */
     void setClientId(int newClientId)
     {
         clientId = newClientId;
     }
 
+    /** Gets the client ID of the sender (for packets received from the relay server). */
     int getClientId() const
     {
         return clientId;
