@@ -168,7 +168,7 @@ void GameState::sendOutgoingCommands()
     }
 
     // Send all commands for this tick to the server
-    GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
+    auto packet = std::make_shared<GameCommandPacket>(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
     app.getConnection()->send(packet);
     outgoingCommands.clear();
 }

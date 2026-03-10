@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>  // std::size_t
+#include <deque>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -44,8 +45,8 @@ public:
 
     bool isOpen() const;
 
-    /** Sends a packet on this connection. */
-    void send(const Packet& packet);
+    /** Enqueues a packet to be sent on this connection. */
+    void send(const std::shared_ptr<const Packet> packet);
 
     /**
      * Gets all packets received since the last call to this method.
@@ -60,8 +61,11 @@ public:
     void returnPackets(std::vector<std::shared_ptr<const Packet>>& packetsToReturn);
 
 private:
+    void sendThreadLoop();
     void receiveThreadLoop();
     bool readFromSocket(std::size_t numBytes);
+
+    void sendNow(std::shared_ptr<const Packet> packet);
 
 private:
     /** Maximum buffer size when receiving data. Packets should never exceed this size. */
@@ -72,6 +76,11 @@ private:
 
     std::vector<char> sendBuffer;
     std::vector<char> recvBuffer;
+
+    std::thread sendThread;
+    std::deque<std::shared_ptr<const Packet>> packetsToSend;
+    std::mutex packetsToSendMutex;
+    std::condition_variable sendReadyCondition;
 
     std::thread receiveThread;
     std::vector<std::shared_ptr<const Packet>> receivedPackets;

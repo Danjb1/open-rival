@@ -13,8 +13,7 @@
 ## Bugs
 <!----------------------------------------------------------------------------->
 
-- Host sometimes crashes in a 3+ player game
-    - "Duplicate player ready received for client ... for tick ..."
+- Lots of socket errors when all clients disconnect from the relay server
 
 <!----------------------------------------------------------------------------->
 ## Features

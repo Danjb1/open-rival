@@ -39,7 +39,7 @@ void Server::onPacketReceived(Connection& connection, std::shared_ptr<const Pack
             continue;
         }
 
-        otherConnection->send(*packet);
+        otherConnection->send(packet);
     }
 }
 
