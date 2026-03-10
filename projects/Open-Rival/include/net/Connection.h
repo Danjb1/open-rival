@@ -61,6 +61,14 @@ public:
     void returnPackets(std::vector<std::shared_ptr<const Packet>>& packetsToReturn);
 
 private:
+    enum class ConnectionState
+    {
+        Invalid,
+        Open,
+        Closing,
+        Closed
+    };
+
     void sendThreadLoop();
     void receiveThreadLoop();
     bool readFromSocket(std::size_t numBytes);
@@ -91,6 +99,8 @@ private:
     /** Client ID of the player at the remote end of the connection.
      * On clients this will always be -1 since the server has no client ID. */
     int remoteClientId = -1;
+
+    ConnectionState state = ConnectionState::Invalid;
 };
 
 }  // namespace Rival
