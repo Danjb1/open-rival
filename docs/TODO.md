@@ -1,10 +1,17 @@
 ﻿# To Do
 
 <!----------------------------------------------------------------------------->
+## WIP
+<!----------------------------------------------------------------------------->
+
+- Write tests for `addLogicalDistance`.
+- Revamp [menu system](/docs/design/menus.md)
+
+<!----------------------------------------------------------------------------->
 ## Bugs
 <!----------------------------------------------------------------------------->
 
--
+- 
 
 <!----------------------------------------------------------------------------->
 ## Features
@@ -12,7 +19,7 @@
 
 ### Combat
 
-- Units should automatically target nearby enemies (needs spatial partitioning!)
+- Units should automatically target nearby enemies
     - Respect "Fighting Area" - do not wander too far
 - Units should rest when idle (approx. 200 health in 30 seconds)
 - Allow attacking buildings
@@ -37,7 +44,6 @@
 
 ### HUD & Menus
 
-- Revamp [menu system](/docs/design/menus.md)
 - Show resources in HUD
 - Show unit ID in HUD
 - Show unit stats in HUD

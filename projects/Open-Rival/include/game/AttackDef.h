@@ -16,9 +16,6 @@ public:
         return range == 1;
     }
 
-private:
-    AttackDef() {}
-
 public:
     /** Name of the attack (not shown in-game). */
     std::string name;

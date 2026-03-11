@@ -1,79 +1,20 @@
 # Tech Debt
 
 <!----------------------------------------------------------------------------->
-## Project
+## Setup
 <!----------------------------------------------------------------------------->
-
-### General
-
-- Consider moving some docs to GitHub wiki
-- Treat linker warnings as errors
-
-### Dependencies
-
-- Is GLEW actually needed?
-- Consider replacing SDL with GLFW
-    - Replace SDL_image with stb_image? (this is what it uses internally)
-- Suppress warnings from JSON and spdlog libraries
-- Do not use header-only JSON library as it leads to longer compile times
-
-### CMake
-
-- Make some settings common to all projects (e.g. Unicode)
-- Copy required files to setup build directory automatically (`build\x64\projects\setup`)
-    - `setup` folder
-    - `res` folder also needs to exist!
-- Resources, DLLs, config file, etc. are not checked for changes when running ZERO_CHECK
-- Use auto formatter: https://github.com/cheshirekow/cmake_format
-- Code review suggestions: https://codereview.stackexchange.com/questions/286277/a-slightly-unconventional-cmake-project
-- Document CMake options
-- Document using CMake from command line
-
-### Tools
-
-- Make scripts work with ALL projects
-    - move_file.py only fixes references in Open-Rival
-    - new_file.py and gen_project_files.py can only be used for Open-Rival
-- Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
-- Add IWYU to build pipeline: https://include-what-you-use.org/
-
-<!----------------------------------------------------------------------------->
-## Unit Tests
-<!----------------------------------------------------------------------------->
-
-### General
-
-- Lower warning level for test project
-- Refactor Open-Rival code such that fewer mocks are needed
-- Use EntityFactory to create entities for tests
-- Tests should use a custom config file with debugging enabled
-- Document how to run a specific test
-
-### Entity/Component Lifecycle
-
-- Test that EntityComponents get deleted when an Entity is deleted
-- Test requestAddEntity + addPendingEntities
-
-### Movement
-
-- Test setting a new route before the old one is finished
-
-<!----------------------------------------------------------------------------->
-## Tech Debt
-<!----------------------------------------------------------------------------->
-
-### Setup
 
 - Setup utilities should log debug output to a file (currently they use cout)
 - Graphical setup utility
 - Ability to re-run individual steps of the setup program
-
-### Assets
-
 - Consolidate "objects_*.tga" spritesheets
     - Palisade, etc. look the same regardless of map type
     - Could combine them all into one texture
 - Create (animated?) gold cursor for menus
+
+<!----------------------------------------------------------------------------->
+## Game
+<!----------------------------------------------------------------------------->
 
 ### Debugging
 
@@ -142,6 +83,11 @@
 
 #### General
 
+- Apply the `Renderer` treatment to other subsystems, e.g. window creation, audio and logging
+- Consider storing pointers instead of references in classes
+- Consider whether class members should be `const`
+- Consider returning pointers instead of references
+- Consider returning / storing raw pointers instead of smart pointers
 - In tests, we only need to mock resource *loading*, but not Resources
 - Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
@@ -159,9 +105,7 @@
     - Pointer access and map access is fragile
 - Use client-attourney pattern or add checks to prevent misuse of add/removeEntity and addPendingEntities
 - Use vectors in MousePicker instead of separate x/y variables
-- Can `getComponent<MyComponent>(MyComponent::key)` be simplified somehow?
 - Replace `Resources::get*Spritesheet` with a generic method that takes an enum parameter
-- Create a CursorRenderer to hold all the cursor rendering logic
 - Reduce duplication between Unit/BuildingAnimationComponent
 - Reduce duplication between Unit/BuildingDef
 - Use building definitions instead of hardcoded logic for building properties: `getWidth`, `getHeight`, `isWall`
@@ -176,7 +120,6 @@
 - Duplication between GameState::pollNetwork and LobbyState::pollNetwork
 - UiImage should be split into 3 different classes
 - Move some headers to pch.h
-- Don't return references
 - Run cppcheck
 - PassabilityComponent is pointless for units, this should be handled by the MovementComponent instead
 - Allow MapNodes to be logged using spdlog: https://github.com/gabime/spdlog/wiki/1.-QuickStart#log-user-defined-objects
@@ -225,3 +168,56 @@
     - We should stop all sounds but keep the buffers
 - Initialise 'n' sound sources up-front, and find the next available one when playing a sound
 - Playing sounds is quite fiddly (need both AudioStore and AudioSystem)
+
+<!----------------------------------------------------------------------------->
+## Tests
+<!----------------------------------------------------------------------------->
+
+### General
+
+- Tests are generally very fragile
+- Move `initLogging` (in TestAttackComponent) to a utility class
+- Use EntityFactory to create entities for tests
+- Document how to run a specific test
+
+### New Tests
+
+- Test that EntityComponents get deleted when an Entity is deleted
+- Test requestAddEntity + addPendingEntities
+- Test setting a new route before the old one is finished
+
+<!----------------------------------------------------------------------------->
+## Project
+<!----------------------------------------------------------------------------->
+
+### General
+
+- Consider moving some docs to GitHub wiki
+- Treat linker warnings as errors
+
+### Dependencies
+
+- Is GLEW actually needed?
+- Consider replacing SDL with GLFW
+    - Replace SDL_image with stb_image? (this is what it uses internally)
+- Suppress warnings from JSON and spdlog libraries
+- Do not use header-only JSON library as it leads to longer compile times
+
+### CMake
+
+- Make some settings common to all projects (e.g. Unicode)
+- Copy required files to setup build directory automatically (`build\x64\projects\setup`)
+    - `setup` folder
+    - `res` folder also needs to exist!
+- Use auto formatter: https://github.com/cheshirekow/cmake_format
+- Code review suggestions: https://codereview.stackexchange.com/questions/286277/a-slightly-unconventional-cmake-project
+- Document CMake options
+- Document using CMake from command line
+
+### Tools
+
+- Make scripts work with ALL projects
+    - move_file.py only fixes references in Open-Rival
+    - new_file.py and gen_project_files.py can only be used for Open-Rival
+- Add script to prepare the `dist` folder (see the [release checklist](release_checklist.md))
+- Add IWYU to build pipeline: https://include-what-you-use.org/

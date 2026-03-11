@@ -6,7 +6,6 @@
 #include <utility>  // std::move
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "entity/components/HealthComponent.h"  // TMP
 #include "entity/components/OwnerComponent.h"
 #include "game/GameInterface.h"
@@ -15,7 +14,7 @@
 #include "gfx/Palette.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/Spritesheet.h"
-#include "gfx/renderer/MenuTextRenderer.h"  // TMP
+#include "gfx/opengl/renderer/MenuTextRenderer.h"  // TMP
 #include "net/Connection.h"
 #include "net/packet-handlers/GameCommandPacketHandler.h"
 #include "net/packet-handlers/PacketHandler.h"
@@ -30,7 +29,7 @@ namespace Rival {
 
 GameState::GameState(Application& app,
         std::unique_ptr<World> scenarioToMove,
-        std::unordered_map<int, PlayerState>& playerStates,
+        std::unordered_map<int, PlayerState> playerStates,
         std::unordered_map<int, ClientInfo> clients,
         int localPlayerId,
         std::shared_ptr<std::mt19937> randomizer)
@@ -45,7 +44,6 @@ GameState::GameState(Application& app,
               *world)
     , playerContext()
     , mousePicker(std::make_shared<MousePicker>(camera, viewport, *world, playerContext, *this, *this))
-    , gameRenderer(window, *world, *this, camera, viewport, res, playerContext)
     , clients(clients)
     , localPlayerId(localPlayerId)
     , randomizer(randomizer)
@@ -56,7 +54,8 @@ GameState::GameState(Application& app,
 
 void GameState::onLoad()
 {
-    app.getContext().getAudioSystem().playMidi(res.getMidi(0));
+    app.getRenderer()->onEnterGame(this);
+    app.getAudioSystem().playMidi(res.getMidi(0));
 }
 
 void GameState::update(int delta)
@@ -64,11 +63,11 @@ void GameState::update(int delta)
     pollNetwork();
     if (!isTickReady())
     {
-        isWaitingForPlayers = true;
+        bIsWaitingForPlayers = true;
         return;
     }
 
-    isWaitingForPlayers = false;
+    bIsWaitingForPlayers = false;
     world->addPendingEntities();
     earlyUpdateEntities();
     respondToInput();
@@ -169,7 +168,7 @@ void GameState::sendOutgoingCommands()
     }
 
     // Send all commands for this tick to the server
-    GameCommandPacket packet(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
+    auto packet = std::make_shared<GameCommandPacket>(outgoingCommands, currentTick + TimeUtils::netCommandDelay);
     app.getConnection()->send(packet);
     outgoingCommands.clear();
 }
@@ -198,55 +197,8 @@ void GameState::updateEntities(int delta) const
 
 void GameState::render(int delta)
 {
-    gameRenderer.render(delta);
-
-    // Render message when waiting for players
-    if (isWaitingForPlayers)
-    {
-        // TMP: Hardcoded hacky rendering until we have a proper menu system.
-        // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
-        // Same goes for the TextRenderer
-        MenuTextRenderer textRenderer(window);
-        std::vector<TextRenderable> textRenderables;
-        TextProperties nameProperties = { res.getFontRegular() };
-        glm::vec2 renderPos = { 100, 100 };
-        const float rowHeight = 32;
-        const float indent = 32;
-
-        // Message
-        {
-            TextSpan textSpan = { "Waiting for players:", TextRenderable::defaultColor };
-            textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-            renderPos.x += indent;
-            renderPos.y += rowHeight;
-        }
-
-        // Player names
-        const auto iter = clientsReady.find(currentTick);
-        const bool areAnyClientsReady = iter != clientsReady.cend();
-        const std::unordered_set<int> clientsReadyThisTick =
-                areAnyClientsReady ? iter->second : std::unordered_set<int>();
-        for (const auto& client : clients)
-        {
-            if (clientsReadyThisTick.contains(client.first))
-            {
-                continue;
-            }
-
-            std::string name = client.second.getName();
-            TextSpan textSpan = { name, TextRenderable::defaultColor };
-            textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-            renderPos.y += rowHeight;
-        }
-
-        // Render the text!
-        std::vector<const TextRenderable*> textRenderablePtrs;
-        for (const auto& textRenderable : textRenderables)
-        {
-            textRenderablePtrs.push_back(&textRenderable);
-        }
-        textRenderer.render(textRenderablePtrs);
-    }
+    Renderer* renderer = app.getRenderer();
+    renderer->renderGame(delta);
 }
 
 void GameState::keyDown(const SDL_Keycode keyCode)
@@ -403,7 +355,7 @@ World& GameState::getWorld()
     return *world;
 }
 
-PlayerState& GameState::getLocalPlayerState() const
+const PlayerState& GameState::getLocalPlayerState() const
 {
     const auto result = playerStates.find(localPlayerId);
     if (result == playerStates.cend())
@@ -414,7 +366,7 @@ PlayerState& GameState::getLocalPlayerState() const
     return result->second;
 }
 
-PlayerState* GameState::getPlayerState(int playerId) const
+const PlayerState* GameState::getPlayerState(int playerId) const
 {
     const auto result = playerStates.find(playerId);
     return result == playerStates.cend() ? nullptr : &result->second;
@@ -468,26 +420,56 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
 
 void GameState::onClientReady(int tick, int clientId)
 {
-    const auto iter = clientsReady.find(tick);
-    if (iter == clientsReady.cend())
+    // Ensure `clientsReady` has an entry for the tick in question
+    auto [iter, inserted] = clientsReady.try_emplace(tick);
+    auto& clientsReadyForTick = iter->second;
+
+    // Add the given client to the ready list
+    auto [_, added] = clientsReadyForTick.insert(clientId);
+    if (!added)
     {
-        // This is the first player ready for this tick
-        std::unordered_set<int> clientsReadyForTick;
-        clientsReadyForTick.insert(clientId);
-        clientsReady.insert({ tick, clientsReadyForTick });
+        throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
+                + " for tick: " + std::to_string(tick));
     }
-    else
+}
+
+bool GameState::isWaitingForPlayers() const
+{
+    return bIsWaitingForPlayers;
+}
+
+std::vector<ClientInfo> GameState::getNotReadyClients() const
+{
+    const auto iter = clientsReady.find(currentTick);
+    const bool areAnyClientsReady = iter != clientsReady.cend();
+    const std::unordered_set<int> clientsReadyThisTick = areAnyClientsReady ? iter->second : std::unordered_set<int>();
+
+    std::vector<ClientInfo> notReadyClients;
+
+    for (const auto& client : clients)
     {
-        // Add to the players already ready
-        std::unordered_set<int>& playersReadyForTick = iter->second;
-        const auto result = playersReadyForTick.insert(clientId);
-        if (!result.second)
+        if (!clientsReadyThisTick.contains(client.first))
         {
-            // result is a pair <iter, bool> where bool is false if the element was already present in the set
-            throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
-                    + " for tick: " + std::to_string(tick));
+            notReadyClients.push_back(client.second);
         }
     }
+
+    return notReadyClients;
+}
+
+const Camera& GameState::getCamera() const
+{
+    return camera;
+}
+
+const Rect& GameState::getViewport() const
+{
+    return viewport;
+}
+
+const PlayerContext& GameState::getPlayerContext() const
+{
+    return playerContext;
 }
 
 void GameState::processCommands()

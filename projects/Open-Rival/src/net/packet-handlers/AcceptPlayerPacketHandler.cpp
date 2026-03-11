@@ -13,7 +13,7 @@ void AcceptPlayerPacketHandler::onPacketReceived(std::shared_ptr<const Packet> p
     LobbyState& lobby = static_cast<LobbyState&>(state);
 
     ClientInfo client(acceptPacket->getPlayerId(), acceptPacket->getPlayerName());
-    lobby.onPlayerAccepted(acceptPacket->getRequestId(), acceptPacket->getClientId(), client);
+    lobby.onPlayerAccepted(acceptPacket->getRequestId(), acceptPacket->getAcceptedClientId(), client);
 }
 
 }  // namespace Rival

@@ -12,7 +12,7 @@ void GameCommandPacketHandler::onPacketReceived(std::shared_ptr<const Packet> pa
 {
     std::shared_ptr<const GameCommandPacket> commandPacket = std::static_pointer_cast<const GameCommandPacket>(packet);
     std::vector<std::shared_ptr<GameCommand>> commands = commandPacket->getCommands();
-    int tick = commandPacket->getTick();
+    const int tick = commandPacket->getTick();
 
     GameState& game = static_cast<GameState&>(state);
     game.onClientReady(tick, commandPacket->getClientId());

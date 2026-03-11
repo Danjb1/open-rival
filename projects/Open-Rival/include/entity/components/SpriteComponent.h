@@ -8,23 +8,24 @@
 
 #include "entity/components/EntityComponent.h"
 #include "game/UnitType.h"
-#include "gfx/renderable/SpriteRenderable.h"
+#include "gfx/Spritesheet.h"
 
 namespace Rival {
 
+class Renderer;
+
 /**
- * Component that links an Entity to a Renderable.
- *
- * This ensures that all graphical resources are released automatically when an Entity is destroyed.
- *
- * Note that this does not contain any logic to set the txIndex; that must be handled elsewhere.
+ * Component that links an Entity to a Spritesheet and stores the current texture index.
  */
 class SpriteComponent : public EntityComponent
 {
 public:
     SpriteComponent(std::shared_ptr<const Spritesheet> spritesheet, float offsetY = 0.f);
 
-    const SpriteRenderable& getRenderable() const;
+    std::shared_ptr<const Spritesheet> getSpritesheet() const
+    {
+        return spritesheet;
+    }
 
     int getTxIndex() const;
 
@@ -38,12 +39,14 @@ public:
 public:
     static const std::string key;
 
+    /** Flag set whenever the texture index changes. */
     mutable bool dirty = true;
+
+    /** Last lerp offset used during rendering. */
     mutable glm::vec2 lastLerpOffset = { 0, 0 };
 
 private:
-    const SpriteRenderable renderable;
-
+    std::shared_ptr<const Spritesheet> spritesheet;
     float offsetY = 0.f;
     int txIndex = 0;
 };

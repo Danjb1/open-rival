@@ -60,6 +60,8 @@ public:
      */
     virtual void render(int delta) = 0;
 
+    const Resources& getResources() const;
+
 protected:
     Application& app;
     Window* window;

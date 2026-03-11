@@ -7,12 +7,13 @@
 
 namespace Rival {
 
+class Renderer;
 class Texture;
 
 namespace PaletteUtils {
 
 /** Creates the combined palette texture used by the game. */
-std::shared_ptr<const Texture> createPaletteTexture();
+std::shared_ptr<const Texture> createPaletteTexture(Renderer* renderer);
 
 /** Gets the texture co-ordinate (y) for the given palette index. */
 float getPaletteTxY(int paletteIndex);

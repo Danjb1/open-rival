@@ -14,7 +14,7 @@ namespace Rival {
 class AcceptPlayerPacket : public Packet
 {
 public:
-    AcceptPlayerPacket(int requestId, std::string playerName, int playerId);
+    AcceptPlayerPacket(int requestId, int clientId, std::string playerName, int playerId);
 
     void serialize(std::vector<char>& buffer) const override;
     static std::shared_ptr<AcceptPlayerPacket> deserialize(const std::vector<char> buffer);
@@ -29,6 +29,11 @@ public:
         return requestId;
     }
 
+    int getAcceptedClientId() const
+    {
+        return acceptedClientId;
+    }
+
     int getPlayerId() const
     {
         return playerId;
@@ -37,6 +42,7 @@ public:
 private:
     std::string playerName;
     int requestId;
+    int acceptedClientId;
     int playerId;
 };
 

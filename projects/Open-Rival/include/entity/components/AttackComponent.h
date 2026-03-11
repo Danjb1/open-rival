@@ -131,7 +131,7 @@ private:
     float cooldownTimeElapsed = 0;
     int cooldownDuration = 0;
 
-    MapNode lastTargetPosition;
+    MapNode lastTargetPosition = MapNode::Invalid;
     int moveToTargetCooldown = 0;
     int numMovementAttempts = 0;
 };

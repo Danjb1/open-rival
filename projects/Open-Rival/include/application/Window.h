@@ -7,11 +7,12 @@
 
 namespace Rival {
 
+/** A window created with SDL.
+ * Later, we should make this abstract and create a concrete SDLWindow implementation. */
 class Window
 {
 public:
     Window(int width, int height, const char* title);
-
     ~Window();
 
     // Disable moving / copying
@@ -21,6 +22,8 @@ public:
     Window& operator=(Window&& other) = delete;
 
     void swapBuffers() const;
+
+    void setPos(int x, int y);
 
     void setIcon(SDL_Surface* surface);
 
@@ -43,6 +46,9 @@ public:
     {
         return vsyncEnabled;
     }
+
+private:
+    static void initSDL();
 
 private:
     SDL_Window* sdlWindow = nullptr;

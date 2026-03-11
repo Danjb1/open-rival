@@ -102,7 +102,7 @@ TEST_CASE("getDir should return the correct direction from an odd-column node", 
     }
 }
 
-TEST_CASE("getDistance should return the correct distance between 2 tiles", "[map-utils]")
+TEST_CASE("getTileDistance should return the correct distance between 2 tiles", "[map-utils]")
 {
     // These points were plotted using the Scenario Editor to calculate the expected distance
     const MapNode node1 = { 10, 10 };
@@ -114,62 +114,62 @@ TEST_CASE("getDistance should return the correct distance between 2 tiles", "[ma
 
     SECTION("tiles are east-west neighbours")
     {
-        REQUIRE(MapUtils::getDistance(node1, { node1.x + MapUtils::eastWestTileSpan, node1.y }) == 1);
+        REQUIRE(MapUtils::getTileDistance(node1, { node1.x + MapUtils::eastWestTileSpan, node1.y }) == 1);
     }
 
     SECTION("tiles are north-south neighbours")
     {
-        REQUIRE(MapUtils::getDistance(node1, { node1.x, node1.y - 1 }) == 1);
+        REQUIRE(MapUtils::getTileDistance(node1, { node1.x, node1.y - 1 }) == 1);
     }
 
     SECTION("tiles are diagonal neighbours (same row)")
     {
-        REQUIRE(MapUtils::getDistance(node1, { node1.x + 1, node1.y }) == 1);
+        REQUIRE(MapUtils::getTileDistance(node1, { node1.x + 1, node1.y }) == 1);
     }
 
     SECTION("tiles are diagonal neighbours (different rows)")
     {
-        REQUIRE(MapUtils::getDistance(node1, { node1.x + 1, node1.y - 1 }) == 1);
+        REQUIRE(MapUtils::getTileDistance(node1, { node1.x + 1, node1.y - 1 }) == 1);
     }
 
     SECTION("tiles are in a direct diagonal line (upper -> lower)")
     {
-        REQUIRE(MapUtils::getDistance(node1, node5) == 11);
+        REQUIRE(MapUtils::getTileDistance(node1, node5) == 11);
     }
 
     SECTION("tiles are in a direct diagonal line (lower -> lower)")
     {
-        REQUIRE(MapUtils::getDistance(node2, node5) == 10);
+        REQUIRE(MapUtils::getTileDistance(node2, node5) == 10);
     }
 
     SECTION("tiles are somewhat diagonal, with some extra vertical distance (lower -> upper)")
     {
-        REQUIRE(MapUtils::getDistance(node2, node3) == 5);
+        REQUIRE(MapUtils::getTileDistance(node2, node3) == 5);
     }
 
     SECTION("tiles are somewhat diagonal, with some extra vertical distance (lower -> lower)")
     {
-        REQUIRE(MapUtils::getDistance(node2, node4) == 6);
+        REQUIRE(MapUtils::getTileDistance(node2, node4) == 6);
     }
 
     SECTION("tiles are somewhat diagonal, with some extra vertical distance (upper -> lower)")
     {
-        REQUIRE(MapUtils::getDistance(node1, { node1.x + 1, node1.y + 1 }) == 2);
+        REQUIRE(MapUtils::getTileDistance(node1, { node1.x + 1, node1.y + 1 }) == 2);
     }
 
     SECTION("tiles are somewhat diagonal, with some extra horizontal distance (lower -> upper)")
     {
-        REQUIRE(MapUtils::getDistance(node2, node6) == 11);
+        REQUIRE(MapUtils::getTileDistance(node2, node6) == 11);
     }
 
     SECTION("tiles are in a direct horizontal line")
     {
-        REQUIRE(MapUtils::getDistance(node4, node5) == 4);
+        REQUIRE(MapUtils::getTileDistance(node4, node5) == 4);
     }
 
     SECTION("tiles are in the same row but not directly horizontal (upper -> lower)")
     {
-        REQUIRE(MapUtils::getDistance(node3, node5) == 5);
+        REQUIRE(MapUtils::getTileDistance(node3, node5) == 5);
     }
 }
 

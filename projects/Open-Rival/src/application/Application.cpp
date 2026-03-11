@@ -5,7 +5,6 @@
 #include <memory>
 #include <utility>  // std::in_place, std::move
 
-#include "application/ApplicationContext.h"
 #include "application/State.h"
 #include "game/PlayerState.h"
 #include "net/Socket.h"
@@ -14,8 +13,14 @@
 
 namespace Rival {
 
-Application::Application(ApplicationContext& context)
-    : context(context)
+Application::Application(
+        json& cfg, Window* window, Renderer* renderer, AudioSystem& audioSystem, Resources& res, FT_Library fontLib)
+    : cfg(cfg)
+    , window(window)
+    , renderer(renderer)
+    , audioSystem(audioSystem)
+    , res(res)
+    , fontLib(fontLib)
 {
 }
 
@@ -23,7 +28,6 @@ void Application::start(std::unique_ptr<State> initialState)
 {
     setState(std::move(initialState));
 
-    Window* window = context.getWindow();
     const bool vsyncEnabled = window->isVsyncEnabled();
 
     TimeUtils::PrecisionTimer timer;
