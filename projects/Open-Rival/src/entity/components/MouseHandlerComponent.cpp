@@ -14,7 +14,7 @@
 #include "entity/components/SpriteComponent.h"
 #include "entity/components/VoiceComponent.h"
 #include "game/PlayerContext.h"
-#include "gfx/renderer/EntityRenderer.h"
+#include "gfx/opengl/renderer/EntityRenderer.h"
 
 namespace Rival {
 

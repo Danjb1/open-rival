@@ -6,11 +6,11 @@ namespace Rival {
 World::World(int width, int height, bool wilderness)
     : width(width)
     , height(height)
+    , spatialIndex(width, height)
     , wilderness(wilderness)
-    ,
 
     // Default to Grass everywhere
-    tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
+    , tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
     , tilePassability(std::vector<TilePassability>(width * height, TilePassability::Clear))
     , nextId(0)
 {
@@ -20,6 +20,7 @@ World::World(int width, int height, bool wilderness)
 World::World(int width, int height, bool wilderness, std::vector<Tile> tiles)
     : width(width)
     , height(height)
+    , spatialIndex(width, height)
     , wilderness(wilderness)
     , tiles(tiles)
     , tilePassability(createPassability())
@@ -74,6 +75,7 @@ void World::addEntity(std::shared_ptr<Entity> entity, const MapNode& pos)
 {
     entitiesList.push_back(entity);
     entitiesById[nextId] = entity;
+    spatialIndex.addEntity({ nextId, pos, entity->isBig() });
     entity->addedToWorld(this, nextId, pos);
     ++nextId;
 }
@@ -114,6 +116,36 @@ SharedEntityList World::getEntities() const
     return { entitiesList.cbegin(), entitiesList.cend() };
 }
 
+SharedEntityList World::getEntitiesFromIds(const std::vector<int>& entityIds) const
+{
+    SharedEntityList entityList;
+
+    for (int id : entityIds)
+    {
+        if (auto e = getEntityShared(id))
+        {
+            entityList.push_back(e);
+        }
+    }
+
+    return entityList;
+}
+
+SharedMutableEntityList World::getMutableEntitiesFromIds(const std::vector<int>& entityIds) const
+{
+    SharedMutableEntityList entityList;
+
+    for (int id : entityIds)
+    {
+        if (auto e = getMutableEntityShared(id))
+        {
+            entityList.push_back(e);
+        }
+    }
+
+    return entityList;
+}
+
 void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func)
 {
     for (const auto& entity : entitiesList)
@@ -132,60 +164,26 @@ void World::forEachEntity(const std::function<void(std::shared_ptr<const Entity>
 
 SharedEntityList World::getEntitiesInRadius(const MapNode& pos, int radius) const
 {
-    // TODO: Use spatial partitioning
-    SharedEntityList entitiesInRadius;
-    for (const auto& entity : entitiesList)
-    {
-        const int distance = MapUtils::getDistance(pos, entity->getPos());
-        if (distance <= radius)
-        {
-            entitiesInRadius.push_back(entity);
-        }
-    }
-    return entitiesInRadius;
+    std::vector<int> entityIds = spatialIndex.getEntitiesInRadius(pos, radius);
+    return getEntitiesFromIds(entityIds);
 }
 
 SharedMutableEntityList World::getMutableEntitiesInRadius(const MapNode& pos, int radius)
 {
-    // TODO: Use spatial partitioning
-    SharedMutableEntityList entitiesInRadius;
-    for (const auto& entity : entitiesList)
-    {
-        const int distance = MapUtils::getDistance(pos, entity->getPos());
-        if (distance <= radius)
-        {
-            entitiesInRadius.push_back(entity);
-        }
-    }
-    return entitiesInRadius;
+    std::vector<int> entityIds = spatialIndex.getEntitiesInRadius(pos, radius);
+    return getMutableEntitiesFromIds(entityIds);
 }
 
 SharedEntityList World::getEntitiesAt(const MapNode& pos) const
 {
-    // TODO: Use spatial partitioning
-    SharedEntityList entities;
-    for (const auto& entity : entitiesList)
-    {
-        if (entity->getPos() == pos)
-        {
-            entities.push_back(entity);
-        }
-    }
-    return entities;
+    std::vector<int> entityIds = spatialIndex.getEntitiesAt(pos);
+    return getEntitiesFromIds(entityIds);
 }
 
 SharedMutableEntityList World::getMutableEntitiesAt(const MapNode& pos)
 {
-    // TODO: Use spatial partitioning
-    SharedMutableEntityList entities;
-    for (const auto& entity : entitiesList)
-    {
-        if (entity->getPos() == pos)
-        {
-            entities.push_back(entity);
-        }
-    }
-    return entities;
+    std::vector<int> entityIds = spatialIndex.getEntitiesAt(pos);
+    return getMutableEntitiesFromIds(entityIds);
 }
 
 Entity* World::getMutableEntity(int id) const
@@ -223,6 +221,11 @@ std::weak_ptr<Entity> World::getMutableEntityWeak(int id) const
 std::weak_ptr<const Entity> World::getEntityWeak(int id) const
 {
     return getMutableEntityWeak(id);
+}
+
+void World::onEntityMoved(int entityId, const MapNode& newPos)
+{
+    spatialIndex.moveEntity(entityId, newPos);
 }
 
 int Rival::World::getWidth() const

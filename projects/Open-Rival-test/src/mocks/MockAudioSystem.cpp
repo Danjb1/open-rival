@@ -4,6 +4,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+#include "application/Resources.h"
 #include "audio/AudioSystem.h"
 
 namespace Rival {
@@ -20,11 +21,13 @@ void AudioSystem::setMidiActive(bool /*active*/) {}
 
 void AudioSystem::setSoundActive(bool /*active*/) {}
 
-void AudioSystem::playMidi(MidiFile /*midi*/) {}
+void AudioSystem::playMidi(std::shared_ptr<const MidiFile> /*midi*/) {}
 
 ///////////////////////////////////////////////////////////////////////////
 // WAV playback
 ///////////////////////////////////////////////////////////////////////////
+
+void AudioSystem::playSound(const AudioStore&, int, SoundConfig) {}
 
 void AudioSystem::playSound(SoundSource /*source*/) {}
 

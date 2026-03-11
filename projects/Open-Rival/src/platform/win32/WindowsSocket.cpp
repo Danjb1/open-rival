@@ -218,6 +218,41 @@ void Socket::send(const std::vector<char>& buffer)
     }
 }
 
+static std::string getWinSockErrorString(int error)
+{
+    char* buffer = nullptr;
+
+    const DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+    const DWORD length = FormatMessageA(flags, nullptr, error, 0, reinterpret_cast<LPSTR>(&buffer), 0, nullptr);
+    if (length == 0 || buffer == nullptr)
+    {
+        return "WSA error " + std::to_string(error);
+    }
+
+    std::string message(buffer, length);
+    LocalFree(buffer);
+
+    return message;
+}
+
+static void handleSocketError()
+{
+    switch (const int error = ::WSAGetLastError())
+    {
+    case WSAECONNABORTED:
+        LOG_DEBUG("Socket closed locally (connection aborted)");
+        break;
+
+    case WSAECONNRESET:
+        LOG_INFO("Socket closed by peer (connection reset)");
+        break;
+
+    default:
+        LOG_WARN("Unexpected error reading from socket: {}", getWinSockErrorString(error));
+        break;
+    }
+}
+
 void Socket::receive(std::vector<char>& buffer)
 {
     std::size_t bytesReceived = 0;
@@ -227,22 +262,19 @@ void Socket::receive(std::vector<char>& buffer)
         std::size_t bytesExpected = buffer.size() - bytesReceived;
         int result = ::recv(handle, buffer.data() + bytesReceived, static_cast<int>(bytesExpected), 0);
 
-        if (result == SOCKET_ERROR && isOpen())
+        if (result > 0)
         {
-            // Socket is still open on our side but may have been closed by the other side
-            LOG_WARN("Failed to read from socket: {}", ::WSAGetLastError());
-            close();
-            break;
+            bytesReceived += result;
+            continue;
         }
 
-        if (result == 0)
+        if (result == SOCKET_ERROR)
         {
-            // Connection has been gracefully closed
-            close();
-            break;
+            handleSocketError();
         }
 
-        bytesReceived += result;
+        close();
+        break;
     }
 }
 

@@ -5,6 +5,7 @@
 
 #include "net/packets/RelayedPacket.h"
 #include "utils/BufferUtils.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
@@ -14,7 +15,9 @@ Connection::Connection(
     , packetFactory(packetFactory)
     , remoteClientId(remoteClientId)
     , listener(listener)
+    , sendThread(&Connection::sendThreadLoop, this)
     , receiveThread(&Connection::receiveThreadLoop, this)
+    , state(ConnectionState::Open)
 {
     sendBuffer.reserve(maxBufferSize);
     recvBuffer.reserve(maxBufferSize);
@@ -23,7 +26,6 @@ Connection::Connection(
 Connection::~Connection()
 {
     close();
-    receiveThread.join();
 }
 
 bool Connection::operator==(const Connection& other) const
@@ -38,12 +40,86 @@ bool Connection::operator!=(const Connection& other) const
 
 void Connection::close() noexcept
 {
+    if (state != ConnectionState::Open)
+    {
+        // Close has already been requested
+        return;
+    }
+
+    LOG_DEBUG("Closing connection...");
+    state = ConnectionState::Closing;
+
+    // Try to close the underlying socket, although it may well be closed already
     socket.close();
+
+    // Forcibly wake the send thread so it can re-evaluate its end condition
+    {
+        // The mutex is necessary here to avoid the "lost wake-up" problem, where we send the notify in the instant
+        // before the call to `wait` and it gets missed.
+        std::lock_guard<std::mutex> lock(packetsToSendMutex);
+        sendReadyCondition.notify_all();
+    }
+
+    // Stop send thread
+    if (sendThread.joinable())
+    {
+        LOG_TRACE("Waiting for connection send thread to finish");
+        sendThread.join();
+    }
+
+    // Stop receive thread
+    if (receiveThread.joinable())
+    {
+        LOG_TRACE("Waiting for connection receive thread to finish");
+        receiveThread.join();
+    }
+
+    state = ConnectionState::Closed;
+    LOG_DEBUG("Connection successfully closed!");
 }
 
 bool Connection::isOpen() const
 {
     return socket.isOpen();
+}
+
+void Connection::send(const std::shared_ptr<const Packet> packet)
+{
+    {
+        std::scoped_lock lock(packetsToSendMutex);
+        packetsToSend.push_back(packet);
+    }
+
+    // Wake up the send thread
+    sendReadyCondition.notify_one();
+}
+
+void Connection::sendThreadLoop()
+{
+    while (isOpen())
+    {
+        std::shared_ptr<const Packet> packet;
+
+        {
+            std::unique_lock<std::mutex> lock(packetsToSendMutex);
+
+            // Wait until we have a packet to send OR the connection closes
+            sendReadyCondition.wait(lock, [this] { return !packetsToSend.empty() || !isOpen(); });
+
+            if (!isOpen())
+            {
+                break;
+            }
+
+            packet = packetsToSend.front();
+            packetsToSend.pop_front();
+        }
+
+        if (packet)
+        {
+            sendNow(packet);
+        }
+    }
 }
 
 void Connection::receiveThreadLoop()
@@ -106,14 +182,16 @@ bool Connection::readFromSocket(std::size_t numBytes)
     return success;
 }
 
-void Connection::send(const Packet& packet)
+void Connection::sendNow(std::shared_ptr<const Packet> packet)
 {
-    packet.serialize(sendBuffer);
-    packet.finalize(sendBuffer);
+    packet->serialize(sendBuffer);
+    packet->finalize(sendBuffer);
+
     if (sendBuffer.empty())
     {
         throw std::runtime_error("Tried to send empty buffer");
     }
+
     socket.send(sendBuffer);
     sendBuffer.clear();
 }

@@ -1,5 +1,6 @@
 #include "gfx/TextureAtlas.h"
 
+#include "gfx/Renderer.h"
 #include "utils/BinaryFileReader.h"
 #include "utils/LogUtils.h"
 
@@ -22,7 +23,7 @@ const int TextureAtlas::getImageHeight(std::string key) const
     return static_cast<int>(imagePlacements.at(key).height);
 }
 
-const std::vector<GLfloat> TextureAtlas::getTexCoords(const std::string& key) const
+const std::vector<float> TextureAtlas::getTexCoords(const std::string& key) const
 {
     // Find the location of the image with the given key
     const Rect& imagePlacement = imagePlacements.at(key);
@@ -50,7 +51,7 @@ const std::vector<GLfloat> TextureAtlas::getTexCoords(const std::string& key) co
     };
 }
 
-std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::string& resourceName)
+std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::string& resourceName, Renderer* renderer)
 {
     std::string textureName = resourceName + ".tga";
     std::string atlasName = resourceName + ".atlas";
@@ -90,7 +91,7 @@ std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::st
 
     reader.close();
 
-    return std::make_shared<const TextureAtlas>(Texture::loadTexture(textureName), imagePlacements);
+    return std::make_shared<const TextureAtlas>(renderer->loadTexture(textureName), imagePlacements);
 }
 
 }  // namespace Rival

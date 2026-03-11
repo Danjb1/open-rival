@@ -47,6 +47,8 @@ public:
         return static_cast<float>(currentHealth) / maxHealth;
     }
 
+    /** Returns true if health has been depleted.
+     * Use with caution! A Unit that is "dead" may still *appear* to be alive in the MovingToDeath state. */
     bool isDead() const;
 
 public:

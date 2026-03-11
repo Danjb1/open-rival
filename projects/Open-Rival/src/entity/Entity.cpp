@@ -98,9 +98,13 @@ void Entity::destroy()
     components.clear();
 }
 
-void Entity::setPos(MapNode newPos)
+void Entity::setPos(const MapNode& newPos)
 {
     pos = newPos;
+    if (world)
+    {
+        world->onEntityMoved(id, newPos);
+    }
     moved = true;
 }
 

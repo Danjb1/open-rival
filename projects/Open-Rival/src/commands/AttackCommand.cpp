@@ -56,7 +56,7 @@ void AttackCommand::execute(GameCommandContext& context)
 {
     World& world = context.getWorld();
 
-    // Validate the target entity
+    // Validate the target
     std::weak_ptr<Entity> targetEntityWeak;
     if (targetEntityId >= 0)
     {
@@ -67,6 +67,11 @@ void AttackCommand::execute(GameCommandContext& context)
             // Target entity has been deleted since this command was issued
             return;
         }
+    }
+    else if (targetTile == MapNode::Invalid)
+    {
+        LOG_WARN("AttackCommand did not contain a valid target!");
+        return;
     }
 
     // Set the target for our attack
@@ -79,11 +84,20 @@ void AttackCommand::execute(GameCommandContext& context)
             continue;
         }
 
-        auto attackComponent = entity->getComponent<AttackComponent>(AttackComponent::key);
+        auto attackComponent = entity->getComponent<AttackComponent>();
         if (!attackComponent)
         {
             LOG_WARN("Tried to attack with a non-attacking entity");
             continue;
+        }
+
+        // Don't ever issue commands to dead Units
+        if (Unit* unit = entity->as<Unit>())
+        {
+            if (unit->isEffectivelyDead())
+            {
+                continue;
+            }
         }
 
         if (targetEntityId >= 0)
