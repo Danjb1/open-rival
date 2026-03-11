@@ -1,17 +1,15 @@
 #include "lobby/LobbyState.h"
 
 #include <chrono>
-#include <cstdlib>  // std::rand
 #include <random>
 
 #include "application/Application.h"
-#include "application/ApplicationContext.h"
 #include "application/ResourceLoader.h"
 #include "entity/EntityFactory.h"
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "game/World.h"
-#include "gfx/renderable/TextRenderable.h"
+#include "gfx/Renderer.h"
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
 #include "net/packet-handlers/LobbyWelcomePacketHandler.h"
@@ -31,18 +29,10 @@
 
 namespace Rival {
 
-Rect makeViewport(const Window* window)
-{
-    // Fill the screen
-    return { 0, 0, window->getWidth(), window->getHeight() };
-}
-
-LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
+LobbyState::LobbyState(Application& app, std::string playerName, bool bIsHost)
     : State(app)
-    , isHost(isHost)
+    , bIsHost(bIsHost)
     , localPlayerName(playerName)
-    , menuRenderer(res, window, makeViewport(window))
-    , textRenderer(window)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
@@ -52,7 +42,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     packetHandlers.insert({ PacketType::KickPlayer, std::make_unique<KickPlayerPacketHandler>() });
     packetHandlers.insert({ PacketType::StartGame, std::make_unique<StartGamePacketHandler>() });
 
-    if (isHost)
+    if (bIsHost)
     {
         // Determine the seed that we will use for all our random numbers once the game starts.
         // It is imperative that all players generate the same sequence of random numbers.
@@ -60,12 +50,23 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool isHost)
     }
 }
 
+static int generateJoinRequestId()
+{
+    // This only matters if 2 players try to join with the same name.
+    // In this case, we need to come up with unique identifiers to differentiate them.
+    auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    static std::mt19937_64 rng(seed);
+    std::uniform_int_distribution<int> dist;
+    return dist(rng);
+}
+
 void LobbyState::onLoad()
 {
+    app.getRenderer()->onEnterLobby(this);
+
     // Load the initial level
     // TODO: Clients should wait to receive the level name from the host
-    ApplicationContext& context = app.getContext();
-    const std::string levelName = ConfigUtils::get(context.getConfig(), "levelName", std::string());
+    const std::string levelName = ConfigUtils::get(app.getConfig(), "levelName", std::string());
     if (levelName.empty())
     {
         throw std::runtime_error("No level name found in config.json ");
@@ -74,7 +75,7 @@ void LobbyState::onLoad()
 
     if (isNetGame())
     {
-        if (isHost)
+        if (bIsHost)
         {
             // Add ourselves to the lobby.
             // The host should always have a client ID and player ID of 0.
@@ -83,9 +84,8 @@ void LobbyState::onLoad()
         }
         else
         {
-            // We generate a random request ID, just in case 2 players try to join with the same name
-            joinRequestId = std::rand();
-            RequestJoinPacket joinPacket(joinRequestId, localPlayerName);
+            joinRequestId = generateJoinRequestId();
+            auto joinPacket = std::make_shared<RequestJoinPacket>(joinRequestId, localPlayerName);
             app.getConnection()->send(joinPacket);
         }
     }
@@ -104,62 +104,8 @@ void LobbyState::update(int /* delta */)
 
 void LobbyState::render(int delta)
 {
-    menuRenderer.render(delta);
-    renderText();
-}
-
-void LobbyState::renderText()
-{
-    // TMP: Hardcoded hacky rendering until we have a proper menu system.
-    // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
-    std::vector<TextRenderable> textRenderables;
-    TextProperties nameProperties = { res.getFontRegular() };
-    glm::vec2 renderPos = { 100, 100 };
-    const float rowHeight = 32;
-    const float indent = 32;
-
-    // Header
-    {
-        TextSpan textSpan = { "Connected Players:", TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.x += indent;
-        renderPos.y += rowHeight;
-    }
-
-    // Local player (if hosting, should always come first)
-    if (isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Other players
-    for (const auto& entry : clients)
-    {
-        std::string name = entry.second.getName();
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Local player (if not hosting, always comes last for now; later we will sort by player ID)
-    if (!isHost)
-    {
-        std::string name = localPlayerName;
-        TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
-        renderPos.y += rowHeight;
-    }
-
-    // Render the text!
-    std::vector<const TextRenderable*> textRenderablePtrs;
-    for (const auto& textRenderable : textRenderables)
-    {
-        textRenderablePtrs.push_back(&textRenderable);
-    }
-    textRenderer.render(textRenderablePtrs);
+    Renderer* renderer = app.getRenderer();
+    renderer->renderLobby(delta);
 }
 
 void LobbyState::keyUp(const SDL_Keycode keyCode)
@@ -169,7 +115,7 @@ void LobbyState::keyUp(const SDL_Keycode keyCode)
     case SDLK_SPACE:
     case SDLK_RETURN:
         // TMP: For now, just start the game when pressing Space or Enter
-        if (isHost)
+        if (bIsHost)
         {
             requestStartGame();
         }
@@ -213,7 +159,7 @@ void LobbyState::pollNetwork()
 
 void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName)
 {
-    if (!isHost)
+    if (!bIsHost)
     {
         // Only the host has the authority to accept other players
         return;
@@ -222,7 +168,9 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     int playerId = requestPlayerId();
     if (playerId >= 0)
     {
-        AcceptPlayerPacket acceptPacket(requestId, playerName, playerId);
+        LOG_INFO("Assigned player ID {} to {}", playerId, playerName);
+
+        auto acceptPacket = std::make_shared<AcceptPlayerPacket>(requestId, clientId, playerName, playerId);
         app.getConnection()->send(acceptPacket);
 
         ClientInfo client = { playerId, playerName };
@@ -230,7 +178,7 @@ void LobbyState::onPlayerJoinRequest(int requestId, int clientId, const std::str
     }
     else
     {
-        RejectPlayerPacket rejectPacket(requestId, playerName);
+        auto rejectPacket = std::make_shared<RejectPlayerPacket>(requestId, playerName);
         app.getConnection()->send(rejectPacket);
         onPlayerRejected(requestId, playerName);
     }
@@ -242,18 +190,20 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
     {
         // Our request to join was the one that got accepted, which means this is our player ID!
         localPlayerId = client.getPlayerId();
+        LOG_INFO("Assigned player ID: {}", localPlayerId);
         return;
     }
 
-    LOG_INFO("Player {} has joined", client.getName());
+    LOG_INFO("Player {} has joined the lobby (client {})", client.getName(), clientId);
 
-    if (isHost)
+    if (bIsHost)
     {
         // Inform joining player about the current lobby state
         std::unordered_map<int, ClientInfo> clientsIncludingHost = clients;
         ClientInfo localClient(0, localPlayerName);
         clientsIncludingHost.insert({ 0, localClient });
-        LobbyWelcomePacket welcomePacket(client.getPlayerId(), clientsIncludingHost, randomSeed);
+        auto welcomePacket =
+                std::make_shared<LobbyWelcomePacket>(client.getPlayerId(), clientsIncludingHost, randomSeed);
         app.getConnection()->send(welcomePacket);
     }
 
@@ -315,20 +265,27 @@ void LobbyState::loadLevel(const std::string& filename)
 
 void LobbyState::requestStartGame()
 {
-    if (!isHost)
+    if (!bIsHost)
     {
         LOG_WARN("Non-host player tried to start the game");
         return;
     }
 
-    StartGamePacket packet;
-    app.getConnection()->send(packet);
+    auto startGamePacket = std::make_shared<StartGamePacket>();
+    app.getConnection()->send(startGamePacket);
     startGame();
 }
 
 void LobbyState::startGame()
 {
     LOG_INFO("Starting game!");
+
+    LOG_DEBUG("Connected clients:");
+    for (const auto& client : clients)
+    {
+        LOG_DEBUG("  Client {} -> Player {} ({})", client.first, client.second.getPlayerId(), client.second.getName());
+    }
+
     std::unique_ptr<State> game = createGameState();
     app.setState(std::move(game));
     isGameStarted = true;
@@ -336,15 +293,13 @@ void LobbyState::startGame()
 
 std::unique_ptr<State> LobbyState::createGameState() const
 {
-    ApplicationContext& context = app.getContext();
-
     LOG_INFO("Using random seed: {}", randomSeed);
     std::shared_ptr<std::mt19937> randomizer = std::make_shared<std::mt19937>(randomSeed);
 
     // Create the world
     ScenarioBuilder scenarioBuilder(scenarioData);
     std::shared_ptr<const EntityFactory> entityFactory =
-            std::make_shared<EntityFactory>(context.getResources(), context.getAudioSystem(), randomizer);
+            std::make_shared<EntityFactory>(res, app.getAudioSystem(), randomizer);
     std::unique_ptr<World> world = scenarioBuilder.build(entityFactory);
 
     // Initialize players
@@ -367,6 +322,21 @@ std::unique_ptr<State> LobbyState::createGameState() const
 bool LobbyState::isNetGame() const
 {
     return app.getConnection().has_value();
+}
+
+bool LobbyState::isHost() const
+{
+    return bIsHost;
+}
+
+std::string LobbyState::getLocalPlayerName() const
+{
+    return localPlayerName;
+}
+
+std::unordered_map<int, ClientInfo> LobbyState::getClients() const
+{
+    return clients;
 }
 
 }  // namespace Rival

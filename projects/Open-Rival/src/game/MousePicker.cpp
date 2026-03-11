@@ -328,22 +328,9 @@ std::weak_ptr<Entity> MousePicker::findEntityUnderMouse(int mouseInViewportX, in
     std::weak_ptr<Entity> selectedEntity;
     for (const auto& e : entities)
     {
-        if (!e->isVisible())
-        {
-            // Ignore invisible entities
-            continue;
-        }
-
-        auto* mouseHandlerComponent = e->getComponent<MouseHandlerComponent>();
+        const MouseHandlerComponent* mouseHandlerComponent = getMouseHandlerForEntity(*e);
         if (!mouseHandlerComponent)
         {
-            continue;
-        }
-
-        auto* healthComponent = e->getComponent<HealthComponent>();
-        if (healthComponent && healthComponent->isDead())
-        {
-            // Ignore dead entities
             continue;
         }
 
@@ -373,7 +360,7 @@ WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) c
     const auto entities = world.getMutableEntities();
     for (const auto& e : entities)
     {
-        const auto& mouseHandlerComponent = e->getComponent<MouseHandlerComponent>(MouseHandlerComponent::key);
+        const MouseHandlerComponent* mouseHandlerComponent = getMouseHandlerForEntity(*e);
         if (!mouseHandlerComponent)
         {
             continue;
@@ -396,6 +383,24 @@ WeakMutableEntityList MousePicker::findEntitiesForDragSelect(const Rect& area) c
     return entitiesInArea;
 }
 
+const MouseHandlerComponent* MousePicker::getMouseHandlerForEntity(const Entity& e) const
+{
+    if (!e.isVisible())
+    {
+        // Can't select invisible entities
+        return nullptr;
+    }
+
+    auto* healthComponent = e.getComponent<HealthComponent>();
+    if (healthComponent && healthComponent->isDead())
+    {
+        // Can't select dead entities
+        return nullptr;
+    }
+
+    return e.getComponent<MouseHandlerComponent>();
+}
+
 void MousePicker::selectEntities(WeakMutableEntityList& entities)
 {
     // Clean up the old selection
@@ -411,6 +416,11 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
         if (const auto healthComponent = selectedEntity->getComponent<HealthComponent>())
         {
             healthComponent->removeListener(getWeakThis());
+        }
+
+        if (Unit* unit = selectedEntity->as<Unit>())
+        {
+            unit->removeStateListener(getWeakThis());
         }
     }
 
@@ -435,6 +445,11 @@ void MousePicker::selectEntities(WeakMutableEntityList& entities)
         if (const auto healthComponent = selectedEntity->getComponent<HealthComponent>())
         {
             healthComponent->addListener(getWeakThis());
+        }
+
+        if (Unit* unit = selectedEntity->as<Unit>())
+        {
+            unit->addStateListener(getWeakThis());
         }
 
         // TODO: Also listen for when entity is removed from world (e.g. boarding a vehicle)
@@ -545,7 +560,23 @@ void MousePicker::onMaxHealthChanged(Entity* /*entity*/, int /*prevValue*/, int 
 
 void MousePicker::onHealthDepleted(Entity* entity)
 {
+    if (entity->as<Unit>())
+    {
+        // Special case for Units: we listen to onUnitStateChanged instead
+        return;
+    }
+
     playerContext.deselectEntity(entity->getId());
+}
+
+void MousePicker::onUnitStateChanged(Unit* unit, const UnitState newState)
+{
+    // Special case for Units: don't deselect until we enter the Dying state.
+    // This is because we still want to render an empty health bar if a Unit is in the MovingToDeath state.
+    if (newState == UnitState::Dying)
+    {
+        playerContext.deselectEntity(unit->getId());
+    }
 }
 
 }  // namespace Rival

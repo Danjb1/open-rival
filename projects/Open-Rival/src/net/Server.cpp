@@ -16,6 +16,8 @@ Server::Server(std::uint16_t port, int maxClients)
 
 Server::~Server()
 {
+    LOG_INFO("Shutting down server");
+
     // Close connections
     for (auto& entry : connectedClients)
     {
@@ -25,6 +27,8 @@ Server::~Server()
     // Kill server
     serverSocket.close();
     acceptThread.join();
+
+    LOG_INFO("Server successfully shut down");
 }
 
 void Server::onPacketReceived(Connection& connection, std::shared_ptr<const Packet> packet)
@@ -39,7 +43,7 @@ void Server::onPacketReceived(Connection& connection, std::shared_ptr<const Pack
             continue;
         }
 
-        otherConnection->send(*packet);
+        otherConnection->send(packet);
     }
 }
 

@@ -17,7 +17,7 @@ Spritesheet::Spritesheet(std::shared_ptr<const Texture> texture, int width, int 
 {
 }
 
-const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
+const std::vector<float> Spritesheet::getTexCoords(int index) const
 {
     const int x = index % xSize;
     const int y = index / xSize;
@@ -32,12 +32,14 @@ const std::vector<GLfloat> Spritesheet::getTexCoords(int index) const
     const float ty1 = srcY / txHeight;
     const float ty2 = (srcY + height) / txHeight;
 
+    /* clang-format off */
     return {
-        tx1, ty1,  //
-        tx2, ty1,  //
-        tx2, ty2,  //
-        tx1, ty2   //
+        tx1, ty1,
+        tx2, ty1,
+        tx2, ty2,
+        tx1, ty2
     };
+    /* clang-format on */
 }
 
 }  // namespace Rival

@@ -11,7 +11,7 @@ using namespace Rival;
 
 namespace EntityTestUtils {
 
-struct UnitConfig final : public AnimationContainer
+struct UnitConfig final : public AnimationContainer<UnitAnimationType>
 {
     // Begin AnimationContainer override
     const Animation* getAnimation(UnitAnimationType animType) const override;
@@ -23,12 +23,22 @@ struct UnitConfig final : public AnimationContainer
 // TMP: Eventually we should create a MockResources object
 class MockAudioStore final : public AudioStore
 {
-    std::shared_ptr<const WaveFile> getSound(int id) const override
+    virtual std::shared_ptr<const WaveFile> getSound(int) const override
     {
         return {};
-    };
+    }
 
-    std::shared_ptr<const MidiFile> getMidi(int id) const override
+    virtual std::vector<std::shared_ptr<const WaveFile>> getAllSounds() const override
+    {
+        return {};
+    }
+
+    virtual std::shared_ptr<const MidiFile> getMidi(int) const override
+    {
+        return {};
+    }
+
+    virtual const SoundBank* getSoundBank(const std::string&) const override
     {
         return {};
     }

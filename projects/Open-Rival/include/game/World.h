@@ -6,6 +6,7 @@
 
 #include "entity/Entity.h"
 #include "game/MapUtils.h"
+#include "game/SpatialIndex.h"
 #include "game/Tile.h"
 #include "utils/EntityUtils.h"
 
@@ -177,7 +178,13 @@ public:
      */
     std::weak_ptr<const Entity> getEntityWeak(int id) const;
 
+    /** This should be called whenever an Entity moves, to update the spatial index. */
+    void onEntityMoved(int entityId, const MapNode& newPos);
+
 private:
+    SharedEntityList getEntitiesFromIds(const std::vector<int>& entityIds) const;
+    SharedMutableEntityList getMutableEntitiesFromIds(const std::vector<int>& entityIds) const;
+
     std::vector<TilePassability> createPassability() const;
 
 private:
@@ -191,6 +198,8 @@ private:
     std::vector<PendingEntity> pendingEntities;
     std::unordered_map<int, std::shared_ptr<Entity>> entitiesById;
     std::vector<std::shared_ptr<Entity>> entitiesList;
+
+    SpatialIndex spatialIndex;
 };
 
 /**

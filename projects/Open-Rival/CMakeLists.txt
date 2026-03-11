@@ -51,6 +51,13 @@ add_executable(Open-Rival
     ${OPEN_RIVAL_EXTRA_FILES}
 )
 
+# Set WIN32_EXECUTABLE for Release builds.
+# This hides the console and calls `WinMain` instead of `main.
+# This is ignored for non-Windows platforms.
+set_target_properties(Open-Rival PROPERTIES
+    WIN32_EXECUTABLE $<CONFIG:Release>
+)
+
 # Add the directories and headers of the project
 target_include_directories(Open-Rival PRIVATE
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
@@ -78,7 +85,6 @@ target_link_libraries(Open-Rival PRIVATE
 	opengl32
     RtMidi::rtmidi
     SDL2::SDL2
-    SDL2::SDL2main
     SDL2_image::SDL2_image
     spdlog::spdlog
     winmm

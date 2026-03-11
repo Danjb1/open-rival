@@ -158,6 +158,7 @@ private:
 
     /** Mutex used to govern access to the sound queue. */
     std::mutex soundQueueMutex;
+
     /** Flag set when sound playback is enabled. */
     bool soundActive;
 };

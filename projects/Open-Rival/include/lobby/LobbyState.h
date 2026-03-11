@@ -8,11 +8,10 @@
 
 #include "application/State.h"
 #include "game/PlayerState.h"
-#include "gfx/renderer/MenuTextRenderer.h"
+#include "gfx/opengl/renderer/MenuTextRenderer.h"
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "scenario/ScenarioData.h"
-#include "ui/MenuRenderer.h"
 
 namespace Rival {
 
@@ -42,8 +41,11 @@ public:
     void onPlayerKicked(int playerId);
     void startGame();
 
+    bool isHost() const;
+    std::string getLocalPlayerName() const;
+    std::unordered_map<int, ClientInfo> getClients() const;
+
 private:
-    void renderText();
     void pollNetwork();
     int requestPlayerId();
     void loadLevel(const std::string& filename);
@@ -54,7 +56,7 @@ private:
 private:
     unsigned int randomSeed = 0;
 
-    bool isHost;
+    bool bIsHost;
     int nextPlayerId = 1;
     int joinRequestId = 0;
 
@@ -70,9 +72,6 @@ private:
 
     /** Registered PacketHandlers by packet type. */
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
-
-    MenuRenderer menuRenderer;
-    MenuTextRenderer textRenderer;
 
     bool isGameStarted = false;
 };

@@ -18,7 +18,7 @@ SCENARIO("Spritesheet calculates the correct texture co-ordinates", "[spriteshee
 
         WHEN("getting the texture co-ordinates for a frame of the sprite")
         {
-            const std::vector<GLfloat> texCoords = spritesheet.getTexCoords(0);
+            const std::vector<float> texCoords = spritesheet.getTexCoords(0);
             float tx1 = texCoords[0];
             float ty1 = texCoords[1];
             float tx2 = texCoords[2];

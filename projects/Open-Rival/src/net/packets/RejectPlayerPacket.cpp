@@ -20,12 +20,7 @@ void RejectPlayerPacket::serialize(std::vector<char>& buffer) const
     Packet::serialize(buffer);
 
     BufferUtils::addToBuffer(buffer, requestId);
-
-    BufferUtils::addToBuffer(buffer, playerName.size());
-    for (std::size_t i = 0; i < playerName.size(); ++i)
-    {
-        BufferUtils::addToBuffer(buffer, playerName.c_str()[i]);
-    }
+    BufferUtils::addStringToBuffer(buffer, playerName);
 }
 
 std::shared_ptr<RejectPlayerPacket> RejectPlayerPacket::deserialize(const std::vector<char> buffer)
@@ -38,14 +33,7 @@ std::shared_ptr<RejectPlayerPacket> RejectPlayerPacket::deserialize(const std::v
     std::size_t playerNameSize = 0;
     BufferUtils::readFromBuffer(buffer, offset, playerNameSize);
 
-    std::string playerName;
-    playerName.reserve(playerNameSize);
-    for (std::size_t i = 0; i < playerNameSize; ++i)
-    {
-        char c;
-        BufferUtils::readFromBuffer(buffer, offset, c);
-        playerName += c;
-    }
+    const std::string playerName = BufferUtils::readStringFromBuffer(buffer, offset);
 
     return std::make_shared<RejectPlayerPacket>(requestId, playerName);
 }

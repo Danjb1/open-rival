@@ -1,8 +1,8 @@
 #ifdef _WIN32
 
-// These comments...
+/* clang-format off */
 #include "net/NetUtils.h"
-// ... prevent the auto-formatter from moving the include
+/* clang-format on */
 
 #include <winsock2.h>
 
