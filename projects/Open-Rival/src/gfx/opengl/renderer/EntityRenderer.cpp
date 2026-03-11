@@ -39,15 +39,39 @@ EntityRenderer::EntityRenderer(
 
 void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, int delta)
 {
+    std::unordered_set<int> entityIds;
+
     entityContainer.forEachEntity([&](const auto& entity) {
+        entityIds.insert(entity->getId());
         if (isEntityVisible(*entity, camera))
         {
             renderEntity(*entity, delta);
         }
     });
 
+    cleanUpStaleRenderables(entityIds);
+
     // Restore the default palette
     glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);
+}
+
+void EntityRenderer::cleanUpStaleRenderables(const std::unordered_set<int>& validEntityIds)
+{
+    for (auto it = entitySpriteRenderables.begin(); it != entitySpriteRenderables.end();)
+    {
+        int entityId = it->first;
+
+        if (validEntityIds.find(entityId) == validEntityIds.cend())
+        {
+            // Entity ID for this SpriteRenderable is no longer valid!
+            // This should call the SpriteRenderable destructor.
+            it = entitySpriteRenderables.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera) const
@@ -79,8 +103,15 @@ bool EntityRenderer::isEntityVisible(const Entity& entity, const Camera& camera)
 
 SpriteRenderable* EntityRenderer::findOrCreateSpriteRenderable(int entityId, const SpriteComponent* spriteComponent)
 {
-    auto [iter, inserted] = entitySpriteRenderables.try_emplace(
-            entityId, std::make_unique<SpriteRenderable>(spriteComponent->getSpritesheet(), 1));
+    // We use `try_emplace` here - instead of a `find` and subsequent `emplace` - to avoid duplicate lookups.
+    // However, we don't want to create a SpriteRenderable if we don't need to (since it allocates resources on the
+    // GPU), so initially we just insert a nullptr.
+    auto [iter, inserted] = entitySpriteRenderables.try_emplace(entityId);
+    if (inserted)
+    {
+        // entityId was not present - *now* we can create our SpriteRenderable
+        iter->second = std::make_unique<SpriteRenderable>(spriteComponent->getSpritesheet(), 1);
+    }
     return iter->second.get();
 }
 
