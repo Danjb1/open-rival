@@ -58,10 +58,10 @@ std::shared_ptr<LobbyWelcomePacket> LobbyWelcomePacket::deserialize(const std::v
         int clientPlayerId = 0;
         BufferUtils::readFromBuffer(buffer, offset, clientPlayerId);
 
-        std::string name = BufferUtils::readStringFromBuffer(buffer, offset);
+        const std::string name = BufferUtils::readStringFromBuffer(buffer, offset);
 
-        ClientInfo client(playerId, name);
-        clients.insert({ thisClientId, client });
+        ClientInfo client(clientPlayerId, name);
+        clients.emplace(thisClientId, client);
     }
 
     unsigned int randomSeed = 0;

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "audio/Sounds.h"
+#include "entity/Unit.h"
 #include "entity/components/EntityComponent.h"
 #include "entity/components/HealthComponent.h"
 #include "game/UnitType.h"
@@ -19,7 +20,7 @@ class UnitDef;
  */
 class VoiceComponent
     : public EntityComponent
-    , public HealthListener
+    , public UnitStateListener
 {
 
 public:
@@ -30,16 +31,15 @@ public:
     void destroy() override;
     // End EntityComponent override
 
-    // Begin HealthListener override
-    void onHealthChanged(Entity* entity, int prevValue, int newValue) override;
-    void onMaxHealthChanged(Entity* entity, int prevValue, int newValue) override;
-    void onHealthDepleted(Entity* entity) override;
-    // Begin HealthListener override
+    // Begin UnitStateListener override
+    void onUnitStateChanged(Unit* unit, const UnitState newState) override;
+    // Begin UnitStateListener override
 
     void playSound(UnitSoundType soundType);
 
 private:
     bool isUnitTypeAlreadySpeaking(UnitType unitType) const;
+    void playDeathSound();
 
 public:
     static const std::string key;

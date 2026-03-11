@@ -15,6 +15,8 @@
 
 namespace Rival {
 
+class AudioStore;
+
 class AudioSystem
 {
 public:
@@ -34,9 +36,11 @@ public:
 public:
     void setMidiActive(bool active);
 
-    void playMidi(MidiFile midi);
+    void playMidi(std::shared_ptr<const MidiFile> midi);
 
     void setSoundActive(bool active);
+
+    void playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg = {});
 
     void playSound(SoundSource source);
 

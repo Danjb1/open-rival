@@ -48,66 +48,19 @@ UiImage::UiImage(Rect pos)
 {
 }
 
+Rect UiImage::getPos() const
+{
+    return pos;
+}
+
+void UiImage::setPos(const Rect& newPos)
+{
+    pos = newPos;
+}
+
 void UiImage::setSpriteIndex(int newSpriteIndex)
 {
     spriteIndex = newSpriteIndex;
-}
-
-void UiImage::addToBuffers(std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords) const
-{
-    // Define vertex positions
-    float x1 = pos.x;
-    float y1 = pos.y;
-    float x2 = x1 + pos.width;
-    float y2 = y1 + pos.height;
-    float z = 0;
-    std::vector<GLfloat> thisVertexData = {
-        x1,
-        y1,
-        z,  //
-        x2,
-        y1,
-        z,  //
-        x2,
-        y2,
-        z,  //
-        x1,
-        y2,
-        z  //
-    };
-
-    // Determine texture co-ordinates
-    std::vector<GLfloat> thisTexCoords;
-    if (texAtlas)
-    {
-        thisTexCoords = texAtlas->getTexCoords(imageKey);
-    }
-    else if (spritesheet)
-    {
-        thisTexCoords = spritesheet->getTexCoords(spriteIndex);
-    }
-    else
-    {
-        const float tx1 = 0.f;
-        const float tx2 = 1.f;
-        const float ty1 = 0.f;
-        const float ty2 = 1.f;
-
-        thisTexCoords = {
-            tx1,
-            ty1,  //
-            tx2,
-            ty1,  //
-            tx2,
-            ty2,  //
-            tx1,
-            ty2  //
-        };
-    }
-
-    // Copy this data into the main buffers
-    positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());
-    texCoords.insert(texCoords.cend(), thisTexCoords.cbegin(), thisTexCoords.cend());
 }
 
 }}  // namespace Rival::GameInterface

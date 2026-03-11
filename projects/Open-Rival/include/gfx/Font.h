@@ -8,6 +8,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "gfx/Renderer.h"
 #include "gfx/Texture.h"
 
 namespace Rival {
@@ -63,8 +64,11 @@ public:
      *
      * @see https://learnopengl.com/In-Practice/Text-Rendering
      */
-    static std::shared_ptr<const Font> loadFont(
-            FT_Library ft, std::vector<std::string> fontDirs, std::string fontName, int defaultSize);
+    static std::shared_ptr<const Font> loadFont(FT_Library ft,
+            std::vector<std::string> fontDirs,
+            std::string fontName,
+            int defaultSize,
+            Renderer* renderer);
 
     Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, CharData> chars, int defaultSize);
 
@@ -90,7 +94,8 @@ public:
     }
 
 private:
-    static std::shared_ptr<const Font> loadFont(FT_Library ft, std::string filename, int defaultSize);
+    static std::shared_ptr<const Font> loadFont(
+            FT_Library ft, std::string filename, int defaultSize, Renderer* renderer);
 
     static unsigned char getCharCode(unsigned char c, FT_Byte charOffset);
     static inline int makePrintable(unsigned char c);

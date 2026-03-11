@@ -116,13 +116,23 @@ Facing getDir(const MapNode& from, const MapNode& to);
 /**
  * Gets the distance between 2 MapNodes, in tiles.
  *
- * For this method, east-west travel still counts as 1 tile, even though such a movement actually represents a change
- * of 2 units in the x-axis.
- *
- * The original game seems to use this approach in most cases, which is why units can see/shoot a lot further
- * horizontally than vertically.
+ * For this method, all directions are considered equivalent (even though east-west travel actually represents a change
+ * of 2 units in the x-axis).
  */
-int getDistance(const MapNode& a, const MapNode& b);
+int getTileDistance(const MapNode& a, const MapNode& b);
+
+/**
+ * Gets the "logical distance" between 2 MapNodes.
+ *
+ * For this method, north-south travel and east-west travel are more expensive than diagonal movement. This is what the
+ * original game uses for range and sight, as it gives a more "rounded" area than other methods.
+ */
+int getLogicalDistance(const MapNode& a, const MapNode& b);
+
+/**
+ * Returns the result of moving by a certain distance in a straight line.
+ */
+MapNode addLogicalDistance(const MapNode& src, Facing dir, int distance);
 
 }  // namespace MapUtils
 }  // namespace Rival

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "gfx/GLWrapper.h"
-
 #include <memory>
 #include <vector>
 
@@ -17,7 +15,7 @@ class Spritesheet
 public:
     Spritesheet(std::shared_ptr<const Texture> texture, int width, int height, int padding);
 
-    const std::vector<GLfloat> getTexCoords(int index) const;
+    const std::vector<float> getTexCoords(int index) const;
 
 public:
     std::shared_ptr<const Texture> texture;
