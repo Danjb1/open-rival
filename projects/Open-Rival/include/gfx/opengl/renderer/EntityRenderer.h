@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 #include "utils/EntityUtils.h"
@@ -36,6 +37,7 @@ public:
     static glm::vec2 getLerpOffset(const Entity& entity, int delta);
 
 private:
+    void cleanUpStaleRenderables(const std::unordered_set<int>& validEntityIds);
     bool isEntityVisible(const Entity& entity, const Camera& camera) const;
     void renderEntity(const Entity& entity, int delta);
     SpriteRenderable* findOrCreateSpriteRenderable(int entityId, const SpriteComponent* spriteComponent);
