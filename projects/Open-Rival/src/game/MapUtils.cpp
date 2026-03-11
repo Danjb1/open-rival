@@ -174,7 +174,7 @@ std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBou
 
 bool isNeighbor(const MapNode& a, const MapNode& b)
 {
-    const int dist = getDistance(a, b);
+    const int dist = getTileDistance(a, b);
     if (dist == eastWestTileSpan)
     {
         // East-west tiles are still neighbours even though they have a distance of 2
@@ -262,16 +262,84 @@ Facing getDir(const MapNode& from, const MapNode& to)
     }
 }
 
-int getDistance(const MapNode& a, const MapNode& b)
+static int ceilInt(float x)
 {
-    // Distance calculations are weird due to the zigzag tile layout.
-    // Check the unit tests for some examples based on real data.
+    return static_cast<int>(std::ceil(x));
+}
+
+int getTileDistance(const MapNode& a, const MapNode& b)
+{
+    /*
+     * Distance calculations are weird due to the zigzag tile layout.
+     * Check the unit tests for some examples based on real data.
+     */
+
+    // First estimate the number of tiles that we traverse in each axis.
+    // This won't be correct, but it's a good starting point.
     int dx = abs(b.x - a.x);
     int dy = abs(b.y - a.y);
 
-    // Determine if this is a "short journey".
-    // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile, we have less far to travel.
-    bool isShortJourney = false;
+    // How many tiles would we cover if this entire movement was diagonal?
+    // Diagonal movement traverses 2 tiles from each row.
+    int maxDiagonalTiles = dy * 2;
+
+    // Special case for "short journeys".
+    if (dy > 0)
+    {
+        // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile, we have less far to travel.
+        // For example, in these cases the distance differs even though both have dy=1:
+        //   (1, 1) -> (2, 2) = distance 1 (short journey)
+        //   (2, 1) -> (4, 2) = distance 2
+        MapNode top = a;
+        MapNode bottom = b;
+        if (a.y > b.y)
+        {
+            std::swap(top, bottom);
+        }
+
+        if (isLowerTile(top.x) && isUpperTile(bottom.x))
+        {
+            // This is a "short journey", so we have less far to travel
+            --maxDiagonalTiles;
+            --dy;
+        }
+    }
+
+    // Start by moving as far as we can diagonally.
+    // Diagonal movement always spans 1 tile in the x-axis, so we can't move further than dx without overshooting the
+    // destination.
+    int numTilesMoved = std::min(dx, maxDiagonalTiles);
+    dx -= numTilesMoved;
+    dy -= numTilesMoved / 2;
+
+    // Whatever's left must be covered by straight lines
+    if (dy > 0)
+    {
+        numTilesMoved += dy;
+    }
+    if (dx > 0)
+    {
+        // We can cover 2 tiles with each horizontal movement.
+        // Round up because we might need 1 final diagonal movement to change between upper/lower tiles.
+        numTilesMoved += ceilInt(static_cast<float>(dx) / eastWestTileSpan);
+    }
+
+    return numTilesMoved;
+}
+
+int getLogicalDistance(const MapNode& a, const MapNode& b)
+{
+    /*
+     * This is equivalent to getTileDistance, except where commented.
+     * This might not be entirely correct right now, but we can revisit it later.
+     * At the very least it should give us an approximation of the original game's behavior.
+     */
+
+    int dx = abs(b.x - a.x);
+    int dy = abs(b.y - a.y);
+
+    int maxDiagonalTiles = dy * 2;
+
     if (dy > 0)
     {
         MapNode top = a;
@@ -280,44 +348,73 @@ int getDistance(const MapNode& a, const MapNode& b)
         {
             std::swap(top, bottom);
         }
-        const bool topIsLower = isLowerTile(top.x);
-        const bool bottomIsUpper = isUpperTile(bottom.x);
-        isShortJourney = topIsLower && bottomIsUpper;
+
+        if (isLowerTile(top.x) && isUpperTile(bottom.x))
+        {
+            --maxDiagonalTiles;
+            --dy;
+        }
     }
 
-    // When travelling diagonally, the y-distance is greater because we traverse up to 2 tiles from each row
-    int dy_diag = dy * 2;
+    int numTilesMoved = std::min(dx, maxDiagonalTiles);
+    dx -= numTilesMoved;
+    dy -= numTilesMoved / 2;
 
-    // For short journeys, there is less potential for diagonal movement
-    if (isShortJourney)
-    {
-        --dy_diag;
-    }
-
-    // First figure out how far we can travel diagonally
-    int numTiles = std::min(dx, dy_diag);
-    dx -= numTiles;
-    dy -= numTiles / 2;
-
-    // For short journeys, we cover more y-distance when travelling diagonally
-    if (isShortJourney)
-    {
-        --dy;
-    }
-
-    // Whatever's left must be covered by straight lines
     if (dy > 0)
     {
-        numTiles += dy;
+        // Vertical movement is treated as double distance
+        numTilesMoved += dy * 2;
     }
     if (dx > 0)
     {
-        // We can cover 2 tiles with each horizontal movement.
-        // Round up because we might need 1 final diagonal movement to change between upper/lower tiles.
-        numTiles += static_cast<int>(std::ceil(static_cast<float>(dx) / eastWestTileSpan));
+        // Horizontal movement is treated as double distance
+        numTilesMoved += ceilInt((2.f * dx) / eastWestTileSpan);
     }
 
-    return numTiles;
+    return numTilesMoved;
+}
+
+MapNode addLogicalDistance(const MapNode& src, Facing dir, int distance)
+{
+    /*
+     * The cardinal directions are straightforward, but the diagonals are a bit more complicated.
+     * Essentially, when travelling diagonally, you traverse 2 tiles in each row, so you cover half the vertical
+     * distance. We also have to adjust depending on whether you start in an upper or lower tile, as this determines
+     * when you first change rows.
+     *
+     * For example, if you are in a lower row and travelling 1 tile northeast, you transition to an upper row but your
+     * y co-ordinate does not actually change.
+     */
+    switch (dir)
+    {
+    case Facing::North:
+        return { src.x, src.y - distance };
+    case Facing::East:
+        return { src.x + eastWestTileSpan * distance, src.y };
+    case Facing::South:
+        return { src.x, src.y + distance };
+    case Facing::West:
+        return { src.x - eastWestTileSpan * distance, src.y };
+
+    case Facing::NorthWest: {
+        int adjustedDist = isLowerTile(src.x) ? distance - 1 : distance;
+        return { src.x - distance, src.y - ceilInt(adjustedDist / 2.f) };
+    }
+    case Facing::NorthEast: {
+        int adjustedDist = isLowerTile(src.x) ? distance - 1 : distance;
+        return { src.x + distance, src.y - ceilInt(adjustedDist / 2.f) };
+    }
+    case Facing::SouthEast: {
+        int adjustedDist = isUpperTile(src.x) ? distance - 1 : distance;
+        return { src.x + distance, src.y + ceilInt(adjustedDist / 2.f) };
+    }
+    case Facing::SouthWest: {
+        int adjustedDist = isUpperTile(src.x) ? distance - 1 : distance;
+        return { src.x - distance, src.y + ceilInt(adjustedDist / 2.f) };
+    }
+    }
+
+    throw std::runtime_error("Direction not supported!");
 }
 
 }  // namespace MapUtils

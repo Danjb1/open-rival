@@ -270,7 +270,7 @@ bool AttackComponent::isInRange(const std::shared_ptr<const Entity> target) cons
         }
     }
 
-    const int distToTarget = MapUtils::getDistance(entity->getPos(), target->getPos());
+    const int distToTarget = MapUtils::getLogicalDistance(entity->getPos(), target->getPos());
     const int range = attackToUse->range;
     return distToTarget <= range;
 }
@@ -279,7 +279,7 @@ bool AttackComponent::isTargetTileInRange() const
 {
     // TMP: For now, always use the first attack
     const AttackDef* attackToUse = attackDefinitions[0];
-    const int distToTarget = MapUtils::getDistance(entity->getPos(), targetTile);
+    const int distToTarget = MapUtils::getLogicalDistance(entity->getPos(), targetTile);
     const int range = attackToUse->range;
     return distToTarget <= range;
 }
