@@ -49,7 +49,7 @@ void ProjectileMovementComponent::onEntityFirstAddedToWorld(World* world)
     // We subtract 1 because projectile graphics are designed to finish in the tile BEFORE the destination.
     const AttackDef* attackDef = projectile->getAttackDef();
     const MapNode pos = projectile->getPos();
-    const int distance = MapUtils::getDistance(pos, targetNode) - 1;
+    const int distance = MapUtils::getTileDistance(pos, targetNode) - 1;
 
     // This is used to ensure the projectile *visually* stops at the right place
     visualDistanceMultiplier = static_cast<float>(distance) / static_cast<float>(distance + 1);

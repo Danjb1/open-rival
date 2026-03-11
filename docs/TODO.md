@@ -4,7 +4,8 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-- Write tests for SpatialIndex
+- Write tests for `addLogicalDistance`.
+- Revamp [menu system](/docs/design/menus.md)
 
 <!----------------------------------------------------------------------------->
 ## Bugs
@@ -43,7 +44,6 @@
 
 ### HUD & Menus
 
-- Revamp [menu system](/docs/design/menus.md)
 - Show resources in HUD
 - Show unit ID in HUD
 - Show unit stats in HUD

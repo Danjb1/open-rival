@@ -13,7 +13,7 @@ namespace Rival {
 class SpatialEntity
 {
 public:
-    SpatialEntity(int id, const MapNode& pos, bool isBig)
+    SpatialEntity(int id, const MapNode& pos, bool isBig = false)
         : id(id)
         , pos(pos)
         , isBig(isBig)
