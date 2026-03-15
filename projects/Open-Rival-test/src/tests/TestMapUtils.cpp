@@ -102,6 +102,24 @@ TEST_CASE("getDir should return the correct direction from an odd-column node", 
     }
 }
 
+TEST_CASE("getLogicalDistance should return the correct distance between 2 tiles", "[map-utils]")
+{
+    // A Unit placed at this tile in the Scenario Editor with Sight 2...
+    const MapNode origin = { 17, 14 };
+
+    // ... should be able to see all of these tiles at the edge of its vision
+    const MapNode node1 = { 17, 13 };
+    const MapNode node2 = { 19, 13 };
+    const MapNode node3 = { 19, 14 };
+
+    SECTION("tiles visible with Sight 2")
+    {
+        REQUIRE(MapUtils::getLogicalDistance(origin, node1) == 2);
+        REQUIRE(MapUtils::getLogicalDistance(origin, node2) == 2);
+        REQUIRE(MapUtils::getLogicalDistance(origin, node3) == 2);
+    }
+}
+
 TEST_CASE("getTileDistance should return the correct distance between 2 tiles", "[map-utils]")
 {
     // These points were plotted using the Scenario Editor to calculate the expected distance
