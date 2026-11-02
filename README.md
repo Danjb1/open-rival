@@ -20,7 +20,7 @@ See the [Development Quickstart](/docs/dev_quickstart.md) for information on bui
 
 I have tried to track down the copyright holders without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
 
-That said, I have gone to great lengths to keep any proprietary game assets out of this repo. Everything contained herein is entirely fan-made, and all assets are extracted from the original game at installation. The only exception to this is the WMA soundtrack, which cannot be extracted from the game directory as it resides on the original CD.
+That said, I have gone to great lengths to keep any proprietary game assets out of this repo. Everything contained herein is entirely fan-made, and all assets (besides the WMA soundtrack, which resides on the game CD and is not currently used by this project) are extracted from the original game at installation.
 
 ## :link: Links
 
