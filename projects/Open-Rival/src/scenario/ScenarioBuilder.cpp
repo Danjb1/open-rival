@@ -68,6 +68,8 @@ std::unique_ptr<World> ScenarioBuilder::build(std::shared_ptr<const EntityFactor
         addDecoration(world.get(), objPlacement, *entityFactory);
     }
 
+    world->onAllEntitiesCreated();
+
     return world;
 }
 

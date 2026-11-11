@@ -46,6 +46,8 @@ public:
     SharedMutableEntityList getMutableEntitiesAt(const MapNode& pos) override;
     // End EntityContainer override
 
+    void onAllEntitiesCreated();
+
     int getWidth() const;
     int getHeight() const;
 

@@ -57,6 +57,11 @@ std::vector<TilePassability> World::createPassability(int width, int height) con
     return passability;
 }
 
+void World::onAllEntitiesCreated()
+{
+    passabilityMap.initReachability();
+}
+
 Tile World::getTile(int x, int y) const
 {
     return tiles[y * getWidth() + x];

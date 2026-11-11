@@ -94,7 +94,7 @@ inline bool isLowerTile(int tileX)
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area);
 
 /**
- * Gets the neighbour in the given direction, if it exists.
+ * Gets the neighbor in the given direction, if it exists.
  */
 std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area);
 
@@ -104,7 +104,7 @@ std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBou
 bool isNeighbor(const MapNode& a, const MapNode& b);
 
 /**
- * Gets the most pertinent direction between 2 neighbouring tiles.
+ * Gets the most pertinent direction between 2 neighboring tiles.
  *
  * For example, if `to` is directly above `from`, this will return
  * `Facing::North`.

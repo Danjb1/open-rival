@@ -1,10 +1,11 @@
 #include "gfx/opengl/renderer/TextRenderer.h"
 
+#include <cassert>
 #include <memory>
 
 #include "gfx/Font.h"
-#include "gfx/opengl/Framebuffer.h"
 #include "gfx/RenderUtils.h"
+#include "gfx/opengl/Framebuffer.h"
 #include "gfx/opengl/renderable/TextRenderable.h"
 #include "utils/LogUtils.h"
 

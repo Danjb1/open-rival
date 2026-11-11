@@ -3,6 +3,7 @@
 #include <string>
 
 #include "entity/components/MovementComponent.h"
+#include "game/PassabilityMap.h"
 #include "game/Pathfinding.h"
 #include "game/Tile.h"
 
@@ -32,22 +33,13 @@ public:
     // End PassabilityUpdater override
 
 private:
-    /** TilePassability values that block pathfinding. */
-    static constexpr TilePassability unpathableFlags =  //
-            TilePassability::Blocked                    //
-            | TilePassability::Building                 //
-            | TilePassability::SoftMountain             //
-            | TilePassability::Tree                     //
-            | TilePassability::Water                    //
-            | TilePassability::Impassable;
-
     /** TilePassability values that signify an obstruction. */
     static constexpr TilePassability obstructedFlags = TilePassability::GroundUnit;
 
     /** TilePassability values that block traversal. */
-    static constexpr TilePassability untraversableFlags = unpathableFlags  //
-            | TilePassability::GroundUnit                                  //
-            | TilePassability::GroundUnitPendingMove                       //
+    static constexpr TilePassability untraversableFlags = PassabilityMap::unpathableFlags  //
+            | TilePassability::GroundUnit                                                  //
+            | TilePassability::GroundUnitPendingMove                                       //
             | TilePassability::GroundUnitLeaving;
 };
 

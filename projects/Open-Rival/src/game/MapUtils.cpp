@@ -103,70 +103,70 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 
 std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area)
 {
-    MapNode neighbour;
+    MapNode neighbor;
     const bool isUpper = isUpperTile(node.x);
 
     switch (dir)
     {
     case Facing::South:
-        neighbour = { node.x, node.y + 1 };
+        neighbor = { node.x, node.y + 1 };
         break;
     case Facing::SouthWest:
         if (isUpper)
         {
-            neighbour = { node.x - 1, node.y };
+            neighbor = { node.x - 1, node.y };
         }
         else
         {
-            neighbour = { node.x - 1, node.y + 1 };
+            neighbor = { node.x - 1, node.y + 1 };
         }
         break;
     case Facing::West:
-        neighbour = { node.x - eastWestTileSpan, node.y };
+        neighbor = { node.x - eastWestTileSpan, node.y };
         break;
     case Facing::NorthWest:
         if (isUpper)
         {
-            neighbour = { node.x - 1, node.y - 1 };
+            neighbor = { node.x - 1, node.y - 1 };
         }
         else
         {
-            neighbour = { node.x - 1, node.y };
+            neighbor = { node.x - 1, node.y };
         }
         break;
     case Facing::North:
-        neighbour = { node.x, node.y - 1 };
+        neighbor = { node.x, node.y - 1 };
         break;
     case Facing::NorthEast:
         if (isUpper)
         {
-            neighbour = { node.x + 1, node.y - 1 };
+            neighbor = { node.x + 1, node.y - 1 };
         }
         else
         {
-            neighbour = { node.x + 1, node.y };
+            neighbor = { node.x + 1, node.y };
         }
         break;
     case Facing::East:
-        neighbour = { node.x + eastWestTileSpan, node.y };
+        neighbor = { node.x + eastWestTileSpan, node.y };
         break;
     case Facing::SouthEast:
         if (isUpper)
         {
-            neighbour = { node.x + 1, node.y };
+            neighbor = { node.x + 1, node.y };
         }
         else
         {
-            neighbour = { node.x + 1, node.y + 1 };
+            neighbor = { node.x + 1, node.y + 1 };
         }
         break;
     default:
         throw std::runtime_error("Invalid facing");
     }
 
-    if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < area.getWidth() && neighbour.y < area.getHeight())
+    if (neighbor.x >= 0 && neighbor.y >= 0 && neighbor.x < area.getWidth() && neighbor.y < area.getHeight())
     {
-        return neighbour;
+        return neighbor;
     }
 
     return {};
