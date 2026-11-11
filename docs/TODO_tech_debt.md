@@ -79,6 +79,10 @@
 - GameState should reject new players
 - Create standalone project to run dedicated server
 
+### Pathfinding
+
+- Allows units to move together instead of waiting for those in front to move
+
 ### Refactoring
 
 #### General

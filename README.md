@@ -34,7 +34,7 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 
 - [Intro and CD Soundtrack](https://youtube.com/playlist?list=PL6389EE9ABE2B104B)
 - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
-- [Lofi Title Theme](https://youtu.be/4tMEXANdk-g?si=qsY5VA-DeA_616cN)
+- [Lofi Title Theme](https://www.youtube.com/watch?v=4tMEXANdk-g)
 
 ### Gameplay
 
@@ -48,3 +48,5 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 - [2022] [Gameplay](https://youtu.be/t25jEkZpS28)
 - [2022] [Gameplay](https://youtu.be/gkayo9Fux-s)
 - [2022] [Gameplay + Commentary | RUS](https://youtu.be/dSLsLiKUFVo)
+- [2025] [Stream - Part 1](https://www.youtube.com/watch?v=Rr59cuD1tqw)
+- [2025] [Stream - Part 2](https://www.youtube.com/watch?v=KU8QY-gyIe4)

@@ -16,37 +16,39 @@ PassabilityComponent::PassabilityComponent(TilePassability passability)
 
 void PassabilityComponent::onEntityAddedToWorld(World* world)
 {
-    world->addPassability(entity->getPos(), passability);
+    PassabilityMap* passabilityMap = world->getPassabilityMap();
+    passabilityMap->addPassability(entity->getPos(), passability);
 
     if (entity->isBig())
     {
-        const auto northEast = MapUtils::getNeighbor(entity->getPos(), Facing::NorthEast, *world);
-        const auto north = MapUtils::getNeighbor(entity->getPos(), Facing::North, *world);
-        const auto northWest = MapUtils::getNeighbor(entity->getPos(), Facing::NorthWest, *world);
+        const auto northEast = MapUtils::getNeighbor(entity->getPos(), Facing::NorthEast, *passabilityMap);
+        const auto north = MapUtils::getNeighbor(entity->getPos(), Facing::North, *passabilityMap);
+        const auto northWest = MapUtils::getNeighbor(entity->getPos(), Facing::NorthWest, *passabilityMap);
 
         if (!(northEast && north && northWest))
         {
             throw std::runtime_error("Invalid entity placement!");
         }
 
-        world->addPassability(*northEast, passability);
-        world->addPassability(*north, passability);
-        world->addPassability(*northWest, passability);
+        passabilityMap->addPassability(*northEast, passability);
+        passabilityMap->addPassability(*north, passability);
+        passabilityMap->addPassability(*northWest, passability);
     }
 }
 
 void PassabilityComponent::onEntityRemovedFromWorld(World* world)
 {
-    world->removePassability(entity->getPos(), passability);
+    PassabilityMap* passabilityMap = world->getPassabilityMap();
+    passabilityMap->removePassability(entity->getPos(), passability);
 
     if (entity->isBig())
     {
-        const auto northEast = MapUtils::getNeighbor(entity->getPos(), Facing::NorthEast, *world);
-        const auto north = MapUtils::getNeighbor(entity->getPos(), Facing::North, *world);
-        const auto northWest = MapUtils::getNeighbor(entity->getPos(), Facing::NorthWest, *world);
-        world->removePassability(*northEast, passability);
-        world->removePassability(*north, passability);
-        world->removePassability(*northWest, passability);
+        const auto northEast = MapUtils::getNeighbor(entity->getPos(), Facing::NorthEast, *passabilityMap);
+        const auto north = MapUtils::getNeighbor(entity->getPos(), Facing::North, *passabilityMap);
+        const auto northWest = MapUtils::getNeighbor(entity->getPos(), Facing::NorthWest, *passabilityMap);
+        passabilityMap->removePassability(*northEast, passability);
+        passabilityMap->removePassability(*north, passability);
+        passabilityMap->removePassability(*northWest, passability);
     }
 }
 

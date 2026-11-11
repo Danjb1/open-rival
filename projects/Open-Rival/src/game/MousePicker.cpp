@@ -113,10 +113,11 @@ void MousePicker::mouseUp(std::uint8_t button)
     }
     else if (button == SDL_BUTTON_MIDDLE)
     {
+        PassabilityMap* passabilityMap = world.getPassabilityMap();
         LOG_DEBUG("tile at {}, {} has passability: {}",
                 playerContext.tileUnderMouse.x,
                 playerContext.tileUnderMouse.y,
-                EnumUtils::toIntegral(world.getPassability(playerContext.tileUnderMouse)));
+                EnumUtils::toIntegral(passabilityMap->getPassability(playerContext.tileUnderMouse)));
     }
     else if (button == SDL_BUTTON_RIGHT)
     {

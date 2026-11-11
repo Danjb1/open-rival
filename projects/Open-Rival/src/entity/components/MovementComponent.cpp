@@ -2,6 +2,7 @@
 
 #include "entity/Entity.h"
 #include "entity/Unit.h"
+#include "game/PassabilityMap.h"
 #include "game/World.h"
 #include "utils/LogUtils.h"
 #include "utils/TimeUtils.h"
@@ -48,8 +49,10 @@ MovementComponent::MovementComponent(MovementMode movementMode,
 {
 }
 
-void MovementComponent::onEntityFirstAddedToWorld(World*)
+void MovementComponent::onEntityFirstAddedToWorld(World* world)
 {
+    passabilityMap = world->getPassabilityMap();
+
     Unit* unit = entity->as<Unit>();
     if (!unit)
     {
@@ -155,18 +158,15 @@ void MovementComponent::prepareForMovement()
         return;
     }
 
-    World* world = entity->getWorld();
-    passabilityUpdater.onUnitPreparingMove(*world, entity->getPos());
+    passabilityUpdater.onUnitPreparingMove(*passabilityMap, entity->getPos());
 }
 
 void MovementComponent::resetPassability(bool wasRemoved)
 {
-    World* world = entity->getWorld();
-
     // If we were moving to another tile, we should unblock it
     if (movement.isValid() && entity->getPos() == movement.start)
     {
-        passabilityUpdater.onUnitMoveAborted(*world, movement.destination);
+        passabilityUpdater.onUnitMoveAborted(*passabilityMap, movement.destination);
     }
 
     if (wasRemoved)
@@ -174,11 +174,11 @@ void MovementComponent::resetPassability(bool wasRemoved)
         // Reset the current tile's passability in case we were preparing to move out of it.
         // Normally the PassabilityComponent would reset our current tile's passability but this does not consider
         // passability flags relating to movement.
-        passabilityUpdater.onUnitMoveAborted(*world, entity->getPos());
+        passabilityUpdater.onUnitMoveAborted(*passabilityMap, entity->getPos());
     }
     else
     {
-        passabilityUpdater.onUnitStopped(*world, entity->getPos());
+        passabilityUpdater.onUnitStopped(*passabilityMap, entity->getPos());
     }
 }
 
@@ -189,7 +189,7 @@ bool MovementComponent::moveTo(const MapNode& node, Pathfinding::Context& contex
 
     const MapNode startPos = getStartPosForNextMovement();
     cachedHints = hints;
-    route = Pathfinding::findPath(startPos, node, *entity->getWorld(), passabilityChecker, context, hints);
+    route = Pathfinding::findPath(startPos, node, *passabilityMap, passabilityChecker, context, hints);
 
     if (route.isEmpty())
     {
@@ -269,9 +269,8 @@ bool MovementComponent::tryStartNextMovement()
     }
 
     // Check that the destination is still pathable
-    World* world = entity->getWorld();
     const MapNode* nextNode = route.peek();
-    if (!passabilityChecker.isNodePathable(*world, *nextNode))
+    if (!passabilityChecker.isNodePathable(*passabilityMap, *nextNode))
     {
         // Tile is no longer pathable, e.g. a building has been placed or terrain has changed
         stopMovement();
@@ -279,15 +278,15 @@ bool MovementComponent::tryStartNextMovement()
     }
 
     // Check that the destination is traversable
-    if (!passabilityChecker.isNodeTraversable(*world, *nextNode))
+    if (!passabilityChecker.isNodeTraversable(*passabilityMap, *nextNode))
     {
-        if (!tryRepathAroundNextNode(*world))
+        if (!tryRepathAroundNextNode(*passabilityMap))
         {
             return false;
         }
     }
 
-    startNextMovement(*world);
+    startNextMovement(*passabilityMap);
     return true;
 }
 
@@ -485,8 +484,7 @@ bool MovementComponent::tryRouteContinuation()
 void MovementComponent::onLeftPreviousTile()
 {
     // Update tile passability
-    World* world = entity->getWorld();
-    passabilityUpdater.onUnitLeftTile(*world, entity->getPos());
+    passabilityUpdater.onUnitLeftTile(*passabilityMap, entity->getPos());
 
     // Update entity position
     entity->setPos(movement.destination);

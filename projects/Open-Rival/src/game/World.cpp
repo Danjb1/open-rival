@@ -4,31 +4,27 @@ namespace Rival {
 
 // Creates an empty World
 World::World(int width, int height, bool wilderness)
-    : width(width)
-    , height(height)
-    , spatialIndex(width, height)
+    : spatialIndex(width, height)
     , wilderness(wilderness)
 
     // Default to Grass everywhere
     , tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
-    , tilePassability(std::vector<TilePassability>(width * height, TilePassability::Clear))
+    , passabilityMap(width, height, TilePassability::Clear)
     , nextId(0)
 {
 }
 
 // Creates a World from data
 World::World(int width, int height, bool wilderness, std::vector<Tile> tiles)
-    : width(width)
-    , height(height)
-    , spatialIndex(width, height)
+    : spatialIndex(width, height)
     , wilderness(wilderness)
     , tiles(tiles)
-    , tilePassability(createPassability())
+    , passabilityMap(width, height, createPassability(width, height))
     , nextId(0)
 {
 }
 
-std::vector<TilePassability> World::createPassability() const
+std::vector<TilePassability> World::createPassability(int width, int height) const
 {
     std::vector<TilePassability> passability;
     passability.reserve(tiles.size());
@@ -63,7 +59,7 @@ std::vector<TilePassability> World::createPassability() const
 
 Tile World::getTile(int x, int y) const
 {
-    return tiles[y * width + x];
+    return tiles[y * getWidth() + x];
 }
 
 void World::addEntity(std::shared_ptr<Entity> entity, int x, int y)
@@ -230,33 +226,12 @@ void World::onEntityMoved(int entityId, const MapNode& newPos)
 
 int Rival::World::getWidth() const
 {
-    return width;
+    return passabilityMap.getWidth();
 }
 
 int Rival::World::getHeight() const
 {
-    return height;
-}
-
-TilePassability World::getPassability(const MapNode& pos) const
-{
-    return tilePassability[pos.y * width + pos.x];
-}
-
-void World::setPassability(const MapNode& pos, TilePassability passability)
-{
-    tilePassability[pos.y * width + pos.x] = passability;
-}
-
-void World::addPassability(const MapNode& pos, TilePassability flags)
-{
-    tilePassability[pos.y * width + pos.x] |= flags;
-}
-
-void World::removePassability(const MapNode& pos, TilePassability flags)
-{
-    // Use bitwise AND with the inverted flags to remove the specified flags
-    tilePassability[pos.y * width + pos.x] &= ~flags;
+    return passabilityMap.getHeight();
 }
 
 }  // namespace Rival

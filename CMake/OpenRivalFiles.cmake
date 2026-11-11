@@ -59,6 +59,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/game/InventoryComponent.cpp
     ${OPEN_RIVAL_DIR}/src/game/MapUtils.cpp
     ${OPEN_RIVAL_DIR}/src/game/MousePicker.cpp
+    ${OPEN_RIVAL_DIR}/src/game/PassabilityMap.cpp
     ${OPEN_RIVAL_DIR}/src/game/Pathfinding.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerContext.cpp
     ${OPEN_RIVAL_DIR}/src/game/PlayerState.cpp
@@ -212,6 +213,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/game/InventoryComponent.h
     ${OPEN_RIVAL_DIR}/include/game/MapUtils.h
     ${OPEN_RIVAL_DIR}/include/game/MousePicker.h
+    ${OPEN_RIVAL_DIR}/include/game/PassabilityMap.h
     ${OPEN_RIVAL_DIR}/include/game/Pathfinding.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerContext.h
     ${OPEN_RIVAL_DIR}/include/game/PlayerState.h

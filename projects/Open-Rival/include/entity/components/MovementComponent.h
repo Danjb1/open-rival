@@ -12,6 +12,7 @@
 
 namespace Rival {
 
+class PassabilityMap;
 class World;
 
 /**
@@ -118,6 +119,8 @@ public:
 protected:
     const Pathfinding::PassabilityChecker& passabilityChecker;
     Pathfinding::PassabilityUpdater& passabilityUpdater;
+
+    PassabilityMap* passabilityMap = nullptr;
 
     WeakPtrSet<MovementListener> listeners;
 

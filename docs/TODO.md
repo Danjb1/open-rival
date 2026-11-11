@@ -4,6 +4,23 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
+# Reachability
+
+- Pre-process World to divide it into distinct reachable regions
+- When changing a tile's passability, update its region and combine neighbouring regions as needed
+- When moving units, pathfinder should return whether the destination is reachable
+    - If not, abort pathfinding as soon as an unreachable tile is about to be added to the route
+
+## ImGui
+
+- Add ImGui dependency
+- Show tile under mouse
+- Show entity under mouse (and its components)
+- Show passability toggle
+- Show reachability toggle
+
+# Menus
+
 - Revamp [menu system](/docs/design/menus.md)
 
 <!----------------------------------------------------------------------------->

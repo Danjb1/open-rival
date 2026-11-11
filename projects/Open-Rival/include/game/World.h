@@ -6,6 +6,7 @@
 
 #include "entity/Entity.h"
 #include "game/MapUtils.h"
+#include "game/PassabilityMap.h"
 #include "game/SpatialIndex.h"
 #include "game/Tile.h"
 #include "utils/EntityUtils.h"
@@ -13,26 +14,6 @@
 namespace Rival {
 
 class Entity;
-
-/**
- * Interface exposing map data for pathfinding.
- */
-class PathfindingMap : public MapBounds
-{
-public:
-    /** Gets the passability of a tile. */
-    virtual TilePassability getPassability(const MapNode& pos) const = 0;
-
-    /** Sets the passability of a tile.
-     * Use with caution; normally addPassability and removePassability are more appropriate. */
-    virtual void setPassability(const MapNode& pos, TilePassability newPassability) = 0;
-
-    /** Adds one or more passability flags to a tile. */
-    virtual void addPassability(const MapNode& pos, TilePassability newPassability) = 0;
-
-    /** Removes one or more passability flags from a tile. */
-    virtual void removePassability(const MapNode& pos, TilePassability newPassability) = 0;
-};
 
 /**
  * An Entity that is waiting to be added to the map.
@@ -49,9 +30,7 @@ struct PendingEntity
  *
  * Contains map data and entities.
  */
-class World
-    : public EntityContainer
-    , public PathfindingMap
+class World : public EntityContainer
 {
 public:
     World(int width, int height, bool wilderness);
@@ -67,14 +46,8 @@ public:
     SharedMutableEntityList getMutableEntitiesAt(const MapNode& pos) override;
     // End EntityContainer override
 
-    // Begin PathfindingMap override
-    int getWidth() const override;
-    int getHeight() const override;
-    TilePassability getPassability(const MapNode& pos) const override;
-    void setPassability(const MapNode& pos, TilePassability newPassability) override;
-    void addPassability(const MapNode& pos, TilePassability newPassability) override;
-    void removePassability(const MapNode& pos, TilePassability newPassability) override;
-    // End PathfindingMap override
+    int getWidth() const;
+    int getHeight() const;
 
     const std::vector<Tile>& getTiles() const
     {
@@ -181,18 +154,21 @@ public:
     /** This should be called whenever an Entity moves, to update the spatial index. */
     void onEntityMoved(int entityId, const MapNode& newPos);
 
+    PassabilityMap* getPassabilityMap()
+    {
+        return &passabilityMap;
+    }
+
 private:
     SharedEntityList getEntitiesFromIds(const std::vector<int>& entityIds) const;
     SharedMutableEntityList getMutableEntitiesFromIds(const std::vector<int>& entityIds) const;
 
-    std::vector<TilePassability> createPassability() const;
+    std::vector<TilePassability> createPassability(int width, int height) const;
 
 private:
-    const int width;
-    const int height;
-    bool wilderness;
     std::vector<Tile> tiles;
-    std::vector<TilePassability> tilePassability;
+    PassabilityMap passabilityMap;
+    bool wilderness;
 
     int nextId;
     std::vector<PendingEntity> pendingEntities;
