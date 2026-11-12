@@ -38,8 +38,11 @@ void MoveCommand::execute(GameCommandContext& context)
 {
     World& world = context.getWorld();
 
-    std::vector<Entity*> validEntities;
-    validEntities.reserve(entityIds.size());
+    std::vector<Entity*> groundUnits;
+    groundUnits.reserve(entityIds.size());
+
+    std::vector<Entity*> flyingUnits;
+    flyingUnits.reserve(entityIds.size());
 
     // Prepare all entities for movement.
     // This needs to be called for all entities *before* any are moved, so that we can take measures to prevent them
@@ -71,20 +74,35 @@ void MoveCommand::execute(GameCommandContext& context)
 
         // At this point the MoveCommand is considered valid for this Entity
         moveComponent->prepareForMovement();
-        validEntities.push_back(entity);
+
+        if (moveComponent->getMovementMode() == MovementMode::Flying)
+        {
+            flyingUnits.push_back(entity);
+        }
+        else
+        {
+            groundUnits.push_back(entity);
+        }
     }
 
-    if (validEntities.empty())
+    if (!flyingUnits.empty())
     {
-        // No entities to move!
-        return;
+        // Context is mostly irrelevant for flying units
+        Pathfinding::Context pathfindingContext(static_cast<int>(flyingUnits.size()));
+        moveEntities(flyingUnits, pathfindingContext);
     }
 
-    // Create a context to make group pathfinding more efficient
-    Pathfinding::Context pathfindingContext(static_cast<int>(validEntities.size()));
+    if (!groundUnits.empty())
+    {
+        // Create a context to make group pathfinding more efficient
+        Pathfinding::Context pathfindingContext(static_cast<int>(groundUnits.size()));
+        moveEntities(groundUnits, pathfindingContext);
+    }
+}
 
-    // Move entities
-    for (Entity* entity : validEntities)
+void MoveCommand::moveEntities(const std::vector<Entity*>& entities, Pathfinding::Context& context)
+{
+    for (Entity* entity : entities)
     {
         auto moveComponent = entity->getComponent<MovementComponent>();
 
@@ -94,7 +112,7 @@ void MoveCommand::execute(GameCommandContext& context)
             attackComponent->clearTarget();
         }
 
-        moveComponent->moveTo(destination, pathfindingContext);
+        moveComponent->moveTo(destination, context);
     }
 }
 

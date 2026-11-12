@@ -8,6 +8,12 @@
 
 namespace Rival {
 
+class Entity;
+
+namespace Pathfinding {
+class Context;
+};
+
 class MoveCommand : public GameCommand
 {
 public:
@@ -19,6 +25,9 @@ public:
     // Begin GameCommand override
     void execute(GameCommandContext& context) override;
     // End GameCommand override
+
+private:
+    void moveEntities(const std::vector<Entity*>& entities, Pathfinding::Context& context);
 
 private:
     std::vector<int> entityIds;

@@ -4,10 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-## Pathfinding
-
-- Don't share PathfindingContext with flying units!
-
 ## ImGui
 
 - Add ImGui dependency
