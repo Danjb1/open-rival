@@ -43,7 +43,6 @@ MovementComponent::MovementComponent(MovementMode movementMode,
         Pathfinding::PassabilityUpdater& passabilityUpdater)
     : EntityComponent(key)
     , movementMode(movementMode)
-    , movement({ 0, 0 })
     , passabilityChecker(passabilityChecker)
     , passabilityUpdater(passabilityUpdater)
 {
@@ -298,14 +297,7 @@ void MovementComponent::startNextMovement(PathfindingMap& map)
     // Configure the new movement
     movement.start = entity->getPos();
     movement.destination = route.pop();
-    movement.timeRequired = ticksPerMove * TimeUtils::timeStepMs;
-
-    // Horizontal movements should take longer because the distance is greater
-    const Facing facing = MapUtils::getDir(entity->getPos(), movement.destination);
-    if (facing == Facing::East || facing == Facing::West)
-    {
-        movement.timeRequired = static_cast<int>(movement.timeRequired * horizontalMoveTimeMultiplier);
-    }
+    movement.timeRequired = getMovementTime(entity->getPos(), movement.destination);
 
     // Update tile passability
     const bool doesRouteContinue = !route.isEmpty();
@@ -314,6 +306,15 @@ void MovementComponent::startNextMovement(PathfindingMap& map)
 
     CollectionUtils::forEachWeakPtr<MovementListener>(
             listeners, [&](auto listener) { listener->onUnitMoveStart(&movement.destination); });
+}
+
+int MovementComponent::getMovementTime(const MapNode& from, const MapNode& to) const
+{
+    const int baseTime = ticksPerMove * TimeUtils::timeStepMs;
+    const Facing facing = MapUtils::getDir(from, to);
+    // Horizontal movements should take longer because the distance is greater
+    const bool isHorizontal = (facing == Facing::East || facing == Facing::West);
+    return isHorizontal ? static_cast<int>(baseTime * horizontalMoveTimeMultiplier) : baseTime;
 }
 
 bool MovementComponent::tryRepathAroundNextNode(const PathfindingMap& map)
@@ -340,31 +341,35 @@ bool MovementComponent::tryRepathAroundNextNode(const PathfindingMap& map)
     }
 
     // We have found a route, but it might not currently be traversable
-    nextNode = route.peek();
-    if (!passabilityChecker.isNodeTraversable(map, *nextNode))
-    {
-        if (route.getSize() == 1)
-        {
-            // The pathfinder still returns a route of size 1 even if the destination is unreachable, which is
-            // probably what's happened here. In this case there is no point trying to repath because we're already
-            // about as close as we can get to destination.
-            stopMovement();
-        }
-        else
-        {
-            // Still can't move yet!
-            ++numFailedRepathAttempts;
-            if (numFailedRepathAttempts >= maxRepathAttempts)
-            {
-                LOG_WARN_CATEGORY("movement", "Reached max repath attempts");
-                stopMovement();
-            }
-        }
+    return tryProceedAfterRepath(map);
+}
 
+bool MovementComponent::tryProceedAfterRepath(const PathfindingMap& map)
+{
+    const MapNode* nextNode = route.peek();
+    if (passabilityChecker.isNodeTraversable(map, *nextNode))
+    {
+        return true;
+    }
+
+    if (route.getSize() == 1)
+    {
+        // The pathfinder still returns a route of size 1 even if the destination is unreachable, which is
+        // probably what's happened here. In this case there is no point trying to repath because we're already
+        // about as close as we can get to destination.
+        stopMovement();
         return false;
     }
 
-    return true;
+    // Still can't move yet!
+    ++numFailedRepathAttempts;
+    if (numFailedRepathAttempts >= maxRepathAttempts)
+    {
+        LOG_WARN_CATEGORY("movement", "Reached max repath attempts");
+        stopMovement();
+    }
+
+    return false;
 }
 
 bool MovementComponent::tryRepathAroundTemporaryObstruction(const PathfindingMap& map)
@@ -409,6 +414,7 @@ bool MovementComponent::tryRepathAroundObstruction(const PathfindingMap& map)
     {
         // This should never happen, but just in case.
         // At the very least we would expect a path to the obstruction to be returned.
+        stopMovement();
         return false;
     }
 

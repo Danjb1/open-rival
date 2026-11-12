@@ -72,12 +72,14 @@ private:
     void spawnProjectile(const AttackDef& attack, const MapNode& targetPos);
 
     bool hasValidTarget() const;
+    void attackOrMoveToTarget();
     void switchToNewTarget();
     void updateCooldown(int delta);
 
     bool isTargetInRange() const;
-    bool isInRange(const std::shared_ptr<const Entity> target) const;
+    bool isEntityInRange(const std::shared_ptr<const Entity> target) const;
     bool isTargetTileInRange() const;
+    bool isInRange(const MapNode& node) const;
     MapNode getTargetPos() const;
 
     void requestAttack();

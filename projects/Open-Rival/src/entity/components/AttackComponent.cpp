@@ -92,19 +92,24 @@ void AttackComponent::update(int delta)
 
     if (hasValidTarget())
     {
-        if (isTargetInRange())
+        attackOrMoveToTarget();
+    }
+}
+
+void AttackComponent::attackOrMoveToTarget()
+{
+    if (isTargetInRange())
+    {
+        if (attackState != AttackState::Cooldown)
         {
-            if (attackState != AttackState::Cooldown)
-            {
-                requestAttack();
-            }
+            requestAttack();
         }
-        else
-        {
-            // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between
-            // units that all start moving at the same time
-            tryMoveToTarget();
-        }
+    }
+    else
+    {
+        // TODO: We could call prepareToMove in some kind of "earlyUpdate" method to prevent obstructions between
+        // units that all start moving at the same time
+        tryMoveToTarget();
     }
 }
 
@@ -239,13 +244,13 @@ bool AttackComponent::isTargetInRange() const
 {
     if (std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock())
     {
-        return isInRange(targetEntity);
+        return isEntityInRange(targetEntity);
     }
 
     return isTargetTileInRange();
 }
 
-bool AttackComponent::isInRange(const std::shared_ptr<const Entity> target) const
+bool AttackComponent::isEntityInRange(const std::shared_ptr<const Entity> target) const
 {
     if (attackDefinitions.empty())
     {
@@ -270,16 +275,26 @@ bool AttackComponent::isInRange(const std::shared_ptr<const Entity> target) cons
         }
     }
 
-    const int distToTarget = MapUtils::getLogicalDistance(entity->getPos(), target->getPos());
-    const int range = attackToUse->range;
-    return distToTarget <= range;
+    return isInRange(target->getPos());
 }
 
 bool AttackComponent::isTargetTileInRange() const
 {
+    return isInRange(targetTile);
+}
+
+bool AttackComponent::isInRange(const MapNode& node) const
+{
     // TMP: For now, always use the first attack
     const AttackDef* attackToUse = attackDefinitions[0];
-    const int distToTarget = MapUtils::getLogicalDistance(entity->getPos(), targetTile);
+
+    if (attackToUse->isMelee())
+    {
+        return MapUtils::isNeighbor(entity->getPos(), node);
+    }
+
+    // Ranged attacks use logical distance (unlike melee attacks)
+    const int distToTarget = MapUtils::getLogicalDistance(entity->getPos(), node);
     const int range = attackToUse->range;
     return distToTarget <= range;
 }

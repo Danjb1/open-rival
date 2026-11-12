@@ -102,8 +102,10 @@ private:
     bool tryStartNextMovement();
     void startNextMovement(PathfindingMap& map);
     void resetPassability(bool wasRemoved);
+    int getMovementTime(const MapNode& from, const MapNode& to) const;
 
     bool tryRepathAroundNextNode(const PathfindingMap& map);
+    bool tryProceedAfterRepath(const PathfindingMap& map);
     bool tryRepathAroundTemporaryObstruction(const PathfindingMap& map);
     bool tryRepathAroundObstruction(const PathfindingMap& map);
     bool tryRepath(Pathfinding::Hints hints = {});

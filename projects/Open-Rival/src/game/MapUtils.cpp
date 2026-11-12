@@ -174,14 +174,7 @@ std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBou
 
 bool isNeighbor(const MapNode& a, const MapNode& b)
 {
-    const int dist = getTileDistance(a, b);
-    if (dist == eastWestTileSpan)
-    {
-        // East-west tiles are still neighbours even though they have a distance of 2
-        return a.y == b.y;
-    }
-
-    return dist == 1;
+    return getTileDistance(a, b) == 1;
 }
 
 Facing getDir(const MapNode& from, const MapNode& to)
