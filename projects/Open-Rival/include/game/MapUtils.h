@@ -3,6 +3,7 @@
 #include <cstddef>  // std::size_t
 #include <optional>
 #include <ostream>
+#include <string>
 #include <vector>
 
 namespace Rival {
@@ -40,6 +41,11 @@ struct MapNode
     bool isValid() const
     {
         return x >= 0 && y >= 0;
+    }
+
+    std::string toString() const
+    {
+        return "{" + std::to_string(x) + ", " + std::to_string(y) + "}";
     }
 };
 

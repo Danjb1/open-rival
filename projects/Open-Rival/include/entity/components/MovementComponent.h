@@ -148,9 +148,6 @@ private:
      * kind of limit to prevent units pathfinding indefinitely when an obstruction is not clearing. */
     static constexpr int maxRepathAttempts = 20;
 
-    /** Minimum size for a route continuation to be considered. */
-    static constexpr int minSizeForRouteContinuation = 4;
-
     Pathfinding::Hints cachedHints;
 
     int numFailedRepathAttempts = 0;

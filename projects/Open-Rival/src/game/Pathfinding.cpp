@@ -1,8 +1,7 @@
 #include "game/Pathfinding.h"
 
 #include <algorithm>  // min, reverse
-#include <iterator>   // back_inserter
-#include <iterator>   // next
+#include <iterator>   // back_inserter, next
 #include <queue>
 #include <unordered_map>
 #include <vector>
@@ -76,9 +75,6 @@ private:
     float getMovementCost(const MapNode& from, const MapNode& to) const;
     void updatePathToNode(const MapNode& node, float newCost);
     ReachableNode* findDiscoveredNode(const MapNode& node);
-    void updatePerimeter(const MapNode& current);
-    bool shouldCheckPerimeter() const;
-    bool isGoalInsideEnclosedPerimeter() const;
 
 private:
     /** Base movement cost for moving between two tiles. */
@@ -116,15 +112,10 @@ private:
     /** Discount applied to the movement cost of nodes that should be preferred. */
     static constexpr float preferredNodeDiscount = 0.1f;
 
-    /** How often we should check to see if the destination is inside an enclosed perimeter.
-     * For unreachable destinations, we can abort pathfinding early once we have visited a closed loop of nodes
-     * surrounding it. */
-    static constexpr int perimeterCheckInterval = 300;
-
-    /** The maximum size to explore when checking for an enclosed area.
-     * It is possible that our destination is on a giant unreachable island, but this is unfortunately difficult to
-     * detect. We will just have to let the pathfinding algorithm give up when it reaches maxNodesToVisit. */
-    static constexpr int maxEnclosedAreaSize = 100;
+    /** In the case of an unreachable goal, this is the maximum number of nodes to expand until we abort, if we don't
+     * find a closer one. Increasing this may allow units to find a closer point to the goal, at the cost of additional
+     * work. */
+    static constexpr int closestPointSearchLimit = 30;
 
     /** The starting node. */
     MapNode start;
@@ -171,11 +162,17 @@ private:
     /** The closest node found to the goal. */
     MapNode closestNodeToGoal;
 
-    /** Nodes visited during pathfinding. */
+    /** Number of nodes visited during pathfinding. */
     int nodesVisited = 0;
 
-    /** Whether the goal was determined to be unreachable. */
-    bool wasGoalUnreachable = false;
+    /** In the case of an unreachable goal, this is the number of nodes visited without finding a closer one. */
+    int nodesVisitedSinceImprovement = 0;
+
+    /** Whether the goal is unreachable from the start tile. */
+    bool isGoalUnreachable = false;
+
+    /** Whether the pathfinder aborted early due to the goal being too far away. */
+    bool isPartialPath = false;
 };
 
 /**
@@ -203,7 +200,7 @@ Pathfinder::Pathfinder(MapNode start,
         pathCost = costToNode[destination];
     }
 
-    route = { start, goal, path, pathCost, wasGoalUnreachable };
+    route = { start, goal, path, pathCost, isGoalUnreachable, isPartialPath };
 }
 
 /**
@@ -220,6 +217,7 @@ std::deque<MapNode> Pathfinder::findPath()
 
     LOG_DEBUG_CATEGORY("pathfinding", "Planning route to ({}, {})", goal.x, goal.y);
 
+    isGoalUnreachable = !map.isReachable(start, goal);
     discoveredNodes.push_back({ start, 0 });
     closestNodeToGoal = start;
     costToNode[start] = 0;
@@ -234,8 +232,6 @@ std::deque<MapNode> Pathfinder::findPath()
         goalNodes.insert(neighbors.cbegin(), neighbors.cend());
     }
 
-    context.addRegisteredGoalNodes(goalNodes);
-
     const int maxNodesToVisit = context.getMaxNodesToVisit();
 
     while (!isFinished())
@@ -244,6 +240,7 @@ std::deque<MapNode> Pathfinder::findPath()
         if (nodesVisited >= maxNodesToVisit)
         {
             LOG_WARN_CATEGORY("pathfinding", "Exceeded maximum nodes to visit ({})", maxNodesToVisit);
+            isPartialPath = true;
             break;
         }
 
@@ -269,19 +266,23 @@ std::deque<MapNode> Pathfinder::findPath()
             return reconstructPathWithCache(current.node, *cachedPath);
         }
 
+        // Abort if we know the goal is unreachable, and the next node takes us significantly further away from the
+        // goal. This means we've probably found the closest point we can reach.
+        if (isGoalUnreachable)
+        {
+            ++nodesVisitedSinceImprovement;
+            if (nodesVisitedSinceImprovement > closestPointSearchLimit)
+            {
+                LOG_INFO_CATEGORY("pathfinding", "Aborting pathfinding for unreachable destination");
+                break;
+            }
+        }
+
         // Abort if our path has become too expensive
         if (current.cost > hints.maxPathCost)
         {
             LOG_WARN_CATEGORY("pathfinding", "Exceeded maximum path cost: {} / {}", current.cost, hints.maxPathCost);
-            break;
-        }
-
-        // Periodically check to see if the goal is inside an unreachable area
-        if (shouldCheckPerimeter() && isGoalInsideEnclosedPerimeter())
-        {
-            // Goal is inside an unreachable area; abort further pathfinding!
-            LOG_INFO_CATEGORY("pathfinding", "Pathfinding aborted due to unreachable goal: ({}, {})", goal.x, goal.y);
-            wasGoalUnreachable = true;
+            isPartialPath = true;
             break;
         }
 
@@ -289,7 +290,6 @@ std::deque<MapNode> Pathfinder::findPath()
 
         for (const MapNode& neighbor : neighbors)
         {
-            ++nodesVisited;
             const float bestCostToNeighbor = getCostToNode(neighbor);
             const float newCostToNeighbor = getCostToNode(current.node) + getMovementCost(current.node, neighbor);
             if (newCostToNeighbor < bestCostToNeighbor)
@@ -300,6 +300,8 @@ std::deque<MapNode> Pathfinder::findPath()
                 updatePathToNode(neighbor, newCostToNeighbor);
             }
         }
+
+        ++nodesVisited;
     }
 
     // The goal could not be reached - get as close as we can.
@@ -505,13 +507,14 @@ void Pathfinder::updatePathToNode(const MapNode& node, float newCost)
     else
     {
         discoveredNodes.emplace_back(node, newEstimate);
-        updatePerimeter(node);
     }
 
     if (estimatedCostToGoal < lowestCostToGoal)
     {
+        // We have found a new closest point to the goal
         lowestCostToGoal = estimatedCostToGoal;
         closestNodeToGoal = node;
+        nodesVisitedSinceImprovement = 0;
     }
 }
 
@@ -530,90 +533,18 @@ ReachableNode* Pathfinder::findDiscoveredNode(const MapNode& node)
     return nullptr;
 }
 
-// Updates the perimeter when a node is visited by the search algorithm (i.e. it becomes reachable)
-void Pathfinder::updatePerimeter(const MapNode& current)
-{
-    // Visited nodes are no longer part of the perimeter
-    perimeter.erase(current);
-
-    // Add all unvisited pathable neighbors to the perimeter
-    std::vector<MapNode> neighbors = findPathableNeighbors(current);
-    for (const auto& neighbor : neighbors)
-    {
-        if (!costToNode.contains(neighbor))
-        {
-            perimeter.insert(neighbor);
-        }
-    }
-}
-
-bool Pathfinder::shouldCheckPerimeter() const
-{
-    return nodesVisited > 0 && nodesVisited % perimeterCheckInterval == 0;
-}
-
-bool Pathfinder::isGoalInsideEnclosedPerimeter() const
-{
-    // Flood fill outwards from the goal until we find visited nodes or map edges
-    std::queue<MapNode> queue;
-    std::unordered_set<MapNode> visited;
-
-    queue.push(goal);
-
-    int numFloodFillNodes = 0;
-
-    while (!queue.empty())
-    {
-        MapNode current = queue.front();
-        queue.pop();
-
-        if (visited.contains(current))
-        {
-            continue;
-        }
-
-        visited.insert(current);
-        ++numFloodFillNodes;
-
-        if (numFloodFillNodes > maxEnclosedAreaSize)
-        {
-            // Either the perimeter is very large, or the goal is not enclosed
-            LOG_DEBUG_CATEGORY("pathfinding", "Flood fill from ({}, {}) aborted", goal.x, goal.y);
-            return false;
-        }
-
-        std::vector<MapNode> neighbors = findPathableNeighbors(current);
-        for (const auto& neighbor : neighbors)
-        {
-            if (visited.contains(neighbor))
-            {
-                continue;
-            }
-
-            if (perimeter.contains(neighbor))
-            {
-                // Found a node on the perimeter, therefore the goal is reachable (not enclosed)
-                LOG_DEBUG_CATEGORY("pathfinding", "Flood fill found perimeter node ({}, {})", neighbor.x, neighbor.y);
-                return false;
-            }
-
-            queue.push(neighbor);
-        }
-    }
-
-    return true;
-}
-
 Route::Route(MapNode start,
         MapNode destination,
         std::deque<MapNode> path,
         float cost,
-        bool bIsIntendedDestinationUnreachable)
+        bool bIsIntendedDestinationUnreachable,
+        bool bIsPartialPath)
     : intendedDestination(destination)
     , path(path)
     , cost(cost)
     , foundDestination(path.empty() ? start : path.back())
     , bIsIntendedDestinationUnreachable(bIsIntendedDestinationUnreachable)
+    , bIsPartialPath(bIsPartialPath)
 {
 }
 
@@ -641,22 +572,7 @@ Route findPath(MapNode start,
         Context& context,
         const Hints hints)
 {
-    Route route = Pathfinder(start, goal, map, passabilityChecker, context, hints).getRoute();
-
-    if (!route.isEmpty())
-    {
-        const auto finalDestination = route.getFinalDestination();
-        if (finalDestination != route.getIntendedDestination())
-        {
-            // We did not find the intended destination, which means that either it was unreachable or pathfinding got
-            // cut short. Storing the final destination in the pathfinding context means that other group members can
-            // use it to save time, rather than having to put in all the work just to reach the same conclusion.
-            // Note that this doesn't help if group members are separated by an untraversable barrier, but this is rare.
-            context.registerGoalNode(finalDestination);
-        }
-    }
-
-    return route;
+    return Pathfinder(start, goal, map, passabilityChecker, context, hints).getRoute();
 }
 
 Context::Context(int numUnits)
@@ -739,16 +655,6 @@ void Context::cachePath(const MapNode& start, const MapNode& goal, const std::de
     // TODO: Should we replace already-cached paths if the new cost is lower?
 }
 
-void Context::registerGoalNode(MapNode goal)
-{
-    registeredGoalNodes.insert(goal);
-}
-
-void Context::addRegisteredGoalNodes(std::unordered_set<MapNode>& goalNodes)
-{
-    goalNodes.insert(registeredGoalNodes.cbegin(), registeredGoalNodes.cend());
-}
-
 int Context::getMaxNodesToVisit() const
 {
     if (pathfindingAttempts == 1)
@@ -756,6 +662,7 @@ int Context::getMaxNodesToVisit() const
         // Don't restrict the first attempt, as the results of this can assist with subsequent attempts
         return maxNodesToVisitPerContext;
     }
+
     return maxNodesToVisitPerAttempt;
 }
 

@@ -4,12 +4,9 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-# Reachability
+## Pathfinding
 
-- Pre-process World to divide it into distinct reachable regions
-- When changing a tile's passability, update its region and combine neighbouring regions as needed
-- When moving units, pathfinder should return whether the destination is reachable
-    - If not, abort pathfinding as soon as an unreachable tile is about to be added to the route
+- Don't share PathfindingContext with flying units!
 
 ## ImGui
 

@@ -32,7 +32,7 @@ public:
     /** Determines whether one tile is reachable from another.
      * "Reachable" means a path can be found that is clear of buildings and obstacles.
      * This is only relevant for ground units, since flying units can go anywhere. */
-    virtual bool isReachable(const MapNode& a, const MapNode& b) = 0;
+    virtual bool isReachable(const MapNode& a, const MapNode& b) const = 0;
 };
 
 /**
@@ -70,7 +70,7 @@ public:
     void setPassability(const MapNode& pos, TilePassability newPassability) override;
     void addPassability(const MapNode& pos, TilePassability newPassability) override;
     void removePassability(const MapNode& pos, TilePassability newPassability) override;
-    bool isReachable(const MapNode& a, const MapNode& b) override;
+    bool isReachable(const MapNode& a, const MapNode& b) const override;
     // End PathfindingMap override
 
 public:

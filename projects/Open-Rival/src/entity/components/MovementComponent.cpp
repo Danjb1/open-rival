@@ -431,15 +431,14 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
         return false;
     }
 
+    LOG_DEBUG_CATEGORY("movement", "Repathing around obstruction");
+
     // Prefer nodes from our current route; this saves us finding the entire path again
     auto existingPath = route.getPath();
     hints.nodesToPrefer.insert(existingPath.cbegin(), existingPath.cend());
 
     Pathfinding::Context context;
-    // Don't try to repath to a destination that we know is unreachable
-    const MapNode destination =
-            route.isIntendedDestinationUnreachable() ? route.getFinalDestination() : route.getIntendedDestination();
-    const bool success = moveTo(destination, context, hints);
+    const bool success = moveTo(route.getFinalDestination(), context, hints);
 
     return success;
 }
@@ -453,30 +452,26 @@ bool MovementComponent::tryRouteContinuation()
         return false;
     }
 
-    if (route.getFinalDestination() == intendedDestination)
+    if (!route.isPartialPath())
     {
-        // Nothing to continue - we've reached our destination
+        // Continuation is not needed if the pathfinder already gave us a full route
         return false;
     }
 
     LOG_INFO_CATEGORY("movement", "Reached end of route but did not reach the intended destination!");
 
-    // We have not yet reached our intended destination - try moving the rest of the way
+    /*
+     * We have not yet reached our intended destination - try moving the rest of the way.
+     * This can happen when pathfinding returns a partial path due to the destination being very far away.
+     */
+
+    // Create a new PathfindingContext and Hints.
+    // Most of the hints are no longer relevant but we still care about the obstructedMovementCost.
     Pathfinding::Context context;
     Pathfinding::Hints hints;
-    // Most of the hints are no longer relevant but we still care about the obstructedMovementCost
     hints.obstructedMovementCost = cachedHints.obstructedMovementCost;
-    const bool success = moveTo(intendedDestination, context, cachedHints);
 
-    if (success && route.getSize() < minSizeForRouteContinuation)
-    {
-        // Abort if the new route is sufficiently short.
-        // This suggests that either:
-        // 1) We are already very close to the intended destination.
-        // 2) The intended destination is unreachable and we are as close as we can be.
-        LOG_INFO_CATEGORY("movement", "Aborting route continuation");
-        return false;
-    }
+    const bool success = moveTo(intendedDestination, context, cachedHints);
 
     return success;
 }

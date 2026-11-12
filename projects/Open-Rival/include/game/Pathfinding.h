@@ -92,7 +92,8 @@ public:
             MapNode destination,
             std::deque<MapNode> path,
             float cost,
-            bool isIntendedDestinationUnreachable);
+            bool isIntendedDestinationUnreachable,
+            bool isPartialPath);
 
     /** Determines if this Route is empty. */
     bool isEmpty() const;
@@ -134,11 +135,17 @@ public:
         return path;
     }
 
-    /** Returns true if the intended destination was *definitely* unreachable.
-     * Note that even if this returns false, the destiantion might still be unreachable. */
-    bool isIntendedDestinationUnreachable()
+    /** Returns true if the intended destination is unreachable.
+     * In this case, the route will go to (approximately) the closest reachable point. */
+    bool isIntendedDestinationUnreachable() const
     {
         return bIsIntendedDestinationUnreachable;
+    }
+
+    /** Returns true if pathfinding aborted early due to the intended destination being too far away. */
+    bool isPartialPath() const
+    {
+        return bIsPartialPath;
     }
 
 private:
@@ -147,6 +154,7 @@ private:
     std::deque<MapNode> path;
     float cost = 0;
     bool bIsIntendedDestinationUnreachable = false;
+    bool bIsPartialPath = false;
 };
 
 /**
@@ -172,12 +180,6 @@ public:
     /** Caches a path from start to goal. */
     void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path, float pathCost);
 
-    /** Registers a goal node to be considered for subsequent pathfinding attempts. */
-    void registerGoalNode(MapNode goal);
-
-    /** Adds all registered goal nodes to the given set. */
-    void addRegisteredGoalNodes(std::unordered_set<MapNode>& goalNodes);
-
     /** Gets the maximum nodes of nodes that the pathfinder should visit on the current attempt. */
     int getMaxNodesToVisit() const;
 
@@ -191,8 +193,6 @@ private:
     /** Lower limit for maxNodesToVisitPerAttempt.
      * This prevents pathfinding from becoming very bad when moving large groups. */
     static constexpr int maxNodesLowerLimit = 100;
-
-    std::unordered_set<MapNode> registeredGoalNodes;
 
     std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
     std::unordered_map<std::pair<MapNode, MapNode>, float> cachedPathCosts;

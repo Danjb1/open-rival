@@ -39,7 +39,7 @@ void PassabilityMap::refreshReachability(const MapNode& node)
     TilePassability tilePassability = getPassability(node);
     std::unordered_set<int> foundGroupIds;
 
-    // Check each neighbor to see if we belong to any of their reachability groups.
+    // Check each neighbor to see if we belong to any of their reachability groups
     std::vector<MapNode> neighbors = MapUtils::findNeighbors(node, *this);
     for (const MapNode& neighbor : neighbors)
     {
@@ -144,20 +144,23 @@ TilePassability PassabilityMap::getPassability(const MapNode& pos) const
 void PassabilityMap::setPassability(const MapNode& pos, TilePassability passability)
 {
     tilePassabilities[pos.y * width + pos.x] = passability;
+    refreshReachability(pos);
 }
 
 void PassabilityMap::addPassability(const MapNode& pos, TilePassability flags)
 {
     tilePassabilities[pos.y * width + pos.x] |= flags;
+    refreshReachability(pos);
 }
 
 void PassabilityMap::removePassability(const MapNode& pos, TilePassability flags)
 {
     // Use bitwise AND with the inverted flags to remove the specified flags
     tilePassabilities[pos.y * width + pos.x] &= ~flags;
+    refreshReachability(pos);
 }
 
-bool PassabilityMap::isReachable(const MapNode& a, const MapNode& b)
+bool PassabilityMap::isReachable(const MapNode& a, const MapNode& b) const
 {
     const auto& aGroup = getReachabilityGroupForTile(a);
     const auto& bGroup = getReachabilityGroupForTile(b);
