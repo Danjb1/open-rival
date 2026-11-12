@@ -130,7 +130,7 @@ public:
     }
 
     /** Gets the full path for this route. */
-    std::deque<MapNode> getPath() const
+    const std::deque<MapNode>& getPath() const
     {
         return path;
     }
@@ -150,11 +150,23 @@ public:
 
 private:
     MapNode intendedDestination = { -1, -1 };
-    MapNode foundDestination = { -1, -1 };
     std::deque<MapNode> path;
     float cost = 0;
+    MapNode foundDestination = { -1, -1 };
     bool bIsIntendedDestinationUnreachable = false;
     bool bIsPartialPath = false;
+};
+
+/**
+ * A route, or the remainder of one, retrieved from a Context's cache.
+ */
+struct CachedRoute
+{
+    /** The nodes to traverse, excluding the node the route was requested from. */
+    std::deque<MapNode> path;
+
+    /** The movement cost of traversing `path`. */
+    float cost = 0.f;
 };
 
 /**
@@ -165,44 +177,49 @@ private:
  */
 class Context
 {
+private:
+    struct CachedStep
+    {
+        MapNode next;
+        float remainingCost;
+    };
+
 public:
     Context(int numUnits = 1);
 
     /** Informs the context of a new pathfinding attempt. */
     void beginPathfinding();
 
-    /** Gets the cached path from start to goal, if it exists. */
-    std::optional<std::deque<MapNode>> getCachedPath(const MapNode& start, const MapNode& goal) const;
+    /** Gets the cached route {`from` -> `to`}, if one exists. */
+    std::optional<CachedRoute> getCachedRoute(const MapNode& from, const MapNode& to) const;
 
-    /** Gets the cost of the cached path from start to goal, if it exists. */
-    std::optional<float> getCachedPathCost(const MapNode& start, const MapNode& goal) const;
-
-    /** Caches a path from start to goal. */
-    void cachePath(const MapNode& start, const MapNode& goal, const std::deque<MapNode>& path, float pathCost);
+    /** Records that the route {`from` -> `to`} continues via `next`.
+     * `remainingCost` is the cost of the whole remaining route, starting from `from`. */
+    void cacheStep(const MapNode& from, const MapNode& to, const MapNode& next, float remainingCost);
 
     /** Gets the maximum nodes of nodes that the pathfinder should visit on the current attempt. */
     int getMaxNodesToVisit() const;
+
+private:
+    const CachedStep* findCachedStep(const MapNode& from, const MapNode& to) const;
 
 private:
     /** Maximum nodes that the pathfinder can visit before giving up.
      * This is set low enough that it should not cause any lag spikes.
      * In general we should not reach this limit unless pathfinding across vast distances;
      * pathfinding in "normal" conditions typically requires 1000 or fewer nodes. */
-    static constexpr int maxNodesToVisitPerContext = 2000;
+    static constexpr int maxNodesToVisitPerContext = 1000;
 
     /** Lower limit for maxNodesToVisitPerAttempt.
      * This prevents pathfinding from becoming very bad when moving large groups. */
     static constexpr int maxNodesLowerLimit = 100;
 
-    std::unordered_map<std::pair<MapNode, MapNode>, std::deque<MapNode>> cachedPaths;
-    std::unordered_map<std::pair<MapNode, MapNode>, float> cachedPathCosts;
+    /** Map of pair{from, to} -> next step towards the goal. */
+    std::unordered_map<std::pair<MapNode, MapNode>, CachedStep> cachedSteps;
 
     int pathfindingAttempts = 0;
-
     int numUnits = 0;
-
     int maxNodesToVisitPerAttempt = 0;
-
     bool isCacheEnabled = false;
 };
 
@@ -251,7 +268,7 @@ Route findPath(MapNode start,
         const PathfindingMap& map,
         const PassabilityChecker& passabilityChecker,
         Context& context,
-        const Hints hints = {});
+        const Hints& hints = {});
 
 }  // namespace Pathfinding
 }  // namespace Rival

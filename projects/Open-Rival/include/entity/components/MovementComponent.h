@@ -117,6 +117,7 @@ public:
     static const std::string key;
 
 protected:
+    MovementMode movementMode;
     const Pathfinding::PassabilityChecker& passabilityChecker;
     Pathfinding::PassabilityUpdater& passabilityUpdater;
 
@@ -127,8 +128,6 @@ protected:
     Pathfinding::Route route;
 
     Movement movement;
-
-    MovementMode movementMode;
 
     // TMP: This should depend on the unit's speed
     int ticksPerMove = 30;

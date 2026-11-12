@@ -434,11 +434,11 @@ bool MovementComponent::tryRepath(Pathfinding::Hints hints)
     LOG_DEBUG_CATEGORY("movement", "Repathing around obstruction");
 
     // Prefer nodes from our current route; this saves us finding the entire path again
-    auto existingPath = route.getPath();
+    const std::deque<MapNode>& existingPath = route.getPath();
     hints.nodesToPrefer.insert(existingPath.cbegin(), existingPath.cend());
 
     Pathfinding::Context context;
-    const bool success = moveTo(route.getFinalDestination(), context, hints);
+    const bool success = moveTo(route.getIntendedDestination(), context, hints);
 
     return success;
 }
@@ -471,7 +471,7 @@ bool MovementComponent::tryRouteContinuation()
     Pathfinding::Hints hints;
     hints.obstructedMovementCost = cachedHints.obstructedMovementCost;
 
-    const bool success = moveTo(intendedDestination, context, cachedHints);
+    const bool success = moveTo(intendedDestination, context, hints);
 
     return success;
 }
