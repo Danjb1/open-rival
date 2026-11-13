@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "gfx/RenderUtils.h"
+#include "gfx/RenderConstants.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/TextureAtlas.h"
 #include "utils/Rect.h"

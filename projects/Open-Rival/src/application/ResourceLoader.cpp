@@ -17,6 +17,7 @@
 #include "gfx/TextureAtlas.h"
 #include "utils/ConfigUtils.h"
 #include "utils/FileUtils.h"
+#include "utils/JsonUtils.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {

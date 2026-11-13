@@ -6,7 +6,6 @@
 #include "entity/components/EntityComponent.h"
 #include "entity/components/MovementListener.h"
 #include "game/PlayerState.h"
-#include "gfx/RenderUtils.h"
 #include "utils/Rect.h"
 
 namespace Rival {

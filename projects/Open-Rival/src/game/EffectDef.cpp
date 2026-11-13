@@ -1,5 +1,7 @@
 #include "game/EffectDef.h"
 
+#include "utils/JsonUtils.h"
+
 namespace Rival {
 
 EffectDef EffectDef::fromJson(const json& j)

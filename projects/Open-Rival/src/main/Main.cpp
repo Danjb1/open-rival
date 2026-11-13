@@ -21,6 +21,7 @@
 #include "main/ProgramOptions.h"
 #include "net/NetUtils.h"
 #include "utils/ConfigUtils.h"
+#include "utils/JsonUtils.h"
 #include "utils/LogUtils.h"
 #include "window/sdl/SDLWindowImpl.h"
 

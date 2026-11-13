@@ -181,6 +181,7 @@ set(OPEN_RIVAL_HEADERS
     include/entity/Effect.h
     include/entity/Entity.h
     include/entity/EntityFactory.h
+    include/entity/EntityType.h
     include/entity/Palisade.h
     include/entity/Projectile.h
     include/entity/Unit.h
@@ -232,12 +233,14 @@ set(OPEN_RIVAL_HEADERS
     include/game/UnitDef.h
     include/game/UnitType.h
     include/game/World.h
+    include/game/WorldStore.h
     include/gfx/Camera.h
     include/gfx/Color.h
     include/gfx/Font.h
     include/gfx/Image.h
     include/gfx/Palette.h
     include/gfx/PaletteUtils.h
+    include/gfx/RenderConstants.h
     include/gfx/RenderUtils.h
     include/gfx/Renderer.h
     include/gfx/Spritesheet.h
@@ -306,6 +309,7 @@ set(OPEN_RIVAL_HEADERS
     include/utils/EnumUtils.h
     include/utils/FileUtils.h
     include/utils/HashUtils.h
+    include/utils/JsonFwd.h
     include/utils/JsonUtils.h
     include/utils/LogUtils.h
     include/utils/MathUtils.h
@@ -485,13 +489,26 @@ target_compile_definitions(Open-Rival-lib PUBLIC
     $<$<CONFIG:Debug>:ENABLE_IMGUI>
 )
 
-# Pre-compiled headers
+# Pre-compiled headers.
+# Only include headers that rarely change (standard library, third-party
+# libraries), since any change to these triggers a full rebuild.
 target_precompile_headers(Open-Rival-lib PRIVATE
+    # Standard library
     <cstdint>
+    <functional>
     <memory>
+    <optional>
     <stdexcept>
     <string>
+    <unordered_map>
+    <unordered_set>
     <vector>
+    # Third-party libraries
+    <glm/glm.hpp>
+    <nlohmann/json.hpp>
+    <spdlog/spdlog.h>
+    # NOTE: <windows.h> is deliberately excluded; WindowsWrapper.h undefines
+    # `near` and `far`, which breaks other Windows headers included later.
 )
 
 ################################################################################

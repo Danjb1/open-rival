@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 
+#include "entity/EntityType.h"
 #include "entity/components/EntityComponent.h"
 #include "game/MapUtils.h"
 
@@ -36,26 +36,6 @@ struct has_component_key<T, std::void_t<decltype(T::key)>> : std::true_type
 namespace Rival {
 
 class World;
-
-enum class EntityType : std::uint8_t
-{
-    Unknown,
-    Unit,
-    Building,
-    Projectile,
-    Tree,
-    Mountain,
-    Wall,
-    Palisade,
-    Door,
-    Decoration,
-    Chest,
-    InfoPoint,
-    Effect
-};
-
-const auto firstEntityType { static_cast<int>(EntityType::Unknown) };
-const auto lastEntityType { static_cast<int>(EntityType::InfoPoint) };
 
 /**
  * Base class for a "thing" that exists within the game world.
@@ -239,12 +219,7 @@ public:
     template <class T>
     T* getComponent(const std::string& key)
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return nullptr;
-        }
-        return dynamic_cast<T*>((iter->second).get());
+        return dynamic_cast<T*>(findComponent(key));
     }
 
     /**
@@ -257,12 +232,7 @@ public:
     template <class T>
     const T* getComponent(const std::string& key) const
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return nullptr;
-        }
-        return dynamic_cast<T*>((iter->second).get());
+        return dynamic_cast<const T*>(findComponent(key));
     }
 
     /**
@@ -278,12 +248,7 @@ public:
     template <class T>
     std::shared_ptr<T> getComponentShared(const std::string& key)
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return std::shared_ptr<T>();
-        }
-        return std::dynamic_pointer_cast<T>(iter->second);
+        return std::dynamic_pointer_cast<T>(findComponentShared(key));
     }
 
     /**
@@ -299,12 +264,7 @@ public:
     template <class T>
     std::shared_ptr<const T> getComponentShared(const std::string& key) const
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return std::shared_ptr<T>();
-        }
-        return std::dynamic_pointer_cast<const T>(iter->second);
+        return std::dynamic_pointer_cast<const T>(findComponentShared(key));
     }
 
     /**
@@ -315,12 +275,7 @@ public:
     template <class T>
     std::weak_ptr<T> getComponentWeak(const std::string key)
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return std::weak_ptr<T>();
-        }
-        return std::dynamic_pointer_cast<T>(iter->second);
+        return std::dynamic_pointer_cast<T>(findComponentShared(key));
     }
 
     /**
@@ -331,12 +286,7 @@ public:
     template <class T>
     std::weak_ptr<const T> getComponentWeak(const std::string& key) const
     {
-        const auto iter = components.find(key);
-        if (iter == components.cend())
-        {
-            return std::weak_ptr<T>();
-        }
-        return std::dynamic_pointer_cast<const T>(iter->second);
+        return std::dynamic_pointer_cast<const T>(findComponentShared(key));
     }
 
     /** Returns the result of `getComponent`, and verifies that it is valid. */
@@ -346,7 +296,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -358,7 +308,7 @@ public:
         auto result = getComponent<T>(key);
         if (!result)
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -370,7 +320,7 @@ public:
         auto result = getComponentShared<T>(key);
         if (!result)
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -382,7 +332,7 @@ public:
         auto result = getComponentShared<const T>(key);
         if (!result)
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -394,7 +344,7 @@ public:
         auto result = getComponentWeak<T>(key);
         if (!result.lock())
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -406,7 +356,7 @@ public:
         auto result = getComponentWeak<const T>(key);
         if (!result.lock())
         {
-            throw std::runtime_error("No component found with key: " + key);
+            throwComponentNotFound(key);
         }
         return result;
     }
@@ -445,6 +395,17 @@ protected:
 
     /** Called when this Entity is removed from the game world, before component destruction. */
     virtual void onDestroy() {};
+
+private:
+    /** Finds the EntityComponent with the given key, or returns nullptr if not found.
+     * This is defined out-of-line to keep the component accessor templates lightweight. */
+    EntityComponent* findComponent(const std::string& key) const;
+
+    /** Finds the EntityComponent with the given key, or returns an empty shared_ptr if not found. */
+    std::shared_ptr<EntityComponent> findComponentShared(const std::string& key) const;
+
+    /** Throws an exception indicating that no component exists with the given key. */
+    [[noreturn]] static void throwComponentNotFound(const std::string& key);
 
 public:
     // TODO: This is only relevant to Units and Buildings, maybe move it somewhere else

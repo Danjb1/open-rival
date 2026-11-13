@@ -48,14 +48,8 @@ target_link_libraries(Open-Rival-test PRIVATE
     project_warnings
 )
 
-# Pre-compiled headers
-target_precompile_headers(Open-Rival-test PRIVATE
-    <cstdint>
-    <memory>
-    <stdexcept>
-    <string>
-    <vector>
-)
+# Pre-compiled headers (shared with the library to avoid building them twice)
+target_precompile_headers(Open-Rival-test REUSE_FROM Open-Rival-lib)
 
 # Register each test case with CTest.
 # PRE_TEST defers discovery until the tests are run, so the build doesn't need

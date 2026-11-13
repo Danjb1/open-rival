@@ -8,6 +8,7 @@
 #pragma warning(pop)
 
 #include "gfx/Palette.h"
+#include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
 #include "gfx/Texture.h"
 #include "utils/MathUtils.h"

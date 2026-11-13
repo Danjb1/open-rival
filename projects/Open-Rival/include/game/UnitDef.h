@@ -7,7 +7,7 @@
 
 #include "audio/Sounds.h"
 #include "game/Animations.h"
-#include "utils/JsonUtils.h"
+#include "utils/JsonFwd.h"
 
 namespace Rival {
 

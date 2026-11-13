@@ -1,5 +1,7 @@
 #include "game/ProjectileDef.h"
 
+#include "utils/JsonUtils.h"
+
 namespace Rival {
 
 ProjectileDef ProjectileDef::fromJson(const json& j)

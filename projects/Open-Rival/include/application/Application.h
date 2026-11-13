@@ -13,7 +13,7 @@
 #include "audio/AudioSystem.h"
 #include "net/Connection.h"
 #include "net/Server.h"
-#include "utils/JsonUtils.h"
+#include "utils/JsonFwd.h"
 #include "window/Window.h"
 
 namespace Rival {

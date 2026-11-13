@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "game/Tile.h"
-#include "gfx/RenderUtils.h"
+#include "gfx/RenderConstants.h"
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 
 namespace Rival {

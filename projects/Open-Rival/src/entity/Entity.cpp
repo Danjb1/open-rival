@@ -1,5 +1,7 @@
 #include "entity/Entity.h"
 
+#include <stdexcept>
+
 #include "game/World.h"
 
 namespace Rival {
@@ -106,6 +108,23 @@ void Entity::setPos(const MapNode& newPos)
         world->onEntityMoved(id, newPos);
     }
     moved = true;
+}
+
+EntityComponent* Entity::findComponent(const std::string& key) const
+{
+    const auto iter = components.find(key);
+    return iter == components.cend() ? nullptr : iter->second.get();
+}
+
+std::shared_ptr<EntityComponent> Entity::findComponentShared(const std::string& key) const
+{
+    const auto iter = components.find(key);
+    return iter == components.cend() ? std::shared_ptr<EntityComponent>() : iter->second;
+}
+
+void Entity::throwComponentNotFound(const std::string& key)
+{
+    throw std::runtime_error("No component found with key: " + key);
 }
 
 }  // namespace Rival

@@ -11,6 +11,7 @@
 
 #include "gfx/Camera.h"
 #include "gfx/Palette.h"
+#include "gfx/RenderUtils.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
 #include "gfx/opengl/Shaders.h"

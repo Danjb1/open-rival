@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "utils/JsonUtils.h"
+#include "utils/JsonFwd.h"
 
 namespace Rival {
 

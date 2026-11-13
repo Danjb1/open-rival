@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "game/Race.h"
-#include "gfx/RenderUtils.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 

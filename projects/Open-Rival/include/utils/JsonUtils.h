@@ -8,7 +8,7 @@
 
 #include <string>
 
-using json = nlohmann::json;
+#include "utils/JsonFwd.h"
 
 namespace Rival { namespace JsonUtils {
 

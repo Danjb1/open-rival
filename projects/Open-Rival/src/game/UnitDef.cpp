@@ -3,6 +3,8 @@
 #include <tuple>
 #include <utility>
 
+#include "utils/JsonUtils.h"
+
 namespace Rival {
 
 UnitDef UnitDef::fromJson(const json& j)

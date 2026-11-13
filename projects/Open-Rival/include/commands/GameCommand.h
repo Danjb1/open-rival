@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "game/World.h"
+#include "game/WorldStore.h"
 
 namespace Rival {
 

@@ -4,6 +4,7 @@
 #include "entity/components/MovementComponent.h"
 #include "game/MapUtils.h"
 #include "game/Pathfinding.h"
+#include "game/World.h"
 #include "utils/BufferUtils.h"
 #include "utils/LogUtils.h"
 

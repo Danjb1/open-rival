@@ -1,5 +1,7 @@
 #include "game/AttackDef.h"
 
+#include "utils/JsonUtils.h"
+
 namespace Rival {
 
 AttackDef AttackDef::fromJson(const json& j)

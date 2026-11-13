@@ -10,7 +10,7 @@
 #include "game/UnitType.h"
 #include "gfx/Font.h"
 #include "gfx/Spritesheet.h"
-#include "utils/JsonUtils.h"
+#include "utils/JsonFwd.h"
 
 namespace Rival {
 

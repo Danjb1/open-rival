@@ -180,13 +180,4 @@ private:
     SpatialIndex spatialIndex;
 };
 
-/**
- * Interface providing access to the world.
- */
-class WorldStore
-{
-public:
-    virtual World& getWorld() = 0;
-};
-
 }  // namespace Rival

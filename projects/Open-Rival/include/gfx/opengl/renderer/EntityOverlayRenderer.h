@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 
-#include "gfx/RenderUtils.h"
 #include "gfx/opengl/renderable/AtlasRenderable.h"
 #include "gfx/opengl/renderable/BoxRenderable.h"
 #include "utils/EntityUtils.h"
