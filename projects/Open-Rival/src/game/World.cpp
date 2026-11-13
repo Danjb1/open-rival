@@ -154,6 +154,7 @@ void World::removeEntity(std::shared_ptr<Entity> entity)
     }
 
     entitiesById.erase(entity->getId());
+    spatialIndex.removeEntity(entity->getId());
 }
 
 SharedMutableEntityList World::getMutableEntities() const
