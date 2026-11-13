@@ -45,6 +45,39 @@ SCENARIO("AttackComponent can initiate an attack", "[components][attack-componen
     }
 }
 
+SCENARIO("AttackComponent ignores targets that no longer exist", "[components][attack-component]")
+{
+    GIVEN("A unit with an AttackComponent")
+    {
+        World world(5, 5, false);
+
+        std::shared_ptr<Unit> attacker = EntityTestUtils::makeUnit();
+        world.addEntity(attacker, 1, 1);
+
+        AttackComponent* attackComponent = attacker->requireComponent<AttackComponent>(AttackComponent::key);
+        AttackDef attackDef;
+        attackDef.range = 1;
+        attackComponent->registerAttack(&attackDef);
+
+        WHEN("targeting a unit that has been destroyed")
+        {
+            std::weak_ptr<Entity> weakTarget;
+            {
+                std::shared_ptr<Unit> target = EntityTestUtils::makeUnit();
+                weakTarget = target;
+            }
+
+            attackComponent->setTargetEntity(weakTarget);
+            attacker->update(TimeUtils::timeStepMs);
+
+            THEN("no attack is initiated")
+            {
+                REQUIRE(attacker->getState() == UnitState::Idle);
+            }
+        }
+    }
+}
+
 SCENARIO("AttackComponent does not interrupt movement", "[components][attack-component]")
 {
     GIVEN("A unit with an AttackComponent that is currently moving")

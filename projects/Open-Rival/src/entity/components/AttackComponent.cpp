@@ -125,6 +125,12 @@ bool AttackComponent::hasValidTarget() const
 
 bool AttackComponent::isValidTarget(std::shared_ptr<const Entity> targetEntity) const
 {
+    if (!targetEntity)
+    {
+        // Target does not exist (e.g. it has been destroyed)
+        return false;
+    }
+
     const HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
     if (!healthComp)
     {
@@ -417,7 +423,7 @@ void AttackComponent::setTargetEntity(std::weak_ptr<Entity> weakNewTarget)
         return;
     }
 
-    if (newTarget && newTarget->getId() == entity->getId())
+    if (newTarget->getId() == entity->getId())
     {
         // Can't attack self!
         return;
