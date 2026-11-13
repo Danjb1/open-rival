@@ -96,7 +96,21 @@ void Connection::send(const std::shared_ptr<const Packet> packet)
     sendReadyCondition.notify_one();
 }
 
-void Connection::sendThreadLoop()
+void Connection::sendThreadLoop() noexcept
+{
+    // Exceptions must not escape this thread, otherwise the whole process is terminated
+    try
+    {
+        sendPackets();
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERROR("Failed to send packet, closing connection: {}", e.what());
+        closeSocketFromThread();
+    }
+}
+
+void Connection::sendPackets()
 {
     while (isOpen())
     {
@@ -124,7 +138,22 @@ void Connection::sendThreadLoop()
     }
 }
 
-void Connection::receiveThreadLoop()
+void Connection::receiveThreadLoop() noexcept
+{
+    // Exceptions must not escape this thread, otherwise the whole process is terminated.
+    // This is particularly important here since we cannot trust the data we receive.
+    try
+    {
+        receivePackets();
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERROR("Failed to receive packet, closing connection: {}", e.what());
+        closeSocketFromThread();
+    }
+}
+
+void Connection::receivePackets()
 {
     while (isOpen())
     {
@@ -141,7 +170,7 @@ void Connection::receiveThreadLoop()
         recvBuffer.clear();
 
         // Sanity-check the packet size
-        if (nextPacketSize > maxBufferSize)
+        if (nextPacketSize <= 0 || static_cast<std::size_t>(nextPacketSize) > maxBufferSize)
         {
             throw std::runtime_error("Unexpected packet size: " + std::to_string(nextPacketSize));
         }
@@ -172,6 +201,21 @@ void Connection::receiveThreadLoop()
             }
         }
     }
+}
+
+/**
+ * Closes the socket from one of our own threads, e.g. after an error.
+ *
+ * We cannot call `close()` here, because it joins both threads, and a thread cannot join itself. Instead, we just
+ * close the socket and rely on later cleanup by the thread that owns the Connection.
+ */
+void Connection::closeSocketFromThread() noexcept
+{
+    socket.close();
+
+    // Wake the send thread so that it detects the dead socket and terminates
+    std::lock_guard<std::mutex> lock(packetsToSendMutex);
+    sendReadyCondition.notify_all();
 }
 
 bool Connection::readFromSocket(std::size_t numBytes)

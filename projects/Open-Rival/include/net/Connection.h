@@ -70,9 +70,12 @@ private:
         Closed
     };
 
-    void sendThreadLoop();
-    void receiveThreadLoop();
+    void sendThreadLoop() noexcept;
+    void sendPackets();
+    void receiveThreadLoop() noexcept;
+    void receivePackets();
     bool readFromSocket(std::size_t numBytes);
+    void closeSocketFromThread() noexcept;
 
     void sendNow(std::shared_ptr<const Packet> packet);
 

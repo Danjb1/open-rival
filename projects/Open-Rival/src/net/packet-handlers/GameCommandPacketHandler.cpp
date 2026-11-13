@@ -15,7 +15,13 @@ void GameCommandPacketHandler::onPacketReceived(std::shared_ptr<const Packet> pa
     const int tick = commandPacket->getTick();
 
     GameState& game = static_cast<GameState&>(state);
-    game.onClientReady(tick, commandPacket->getClientId());
+    bool success = game.onClientReady(tick, commandPacket->getClientId());
+
+    if (!success)
+    {
+        // Packet was rejected; don't schedule its commands
+        return;
+    }
 
     for (auto& command : commands)
     {

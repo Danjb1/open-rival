@@ -42,8 +42,7 @@ GameState::GameState(Application& app,
               RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
               *world)
     , playerContext()
-    , mousePicker(std::make_shared<MousePicker>(
-              camera, viewport, *world, playerContext, *this, *this, app.getInput()))
+    , mousePicker(std::make_shared<MousePicker>(camera, viewport, *world, playerContext, *this, *this, app.getInput()))
     , clients(clients)
     , localPlayerId(localPlayerId)
     , randomizer(randomizer)
@@ -413,8 +412,14 @@ void GameState::scheduleCommand(std::shared_ptr<GameCommand> command, int tick)
     }
 }
 
-void GameState::onClientReady(int tick, int clientId)
+bool GameState::onClientReady(int tick, int clientId)
 {
+    if (tick < currentTick)
+    {
+        LOG_WARN("Ignoring player ready received for client {} for past tick: {}", clientId, tick);
+        return false;
+    }
+
     // Ensure `clientsReady` has an entry for the tick in question
     auto [iter, inserted] = clientsReady.try_emplace(tick);
     auto& clientsReadyForTick = iter->second;
@@ -423,9 +428,11 @@ void GameState::onClientReady(int tick, int clientId)
     auto [_, added] = clientsReadyForTick.insert(clientId);
     if (!added)
     {
-        throw std::runtime_error("Duplicate player ready received for client " + std::to_string(clientId)
-                + " for tick: " + std::to_string(tick));
+        LOG_WARN("Ignoring duplicate player ready received for client {} for tick: {}", clientId, tick);
+        return false;
     }
+
+    return true;
 }
 
 bool GameState::isWaitingForPlayers() const

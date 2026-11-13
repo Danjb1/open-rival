@@ -88,7 +88,9 @@ public:
     // End GameCommandInvoker override
 
     void scheduleCommand(std::shared_ptr<GameCommand> command, int tick);
-    void onClientReady(int tick, int clientId);
+    /** Registers that a client has sent its commands for the given tick.
+     * Returns false if the packet should be ignored (e.g. it is a duplicate). */
+    bool onClientReady(int tick, int clientId);
     bool isWaitingForPlayers() const;
     std::vector<ClientInfo> getNotReadyClients() const;
 
