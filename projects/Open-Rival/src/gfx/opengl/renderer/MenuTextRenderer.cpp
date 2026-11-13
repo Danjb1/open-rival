@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "application/Window.h"
+#include "window/Window.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
 

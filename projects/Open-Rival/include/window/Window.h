@@ -1,19 +1,15 @@
 #pragma once
 
-#include "utils/SDLWrapper.h"
-
 #include <string>
 #include <vector>
 
 namespace Rival {
 
-/** A window created with SDL.
- * Later, we should make this abstract and create a concrete SDLWindow implementation. */
 class Window
 {
 public:
     Window(int width, int height, const char* title);
-    ~Window();
+    virtual ~Window() = default;
 
     // Disable moving / copying
     Window(const Window& other) = delete;
@@ -21,11 +17,8 @@ public:
     Window& operator=(const Window& other) = delete;
     Window& operator=(Window&& other) = delete;
 
-    void swapBuffers() const;
-
-    void setPos(int x, int y);
-
-    void setIcon(SDL_Surface* surface);
+    virtual void swapBuffers() const = 0;
+    virtual void setPos(int x, int y) = 0;
 
     int getWidth() const
     {
@@ -47,13 +40,7 @@ public:
         return vsyncEnabled;
     }
 
-private:
-    static void initSDL();
-
-private:
-    SDL_Window* sdlWindow = nullptr;
-    SDL_GLContext glContext = nullptr;
-
+protected:
     const int width;
     const int height;
     const double aspectRatio;

@@ -4,7 +4,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/application/ResourceLoader.cpp
     ${OPEN_RIVAL_DIR}/src/application/Resources.cpp
     ${OPEN_RIVAL_DIR}/src/application/State.cpp
-    ${OPEN_RIVAL_DIR}/src/application/Window.cpp
     ${OPEN_RIVAL_DIR}/src/audio/AudioSystem.cpp
     ${OPEN_RIVAL_DIR}/src/audio/AudioUtils.cpp
     ${OPEN_RIVAL_DIR}/src/audio/MidiContainer.cpp
@@ -146,6 +145,8 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/utils/Rect.cpp
     ${OPEN_RIVAL_DIR}/src/utils/StringUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/TimeUtils.cpp
+    ${OPEN_RIVAL_DIR}/src/window/Window.cpp
+    ${OPEN_RIVAL_DIR}/src/window/sdl/SDLWindowImpl.cpp
 )
 
 set(OPEN_RIVAL_HEADERS
@@ -154,7 +155,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/application/ResourceLoader.h
     ${OPEN_RIVAL_DIR}/include/application/Resources.h
     ${OPEN_RIVAL_DIR}/include/application/State.h
-    ${OPEN_RIVAL_DIR}/include/application/Window.h
     ${OPEN_RIVAL_DIR}/include/audio/AudioSystem.h
     ${OPEN_RIVAL_DIR}/include/audio/AudioUtils.h
     ${OPEN_RIVAL_DIR}/include/audio/MidiContainer.h
@@ -306,4 +306,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/utils/SDLWrapper.h
     ${OPEN_RIVAL_DIR}/include/utils/StringUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/TimeUtils.h
+    ${OPEN_RIVAL_DIR}/include/window/Window.h
+    ${OPEN_RIVAL_DIR}/include/window/sdl/SDLWindowImpl.h
 )

@@ -79,15 +79,11 @@
 - GameState should reject new players
 - Create standalone project to run dedicated server
 
-### Pathfinding
-
-- Allows units to move together instead of waiting for those in front to move
-
 ### Refactoring
 
 #### General
 
-- Apply the `Renderer` treatment to other subsystems, e.g. window creation, audio and logging
+- Apply the `Renderer` treatment to other subsystems, e.g. input, audio and logging
 - Consider storing pointers instead of references in classes
 - Consider whether class members should be `const`
 - Consider returning pointers instead of references

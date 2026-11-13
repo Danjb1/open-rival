@@ -2,7 +2,7 @@
 
 #include "gfx/opengl/GLWrapper.h"
 
-#include "application/Window.h"
+#include "window/Window.h"
 #include "gfx/opengl/GLUtils.h"
 #include "gfx/Palette.h"
 #include "gfx/PaletteUtils.h"

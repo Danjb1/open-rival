@@ -1,6 +1,6 @@
 #pragma once
 
-#include "application/Window.h"
+#include "window/Window.h"
 #include "game/GameInterface.h"
 #include "game/Race.h"
 #include "gfx/opengl/renderable/AtlasRenderable.h"

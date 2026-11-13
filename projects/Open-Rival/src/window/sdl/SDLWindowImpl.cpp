@@ -1,4 +1,4 @@
-#include "application/Window.h"
+#include "window/sdl/SDLWindowImpl.h"
 
 #include "utils/SDLWrapper.h"
 #include <SDL_image.h>
@@ -8,11 +8,8 @@
 
 namespace Rival {
 
-Window::Window(int width, int height, const char* title)
-    : width(width)
-    , height(height)
-    , title(title)
-    , aspectRatio(static_cast<double>(width) / height)
+SDLWindowImpl::SDLWindowImpl(int width, int height, const char* title)
+    : Window(width, height, title)
 {
     initSDL();
 
@@ -56,13 +53,13 @@ Window::Window(int width, int height, const char* title)
     SDL_FreeSurface(surface);
 }
 
-Window::~Window()
+SDLWindowImpl::~SDLWindowImpl()
 {
     SDL_DestroyWindow(sdlWindow);
     sdlWindow = nullptr;
 }
 
-void Window::initSDL()
+void SDLWindowImpl::initSDL()
 {
     // Ensure that we only initialize SDL once, in case we create multiple Windows.
     // Really, this initialization should be moved elsewhere.
@@ -95,17 +92,17 @@ void Window::initSDL()
     isInitialized = true;
 }
 
-void Window::swapBuffers() const
+void SDLWindowImpl::swapBuffers() const
 {
     SDL_GL_SwapWindow(sdlWindow);
 }
 
-void Window::setPos(int x, int y)
+void SDLWindowImpl::setPos(int x, int y)
 {
     SDL_SetWindowPosition(sdlWindow, x, y);
 }
 
-void Window::setIcon(SDL_Surface* surface)
+void SDLWindowImpl::setIcon(SDL_Surface* surface)
 {
     SDL_SetWindowIcon(sdlWindow, surface);
 }

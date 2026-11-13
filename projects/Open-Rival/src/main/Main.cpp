@@ -9,13 +9,13 @@
 #include <utility>  // std::move, std::piecewise_construct
 
 #include "application/Application.h"
-#include "application/Window.h"
 #include "gfx/opengl/GLRenderer.h"
 #include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
 #include "net/NetUtils.h"
 #include "utils/ConfigUtils.h"
 #include "utils/LogUtils.h"
+#include "window/sdl/SDLWindowImpl.h"
 
 using namespace Rival;
 
@@ -46,7 +46,7 @@ static void startApplication(const ProgramOptions& options)
 
     // Initialize engine subsystems
     // --- Window ---
-    Window window(800, 600, "Rival Realms");
+    SDLWindowImpl window(800, 600, "Rival Realms");
     if (options.hasWindowPosition())
     {
         auto windowPos = options.getWindowPos();

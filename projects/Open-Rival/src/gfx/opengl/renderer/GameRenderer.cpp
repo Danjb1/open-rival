@@ -8,7 +8,7 @@
 #pragma warning(pop)
 
 #include "application/Resources.h"
-#include "application/Window.h"
+#include "window/Window.h"
 #include "game/GameState.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"

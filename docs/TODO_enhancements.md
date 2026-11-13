@@ -13,6 +13,7 @@
 ## Quality of Life
 
 - [x] Improved pathfinding
+- [ ] Allow units to move together instead of waiting for those in front to move
 - [ ] UI scaling
 - [x] Camera zooming
 - [ ] Smooth camera panning

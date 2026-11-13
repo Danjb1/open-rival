@@ -1,6 +1,6 @@
 #pragma once
 
-#include "application/Window.h"
+#include "window/Window.h"
 #include "game/GameInterface.h"
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 #include "ui/Cursor.h"
