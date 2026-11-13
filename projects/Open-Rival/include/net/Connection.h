@@ -1,5 +1,6 @@
 #pragma once
 
+#include <condition_variable>
 #include <cstddef>  // std::size_t
 #include <deque>
 #include <memory>
@@ -85,12 +86,10 @@ private:
     std::vector<char> sendBuffer;
     std::vector<char> recvBuffer;
 
-    std::thread sendThread;
     std::deque<std::shared_ptr<const Packet>> packetsToSend;
     std::mutex packetsToSendMutex;
     std::condition_variable sendReadyCondition;
 
-    std::thread receiveThread;
     std::vector<std::shared_ptr<const Packet>> receivedPackets;
     std::mutex receivedPacketsMutex;
 
@@ -101,6 +100,9 @@ private:
     int remoteClientId = -1;
 
     ConnectionState state = ConnectionState::Invalid;
+
+    std::thread sendThread;
+    std::thread receiveThread;
 };
 
 }  // namespace Rival

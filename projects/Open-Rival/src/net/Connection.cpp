@@ -13,14 +13,16 @@ Connection::Connection(
         Socket socket, std::shared_ptr<PacketFactory> packetFactory, int remoteClientId, ConnectionListener* listener)
     : socket(std::move(socket))
     , packetFactory(packetFactory)
-    , remoteClientId(remoteClientId)
     , listener(listener)
-    , sendThread(&Connection::sendThreadLoop, this)
-    , receiveThread(&Connection::receiveThreadLoop, this)
+    , remoteClientId(remoteClientId)
     , state(ConnectionState::Open)
 {
     sendBuffer.reserve(maxBufferSize);
     recvBuffer.reserve(maxBufferSize);
+
+    // Start the threads last, once everything is fully initialized
+    sendThread = std::thread(&Connection::sendThreadLoop, this);
+    receiveThread = std::thread(&Connection::receiveThreadLoop, this);
 }
 
 Connection::~Connection()
