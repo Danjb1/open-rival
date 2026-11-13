@@ -79,6 +79,8 @@ private:
 
     int width;
     int height;
+    int numChunksX;
+    int numChunksY;
     std::vector<Chunk> chunks;
     std::unordered_map<int, SpatialEntity> entities;
 };

@@ -1,5 +1,8 @@
 #include "game/SpatialIndex.h"
 
+#include <algorithm>  // std::max, std::min
+#include <utility>    // std::as_const
+
 #include "utils/LogUtils.h"
 
 namespace Rival {
@@ -7,19 +10,11 @@ namespace Rival {
 SpatialIndex::SpatialIndex(int width, int height)
     : width(width)
     , height(height)
+    // Round up so that partial chunks at the edges of the map are included
+    , numChunksX((width + chunkWidth - 1) / chunkWidth)
+    , numChunksY((height + chunkHeight - 1) / chunkHeight)
+    , chunks(static_cast<std::size_t>(numChunksX * numChunksY))
 {
-    int numChunksX = static_cast<int>(ceil(static_cast<float>(width) / chunkWidth));
-    int numChunksY = static_cast<int>(ceil(static_cast<float>(height) / chunkHeight));
-    int numChunks = numChunksX * numChunksY;
-    chunks.reserve(numChunks);
-
-    for (int y = 0; y < height; y += chunkHeight)
-    {
-        for (int x = 0; x < width; x += chunkWidth)
-        {
-            chunks.emplace_back();
-        }
-    }
 }
 
 void SpatialIndex::addEntity(const SpatialEntity& entity)
@@ -163,38 +158,34 @@ std::vector<int> SpatialIndex::getEntitiesInRadius(const MapNode& pos, int radiu
 
 SpatialIndex::Chunk* SpatialIndex::getChunk(int chunkX, int chunkY)
 {
-    int chunkIndex = chunkY * chunkWidth + chunkX;
-    if (chunkIndex < 0 || chunkIndex >= chunks.size())
-    {
-        // Out of bounds (should never happen!)
-        return nullptr;
-    }
-    return &chunks[chunkIndex];
+    // Reuse the const implementation
+    return const_cast<Chunk*>(std::as_const(*this).getChunk(chunkX, chunkY));
 }
 
 const SpatialIndex::Chunk* SpatialIndex::getChunk(int chunkX, int chunkY) const
 {
-    int chunkIndex = chunkY * chunkWidth + chunkX;
-    if (chunkIndex < 0 || chunkIndex >= chunks.size())
+    if (chunkX < 0 || chunkX >= numChunksX || chunkY < 0 || chunkY >= numChunksY)
     {
-        // Out of bounds (should never happen!)
+        // Out of bounds
         return nullptr;
     }
-    return &chunks[chunkIndex];
+    return &chunks[chunkY * numChunksX + chunkX];
 }
 
 SpatialIndex::Chunk* SpatialIndex::getChunkAt(const MapNode& pos)
 {
-    int x = pos.x / chunkWidth;
-    int y = pos.y / chunkHeight;
-    return getChunk(x, y);
+    // Reuse the const implementation
+    return const_cast<Chunk*>(std::as_const(*this).getChunkAt(pos));
 }
 
 const SpatialIndex::Chunk* SpatialIndex::getChunkAt(const MapNode& pos) const
 {
-    int x = pos.x / chunkWidth;
-    int y = pos.y / chunkHeight;
-    return getChunk(x, y);
+    // Check the position itself, since integer division would round small negative values to chunk 0
+    if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height)
+    {
+        return nullptr;
+    }
+    return getChunk(pos.x / chunkWidth, pos.y / chunkHeight);
 }
 
 std::vector<const SpatialIndex::Chunk*> SpatialIndex::getChunksInRadius(const MapNode& pos, int radius) const
@@ -208,17 +199,20 @@ std::vector<const SpatialIndex::Chunk*> SpatialIndex::getChunksInRadius(const Ma
     MapNode min = MapUtils::addLogicalDistance(pos, Facing::NorthWest, radius);
     MapNode max = MapUtils::addLogicalDistance(pos, Facing::SouthEast, radius);
 
-    int minChunkX = min.x / chunkWidth;
-    int maxChunkX = max.x / chunkWidth;
-    int minChunkY = min.y / chunkHeight;
-    int maxChunkY = max.y / chunkHeight;
+    // Clamp to the bounds of the map, since the radius may extend beyond it
+    const int minChunkX = std::max(min.x / chunkWidth, 0);
+    const int maxChunkX = std::min(max.x / chunkWidth, numChunksX - 1);
+    const int minChunkY = std::max(min.y / chunkHeight, 0);
+    const int maxChunkY = std::min(max.y / chunkHeight, numChunksY - 1);
 
     for (int chunkY = minChunkY; chunkY <= maxChunkY; ++chunkY)
     {
         for (int chunkX = minChunkX; chunkX <= maxChunkX; ++chunkX)
         {
-            auto* chunk = getChunk(chunkX, chunkY);
-            foundChunks.push_back(chunk);
+            if (const Chunk* chunk = getChunk(chunkX, chunkY))
+            {
+                foundChunks.push_back(chunk);
+            }
         }
     }
 
