@@ -1,5 +1,7 @@
 #include "utils/SDLWrapper.h"  // Needed for SDL_Quit
+#ifdef ENABLE_IMGUI
 #include <imgui.h>
+#endif
 #include <spdlog/spdlog.h>
 
 #include <memory>
@@ -24,6 +26,7 @@ using namespace Rival;
 // TODO: this should be wrapped in a class that uses RAII
 static FT_Library fontLib = nullptr;
 
+#ifdef ENABLE_IMGUI
 /** Owns the ImGui context for as long as it is in scope.
  * This must outlive the Window and Renderer, since they initialize / shut down the ImGui backends. */
 class ImGuiContextScope
@@ -51,6 +54,7 @@ public:
     ImGuiContextScope& operator=(const ImGuiContextScope&) = delete;
     ImGuiContextScope& operator=(ImGuiContextScope&&) = delete;
 };
+#endif
 
 static void initLogging(const json& cfg)
 {
@@ -75,8 +79,10 @@ static void startApplication(const ProgramOptions& options)
     initLogging(cfg);
 
     // Initialize engine subsystems
+#ifdef ENABLE_IMGUI
     // --- ImGui ---
     ImGuiContextScope imGuiContext;
+#endif
 
     // --- Window ---
     SDLWindowImpl window(800, 600, "Rival Realms");

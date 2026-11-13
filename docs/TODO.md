@@ -6,7 +6,6 @@
 
 ## ImGui
 
-- Add ImGui dependency
 - Show tile under mouse
 - Show entity under mouse (and its components)
 - Show passability toggle

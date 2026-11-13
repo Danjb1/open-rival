@@ -122,14 +122,18 @@ public:
 private:
     void makeNextStateActive();
 
+#ifdef ENABLE_IMGUI
     /** Builds the ImGui UI for the current frame. */
     void buildImGui();
+#endif
 
 private:
     bool exiting { false };
 
+#ifdef ENABLE_IMGUI
     /** Whether to show the ImGui window (toggled with the backtick key). */
     bool isImGuiVisible { false };
+#endif
 
     // Subsystems and resources
     json& cfg;

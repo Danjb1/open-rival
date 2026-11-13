@@ -9,7 +9,8 @@
 namespace Rival {
 
 /** A window created with SDL.
- * This also hosts the ImGui platform backend, so an ImGui context must exist for the lifetime of this window. */
+ * When ENABLE_IMGUI is defined, this also hosts the ImGui platform backend, so an ImGui context must exist for the
+ * lifetime of this window. */
 class SDLWindowImpl : public Window
 {
 public:
@@ -19,7 +20,9 @@ public:
     void swapBuffers() const override;
     void setPos(int x, int y) override;
     void pollEvents() override;
+#ifdef ENABLE_IMGUI
     void beginImGuiFrame() override;
+#endif
 
 private:
     static void initSDL();

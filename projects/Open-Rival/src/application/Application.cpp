@@ -1,6 +1,8 @@
 #include "application/Application.h"
 
+#ifdef ENABLE_IMGUI
 #include <imgui.h>
+#endif
 
 #include <algorithm>  // std::min
 #include <chrono>
@@ -107,6 +109,7 @@ void Application::start(std::unique_ptr<State> initialState)
             const TimeUtils::TimePoint lastUpdate = nextUpdateDue - std::chrono::milliseconds(TimeUtils::timeStepMs);
             frameTiming.timeSinceLastUpdate = std::chrono::duration<float>(now - lastUpdate).count();
 
+#ifdef ENABLE_IMGUI
             // Build this frame's ImGui UI. This must happen before rendering
             // the State, since the Renderer draws the resulting ImGui data.
             renderer->beginImGuiFrame();
@@ -114,6 +117,7 @@ void Application::start(std::unique_ptr<State> initialState)
             ImGui::NewFrame();
             buildImGui();
             ImGui::Render();
+#endif
 
             // Render the game, once per iteration. With vsync enabled, this
             // will be called at the same frequency as the screen's refresh
@@ -157,10 +161,12 @@ void Application::onKeyDownEvent(const KeyEvent& evt)
 {
     input.onKeyDown(evt);
 
+#ifdef ENABLE_IMGUI
     if (evt.key == KeyCode::Backtick)
     {
         isImGuiVisible = !isImGuiVisible;
     }
+#endif
 
     if (state)
     {
@@ -211,6 +217,7 @@ void Application::onMouseWheelEvent(const MouseWheelEvent& evt)
     }
 }
 
+#ifdef ENABLE_IMGUI
 void Application::buildImGui()
 {
     if (isImGuiVisible)
@@ -218,6 +225,7 @@ void Application::buildImGui()
         ImGui::ShowDemoWindow(&isImGuiVisible);
     }
 }
+#endif
 
 void Application::makeNextStateActive()
 {

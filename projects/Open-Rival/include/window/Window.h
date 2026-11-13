@@ -38,8 +38,10 @@ public:
     virtual void setPos(int x, int y) = 0;
     virtual void pollEvents() = 0;
 
+#ifdef ENABLE_IMGUI
     /** Prepares the ImGui platform backend for a new frame. */
     virtual void beginImGuiFrame() = 0;
+#endif
 
     void setListener(WindowListener* listener);
 

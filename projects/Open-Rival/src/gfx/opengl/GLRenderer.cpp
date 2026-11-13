@@ -1,7 +1,9 @@
 #include "gfx/opengl/GLRenderer.h"
 
+#ifdef ENABLE_IMGUI
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
+#endif
 
 #include "game/GameState.h"
 #include "gfx/opengl/GLUtils.h"
@@ -18,19 +20,24 @@ GLRenderer::GLRenderer(Window* window, const Input& input)
     initGLEW();
     initGL();
 
+#ifdef ENABLE_IMGUI
     // Initialize the ImGui renderer backend.
     // The GLSL version must match our OpenGL context (3.1 core).
     if (!ImGui_ImplOpenGL3_Init("#version 140"))
     {
         throw std::runtime_error("Failed to initialize ImGui OpenGL3 backend");
     }
+#endif
 }
 
 GLRenderer::~GLRenderer()
 {
+#ifdef ENABLE_IMGUI
     ImGui_ImplOpenGL3_Shutdown();
+#endif
 }
 
+#ifdef ENABLE_IMGUI
 void GLRenderer::beginImGuiFrame()
 {
     ImGui_ImplOpenGL3_NewFrame();
@@ -44,6 +51,7 @@ void GLRenderer::renderImGui()
         ImGui_ImplOpenGL3_RenderDrawData(drawData);
     }
 }
+#endif
 
 void GLRenderer::onEnterLobby(LobbyState* lobby)
 {
@@ -63,7 +71,9 @@ void GLRenderer::renderLobby(const FrameTiming& frameTiming)
         lobbyRenderer->render();
     }
 
+#ifdef ENABLE_IMGUI
     renderImGui();
+#endif
 
     if (cursorRenderer)
     {
@@ -195,7 +205,9 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
 
     gameRenderer->render(frameTiming);
 
+#ifdef ENABLE_IMGUI
     renderImGui();
+#endif
 
     if (cursorRenderer)
     {

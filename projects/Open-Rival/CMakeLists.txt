@@ -81,7 +81,7 @@ target_link_libraries(Open-Rival PRIVATE
     GLEW::glew
     glm::glm
 	glu32
-    imgui::imgui
+    $<$<CONFIG:Debug>:imgui::imgui> # debug only
     nlohmann_json::nlohmann_json
     OpenAL::OpenAL
 	opengl32
@@ -97,8 +97,9 @@ target_link_libraries(Open-Rival PRIVATE
 
 # Add macro definitions
 target_compile_definitions(Open-Rival PRIVATE
-    # Define DEBUG macro in debug builds
+    # Define DEBUG and ENABLE_IMGUI macros in debug builds
     $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Debug>:ENABLE_IMGUI>
 )
 
 # Pre-compiled headers

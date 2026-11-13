@@ -17,14 +17,17 @@ class Input;
 class Window;
 
 /** OpenGL rendering implementation.
- * This also hosts the ImGui renderer backend, so an ImGui context must exist for the lifetime of this renderer. */
+ * When ENABLE_IMGUI is defined, this also hosts the ImGui renderer backend, so an ImGui context must exist for the
+ * lifetime of this renderer. */
 class GLRenderer : public Renderer
 {
 public:
     GLRenderer(Window* window, const Input& input);
     ~GLRenderer();
 
+#ifdef ENABLE_IMGUI
     void beginImGuiFrame() override;
+#endif
 
     void onEnterLobby(LobbyState* lobby) override;
     void renderLobby(const FrameTiming& frameTiming) override;
@@ -41,7 +44,9 @@ private:
     static void initGL();
 
     void initCursorRenderer(const TextureStore& textureStore);
+#ifdef ENABLE_IMGUI
     static void renderImGui();
+#endif
 
     Window* window;
     const Input& input;
