@@ -1,7 +1,6 @@
 #include "utils/EntityTestUtils.h"
 
 #include "application/Resources.h"
-#include "audio/AudioSystem.h"
 #include "entity/EntityFactory.h"
 #include "entity/components/AttackComponent.h"
 #include "entity/components/FacingComponent.h"
@@ -13,6 +12,7 @@
 #include "entity/components/WalkerComponent.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "mocks/MockAudioSystem.h"
 
 namespace EntityTestUtils {
 
@@ -42,7 +42,7 @@ std::shared_ptr<Unit> makeUnit(const UnitConfig& cfg)
     static Resources res;
     static std::shared_ptr<Texture> texture = std::make_shared<Texture>(0, 64, 64);
     static std::shared_ptr<Spritesheet> spritesheet = std::make_shared<Spritesheet>(texture, 32, 32, 0);
-    static AudioSystem mockAudioSystem;
+    static MockAudioSystem mockAudioSystem;
     static MockAudioStore mockAudioStore;
     static std::shared_ptr<std::mt19937> randomizer;
     static std::shared_ptr<EntityFactory> entityFactory =

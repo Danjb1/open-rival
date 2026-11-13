@@ -9,6 +9,10 @@
 
 namespace Rival {
 
+/** Identifies a SoundSource that has been played by the audio system.
+ * The meaning of the value is up to the AudioSystem implementation. */
+using SoundSourceId = unsigned int;
+
 /** A sound that can be played through the audio system. */
 struct SoundSource
 {

@@ -3,10 +3,21 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <array>
 #include <iostream>
 #include <memory>
+#include <utility>  // std::pair
+
+#include "utils/ConfigUtils.h"
 
 namespace Rival { namespace LogUtils {
+
+/** All log categories used by the game, paired with the config key that controls each one's log level. */
+static const std::array<std::pair<const char*, const char*>, 3> logCategories = { {
+        { "attack", "logLevelAttack" },
+        { "movement", "logLevelMovement" },
+        { "pathfinding", "logLevelPathfinding" },
+} };
 
 std::string getLogFilename(const std::string& filenamePrefix)
 {
@@ -84,6 +95,14 @@ Logger makeLogCategory(const std::string& category, const std::string& logLevel)
     spdlog::register_logger(categoryLogger);
 
     return categoryLogger;
+}
+
+void makeLogCategories(const json& cfg, const std::string& defaultLogLevel)
+{
+    for (const auto& [category, configKey] : logCategories)
+    {
+        makeLogCategory(category, ConfigUtils::get(cfg, configKey, defaultLogLevel));
+    }
 }
 
 }}  // namespace Rival::LogUtils

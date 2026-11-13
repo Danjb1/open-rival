@@ -1,4 +1,4 @@
-#include "audio/AudioSystem.h"
+#include "audio/openal/OpenALAudioSystem.h"
 
 #include <utility>
 
@@ -9,14 +9,14 @@
 
 namespace Rival {
 
-AudioSystem::AudioSystem()
+OpenALAudioSystem::OpenALAudioSystem()
     : midiActive(false)
     , soundActive(false)
 {
     AudioUtils::initAL();
 }
 
-AudioSystem::~AudioSystem()
+OpenALAudioSystem::~OpenALAudioSystem()
 {
     setMidiActive(false);
     setSoundActive(false);
@@ -29,7 +29,7 @@ AudioSystem::~AudioSystem()
 // MIDI playback
 ///////////////////////////////////////////////////////////////////////////
 
-void AudioSystem::midiThreadLoop()
+void OpenALAudioSystem::midiThreadLoop()
 {
     while (midiActive)
     {
@@ -38,7 +38,7 @@ void AudioSystem::midiThreadLoop()
     }
 }
 
-void AudioSystem::waitForMidi()
+void OpenALAudioSystem::waitForMidi()
 {
     std::unique_lock<std::mutex> midiReadyLock(midiMutex);
     while (midiActive && (!currentMidiTrack || currentMidiTrack->isEmpty()))
@@ -47,7 +47,7 @@ void AudioSystem::waitForMidi()
     }
 }
 
-void AudioSystem::setMidiActive(bool active)
+void OpenALAudioSystem::setMidiActive(bool active)
 {
     if (midiActive == active)
     {
@@ -65,14 +65,14 @@ void AudioSystem::setMidiActive(bool active)
     }
 }
 
-void AudioSystem::startMidiSystem()
+void OpenALAudioSystem::startMidiSystem()
 {
     midiActive = true;
     midiPlayer.init();
-    midiThread = std::thread(&AudioSystem::midiThreadLoop, this);
+    midiThread = std::thread(&OpenALAudioSystem::midiThreadLoop, this);
 }
 
-void AudioSystem::destroyMidiSystem()
+void OpenALAudioSystem::destroyMidiSystem()
 {
     midiActive = false;
     midiPlayer.stop();
@@ -80,7 +80,7 @@ void AudioSystem::destroyMidiSystem()
     midiThread.join();
 }
 
-void AudioSystem::playMidi(std::shared_ptr<const MidiFile> midi)
+void OpenALAudioSystem::playMidi(std::shared_ptr<const MidiFile> midi)
 {
     if (!midiActive)
     {
@@ -102,7 +102,7 @@ void AudioSystem::playMidi(std::shared_ptr<const MidiFile> midi)
 // WAV playback
 ///////////////////////////////////////////////////////////////////////////
 
-void AudioSystem::soundThreadLoop()
+void OpenALAudioSystem::soundThreadLoop()
 {
     while (soundActive)
     {
@@ -111,7 +111,7 @@ void AudioSystem::soundThreadLoop()
     }
 }
 
-void AudioSystem::waitForSound()
+void OpenALAudioSystem::waitForSound()
 {
     std::unique_lock<std::mutex> soundReadyLock(soundQueueMutex);
     while (soundActive && soundQueue.size() == 0)
@@ -120,7 +120,7 @@ void AudioSystem::waitForSound()
     }
 }
 
-void AudioSystem::playNextSound()
+void OpenALAudioSystem::playNextSound()
 {
     const std::scoped_lock<std::mutex> lock(soundQueueMutex);
     if (soundQueue.empty())
@@ -149,7 +149,7 @@ void AudioSystem::playNextSound()
     }
 }
 
-void AudioSystem::setSoundActive(bool active)
+void OpenALAudioSystem::setSoundActive(bool active)
 {
     if (soundActive == active)
     {
@@ -167,10 +167,10 @@ void AudioSystem::setSoundActive(bool active)
     }
 }
 
-void AudioSystem::startSoundSystem()
+void OpenALAudioSystem::startSoundSystem()
 {
     soundActive = true;
-    soundThread = std::thread(&AudioSystem::soundThreadLoop, this);
+    soundThread = std::thread(&OpenALAudioSystem::soundThreadLoop, this);
 }
 
 void clear(std::queue<SoundSource>& q)
@@ -180,7 +180,7 @@ void clear(std::queue<SoundSource>& q)
     std::swap(q, empty);
 }
 
-void AudioSystem::destroySoundSystem()
+void OpenALAudioSystem::destroySoundSystem()
 {
     soundActive = false;
     stopAllSounds();
@@ -189,7 +189,7 @@ void AudioSystem::destroySoundSystem()
     soundThread.join();
 }
 
-void AudioSystem::stopAllSounds()
+void OpenALAudioSystem::stopAllSounds()
 {
     for (const auto& sound : playedSounds)
     {
@@ -200,7 +200,7 @@ void AudioSystem::stopAllSounds()
     playedSounds.clear();
 }
 
-void AudioSystem::prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sounds)
+void OpenALAudioSystem::prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sounds)
 {
     for (const auto& sound : sounds)
     {
@@ -209,7 +209,7 @@ void AudioSystem::prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sou
     }
 }
 
-void AudioSystem::destroyAllSounds()
+void OpenALAudioSystem::destroyAllSounds()
 {
     for (const auto& buffer : buffers)
     {
@@ -217,7 +217,7 @@ void AudioSystem::destroyAllSounds()
     }
 }
 
-void AudioSystem::playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg)
+void OpenALAudioSystem::playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg)
 {
     std::shared_ptr<const WaveFile> waveFile = audioStore.getSound(soundId);
     if (!waveFile)
@@ -230,7 +230,7 @@ void AudioSystem::playSound(const AudioStore& audioStore, int soundId, SoundConf
     playSound(soundSource);
 }
 
-void AudioSystem::playSound(SoundSource source)
+void OpenALAudioSystem::playSound(SoundSource source)
 {
     // Periodically clean up sounds that have finished
     cleanUpPlayedSounds();
@@ -244,7 +244,7 @@ void AudioSystem::playSound(SoundSource source)
     soundReadyCondition.notify_one();
 }
 
-void AudioSystem::cleanUpPlayedSounds()
+void OpenALAudioSystem::cleanUpPlayedSounds()
 {
     for (auto it = playedSounds.cbegin(); it != playedSounds.cend(); /* no increment */)
     {
@@ -261,7 +261,7 @@ void AudioSystem::cleanUpPlayedSounds()
     }
 }
 
-bool AudioSystem::isSoundPlaying(ALuint sourceId) const
+bool OpenALAudioSystem::isSoundPlaying(SoundSourceId sourceId) const
 {
     ALint state;
     alGetSourcei(sourceId, AL_SOURCE_STATE, &state);

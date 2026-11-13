@@ -8,6 +8,7 @@
 #pragma warning(disable : 6285 26437 26450 26451 26495 26498 26800)
 #include <spdlog/spdlog.h>
 #pragma warning(pop)
+#include <nlohmann/json_fwd.hpp>
 
 #include <string>
 
@@ -39,5 +40,11 @@ void initLogging(
 /** Creates a new log "category" that can have its own independent log level.
  * This should be called exactly once per category. */
 Logger makeLogCategory(const std::string& category, const std::string& logLevel);
+
+/** Creates all of the log categories used by the game.
+ * This should be called exactly once, before any categories are used (otherwise the LOG_X_CATEGORY macros will crash).
+ * The log level of each category is read from the config (e.g. "logLevelPathfinding"), if present; otherwise,
+ * `defaultLogLevel` is used. */
+void makeLogCategories(const nlohmann::json& cfg, const std::string& defaultLogLevel);
 
 }}  // namespace Rival::LogUtils

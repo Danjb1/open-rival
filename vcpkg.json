@@ -1,5 +1,6 @@
 {
   "dependencies": [
+    { "name": "catch2", "version>=": "3.9.0" },
     { "name": "freetype", "version>=": "2.13.3" },
     { "name": "glew", "version>=": "2.2.0#6" },
     { "name": "glm", "version>=": "1.0.1#3" },

@@ -12,6 +12,7 @@
 #include <utility>  // std::move, std::piecewise_construct
 
 #include "application/Application.h"
+#include "audio/openal/OpenALAudioSystem.h"
 #include "gfx/opengl/GLRenderer.h"
 #include "input/Input.h"
 #include "lobby/LobbyState.h"
@@ -63,11 +64,7 @@ static void initLogging(const json& cfg)
     const bool logToConsole = ConfigUtils::get(cfg, "logToConsole", false);
     const bool logToFile = ConfigUtils::get(cfg, "logToFile", true);
     LogUtils::initLogging(logLevel, logToConsole, logToFile, "Open-Rival");
-
-    // Categories
-    LogUtils::makeLogCategory("attack", ConfigUtils::get(cfg, "logLevelAttack", defaultLogLevel));
-    LogUtils::makeLogCategory("movement", ConfigUtils::get(cfg, "logLevelMovement", defaultLogLevel));
-    LogUtils::makeLogCategory("pathfinding", ConfigUtils::get(cfg, "logLevelPathfinding", defaultLogLevel));
+    LogUtils::makeLogCategories(cfg, defaultLogLevel);
 }
 
 static void startApplication(const ProgramOptions& options)
@@ -109,7 +106,7 @@ static void startApplication(const ProgramOptions& options)
     ResourceLoader(cfg, &renderer, fontLib, res);
 
     // --- Audio ---
-    AudioSystem audioSystem;
+    OpenALAudioSystem audioSystem;
     audioSystem.setMidiActive(ConfigUtils::get(cfg, "midiEnabled", true));
     audioSystem.setSoundActive(ConfigUtils::get(cfg, "soundEnabled", true));
     audioSystem.prepareSounds(res.getAllSounds());

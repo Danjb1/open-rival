@@ -74,7 +74,7 @@ void VoiceComponent::playSound(UnitSoundType soundType)
 bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
 {
     // There can only be 1 voice clip playing at a time, per unit type
-    std::unordered_map<ALuint, SoundSource> playedSounds = audioSystem.getPlayedSounds();
+    std::unordered_map<SoundSourceId, SoundSource> playedSounds = audioSystem.getPlayedSounds();
 
     for (const auto& playedSound : playedSounds)
     {
@@ -84,7 +84,7 @@ bool VoiceComponent::isUnitTypeAlreadySpeaking(UnitType unitType) const
             continue;
         }
 
-        ALuint sourceId = playedSound.first;
+        SoundSourceId sourceId = playedSound.first;
         if (audioSystem.isSoundPlaying(sourceId))
         {
             return true;

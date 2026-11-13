@@ -1,4 +1,5 @@
-#include "catch2/catch.h"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
 
 #include "game/World.h"
 #include "gfx/Camera.h"
@@ -151,7 +152,7 @@ SCENARIO("Camera should be the correct size", "[camera]")
                     // At the max zoom level (2.0),
                     // half as many tiles should be visible
                     REQUIRE(cameraWidth == 10.f);
-                    REQUIRE(cameraHeight == Approx(5.625f));
+                    REQUIRE(cameraHeight == Catch::Approx(5.625f));
                 }
             }
         }

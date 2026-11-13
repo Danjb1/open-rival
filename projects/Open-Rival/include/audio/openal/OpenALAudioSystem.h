@@ -1,0 +1,171 @@
+#pragma once
+
+#include <AL/al.h>
+
+#include <condition_variable>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <type_traits>
+#include <unordered_map>
+
+#include "audio/AudioSystem.h"
+#include "audio/MidiFile.h"
+#include "audio/MidiPlayer.h"
+#include "audio/SoundSource.h"
+#include "audio/Sounds.h"
+
+namespace Rival {
+
+// We use OpenAL source IDs directly as our SoundSourceIds, which avoids any need to convert between them
+static_assert(std::is_same_v<ALuint, SoundSourceId>, "SoundSourceId must match OpenAL's source ID type");
+
+class AudioStore;
+class WaveFile;
+
+/** AudioSystem that plays sounds using OpenAL, and MIDI using RtMidi. */
+class OpenALAudioSystem : public AudioSystem
+{
+public:
+    OpenALAudioSystem();
+    ~OpenALAudioSystem();
+
+    // Disable moving / copying
+    OpenALAudioSystem(const OpenALAudioSystem& other) = delete;
+    OpenALAudioSystem(OpenALAudioSystem&& other) = delete;
+    OpenALAudioSystem& operator=(const OpenALAudioSystem& other) = delete;
+    OpenALAudioSystem& operator=(OpenALAudioSystem&& other) = delete;
+
+    ///////////////////////////////////////////////////////////////////////
+    // MIDI playback
+    ///////////////////////////////////////////////////////////////////////
+
+public:
+    /** Enables or disables MIDI playback. */
+    void setMidiActive(bool active) override;
+
+    /** Plays the given MIDI file.
+     * Requires that MIDI playback is enabled. */
+    void playMidi(std::shared_ptr<const MidiFile> midi) override;
+
+private:
+    /** Plays the current MIDI track on a loop, for as long as MIDI playback
+     * is enabled. */
+    void midiThreadLoop();
+
+    /** Causes the current thread to wait until `midiReadyCondition` is
+     * notified, and the current MIDI track is set to a non-empty file. */
+    void waitForMidi();
+
+    /** Initializes the MIDI device, and starts the MIDI thread. */
+    void startMidiSystem();
+
+    /** Cleans up all MIDI resources. */
+    void destroyMidiSystem();
+
+private:
+    /** MidiPlayer used to play MIDI files synchronously in a background
+     * thread. */
+    MidiPlayer midiPlayer;
+
+    /** The MIDI track being played.
+     *
+     * If this is an empty MidiFile, the MIDI thread will wait for
+     * `midiReadyCondition` to be notified. */
+    std::shared_ptr<const MidiFile> currentMidiTrack;
+
+    /** Background thread used to play MIDI files. */
+    std::thread midiThread;
+
+    /** Condition used to wait / notify the MIDI thread. */
+    std::condition_variable midiReadyCondition;
+
+    /** Mutex used to govern access to the current MIDI track. */
+    std::mutex midiMutex;
+
+    /** Flag set when MIDI playback is enabled. */
+    bool midiActive;
+
+    ///////////////////////////////////////////////////////////////////////
+    // WAV playback
+    ///////////////////////////////////////////////////////////////////////
+
+public:
+    /** Enables or disables sound playback. */
+    void setSoundActive(bool active) override;
+
+    /** Prepares a list of sounds for future playback.
+     * This must be called before any of these sounds can be played. */
+    void prepareSounds(std::vector<std::shared_ptr<const WaveFile>> sounds) override;
+
+    /** Finds and plays the given sound.
+     * Requires that sound playback is enabled. */
+    void playSound(const AudioStore& audioStore, int soundId, SoundConfig cfg = {}) override;
+
+    /** Plays the given sound.
+     * Requires that sound playback is enabled. */
+    void playSound(SoundSource source) override;
+
+    /** Determines if the given sound source is currently playing. */
+    bool isSoundPlaying(SoundSourceId sourceId) const override;
+
+    /** Gets the most recently played sounds.
+     * Note that these sounds may already have finished playing. */
+    std::unordered_map<SoundSourceId, SoundSource> getPlayedSounds() const override
+    {
+        return playedSounds;
+    }
+
+private:
+    /** Plays sounds from the queue, for as long as sound playback is
+     * enabled. */
+    void soundThreadLoop();
+
+    /** Causes the current thread to wait until `soundReadyCondition` is
+     * notified, and the sound queue is not empty. */
+    void waitForSound();
+
+    /** Plays the next sound from the queue. */
+    void playNextSound();
+
+    /** Initializes the sound device, and starts the MIDI thread. */
+    void startSoundSystem();
+
+    /** Cleans up all sound resources. */
+    void destroySoundSystem();
+
+    /** Stops all sounds that are playing. */
+    void stopAllSounds();
+
+    /** Cleans up all sound sources that have finished playing. */
+    void cleanUpPlayedSounds();
+
+    /** Destroys all prepared sounds.
+     * After this they can no longer be played. */
+    void destroyAllSounds();
+
+private:
+    /** Buffer IDs associated with each prepared sound. */
+    std::unordered_map<std::shared_ptr<const WaveFile>, ALuint> buffers;
+
+    /** Queue of sounds waiting to be played. */
+    std::queue<SoundSource> soundQueue;
+
+    /** Map of sounds that are currently playing. */
+    std::unordered_map<ALuint, SoundSource> playedSounds;
+
+    /** Background thread used to play sound files. */
+    std::thread soundThread;
+
+    /** Condition used to wait / notify the sound thread. */
+    std::condition_variable soundReadyCondition;
+
+    /** Mutex used to govern access to the sound queue. */
+    std::mutex soundQueueMutex;
+
+    /** Flag set when sound playback is enabled. */
+    bool soundActive;
+};
+
+}  // namespace Rival

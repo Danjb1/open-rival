@@ -1,4 +1,4 @@
-#include "catch2/catch.h"
+#include <catch2/catch_test_macros.hpp>
 
 #include <array>
 
@@ -52,7 +52,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
 
         for (const MapNode& node : enclosure)
         {
-            world.setPassability(node, TilePassability::Blocked);
+            world.getPassabilityMap()->setPassability(node, TilePassability::Blocked);
         }
 
         WHEN("Trying to pathfind out of the enclosure")
@@ -125,11 +125,11 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
                 REQUIRE(!walkerComponent1->getMovement().isValid());
                 REQUIRE(!walkerComponent2->getMovement().isValid());
                 REQUIRE((e1->getPos() == destination || e2->getPos() == destination));
-                REQUIRE(world.getPassability(destination) == TilePassability::GroundUnit);
-                REQUIRE((world.getPassability({ 1, 1 }) == TilePassability::Clear
-                        || world.getPassability({ 2, 2 }) == TilePassability::Clear));
-                REQUIRE((world.getPassability({ 1, 1 }) == TilePassability::GroundUnit
-                        || world.getPassability({ 2, 2 }) == TilePassability::GroundUnit));
+                REQUIRE(world.getPassabilityMap()->getPassability(destination) == TilePassability::GroundUnit);
+                REQUIRE((world.getPassabilityMap()->getPassability({ 1, 1 }) == TilePassability::Clear
+                        || world.getPassabilityMap()->getPassability({ 2, 2 }) == TilePassability::Clear));
+                REQUIRE((world.getPassabilityMap()->getPassability({ 1, 1 }) == TilePassability::GroundUnit
+                        || world.getPassabilityMap()->getPassability({ 2, 2 }) == TilePassability::GroundUnit));
             }
         }
     }
@@ -161,8 +161,8 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
             THEN("the passability of the tiles is updated")
             {
-                REQUIRE(world.getPassability({ 1, 1 }) == TilePassability::GroundUnitLeaving);
-                REQUIRE(world.getPassability({ 1, 2 }) == TilePassability::GroundUnit);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 1 }) == TilePassability::GroundUnitLeaving);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 2 }) == TilePassability::GroundUnit);
             }
         }
 
@@ -183,8 +183,8 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
             THEN("the passability of the tiles is updated")
             {
-                REQUIRE(world.getPassability({ 1, 1 }) == TilePassability::Clear);
-                REQUIRE(world.getPassability({ 1, 2 }) == TilePassability::GroundUnit);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 1 }) == TilePassability::Clear);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 2 }) == TilePassability::GroundUnit);
             }
         }
     }
@@ -215,8 +215,8 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
 
             THEN("the passability of the tiles is unchanged")
             {
-                REQUIRE(world.getPassability({ 1, 1 }) == TilePassability::GroundUnit);
-                REQUIRE(world.getPassability({ 1, 2 }) == TilePassability::GroundUnit);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 1 }) == TilePassability::GroundUnit);
+                REQUIRE(world.getPassabilityMap()->getPassability({ 1, 2 }) == TilePassability::GroundUnit);
             }
         }
     }
