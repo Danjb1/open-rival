@@ -1,7 +1,5 @@
 #include "gfx/opengl/ShaderUtils.h"
 
-#include "utils/SDLWrapper.h"
-
 #include <stdio.h>
 
 #include <fstream>

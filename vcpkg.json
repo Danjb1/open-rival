@@ -6,8 +6,8 @@
     { "name": "nlohmann-json", "version>=": "3.11.2" },
     { "name": "openal-soft", "version>=": "1.23.1" },
     { "name": "rtmidi", "version>=": "5.0.0" },
-    { "name": "sdl2", "version>=": "2.32.8" },
-    { "name": "sdl2-image", "version>=": "2.6.3" },
+    { "name": "sdl3", "version>=": "3.2.20" },
+    { "name": "sdl3-image", "version>=": "3.2.4", "features": [ "png" ] },
     { "name": "spdlog", "version>=": "1.14.1" }
   ]
 }

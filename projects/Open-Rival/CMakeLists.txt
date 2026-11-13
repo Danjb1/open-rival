@@ -70,8 +70,8 @@ find_package(glm REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(rtmidi REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
+find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL3_image CONFIG REQUIRED)
 find_package(spdlog REQUIRED)
 
 # Link dependencies
@@ -84,8 +84,8 @@ target_link_libraries(Open-Rival PRIVATE
     OpenAL::OpenAL
 	opengl32
     RtMidi::rtmidi
-    SDL2::SDL2
-    SDL2_image::SDL2_image
+    SDL3::SDL3
+    $<IF:$<TARGET_EXISTS:SDL3_image::SDL3_image-shared>,SDL3_image::SDL3_image-shared,SDL3_image::SDL3_image-static>
     spdlog::spdlog
     winmm
     Ws2_32

@@ -4,16 +4,13 @@
 
  - Rendering should be synced to refresh rate, if possible
     - For now, let's assume vsync is always enabled
-
  - If vsync is disabled for whatever reason, cap the FPS manually
     - Use `SDL_Delay(1)` to sleep for (at least) 1ms
-
  - Game logic should run at a fixed rate, regardless of refresh rate
     - If render rate is slower than the logic, execute logic multiple times per render
     - If render rate is faster than the logic, we should skip some render operations
         - There is no point rendering if nothing has changed!
         - Exception: if using vsync we should always render (?)
-
  - Calling `SDL_GL_SwapWindow` will swap the buffers at the next acceptable "swap interval"
     - With vsync enabled, this will be in-sync with the screen's refresh rate
     - With vsync disabled, this will happen immediately
@@ -21,8 +18,8 @@
     - This means we always have to call `SDL_GL_SwapWindow` before the swap interval occurs
 
 See:
-https://gamedev.stackexchange.com/questions/151877/handling-variable-frame-rate-in-sdl2
-https://gamedev.stackexchange.com/questions/79490/should-i-cap-the-frame-rate-in-sdl
+- https://gamedev.stackexchange.com/questions/151877/handling-variable-frame-rate-in-sdl2
+- https://gamedev.stackexchange.com/questions/79490/should-i-cap-the-frame-rate-in-sdl
 
 ### Fixed Timestep
 
@@ -62,49 +59,47 @@ make any guarantees about the screen's refresh rate.
 This is a simple *fixed timestep* loop based on:
 https://gamedev.stackexchange.com/questions/151877/handling-variable-frame-rate-in-sdl2
 
----
+```
+Uint32 timeStepMs = 1000 / 60;
+Uint32 nextUpdateDue = SDL_GetTicks();
 
-    Uint32 timeStepMs = 1000 / 60;
-    Uint32 nextUpdateDue = SDL_GetTicks();
+while (running){
+  Uint32 frameStartTime = SDL_GetTicks();
 
-    while (running){
-      Uint32 frameStartTime = SDL_GetTicks();
+  // Is the next update due?
+  if (vsyncEnabled || nextUpdateDue <= frameStartTime){
 
-      // Is the next update due?
-      if (vsyncEnabled || nextUpdateDue <= frameStartTime){
-
-        // Update the game logic, as many times as necessary to keep it in-sync
-        // with the refresh rate.
-        //
-        // For example:
-        //  - For a 30Hz monitor, this will run twice per render.
-        //  - For a 60Hz monitor, this will run once per render.
-        //  - For a 120Hz monitor, this will run every other render.
-        //
-        // If vsync is disabled, this should run once per render.
-        while (nextUpdateDue <= frameStartTime) {
-          update(timeStepMs);
-          nextUpdateDue += timeStepMs;
-        }
-
-        // Render the game once per iteration.
-        // With vsync enabled, this matches the screen's refresh rate.
-        // Otherwise, this matches our target FPS.
-        render();
-        
-        // If vsync is enabled this will wait until the next swap interval
-        SDL_GL_SwapWindow();
-
-      } else {
-        // Next update is not yet due.
-        // Sleep for the shortest possible time, so as not to risk overshooting!
-        SDL_Delay(1);
-      }
+    // Update the game logic, as many times as necessary to keep it in-sync
+    // with the refresh rate.
+    //
+    // For example:
+    //  - For a 30Hz monitor, this will run twice per render.
+    //  - For a 60Hz monitor, this will run once per render.
+    //  - For a 120Hz monitor, this will run every other render.
+    //
+    // If vsync is disabled, this should run once per render.
+    while (nextUpdateDue <= frameStartTime) {
+      update(timeStepMs);
+      nextUpdateDue += timeStepMs;
     }
 
----
+    // Render the game once per iteration.
+    // With vsync enabled, this matches the screen's refresh rate.
+    // Otherwise, this matches our target FPS.
+    render();
+    
+    // If vsync is enabled this will wait until the next swap interval
+    SDL_GL_SwapWindow();
 
-Notes:
+  } else {
+    // Next update is not yet due.
+    // Sleep for the shortest possible time, so as not to risk overshooting!
+    SDL_Delay(1);
+  }
+}
+```
+
+**Notes:**
 
  - We could limit the number of times the logic loop runs.
     This would mean that if a lagspike occurs, the game would slow down instead

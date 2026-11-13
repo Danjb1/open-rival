@@ -1,4 +1,4 @@
-#include "utils/SDLWrapper.h"  // Needed for SDL_MAIN_HANDLED
+#include "utils/SDLWrapper.h"  // Needed for SDL_Quit
 #include <spdlog/spdlog.h>
 
 #include <memory>

@@ -1,7 +1,7 @@
 #include "window/sdl/SDLWindowImpl.h"
 
 #include "utils/SDLWrapper.h"
-#include <SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 
 #include "application/ResourceLoader.h"
 #include "utils/LogUtils.h"
@@ -12,14 +12,14 @@ namespace {
 
 KeyCode toKeyCode(SDL_Keycode sdlKey)
 {
-    if (sdlKey >= SDLK_a && sdlKey <= SDLK_z)
+    if (sdlKey >= SDLK_A && sdlKey <= SDLK_Z)
     {
-        return static_cast<KeyCode>(static_cast<int>(KeyCode::A) + (sdlKey - SDLK_a));
+        return static_cast<KeyCode>(static_cast<int>(KeyCode::A) + static_cast<int>(sdlKey - SDLK_A));
     }
 
     if (sdlKey >= SDLK_0 && sdlKey <= SDLK_9)
     {
-        return static_cast<KeyCode>(static_cast<int>(KeyCode::Num0) + (sdlKey - SDLK_0));
+        return static_cast<KeyCode>(static_cast<int>(KeyCode::Num0) + static_cast<int>(sdlKey - SDLK_0));
     }
 
     switch (sdlKey)
@@ -66,12 +66,20 @@ MouseButton toMouseButton(Uint8 sdlButton)
 
 MouseButtonEvent toMouseButtonEvent(const SDL_MouseButtonEvent& sdlEvent)
 {
-    return { toMouseButton(sdlEvent.button), sdlEvent.x, sdlEvent.y };
+    // SDL3 reports mouse positions as floats, but we only care about whole pixels
+    return { toMouseButton(sdlEvent.button), static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) };
+}
+
+MouseMoveEvent toMouseMoveEvent(const SDL_MouseMotionEvent& sdlEvent)
+{
+    return { static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) };
 }
 
 MouseWheelEvent toMouseWheelEvent(const SDL_MouseWheelEvent& sdlEvent)
 {
-    int delta = sdlEvent.y;
+    // SDL3 reports precise (fractional) scroll amounts in `y`, e.g. for touchpads.
+    // `integer_y` accumulates these into whole scroll "ticks", matching SDL2's behaviour.
+    int delta = sdlEvent.integer_y;
     if (sdlEvent.direction == SDL_MOUSEWHEEL_FLIPPED)
     {
         delta *= -1;
@@ -86,12 +94,7 @@ SDLWindowImpl::SDLWindowImpl(int width, int height, const char* title)
 {
     initSDL();
 
-    sdlWindow = SDL_CreateWindow(title,
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            width,
-            height,
-            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    sdlWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL);
 
     if (sdlWindow == nullptr)
     {
@@ -109,7 +112,7 @@ SDLWindowImpl::SDLWindowImpl(int width, int height, const char* title)
 
     // Try to enable vsync.
     // Note that vsync may already be enabled by default!
-    if (SDL_GL_SetSwapInterval(1) == 0)
+    if (SDL_GL_SetSwapInterval(1))
     {
         vsyncEnabled = true;
     }
@@ -117,17 +120,13 @@ SDLWindowImpl::SDLWindowImpl(int width, int height, const char* title)
     {
         LOG_WARN("Failed to enable vsync! SDL Error: {}", SDL_GetError());
     }
-
-    // Set the icon
-    std::string iconFilename = ResourceLoader::txDir + "icon.png";
-    SDL_Surface* surface;
-    surface = IMG_Load(iconFilename.c_str());
-    setIcon(surface);
-    SDL_FreeSurface(surface);
 }
 
 SDLWindowImpl::~SDLWindowImpl()
 {
+    SDL_GL_DestroyContext(glContext);
+    glContext = nullptr;
+
     SDL_DestroyWindow(sdlWindow);
     sdlWindow = nullptr;
 }
@@ -144,11 +143,7 @@ void SDLWindowImpl::initSDL()
 
     LOG_DEBUG("Initializing...");
 
-    // This must be called before SDL_Init since we're not using SDL_main
-    // as an entry point
-    SDL_SetMainReady();
-
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (!SDL_Init(SDL_INIT_VIDEO))
     {
         LOG_ERROR("Failed to initialize SDL");
         throw std::runtime_error(SDL_GetError());
@@ -160,7 +155,7 @@ void SDLWindowImpl::initSDL()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     // Hide cursor
-    SDL_ShowCursor(SDL_DISABLE);
+    SDL_HideCursor();
 
     isInitialized = true;
 }
@@ -178,7 +173,7 @@ void SDLWindowImpl::setPos(int x, int y)
 void SDLWindowImpl::pollEvents()
 {
     SDL_Event e;
-    while (SDL_PollEvent(&e) != 0)
+    while (SDL_PollEvent(&e))
     {
         if (!listener)
         {
@@ -186,44 +181,36 @@ void SDLWindowImpl::pollEvents()
             continue;
         }
 
-        if (e.type == SDL_QUIT)
+        switch (e.type)
         {
+        case SDL_EVENT_QUIT:
             listener->onExitRequested();
-        }
-        else if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
-        {
+            break;
+        case SDL_EVENT_WINDOW_FOCUS_LOST:
             listener->onFocusLost();
-        }
-        else if (e.type == SDL_KEYDOWN)
-        {
-            listener->onKeyDownEvent(KeyEvent(toKeyCode(e.key.keysym.sym)));
-        }
-        else if (e.type == SDL_KEYUP)
-        {
-            listener->onKeyUpEvent(KeyEvent(toKeyCode(e.key.keysym.sym)));
-        }
-        else if (e.type == SDL_MOUSEBUTTONDOWN)
-        {
+            break;
+        case SDL_EVENT_KEY_DOWN:
+            listener->onKeyDownEvent(KeyEvent(toKeyCode(e.key.key)));
+            break;
+        case SDL_EVENT_KEY_UP:
+            listener->onKeyUpEvent(KeyEvent(toKeyCode(e.key.key)));
+            break;
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
             listener->onMouseDownEvent(toMouseButtonEvent(e.button));
-        }
-        else if (e.type == SDL_MOUSEBUTTONUP)
-        {
+            break;
+        case SDL_EVENT_MOUSE_BUTTON_UP:
             listener->onMouseUpEvent(toMouseButtonEvent(e.button));
-        }
-        else if (e.type == SDL_MOUSEMOTION)
-        {
-            listener->onMouseMoveEvent(MouseMoveEvent(e.motion.x, e.motion.y));
-        }
-        else if (e.type == SDL_MOUSEWHEEL)
-        {
+            break;
+        case SDL_EVENT_MOUSE_MOTION:
+            listener->onMouseMoveEvent(toMouseMoveEvent(e.motion));
+            break;
+        case SDL_EVENT_MOUSE_WHEEL:
             listener->onMouseWheelEvent(toMouseWheelEvent(e.wheel));
+            break;
+        default:
+            break;
         }
     }
-}
-
-void SDLWindowImpl::setIcon(SDL_Surface* surface)
-{
-    SDL_SetWindowIcon(sdlWindow, surface);
 }
 
 }  // namespace Rival

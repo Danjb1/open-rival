@@ -32,11 +32,11 @@
 
 > **Used for:** MIDI playback.
 
-### [SDL2](https://github.com/libsdl-org/SDL)
+### [SDL3](https://github.com/libsdl-org/SDL)
 
 > **Used for:** Window creation and input.
 
-[Install guide](https://wiki.libsdl.org/SDL2/Installation)
+[Wiki](https://wiki.libsdl.org/SDL3/FrontPage)
 
 ### [SDL_image](https://github.com/libsdl-org/SDL_image)
 
@@ -64,8 +64,8 @@ These are the DLL files that should be shipped with the game. They can all be fo
 
 ```
 OpenAL32.dll
-SDL2_image.dll
-SDL2.dll
+SDL3_image.dll
+SDL3.dll
 brotlicommon.dll
 brotlidec.dll
 bz2.dll

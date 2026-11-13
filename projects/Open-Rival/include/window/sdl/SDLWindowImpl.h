@@ -17,8 +17,6 @@ public:
     void setPos(int x, int y) override;
     void pollEvents() override;
 
-    void setIcon(SDL_Surface* surface);
-
 private:
     static void initSDL();
 

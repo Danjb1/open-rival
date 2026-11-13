@@ -19,7 +19,7 @@
     - JSON for Modern C++
     - OpenAL Soft
     - RtMidi
-    - SDL2
+    - SDL3
     - SDL_image
     - spdlog
 
