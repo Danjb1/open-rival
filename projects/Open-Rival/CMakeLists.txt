@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.16)
-
 ################################################################################
 # Source files
 # -------------
@@ -321,6 +319,31 @@ set(OPEN_RIVAL_HEADERS
 )
 # END GENERATED FILE LIST
 
+# Low-level utilities that are shared with the setup / extraction tools.
+# These go in Open-Rival-common, so they must not depend on anything else in
+# the game.
+set(OPEN_RIVAL_COMMON_SOURCES
+    src/gfx/Image.cpp
+    src/gfx/Palette.cpp
+    src/utils/BinaryFileReader.cpp
+    src/utils/FileUtils.cpp
+    src/utils/LogUtils.cpp
+    src/utils/MathUtils.cpp
+    src/utils/StringUtils.cpp
+)
+set(OPEN_RIVAL_COMMON_HEADERS
+    include/gfx/Image.h
+    include/gfx/Palette.h
+    include/utils/BinaryFileReader.h
+    include/utils/ConfigUtils.h
+    include/utils/FileUtils.h
+    include/utils/LogUtils.h
+    include/utils/MathUtils.h
+    include/utils/StringUtils.h
+)
+list(REMOVE_ITEM OPEN_RIVAL_SOURCES ${OPEN_RIVAL_COMMON_SOURCES})
+list(REMOVE_ITEM OPEN_RIVAL_HEADERS ${OPEN_RIVAL_COMMON_HEADERS})
+
 # Files under `main` belong to the executable; everything else goes in the
 # library (which is shared with the unit tests).
 set(OPEN_RIVAL_MAIN_SOURCES ${OPEN_RIVAL_SOURCES})
@@ -339,6 +362,15 @@ set(OPEN_RIVAL_DOCS
 # Extra project files (not required for compilation, but helpful to have at hand)
 set(OPEN_RIVAL_EXTRA_FILES
     "${CMAKE_SOURCE_DIR}/projects/.clang-format"
+    "${CMAKE_CURRENT_LIST_DIR}/Version.h.in"
+)
+
+# Generate Version.h from the project version (see the root CMakeLists.txt).
+# This goes in the build folder, so the generated file is never committed.
+set(OPEN_RIVAL_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+configure_file(
+    "${CMAKE_CURRENT_LIST_DIR}/Version.h.in"
+    "${OPEN_RIVAL_GENERATED_INCLUDE_DIR}/Version.h"
 )
 
 # Include directories
@@ -353,9 +385,6 @@ set(OPEN_RIVAL_RESOURCES
     "${CMAKE_CURRENT_LIST_DIR}/resource.h"
 )
 
-# DLLs folder
-set(OPEN_RIVAL_DLL_SRC_DIR "${CMAKE_SOURCE_DIR}/dist")
-
 # Resources folder
 set(OPEN_RIVAL_RES_SRC_DIR "${CMAKE_SOURCE_DIR}/dist/res")
 
@@ -363,14 +392,54 @@ set(OPEN_RIVAL_RES_SRC_DIR "${CMAKE_SOURCE_DIR}/dist/res")
 set(OPEN_RIVAL_CONFIG_SRC "${CMAKE_SOURCE_DIR}/dist/config.json")
 
 # Organise files into folders (filters)
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Source Files" FILES ${OPEN_RIVAL_SOURCES} ${OPEN_RIVAL_MAIN_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_HEADERS} ${OPEN_RIVAL_MAIN_HEADERS})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src PREFIX "Source Files" FILES ${OPEN_RIVAL_SOURCES} ${OPEN_RIVAL_MAIN_SOURCES} ${OPEN_RIVAL_COMMON_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/include PREFIX "Source Files" FILES ${OPEN_RIVAL_HEADERS} ${OPEN_RIVAL_MAIN_HEADERS} ${OPEN_RIVAL_COMMON_HEADERS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} PREFIX "Resources" FILES ${OPEN_RIVAL_RESOURCES})
 source_group("Docs" FILES ${OPEN_RIVAL_DOCS})
 
+# Find dependencies
+find_package(Freetype REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glm REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(rtmidi REQUIRED)
+find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL3_image CONFIG REQUIRED)
+find_package(spdlog REQUIRED)
+
 ################################################################################
-# Library
-# --------
+# Common library
+# ---------------
+# Low-level utilities that are shared between the game and the setup /
+# extraction tools.
+################################################################################
+
+add_library(Open-Rival-common STATIC
+    ${OPEN_RIVAL_COMMON_SOURCES}
+    ${OPEN_RIVAL_COMMON_HEADERS}
+)
+
+target_include_directories(Open-Rival-common PUBLIC
+    "${CMAKE_CURRENT_LIST_DIR}/include"
+    "${OPEN_RIVAL_GENERATED_INCLUDE_DIR}"
+)
+
+# These are PUBLIC because our headers expose these libraries' types
+target_link_libraries(Open-Rival-common
+  PUBLIC
+    nlohmann_json::nlohmann_json
+    spdlog::spdlog
+    project_options
+  PRIVATE
+    project_warnings
+)
+
+################################################################################
+# Game library
+# -------------
 # Contains all of the game code, so that it can be shared between the
 # executable and the unit tests.
 ################################################################################
@@ -385,38 +454,26 @@ target_include_directories(Open-Rival-lib PUBLIC
     ${OPEN_RIVAL_INCLUDE_DIRECTORIES}
 )
 
-# Find dependencies
-find_package(Freetype REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(glm REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-find_package(nlohmann_json REQUIRED)
-find_package(OpenAL REQUIRED)
-find_package(rtmidi REQUIRED)
-find_package(SDL3 CONFIG REQUIRED)
-find_package(SDL3_image CONFIG REQUIRED)
-find_package(spdlog REQUIRED)
-
 # Link dependencies.
 # These are PUBLIC because our headers expose many of these libraries' types.
 target_link_libraries(Open-Rival-lib
   PUBLIC
+    Open-Rival-common
     Freetype::Freetype
     GLEW::glew
     glm::glm
-	glu32
     $<$<CONFIG:Debug>:imgui::imgui> # debug only
-    nlohmann_json::nlohmann_json
     OpenAL::OpenAL
-	opengl32
+    OpenGL::GL
+    OpenGL::GLU
     RtMidi::rtmidi
     SDL3::SDL3
     $<IF:$<TARGET_EXISTS:SDL3_image::SDL3_image-shared>,SDL3_image::SDL3_image-shared,SDL3_image::SDL3_image-static>
-    spdlog::spdlog
-    winmm
-    Ws2_32
-  PRIVATE
     project_options
+    # Windows-only libraries (multimedia timers, sockets)
+    $<$<PLATFORM_ID:Windows>:winmm>
+    $<$<PLATFORM_ID:Windows>:Ws2_32>
+  PRIVATE
     project_warnings
 )
 
@@ -458,7 +515,6 @@ set_target_properties(Open-Rival PROPERTIES
 
 target_link_libraries(Open-Rival PRIVATE
     Open-Rival-lib
-    project_options
     project_warnings
 )
 
@@ -492,22 +548,11 @@ add_dependencies(Open-Rival copy_assets)
 # ------------
 # These are copied to the build folder when CMake runs, but changes to these
 # files will not trigger a new CMake build.
+#
+# Note that DLLs are copied next to the executable by vcpkg after each build.
 ################################################################################
-
-# Copy DLL files to build folder
-file(GLOB OPEN_RIVAL_DLL_FILES "${OPEN_RIVAL_DLL_SRC_DIR}/*.dll")
-foreach(DLL ${OPEN_RIVAL_DLL_FILES})
-    file(COPY ${DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-endforeach()
 
 # Copy config file to build folder (if not present)
 if(NOT(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/config.json))
     file(COPY ${OPEN_RIVAL_CONFIG_SRC} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
-
-# Copy dev files to project folder
-foreach(FILE ${OPEN_RIVAL_DEV_FILES})
-    if(EXISTS ${FILE})
-        file(COPY ${FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-    endif()
-endforeach()

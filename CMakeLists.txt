@@ -1,25 +1,40 @@
-cmake_minimum_required(VERSION 3.10)
-project(Open-Rival CXX)
+cmake_minimum_required(VERSION 3.21)
+project(Open-Rival
+    VERSION 0.5.0
+    DESCRIPTION "Faithful, modernized reimplementation of the 1998 RTS game Rival Realms"
+    LANGUAGES CXX
+)
 
 include(CMake/CompilerWarnings.cmake)
 include(CMake/StandardProjectSettings.cmake)
 
-set(CMAKE_CXX_STANDARD 20)
-
 MESSAGE(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 
-# This is seemingly an empty interface which all projects depend on... remove?
-add_library(project_options INTERFACE)
+################################################################################
+# Options
+################################################################################
 
-# Option specifications
 option(BUILD_TESTING "Build the unit tests" ON)
+option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
+
+################################################################################
+# Common project settings
+################################################################################
+
+# Projects can link with this "library" to use our common compiler settings
+add_library(project_options INTERFACE)
+target_compile_features(project_options INTERFACE cxx_std_20)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Projects can link with this "library" to use the warnings
 # specified in CompilerWarnings.cmake
 add_library(project_warnings INTERFACE)
 set_project_warnings(project_warnings)
 
-# Add projects
+################################################################################
+# Projects
+################################################################################
+
 add_subdirectory(projects/Open-Rival)
 if(BUILD_TESTING)
     # Registers tests with CTest (e.g. for `ctest` or the Visual Studio Test Explorer)

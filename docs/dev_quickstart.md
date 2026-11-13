@@ -68,6 +68,15 @@ cmake --preset windows-vs2022-x64
 
 At this point, it should be possible to build the solution using Visual Studio. However, do not attempt to run the game yet, as we still need to extract the required resources.
 
+Alternatively, the solution can be built (and the unit tests run) from the command line:
+
+```
+cmake --build --preset debug
+ctest --preset debug
+```
+
+> Use the `release` presets for a Release build.
+
 ### 5) Extract Resources
 
 To extract the required resources, build and run the [setup project](/projects/setup).

@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <utility>  // std::move, std::piecewise_construct
 
+#include "Version.h"
+
 #include "application/Application.h"
 #include "audio/openal/OpenALAudioSystem.h"
 #include "gfx/opengl/GLRenderer.h"
@@ -82,7 +84,8 @@ static void startApplication(const ProgramOptions& options)
 #endif
 
     // --- Window ---
-    SDLWindowImpl window(800, 600, "Rival Realms");
+    // Note that the Window keeps a pointer to the title, so we use a string literal here
+    SDLWindowImpl window(800, 600, "Rival Realms (Open-Rival v" OPEN_RIVAL_VERSION_STRING ")");
     if (options.hasWindowPosition())
     {
         auto windowPos = options.getWindowPos();

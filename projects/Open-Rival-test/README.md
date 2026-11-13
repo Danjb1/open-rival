@@ -13,7 +13,7 @@ The tests never create a window, OpenGL context or audio device. Where the game 
 Each test case is registered with CTest, so the tests can be run:
 
 - From the Visual Studio Test Explorer.
-- From the command line, using `ctest -C Debug` in the build folder.
+- From the command line, using `ctest --preset debug` (or `ctest --preset release`) in the root folder.
 - By running `Open-Rival-test.exe` directly (pass `-?` to see the available options).
 
 The test project can be excluded from the build by setting the CMake option `BUILD_TESTING=OFF`.

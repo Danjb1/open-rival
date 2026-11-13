@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.16)
-
 # --- Test Headers ---
 # These are header files that exist only in the test project.
 set(OPEN_RIVAL_TEST_HEADERS
@@ -47,7 +45,6 @@ find_package(Catch2 3 CONFIG REQUIRED)
 target_link_libraries(Open-Rival-test PRIVATE
     Open-Rival-lib
     Catch2::Catch2WithMain
-    project_options
     project_warnings
 )
 
