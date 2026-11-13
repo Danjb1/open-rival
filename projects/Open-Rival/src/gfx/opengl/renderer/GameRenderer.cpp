@@ -8,7 +8,6 @@
 #pragma warning(pop)
 
 #include "application/Resources.h"
-#include "window/Window.h"
 #include "game/GameState.h"
 #include "game/PlayerContext.h"
 #include "game/PlayerState.h"
@@ -18,6 +17,7 @@
 #include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
 #include "utils/Rect.h"
+#include "window/Window.h"
 
 namespace Rival {
 
@@ -51,17 +51,21 @@ GameRenderer::GameRenderer(const GameState& game,
 {
 }
 
-void GameRenderer::render(int delta)
+void GameRenderer::render(const FrameTiming& frameTiming)
 {
-    renderGameViaFramebuffer(delta);
+    renderGameViaFramebuffer(frameTiming);
     renderUi();
     renderText();
     renderDragSelect();
-    renderCursor(delta);
     renderMessages();
 }
 
-void GameRenderer::renderGameViaFramebuffer(int delta)
+CursorDef GameRenderer::getCurrentCursor() const
+{
+    return Cursor::getCurrentCursor(game, playerContext);
+}
+
+void GameRenderer::renderGameViaFramebuffer(const FrameTiming& frameTiming)
 {
     // Render to our framebuffer.
     // Here the viewport specifies the region of the framebuffer texture
@@ -72,7 +76,7 @@ void GameRenderer::renderGameViaFramebuffer(int delta)
     int canvasWidth = RenderUtils::getCanvasWidth(camera.getWidth());
     int canvasHeight = RenderUtils::getCanvasHeight(camera.getHeight());
     glViewport(0, 0, canvasWidth, canvasHeight);
-    renderGame(canvasWidth, canvasHeight, delta);
+    renderGame(canvasWidth, canvasHeight, frameTiming);
 
     // Render the framebuffer to the screen.
     // Here the viewport specifies the region of the game window that we
@@ -86,7 +90,7 @@ void GameRenderer::renderGameViaFramebuffer(int delta)
     renderFramebuffer(canvasWidth, canvasHeight);
 }
 
-void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
+void GameRenderer::renderGame(int viewportWidth, int viewportHeight, const FrameTiming& frameTiming)
 {
     // Clear framebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -108,13 +112,14 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, int delta)
     glUniform1f(Shaders::worldShader.transparentIndex, Palette::globalTransparentColor);  // Enable transparency
 
     // Render Tiles
-    tileRenderer.render(delta, camera, world.getTiles(), world.getWidth(), world.getHeight());
+    tileRenderer.render(
+            frameTiming.timeSinceLastRender, camera, world.getTiles(), world.getWidth(), world.getHeight());
 
     // Render Map Borders
     mapBorderRenderer.render();
 
     // Render Entities
-    entityRenderer.render(camera, world, delta);
+    entityRenderer.render(camera, world, frameTiming.timeSinceLastUpdate);
 
     // Render overlays
     renderGameOverlays(viewProjMatrix);
@@ -217,28 +222,6 @@ void GameRenderer::renderDragSelect()
     // Render the drag-select to the screen
     glViewport(0, 0, window->getWidth(), window->getHeight());
     dragSelectRenderer.render();
-}
-
-void GameRenderer::renderCursor(int delta)
-{
-    // Disable depth testing since the cursor is always on top
-    glDisable(GL_DEPTH_TEST);
-
-    // Use indexed texture shader
-    glUseProgram(Shaders::indexedTextureShader.programId);
-
-    // Determine our view-projection matrix
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
-
-    // Set uniform values
-    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
-    glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
-    glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
-    glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::cursorTransparentColor);
-
-    // Render the cursor to the screen
-    glViewport(0, 0, window->getWidth(), window->getHeight());
-    uiRenderer.renderCursor(delta);
 }
 
 // TMP

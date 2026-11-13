@@ -2,15 +2,15 @@
 
 #include "gfx/opengl/GLWrapper.h"
 
-#include "window/Window.h"
-#include "gfx/opengl/GLUtils.h"
 #include "gfx/Palette.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
+#include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
 #include "gfx/opengl/renderable/TextureRenderable.h"
 #include "gfx/opengl/renderer/UiRenderer.h"
 #include "utils/Rect.h"
+#include "window/Window.h"
 
 namespace Rival {
 
@@ -20,13 +20,12 @@ MenuRenderer::MenuRenderer(const TextureStore& textureStore, const Window* windo
     : textureStore(textureStore)
     , window(window)
     , viewport(viewport)
-    , cursorRenderer(textureStore, window)
     , backgroundImage(backgroundImageRect)
     , backgroundRenderable(textureStore.getMenuBackgroundTexture())
 {
 }
 
-void MenuRenderer::render(int delta)
+void MenuRenderer::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -38,7 +37,6 @@ void MenuRenderer::render(int delta)
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxY);
 
     renderBackground();
-    renderCursor(delta);
 
     // Restore the default palette
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, 0);
@@ -87,32 +85,6 @@ void MenuRenderer::sendBackgroundDataToGpu()
     glBindBuffer(GL_ARRAY_BUFFER, backgroundRenderable.getTexCoordVbo());
     int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
-}
-
-void MenuRenderer::renderCursor(int delta)
-{
-    // Disable depth testing since the cursor is always on top
-    glDisable(GL_DEPTH_TEST);
-
-    // Use indexed texture shader
-    glUseProgram(Shaders::indexedTextureShader.programId);
-
-    // Determine our view-projection matrix
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
-
-    // Set uniform values
-    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
-    glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
-    glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
-    glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::cursorTransparentColor);
-
-    // TMP: Use the game palette since we don't have menu cursor images yet
-    float paletteTxY = PaletteUtils::getPaletteTxY(PaletteUtils::paletteIndexGame);
-    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, paletteTxY);
-
-    // Render the cursor to the screen
-    glViewport(0, 0, window->getWidth(), window->getHeight());
-    cursorRenderer.render(Cursor::arrow, delta);
 }
 
 }  // namespace Rival

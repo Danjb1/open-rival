@@ -1,7 +1,5 @@
 #pragma once
 
-#include "utils/SDLWrapper.h"
-
 #include <memory>
 #include <random>
 #include <unordered_map>
@@ -38,7 +36,7 @@ enum class Direction : std::int8_t
 /**
  * Holds the current player input.
  */
-struct Input
+struct PlayerInput
 {
     Direction lastDirectionX = Direction::None;
     Direction lastDirectionY = Direction::None;
@@ -64,13 +62,13 @@ public:
 
     // Begin State override
     void onLoad() override;
-    void keyDown(const SDL_Keycode keyCode) override;
-    void keyUp(const SDL_Keycode keyCode) override;
-    void mouseDown(const SDL_MouseButtonEvent event) override;
-    void mouseUp(const SDL_MouseButtonEvent event) override;
-    void mouseWheelMoved(const SDL_MouseWheelEvent event) override;
+    void keyDown(const KeyEvent& evt) override;
+    void keyUp(const KeyEvent& evt) override;
+    void mouseDown(const MouseButtonEvent& evt) override;
+    void mouseUp(const MouseButtonEvent& evt) override;
+    void mouseWheelMoved(const MouseWheelEvent& evt) override;
     void update(int delta) override;
-    void render(int delta) override;
+    void render(const FrameTiming& frameTiming) override;
     // End State override
 
     // Begin WorldStore override
@@ -152,7 +150,7 @@ private:
     std::vector<std::shared_ptr<GameCommand>> outgoingCommands;
 
     /** The current player input. */
-    Input input = {};
+    PlayerInput playerInput = {};
 
     /** Tick number, incremented with each update. */
     int currentTick = 0;

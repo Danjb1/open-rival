@@ -32,20 +32,20 @@ public:
     EntityRenderer(const EntityRenderer&) = delete;
     EntityRenderer& operator=(const EntityRenderer&) = delete;
 
-    void render(const Camera& camera, const EntityContainer& entityContainer, int delta);
+    void render(const Camera& camera, const EntityContainer& entityContainer, float timeSinceLastUpdate);
 
-    static glm::vec2 getLerpOffset(const Entity& entity, int delta);
+    static glm::vec2 getLerpOffset(const Entity& entity, float timeSinceLastUpdate);
 
 private:
     void cleanUpStaleRenderables(const std::unordered_set<int>& validEntityIds);
     bool isEntityVisible(const Entity& entity, const Camera& camera) const;
-    void renderEntity(const Entity& entity, int delta);
+    void renderEntity(const Entity& entity, float timeSinceLastUpdate);
     SpriteRenderable* findOrCreateSpriteRenderable(int entityId, const SpriteComponent* spriteComponent);
     bool needsUpdate(const Entity& entity, const SpriteComponent& spriteComponent) const;
     void sendDataToGpu(const Entity& entity,
             const SpriteComponent& spriteComponent,
             const SpriteRenderable& spriteRenderable,
-            int delta) const;
+            float timeSinceLastUpdate) const;
     bool shouldRenderHitboxes() const;
     bool isEntityUnderMouse(const Entity& entity) const;
     void renderHitbox(const Entity& entity) const;

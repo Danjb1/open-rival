@@ -37,7 +37,7 @@ EntityRenderer::EntityRenderer(
 {
 }
 
-void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, int delta)
+void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, float timeSinceLastUpdate)
 {
     std::unordered_set<int> entityIds;
 
@@ -45,7 +45,7 @@ void EntityRenderer::render(const Camera& camera, const EntityContainer& entityC
         entityIds.insert(entity->getId());
         if (isEntityVisible(*entity, camera))
         {
-            renderEntity(*entity, delta);
+            renderEntity(*entity, timeSinceLastUpdate);
         }
     });
 
@@ -115,7 +115,7 @@ SpriteRenderable* EntityRenderer::findOrCreateSpriteRenderable(int entityId, con
     return iter->second.get();
 }
 
-void EntityRenderer::renderEntity(const Entity& entity, int delta)
+void EntityRenderer::renderEntity(const Entity& entity, float timeSinceLastUpdate)
 {
     // Get this Entity's SpriteComponent
     const SpriteComponent* spriteComponent = entity.getComponent<SpriteComponent>(SpriteComponent::key);
@@ -155,7 +155,7 @@ void EntityRenderer::renderEntity(const Entity& entity, int delta)
     // Update the data on the GPU
     if (needsUpdate(entity, *spriteComponent))
     {
-        sendDataToGpu(entity, *spriteComponent, *renderable, delta);
+        sendDataToGpu(entity, *spriteComponent, *renderable, timeSinceLastUpdate);
     }
 
     // Render
@@ -177,7 +177,7 @@ bool EntityRenderer::needsUpdate(const Entity& entity, const SpriteComponent& sp
 void EntityRenderer::sendDataToGpu(const Entity& entity,
         const SpriteComponent& spriteComponent,
         const SpriteRenderable& renderable,
-        int delta) const
+        float timeSinceLastUpdate) const
 {
     // Determine the frame of the texture to be rendered
     int txIndex = spriteComponent.getTxIndex();
@@ -190,7 +190,7 @@ void EntityRenderer::sendDataToGpu(const Entity& entity,
     y1 += static_cast<float>(RenderUtils::entityDrawOffsetY);
     y1 += spriteComponent.getOffsetY();
 
-    glm::vec2 lerpOffset = getLerpOffset(entity, delta);
+    glm::vec2 lerpOffset = getLerpOffset(entity, timeSinceLastUpdate);
     spriteComponent.lastLerpOffset = lerpOffset;
     x1 += lerpOffset.x;
     y1 += lerpOffset.y;
@@ -235,16 +235,19 @@ void EntityRenderer::sendDataToGpu(const Entity& entity,
  *
  * Due to the way tiles overlap, diagonal moves only actually span half a tile, in terms of pixels.
  */
-glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
+glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, float timeSinceLastUpdate)
 {
     glm::vec2 offset = { 0, 0 };
+
+    // Game logic times are measured in milliseconds
+    const float timeSinceLastUpdateMs = timeSinceLastUpdate * 1000.f;
 
     // Special handling for projectiles
     const ProjectileMovementComponent* projectileMoveComponent =
             entity.getComponent<ProjectileMovementComponent>(ProjectileMovementComponent::key);
     if (projectileMoveComponent)
     {
-        return projectileMoveComponent->getRenderOffset(delta);
+        return projectileMoveComponent->getRenderOffset(timeSinceLastUpdateMs);
     }
 
     // See if the Entity can move
@@ -265,7 +268,7 @@ glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, int delta)
     const Facing dir = MapUtils::getDir(movement.start, movement.destination);
 
     // Determine the overall "progress" through the movement (0-1)
-    const int timeElapsed = movement.timeElapsed + delta;
+    const float timeElapsed = movement.timeElapsed + timeSinceLastUpdateMs;
     float progress = std::min(static_cast<float>(timeElapsed) / movement.timeRequired, 1.f);
 
     if (movement.isPastHalfway())

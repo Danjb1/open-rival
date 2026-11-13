@@ -3,7 +3,24 @@
 #include <string>
 #include <vector>
 
+#include "input/Input.h"
+
 namespace Rival {
+
+class WindowListener
+{
+public:
+    virtual ~WindowListener() = default;
+
+    virtual void onExitRequested() = 0;
+    virtual void onFocusLost() = 0;
+    virtual void onKeyDownEvent(const KeyEvent& evt) = 0;
+    virtual void onKeyUpEvent(const KeyEvent& evt) = 0;
+    virtual void onMouseDownEvent(const MouseButtonEvent& evt) = 0;
+    virtual void onMouseUpEvent(const MouseButtonEvent& evt) = 0;
+    virtual void onMouseMoveEvent(const MouseMoveEvent& evt) = 0;
+    virtual void onMouseWheelEvent(const MouseWheelEvent& evt) = 0;
+};
 
 class Window
 {
@@ -19,6 +36,9 @@ public:
 
     virtual void swapBuffers() const = 0;
     virtual void setPos(int x, int y) = 0;
+    virtual void pollEvents() = 0;
+
+    void setListener(WindowListener* listener);
 
     int getWidth() const
     {
@@ -41,9 +61,10 @@ public:
     }
 
 protected:
-    const int width;
-    const int height;
-    const double aspectRatio;
+    WindowListener* listener = nullptr;
+    int width;
+    int height;
+    double aspectRatio;
     const char* title;
     bool vsyncEnabled { false };
 };

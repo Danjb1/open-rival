@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gfx/Texture.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival {
 
@@ -20,13 +21,13 @@ public:
     virtual void onEnterLobby(LobbyState* lobbyState) = 0;
 
     /** Renders the LobbyState. */
-    virtual void renderLobby(int delta) = 0;
+    virtual void renderLobby(const FrameTiming& frameTiming) = 0;
 
     /** Called whenever we enter the GameState. */
     virtual void onEnterGame(GameState* game) = 0;
 
     /** Renders the GameState. */
-    virtual void renderGame(int delta) = 0;
+    virtual void renderGame(const FrameTiming& frameTiming) = 0;
 
     /** Loads a Texture from a file. */
     virtual std::shared_ptr<const Texture> loadTexture(

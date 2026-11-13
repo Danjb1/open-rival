@@ -11,9 +11,9 @@
 
 #include "gfx/Camera.h"
 #include "gfx/Palette.h"
-#include "gfx/opengl/Shaders.h"
 #include "gfx/Spritesheet.h"
 #include "gfx/Texture.h"
+#include "gfx/opengl/Shaders.h"
 #include "utils/MathUtils.h"
 
 namespace Rival {
@@ -30,13 +30,11 @@ TileRenderer::TileRenderer(
 
 /**
  * Renders all tiles visible to the camera.
- *
- * Note that while this is very slow in Debug mode, performance is not an
- * issue in Release mode.
  */
-void TileRenderer::render(int delta, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight)
+void TileRenderer::render(
+        float timeSinceLastRender, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight)
 {
-    updateWaterPalettes(delta);
+    updateWaterPalettes(timeSinceLastRender);
 
     // Use textures
     glActiveTexture(GL_TEXTURE0 + 0);  // Texture unit 0
@@ -62,16 +60,16 @@ void TileRenderer::render(int delta, const Camera& camera, const std::vector<Til
     glDrawElements(renderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
-void TileRenderer::updateWaterPalettes(int delta)
+void TileRenderer::updateWaterPalettes(float timeSinceLastRender)
 {
     // Water is animated by rotating a few groups of colors in the palette.
     // We simulate this in the shader by adjusting the palette index based on some offsets that we control.
-    msSinceWaterShift += delta;
-    if (msSinceWaterShift > msPerWaterFrame)
+    timeSinceWaterShift += timeSinceLastRender;
+    if (timeSinceWaterShift > timePerWaterFrame)
     {
         waterIndex1 = (waterIndex1 + 1) % waterFrames1.size();
         waterIndex2 = (waterIndex2 + 1) % waterFrames2.size();
-        msSinceWaterShift -= msPerWaterFrame;
+        timeSinceWaterShift -= timePerWaterFrame;
     }
 }
 

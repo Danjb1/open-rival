@@ -1,7 +1,5 @@
 #pragma once
 
-#include "utils/SDLWrapper.h"
-
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -29,9 +27,9 @@ public:
 
     // Begin State override
     void onLoad() override;
-    void keyUp(const SDL_Keycode keyCode) override;
+    void keyUp(const KeyEvent& evt) override;
     void update(int delta) override;
-    void render(int delta) override;
+    void render(const FrameTiming& frameTiming) override;
     // End State override
 
     void onPlayerJoinRequest(int requestId, int clientId, const std::string& playerName);

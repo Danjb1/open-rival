@@ -168,7 +168,7 @@ void ProjectileMovementComponent::playImpactSound(const std::string& soundName) 
     }
 }
 
-glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
+glm::vec2 ProjectileMovementComponent::getRenderOffset(float timeSinceLastUpdateMs) const
 {
     // NOTE: We don't technically move the projectile, we just simulate the movement with a render offset.
     //   This may cause problems later down the line with fog of war.
@@ -193,7 +193,7 @@ glm::vec2 ProjectileMovementComponent::getRenderOffset(int delta) const
     const glm::vec2 finalOffset = startToEnd * visualDistanceMultiplier;
 
     // Calculate current progress through the projectile's journey
-    const float timeElapsedWithDelta = static_cast<float>(timeElapsed + delta);
+    const float timeElapsedWithDelta = static_cast<float>(timeElapsed) + timeSinceLastUpdateMs;
     const float progress = MathUtils::clampf(timeElapsedWithDelta / lifetime, 0.f, 1.f);
 
     return finalOffset * progress;

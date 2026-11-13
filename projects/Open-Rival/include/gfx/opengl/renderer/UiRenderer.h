@@ -1,12 +1,11 @@
 #pragma once
 
-#include "window/Window.h"
 #include "game/GameInterface.h"
 #include "game/Race.h"
 #include "gfx/opengl/renderable/AtlasRenderable.h"
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 #include "gfx/opengl/renderer/MenuTextRenderer.h"
-#include "gfx/opengl/renderer/CursorRenderer.h"
+#include "window/Window.h"
 
 namespace Rival {
 
@@ -29,7 +28,6 @@ public:
 
     void renderUi();
     void renderText();
-    void renderCursor(int delta);
 
     static void addToBuffers(
             const GameInterface::UiImage& image, std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords);
@@ -80,9 +78,6 @@ private:
     TextProperties nameProperties;
     TextRenderable nameRenderable;
     MenuTextRenderer textRenderer;
-
-    // Cursor
-    CursorRenderer cursorRenderer;
 };
 
 }  // namespace Rival

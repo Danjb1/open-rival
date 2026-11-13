@@ -3,7 +3,6 @@
 #include "application/Resources.h"
 #include "game/GameInterface.h"
 #include "gfx/opengl/renderable/TextureRenderable.h"
-#include "gfx/opengl/renderer/CursorRenderer.h"
 
 namespace Rival {
 
@@ -19,12 +18,11 @@ class MenuRenderer
 public:
     MenuRenderer(const TextureStore& textureStore, const Window* window, const Rect& viewport);
 
-    void render(int delta);
+    void render();
 
 private:
     void renderBackground();
     void sendBackgroundDataToGpu();
-    void renderCursor(int delta);
 
 private:
     const TextureStore& textureStore;
@@ -33,8 +31,6 @@ private:
 
     GameInterface::UiImage backgroundImage;
     TextureRenderable backgroundRenderable;
-
-    CursorRenderer cursorRenderer;
 };
 
 }  // namespace Rival

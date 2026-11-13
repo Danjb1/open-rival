@@ -10,4 +10,9 @@ Window::Window(int width, int height, const char* title)
 {
 }
 
+void Window::setListener(WindowListener* newListener)
+{
+    listener = newListener;
+}
+
 }  // namespace Rival

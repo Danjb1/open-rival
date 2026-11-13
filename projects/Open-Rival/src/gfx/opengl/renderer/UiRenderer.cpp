@@ -48,9 +48,6 @@ UiRenderer::UiRenderer(const PlayerStore& playerStore,
     , nameRenderable(
               Entity::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
     , textRenderer(window)
-
-    // Cursor
-    , cursorRenderer(textureStore, window)
 {
 }
 
@@ -303,16 +300,6 @@ bool UiRenderer::isNameVisible(std::string& outName) const
 
     outName = unit->getName();
     return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Cursor
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void UiRenderer::renderCursor(int delta)
-{
-    CursorDef cursorDef = Cursor::getCurrentCursor(playerStore, playerContext);
-    cursorRenderer.render(cursorDef, delta);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

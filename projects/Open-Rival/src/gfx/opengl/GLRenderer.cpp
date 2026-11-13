@@ -8,8 +8,9 @@
 
 namespace Rival {
 
-GLRenderer::GLRenderer(Window* window)
+GLRenderer::GLRenderer(Window* window, const Input& input)
     : window(window)
+    , input(input)
 {
     initGLEW();
     initGL();
@@ -23,13 +24,27 @@ void GLRenderer::onEnterLobby(LobbyState* lobby)
     }
 
     lobbyRenderer = std::make_unique<LobbyRenderer>(*lobby, window);
+    initCursorRenderer(lobby->getResources());
 }
 
-void GLRenderer::renderLobby(int delta)
+void GLRenderer::renderLobby(const FrameTiming& frameTiming)
 {
     if (lobbyRenderer)
     {
-        lobbyRenderer->render(delta);
+        lobbyRenderer->render();
+    }
+
+    if (cursorRenderer)
+    {
+        cursorRenderer->render(Cursor::arrow, frameTiming.timeSinceLastRender);
+    }
+}
+
+void GLRenderer::initCursorRenderer(const TextureStore& textureStore)
+{
+    if (!cursorRenderer)
+    {
+        cursorRenderer = std::make_unique<CursorRenderer>(textureStore, window, input);
     }
 }
 
@@ -137,13 +152,21 @@ void GLRenderer::onEnterGame(GameState* game)
     const PlayerContext& playerContext = game->getPlayerContext();
 
     gameRenderer = std::make_unique<GameRenderer>(*game, window, world, *game, camera, viewport, res, playerContext);
+    initCursorRenderer(res);
 }
 
-void GLRenderer::renderGame(int delta)
+void GLRenderer::renderGame(const FrameTiming& frameTiming)
 {
-    if (gameRenderer)
+    if (!gameRenderer)
     {
-        gameRenderer->render(delta);
+        return;
+    }
+
+    gameRenderer->render(frameTiming);
+
+    if (cursorRenderer)
+    {
+        cursorRenderer->render(gameRenderer->getCurrentCursor(), frameTiming.timeSinceLastRender);
     }
 }
 

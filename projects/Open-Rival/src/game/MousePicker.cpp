@@ -1,7 +1,5 @@
 #include "game/MousePicker.h"
 
-#include "utils/SDLWrapper.h"
-
 #include <algorithm>  // min, max
 #include <cstdint>
 #include <cstdlib>  // abs
@@ -30,13 +28,15 @@ MousePicker::MousePicker(Camera& camera,
         World& world,
         PlayerContext& playerContext,
         PlayerStore& playerStore,
-        GameCommandInvoker& cmdInvoker)
+        GameCommandInvoker& cmdInvoker,
+        const Input& input)
     : camera(camera)
     , viewport(viewport)
     , world(world)
     , playerContext(playerContext)
     , playerStore(playerStore)
     , cmdInvoker(cmdInvoker)
+    , input(input)
     , mapWidth(world.getWidth())
     , mapHeight(world.getHeight())
 {
@@ -47,17 +47,16 @@ std::weak_ptr<MousePicker> MousePicker::getWeakThis()
     return std::dynamic_pointer_cast<MousePicker>(shared_from_this());
 }
 
-void MousePicker::mouseDown(std::uint8_t button)
+void MousePicker::mouseDown(MouseButton button)
 {
-    if (button != SDL_BUTTON_LEFT)
+    if (button != MouseButton::Left)
     {
         return;
     }
 
     // Get the mouse position relative to the window, in pixels
-    int mouseX;
-    int mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
+    int mouseX = input.getMouseX();
+    int mouseY = input.getMouseY();
 
     // Abort if the mouse is outside the viewport
     if (!viewport.contains(mouseX, mouseY))
@@ -75,9 +74,9 @@ void MousePicker::mouseDown(std::uint8_t button)
     }
 }
 
-void MousePicker::mouseUp(std::uint8_t button)
+void MousePicker::mouseUp(MouseButton button)
 {
-    if (button == SDL_BUTTON_LEFT)
+    if (button == MouseButton::Left)
     {
         // Drag-select
         if (playerContext.getCurrentAction() == PlayerAction::DragSelect)
@@ -88,9 +87,8 @@ void MousePicker::mouseUp(std::uint8_t button)
         }
 
         // Get the mouse position relative to the window, in pixels
-        int mouseX;
-        int mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
+        int mouseX = input.getMouseX();
+        int mouseY = input.getMouseY();
 
         // Abort if the mouse is outside the viewport
         if (!viewport.contains(mouseX, mouseY))
@@ -111,7 +109,7 @@ void MousePicker::mouseUp(std::uint8_t button)
 
         playerContext.setCurrentAction(PlayerAction::None);
     }
-    else if (button == SDL_BUTTON_MIDDLE)
+    else if (button == MouseButton::Middle)
     {
         PassabilityMap* passabilityMap = world.getPassabilityMap();
         LOG_DEBUG("tile at {}, {} has passability: {}",
@@ -119,7 +117,7 @@ void MousePicker::mouseUp(std::uint8_t button)
                 playerContext.tileUnderMouse.y,
                 EnumUtils::toIntegral(passabilityMap->getPassability(playerContext.tileUnderMouse)));
     }
-    else if (button == SDL_BUTTON_RIGHT)
+    else if (button == MouseButton::Right)
     {
         deselect();
         playerContext.setCurrentAction(PlayerAction::None);
@@ -129,9 +127,8 @@ void MousePicker::mouseUp(std::uint8_t button)
 void MousePicker::handleMouse()
 {
     // Get the mouse position relative to the window, in pixels
-    int mouseX;
-    int mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
+    int mouseX = input.getMouseX();
+    int mouseY = input.getMouseY();
 
     // Drag-select
     if (playerContext.dragSelect.isActive())

@@ -13,7 +13,7 @@ class LobbyRenderer
 {
 public:
     LobbyRenderer(LobbyState& lobby, const Window* window);
-    void render(int delta);
+    void render();
 
 private:
     void renderText();

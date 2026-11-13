@@ -10,6 +10,7 @@
 
 #include "application/Application.h"
 #include "gfx/opengl/GLRenderer.h"
+#include "input/Input.h"
 #include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
 #include "net/NetUtils.h"
@@ -53,8 +54,11 @@ static void startApplication(const ProgramOptions& options)
         window.setPos(windowPos.x, windowPos.y);
     }
 
+    // --- Input ---
+    Input input;
+
     // --- Rendering ---
-    GLRenderer renderer(&window);
+    GLRenderer renderer(&window, input);
 
     // --- Fonts ---
     if (FT_Error err = FT_Init_FreeType(&fontLib))
@@ -76,7 +80,7 @@ static void startApplication(const ProgramOptions& options)
     NetUtils::initNetworking();
 
     // Create the application
-    Application app(cfg, &window, &renderer, audioSystem, res, fontLib);
+    Application app(cfg, &window, input, &renderer, audioSystem, res, fontLib);
 
     // Host or join a game;
     // eventually this will be handled before we enter the LobbyState

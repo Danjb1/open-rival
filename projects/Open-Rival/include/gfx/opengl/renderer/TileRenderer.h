@@ -30,15 +30,15 @@ public:
 
     TileRenderer(std::shared_ptr<const Spritesheet> spritesheet, std::shared_ptr<const Texture> paletteTexture);
 
-    void render(int delta, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight);
+    void render(float timeSinceLastRender, const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight);
 
 private:
-    void updateWaterPalettes(int delta);
+    void updateWaterPalettes(float timeSinceLastRender);
     bool needsUpdate() const;
     void sendDataToGpu(const Camera& camera, const std::vector<Tile>& tiles, int mapWidth, int mapHeight) const;
 
 private:
-    static constexpr int msPerWaterFrame = 180;
+    static constexpr float timePerWaterFrame = 0.18f;
     static const std::array<int, 4> waterFrames1;
     static const std::array<int, 7> waterFrames2;
 
@@ -47,7 +47,7 @@ private:
 
     int waterIndex1 = 0;
     int waterIndex2 = 0;
-    int msSinceWaterShift = 0;
+    float timeSinceWaterShift = 0.f;
 };
 
 }  // namespace Rival

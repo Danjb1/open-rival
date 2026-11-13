@@ -1,8 +1,9 @@
 #include "application/Application.h"
 
-#include "utils/SDLWrapper.h"
-
+#include <algorithm>  // std::min
+#include <chrono>
 #include <memory>
+#include <optional>
 #include <utility>  // std::in_place, std::move
 
 #include "application/State.h"
@@ -13,15 +14,22 @@
 
 namespace Rival {
 
-Application::Application(
-        json& cfg, Window* window, Renderer* renderer, AudioSystem& audioSystem, Resources& res, FT_Library fontLib)
+Application::Application(json& cfg,
+        Window* window,
+        Input& input,
+        Renderer* renderer,
+        AudioSystem& audioSystem,
+        Resources& res,
+        FT_Library fontLib)
     : cfg(cfg)
     , window(window)
+    , input(input)
     , renderer(renderer)
     , audioSystem(audioSystem)
     , res(res)
     , fontLib(fontLib)
 {
+    window->setListener(this);
 }
 
 void Application::start(std::unique_ptr<State> initialState)
@@ -33,7 +41,8 @@ void Application::start(std::unique_ptr<State> initialState)
     TimeUtils::PrecisionTimer timer;
 
     // Game loop
-    Uint32 nextUpdateDue = SDL_GetTicks();
+    TimeUtils::TimePoint nextUpdateDue = TimeUtils::Clock::now();
+    std::optional<TimeUtils::TimePoint> lastRenderTime;
     while (!exiting)
     {
         // Switch to the next State, if set
@@ -47,13 +56,13 @@ void Application::start(std::unique_ptr<State> initialState)
         // nextUpdateDue, so we will have to update the logic multiple
         // times to catch up. If we are ahead of schedule, this will be
         // BEFORE nextUpdateDue, and we will need to wait a little longer.
-        Uint32 frameStartTime = SDL_GetTicks();
+        TimeUtils::TimePoint frameStartTime = TimeUtils::Clock::now();
 
         // Is the next update due?
         if (vsyncEnabled || nextUpdateDue <= frameStartTime)
         {
             // Handle events on the queue
-            pollEvents();
+            window->pollEvents();
 
             // We can change the game speed by simulating more or less
             // time in each tick. This should be done with caution as it
@@ -74,22 +83,34 @@ void Application::start(std::unique_ptr<State> initialState)
             while (nextUpdateDue <= frameStartTime)
             {
                 state->update(logicDelta);
-                nextUpdateDue += TimeUtils::timeStepMs;
+                nextUpdateDue += std::chrono::milliseconds(TimeUtils::timeStepMs);
             }
 
-            // Calculate our delta time for rendering. This is the number of
-            // milliseconds that have passed since the game logic was last
-            // updated. This enables us to accurately extrapolate unit
-            // positions between logical movements.
-            Uint32 now = SDL_GetTicks();
-            Uint32 lastUpdate = nextUpdateDue - TimeUtils::timeStepMs;
-            Uint32 delta = now - lastUpdate;
+            // Calculate our timing information for rendering
+            const TimeUtils::TimePoint now = TimeUtils::Clock::now();
+            FrameTiming frameTiming;
+
+            // Time since the last render; this is used to advance visual animations.
+            // We clamp this so that animations don't jump too far ahead after a long stall.
+            if (lastRenderTime)
+            {
+                const auto timeSinceLastRender = std::min<TimeUtils::Clock::duration>(
+                        now - *lastRenderTime, TimeUtils::maxTimeSinceLastRender);
+                frameTiming.timeSinceLastRender = std::chrono::duration<float>(timeSinceLastRender).count();
+            }
+            lastRenderTime = now;
+
+            // Time since the game logic was last updated; this enables us to
+            // accurately extrapolate unit positions between logical movements.
+            const TimeUtils::TimePoint lastUpdate =
+                    nextUpdateDue - std::chrono::milliseconds(TimeUtils::timeStepMs);
+            frameTiming.timeSinceLastUpdate = std::chrono::duration<float>(now - lastUpdate).count();
 
             // Render the game, once per iteration. With vsync enabled, this
             // will be called at the same frequency as the screen's refresh
             // rate. Otherwise, this will be called at a frequency that
             // matches our target FPS.
-            state->render(static_cast<int>(delta));
+            state->render(frameTiming);
 
             // Update the window with our newly-rendered game.
             // If vsync is enabled, this will block execution until the
@@ -100,8 +121,8 @@ void Application::start(std::unique_ptr<State> initialState)
         {
             // Next update is not yet due (frameStartTime < nextUpdateDue),
             // so let's sleep (unless the next update is imminent!)
-            Uint32 sleepTime = nextUpdateDue - frameStartTime;
-            if (sleepTime >= TimeUtils::minSleepTime)
+            auto sleepTime = std::chrono::duration<float>(nextUpdateDue - frameStartTime);
+            if (sleepTime >= std::chrono::milliseconds(TimeUtils::minSleepTime))
             {
                 timer.wait(sleepTime);
             }
@@ -109,35 +130,70 @@ void Application::start(std::unique_ptr<State> initialState)
     }
 }
 
-void Application::pollEvents()
+void Application::onExitRequested()
 {
-    SDL_Event e;
-    while (SDL_PollEvent(&e) != 0)
+    exiting = true;
+}
+
+void Application::onFocusLost()
+{
+    // We won't receive any key / button release events while unfocused
+    input.releaseAll();
+}
+
+// Note that we always update the Input BEFORE forwarding events to the State,
+// so that the State sees an up-to-date Input when handling the event.
+
+void Application::onKeyDownEvent(const KeyEvent& evt)
+{
+    input.onKeyDown(evt);
+
+    if (state)
     {
-        if (e.type == SDL_QUIT)
-        {
-            exiting = true;
-        }
-        else if (e.type == SDL_KEYDOWN)
-        {
-            state->keyDown(e.key.keysym.sym);
-        }
-        else if (e.type == SDL_KEYUP)
-        {
-            state->keyUp(e.key.keysym.sym);
-        }
-        else if (e.type == SDL_MOUSEBUTTONDOWN)
-        {
-            state->mouseDown(e.button);
-        }
-        else if (e.type == SDL_MOUSEBUTTONUP)
-        {
-            state->mouseUp(e.button);
-        }
-        else if (e.type == SDL_MOUSEWHEEL)
-        {
-            state->mouseWheelMoved(e.wheel);
-        }
+        state->keyDown(evt);
+    }
+}
+
+void Application::onKeyUpEvent(const KeyEvent& evt)
+{
+    input.onKeyUp(evt);
+
+    if (state)
+    {
+        state->keyUp(evt);
+    }
+}
+
+void Application::onMouseDownEvent(const MouseButtonEvent& evt)
+{
+    input.onMouseDown(evt);
+
+    if (state)
+    {
+        state->mouseDown(evt);
+    }
+}
+
+void Application::onMouseUpEvent(const MouseButtonEvent& evt)
+{
+    input.onMouseUp(evt);
+
+    if (state)
+    {
+        state->mouseUp(evt);
+    }
+}
+
+void Application::onMouseMoveEvent(const MouseMoveEvent& evt)
+{
+    input.onMouseMoved(evt);
+}
+
+void Application::onMouseWheelEvent(const MouseWheelEvent& evt)
+{
+    if (state)
+    {
+        state->mouseWheelMoved(evt);
     }
 }
 

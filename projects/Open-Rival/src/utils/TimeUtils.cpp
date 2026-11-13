@@ -4,33 +4,37 @@
 
 namespace Rival { namespace TimeUtils {
 
-/** Maximum time that we are happy to spend spinning, in milliseconds. */
-static constexpr Uint32 maxSpinTime = 3;
+/** Maximum time that we are happy to spend spinning. */
+static constexpr auto maxSpinTime = std::chrono::milliseconds(3);
 
-/** Maximum time that we are happy to spend yielding, in milliseconds. */
-static constexpr Uint32 maxYieldTime = 10;
+/** Maximum time that we are happy to spend yielding. */
+static constexpr auto maxYieldTime = std::chrono::milliseconds(10);
 
-void PrecisionTimer::wait(Uint32 waitTimeMs)
+void PrecisionTimer::wait(std::chrono::duration<float> waitTime)
 {
     reset();
 
-    Uint32 startTime = SDL_GetTicks();
-    Uint32 timeElapsed = 0;
-    int timeRemaining = static_cast<int>(waitTimeMs);
+    const auto deadline = Clock::now() + waitTime;
 
-    while (timeRemaining > 0 && !interrupted)
+    while (!interrupted)
     {
+        const auto remaining = std::chrono::duration<float>(deadline - Clock::now());
+
+        if (remaining.count() <= 0.f)
+        {
+            break;
+        }
+
         // If there is hardly any time to wait, just spin until done.
         // This is the most reliable way to kill time but uses max CPU.
-        if (timeRemaining < maxSpinTime)
+        if (remaining < maxSpinTime)
         {
-            // Do nothing at all - even a print statement here can
-            // throw off our timing.
+            // Do nothing at all - even a print statement here can throw off our timing
         }
 
         // If there is a little time to wait, yield to other threads.
         // Note that this will still max out the CPU.
-        else if (timeRemaining < maxYieldTime)
+        else if (remaining < maxYieldTime)
         {
             std::this_thread::yield();
         }
@@ -42,10 +46,6 @@ void PrecisionTimer::wait(Uint32 waitTimeMs)
             // This can still cause frame drops, as sleep may take longer than requested.
             sleep(1);
         }
-
-        Uint32 nowTime = SDL_GetTicks();
-        timeElapsed = nowTime - startTime;
-        timeRemaining = waitTimeMs - timeElapsed;
     }
 }
 

@@ -7,6 +7,7 @@
 #include "entity/Unit.h"
 #include "entity/components/HealthComponent.h"
 #include "game/MapUtils.h"
+#include "input/Input.h"
 #include "utils/EntityUtils.h"
 
 namespace Rival {
@@ -45,12 +46,13 @@ public:
             World& world,
             PlayerContext& playerContext,
             PlayerStore& playerStore,
-            GameCommandInvoker& cmdInvoker);
+            GameCommandInvoker& cmdInvoker,
+            const Input& input);
 
     virtual ~MousePicker() = default;
 
-    void mouseDown(std::uint8_t button);
-    void mouseUp(std::uint8_t button);
+    void mouseDown(MouseButton button);
+    void mouseUp(MouseButton button);
     void handleMouse();
 
     // Begin HealthListener override
@@ -93,6 +95,7 @@ private:
     PlayerContext& playerContext;
     PlayerStore& playerStore;
     GameCommandInvoker& cmdInvoker;
+    const Input& input;
 
     int mapWidth;
     int mapHeight;

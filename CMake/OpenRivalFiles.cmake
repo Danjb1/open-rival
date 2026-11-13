@@ -101,6 +101,7 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TextRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/TileRenderer.cpp
     ${OPEN_RIVAL_DIR}/src/gfx/opengl/renderer/UiRenderer.cpp
+    ${OPEN_RIVAL_DIR}/src/input/Input.cpp
     ${OPEN_RIVAL_DIR}/src/lobby/LobbyState.cpp
     ${OPEN_RIVAL_DIR}/src/main/Main.cpp
     ${OPEN_RIVAL_DIR}/src/main/ProgramOptions.cpp
@@ -137,7 +138,6 @@ set(OPEN_RIVAL_SOURCES
     ${OPEN_RIVAL_DIR}/src/utils/BufferUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/FileUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/HashUtils.cpp
-    ${OPEN_RIVAL_DIR}/src/utils/InputUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/JsonUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/LogUtils.cpp
     ${OPEN_RIVAL_DIR}/src/utils/MathUtils.cpp
@@ -259,6 +259,7 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/TextRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/TileRenderer.h
     ${OPEN_RIVAL_DIR}/include/gfx/opengl/renderer/UiRenderer.h
+    ${OPEN_RIVAL_DIR}/include/input/Input.h
     ${OPEN_RIVAL_DIR}/include/lobby/LobbyState.h
     ${OPEN_RIVAL_DIR}/include/main/ProgramOptions.h
     ${OPEN_RIVAL_DIR}/include/net/ClientInfo.h
@@ -297,7 +298,6 @@ set(OPEN_RIVAL_HEADERS
     ${OPEN_RIVAL_DIR}/include/utils/EnumUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/FileUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/HashUtils.h
-    ${OPEN_RIVAL_DIR}/include/utils/InputUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/JsonUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/LogUtils.h
     ${OPEN_RIVAL_DIR}/include/utils/MathUtils.h

@@ -20,7 +20,6 @@
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/GameCommandPacket.h"
 #include "utils/EnumUtils.h"
-#include "utils/InputUtils.h"
 #include "utils/LogUtils.h"
 #include "utils/MouseUtils.h"
 #include "utils/TimeUtils.h"
@@ -43,7 +42,8 @@ GameState::GameState(Application& app,
               RenderUtils::pxToCamera_Y(static_cast<float>(viewport.height)),
               *world)
     , playerContext()
-    , mousePicker(std::make_shared<MousePicker>(camera, viewport, *world, playerContext, *this, *this))
+    , mousePicker(std::make_shared<MousePicker>(
+              camera, viewport, *world, playerContext, *this, *this, app.getInput()))
     , clients(clients)
     , localPlayerId(localPlayerId)
     , randomizer(randomizer)
@@ -135,19 +135,19 @@ void GameState::respondToInput()
     mousePicker->handleMouse();
 
     // Move camera
-    if (input.lastDirectionX == Direction::Decreasing)
+    if (playerInput.lastDirectionX == Direction::Decreasing)
     {
         camera.translate(-0.5f, 0.f);
     }
-    else if (input.lastDirectionX == Direction::Increasing)
+    else if (playerInput.lastDirectionX == Direction::Increasing)
     {
         camera.translate(0.5f, 0.f);
     }
-    if (input.lastDirectionY == Direction::Decreasing)
+    if (playerInput.lastDirectionY == Direction::Decreasing)
     {
         camera.translate(0.f, -0.35f);
     }
-    else if (input.lastDirectionY == Direction::Increasing)
+    else if (playerInput.lastDirectionY == Direction::Increasing)
     {
         camera.translate(0.f, 0.35f);
     }
@@ -195,33 +195,33 @@ void GameState::updateEntities(int delta) const
     }
 }
 
-void GameState::render(int delta)
+void GameState::render(const FrameTiming& frameTiming)
 {
     Renderer* renderer = app.getRenderer();
-    renderer->renderGame(delta);
+    renderer->renderGame(frameTiming);
 }
 
-void GameState::keyDown(const SDL_Keycode keyCode)
+void GameState::keyDown(const KeyEvent& evt)
 {
-    switch (keyCode)
+    switch (evt.key)
     {
-    case SDLK_UP:
-        input.lastDirectionY = Direction::Decreasing;
+    case KeyCode::Up:
+        playerInput.lastDirectionY = Direction::Decreasing;
         break;
 
-    case SDLK_DOWN:
-        input.lastDirectionY = Direction::Increasing;
+    case KeyCode::Down:
+        playerInput.lastDirectionY = Direction::Increasing;
         break;
 
-    case SDLK_LEFT:
-        input.lastDirectionX = Direction::Decreasing;
+    case KeyCode::Left:
+        playerInput.lastDirectionX = Direction::Decreasing;
         break;
 
-    case SDLK_RIGHT:
-        input.lastDirectionX = Direction::Increasing;
+    case KeyCode::Right:
+        playerInput.lastDirectionX = Direction::Increasing;
         break;
 
-    case SDLK_DELETE: {
+    case KeyCode::Delete: {
         // TMP: Kill selected unit
         auto weakSelectedEntity = playerContext.getFirstSelectedEntity();
         if (auto selectedEntity = weakSelectedEntity.lock())
@@ -239,27 +239,29 @@ void GameState::keyDown(const SDL_Keycode keyCode)
     }
 }
 
-void GameState::keyUp(const SDL_Keycode keyCode)
+void GameState::keyUp(const KeyEvent& evt)
 {
-    switch (keyCode)
+    const Input& input = app.getInput();
+
+    switch (evt.key)
     {
-    case SDLK_UP:
-        input.lastDirectionY = InputUtils::isKeyDown(SDLK_DOWN) ? Direction::Decreasing : Direction::None;
+    case KeyCode::Up:
+        playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Down) ? Direction::Increasing : Direction::None;
         break;
 
-    case SDLK_DOWN:
-        input.lastDirectionY = InputUtils::isKeyDown(SDLK_UP) ? Direction::Increasing : Direction::None;
+    case KeyCode::Down:
+        playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Up) ? Direction::Decreasing : Direction::None;
         break;
 
-    case SDLK_LEFT:
-        input.lastDirectionX = InputUtils::isKeyDown(SDLK_RIGHT) ? Direction::Decreasing : Direction::None;
+    case KeyCode::Left:
+        playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Right) ? Direction::Increasing : Direction::None;
         break;
 
-    case SDLK_RIGHT:
-        input.lastDirectionX = InputUtils::isKeyDown(SDLK_LEFT) ? Direction::Increasing : Direction::None;
+    case KeyCode::Right:
+        playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Left) ? Direction::Decreasing : Direction::None;
         break;
 
-    case SDLK_a:
+    case KeyCode::A:
         requestAttackMode();
         break;
 
@@ -279,22 +281,21 @@ void GameState::requestAttackMode()
     }
 }
 
-void GameState::mouseDown(const SDL_MouseButtonEvent evt)
+void GameState::mouseDown(const MouseButtonEvent& evt)
 {
     mousePicker->mouseDown(evt.button);
 }
 
-void GameState::mouseUp(const SDL_MouseButtonEvent evt)
+void GameState::mouseUp(const MouseButtonEvent& evt)
 {
     mousePicker->mouseUp(evt.button);
 }
 
-void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
+void GameState::mouseWheelMoved(const MouseWheelEvent& evt)
 {
     // Get the mouse position relative to the window, in pixels
-    int mouseInViewportX;
-    int mouseInViewportY;
-    SDL_GetMouseState(&mouseInViewportX, &mouseInViewportY);
+    const int mouseInViewportX = app.getInput().getMouseX();
+    const int mouseInViewportY = app.getInput().getMouseY();
 
     // Abort if the mouse is outside the viewport
     if (!viewport.contains(mouseInViewportX, mouseInViewportY))
@@ -303,16 +304,10 @@ void GameState::mouseWheelMoved(const SDL_MouseWheelEvent evt)
     }
 
     // Check if any scrolling took place
-    int scrollDelta = evt.y;
+    const int scrollDelta = evt.delta;
     if (scrollDelta == 0)
     {
         return;
-    }
-
-    // Determine the scroll direction
-    if (evt.direction == SDL_MOUSEWHEEL_FLIPPED)
-    {
-        scrollDelta *= -1;
     }
 
     // Find the mouse position in scaled pixels before the zoom

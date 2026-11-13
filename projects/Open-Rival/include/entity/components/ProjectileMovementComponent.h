@@ -37,7 +37,9 @@ public:
     void update(int delta) override;
     // End EntityComponent override
 
-    glm::vec2 getRenderOffset(int delta) const;
+    /** Gets the visual offset of this projectile from its starting position.
+     * timeSinceLastUpdateMs is used to interpolate between logic updates. */
+    glm::vec2 getRenderOffset(float timeSinceLastUpdateMs) const;
 
 private:
     void onProjectileArrived();

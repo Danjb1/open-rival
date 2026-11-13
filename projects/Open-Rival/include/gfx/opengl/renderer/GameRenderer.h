@@ -10,6 +10,8 @@
 #include "gfx/opengl/renderer/MapBorderRenderer.h"
 #include "gfx/opengl/renderer/TileRenderer.h"
 #include "gfx/opengl/renderer/UiRenderer.h"
+#include "ui/Cursor.h"
+#include "utils/TimeUtils.h"
 
 namespace Rival {
 
@@ -35,17 +37,19 @@ public:
             const Resources& res,
             const PlayerContext& playerContext);
 
-    void render(int delta);
+    void render(const FrameTiming& frameTiming);
+
+    /** Gets the cursor that should currently be displayed. */
+    CursorDef getCurrentCursor() const;
 
 private:
-    void renderGameViaFramebuffer(int delta);
-    void renderGame(int viewportWidth, int viewportHeight, int delta);
+    void renderGameViaFramebuffer(const FrameTiming& frameTiming);
+    void renderGame(int viewportWidth, int viewportHeight, const FrameTiming& frameTiming);
     void renderGameOverlays(const glm::mat4& viewProjMatrix);
     void renderFramebuffer(int srcWidth, int srcHeight) const;
     void renderUi();
     void renderText();
     void renderDragSelect();
-    void renderCursor(int delta);
     void renderMessages();
 
 private:

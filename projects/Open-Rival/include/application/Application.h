@@ -14,23 +14,24 @@
 #include "net/Connection.h"
 #include "net/Server.h"
 #include "utils/JsonUtils.h"
+#include "window/Window.h"
 
 namespace Rival {
 
 class Socket;
 class State;
 class Renderer;
-class Window;
 
 /**
  * Manages the application as a whole.
  * Holds references to all of our subsystems, runs the game loop and switches between "states" (e.g. menu, game).
  */
-class Application
+class Application : public WindowListener
 {
 public:
     Application(json& cfg,
             Window* window,
+            Input& input,
             Renderer* renderer,
             AudioSystem& audioSystem,
             Resources& res,
@@ -41,7 +42,16 @@ public:
      */
     void start(std::unique_ptr<State> state);
 
-    void pollEvents();
+    // Begin WindowListener override
+    void onExitRequested() override;
+    void onFocusLost() override;
+    void onKeyDownEvent(const KeyEvent& evt) override;
+    void onKeyUpEvent(const KeyEvent& evt) override;
+    void onMouseDownEvent(const MouseButtonEvent& evt) override;
+    void onMouseUpEvent(const MouseButtonEvent& evt) override;
+    void onMouseMoveEvent(const MouseMoveEvent& evt) override;
+    void onMouseWheelEvent(const MouseWheelEvent& evt) override;
+    // End WindowListener override
 
     void requestExit()
     {
@@ -72,6 +82,11 @@ public:
     Window* getWindow() const
     {
         return window;
+    }
+
+    const Input& getInput() const
+    {
+        return input;
     }
 
     Renderer* getRenderer() const
@@ -113,6 +128,7 @@ private:
     // Subsystems and resources
     json& cfg;
     Window* window;
+    Input& input;
     Renderer* renderer;
     AudioSystem& audioSystem;
     Resources& res;

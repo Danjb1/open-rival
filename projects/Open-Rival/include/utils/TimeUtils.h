@@ -1,22 +1,41 @@
 #pragma once
 
-#include "utils/SDLWrapper.h"
+#include <chrono>
 
-namespace Rival { namespace TimeUtils {
+namespace Rival {
+
+/** Timing information supplied when rendering a frame. All values are in seconds. */
+struct FrameTiming
+{
+    /** Time since the previous frame was rendered.
+     * Use this to advance animations that are purely visual (e.g. the cursor). */
+    float timeSinceLastRender = 0.f;
+
+    /** Time since the game logic was last updated.
+     * Use this to interpolate between logical states (e.g. smooth movement between ticks). */
+    float timeSinceLastUpdate = 0.f;
+};
+
+namespace TimeUtils {
+
+using Clock = std::chrono::steady_clock;
+using TimePoint = Clock::time_point;
 
 /** Desired FPS for the game logic. */
 static constexpr int fps = 60;
 
-/** Approximate time for each frame, in milliseconds. */
+/** Approximate time for each frame, in milliseconds.
+ * Working with integer values is much safer than using floats, in order to keep the game simulation deterministic
+ * across different systems. We don't need greater precision than this. */
 static constexpr int timeStepMs = 1000 / fps;
 
-/**
- * Minimum time that we will consider sleeping for.
- *
- * If the next frame is due sooner than this then we will just
- * busy-wait, to reduce the risk of oversleeping.
- */
-static constexpr int minSleepTime = 2;
+/** Minimum time that we will consider sleeping for.
+ * If the next frame is due sooner than this then we will just busy-wait, to reduce the risk of oversleeping. */
+static constexpr auto minSleepTime = std::chrono::milliseconds(2);
+
+/** Upper limit for FrameTiming::timeSinceLastRender.
+ * This stops visual animations from jumping ahead after a long stall (e.g. debugger breakpoint, window drag). */
+static constexpr auto maxTimeSinceLastRender = std::chrono::milliseconds(250);
 
 /** Number of ticks in the future that commands are scheduled for in a network game.
  * For now, this is quite high to avoid interruptions when latency is high.
@@ -35,8 +54,8 @@ public:
     PrecisionTimer();
     ~PrecisionTimer();
 
-    /** Waits for some time (seconds) using the most appropriate mechanism available. */
-    void wait(Uint32 waitTimeMs);
+    /** Waits for some time using the most appropriate mechanism available. */
+    void wait(std::chrono::duration<float> waitTime);
 
     /** Interrupts the timer if it is currently waiting. */
     void interrupt();

@@ -83,7 +83,7 @@
 
 #### General
 
-- Apply the `Renderer` treatment to other subsystems, e.g. input, audio and logging
+- Apply the `Renderer` treatment to other subsystems, e.g. audio and logging
 - Consider storing pointers instead of references in classes
 - Consider whether class members should be `const`
 - Consider returning pointers instead of references

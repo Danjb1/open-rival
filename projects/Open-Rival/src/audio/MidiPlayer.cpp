@@ -1,7 +1,6 @@
 #include "audio/MidiPlayer.h"
 
 #include <RTMidi/RtMidi.h>
-#include "utils/SDLWrapper.h"
 
 #include <chrono>
 #include <stdexcept>
@@ -62,7 +61,7 @@ void MidiPlayer::play(std::shared_ptr<const MidiFile> file)
     const std::vector<midi_stream_event>& events = file->getEvents();
 
     // Play the file until completion
-    Uint32 startTime = SDL_GetTicks();
+    TimeUtils::TimePoint startTime = TimeUtils::Clock::now();
     for (const auto& evt : events)
     {
         if (stopped)
@@ -77,7 +76,9 @@ void MidiPlayer::play(std::shared_ptr<const MidiFile> file)
         std::uint32_t eventValue = evt.m_event;
         std::uint8_t eventId = eventValue & 0xFF;
         int numBytes = getMessageSize(eventId);
+
         message.push_back(eventId);
+
         if (numBytes == 2)
         {
             message.push_back((eventValue >> 8) & 0xFF);
@@ -89,14 +90,15 @@ void MidiPlayer::play(std::shared_ptr<const MidiFile> file)
         }
 
         // Calculate how long we need to wait
-        const Uint32 currentTime = SDL_GetTicks();
-        const Uint32 timeElapsed = currentTime - startTime;
-        const int timeUntilMessage = static_cast<int>(evt.m_timestamp - timeElapsed);
+        const auto currentTime = TimeUtils::Clock::now();
+        const auto timeElapsed = std::chrono::duration<float>(currentTime - startTime);
+        const auto eventTimestamp = std::chrono::milliseconds(evt.m_timestamp);
+        const auto timeUntilMessage = eventTimestamp - timeElapsed;
 
         // Wait until the message is due
-        if (timeUntilMessage > 0)
+        if (timeUntilMessage.count() > 0.f)
         {
-            midiTimer.wait(static_cast<Uint32>(timeUntilMessage));
+            midiTimer.wait(timeUntilMessage);
         }
 
         // Send the message to our MIDI output

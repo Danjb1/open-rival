@@ -18,9 +18,9 @@ LobbyRenderer::LobbyRenderer(LobbyState& lobby, const Window* window)
 {
 }
 
-void LobbyRenderer::render(int delta)
+void LobbyRenderer::render()
 {
-    menuRenderer.render(delta);
+    menuRenderer.render();
     renderText();
 }
 

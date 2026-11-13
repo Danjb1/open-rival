@@ -102,18 +102,18 @@ void LobbyState::update(int /* delta */)
     pollNetwork();
 }
 
-void LobbyState::render(int delta)
+void LobbyState::render(const FrameTiming& frameTiming)
 {
     Renderer* renderer = app.getRenderer();
-    renderer->renderLobby(delta);
+    renderer->renderLobby(frameTiming);
 }
 
-void LobbyState::keyUp(const SDL_Keycode keyCode)
+void LobbyState::keyUp(const KeyEvent& evt)
 {
-    switch (keyCode)
+    switch (evt.key)
     {
-    case SDLK_SPACE:
-    case SDLK_RETURN:
+    case KeyCode::Space:
+    case KeyCode::Return:
         // TMP: For now, just start the game when pressing Space or Enter
         if (bIsHost)
         {
