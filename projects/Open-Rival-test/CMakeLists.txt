@@ -13,6 +13,7 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAnimationComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestAttackComponent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestCamera.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestCollectionUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestEntity.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestMapUtils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestMousePicker.cpp

@@ -1,36 +1,9 @@
 #include "game/World.h"
 
+#include "utils/IterationGuard.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
-
-namespace {
-
-/**
- * Tracks an iteration over the Entity list for as long as it is in scope.
- */
-class EntityIterationGuard
-{
-public:
-    explicit EntityIterationGuard(int& depth)
-        : depth(depth)
-    {
-        ++depth;
-    }
-
-    ~EntityIterationGuard()
-    {
-        --depth;
-    }
-
-    EntityIterationGuard(const EntityIterationGuard&) = delete;
-    EntityIterationGuard& operator=(const EntityIterationGuard&) = delete;
-
-private:
-    int& depth;
-};
-
-}  // namespace
 
 // Creates an empty World
 World::World(int width, int height, bool wilderness)
@@ -200,7 +173,7 @@ SharedMutableEntityList World::getMutableEntitiesFromIds(const std::vector<int>&
 
 void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func)
 {
-    EntityIterationGuard guard(entityIterationDepth);
+    IterationGuard guard(entityIterationDepth);
     for (const auto& entity : entitiesList)
     {
         func(entity);
@@ -209,7 +182,7 @@ void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity
 
 void World::forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const
 {
-    EntityIterationGuard guard(entityIterationDepth);
+    IterationGuard guard(entityIterationDepth);
     for (const auto& entity : entitiesList)
     {
         func(entity);

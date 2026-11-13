@@ -309,6 +309,7 @@ set(OPEN_RIVAL_HEADERS
     include/utils/EnumUtils.h
     include/utils/FileUtils.h
     include/utils/HashUtils.h
+    include/utils/IterationGuard.h
     include/utils/JsonFwd.h
     include/utils/JsonUtils.h
     include/utils/LogUtils.h
