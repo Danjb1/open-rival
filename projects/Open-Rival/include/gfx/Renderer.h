@@ -17,6 +17,9 @@ class Renderer
 public:
     virtual ~Renderer() {}
 
+    /** Prepares the ImGui renderer backend for a new frame. */
+    virtual void beginImGuiFrame() = 0;
+
     /** Called whenever we enter the LobbyState. */
     virtual void onEnterLobby(LobbyState* lobbyState) = 0;
 

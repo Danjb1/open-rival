@@ -2,6 +2,8 @@
 
 #include "utils/SDLWrapper.h"
 #include <SDL3_image/SDL_image.h>
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
 
 #include "application/ResourceLoader.h"
 #include "utils/LogUtils.h"
@@ -20,6 +22,11 @@ KeyCode toKeyCode(SDL_Keycode sdlKey)
     if (sdlKey >= SDLK_0 && sdlKey <= SDLK_9)
     {
         return static_cast<KeyCode>(static_cast<int>(KeyCode::Num0) + static_cast<int>(sdlKey - SDLK_0));
+    }
+
+    if (sdlKey >= SDLK_F1 && sdlKey <= SDLK_F12)
+    {
+        return static_cast<KeyCode>(static_cast<int>(KeyCode::F1) + static_cast<int>(sdlKey - SDLK_F1));
     }
 
     switch (sdlKey)
@@ -44,6 +51,8 @@ KeyCode toKeyCode(SDL_Keycode sdlKey)
         return KeyCode::Tab;
     case SDLK_DELETE:
         return KeyCode::Delete;
+    case SDLK_GRAVE:
+        return KeyCode::Backtick;
     default:
         return KeyCode::Unknown;
     }
@@ -120,10 +129,18 @@ SDLWindowImpl::SDLWindowImpl(int width, int height, const char* title)
     {
         LOG_WARN("Failed to enable vsync! SDL Error: {}", SDL_GetError());
     }
+
+    // Initialize the ImGui platform backend
+    if (!ImGui_ImplSDL3_InitForOpenGL(sdlWindow, glContext))
+    {
+        throw std::runtime_error("Failed to initialize ImGui SDL3 backend");
+    }
 }
 
 SDLWindowImpl::~SDLWindowImpl()
 {
+    ImGui_ImplSDL3_Shutdown();
+
     SDL_GL_DestroyContext(glContext);
     glContext = nullptr;
 
@@ -175,42 +192,86 @@ void SDLWindowImpl::pollEvents()
     SDL_Event e;
     while (SDL_PollEvent(&e))
     {
-        if (!listener)
-        {
-            // Nobody to receive events; just drain the queue
-            continue;
-        }
+        // ImGui needs to see every event so it can track the state of the mouse, keyboard, etc.
+        ImGui_ImplSDL3_ProcessEvent(&e);
 
-        switch (e.type)
+        // If there is no listener, we just drain the queue
+        if (listener)
         {
-        case SDL_EVENT_QUIT:
-            listener->onExitRequested();
-            break;
-        case SDL_EVENT_WINDOW_FOCUS_LOST:
-            listener->onFocusLost();
-            break;
-        case SDL_EVENT_KEY_DOWN:
-            listener->onKeyDownEvent(KeyEvent(toKeyCode(e.key.key)));
-            break;
-        case SDL_EVENT_KEY_UP:
-            listener->onKeyUpEvent(KeyEvent(toKeyCode(e.key.key)));
-            break;
-        case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            listener->onMouseDownEvent(toMouseButtonEvent(e.button));
-            break;
-        case SDL_EVENT_MOUSE_BUTTON_UP:
-            listener->onMouseUpEvent(toMouseButtonEvent(e.button));
-            break;
-        case SDL_EVENT_MOUSE_MOTION:
-            listener->onMouseMoveEvent(toMouseMoveEvent(e.motion));
-            break;
-        case SDL_EVENT_MOUSE_WHEEL:
-            listener->onMouseWheelEvent(toMouseWheelEvent(e.wheel));
-            break;
-        default:
-            break;
+            handleEvent(e);
         }
     }
+}
+
+void SDLWindowImpl::handleEvent(const SDL_Event& e)
+{
+    // ImGui tells us when it wants exclusive use of the mouse / keyboard (e.g. when hovering over an ImGui window, or
+    // typing into an ImGui text field), in which case we should not pass those inputs on to the game.
+    const ImGuiIO& io = ImGui::GetIO();
+
+    switch (e.type)
+    {
+    case SDL_EVENT_QUIT:
+        listener->onExitRequested();
+        break;
+
+    case SDL_EVENT_WINDOW_FOCUS_LOST:
+        keysForwardedToListener.clear();
+        listener->onFocusLost();
+        break;
+
+    case SDL_EVENT_KEY_DOWN:
+        if (!io.WantCaptureKeyboard)
+        {
+            keysForwardedToListener.insert(e.key.key);
+            listener->onKeyDownEvent(KeyEvent(toKeyCode(e.key.key)));
+        }
+        break;
+
+    case SDL_EVENT_KEY_UP:
+        // Only pass on key-ups if we passed on the key-down. This way, a key pressed in-game and released while ImGui
+        // has focus doesn't get stuck, and a key pressed within ImGui doesn't trigger a key-up action in-game.
+        if (keysForwardedToListener.erase(e.key.key) > 0)
+        {
+            listener->onKeyUpEvent(KeyEvent(toKeyCode(e.key.key)));
+        }
+        break;
+
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        if (!io.WantCaptureMouse)
+        {
+            listener->onMouseDownEvent(toMouseButtonEvent(e.button));
+        }
+        break;
+
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+        // ImGui only claims a button release if it also claimed the press, so this keeps button events paired
+        if (!io.WantCaptureMouse)
+        {
+            listener->onMouseUpEvent(toMouseButtonEvent(e.button));
+        }
+        break;
+
+    case SDL_EVENT_MOUSE_MOTION:
+        // Always pass this on, since the game renders its own cursor (even on top of ImGui)
+        listener->onMouseMoveEvent(toMouseMoveEvent(e.motion));
+        break;
+
+    case SDL_EVENT_MOUSE_WHEEL:
+        if (!io.WantCaptureMouse)
+        {
+            listener->onMouseWheelEvent(toMouseWheelEvent(e.wheel));
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
+void SDLWindowImpl::beginImGuiFrame()
+{
+    ImGui_ImplSDL3_NewFrame();
 }
 
 }  // namespace Rival

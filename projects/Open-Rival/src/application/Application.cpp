@@ -1,5 +1,7 @@
 #include "application/Application.h"
 
+#include <imgui.h>
+
 #include <algorithm>  // std::min
 #include <chrono>
 #include <memory>
@@ -94,17 +96,24 @@ void Application::start(std::unique_ptr<State> initialState)
             // We clamp this so that animations don't jump too far ahead after a long stall.
             if (lastRenderTime)
             {
-                const auto timeSinceLastRender = std::min<TimeUtils::Clock::duration>(
-                        now - *lastRenderTime, TimeUtils::maxTimeSinceLastRender);
+                const auto timeSinceLastRender =
+                        std::min<TimeUtils::Clock::duration>(now - *lastRenderTime, TimeUtils::maxTimeSinceLastRender);
                 frameTiming.timeSinceLastRender = std::chrono::duration<float>(timeSinceLastRender).count();
             }
             lastRenderTime = now;
 
             // Time since the game logic was last updated; this enables us to
             // accurately extrapolate unit positions between logical movements.
-            const TimeUtils::TimePoint lastUpdate =
-                    nextUpdateDue - std::chrono::milliseconds(TimeUtils::timeStepMs);
+            const TimeUtils::TimePoint lastUpdate = nextUpdateDue - std::chrono::milliseconds(TimeUtils::timeStepMs);
             frameTiming.timeSinceLastUpdate = std::chrono::duration<float>(now - lastUpdate).count();
+
+            // Build this frame's ImGui UI. This must happen before rendering
+            // the State, since the Renderer draws the resulting ImGui data.
+            renderer->beginImGuiFrame();
+            window->beginImGuiFrame();
+            ImGui::NewFrame();
+            buildImGui();
+            ImGui::Render();
 
             // Render the game, once per iteration. With vsync enabled, this
             // will be called at the same frequency as the screen's refresh
@@ -147,6 +156,11 @@ void Application::onFocusLost()
 void Application::onKeyDownEvent(const KeyEvent& evt)
 {
     input.onKeyDown(evt);
+
+    if (evt.key == KeyCode::Backtick)
+    {
+        isImGuiVisible = !isImGuiVisible;
+    }
 
     if (state)
     {
@@ -194,6 +208,14 @@ void Application::onMouseWheelEvent(const MouseWheelEvent& evt)
     if (state)
     {
         state->mouseWheelMoved(evt);
+    }
+}
+
+void Application::buildImGui()
+{
+    if (isImGuiVisible)
+    {
+        ImGui::ShowDemoWindow(&isImGuiVisible);
     }
 }
 

@@ -2,6 +2,13 @@
 
 ## Overview
 
+### [Dear ImGui](https://github.com/ocornut/imgui)
+
+> **Used for:** Debug / developer UI.
+
+- Uses the SDL3 platform backend and OpenGL3 renderer backend.
+- Linked statically, so no DLL is required.
+
 ### [FreeType](https://www.freetype.org/download.html)
 
 > **Used for:** Font rendering.

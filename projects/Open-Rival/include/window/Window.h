@@ -38,6 +38,9 @@ public:
     virtual void setPos(int x, int y) = 0;
     virtual void pollEvents() = 0;
 
+    /** Prepares the ImGui platform backend for a new frame. */
+    virtual void beginImGuiFrame() = 0;
+
     void setListener(WindowListener* listener);
 
     int getWidth() const

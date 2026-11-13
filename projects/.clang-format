@@ -98,6 +98,11 @@ IncludeCategories:
     Priority:        1
     SortPriority:    52
     CaseSensitive:   true
+  ## ImGui
+  - Regex:           '^<imgui.+>'
+    Priority:        1
+    SortPriority:    40
+    CaseSensitive:   true
   ## RtMidi
   - Regex:           '^<RtMidi\.h>'
     Priority:        1

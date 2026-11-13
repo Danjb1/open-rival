@@ -122,8 +122,14 @@ public:
 private:
     void makeNextStateActive();
 
+    /** Builds the ImGui UI for the current frame. */
+    void buildImGui();
+
 private:
     bool exiting { false };
+
+    /** Whether to show the ImGui window (toggled with the backtick key). */
+    bool isImGuiVisible { false };
 
     // Subsystems and resources
     json& cfg;

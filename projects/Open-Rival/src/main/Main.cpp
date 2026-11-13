@@ -1,4 +1,5 @@
 #include "utils/SDLWrapper.h"  // Needed for SDL_Quit
+#include <imgui.h>
 #include <spdlog/spdlog.h>
 
 #include <memory>
@@ -23,6 +24,34 @@ using namespace Rival;
 // TODO: this should be wrapped in a class that uses RAII
 static FT_Library fontLib = nullptr;
 
+/** Owns the ImGui context for as long as it is in scope.
+ * This must outlive the Window and Renderer, since they initialize / shut down the ImGui backends. */
+class ImGuiContextScope
+{
+public:
+    ImGuiContextScope()
+    {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+
+        ImGuiIO& io = ImGui::GetIO();
+
+        // We render our own cursor, so prevent ImGui from changing (and showing!) the system cursor
+        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+    }
+
+    ~ImGuiContextScope()
+    {
+        ImGui::DestroyContext();
+    }
+
+    // Disable moving / copying
+    ImGuiContextScope(const ImGuiContextScope&) = delete;
+    ImGuiContextScope(ImGuiContextScope&&) = delete;
+    ImGuiContextScope& operator=(const ImGuiContextScope&) = delete;
+    ImGuiContextScope& operator=(ImGuiContextScope&&) = delete;
+};
+
 static void initLogging(const json& cfg)
 {
     const std::string defaultLogLevel = "info";
@@ -46,6 +75,9 @@ static void startApplication(const ProgramOptions& options)
     initLogging(cfg);
 
     // Initialize engine subsystems
+    // --- ImGui ---
+    ImGuiContextScope imGuiContext;
+
     // --- Window ---
     SDLWindowImpl window(800, 600, "Rival Realms");
     if (options.hasWindowPosition())

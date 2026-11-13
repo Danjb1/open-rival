@@ -3,6 +3,7 @@
     { "name": "freetype", "version>=": "2.13.3" },
     { "name": "glew", "version>=": "2.2.0#6" },
     { "name": "glm", "version>=": "1.0.1#3" },
+    { "name": "imgui", "version>=": "1.91.9", "features": [ "opengl3-binding", "sdl3-binding" ] },
     { "name": "nlohmann-json", "version>=": "3.11.2" },
     { "name": "openal-soft", "version>=": "1.23.1" },
     { "name": "rtmidi", "version>=": "5.0.0" },

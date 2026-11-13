@@ -67,6 +67,7 @@ target_include_directories(Open-Rival PRIVATE
 find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(rtmidi REQUIRED)
@@ -80,6 +81,7 @@ target_link_libraries(Open-Rival PRIVATE
     GLEW::glew
     glm::glm
 	glu32
+    imgui::imgui
     nlohmann_json::nlohmann_json
     OpenAL::OpenAL
 	opengl32

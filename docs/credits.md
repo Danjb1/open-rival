@@ -13,6 +13,7 @@
 - **The original developers** for making this great game!
 - **Library authors** for making this project possible:
     - catch2
+    - Dear ImGui
     - FreeType
     - glew
     - GLM
