@@ -75,15 +75,15 @@ const int viewportWidth = 800;
 const int viewportHeight = 600;
 const float aspectRatio = static_cast<float>(viewportWidth) / viewportHeight;
 Rect viewport(0, 0, viewportWidth, viewportHeight);
-World world(50, 50, false);
-PlayerContext playerContext;
 std::unordered_map<int, PlayerState> playerStates;
 DummyPlayerStore playerStore(playerStates);
 DummyGameCommandInvoker cmdInvoker;
-Input input;
+
+// NOTE: Any state that is modified by the tests (e.g. the World, PlayerContext and Input) should be created within each
+// test, since Catch2 may run the tests in any order, and re-runs each SCENARIO from the start for every section.
 
 /** Simulates the mouse moving to the given position (relative to the window, in pixels). */
-void setMousePos(int x, int y)
+void setMousePos(Input& input, int x, int y)
 {
     input.onMouseMoved(MouseMoveEvent(x, y));
 }
@@ -103,6 +103,10 @@ void setMousePos(int x, int y)
  */
 SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picker]")
 {
+    World world(50, 50, false);
+    PlayerContext playerContext;
+    Input input;
+
     // Create a pixel-perfect Camera
     float width = RenderUtils::pxToCamera_X(static_cast<float>(viewportWidth));
     Camera camera(0.0f, 0.0f, width, width / aspectRatio, world);
@@ -114,7 +118,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
         REQUIRE(playerContext.tileUnderMouse.x == -1);
         REQUIRE(playerContext.tileUnderMouse.y == -1);
 
-        setMousePos(viewportWidth + 10, viewportHeight + 10);
+        setMousePos(input, viewportWidth + 10, viewportHeight + 10);
 
         WHEN("getting the tile under the mouse")
         {
@@ -133,7 +137,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the centre of the screen")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(viewportWidth / 2, viewportHeight / 2);
+        setMousePos(input, viewportWidth / 2, viewportHeight / 2);
 
         AND_GIVEN("the camera is zoomed in at the centre of the map")
         {
@@ -178,7 +182,7 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     {
         camera.centreOnTile(50, 50);
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(viewportWidth - 1, viewportHeight - 1);
+        setMousePos(input, viewportWidth - 1, viewportHeight - 1);
         mousePicker.handleMouse();
 
         WHEN("getting the tile under the mouse")
@@ -204,7 +208,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
         // Due to the way tiles overlap, the point at
         //  (tileWidthPx * 1.5f, tileHeightPx * 2.5f)
         // should be the centre of tile (2, 2).
-        setMousePos(static_cast<int>(RenderUtils::tileWidthPx * 1.45f), static_cast<int>(RenderUtils::tileHeightPx * 2.45f));
+        setMousePos(input,
+                static_cast<int>(RenderUtils::tileWidthPx * 1.45f),
+                static_cast<int>(RenderUtils::tileHeightPx * 2.45f));
 
         WHEN("getting the tile under the mouse")
         {
@@ -223,7 +229,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the top-right quadrant of an even-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(1.55f * RenderUtils::tileWidthPx), static_cast<int>(2.45f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(1.55f * RenderUtils::tileWidthPx),
+                static_cast<int>(2.45f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -242,7 +250,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the bottom-left quadrant of an even-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(1.45f * RenderUtils::tileWidthPx), static_cast<int>(2.55f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(1.45f * RenderUtils::tileWidthPx),
+                static_cast<int>(2.55f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -261,7 +271,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the bottom-right quadrant of an even-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(1.55f * RenderUtils::tileWidthPx), static_cast<int>(2.55f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(1.55f * RenderUtils::tileWidthPx),
+                static_cast<int>(2.55f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -287,7 +299,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
         // Due to the way tiles overlap, the point at
         //  (tileWidthPx * 1.0f, tileHeightPx * 2.0f)
         // should be the centre of tile (1, 1).
-        setMousePos(static_cast<int>(0.95f * RenderUtils::tileWidthPx), static_cast<int>(1.95f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(0.95f * RenderUtils::tileWidthPx),
+                static_cast<int>(1.95f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -306,7 +320,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the top-right quadrant of an odd-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(1.05f * RenderUtils::tileWidthPx), static_cast<int>(1.95f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(1.05f * RenderUtils::tileWidthPx),
+                static_cast<int>(1.95f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -325,7 +341,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the bottom-left quadrant of an odd-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(0.95f * RenderUtils::tileWidthPx), static_cast<int>(2.05f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(0.95f * RenderUtils::tileWidthPx),
+                static_cast<int>(2.05f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -344,7 +362,9 @@ SCENARIO("Mouse picker should determine the tile under the mouse", "[mouse-picke
     GIVEN("the mouse is in the bottom-right quadrant of an odd-column tile")
     {
         MousePicker mousePicker(camera, viewport, world, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(1.05f * RenderUtils::tileWidthPx), static_cast<int>(2.05f * RenderUtils::tileHeightPx));
+        setMousePos(input,
+                static_cast<int>(1.05f * RenderUtils::tileWidthPx),
+                static_cast<int>(2.05f * RenderUtils::tileHeightPx));
 
         WHEN("getting the tile under the mouse")
         {
@@ -365,6 +385,8 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
 {
     // Create the world fresh each time so that no entities are lingering from previous tests
     World cleanWorld(50, 50, false);
+    PlayerContext playerContext;
+    Input input;
 
     // Add a Unit with a MouseHandlerComponent
     std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
@@ -378,7 +400,7 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
     GIVEN("the mouse is not over a unit")
     {
         MousePicker mousePicker(camera, viewport, cleanWorld, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(0, 0);
+        setMousePos(input, 0, 0);
 
         WHEN("getting the entity under the mouse")
         {
@@ -394,7 +416,9 @@ SCENARIO("Mouse picker should detect units under the mouse", "[mouse-picker]")
     GIVEN("the mouse is over a unit")
     {
         MousePicker mousePicker(camera, viewport, cleanWorld, playerContext, playerStore, cmdInvoker, input);
-        setMousePos(static_cast<int>(RenderUtils::tileWidthPx * 2.5f), static_cast<int>(RenderUtils::tileHeightPx * 4.5f));
+        setMousePos(input,
+                static_cast<int>(RenderUtils::tileWidthPx * 2.5f),
+                static_cast<int>(RenderUtils::tileHeightPx * 4.5f));
 
         WHEN("getting the entity under the mouse")
         {
