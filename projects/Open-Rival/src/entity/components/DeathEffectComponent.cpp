@@ -23,7 +23,8 @@ std::shared_ptr<Entity> DeathEffectComponent::spawnEffect(Facing facing, float o
 
     // Spawn it in the world
     World* world = entity->getWorld();
-    world->addEntity(effect, entity->getPos());
+    const MapNode& pos = entity->getPos();
+    world->requestAddEntity(effect, pos.x, pos.y);
 
     return effect;
 }

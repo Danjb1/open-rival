@@ -209,7 +209,7 @@ void AttackComponent::spawnProjectile(const AttackDef& attackDef, const MapNode&
     World* world = entity->getWorld();
     MapNode pos = entity->getPos();
     auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, pos, targetPos);
-    world->addEntity(projectile, pos);
+    world->requestAddEntity(projectile, pos.x, pos.y);
 }
 
 void AttackComponent::switchToNewTarget()

@@ -66,14 +66,16 @@ public:
     /**
      * Adds an Entity to the world immediately.
      *
-     * Should not be called while iterating over Entities.
+     * Should not be called while iterating over Entities (use `requestAddEntity` instead).
+     * If it is, an error is logged and the Entity is added later, as though `requestAddEntity` had been called.
      */
     void addEntity(std::shared_ptr<Entity> entity, int x, int y);
 
     /**
      * Adds an Entity to the world immediately.
      *
-     * Should not be called while iterating over Entities.
+     * Should not be called while iterating over Entities (use `requestAddEntity` instead).
+     * If it is, an error is logged and the Entity is added later, as though `requestAddEntity` had been called.
      */
     void addEntity(std::shared_ptr<Entity> entity, const MapNode& pos);
 
@@ -88,13 +90,15 @@ public:
      * Adds all pending Entities to the world immediately.
      *
      * Should not be called while iterating over Entities.
+     * If it is, an error is logged and nothing happens.
      */
     void addPendingEntities();
 
     /**
      * Removes an Entity from the world immediately.
      *
-     * Should not be called while iterating over Entities. Mark Entities for deletion instead.
+     * Should not be called while iterating over Entities; mark Entities for deletion instead.
+     * If it is, an error is logged and nothing happens.
      */
     void removeEntity(std::shared_ptr<Entity> entity);
 
@@ -167,7 +171,18 @@ private:
 
     std::vector<TilePassability> createPassability(int width, int height) const;
 
+    /** Whether we are currently iterating over the Entity list.
+     * While this is true, the Entity list must not be modified. */
+    bool isIteratingEntities() const
+    {
+        return entityIterationDepth > 0;
+    }
+
 private:
+    /** Number of active iterations over the Entity list (iterations may be nested).
+     * Mutable so that iteration can be tracked in const methods. */
+    mutable int entityIterationDepth = 0;
+
     std::vector<Tile> tiles;
     PassabilityMap passabilityMap;
     bool wilderness;

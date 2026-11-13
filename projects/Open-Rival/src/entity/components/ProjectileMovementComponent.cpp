@@ -155,7 +155,7 @@ void ProjectileMovementComponent::spawnImpactEffect() const
     // Facing is irrelevant!
     std::shared_ptr<Entity> effect = entityFactory->createEffect(*impactEffectDef, Facing::North, offsetY);
     World* world = entity->getWorld();
-    world->addEntity(effect, targetNode);
+    world->requestAddEntity(effect, targetNode.x, targetNode.y);
 }
 
 void ProjectileMovementComponent::playImpactSound(const std::string& soundName) const

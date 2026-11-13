@@ -1,6 +1,36 @@
 #include "game/World.h"
 
+#include "utils/LogUtils.h"
+
 namespace Rival {
+
+namespace {
+
+/**
+ * Tracks an iteration over the Entity list for as long as it is in scope.
+ */
+class EntityIterationGuard
+{
+public:
+    explicit EntityIterationGuard(int& depth)
+        : depth(depth)
+    {
+        ++depth;
+    }
+
+    ~EntityIterationGuard()
+    {
+        --depth;
+    }
+
+    EntityIterationGuard(const EntityIterationGuard&) = delete;
+    EntityIterationGuard& operator=(const EntityIterationGuard&) = delete;
+
+private:
+    int& depth;
+};
+
+}  // namespace
 
 // Creates an empty World
 World::World(int width, int height, bool wilderness)
@@ -74,6 +104,14 @@ void World::addEntity(std::shared_ptr<Entity> entity, int x, int y)
 
 void World::addEntity(std::shared_ptr<Entity> entity, const MapNode& pos)
 {
+    if (isIteratingEntities())
+    {
+        // Adding to the Entity list now would invalidate the iterator in use, so defer it instead
+        LOG_ERROR("Tried to add an Entity while iterating over Entities; use requestAddEntity instead");
+        requestAddEntity(entity, pos.x, pos.y);
+        return;
+    }
+
     entitiesList.push_back(entity);
     entitiesById[nextId] = entity;
     spatialIndex.addEntity({ nextId, pos, entity->isBig() });
@@ -88,6 +126,12 @@ void World::requestAddEntity(std::shared_ptr<Entity> entity, int x, int y)
 
 void World::addPendingEntities()
 {
+    if (isIteratingEntities())
+    {
+        LOG_ERROR("Tried to add pending Entities while iterating over Entities");
+        return;
+    }
+
     for (const auto& pendingEntity : pendingEntities)
     {
         addEntity(pendingEntity.entity, pendingEntity.x, pendingEntity.y);
@@ -97,6 +141,12 @@ void World::addPendingEntities()
 
 void World::removeEntity(std::shared_ptr<Entity> entity)
 {
+    if (isIteratingEntities())
+    {
+        LOG_ERROR("Tried to remove an Entity while iterating over Entities; mark it for deletion instead");
+        return;
+    }
+
     const auto it = std::find(entitiesList.begin(), entitiesList.end(), entity);
     if (it != entitiesList.end())
     {
@@ -149,6 +199,7 @@ SharedMutableEntityList World::getMutableEntitiesFromIds(const std::vector<int>&
 
 void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity>)>& func)
 {
+    EntityIterationGuard guard(entityIterationDepth);
     for (const auto& entity : entitiesList)
     {
         func(entity);
@@ -157,6 +208,7 @@ void World::forEachMutableEntity(const std::function<void(std::shared_ptr<Entity
 
 void World::forEachEntity(const std::function<void(std::shared_ptr<const Entity>)>& func) const
 {
+    EntityIterationGuard guard(entityIterationDepth);
     for (const auto& entity : entitiesList)
     {
         func(entity);
