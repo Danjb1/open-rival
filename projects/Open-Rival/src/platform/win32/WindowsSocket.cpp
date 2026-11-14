@@ -12,7 +12,6 @@
 #include <cstring>  // std::memset
 #include <stdexcept>
 #include <system_error>
-#include <utility>  // std::exchange
 
 #include "utils/LogUtils.h"
 
@@ -136,24 +135,8 @@ Socket Socket::createClient(const std::string& address, std::uint16_t port)
 // Socket Implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Socket::Socket(Socket&& other) noexcept
-    // Move constructor: this object is being created to replace `other`.
-    // Just steal the socket from `other`.
-    : handle(std::exchange(other.handle, INVALID_SOCKET))
-{
-}
-
-Socket& Socket::operator=(Socket&& other) noexcept
-{
-    if (this != &other)
-    {
-        // Move assignment: this object is being replaced by `other`.
-        // First close this socket, then steal the socket from `other`.
-        close();
-        handle = std::exchange(other.handle, INVALID_SOCKET);
-    }
-    return *this;
-}
+/** How often blocking calls check whether the socket has been shut down. */
+static constexpr long pollIntervalMicros = 100'000;  // 100ms
 
 void Socket::init()
 {
@@ -162,10 +145,65 @@ void Socket::init()
     ::setsockopt(handle, IPPROTO_TCP, TCP_NODELAY, (char*) (&socketOptionValue), sizeof(BOOL));
 }
 
+void Socket::shutdown() noexcept
+{
+    if (isShutDown.exchange(true) || handle == INVALID_SOCKET)
+    {
+        // Already shut down, or there is nothing to shut down
+        return;
+    }
+
+    // Let the other side know that the connection is ending.
+    // This fails for listening sockets, since they are not connected, but this is harmless.
+    // Note that, on Windows, this does NOT wake up blocking calls on other threads; instead, those calls periodically
+    // check whether the socket has been shut down (see `waitUntilReady`).
+    ::shutdown(handle, SD_BOTH);
+}
+
+/**
+ * Blocking call that waits until the socket is ready (for either reading or writing).
+ * This is used as a safety mechanism before calling various built-in blocking methods (e.g. `accept`, `send`, `recv`),
+ * because it reliably detects whether the socket has been closed and returns, instead of blocking indefinitely.
+ */
+bool Socket::waitUntilReady(bool forWriting) const
+{
+    // Keep polling the socket as long as it is open
+    while (isOpen())
+    {
+        // Create an `fd_set` and populate it with our socket handle
+        ::fd_set socketSet;
+        FD_ZERO(&socketSet);
+        FD_SET(handle, &socketSet);
+
+        // Call `select` to check the socket status, with a timeout to ensure we don't block forever
+        ::fd_set* readSet = forWriting ? nullptr : &socketSet;
+        ::fd_set* writeSet = forWriting ? &socketSet : nullptr;
+        ::timeval timeout = { 0, pollIntervalMicros };
+        const int result = ::select(0, readSet, writeSet, nullptr, &timeout);
+
+        if (result > 0)
+        {
+            // Socket is ready!
+            return true;
+        }
+
+        if (result == SOCKET_ERROR)
+        {
+            LOG_WARN("Failed to wait for socket: {}", ::WSAGetLastError());
+            return false;
+        }
+
+        // Timed out; now is our chance to return if the socket was closed
+    }
+
+    return false;
+}
+
 void Socket::close() noexcept
 {
-    if (!isOpen())
+    if (handle == INVALID_SOCKET)
     {
+        // Already closed
         return;
     }
 
@@ -178,23 +216,33 @@ void Socket::close() noexcept
     handle = INVALID_SOCKET;
 }
 
+std::uint16_t Socket::getLocalPort() const
+{
+    ::sockaddr_in address = {};
+    int addressSize = sizeof(address);
+    if (::getsockname(handle, reinterpret_cast<::sockaddr*>(&address), &addressSize) != 0)
+    {
+        return 0;
+    }
+    return ::ntohs(address.sin_port);
+}
+
 Socket Socket::accept()
 {
-    SOCKET clientSocket = INVALID_SOCKET;
+    // A listening socket is "ready to read" when there is a connection waiting
+    if (!waitUntilReady(false))
+    {
+        return {};
+    }
 
-    clientSocket = ::accept(handle, nullptr, nullptr);
-
-    if (clientSocket == INVALID_SOCKET && isOpen())
+    const SOCKET clientSocket = ::accept(handle, nullptr, nullptr);
+    if (clientSocket == INVALID_SOCKET)
     {
         LOG_WARN("Failed to accept client: {}", ::WSAGetLastError());
+        return {};
     }
 
     return { clientSocket };
-}
-
-bool Socket::isOpen() const
-{
-    return handle != INVALID_SOCKET;
 }
 
 void Socket::send(const std::vector<char>& buffer)
@@ -203,14 +251,26 @@ void Socket::send(const std::vector<char>& buffer)
 
     while (bytesSent < buffer.size())
     {
+        if (!waitUntilReady(true))
+        {
+            // Shut down while waiting, or an error occurred
+            shutdown();
+            break;
+        }
+
         std::size_t bytesRemaining = buffer.size() - bytesSent;
         int result = ::send(handle, buffer.data() + bytesSent, static_cast<int>(bytesRemaining), 0);
 
-        if (result == SOCKET_ERROR && isOpen())
+        if (result == SOCKET_ERROR)
         {
-            // Socket is still open on our side but may have been closed by the other side
-            LOG_WARN("Failed to send on socket: {}", ::WSAGetLastError());
-            close();
+            if (isOpen())
+            {
+                // Socket is still open on our side but may have been closed by the other side
+                LOG_WARN("Failed to send on socket: {}", ::WSAGetLastError());
+                shutdown();
+            }
+
+            // Otherwise, the socket was shut down on our side (e.g. by another thread); either way, we can't send
             break;
         }
 
@@ -243,6 +303,10 @@ static void handleSocketError()
         LOG_DEBUG("Socket closed locally (connection aborted)");
         break;
 
+    case WSAESHUTDOWN:
+        LOG_DEBUG("Socket shut down locally");
+        break;
+
     case WSAECONNRESET:
         LOG_INFO("Socket closed by peer (connection reset)");
         break;
@@ -259,6 +323,13 @@ void Socket::receive(std::vector<char>& buffer)
 
     while (bytesReceived < buffer.size())
     {
+        if (!waitUntilReady(false))
+        {
+            // Shut down while waiting, or an error occurred
+            shutdown();
+            break;
+        }
+
         std::size_t bytesExpected = buffer.size() - bytesReceived;
         int result = ::recv(handle, buffer.data() + bytesReceived, static_cast<int>(bytesExpected), 0);
 
@@ -268,12 +339,13 @@ void Socket::receive(std::vector<char>& buffer)
             continue;
         }
 
-        if (result == SOCKET_ERROR)
+        if (result == SOCKET_ERROR && isOpen())
         {
             handleSocketError();
         }
 
-        close();
+        // The connection has been closed by the other side, or shut down on our side (e.g. by another thread)
+        shutdown();
         break;
     }
 }

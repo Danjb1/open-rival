@@ -19,6 +19,7 @@ set(OPEN_RIVAL_TEST_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestMousePicker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestPassabilityMap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestRenderUtils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSocket.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSpatialIndex.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestSpritesheet.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/tests/TestWalkerComponent.cpp

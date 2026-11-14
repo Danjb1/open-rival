@@ -2,6 +2,10 @@
 Changelog
 ================================================================================
 
+v0.5.0
+- Fixed melee units attacking from too far away
+- Improved performance and stability
+
 v0.4.0 (Combat demo)
 - Units can now attack each other
 - Added health bars for units

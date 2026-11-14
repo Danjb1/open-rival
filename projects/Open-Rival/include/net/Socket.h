@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -47,14 +48,31 @@ public:
     Socket& operator=(const Socket& other) = delete;
     Socket& operator=(Socket&& other) noexcept;
 
-    /** Blocking call that waits for a new connection. */
+    /** Blocking call that waits for a new connection.
+     * Returns an invalid Socket if this socket is shut down while waiting. */
     Socket accept();
 
-    /** Closes the socket; forces any blocking calls to return. */
+    /**
+     * Stops all communication on this socket, and forces any blocking calls to return.
+     *
+     * This is safe to call from any thread. The socket is not released until `close()` is called.
+     */
+    void shutdown() noexcept;
+
+    /**
+     * Releases the socket.
+     *
+     * This must only be called when no other thread is using the socket. To stop other threads from using the socket
+     * (e.g. to unblock a call to `receive`), call `shutdown()` first, and wait for those threads to finish.
+     */
     void close() noexcept;
 
-    /** Determines if this socket is currently open. */
+    /** Determines if this socket is currently open, i.e. it has not been shut down or closed. */
     bool isOpen() const;
+
+    /** Gets the local port to which this socket is bound, or 0 if this cannot be determined.
+     * This is useful when creating a server on port 0, which picks any available port. */
+    std::uint16_t getLocalPort() const;
 
     /** Sends data on this socket. */
     void send(const std::vector<char>& buffer);
@@ -67,8 +85,15 @@ private:
 
     void init();
 
+    /** Waits until this socket is ready to be read from (or written to).
+     * Returns false if the socket is shut down while waiting, or an error occurs. */
+    bool waitUntilReady(bool forWriting) const;
+
 private:
     SOCKET handle;
+
+    /** Atomic because a socket may be shut down by one thread while another thread is using it. */
+    std::atomic<bool> isShutDown = false;
 };
 
 }  // namespace Rival

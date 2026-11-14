@@ -18,15 +18,19 @@ Server::~Server()
 {
     LOG_INFO("Shutting down server");
 
+    // Stop accepting new connections first, so that the accept thread can't add any more while we close them
+    serverSocket.shutdown();
+    if (acceptThread.joinable())
+    {
+        acceptThread.join();
+    }
+    serverSocket.close();
+
     // Close connections
     for (auto& entry : connectedClients)
     {
         entry.second->close();
     }
-
-    // Kill server
-    serverSocket.close();
-    acceptThread.join();
 
     LOG_INFO("Server successfully shut down");
 }

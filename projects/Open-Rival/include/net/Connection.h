@@ -75,7 +75,7 @@ private:
     void receiveThreadLoop() noexcept;
     void receivePackets();
     bool readFromSocket(std::size_t numBytes);
-    void closeSocketFromThread() noexcept;
+    void shutDownSocketFromThread() noexcept;
 
     void sendNow(std::shared_ptr<const Packet> packet);
 

@@ -51,8 +51,9 @@ void Connection::close() noexcept
     LOG_DEBUG("Closing connection...");
     state = ConnectionState::Closing;
 
-    // Try to close the underlying socket, although it may well be closed already
-    socket.close();
+    // Shut down the socket, which causes any blocking calls in our threads to return.
+    // We can't close the socket until the threads have finished using it.
+    socket.shutdown();
 
     // Forcibly wake the send thread so it can re-evaluate its end condition
     {
@@ -75,6 +76,9 @@ void Connection::close() noexcept
         LOG_TRACE("Waiting for connection receive thread to finish");
         receiveThread.join();
     }
+
+    // Now that no other threads are using the socket, it can be released
+    socket.close();
 
     state = ConnectionState::Closed;
     LOG_DEBUG("Connection successfully closed!");
@@ -106,7 +110,7 @@ void Connection::sendThreadLoop() noexcept
     catch (const std::exception& e)
     {
         LOG_ERROR("Failed to send packet, closing connection: {}", e.what());
-        closeSocketFromThread();
+        shutDownSocketFromThread();
     }
 }
 
@@ -149,7 +153,7 @@ void Connection::receiveThreadLoop() noexcept
     catch (const std::exception& e)
     {
         LOG_ERROR("Failed to receive packet, closing connection: {}", e.what());
-        closeSocketFromThread();
+        shutDownSocketFromThread();
     }
 }
 
@@ -204,14 +208,14 @@ void Connection::receivePackets()
 }
 
 /**
- * Closes the socket from one of our own threads, e.g. after an error.
+ * Shuts down the socket from one of our own threads, e.g. after an error.
  *
  * We cannot call `close()` here, because it joins both threads, and a thread cannot join itself. Instead, we just
- * close the socket and rely on later cleanup by the thread that owns the Connection.
+ * shut down the socket and rely on later cleanup by the thread that owns the Connection.
  */
-void Connection::closeSocketFromThread() noexcept
+void Connection::shutDownSocketFromThread() noexcept
 {
-    socket.close();
+    socket.shutdown();
 
     // Wake the send thread so that it detects the dead socket and terminates
     std::lock_guard<std::mutex> lock(packetsToSendMutex);
