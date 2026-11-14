@@ -18,6 +18,7 @@
     - glew
     - GLM
     - JSON for Modern C++
+    - Magic Enum
     - OpenAL Soft
     - RtMidi
     - SDL3

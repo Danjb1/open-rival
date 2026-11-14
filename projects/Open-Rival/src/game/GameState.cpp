@@ -1,5 +1,7 @@
 #include "game/GameState.h"
 
+#include <magic_enum/magic_enum.hpp>
+
 #include <map>  // std::cend
 #include <stdexcept>
 #include <string>
@@ -19,7 +21,6 @@
 #include "net/packet-handlers/GameCommandPacketHandler.h"
 #include "net/packet-handlers/PacketHandler.h"
 #include "net/packets/GameCommandPacket.h"
-#include "utils/EnumUtils.h"
 #include "utils/LogUtils.h"
 #include "utils/MouseUtils.h"
 #include "utils/TimeUtils.h"
@@ -116,7 +117,7 @@ void GameState::pollNetwork()
         const auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
-            LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));
+            LOG_WARN("Received unexpected packet of type {}", magic_enum::enum_name(packet->getType()));
             continue;
         }
 

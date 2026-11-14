@@ -407,6 +407,7 @@ find_package(Freetype REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(magic_enum CONFIG REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -468,6 +469,7 @@ target_link_libraries(Open-Rival-lib
     GLEW::glew
     glm::glm
     $<$<CONFIG:Debug>:imgui::imgui> # debug only
+    magic_enum::magic_enum
     OpenAL::OpenAL
     OpenGL::GL
     OpenGL::GLU

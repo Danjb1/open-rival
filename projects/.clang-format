@@ -103,6 +103,11 @@ IncludeCategories:
     Priority:        1
     SortPriority:    40
     CaseSensitive:   true
+  ## Magic Enum
+  - Regex:           '^<magic_enum\/.+>'
+    Priority:        1
+    SortPriority:    40
+    CaseSensitive:   true
   ## RtMidi
   - Regex:           '^<RtMidi\.h>'
     Priority:        1

@@ -89,7 +89,6 @@
 - Consider returning pointers instead of references
 - Consider returning / storing raw pointers instead of smart pointers
 - In tests, we only need to mock resource *loading*, but not Resources
-- Use some kind of "magic enum" library for enum-to-string functionality
 - Prefer default member initialization to initializer lists
 - Don't use `const` or references for member variables?
     - Should Resources always be `const` (e.g. when using `app.getResources()`)?
@@ -112,8 +111,6 @@
 - UnitDef exposes some properties as public, which could be dangerous
 - PassabilityComponent for units is only used to set the initial passability; after that, we rely on the MovementComponent
 - Replace ConfigUtils with JsonUtils
-- Improve enums: https://stackoverflow.com/review/suggested-edits/33596043
-    - Also see comment: "You don't need `typename` here"
 - Copy/move constructors should use `noexcept`
 - Allow non-copyable classes to be moved (check uses of "= delete")
 - Replace PacketFactory's switch statement with a map of type -> function

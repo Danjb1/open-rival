@@ -25,6 +25,12 @@
 
 > **Used for:** JSON parsing.
 
+### [Magic Enum](https://github.com/Neargye/magic_enum)
+
+> **Used for:** Enum-to-string conversion.
+
+- Header-only, so no DLL is required.
+
 ### [OpenAL Soft](https://github.com/kcat/openal-soft)
 
 > **Used for:** OpenAL functionality (playing sounds).

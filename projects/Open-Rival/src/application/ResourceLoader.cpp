@@ -1,5 +1,7 @@
 #include "application/ResourceLoader.h"
 
+#include <magic_enum/magic_enum.hpp>
+
 #include <gfx/Renderer.h>
 
 #include "application/PathUtils.h"
@@ -425,7 +427,7 @@ std::unordered_map<UnitType, UnitDef> ResourceLoader::initUnitDefs() const
         }
         catch (const json::exception&)
         {
-            LOG_ERROR("Error parsing unit definition: {}", nextUnitType);
+            LOG_ERROR("Error parsing unit definition: {}", magic_enum::enum_name(unitType));
             throw;
         }
 
@@ -450,15 +452,15 @@ std::unordered_map<BuildingType, BuildingDef> ResourceLoader::initBuildingDefs()
             throw std::runtime_error("Trying to parse invalid building type: " + std::to_string(nextBuildingType));
         }
 
-        BuildingType unitType = static_cast<BuildingType>(nextBuildingType);
+        BuildingType buildingType = static_cast<BuildingType>(nextBuildingType);
 
         try
         {
-            allBuildingDefs.emplace(unitType, BuildingDef::fromJson(rawBuildingDef));
+            allBuildingDefs.emplace(buildingType, BuildingDef::fromJson(rawBuildingDef));
         }
         catch (const json::exception&)
         {
-            LOG_ERROR("Error parsing building definition: {}", nextBuildingType);
+            LOG_ERROR("Error parsing building definition: {}", magic_enum::enum_name(buildingType));
             throw;
         }
 

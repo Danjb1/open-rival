@@ -1,5 +1,7 @@
 #include "lobby/LobbyState.h"
 
+#include <magic_enum/magic_enum.hpp>
+
 #include <chrono>
 #include <random>
 
@@ -140,7 +142,7 @@ void LobbyState::pollNetwork()
         const auto iter = packetHandlers.find(packet->getType());
         if (iter == packetHandlers.cend())
         {
-            LOG_WARN("Received unexpected packet of type {}", EnumUtils::toIntegral(packet->getType()));
+            LOG_WARN("Received unexpected packet of type {}", magic_enum::enum_name(packet->getType()));
             continue;
         }
 
