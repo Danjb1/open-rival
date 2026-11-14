@@ -59,6 +59,13 @@ public:
      */
     virtual void render(const FrameTiming& frameTiming) = 0;
 
+#ifdef ENABLE_IMGUI
+    /**
+     * Builds the ImGui menu that will be rendered for this State.
+     */
+    virtual void buildImGui() {}
+#endif
+
     const Resources& getResources() const;
 
 protected:

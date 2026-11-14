@@ -69,6 +69,9 @@ public:
     void mouseWheelMoved(const MouseWheelEvent& evt) override;
     void update(int delta) override;
     void render(const FrameTiming& frameTiming) override;
+#ifdef ENABLE_IMGUI
+    void buildImGui() override;
+#endif
     // End State override
 
     // Begin WorldStore override

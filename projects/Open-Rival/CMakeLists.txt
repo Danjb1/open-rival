@@ -62,6 +62,7 @@ set(OPEN_RIVAL_SOURCES
     src/game/EffectDef.cpp
     src/game/GameInterface.cpp
     src/game/GameState.cpp
+    src/game/GameStateDebugMenu.cpp
     src/game/InventoryComponent.cpp
     src/game/MapUtils.cpp
     src/game/MousePicker.cpp

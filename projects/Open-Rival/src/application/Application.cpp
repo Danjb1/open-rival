@@ -244,7 +244,7 @@ void Application::buildImGui()
 {
     if (isImGuiVisible)
     {
-        ImGui::ShowDemoWindow(&isImGuiVisible);
+        state->buildImGui();
     }
 }
 #endif
