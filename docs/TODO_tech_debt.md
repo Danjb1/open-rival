@@ -18,7 +18,8 @@
 
 ### Debugging
 
-- Passability debug visualisation
+- Passability grid debug visualisation
+- Reachability debug visualisation
 - Pathfinding debug visualisation
 
 ### Fonts

@@ -5,6 +5,7 @@
 
 #ifdef ENABLE_IMGUI
 #include <imgui.h>
+#include <magic_enum/magic_enum.hpp>
 
 #include <string>
 
@@ -15,15 +16,27 @@ namespace Rival {
 
 namespace {
 
-static void addEntityName(std::shared_ptr<Entity> entity)
+static void addPassability(TilePassability passability)
 {
-    if (!entity)
+    for (const TilePassability flag : magic_enum::enum_values<TilePassability>())
     {
-        ImGui::TextColored(DebugUtils::red, "None");
-        return;
+        bool isFlagPresent = (passability & flag) != TilePassability::Clear;
+        auto color = isFlagPresent ? DebugUtils::green : DebugUtils::red;
+        ImGui::TextColored(color, "%s", magic_enum::enum_name(flag).data());
     }
+}
 
-    ImGui::Text(entity->getDebugName().c_str());
+static void addEntityName(const Entity& entity)
+{
+    ImGui::Text(entity.getDebugName().c_str());
+}
+
+static void addEntityInfo(const Entity& entity)
+{
+    if (const Unit* unit = entity.as<Unit>())
+    {
+        ImGui::Text("State: %s", magic_enum::enum_name(unit->getState()).data());
+    }
 }
 
 }  // anonymous namespace
@@ -39,12 +52,22 @@ void GameState::buildImGui()
             {
                 const auto& tileUnderMouse = playerContext.tileUnderMouse;
                 ImGui::Text(tileUnderMouse.toString().c_str());
+                auto passability = world->getPassabilityMap()->getPassability(tileUnderMouse);
+                addPassability(passability);
             }
 
             // Entity under mouse
             if (ImGui::CollapsingHeader("Entity Under Mouse", ImGuiTreeNodeFlags_DefaultOpen))
             {
-                addEntityName(playerContext.weakEntityUnderMouse.lock());
+                if (auto hoveredEntity = playerContext.weakEntityUnderMouse.lock())
+                {
+                    addEntityName(*hoveredEntity);
+                    addEntityInfo(*hoveredEntity);
+                }
+                else
+                {
+                    ImGui::Text("None");
+                }
             }
 
             ImGui::EndTabItem();

@@ -4,12 +4,6 @@
 ## WIP
 <!----------------------------------------------------------------------------->
 
-## ImGui
-
-- Show details of selected entity (including components)
-- Show passability toggle
-- Show reachability toggle
-
 # Menus
 
 - Revamp [menu system](/docs/design/menus.md)

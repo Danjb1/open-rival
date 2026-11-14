@@ -1,5 +1,7 @@
 #pragma once
 
+#include <magic_enum/magic_enum_flags.hpp>
+
 #include <cstdint>  // uint*_t
 
 #include "utils/EnumUtils.h"
@@ -110,3 +112,11 @@ private:
 };
 
 }  // namespace Rival
+
+/* Explicitly declare TilePassability as enum flags.
+ * Otherwise, Magic Enum does not find all values. */
+template <>
+struct magic_enum::customize::enum_range<Rival::TilePassability>
+{
+    static constexpr bool is_flags = true;
+};
