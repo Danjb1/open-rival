@@ -194,7 +194,6 @@
 
 ### Dependencies
 
-- Is GLEW actually needed?
 - Consider replacing SDL with GLFW
     - Replace SDL_image with stb_image? (this is what it uses internally)
 - Suppress warnings from JSON and spdlog libraries
