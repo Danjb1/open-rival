@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.25)
 project(Open-Rival
     VERSION 0.5.0
     DESCRIPTION "Faithful, modernized reimplementation of the 1998 RTS game Rival Realms"
@@ -28,6 +28,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Compile source files in parallel to speed up builds
 target_compile_options(project_options INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
+# Embed debug information in object files (/Z7), instead of writing it to a separate PDB during compilation (/Zi).
+# This is required for the test project to reuse the library's pre-compiled headers: with /Zi, CMake copies the
+# library's compile-time PDB into the test project before each build, which corrupts the test project's own debug
+# information. The linker still produces a PDB for each executable, so debugging is unaffected.
+set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
 
 # Projects can link with this "library" to use the warnings
 # specified in CompilerWarnings.cmake
