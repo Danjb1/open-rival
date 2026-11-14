@@ -236,7 +236,7 @@ std::shared_ptr<Entity> EntityFactory::createDecoration(const ObjectPlacement& o
 }
 
 std::shared_ptr<Entity> EntityFactory::createProjectile(
-        const AttackDef& attackDef, const ProjectileDef& projectileDef, const MapNode& pos, const MapNode& target) const
+        const AttackDef& attackDef, const ProjectileDef& projectileDef, Facing facing, const MapNode& target) const
 {
     // Create Entity
     std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(attackDef);
@@ -250,7 +250,6 @@ std::shared_ptr<Entity> EntityFactory::createProjectile(
     const bool isAnimated = projectileDef.numAnimFrames > 0;
     if (projectileDef.shouldUseRotation)
     {
-        const Facing facing = MapUtils::getDir(pos, target);
         auto facingComponent = std::make_shared<FacingComponent>(facing);
         projectile->attach(facingComponent);
 

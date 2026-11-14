@@ -102,6 +102,53 @@ TEST_CASE("getDir should return the correct direction from an odd-column node", 
     }
 }
 
+TEST_CASE("getDir should return the direction that points most directly towards a distant tile", "[map-utils]")
+{
+    SECTION("mostly horizontal, from either an upper or a lower tile")
+    {
+        // All of these are 3 columns and 1 half-row away
+        REQUIRE(MapUtils::getDir({ 2, 5 }, { 5, 4 }) == Facing::East);
+        REQUIRE(MapUtils::getDir({ 2, 5 }, { 5, 5 }) == Facing::East);
+        REQUIRE(MapUtils::getDir({ 3, 5 }, { 6, 5 }) == Facing::East);
+        REQUIRE(MapUtils::getDir({ 3, 5 }, { 6, 6 }) == Facing::East);
+    }
+
+    SECTION("mostly vertical")
+    {
+        // 1 column and 9 half-rows away
+        REQUIRE(MapUtils::getDir({ 10, 10 }, { 11, 5 }) == Facing::North);
+    }
+
+    SECTION("exactly diagonal")
+    {
+        REQUIRE(MapUtils::getDir({ 10, 10 }, { 12, 9 }) == Facing::NorthEast);
+    }
+
+    SECTION("the same offset gives the same direction, regardless of the starting tile")
+    {
+        const MapNode upperStart(20, 20);
+        const MapNode lowerStart(21, 20);
+
+        for (int dx = -8; dx <= 8; ++dx)
+        {
+            for (int dy = -8; dy <= 8; ++dy)
+            {
+                if ((dx + dy) % 2 != 0)
+                {
+                    // Not a valid offset between 2 tiles
+                    continue;
+                }
+
+                const MapNode targetFromUpper =
+                        MapUtils::fromHalfRow(upperStart.x + dx, MapUtils::getHalfRow(upperStart) + dy);
+                const MapNode targetFromLower =
+                        MapUtils::fromHalfRow(lowerStart.x + dx, MapUtils::getHalfRow(lowerStart) + dy);
+                REQUIRE(MapUtils::getDir(upperStart, targetFromUpper) == MapUtils::getDir(lowerStart, targetFromLower));
+            }
+        }
+    }
+}
+
 TEST_CASE("getLogicalDistance should return the correct distance between 2 tiles", "[map-utils]")
 {
     // A Unit placed at this tile in the Scenario Editor with Sight 2...

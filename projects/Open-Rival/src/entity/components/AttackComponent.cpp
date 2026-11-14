@@ -218,7 +218,12 @@ void AttackComponent::spawnProjectile(const AttackDef& attackDef, const MapNode&
 
     World* world = entity->getWorld();
     MapNode pos = entity->getPos();
-    auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, pos, targetPos);
+
+    // Projectiles face the same way as the attacker (or towards the target, if the attacker has no facing)
+    const auto facingComponent = weakFacingComp.lock();
+    const Facing facing = facingComponent ? facingComponent->getFacing() : MapUtils::getDir(pos, targetPos);
+
+    auto projectile = entityFactory->createProjectile(attackDef, *projectileDef, facing, targetPos);
     world->requestAddEntity(projectile, pos.x, pos.y);
 }
 

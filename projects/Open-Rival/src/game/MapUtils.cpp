@@ -6,6 +6,8 @@
 #include <optional>
 #include <stdexcept>
 
+#include "gfx/RenderConstants.h"
+
 namespace Rival {
 
 constexpr MapNode MapNode::Invalid { -1, -1 };
@@ -47,6 +49,79 @@ Step getStep(Facing dir)
     throw std::runtime_error("Invalid facing");
 }
 
+/**
+ * All directions, in the order in which neighbors are returned by `findNeighbors`.
+ *
+ * The order itself is arbitrary, but it should not be changed lightly, since it affects which route the pathfinder
+ * picks when several routes have the same cost.
+ */
+constexpr std::array<Facing, maxNeighbors> allDirections = {
+    Facing::North,
+    Facing::East,
+    Facing::South,
+    Facing::West,
+    Facing::NorthEast,
+    Facing::NorthWest,
+    Facing::SouthEast,
+    Facing::SouthWest,
+};
+
+/**
+ * Gets the direction that points most directly at a (potentially distant) target, as seen on screen.
+ *
+ * `dx` and `dy` are the offset to the target, in columns and half-rows.
+ */
+Facing getScreenDir(int dx, int dy)
+{
+    /*
+     * The target lies in one quadrant, so there are 3 candidates: horizontal (east/west), vertical (north/south), or
+     * the diagonal in between. We find the one at the smallest angle to the target, by comparing the cosines of the
+     * angles (using the dot product):
+     *
+     *     cos(angle to horizontal) = targetX / |target|
+     *     cos(angle to vertical)   = targetY / |target|
+     *     cos(angle to diagonal)   = (targetX * diagonalX + targetY * diagonalY) / (|target| * |diagonal|)
+     *
+     * To avoid square roots (and floating-point arithmetic), we multiply out the denominators and square both sides
+     * of each comparison. All values are positive, so this doesn't affect the result.
+     */
+
+    // Distance to the target on screen, in pixels
+    constexpr long long columnWidthPx = RenderUtils::tileWidthPx / 2;
+    constexpr long long halfRowHeightPx = RenderUtils::tileHeightPx / 2;
+    const long long targetX = std::abs(dx) * columnWidthPx;
+    const long long targetY = std::abs(dy) * halfRowHeightPx;
+
+    // A diagonal movement covers 1 column and 1 half-row
+    constexpr long long diagonalX = columnWidthPx;
+    constexpr long long diagonalY = halfRowHeightPx;
+    constexpr long long diagonalLengthSquared = diagonalX * diagonalX + diagonalY * diagonalY;
+
+    const long long diagonalAlignment = targetX * diagonalX + targetY * diagonalY;
+    const long long diagonalAlignmentSquared = diagonalAlignment * diagonalAlignment;
+
+    const bool isEast = dx > 0;
+    const bool isSouth = dy > 0;
+
+    if (targetX * targetX * diagonalLengthSquared > diagonalAlignmentSquared)
+    {
+        // Closer to horizontal than diagonal
+        return isEast ? Facing::East : Facing::West;
+    }
+
+    if (targetY * targetY * diagonalLengthSquared > diagonalAlignmentSquared)
+    {
+        // Closer to vertical than diagonal
+        return isSouth ? Facing::South : Facing::North;
+    }
+
+    if (isSouth)
+    {
+        return isEast ? Facing::SouthEast : Facing::SouthWest;
+    }
+    return isEast ? Facing::NorthEast : Facing::NorthWest;
+}
+
 }  // namespace
 
 int getHalfRow(const MapNode& node)
@@ -66,23 +141,10 @@ TileOffset getTileOffset(const MapNode& a, const MapNode& b)
 
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 {
-    // Neighbors are always returned in this order. The order itself is arbitrary, but it should not be changed lightly,
-    // since it affects which route the pathfinder picks when several routes have the same cost.
-    static constexpr std::array<Facing, maxNeighbors> directions = {
-        Facing::North,
-        Facing::East,
-        Facing::South,
-        Facing::West,
-        Facing::NorthEast,
-        Facing::NorthWest,
-        Facing::SouthEast,
-        Facing::SouthWest,
-    };
-
     std::vector<MapNode> neighbors;
     neighbors.reserve(maxNeighbors);
 
-    for (Facing dir : directions)
+    for (Facing dir : allDirections)
     {
         if (std::optional<MapNode> neighbor = getNeighbor(node, dir, area))
         {
@@ -112,80 +174,27 @@ bool isNeighbor(const MapNode& a, const MapNode& b)
 
 Facing getDir(const MapNode& from, const MapNode& to)
 {
-    // Let's get the easy ones out of the way first
-    if (from.x == to.x)
+    const int dx = to.x - from.x;
+    const int dy = getHalfRow(to) - getHalfRow(from);
+
+    if (dx == 0 && dy == 0)
     {
-        return from.y <= to.y ? Facing::South : Facing::North;
+        return Facing::South;
     }
 
-    // Determine x/y distance between the 2 nodes
-    int dx = to.x - from.x;
-    int dy = to.y - from.y;
-
-    // We need to factor in the zigzagging nature of the rows. Even within
-    // the same row, tiles can be positioned above or below each other.
-    if (isUpperTile(from.x) && isLowerTile(to.x))
+    // Neighboring tiles are exactly 1 movement apart, so we can just find the matching movement. This is the most
+    // common case (e.g. during movement), so it's worth skipping the more expensive calculation.
+    for (Facing dir : allDirections)
     {
-        if (dy < 0)
+        const Step step = getStep(dir);
+        if (step.columns == dx && step.halfRows == dy)
         {
-            // Moving from top part of a zigzag to the row above
-            --dy;
-        }
-        else
-        {
-            // Moving from top part of a zigzag to the bottom
-            ++dy;
-        }
-    }
-    else if (isLowerTile(from.x) && isUpperTile(to.x))
-    {
-        if (dy <= 0)
-        {
-            // Moving from bottom part of a zigzag to the top
-            --dy;
-        }
-        else
-        {
-            // Moving from bottom part of a zigzag to the row below
-            ++dy;
+            return dir;
         }
     }
 
-    // If the x-delta is significantly more than the y-delta, we should
-    // face east/west.
-    if (abs(dx) > 2 * abs(dy))
-    {
-        return dx < 0 ? Facing::West : Facing::East;
-    }
-
-    if (isUpperTile(from.x))
-    {
-        // We are in the top part of the zigzag;
-        // => Moving to the row above is diagonally north.
-        // => Moving to the *same* row is diagonally south.
-        if (dy < 0)
-        {
-            return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
-        }
-        else
-        {
-            return dx < 0 ? Facing::SouthWest : Facing::SouthEast;
-        }
-    }
-    else
-    {
-        // We are in the bottom part of the zigzag;
-        // => Moving to the *same* row is diagonally north.
-        // => Moving to the row below is diagonally south.
-        if (dy <= 0)
-        {
-            return dx < 0 ? Facing::NorthWest : Facing::NorthEast;
-        }
-        else
-        {
-            return dx < 0 ? Facing ::SouthWest : Facing::SouthEast;
-        }
-    }
+    // Otherwise, find the direction that points most directly at the target
+    return getScreenDir(dx, dy);
 }
 
 int getTileDistance(const MapNode& a, const MapNode& b)

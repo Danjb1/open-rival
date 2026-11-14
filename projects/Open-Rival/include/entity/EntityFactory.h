@@ -34,11 +34,10 @@ public:
     /** Creates a Decoration from raw data (e.g. read from a Scenario file). */
     std::shared_ptr<Entity> createDecoration(const ObjectPlacement& objPlacement, bool wilderness) const;
 
-    /** Creates a Projectile with the given properties. */
-    std::shared_ptr<Entity> createProjectile(const AttackDef& attack,
-            const ProjectileDef& projectileDef,
-            const MapNode& pos,
-            const MapNode& target) const;
+    /** Creates a Projectile with the given properties.
+     * `facing` is only used if the projectile is rendered with rotation. */
+    std::shared_ptr<Entity> createProjectile(
+            const AttackDef& attack, const ProjectileDef& projectileDef, Facing facing, const MapNode& target) const;
 
     /** Creates an Effect at the given location. */
     std::shared_ptr<Entity> createEffect(

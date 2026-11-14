@@ -147,10 +147,10 @@ std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBou
 bool isNeighbor(const MapNode& a, const MapNode& b);
 
 /**
- * Gets the most pertinent direction between 2 neighboring tiles.
+ * Gets the direction that points most directly from one tile towards another, as seen on screen.
  *
- * For example, if `to` is directly above `from`, this will return
- * `Facing::North`.
+ * For neighboring tiles, this is simply the direction of the movement between them. For example, if `to` is directly
+ * above `from`, this will return `Facing::North`.
  *
  * If the MapNodes are identical, this returns South.
  */
