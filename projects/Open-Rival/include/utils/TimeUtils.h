@@ -33,6 +33,10 @@ static constexpr int timeStepMs = 1000 / fps;
  * If the next frame is due sooner than this then we will just busy-wait, to reduce the risk of oversleeping. */
 static constexpr auto minSleepTime = std::chrono::milliseconds(2);
 
+/** Maximum number of logic updates to run before rendering a frame.
+ * If the game falls further behind than this, it skips the missed updates rather than trying to catch up. */
+static constexpr int maxUpdatesPerFrame = 10;
+
 /** Upper limit for FrameTiming::timeSinceLastRender.
  * This stops visual animations from jumping ahead after a long stall (e.g. debugger breakpoint, window drag). */
 static constexpr auto maxTimeSinceLastRender = std::chrono::milliseconds(250);
@@ -81,4 +85,5 @@ private:
     unsigned int timerResolution = 0;
 };
 
-}}  // namespace Rival::TimeUtils
+}  // namespace TimeUtils
+}  // namespace Rival

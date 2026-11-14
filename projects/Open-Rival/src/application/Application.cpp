@@ -56,11 +56,11 @@ void Application::start(std::unique_ptr<State> initialState)
             makeNextStateActive();
         }
 
-        // Determine when this frame began.
-        // If we are running behind, this will be a long time after
-        // nextUpdateDue, so we will have to update the logic multiple
-        // times to catch up. If we are ahead of schedule, this will be
-        // BEFORE nextUpdateDue, and we will need to wait a little longer.
+        // Start time of the current logic update.
+        //  => If we are running behind, this will be a long time after `nextUpdateDue`, so we will have to update the
+        //     logic multiple times to catch up.
+        //  => If we are ahead of schedule, this will be *before* `nextUpdateDue`, and we will need to wait a little
+        //     longer.
         TimeUtils::TimePoint frameStartTime = TimeUtils::Clock::now();
 
         // Is the next update due?
@@ -68,6 +68,10 @@ void Application::start(std::unique_ptr<State> initialState)
         {
             // Handle events on the queue
             window->pollEvents();
+
+            // Set the frameStartTime *after* polling events, as this can block for a long time (e.g. while dragging
+            // the window). Otherwise, we won't realise we have fallen behind until the next frame.
+            frameStartTime = TimeUtils::Clock::now();
 
             // We can change the game speed by simulating more or less
             // time in each tick. This should be done with caution as it
@@ -85,10 +89,24 @@ void Application::start(std::unique_ptr<State> initialState)
             //  - For a 120Hz monitor, this will run every other render.
             //
             // If vsync is disabled, this should run once per render.
-            while (nextUpdateDue <= frameStartTime)
+            int numUpdates = 0;
+            while (nextUpdateDue <= frameStartTime && numUpdates < TimeUtils::maxUpdatesPerFrame)
             {
                 state->update(logicDelta);
                 nextUpdateDue += std::chrono::milliseconds(TimeUtils::timeStepMs);
+                ++numUpdates;
+            }
+
+            // If we have fallen too far behind (e.g. after a debugger breakpoint or a window drag), skip the missed
+            // updates instead of trying to catch up. Otherwise, we could spend a long time running updates without
+            // rendering or handling input, and if each update is slow, we may never catch up at all.
+            // Skipping updates is harmless; the next tick will execute the exact same logic, just a little later.
+            if (nextUpdateDue <= frameStartTime)
+            {
+                const auto timeBehind =
+                        std::chrono::duration_cast<std::chrono::milliseconds>(frameStartTime - nextUpdateDue);
+                LOG_WARN("Game loop is running behind by {} ms; skipping missed updates", timeBehind.count());
+                nextUpdateDue = frameStartTime + std::chrono::milliseconds(TimeUtils::timeStepMs);
             }
 
             // Calculate our timing information for rendering
@@ -105,10 +123,13 @@ void Application::start(std::unique_ptr<State> initialState)
             }
             lastRenderTime = now;
 
-            // Time since the game logic was last updated; this enables us to
-            // accurately extrapolate unit positions between logical movements.
+            // Time since the game logic was last updated; this enables us to accurately extrapolate unit positions
+            // between logical movements. We clamp this to a single tick, since the next update should always happen
+            // before then; otherwise, units could be drawn ahead of where they really are.
             const TimeUtils::TimePoint lastUpdate = nextUpdateDue - std::chrono::milliseconds(TimeUtils::timeStepMs);
-            frameTiming.timeSinceLastUpdate = std::chrono::duration<float>(now - lastUpdate).count();
+            const auto timeSinceLastUpdate = std::min<TimeUtils::Clock::duration>(
+                    now - lastUpdate, std::chrono::milliseconds(TimeUtils::timeStepMs));
+            frameTiming.timeSinceLastUpdate = std::chrono::duration<float>(timeSinceLastUpdate).count();
 
 #ifdef ENABLE_IMGUI
             // Build this frame's ImGui UI. This must happen before rendering
