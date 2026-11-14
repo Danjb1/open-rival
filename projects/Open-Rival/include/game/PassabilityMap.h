@@ -8,8 +8,6 @@
 
 namespace Rival {
 
-using TileGroup = std::unordered_set<MapNode>;
-
 /**
  * Interface exposing map data for pathfinding.
  */
@@ -36,7 +34,7 @@ public:
 };
 
 /**
- * Stores and exposes tile passabilities.
+ * Stores and manages the passability and reachability of all tiles.
  */
 class PassabilityMap : public PathfindingMap
 {
@@ -49,8 +47,9 @@ public:
 
     virtual ~PassabilityMap() = default;
 
-    /** This should be called when all tiles passabilities have been set,
-     * i.e. after all Entities are added to the world. */
+    /** Calculates the reachability of every tile.
+     * This must be called when all tiles passabilities have been set, i.e. after all Entities are added to the world,
+     * and before reachability is queried. After this, reachability is kept up to date as tile passabilities change. */
     void initReachability();
 
     int getWidth() const
@@ -62,8 +61,6 @@ public:
     {
         return height;
     }
-
-    int getReachabilityGroupForTile(const MapNode& node) const;
 
     // Begin PathfindingMap override
     TilePassability getPassability(const MapNode& pos) const override;
@@ -85,14 +82,43 @@ public:
             | TilePassability::Impassable;
 
 private:
+    bool areTilePassabilitiesEquivalent(TilePassability a, TilePassability b) const;
+    int getTileIndex(const MapNode& pos) const;
+    bool isInBounds(const MapNode& pos) const;
+    void updatePassability(const MapNode& pos, TilePassability newPassability);
+    void removeTileFromGroup(const MapNode& pos);
+    void addTileToGroup(const MapNode& pos);
+    void splitGroupIfDisconnected(int group, std::vector<MapNode> nodes);
+    void mergeGroups(int fromGroup, int intoGroup);
+    void moveTileToGroup(int tileIndex, int newGroup);
+    int createGroup();
+
+private:
+    /** Group ID used for tiles that do not belong to any group. */
+    static constexpr int noGroup = -1;
+
     int width;
     int height;
     std::vector<TilePassability> tilePassabilities;
-    std::vector<TileGroup> reachabilityGroups;
 
-    void refreshReachability(const MapNode& node);
-    int mergeReachabilityGroups(const std::unordered_set<int>& foundGroupIds);
-    bool areTilePassabilitiesEquivalent(TilePassability a, TilePassability b) const;
+    /** Whether initReachability has been called. */
+    bool isReachabilityInitialized = false;
+
+    /*
+     * Tiles are divided into reachability groups. Tiles in the same group are reachable from one another.
+     *
+     * We store both the group of each tile, and the tiles in each group. These must be kept in sync, so they should
+     * only be modified via `moveTileToGroup`.
+     */
+
+    /** Group ID of each tile, indexed by tile index. */
+    std::vector<int> tileGroups;
+
+    /** Tile indices belonging to each group, indexed by group ID. */
+    std::vector<std::unordered_set<int>> groups;
+
+    /** IDs of groups that are empty and can be reused. */
+    std::vector<int> emptyGroups;
 };
 
 }  // namespace Rival

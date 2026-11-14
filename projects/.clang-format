@@ -52,7 +52,7 @@ IncludeBlocks: Regroup
 # - The header file directly corresponding to a .cpp file gets Priority 0
 IncludeCategories:
   # Testing framework ==========================================================
-  - Regex:           '^\"catch2\/.*\"'
+  - Regex:           '^\<catch2\/.*\>'
     Priority:        -1
     SortPriority:    -10
     CaseSensitive:   true

@@ -86,6 +86,7 @@ SCENARIO("AttackComponent does not interrupt movement", "[components][attack-com
 
         std::shared_ptr<Unit> attacker = EntityTestUtils::makeUnit();
         world.addEntity(attacker, 1, 1);
+        world.onAllEntitiesCreated();
 
         AttackComponent* attackComponent = attacker->requireComponent<AttackComponent>(AttackComponent::key);
         AttackDef attackDef;

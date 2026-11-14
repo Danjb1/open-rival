@@ -1,10 +1,7 @@
 #include "game/PassabilityMap.h"
 
-#include <algorithm>
-#include <array>
-#include <cassert>
-
-#include "utils/LogUtils.h"
+#include <algorithm>  // std::erase_if, std::find, std::max_element
+#include <stdexcept>
 
 namespace Rival {
 
@@ -22,86 +19,56 @@ PassabilityMap::PassabilityMap(int width, int height, const std::vector<TilePass
 {
 }
 
+/**
+ * Assigns every tile to a reachability group.
+ *
+ * This uses a flood fill to find each connected region of tiles with equivalent passability.
+ */
 void PassabilityMap::initReachability()
 {
+    tileGroups.assign(tilePassabilities.size(), noGroup);
+    groups.clear();
+    emptyGroups.clear();
+
+    std::vector<MapNode> nodesToVisit;
+
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
-            MapNode node(x, y);
-            refreshReachability(node);
-        }
-    }
-}
-
-void PassabilityMap::refreshReachability(const MapNode& node)
-{
-    TilePassability tilePassability = getPassability(node);
-    std::unordered_set<int> foundGroupIds;
-
-    // Check each neighbor to see if we belong to any of their reachability groups
-    std::vector<MapNode> neighbors = MapUtils::findNeighbors(node, *this);
-    for (const MapNode& neighbor : neighbors)
-    {
-        if (areTilePassabilitiesEquivalent(tilePassability, getPassability(neighbor)))
-        {
-            // This tile belongs to the neighbor's reachability group
-            int groupIndex = getReachabilityGroupForTile(neighbor);
-            if (groupIndex == -1)
+            const MapNode start(x, y);
+            if (tileGroups[getTileIndex(start)] != noGroup)
             {
-                // Neighbor hasn't been initialized yet.
-                // This happens when we check the north-east neighbor or the south-west neighbor from a lower tile.
+                // Already part of a group
                 continue;
             }
 
-            foundGroupIds.insert(groupIndex);
+            // Start a new group and flood fill from here
+            const int group = createGroup();
+            moveTileToGroup(getTileIndex(start), group);
+            nodesToVisit.push_back(start);
+
+            while (!nodesToVisit.empty())
+            {
+                const MapNode node = nodesToVisit.back();
+                nodesToVisit.pop_back();
+                const TilePassability passability = getPassability(node);
+
+                for (const MapNode& neighbor : MapUtils::findNeighbors(node, *this))
+                {
+                    const int neighborIndex = getTileIndex(neighbor);
+                    if (tileGroups[neighborIndex] == noGroup
+                            && areTilePassabilitiesEquivalent(passability, tilePassabilities[neighborIndex]))
+                    {
+                        moveTileToGroup(neighborIndex, group);
+                        nodesToVisit.push_back(neighbor);
+                    }
+                }
+            }
         }
     }
 
-    if (foundGroupIds.empty())
-    {
-        // If we don't belong to the same group as any neighbor, start a new group
-        TileGroup newGroup = { node };
-        reachabilityGroups.push_back(newGroup);
-    }
-    else
-    {
-        int groupIndex = mergeReachabilityGroups(foundGroupIds);
-        TileGroup& group = reachabilityGroups[groupIndex];
-        group.insert(node);
-    }
-}
-
-int PassabilityMap::mergeReachabilityGroups(const std::unordered_set<int>& foundGroupIds)
-{
-    if (foundGroupIds.size() == 1)
-    {
-        // Nothing to merge, just return the sole group ID
-        return *foundGroupIds.cbegin();
-    }
-
-    // Put the group indices into a sorted list
-    std::vector<int> sortedGroupIds(foundGroupIds.cbegin(), foundGroupIds.cend());
-    std::sort(sortedGroupIds.begin(), sortedGroupIds.end());
-
-    // Pick the first group - this is the one we will keep
-    int firstGroupId = sortedGroupIds.front();
-    TileGroup& firstGroup = reachabilityGroups[firstGroupId];
-
-    // Merge all groups into the first group
-    for (int i = 1; i < sortedGroupIds.size(); ++i)
-    {
-        const TileGroup& group = reachabilityGroups[sortedGroupIds[i]];
-        firstGroup.insert(group.cbegin(), group.cend());
-    }
-
-    // Remove the other groups in reverse order (so as not to invalidate the indices)
-    for (int i = static_cast<int>(sortedGroupIds.size()) - 1; i > 0; --i)
-    {
-        reachabilityGroups.erase(reachabilityGroups.begin() + sortedGroupIds[i]);
-    }
-
-    return firstGroupId;
+    isReachabilityInitialized = true;
 }
 
 bool PassabilityMap::areTilePassabilitiesEquivalent(TilePassability a, TilePassability b) const
@@ -122,49 +89,262 @@ bool PassabilityMap::areTilePassabilitiesEquivalent(TilePassability a, TilePassa
     return true;
 }
 
-int PassabilityMap::getReachabilityGroupForTile(const MapNode& node) const
+int PassabilityMap::getTileIndex(const MapNode& pos) const
 {
-    for (int i = 0; i < reachabilityGroups.size(); ++i)
-    {
-        const auto& group = reachabilityGroups[i];
-        if (group.find(node) != group.cend())
-        {
-            return i;
-        }
-    }
+    return pos.y * width + pos.x;
+}
 
-    return -1;
+bool PassabilityMap::isInBounds(const MapNode& pos) const
+{
+    return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
 }
 
 TilePassability PassabilityMap::getPassability(const MapNode& pos) const
 {
-    return tilePassabilities[pos.y * width + pos.x];
+    return tilePassabilities[getTileIndex(pos)];
 }
 
 void PassabilityMap::setPassability(const MapNode& pos, TilePassability passability)
 {
-    tilePassabilities[pos.y * width + pos.x] = passability;
-    refreshReachability(pos);
+    updatePassability(pos, passability);
 }
 
 void PassabilityMap::addPassability(const MapNode& pos, TilePassability flags)
 {
-    tilePassabilities[pos.y * width + pos.x] |= flags;
-    refreshReachability(pos);
+    updatePassability(pos, getPassability(pos) | flags);
 }
 
 void PassabilityMap::removePassability(const MapNode& pos, TilePassability flags)
 {
     // Use bitwise AND with the inverted flags to remove the specified flags
-    tilePassabilities[pos.y * width + pos.x] &= ~flags;
-    refreshReachability(pos);
+    updatePassability(pos, getPassability(pos) & ~flags);
+}
+
+void PassabilityMap::updatePassability(const MapNode& pos, TilePassability newPassability)
+{
+    TilePassability& passability = tilePassabilities[getTileIndex(pos)];
+    const TilePassability oldPassability = passability;
+    passability = newPassability;
+
+    if (!isReachabilityInitialized)
+    {
+        // Reachability will be calculated for all tiles when it is initialized
+        return;
+    }
+
+    if (areTilePassabilitiesEquivalent(oldPassability, newPassability))
+    {
+        // Most changes (e.g. units moving around) have no effect on reachability
+        return;
+    }
+
+    // This tile now belongs to a different group (e.g. a building has been placed or destroyed)
+    removeTileFromGroup(pos);
+    addTileToGroup(pos);
+}
+
+/**
+ * Removes a tile from its current reachability group.
+ *
+ * This may split the group in two (or more), if the tile was the only connection between parts of the group.
+ */
+void PassabilityMap::removeTileFromGroup(const MapNode& pos)
+{
+    const int group = tileGroups[getTileIndex(pos)];
+    moveTileToGroup(getTileIndex(pos), noGroup);
+
+    // Find the neighbors that were in the same group; these may no longer be connected to each other
+    std::vector<MapNode> neighborsInGroup;
+    for (const MapNode& neighbor : MapUtils::findNeighbors(pos, *this))
+    {
+        if (tileGroups[getTileIndex(neighbor)] == group)
+        {
+            neighborsInGroup.push_back(neighbor);
+        }
+    }
+
+    splitGroupIfDisconnected(group, neighborsInGroup);
+}
+
+/**
+ * Adds a tile to the reachability group of its neighbors with equivalent passability.
+ *
+ * If the tile connects multiple groups, these are merged.
+ */
+void PassabilityMap::addTileToGroup(const MapNode& pos)
+{
+    const TilePassability passability = getPassability(pos);
+
+    // Find the distinct groups of all equivalent neighbors
+    std::vector<int> neighborGroups;
+    for (const MapNode& neighbor : MapUtils::findNeighbors(pos, *this))
+    {
+        const int neighborGroup = tileGroups[getTileIndex(neighbor)];
+        if (neighborGroup != noGroup && areTilePassabilitiesEquivalent(passability, getPassability(neighbor))
+                && std::find(neighborGroups.cbegin(), neighborGroups.cend(), neighborGroup) == neighborGroups.cend())
+        {
+            neighborGroups.push_back(neighborGroup);
+        }
+    }
+
+    int group = noGroup;
+    if (neighborGroups.empty())
+    {
+        // Not connected to any equivalent tiles
+        group = createGroup();
+    }
+    else
+    {
+        // Keep the largest group, and merge the others into it, so that we move as few tiles as possible
+        group = *std::max_element(neighborGroups.cbegin(), neighborGroups.cend(), [&](int a, int b) {
+            return groups[a].size() < groups[b].size();
+        });
+
+        for (int neighborGroup : neighborGroups)
+        {
+            if (neighborGroup != group)
+            {
+                mergeGroups(neighborGroup, group);
+            }
+        }
+    }
+
+    moveTileToGroup(getTileIndex(pos), group);
+}
+
+/**
+ * Checks whether the given nodes (all from the same group) are still connected to one another, and splits the group if
+ * not.
+ *
+ * In the common case (e.g. a building placed in an open area), the nodes are still connected via some nearby path, so
+ * this terminates quickly. Only a genuine split requires a whole region to be explored.
+ */
+void PassabilityMap::splitGroupIfDisconnected(int group, std::vector<MapNode> nodes)
+{
+    // Loop until all nodes in the group have been visited
+    while (nodes.size() > 1)
+    {
+        // Starting with the first node, we are trying to find all *other* nodes
+        std::unordered_set<MapNode> nodesToFind(nodes.cbegin() + 1, nodes.cend());
+        std::unordered_set<int> visitedIndices = { getTileIndex(nodes.front()) };
+        std::vector<MapNode> nodesToVisit = { nodes.front() };
+
+        // Search all connected nodes until we run out of options (flood fill)
+        while (!nodesToVisit.empty() && !nodesToFind.empty())
+        {
+            // Grab the next node from nodesToVisit
+            const MapNode node = nodesToVisit.back();
+            nodesToVisit.pop_back();
+
+            // Look at all neighbors to see if they are connected
+            for (const MapNode& neighbor : MapUtils::findNeighbors(node, *this))
+            {
+                const int neighborIndex = getTileIndex(neighbor);
+
+                if (tileGroups[neighborIndex] != group)
+                {
+                    // Neighbor is not connected (belongs to a different group)
+                    continue;
+                }
+
+                if (const bool wasInserted = visitedIndices.insert(neighborIndex).second)
+                {
+                    // We have found a new connected node (not seen before)
+                    nodesToFind.erase(neighbor);
+                    nodesToVisit.push_back(neighbor);
+                }
+            }
+        }
+
+        if (nodesToFind.empty())
+        {
+            // Every node in the group was found via the flood fill, which means they are all still connected
+            return;
+        }
+
+        // We have explored the entire region connected to the first node, and it does not include all of the nodes.
+        // This region has become separated from the rest of the group, so move it to a new group.
+        const int newGroup = createGroup();
+        for (int tileIndex : visitedIndices)
+        {
+            moveTileToGroup(tileIndex, newGroup);
+        }
+
+        // Remove the region we just visited from our node list, now that it has been dealt with.
+        // The loop will repeat if any nodes remain, in case the group has been split more than once.
+        std::erase_if(nodes, [&](const MapNode& node) { return visitedIndices.contains(getTileIndex(node)); });
+    }
+}
+
+/**
+ * Moves all tiles from one group into another.
+ */
+void PassabilityMap::mergeGroups(int fromGroup, int intoGroup)
+{
+    // Take a copy, since moving tiles modifies the group
+    const std::vector<int> tilesToMove(groups[fromGroup].cbegin(), groups[fromGroup].cend());
+    for (int tileIndex : tilesToMove)
+    {
+        moveTileToGroup(tileIndex, intoGroup);
+    }
+}
+
+/**
+ * Moves a tile into a different group (or `noGroup`).
+ *
+ * This is the only place where group membership should be modified, to keep `tileGroups` and `groups` in sync.
+ */
+void PassabilityMap::moveTileToGroup(int tileIndex, int newGroup)
+{
+    const int oldGroup = tileGroups[tileIndex];
+    if (oldGroup != noGroup)
+    {
+        groups[oldGroup].erase(tileIndex);
+
+        // Keep track of empty groups rather than removing them, as removal would impact other group IDs.
+        // Empty groups are reused by `createGroup` to stop them accumulating.
+        if (groups[oldGroup].empty())
+        {
+            emptyGroups.push_back(oldGroup);
+        }
+    }
+
+    tileGroups[tileIndex] = newGroup;
+    if (newGroup != noGroup)
+    {
+        groups[newGroup].insert(tileIndex);
+    }
+}
+
+/**
+ * Gets the ID of an empty group, reusing an existing group if possible.
+ */
+int PassabilityMap::createGroup()
+{
+    if (!emptyGroups.empty())
+    {
+        const int group = emptyGroups.back();
+        emptyGroups.pop_back();
+        return group;
+    }
+
+    groups.emplace_back();
+    return static_cast<int>(groups.size()) - 1;
 }
 
 bool PassabilityMap::isReachable(const MapNode& a, const MapNode& b) const
 {
-    const auto& aGroup = getReachabilityGroupForTile(a);
-    const auto& bGroup = getReachabilityGroupForTile(b);
-    return aGroup == bGroup;
+    if (!isReachabilityInitialized)
+    {
+        throw std::runtime_error("Reachability has not been initialized");
+    }
+
+    if (!isInBounds(a) || !isInBounds(b))
+    {
+        return false;
+    }
+
+    return tileGroups[getTileIndex(a)] == tileGroups[getTileIndex(b)];
 }
 
 }  // namespace Rival

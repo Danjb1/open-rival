@@ -21,6 +21,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
         World world(5, 5, false);
         std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         e->addedToWorld(&world, 0, { 1, 1 });
+        world.onAllEntitiesCreated();
 
         WalkerComponent* walkerComponent = e->requireComponent<WalkerComponent>(WalkerComponent::key);
 
@@ -54,6 +55,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
         {
             world.getPassabilityMap()->setPassability(node, TilePassability::Blocked);
         }
+        world.onAllEntitiesCreated();
 
         WHEN("Trying to pathfind out of the enclosure")
         {
@@ -74,6 +76,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
         World largeWorld(1001, 1001, false);
         std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         e->addedToWorld(&largeWorld, 0, { 1, 1 });
+        largeWorld.onAllEntitiesCreated();
 
         WalkerComponent* walkerComponent = e->requireComponent<WalkerComponent>(WalkerComponent::key);
 
@@ -98,6 +101,7 @@ SCENARIO("WalkerComponent can plan a route", "[components][walker-component]")
         e1->addedToWorld(&world, 0, { 1, 1 });
         std::shared_ptr<Unit> e2 = EntityTestUtils::makeUnit();
         e2->addedToWorld(&world, 1, { 2, 2 });
+        world.onAllEntitiesCreated();
 
         WalkerComponent* walkerComponent1 = e1->requireComponent<WalkerComponent>(WalkerComponent::key);
         WalkerComponent* walkerComponent2 = e2->requireComponent<WalkerComponent>(WalkerComponent::key);
@@ -143,6 +147,7 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
     {
         std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         e->addedToWorld(&world, 0, { 1, 1 });
+        world.onAllEntitiesCreated();
 
         WalkerComponent* walkerComponent = e->requireComponent<WalkerComponent>(WalkerComponent::key);
         const MapNode destination = { 1, 2 };
@@ -193,6 +198,7 @@ SCENARIO("WalkerComponent can move a unit according to its route", "[components]
     {
         std::shared_ptr<Unit> e = EntityTestUtils::makeUnit();
         e->addedToWorld(&world, 0, { 1, 1 });
+        world.onAllEntitiesCreated();
 
         // Plan a route
         WalkerComponent* walkerComponent = e->requireComponent<WalkerComponent>(WalkerComponent::key);
