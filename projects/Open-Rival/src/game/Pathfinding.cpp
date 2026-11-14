@@ -1,7 +1,6 @@
 #include "game/Pathfinding.h"
 
 #include <algorithm>   // std::min, std::none_of
-#include <cstdlib>     // std::abs
 #include <functional>  // std::greater
 #include <iterator>    // std::back_inserter, std::next
 #include <queue>
@@ -15,7 +14,7 @@ namespace Rival { namespace Pathfinding {
 
 /**
  * A MapNode in the open list.
- * These are sortable such that the lowest-cost nodes come first.
+ * These are sortable such that the most promising nodes come first.
  */
 struct OpenNode
 {
@@ -36,9 +35,33 @@ struct OpenNode
      */
     float totalPathCost;
 
+    /** Whether this node should be preferred over others of equal cost (see Hints::nodesToPrefer). */
+    bool isPreferred = false;
+
+    /**
+     * Determines whether this node is less promising than another.
+     *
+     * Nodes with the lowest f(n) come first. Ties are common, since many routes have the same cost, so we break them
+     * (in order of priority) by:
+     *
+     *   1) Preferring nodes that we have been asked to prefer, e.g. nodes from a previous route.
+     *   2) Preferring nodes with the highest g(n), i.e. the furthest along their route. This makes the pathfinder
+     *      commit to one of several equally-good routes, rather than exploring them all.
+     *
+     * Exact comparisons are fine here: movement costs are typically multiples of 0.5, which floats represent exactly.
+     * Even if they weren't, we would merely detect fewer ties; this only affects efficiency, not correctness.
+     */
     bool operator>(const OpenNode& other) const
     {
-        return totalPathCost > other.totalPathCost;
+        if (totalPathCost != other.totalPathCost)
+        {
+            return totalPathCost > other.totalPathCost;
+        }
+        if (isPreferred != other.isPreferred)
+        {
+            return other.isPreferred;
+        }
+        return costFromStart < other.costFromStart;
     }
 };
 
@@ -80,12 +103,14 @@ private:
     FoundPath findPath();
     bool isFinished() const;
     float estimateCostToGoal(const MapNode& node) const;
+    static float estimateOpenGroundCost(const MapNode& from, const MapNode& to);
     FoundPath reconstructPath(const MapNode& destination) const;
     FoundPath reconstructPathWithCache(const MapNode& cachedRouteStart, const CachedRoute& cachedRoute) const;
     void cacheRoute(const std::deque<MapNode>& path) const;
     std::vector<MapNode> findPathableNeighbors(const MapNode& node) const;
     float getCostToNode(const MapNode& node) const;
     float getMovementCost(const MapNode& from, const MapNode& to) const;
+    bool isNodePreferred(const MapNode& node) const;
 
 private:
     /** Base movement cost for moving between two tiles. */
@@ -119,9 +144,6 @@ private:
      * so.
      */
     static constexpr float horizontalMoveCostMultiplier = 1.5f;
-
-    /** Discount applied to the movement cost of nodes that should be preferred. */
-    static constexpr float preferredNodeDiscount = 0.1f;
 
     /** In the case of an unreachable goal, this is the maximum number of nodes to expand until we abort, if we don't
      * find a closer one. Increasing this may allow units to find a closer point to the goal, at the cost of additional
@@ -312,7 +334,10 @@ FoundPath Pathfinder::findPath()
             // This path to neighbor is better than any previous one
             const float estimatedCostToGoal = estimateCostToGoal(neighbor);
             nodeInfo[neighbor] = { current.node, newCostToNeighbor };
-            open.push({ neighbor, newCostToNeighbor, newCostToNeighbor + estimatedCostToGoal });
+            open.push({ neighbor,
+                    newCostToNeighbor,
+                    newCostToNeighbor + estimatedCostToGoal,
+                    isNodePreferred(neighbor) });
 
             if (estimatedCostToGoal < lowestCostToGoal)
             {
@@ -347,10 +372,36 @@ float Pathfinder::estimateCostToGoal(const MapNode& node) const
     float best = std::numeric_limits<float>::max();
     for (const MapNode& goalNode : goalNodes)
     {
-        const int distance = std::max(std::abs(node.x - goalNode.x), std::abs(node.y - goalNode.y));
-        best = std::min(best, static_cast<float>(distance));
+        best = std::min(best, estimateOpenGroundCost(node, goalNode));
     }
     return best;
+}
+
+/**
+ * Calculates the cost of the cheapest route between 2 nodes, assuming there are no obstacles.
+ *
+ * This is used as our heuristic. Since obstacles only ever make a route more expensive, this never overestimates the
+ * true cost, which means the pathfinder finds the cheapest route. And since it is exact in open ground, the pathfinder
+ * doesn't waste time exploring unnecessary nodes.
+ *
+ * The cheapest route uses as many diagonal movements as possible, then covers the remaining distance with east/west or
+ * north/south movements (see MapUtils::TileOffset for how far each movement goes).
+ */
+float Pathfinder::estimateOpenGroundCost(const MapNode& from, const MapNode& to)
+{
+    // This calculation assumes that diagonal movements are preferable to a combination of horizontal and vertical
+    // movements, and that horizontal movements are preferable to 2 diagonal movements
+    static_assert(horizontalMoveCostMultiplier > 1.f && horizontalMoveCostMultiplier <= 2.f);
+
+    const MapUtils::TileOffset offset = MapUtils::getTileOffset(from, to);
+    const int diagonalMoves = std::min(offset.columns, offset.halfRows);
+
+    // After moving diagonally, the remaining distance is either 0, or the difference between `columns` and `halfRows`.
+    // This difference is always even (see MapUtils::TileOffset), so these divisions are exact.
+    const int horizontalMoves = (offset.columns - diagonalMoves) / 2;
+    const int verticalMoves = (offset.halfRows - diagonalMoves) / 2;
+
+    return baseMovementCost * (diagonalMoves + verticalMoves + horizontalMoves * horizontalMoveCostMultiplier);
 }
 
 /**
@@ -462,16 +513,17 @@ float Pathfinder::getMovementCost(const MapNode& from, const MapNode& to) const
     const bool shouldAvoidNode = hints.nodesToAvoid.contains(to);
     const bool isObstructed = passabilityChecker.isNodeObstructed(map, to);
     const float baseCost = (shouldAvoidNode || isObstructed) ? hints.obstructedMovementCost : baseMovementCost;
-    float finalCost = baseCost * dirMultiplier;
+    return baseCost * dirMultiplier;
+}
 
-    // Preferred nodes get a slight discount
-    const bool shouldPreferNode = !shouldAvoidNode && hints.nodesToPrefer.contains(to);
-    if (shouldPreferNode)
-    {
-        finalCost -= preferredNodeDiscount;
-    }
-
-    return finalCost;
+/**
+ * Determines whether a node should be preferred over others of equal cost.
+ *
+ * Note that preferred nodes are not cheaper to move to; they are just explored first (see OpenNode).
+ */
+bool Pathfinder::isNodePreferred(const MapNode& node) const
+{
+    return !hints.nodesToAvoid.contains(node) && hints.nodesToPrefer.contains(node);
 }
 
 Route::Route(MapNode start,

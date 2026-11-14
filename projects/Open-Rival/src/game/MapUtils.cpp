@@ -1,6 +1,7 @@
 #include "game/MapUtils.h"
 
-#include <algorithm>  // std::min
+#include <algorithm>  // std::max, std::min
+#include <cstdlib>    // std::abs
 #include <stdexcept>
 
 namespace Rival {
@@ -260,111 +261,33 @@ static int ceilInt(float x)
     return static_cast<int>(std::ceil(x));
 }
 
+TileOffset getTileOffset(const MapNode& a, const MapNode& b)
+{
+    auto toHalfRows = [](const MapNode& node) { return 2 * node.y + (isLowerTile(node.x) ? 1 : 0); };
+    return { std::abs(a.x - b.x), std::abs(toHalfRows(a) - toHalfRows(b)) };
+}
+
 int getTileDistance(const MapNode& a, const MapNode& b)
 {
-    /*
-     * Distance calculations are weird due to the zigzag tile layout.
-     * Check the unit tests for some examples based on real data.
-     */
-
-    // First estimate the number of tiles that we traverse in each axis.
-    // This won't be correct, but it's a good starting point.
-    int dx = abs(b.x - a.x);
-    int dy = abs(b.y - a.y);
-
-    // How many tiles would we cover if this entire movement was diagonal?
-    // Diagonal movement traverses 2 tiles from each row.
-    int maxDiagonalTiles = dy * 2;
-
-    // Special case for "short journeys".
-    if (dy > 0)
-    {
-        // If the topmost tile is a LOWER tile, and the bottom-most tile is an UPPER tile, we have less far to travel.
-        // For example, in these cases the distance differs even though both have dy=1:
-        //   (1, 1) -> (2, 2) = distance 1 (short journey)
-        //   (2, 1) -> (4, 2) = distance 2
-        MapNode top = a;
-        MapNode bottom = b;
-        if (a.y > b.y)
-        {
-            std::swap(top, bottom);
-        }
-
-        if (isLowerTile(top.x) && isUpperTile(bottom.x))
-        {
-            // This is a "short journey", so we have less far to travel
-            --maxDiagonalTiles;
-            --dy;
-        }
-    }
-
-    // Start by moving as far as we can diagonally.
-    // Diagonal movement always spans 1 tile in the x-axis, so we can't move further than dx without overshooting the
-    // destination.
-    int numTilesMoved = std::min(dx, maxDiagonalTiles);
-    dx -= numTilesMoved;
-    dy -= numTilesMoved / 2;
-
-    // Whatever's left must be covered by straight lines
-    if (dy > 0)
-    {
-        numTilesMoved += dy;
-    }
-    if (dx > 0)
-    {
-        // We can cover 2 tiles with each horizontal movement.
-        // Round up because we might need 1 final diagonal movement to change between upper/lower tiles.
-        numTilesMoved += ceilInt(static_cast<float>(dx) / eastWestTileSpan);
-    }
-
-    return numTilesMoved;
+    // Every movement covers a total of 2 columns and/or half-rows (see TileOffset), so the fewest movements needed is
+    // half the total. This total is always even, so the division is exact.
+    const TileOffset offset = getTileOffset(a, b);
+    return (offset.columns + offset.halfRows) / 2;
 }
 
 int getLogicalDistance(const MapNode& a, const MapNode& b)
 {
     /*
-     * This is equivalent to getTileDistance, except where commented.
-     * This might not be entirely correct right now, but we can revisit it later.
-     * At the very least it should give us an approximation of the original game's behavior.
+     * Logical distance counts each diagonal movement as 1, and each north/south or east/west movement as 2.
+     *
+     * This ends up being the higher of columns and half-rows travelled. This is because the shorter of the 2 axes
+     * can be covered "for free" by diagonal movement while we cover the longer one.
+     *
+     * For example, to travel 5 columns and 3 half-rows, we can move diagonally 3 times (distance 3), which leaves 2
+     * columns, then move east once (distance 2). The total is 5: the larger of the two values.
      */
-
-    int dx = abs(b.x - a.x);
-    int dy = abs(b.y - a.y);
-
-    int maxDiagonalTiles = dy * 2;
-
-    if (dy > 0)
-    {
-        MapNode top = a;
-        MapNode bottom = b;
-        if (a.y > b.y)
-        {
-            std::swap(top, bottom);
-        }
-
-        if (isLowerTile(top.x) && isUpperTile(bottom.x))
-        {
-            --maxDiagonalTiles;
-            --dy;
-        }
-    }
-
-    int numTilesMoved = std::min(dx, maxDiagonalTiles);
-    dx -= numTilesMoved;
-    dy -= numTilesMoved / 2;
-
-    if (dy > 0)
-    {
-        // Vertical movement is treated as double distance
-        numTilesMoved += dy * 2;
-    }
-    if (dx > 0)
-    {
-        // Horizontal movement is treated as double distance
-        numTilesMoved += ceilInt((2.f * dx) / eastWestTileSpan);
-    }
-
-    return numTilesMoved;
+    const TileOffset offset = getTileOffset(a, b);
+    return std::max(offset.columns, offset.halfRows);
 }
 
 MapNode addLogicalDistance(const MapNode& src, Facing dir, int distance)

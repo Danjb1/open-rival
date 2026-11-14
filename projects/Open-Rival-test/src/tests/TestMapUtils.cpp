@@ -118,6 +118,71 @@ TEST_CASE("getLogicalDistance should return the correct distance between 2 tiles
         REQUIRE(MapUtils::getLogicalDistance(origin, node2) == 2);
         REQUIRE(MapUtils::getLogicalDistance(origin, node3) == 2);
     }
+
+    SECTION("north/south and east/west movements count as double distance")
+    {
+        REQUIRE(MapUtils::getLogicalDistance({ 4, 4 }, { 4, 1 }) == 6);
+        REQUIRE(MapUtils::getLogicalDistance({ 4, 4 }, { 8, 4 }) == 4);
+    }
+
+    SECTION("diagonal movements count as single distance")
+    {
+        // Lower tile to upper tile in the row below
+        REQUIRE(MapUtils::getLogicalDistance({ 1, 1 }, { 2, 2 }) == 1);
+
+        // Upper tile to upper tile in the row below (2 diagonal movements)
+        REQUIRE(MapUtils::getLogicalDistance({ 2, 1 }, { 4, 2 }) == 2);
+    }
+}
+
+TEST_CASE("getTileOffset should return the distance in columns and half-rows", "[map-utils]")
+{
+    SECTION("the same tile")
+    {
+        const MapUtils::TileOffset offset = MapUtils::getTileOffset({ 3, 3 }, { 3, 3 });
+        REQUIRE(offset.columns == 0);
+        REQUIRE(offset.halfRows == 0);
+    }
+
+    SECTION("north/south movement spans 2 half-rows")
+    {
+        const MapUtils::TileOffset offset = MapUtils::getTileOffset({ 3, 3 }, { 3, 2 });
+        REQUIRE(offset.columns == 0);
+        REQUIRE(offset.halfRows == 2);
+    }
+
+    SECTION("east/west movement spans 2 columns")
+    {
+        const MapUtils::TileOffset offset = MapUtils::getTileOffset({ 3, 3 }, { 5, 3 });
+        REQUIRE(offset.columns == 2);
+        REQUIRE(offset.halfRows == 0);
+    }
+
+    SECTION("diagonal movement spans 1 column and 1 half-row, from either an upper or a lower tile")
+    {
+        struct Bounds : MapBounds
+        {
+            int getWidth() const override
+            {
+                return 10;
+            }
+            int getHeight() const override
+            {
+                return 10;
+            }
+        };
+
+        for (const MapNode from : { MapNode(2, 3), MapNode(3, 3) })
+        {
+            for (Facing dir : { Facing::NorthEast, Facing::NorthWest, Facing::SouthEast, Facing::SouthWest })
+            {
+                const MapNode to = *MapUtils::getNeighbor(from, dir, Bounds());
+                const MapUtils::TileOffset offset = MapUtils::getTileOffset(from, to);
+                REQUIRE(offset.columns == 1);
+                REQUIRE(offset.halfRows == 1);
+            }
+        }
+    }
 }
 
 TEST_CASE("getTileDistance should return the correct distance between 2 tiles", "[map-utils]")

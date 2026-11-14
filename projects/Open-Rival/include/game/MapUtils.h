@@ -120,6 +120,31 @@ bool isNeighbor(const MapNode& a, const MapNode& b);
 Facing getDir(const MapNode& from, const MapNode& to);
 
 /**
+ * The horizontal and vertical distance between 2 tiles.
+ *
+ * Because of the zigzag layout of the map, lower tiles (odd columns) sit half a row below upper tiles (even columns).
+ * To account for this, vertical distance is measured in half-rows. Then, every movement changes these values by a
+ * fixed amount:
+ *
+ *   - North / South: 2 half-rows
+ *   - East / West:   2 columns
+ *   - Diagonal:      1 column and 1 half-row
+ *
+ * Since every movement changes `columns + halfRows` by exactly 2, `columns` and `halfRows` are always either both
+ * even or both odd. In other words, the difference between them is always even.
+ */
+struct TileOffset
+{
+    int columns = 0;
+    int halfRows = 0;
+};
+
+/**
+ * Gets the (absolute) horizontal and vertical distance between 2 tiles.
+ */
+TileOffset getTileOffset(const MapNode& a, const MapNode& b);
+
+/**
  * Gets the distance between 2 MapNodes, in tiles.
  *
  * For this method, all directions are considered equivalent (even though east-west travel actually represents a change

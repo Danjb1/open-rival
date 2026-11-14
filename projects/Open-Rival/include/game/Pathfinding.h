@@ -231,7 +231,8 @@ struct Hints
     /** Nodes that should be treated as obstructed. */
     std::unordered_set<MapNode> nodesToAvoid;
 
-    /** Nodes that should be preferred (if they are not also present in nodesToAvoid). */
+    /** Nodes that should be preferred (if they are not also present in nodesToAvoid).
+     * These are explored before other nodes of equal cost, but they are not cheaper to move to. */
     std::unordered_set<MapNode> nodesToPrefer;
 
     /**
