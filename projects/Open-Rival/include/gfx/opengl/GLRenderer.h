@@ -15,6 +15,7 @@ namespace Rival {
 
 class Input;
 class Window;
+struct CursorDef;
 
 /** OpenGL rendering implementation.
  * When ENABLE_IMGUI is defined, this also hosts the ImGui renderer backend, so an ImGui context must exist for the
@@ -48,6 +49,9 @@ private:
     static void renderImGui();
 #endif
 
+    void renderCursor(const CursorDef& cursorDef, const FrameTiming& frameTiming);
+
+private:
     Window* window;
     const Input& input;
     std::unique_ptr<LobbyRenderer> lobbyRenderer;

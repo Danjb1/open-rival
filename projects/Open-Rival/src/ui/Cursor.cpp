@@ -1,5 +1,9 @@
 #include "ui/Cursor.h"
 
+#ifdef ENABLE_IMGUI
+#include <imgui.h>
+#endif
+
 #include "entity/components/MovementComponent.h"
 #include "entity/components/OwnerComponent.h"
 #include "game/PlayerContext.h"

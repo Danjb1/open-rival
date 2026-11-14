@@ -40,11 +40,6 @@ public:
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-
-        ImGuiIO& io = ImGui::GetIO();
-
-        // We render our own cursor, so prevent ImGui from changing (and showing!) the system cursor
-        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
     }
 
     ~ImGuiContextScope()

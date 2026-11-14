@@ -128,13 +128,17 @@ IncludeCategories:
   - Regex:           '^<.+>'
     Priority:        3
     SortPriority:    110
-  # Project files ==============================================================
-  - Regex:           '^\".*\/.*\"'
+  # Generated headers ==========================================================
+  - Regex:           '^\"Version\.h"'
     Priority:        4
     SortPriority:    120
+  # Project files ==============================================================
+  - Regex:           '^\".*\/.*\"'
+    Priority:        5
+    SortPriority:    130
   - Regex:           '^\".*\"'
-    Priority:        4
-    SortPriority:    121
+    Priority:        6
+    SortPriority:    131
 IndentCaseLabels: 'false'
 IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'

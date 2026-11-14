@@ -9,6 +9,7 @@
 #include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
 #include "lobby/LobbyState.h"
+#include "ui/Cursor.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
@@ -75,10 +76,7 @@ void GLRenderer::renderLobby(const FrameTiming& frameTiming)
     renderImGui();
 #endif
 
-    if (cursorRenderer)
-    {
-        cursorRenderer->render(Cursor::arrow, frameTiming.timeSinceLastRender);
-    }
+    renderCursor(Cursor::arrow, frameTiming);
 }
 
 void GLRenderer::initCursorRenderer(const TextureStore& textureStore)
@@ -209,9 +207,23 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
     renderImGui();
 #endif
 
+    renderCursor(gameRenderer->getCurrentCursor(), frameTiming);
+}
+
+void GLRenderer::renderCursor(const CursorDef& cursorDef, const FrameTiming& frameTiming)
+{
+#ifdef ENABLE_IMGUI
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.WantCaptureMouse)
+    {
+        // Don't render the software cursor if ImGui has the mouse
+        return;
+    }
+#endif
+
     if (cursorRenderer)
     {
-        cursorRenderer->render(gameRenderer->getCurrentCursor(), frameTiming.timeSinceLastRender);
+        cursorRenderer->render(cursorDef, frameTiming.timeSinceLastRender);
     }
 }
 

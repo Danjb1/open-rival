@@ -288,6 +288,19 @@ void SDLWindowImpl::handleEvent(const SDL_Event& e)
 void SDLWindowImpl::beginImGuiFrame()
 {
     ImGui_ImplSDL3_NewFrame();
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.WantCaptureMouse)
+    {
+        // Enable the system cursor
+        io.ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+    }
+    else
+    {
+        // Disable the system cursor
+        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+        SDL_HideCursor();
+    }
 }
 #endif
 
