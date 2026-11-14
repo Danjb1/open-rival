@@ -91,6 +91,8 @@ private:
     // Token Extraction
     ///////////////////////////////////////////////////////////////////////
 
+    void requireBytes(std::size_t offset, std::size_t numBytes) const;
+
     std::uint8_t readByte();
 
     std::uint8_t readByte(std::size_t offset) const;

@@ -90,4 +90,35 @@ SCENARIO("Entities cannot be removed while iterating over the World", "[world]")
     }
 }
 
+SCENARIO("Entities cannot be added outside the World", "[world]")
+{
+    GIVEN("An empty World")
+    {
+        World world(5, 5, false);
+
+        WHEN("Entities are added outside the map")
+        {
+            world.addEntity(EntityTestUtils::makeUnit(), -1, 0);
+            world.addEntity(EntityTestUtils::makeUnit(), 0, -1);
+            world.addEntity(EntityTestUtils::makeUnit(), 5, 0);
+            world.addEntity(EntityTestUtils::makeUnit(), 0, 5);
+
+            THEN("they are not added")
+            {
+                REQUIRE(world.getEntities().empty());
+            }
+        }
+
+        WHEN("an Entity is added at the edge of the map")
+        {
+            world.addEntity(EntityTestUtils::makeUnit(), 4, 4);
+
+            THEN("it is added")
+            {
+                REQUIRE(world.getEntities().size() == 1);
+            }
+        }
+    }
+}
+
 }  // namespace TestWorld

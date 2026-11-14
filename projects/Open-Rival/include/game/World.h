@@ -68,6 +68,7 @@ public:
      *
      * Should not be called while iterating over Entities (use `requestAddEntity` instead).
      * If it is, an error is logged and the Entity is added later, as though `requestAddEntity` had been called.
+     * Entities outside the map are ignored, and an error is logged.
      */
     void addEntity(std::shared_ptr<Entity> entity, int x, int y);
 
@@ -76,6 +77,7 @@ public:
      *
      * Should not be called while iterating over Entities (use `requestAddEntity` instead).
      * If it is, an error is logged and the Entity is added later, as though `requestAddEntity` had been called.
+     * Entities outside the map are ignored, and an error is logged.
      */
     void addEntity(std::shared_ptr<Entity> entity, const MapNode& pos);
 

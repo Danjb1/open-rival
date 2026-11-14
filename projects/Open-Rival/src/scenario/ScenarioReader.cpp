@@ -620,7 +620,6 @@ AiSetting ScenarioReader::parseAiSetting()
 
 std::vector<TilePlacement> ScenarioReader::parseTiles(int width, int height)
 {
-
     unsigned int numTiles = width * height;
     std::vector<TilePlacement> tiles;
     tiles.reserve(numTiles);
@@ -960,8 +959,24 @@ std::uint8_t ScenarioReader::readByte()
     return value;
 }
 
+/**
+ * Ensures that the given number of bytes can be read from the given offset.
+ *
+ * Throws if the scenario data is too short, e.g. if the file is truncated or corrupt.
+ */
+void ScenarioReader::requireBytes(std::size_t offset, std::size_t numBytes) const
+{
+    if (offset > data.size() || numBytes > data.size() - offset)
+    {
+        throw std::runtime_error("Unexpected end of scenario data: tried to read " + std::to_string(numBytes)
+                + " byte(s) at offset " + std::to_string(offset) + ", but the data is only "
+                + std::to_string(data.size()) + " byte(s) long");
+    }
+}
+
 std::uint8_t ScenarioReader::readByte(std::size_t offset) const
 {
+    requireBytes(offset, 1);
     return std::uint8_t(data[offset]);
 }
 
@@ -975,6 +990,7 @@ std::uint8_t ScenarioReader::readRivalByte()
 // Special numbering used by goals, etc.
 std::uint8_t ScenarioReader::readRivalByte(std::size_t offset) const
 {
+    requireBytes(offset, 1);
     std::uint8_t val = std::uint8_t(data[offset]);
     return fixRivalByte(val);
 }
@@ -1047,6 +1063,8 @@ std::uint16_t ScenarioReader::readRivalShort()
 
 std::uint16_t ScenarioReader::readRivalShort(std::size_t offset) const
 {
+    requireBytes(offset, numBytesShort);
+
     // read 2 rival bytes, and combine them like a normal short
     return std::uint16_t(fixRivalByte(data[offset + 1]) << 8 | fixRivalByte(data[offset + 0]));
 }
@@ -1060,6 +1078,7 @@ bool ScenarioReader::readBool()
 
 bool ScenarioReader::readBool(std::size_t offset) const
 {
+    requireBytes(offset, 1);
     std::uint8_t value = data[offset];
     return value == 1;
 }
@@ -1073,6 +1092,8 @@ std::uint16_t ScenarioReader::readShort()
 
 std::uint16_t ScenarioReader::readShort(std::size_t offset) const
 {
+    requireBytes(offset, numBytesShort);
+
     // little endian
     return std::uint16_t(data[offset + 1] << 8 | data[offset + 0]);
 }
@@ -1086,6 +1107,8 @@ std::uint32_t ScenarioReader::readInt()
 
 std::uint32_t ScenarioReader::readInt(std::size_t offset) const
 {
+    requireBytes(offset, numBytesInt);
+
     // little endian
     return std::uint32_t(data[offset + 3] << 24  //
             | data[offset + 2] << 16             //
@@ -1102,6 +1125,7 @@ std::string ScenarioReader::readString(std::size_t length)
 
 std::string ScenarioReader::readString(std::size_t offset, std::size_t length) const
 {
+    requireBytes(offset, length);
     std::vector<char> chars(length);
     for (std::size_t i = 0; i < length; ++i)
     {
@@ -1120,7 +1144,7 @@ std::string ScenarioReader::readRivalString(std::size_t length)
 
 std::string ScenarioReader::readRivalString(std::size_t offset, std::size_t length) const
 {
-
+    requireBytes(offset, length);
     std::vector<char> chars(length);
     for (std::size_t i = 0; i < length; ++i)
     {

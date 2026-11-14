@@ -85,6 +85,12 @@ void World::addEntity(std::shared_ptr<Entity> entity, const MapNode& pos)
         return;
     }
 
+    if (pos.x < 0 || pos.x >= getWidth() || pos.y < 0 || pos.y >= getHeight())
+    {
+        LOG_ERROR("Tried to add an Entity outside the map at ({}, {}); ignoring", pos.x, pos.y);
+        return;
+    }
+
     entitiesList.push_back(entity);
     entitiesById[nextId] = entity;
     spatialIndex.addEntity({ nextId, pos, entity->isBig() });
