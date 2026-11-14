@@ -1,5 +1,7 @@
 #include "game/World.h"
 
+#include <utility>  // std::move
+
 #include "utils/IterationGuard.h"
 #include "utils/LogUtils.h"
 
@@ -7,23 +9,23 @@ namespace Rival {
 
 // Creates an empty World
 World::World(int width, int height, bool wilderness)
-    : spatialIndex(width, height)
-    , wilderness(wilderness)
-
     // Default to Grass everywhere
-    , tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
+    : tiles(std::vector<Tile>(width * height, Tile(TileType::Grass, 0, 0)))
     , passabilityMap(width, height, TilePassability::Clear)
+    , wilderness(wilderness)
     , nextId(0)
+    , spatialIndex(width, height)
 {
 }
 
 // Creates a World from data
 World::World(int width, int height, bool wilderness, std::vector<Tile> tiles)
-    : spatialIndex(width, height)
-    , wilderness(wilderness)
-    , tiles(tiles)
+    : tiles(std::move(tiles))
+    // NOTE: This relies on `tiles` being initialized first
     , passabilityMap(width, height, createPassability(width, height))
+    , wilderness(wilderness)
     , nextId(0)
+    , spatialIndex(width, height)
 {
 }
 

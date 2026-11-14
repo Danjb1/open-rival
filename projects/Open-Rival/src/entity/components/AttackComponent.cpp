@@ -131,6 +131,13 @@ bool AttackComponent::isValidTarget(std::shared_ptr<const Entity> targetEntity) 
         return false;
     }
 
+    const AttackDef* attackToUse = getAttackToUse();
+    if (!attackToUse)
+    {
+        // We have no way of attacking anything
+        return false;
+    }
+
     const HealthComponent* healthComp = targetEntity->getComponent<HealthComponent>();
     if (!healthComp)
     {
@@ -146,15 +153,10 @@ bool AttackComponent::isValidTarget(std::shared_ptr<const Entity> targetEntity) 
 
     const Unit* targetUnit = targetEntity->as<Unit>();
     bool isTargetFlying = targetUnit && targetUnit->isFlying();
-    if (isTargetFlying)
+    if (isTargetFlying && attackToUse->isMelee())
     {
-        // TODO: For now, just check the first attack
-        const AttackDef* attackToUse = attackDefinitions[0];
-        if (attackToUse->isMelee())
-        {
-            // Melee units can't target flying units
-            return false;
-        }
+        // Melee units can't target flying units
+        return false;
     }
 
     return true;
@@ -173,11 +175,13 @@ void AttackComponent::deliverAttack()
     std::shared_ptr<Entity> targetEntity = weakTargetEntity.lock();
     MapNode targetPos = getTargetPos();
 
-    // TMP: Assume the first attack was used
-    const AttackDef* attackToUse = attackDefinitions[0];
-    const bool isMelee = attackToUse->range <= 1;
+    const AttackDef* attackToUse = getAttackToUse();
+    if (!attackToUse)
+    {
+        return;
+    }
 
-    if (isMelee)
+    if (attackToUse->isMelee())
     {
         // targetEntity *should* always be valid at this point, since melee attacks can't target tiles
         if (targetEntity)
@@ -258,16 +262,12 @@ bool AttackComponent::isTargetInRange() const
 
 bool AttackComponent::isEntityInRange(const std::shared_ptr<const Entity> target) const
 {
-    if (attackDefinitions.empty())
+    const AttackDef* attackToUse = getAttackToUse();
+    if (!attackToUse)
     {
         // No attacks; should never happen
         return false;
     }
-
-    // TMP: For now, always use the first attack.
-    //   Later, attacks with longer range and no mana cost should be preferred, as long as they are not on cooldown.
-    //   It is also possible to set a spell as the default attack, in which case this should be used instead.
-    const AttackDef* attackToUse = attackDefinitions[0];
 
     if (attackToUse->isMelee())
     {
@@ -291,8 +291,11 @@ bool AttackComponent::isTargetTileInRange() const
 
 bool AttackComponent::isInRange(const MapNode& node) const
 {
-    // TMP: For now, always use the first attack
-    const AttackDef* attackToUse = attackDefinitions[0];
+    const AttackDef* attackToUse = getAttackToUse();
+    if (!attackToUse)
+    {
+        return false;
+    }
 
     if (attackToUse->isMelee())
     {
@@ -446,11 +449,10 @@ void AttackComponent::setTargetTile(const MapNode& newTargetTile)
         return;
     }
 
-    // TODO: For now, just check the first attack.
-    //   Units with ranged special attacks (e.g. flail) should be able to target tiles,
+    // TODO: Units with ranged special attacks (e.g. flail) should be able to target tiles,
     //   but the target tile should be cleared after a single attack.
-    const AttackDef* attackToUse = attackDefinitions[0];
-    if (attackToUse->isMelee())
+    const AttackDef* attackToUse = getAttackToUse();
+    if (!attackToUse || attackToUse->isMelee())
     {
         // Melee units cannot target tiles
         return;
@@ -486,6 +488,14 @@ void AttackComponent::removeListener(std::weak_ptr<AttackListener> listener)
 void AttackComponent::registerAttack(const AttackDef* attackDefinition)
 {
     attackDefinitions.push_back(attackDefinition);
+}
+
+const AttackDef* AttackComponent::getAttackToUse() const
+{
+    // TMP: For now, always use the first attack.
+    //   Later, attacks with longer range and no mana cost should be preferred, as long as they are not on cooldown.
+    //   It is also possible to set a spell as the default attack, in which case this should be used instead.
+    return attackDefinitions.empty() ? nullptr : attackDefinitions[0];
 }
 
 }  // namespace Rival

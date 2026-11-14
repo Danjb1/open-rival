@@ -31,25 +31,26 @@ namespace Rival {
 EntityRenderer::EntityRenderer(
         const TextureStore& textureStore, const PlayerContext& playerContext, const PlayerStore& playerStore)
     : paletteTexture(textureStore.getPalette())
-    , hitboxRenderable(textureStore.getHitboxSpritesheet(), numHitboxSprites)
     , playerContext(playerContext)
     , playerStore(playerStore)
+    , hitboxRenderable(textureStore.getHitboxSpritesheet(), numHitboxSprites)
 {
 }
 
 void EntityRenderer::render(const Camera& camera, const EntityContainer& entityContainer, float timeSinceLastUpdate)
 {
-    std::unordered_set<int> entityIds;
+    // Clearing keeps the allocated memory, so we don't need to allocate it again every frame
+    currentEntityIds.clear();
 
     entityContainer.forEachEntity([&](const auto& entity) {
-        entityIds.insert(entity->getId());
+        currentEntityIds.insert(entity->getId());
         if (isEntityVisible(*entity, camera))
         {
             renderEntity(*entity, timeSinceLastUpdate);
         }
     });
 
-    cleanUpStaleRenderables(entityIds);
+    cleanUpStaleRenderables(currentEntityIds);
 
     // Restore the default palette
     glUniform1f(Shaders::worldShader.paletteTxYUnitUniformLoc, 0);

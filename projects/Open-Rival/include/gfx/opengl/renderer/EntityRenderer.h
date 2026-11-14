@@ -60,6 +60,10 @@ private:
     /** Map of Entity ID -> SpriteRenderable */
     std::unordered_map<int, std::unique_ptr<SpriteRenderable>> entitySpriteRenderables;
 
+    /** IDs of all Entities that exist this frame.
+     * This is a member so that its memory can be reused each frame. */
+    std::unordered_set<int> currentEntityIds;
+
     SpriteRenderable hitboxRenderable;
 };
 

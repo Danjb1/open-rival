@@ -78,6 +78,34 @@ SCENARIO("AttackComponent ignores targets that no longer exist", "[components][a
     }
 }
 
+SCENARIO("AttackComponent does nothing if it has no attacks", "[components][attack-component]")
+{
+    GIVEN("A unit with an AttackComponent but no registered attacks")
+    {
+        World world(5, 5, false);
+
+        std::shared_ptr<Unit> attacker = EntityTestUtils::makeUnit();
+        world.addEntity(attacker, 1, 1);
+
+        AttackComponent* attackComponent = attacker->requireComponent<AttackComponent>(AttackComponent::key);
+
+        WHEN("targeting a unit or a tile")
+        {
+            std::shared_ptr<Unit> target = EntityTestUtils::makeUnit();
+            world.addEntity(target, 2, 1);
+
+            attackComponent->setTargetEntity(target);
+            attackComponent->setTargetTile({ 3, 3 });
+            attacker->update(TimeUtils::timeStepMs);
+
+            THEN("no attack is initiated")
+            {
+                REQUIRE(attacker->getState() == UnitState::Idle);
+            }
+        }
+    }
+}
+
 SCENARIO("AttackComponent does not interrupt movement", "[components][attack-component]")
 {
     GIVEN("A unit with an AttackComponent that is currently moving")

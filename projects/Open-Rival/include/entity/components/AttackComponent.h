@@ -69,6 +69,9 @@ public:
     void registerAttack(const AttackDef* attackDefinition);
 
 private:
+    /** Gets the attack that should be used against the current target, or nullptr if we have no attacks. */
+    const AttackDef* getAttackToUse() const;
+
     void spawnProjectile(const AttackDef& attack, const MapNode& targetPos);
 
     bool hasValidTarget() const;

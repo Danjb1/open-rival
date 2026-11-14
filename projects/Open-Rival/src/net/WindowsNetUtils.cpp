@@ -7,6 +7,7 @@
 #include <winsock2.h>
 
 #include <stdexcept>
+#include <string>
 
 namespace Rival { namespace NetUtils {
 
@@ -16,7 +17,7 @@ void initNetworking()
 
     if (int err = WSAStartup(MAKEWORD(2, 2), &wsaData))
     {
-        throw std::runtime_error("Failed to initialize Winsock: " + err);
+        throw std::runtime_error("Failed to initialize Winsock: " + std::to_string(err));
     }
 }
 

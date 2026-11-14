@@ -66,7 +66,7 @@ void addVectorToBuffer(std::vector<char>& buffer, const std::vector<T>& vec)
     destPtr += sizeof(numElems);
 
     // Write the data
-    std::memcpy(destPtr, &vec[0], dataSize);
+    std::memcpy(destPtr, vec.data(), dataSize);
 }
 
 /** Reads a vector from the given buffer, at some offset.

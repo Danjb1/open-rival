@@ -33,8 +33,11 @@ GameState::GameState(Application& app,
         int localPlayerId,
         std::shared_ptr<std::mt19937> randomizer)
     : State(app)
+    , localPlayerId(localPlayerId)
+    , clients(std::move(clients))
+    , playerStates(std::move(playerStates))
     , world(std::move(scenarioToMove))
-    , playerStates(playerStates)
+    , randomizer(std::move(randomizer))
     , viewport(0, 0, window->getWidth(), window->getHeight() - GameInterface::uiHeight)
     , camera(0.0f,
               0.0f,
@@ -43,9 +46,6 @@ GameState::GameState(Application& app,
               *world)
     , playerContext()
     , mousePicker(std::make_shared<MousePicker>(camera, viewport, *world, playerContext, *this, *this, app.getInput()))
-    , clients(clients)
-    , localPlayerId(localPlayerId)
-    , randomizer(randomizer)
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::GameCommand, std::make_unique<GameCommandPacketHandler>() });
@@ -443,14 +443,13 @@ bool GameState::isWaitingForPlayers() const
 std::vector<ClientInfo> GameState::getNotReadyClients() const
 {
     const auto iter = clientsReady.find(currentTick);
-    const bool areAnyClientsReady = iter != clientsReady.cend();
-    const std::unordered_set<int> clientsReadyThisTick = areAnyClientsReady ? iter->second : std::unordered_set<int>();
+    const std::unordered_set<int>* clientsReadyThisTick = iter != clientsReady.cend() ? &iter->second : nullptr;
 
     std::vector<ClientInfo> notReadyClients;
 
     for (const auto& client : clients)
     {
-        if (!clientsReadyThisTick.contains(client.first))
+        if (!clientsReadyThisTick || !clientsReadyThisTick->contains(client.first))
         {
             notReadyClients.push_back(client.second);
         }
