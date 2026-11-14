@@ -74,6 +74,7 @@ public:
     }
 
     // Begin Entity override
+    std::string getDebugName() const override;
     void onReady() override;
     void onDestroy() override;
     float getZOffset() const override;

@@ -6,7 +6,6 @@
 
 ## ImGui
 
-- Show name of entity under mouse
 - Show details of selected entity (including components)
 - Show passability toggle
 - Show reachability toggle

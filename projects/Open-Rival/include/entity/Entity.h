@@ -75,6 +75,8 @@ class Entity : public std::enable_shared_from_this<Entity>
 public:
     virtual ~Entity() = default;
 
+    virtual std::string getDebugName() const = 0;
+
     /**
      * Attaches an EntityComponent to this Entity.
      *

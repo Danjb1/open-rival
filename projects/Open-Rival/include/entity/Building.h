@@ -18,6 +18,8 @@ public:
     {
     }
 
+    std::string getDebugName() const override;
+
     BuildingType getBuildingType() const
     {
         return type;

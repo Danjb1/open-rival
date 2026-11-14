@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "entity/Entity.h"
 #include "game/AttackDef.h"
 #include "game/MapUtils.h"
@@ -14,6 +16,8 @@ public:
 
 public:
     Projectile(AttackDef attackDef);
+
+    std::string getDebugName() const override;
 
     const AttackDef* getAttackDef() const
     {

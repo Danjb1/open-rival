@@ -4,6 +4,11 @@
 
 namespace Rival {
 
+std::string Effect::getDebugName() const
+{
+    return "[Effect] " + effectDef.texture + " (" + std::to_string(id) + ")";
+}
+
 void Effect::addListener(std::weak_ptr<EffectListener> listener)
 {
     if (listener.expired())

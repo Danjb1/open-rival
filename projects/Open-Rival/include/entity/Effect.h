@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "entity/Entity.h"
 #include "game/EffectDef.h"
@@ -27,6 +28,8 @@ public:
         , effectDef(effectDef)
     {
     }
+
+    std::string getDebugName() const override;
 
     void addListener(std::weak_ptr<EffectListener> listener);
     void removeListener(std::weak_ptr<EffectListener> listener);

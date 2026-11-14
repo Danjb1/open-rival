@@ -1,5 +1,7 @@
 #include "entity/Unit.h"
 
+#include <magic_enum/magic_enum.hpp>
+
 #include "entity/Effect.h"
 #include "entity/Entity.h"
 #include "entity/components/AttackComponent.h"
@@ -13,6 +15,11 @@
 #include "gfx/RenderUtils.h"
 
 namespace Rival {
+
+std::string Unit::getDebugName() const
+{
+    return name + " (" + std::to_string(id) + ")";
+}
 
 void Unit::onReady()
 {

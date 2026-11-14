@@ -15,6 +15,8 @@ public:
         : Entity(staticEntityType, /* isBig = */ false)
     {
     }
+
+    std::string getDebugName() const override;
 };
 
 }  // namespace Rival

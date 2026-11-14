@@ -144,6 +144,7 @@ set(OPEN_RIVAL_SOURCES
     src/ui/Cursor.cpp
     src/utils/BinaryFileReader.cpp
     src/utils/BufferUtils.cpp
+    src/utils/DebugUtils.cpp
     src/utils/FileUtils.cpp
     src/utils/HashUtils.cpp
     src/utils/JsonUtils.cpp
@@ -306,6 +307,7 @@ set(OPEN_RIVAL_HEADERS
     include/utils/BufferUtils.h
     include/utils/CollectionUtils.h
     include/utils/ConfigUtils.h
+    include/utils/DebugUtils.h
     include/utils/EntityUtils.h
     include/utils/EnumUtils.h
     include/utils/FileUtils.h

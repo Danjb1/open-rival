@@ -9,8 +9,24 @@
 #include <string>
 
 #include "game/GameState.h"
+#include "utils/DebugUtils.h"
 
 namespace Rival {
+
+namespace {
+
+static void addEntityName(std::shared_ptr<Entity> entity)
+{
+    if (!entity)
+    {
+        ImGui::TextColored(DebugUtils::red, "None");
+        return;
+    }
+
+    ImGui::Text(entity->getDebugName().c_str());
+}
+
+}  // anonymous namespace
 
 void GameState::buildImGui()
 {
@@ -19,16 +35,17 @@ void GameState::buildImGui()
         if (ImGui::BeginTabItem("Info"))
         {
             // Tile under mouse
-            const auto& tileUnderMouse = playerContext.tileUnderMouse;
-            ImGui::Text("Mouse is over tile: %s", tileUnderMouse.toString().c_str());
+            if (ImGui::CollapsingHeader("Tile Under Mouse", ImGuiTreeNodeFlags_DefaultOpen))
+            {
+                const auto& tileUnderMouse = playerContext.tileUnderMouse;
+                ImGui::Text(tileUnderMouse.toString().c_str());
+            }
 
             // Entity under mouse
-            std::string hoveredEntityId = "None";
-            if (auto entityUnderMouse = playerContext.weakEntityUnderMouse.lock())
+            if (ImGui::CollapsingHeader("Entity Under Mouse", ImGuiTreeNodeFlags_DefaultOpen))
             {
-                hoveredEntityId = std::to_string(entityUnderMouse->getId());
+                addEntityName(playerContext.weakEntityUnderMouse.lock());
             }
-            ImGui::Text("Mouse is over entity: %s", hoveredEntityId.c_str());
 
             ImGui::EndTabItem();
         }

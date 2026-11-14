@@ -2,6 +2,9 @@
 
 namespace Rival {
 
-    // TODO
+std::string Palisade::getDebugName() const
+{
+    return "Palisade (" + std::to_string(id) + ")";
+}
 
 }  // namespace Rival

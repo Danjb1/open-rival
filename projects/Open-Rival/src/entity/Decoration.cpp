@@ -2,6 +2,9 @@
 
 namespace Rival {
 
-    // TODO
+std::string Decoration::getDebugName() const
+{
+    return "Decoration (" + std::to_string(id) + ")";
+}
 
 }  // namespace Rival

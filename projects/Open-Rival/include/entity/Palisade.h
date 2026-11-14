@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "entity/Entity.h"
 
 namespace Rival {
@@ -16,6 +18,8 @@ public:
         , isGrate(isGrate)
     {
     }
+
+    std::string getDebugName() const override;
 
 private:
     bool isGrate;
