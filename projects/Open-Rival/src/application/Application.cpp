@@ -179,63 +179,44 @@ void Application::onFocusLost()
 // Note that we always update the Input BEFORE forwarding events to the State,
 // so that the State sees an up-to-date Input when handling the event.
 
-void Application::onKeyDownEvent(const KeyEvent& evt)
+void Application::onKeyEvent(const KeyEvent& evt)
 {
-    input.onKeyDown(evt);
+    input.onKeyEvent(evt);
 
 #ifdef ENABLE_IMGUI
-    if (evt.key == KeyCode::Backtick)
+    if (evt.isPress && evt.key == KeyCode::Backtick)
     {
         isImGuiVisible = !isImGuiVisible;
+        return;
     }
 #endif
 
     if (state)
     {
-        state->keyDown(evt);
+        state->onKeyEvent(evt);
     }
 }
 
-void Application::onKeyUpEvent(const KeyEvent& evt)
+void Application::onMouseButtonEvent(const MouseButtonEvent& evt)
 {
-    input.onKeyUp(evt);
+    input.onMouseButtonEvent(evt);
 
     if (state)
     {
-        state->keyUp(evt);
-    }
-}
-
-void Application::onMouseDownEvent(const MouseButtonEvent& evt)
-{
-    input.onMouseDown(evt);
-
-    if (state)
-    {
-        state->mouseDown(evt);
-    }
-}
-
-void Application::onMouseUpEvent(const MouseButtonEvent& evt)
-{
-    input.onMouseUp(evt);
-
-    if (state)
-    {
-        state->mouseUp(evt);
+        state->onMouseButtonEvent(evt);
     }
 }
 
 void Application::onMouseMoveEvent(const MouseMoveEvent& evt)
 {
-    input.onMouseMoved(evt);
+    input.onMouseMoveEvent(evt);
 }
 
 void Application::onMouseWheelEvent(const MouseWheelEvent& evt)
 {
     if (state)
     {
-        state->mouseWheelMoved(evt);
+        state->onMouseWheelEvent(evt);
     }
 }
 

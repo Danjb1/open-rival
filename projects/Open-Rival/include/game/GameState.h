@@ -62,11 +62,9 @@ public:
 
     // Begin State override
     void onLoad() override;
-    void keyDown(const KeyEvent& evt) override;
-    void keyUp(const KeyEvent& evt) override;
-    void mouseDown(const MouseButtonEvent& evt) override;
-    void mouseUp(const MouseButtonEvent& evt) override;
-    void mouseWheelMoved(const MouseWheelEvent& evt) override;
+    void onKeyEvent(const KeyEvent& evt) override;
+    void onMouseButtonEvent(const MouseButtonEvent& evt) override;
+    void onMouseWheelEvent(const MouseWheelEvent& evt) override;
     void update(int delta) override;
     void render(const FrameTiming& frameTiming) override;
 #ifdef ENABLE_IMGUI

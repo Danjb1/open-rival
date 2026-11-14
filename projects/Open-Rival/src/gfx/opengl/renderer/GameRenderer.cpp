@@ -112,8 +112,7 @@ void GameRenderer::renderGame(int viewportWidth, int viewportHeight, const Frame
     glUniform1f(Shaders::worldShader.transparentIndex, Palette::globalTransparentColor);  // Enable transparency
 
     // Render Tiles
-    tileRenderer.render(
-            frameTiming.timeSinceLastRender, camera, world.getTiles(), world.getWidth(), world.getHeight());
+    tileRenderer.render(frameTiming.timeSinceLastRender, camera, world.getTiles(), world.getWidth(), world.getHeight());
 
     // Render Map Borders
     mapBorderRenderer.render();
@@ -239,7 +238,7 @@ void GameRenderer::renderMessages()
     MenuTextRenderer textRenderer(window);
     std::vector<TextRenderable> textRenderables;
     TextProperties nameProperties = { res.getFontRegular() };
-    glm::vec2 renderPos = { 100, 100 };
+    glm::vec2 renderPos = { 100.f, 100.f };
     const float rowHeight = 32;
     const float indent = 32;
 

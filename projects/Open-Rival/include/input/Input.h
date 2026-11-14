@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 #include <unordered_set>
 
 namespace Rival {
@@ -92,33 +94,37 @@ enum class MouseButton
 class KeyEvent
 {
 public:
-    explicit KeyEvent(KeyCode key);
+    explicit KeyEvent(KeyCode key, bool isPress);
 
     KeyCode key;
+
+    /** True if this is a press, false if it is a release. */
+    bool isPress = false;
 };
 
 /** Event fired when a mouse button is pressed or released. */
 class MouseButtonEvent
 {
 public:
-    MouseButtonEvent(MouseButton button, int x, int y);
+    MouseButtonEvent(MouseButton button, glm::ivec2 position, bool isPress);
 
     MouseButton button;
 
-    /** Mouse position relative to the window, in pixels. */
-    int x;
-    int y;
+    /** Mouse position, in pixels. */
+    glm::ivec2 position;
+
+    /** True if this is a press, false if it is a release. */
+    bool isPress = false;
 };
 
 /** Event fired when the mouse is moved. */
 class MouseMoveEvent
 {
 public:
-    MouseMoveEvent(int x, int y);
+    MouseMoveEvent(glm::ivec2 position);
 
-    /** Mouse position relative to the window, in pixels. */
-    int x;
-    int y;
+    /** Mouse position, in pixels. */
+    glm::ivec2 position;
 };
 
 /** Event fired when the mouse wheel is scrolled. */
@@ -140,11 +146,9 @@ public:
 class Input
 {
 public:
-    void onKeyDown(const KeyEvent& evt);
-    void onKeyUp(const KeyEvent& evt);
-    void onMouseDown(const MouseButtonEvent& evt);
-    void onMouseUp(const MouseButtonEvent& evt);
-    void onMouseMoved(const MouseMoveEvent& evt);
+    void onKeyEvent(const KeyEvent& evt);
+    void onMouseButtonEvent(const MouseButtonEvent& evt);
+    void onMouseMoveEvent(const MouseMoveEvent& evt);
 
     /** Releases all keys and mouse buttons, e.g. when the window loses focus. */
     void releaseAll();
@@ -152,23 +156,16 @@ public:
     bool isKeyPressed(KeyCode key) const;
     bool isMouseButtonPressed(MouseButton button) const;
 
-    /** Gets the last known mouse x-position relative to the window, in pixels. */
-    int getMouseX() const
+    /** Gets the last known mouse position relative to the window, in pixels. */
+    glm::ivec2 getMousePosition() const
     {
-        return mouseX;
-    }
-
-    /** Gets the last known mouse y-position relative to the window, in pixels. */
-    int getMouseY() const
-    {
-        return mouseY;
+        return mousePos;
     }
 
 private:
     std::unordered_set<KeyCode> pressedKeys;
     std::unordered_set<MouseButton> pressedMouseButtons;
-    int mouseX = 0;
-    int mouseY = 0;
+    glm::ivec2 mousePos { 0, 0 };
 };
 
 }  // namespace Rival

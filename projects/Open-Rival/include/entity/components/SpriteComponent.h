@@ -43,7 +43,7 @@ public:
     mutable bool dirty = true;
 
     /** Last lerp offset used during rendering. */
-    mutable glm::vec2 lastLerpOffset = { 0, 0 };
+    mutable glm::vec2 lastLerpOffset = { 0.f, 0.f };
 
 private:
     std::shared_ptr<const Spritesheet> spritesheet;

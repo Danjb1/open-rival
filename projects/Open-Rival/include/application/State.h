@@ -23,29 +23,19 @@ public:
     virtual void onLoad() {}
 
     /**
-     * Handles keyDown events.
+     * Handles key events.
      */
-    virtual void keyDown(const KeyEvent&) {}
+    virtual void onKeyEvent(const KeyEvent&) {}
 
     /**
-     * Handles keyUp events.
+     * Handles mouse button events.
      */
-    virtual void keyUp(const KeyEvent&) {}
-
-    /**
-     * Handles mouse down events.
-     */
-    virtual void mouseDown(const MouseButtonEvent&) {}
-
-    /**
-     * Handles mouse up events.
-     */
-    virtual void mouseUp(const MouseButtonEvent&) {}
+    virtual void onMouseButtonEvent(const MouseButtonEvent&) {}
 
     /**
      * Handles mouse wheel events.
      */
-    virtual void mouseWheelMoved(const MouseWheelEvent&) {}
+    virtual void onMouseWheelEvent(const MouseWheelEvent&) {}
 
     /**
      * Updates the logic based on the given delta (milliseconds).

@@ -27,7 +27,7 @@ public:
 
     // Begin State override
     void onLoad() override;
-    void keyUp(const KeyEvent& evt) override;
+    void onKeyEvent(const KeyEvent& evt) override;
     void update(int delta) override;
     void render(const FrameTiming& frameTiming) override;
     // End State override

@@ -14,10 +14,8 @@ public:
 
     virtual void onExitRequested() = 0;
     virtual void onFocusLost() = 0;
-    virtual void onKeyDownEvent(const KeyEvent& evt) = 0;
-    virtual void onKeyUpEvent(const KeyEvent& evt) = 0;
-    virtual void onMouseDownEvent(const MouseButtonEvent& evt) = 0;
-    virtual void onMouseUpEvent(const MouseButtonEvent& evt) = 0;
+    virtual void onKeyEvent(const KeyEvent& evt) = 0;
+    virtual void onMouseButtonEvent(const MouseButtonEvent& evt) = 0;
     virtual void onMouseMoveEvent(const MouseMoveEvent& evt) = 0;
     virtual void onMouseWheelEvent(const MouseWheelEvent& evt) = 0;
 };

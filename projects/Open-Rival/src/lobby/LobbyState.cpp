@@ -110,20 +110,23 @@ void LobbyState::render(const FrameTiming& frameTiming)
     renderer->renderLobby(frameTiming);
 }
 
-void LobbyState::keyUp(const KeyEvent& evt)
+void LobbyState::onKeyEvent(const KeyEvent& evt)
 {
-    switch (evt.key)
+    if (!evt.isPress)
     {
-    case KeyCode::Space:
-    case KeyCode::Return:
-        // TMP: For now, just start the game when pressing Space or Enter
-        if (bIsHost)
+        switch (evt.key)
         {
-            requestStartGame();
+        case KeyCode::Space:
+        case KeyCode::Return:
+            // TMP: For now, just start the game when pressing Space or Enter
+            if (bIsHost)
+            {
+                requestStartGame();
+            }
+            break;
+        default:
+            break;
         }
-        break;
-    default:
-        break;
     }
 }
 

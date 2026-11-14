@@ -55,8 +55,9 @@ void MousePicker::mouseDown(MouseButton button)
     }
 
     // Get the mouse position relative to the window, in pixels
-    int mouseX = input.getMouseX();
-    int mouseY = input.getMouseY();
+    glm::ivec2 mousePos = input.getMousePosition();
+    int mouseX = mousePos.x;
+    int mouseY = mousePos.y;
 
     // Abort if the mouse is outside the viewport
     if (!viewport.contains(mouseX, mouseY))
@@ -87,8 +88,9 @@ void MousePicker::mouseUp(MouseButton button)
         }
 
         // Get the mouse position relative to the window, in pixels
-        int mouseX = input.getMouseX();
-        int mouseY = input.getMouseY();
+        glm::ivec2 mousePos = input.getMousePosition();
+        int mouseX = mousePos.x;
+        int mouseY = mousePos.y;
 
         // Abort if the mouse is outside the viewport
         if (!viewport.contains(mouseX, mouseY))
@@ -127,8 +129,9 @@ void MousePicker::mouseUp(MouseButton button)
 void MousePicker::handleMouse()
 {
     // Get the mouse position relative to the window, in pixels
-    int mouseX = input.getMouseX();
-    int mouseY = input.getMouseY();
+    glm::ivec2 mousePos = input.getMousePosition();
+    int mouseX = mousePos.x;
+    int mouseY = mousePos.y;
 
     // Drag-select
     if (playerContext.dragSelect.isActive())

@@ -238,7 +238,7 @@ void EntityRenderer::sendDataToGpu(const Entity& entity,
  */
 glm::vec2 EntityRenderer::getLerpOffset(const Entity& entity, float timeSinceLastUpdate)
 {
-    glm::vec2 offset = { 0, 0 };
+    glm::vec2 offset = { 0.f, 0.f };
 
     // Game logic times are measured in milliseconds
     const float timeSinceLastUpdateMs = timeSinceLastUpdate * 1000.f;

@@ -27,6 +27,6 @@ Unless performance is identified as a problem, prefer simplicity and readability
 
 To ensure consistency within the codebase, code should be formatted using the included [`.clang-format`](/.clang-format) file.
 
-The project is formatted using ClangFormat 13.0.1, as this is the version that ships with Visual Studio 2022.
+The project is formatted using ClangFormat 19, as this is the version that ships with Visual Studio 2022.
 
 > The [Format document on save](https://marketplace.visualstudio.com/items?itemName=mynkow.FormatdocumentonSave) add-on can help with this.

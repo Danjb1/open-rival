@@ -45,10 +45,8 @@ public:
     // Begin WindowListener override
     void onExitRequested() override;
     void onFocusLost() override;
-    void onKeyDownEvent(const KeyEvent& evt) override;
-    void onKeyUpEvent(const KeyEvent& evt) override;
-    void onMouseDownEvent(const MouseButtonEvent& evt) override;
-    void onMouseUpEvent(const MouseButtonEvent& evt) override;
+    void onKeyEvent(const KeyEvent& evt) override;
+    void onMouseButtonEvent(const MouseButtonEvent& evt) override;
     void onMouseMoveEvent(const MouseMoveEvent& evt) override;
     void onMouseWheelEvent(const MouseWheelEvent& evt) override;
     // End WindowListener override

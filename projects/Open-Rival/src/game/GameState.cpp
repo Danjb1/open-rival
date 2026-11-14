@@ -201,72 +201,74 @@ void GameState::render(const FrameTiming& frameTiming)
     renderer->renderGame(frameTiming);
 }
 
-void GameState::keyDown(const KeyEvent& evt)
+void GameState::onKeyEvent(const KeyEvent& evt)
 {
-    switch (evt.key)
+    if (evt.isPress)
     {
-    case KeyCode::Up:
-        playerInput.lastDirectionY = Direction::Decreasing;
-        break;
-
-    case KeyCode::Down:
-        playerInput.lastDirectionY = Direction::Increasing;
-        break;
-
-    case KeyCode::Left:
-        playerInput.lastDirectionX = Direction::Decreasing;
-        break;
-
-    case KeyCode::Right:
-        playerInput.lastDirectionX = Direction::Increasing;
-        break;
-
-    case KeyCode::Delete: {
-        // TMP: Kill selected unit
-        auto weakSelectedEntity = playerContext.getFirstSelectedEntity();
-        if (auto selectedEntity = weakSelectedEntity.lock())
+        switch (evt.key)
         {
-            if (HealthComponent* health = selectedEntity->getComponent<HealthComponent>())
+        case KeyCode::Up:
+            playerInput.lastDirectionY = Direction::Decreasing;
+            break;
+
+        case KeyCode::Down:
+            playerInput.lastDirectionY = Direction::Increasing;
+            break;
+
+        case KeyCode::Left:
+            playerInput.lastDirectionX = Direction::Decreasing;
+            break;
+
+        case KeyCode::Right:
+            playerInput.lastDirectionX = Direction::Increasing;
+            break;
+
+        case KeyCode::Delete: {
+            // TMP: Kill selected unit
+            auto weakSelectedEntity = playerContext.getFirstSelectedEntity();
+            if (auto selectedEntity = weakSelectedEntity.lock())
             {
-                health->addHealth(-9999);
+                if (HealthComponent* health = selectedEntity->getComponent<HealthComponent>())
+                {
+                    health->addHealth(-9999);
+                }
             }
+            break;
         }
-        break;
+
+        default:
+            break;
+        }
     }
-
-    default:
-        break;
-    }
-}
-
-void GameState::keyUp(const KeyEvent& evt)
-{
-    const Input& input = app.getInput();
-
-    switch (evt.key)
+    else
     {
-    case KeyCode::Up:
-        playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Down) ? Direction::Increasing : Direction::None;
-        break;
+        const Input& input = app.getInput();
 
-    case KeyCode::Down:
-        playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Up) ? Direction::Decreasing : Direction::None;
-        break;
+        switch (evt.key)
+        {
+        case KeyCode::Up:
+            playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Down) ? Direction::Increasing : Direction::None;
+            break;
 
-    case KeyCode::Left:
-        playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Right) ? Direction::Increasing : Direction::None;
-        break;
+        case KeyCode::Down:
+            playerInput.lastDirectionY = input.isKeyPressed(KeyCode::Up) ? Direction::Decreasing : Direction::None;
+            break;
 
-    case KeyCode::Right:
-        playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Left) ? Direction::Decreasing : Direction::None;
-        break;
+        case KeyCode::Left:
+            playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Right) ? Direction::Increasing : Direction::None;
+            break;
 
-    case KeyCode::A:
-        requestAttackMode();
-        break;
+        case KeyCode::Right:
+            playerInput.lastDirectionX = input.isKeyPressed(KeyCode::Left) ? Direction::Decreasing : Direction::None;
+            break;
 
-    default:
-        break;
+        case KeyCode::A:
+            requestAttackMode();
+            break;
+
+        default:
+            break;
+        }
     }
 }
 
@@ -281,21 +283,24 @@ void GameState::requestAttackMode()
     }
 }
 
-void GameState::mouseDown(const MouseButtonEvent& evt)
+void GameState::onMouseButtonEvent(const MouseButtonEvent& evt)
 {
-    mousePicker->mouseDown(evt.button);
+    if (evt.isPress)
+    {
+        mousePicker->mouseDown(evt.button);
+    }
+    else
+    {
+        mousePicker->mouseUp(evt.button);
+    }
 }
 
-void GameState::mouseUp(const MouseButtonEvent& evt)
-{
-    mousePicker->mouseUp(evt.button);
-}
-
-void GameState::mouseWheelMoved(const MouseWheelEvent& evt)
+void GameState::onMouseWheelEvent(const MouseWheelEvent& evt)
 {
     // Get the mouse position relative to the window, in pixels
-    const int mouseInViewportX = app.getInput().getMouseX();
-    const int mouseInViewportY = app.getInput().getMouseY();
+    const glm::ivec2 mouseInViewport = app.getInput().getMousePosition();
+    const int mouseInViewportX = mouseInViewport.x;
+    const int mouseInViewportY = mouseInViewport.y;
 
     // Abort if the mouse is outside the viewport
     if (!viewport.contains(mouseInViewportX, mouseInViewportY))

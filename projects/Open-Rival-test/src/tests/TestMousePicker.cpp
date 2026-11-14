@@ -85,7 +85,7 @@ DummyGameCommandInvoker cmdInvoker;
 /** Simulates the mouse moving to the given position (relative to the window, in pixels). */
 void setMousePos(Input& input, int x, int y)
 {
-    input.onMouseMoved(MouseMoveEvent(x, y));
+    input.onMouseMoveEvent(MouseMoveEvent({ x, y }));
 }
 
 /**

@@ -75,15 +75,15 @@ MouseButton toMouseButton(Uint8 sdlButton)
     }
 }
 
-MouseButtonEvent toMouseButtonEvent(const SDL_MouseButtonEvent& sdlEvent)
+MouseButtonEvent toMouseButtonEvent(const SDL_MouseButtonEvent& sdlEvent, bool isPress)
 {
     // SDL3 reports mouse positions as floats, but we only care about whole pixels
-    return { toMouseButton(sdlEvent.button), static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) };
+    return { toMouseButton(sdlEvent.button), { static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) }, isPress };
 }
 
 MouseMoveEvent toMouseMoveEvent(const SDL_MouseMotionEvent& sdlEvent)
 {
-    return { static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) };
+    return { { static_cast<int>(sdlEvent.x), static_cast<int>(sdlEvent.y) } };
 }
 
 MouseWheelEvent toMouseWheelEvent(const SDL_MouseWheelEvent& sdlEvent)
@@ -239,7 +239,7 @@ void SDLWindowImpl::handleEvent(const SDL_Event& e)
         if (!imGuiWantsKeyboard)
         {
             keysForwardedToListener.insert(e.key.key);
-            listener->onKeyDownEvent(KeyEvent(toKeyCode(e.key.key)));
+            listener->onKeyEvent(KeyEvent(toKeyCode(e.key.key), true));
         }
         break;
 
@@ -248,14 +248,14 @@ void SDLWindowImpl::handleEvent(const SDL_Event& e)
         // has focus doesn't get stuck, and a key pressed within ImGui doesn't trigger a key-up action in-game.
         if (keysForwardedToListener.erase(e.key.key) > 0)
         {
-            listener->onKeyUpEvent(KeyEvent(toKeyCode(e.key.key)));
+            listener->onKeyEvent(KeyEvent(toKeyCode(e.key.key), false));
         }
         break;
 
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
         if (!imGuiWantsMouse)
         {
-            listener->onMouseDownEvent(toMouseButtonEvent(e.button));
+            listener->onMouseButtonEvent(toMouseButtonEvent(e.button, true));
         }
         break;
 
@@ -263,7 +263,7 @@ void SDLWindowImpl::handleEvent(const SDL_Event& e)
         // ImGui only claims a button release if it also claimed the press, so this keeps button events paired
         if (!imGuiWantsMouse)
         {
-            listener->onMouseUpEvent(toMouseButtonEvent(e.button));
+            listener->onMouseButtonEvent(toMouseButtonEvent(e.button, false));
         }
         break;
 

@@ -30,7 +30,7 @@ void LobbyRenderer::renderText()
     // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
     std::vector<TextRenderable> textRenderables;
     TextProperties nameProperties = { res.getFontRegular() };
-    glm::vec2 renderPos = { 100, 100 };
+    glm::vec2 renderPos = { 100.f, 100.f };
     const float rowHeight = 32;
     const float indent = 32;
 

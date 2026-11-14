@@ -142,6 +142,10 @@ set(OPEN_RIVAL_SOURCES
     src/scenario/ScenarioBuilder.cpp
     src/scenario/ScenarioReader.cpp
     src/ui/Cursor.cpp
+    src/ui/UIElement.cpp
+    src/ui/UIRoot.cpp
+    src/ui/containers/FlatContainer.cpp
+    src/ui/widgets/Button.cpp
     src/utils/BinaryFileReader.cpp
     src/utils/BufferUtils.cpp
     src/utils/DebugUtils.cpp
@@ -303,6 +307,10 @@ set(OPEN_RIVAL_HEADERS
     include/scenario/ScenarioData.h
     include/scenario/ScenarioReader.h
     include/ui/Cursor.h
+    include/ui/UIElement.h
+    include/ui/UIRoot.h
+    include/ui/containers/FlatContainer.h
+    include/ui/widgets/Button.h
     include/utils/BinaryFileReader.h
     include/utils/BufferUtils.h
     include/utils/CollectionUtils.h

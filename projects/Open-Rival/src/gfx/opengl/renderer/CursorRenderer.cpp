@@ -47,8 +47,9 @@ void CursorRenderer::render(const CursorDef& cursorDef, float timeSinceLastRende
     glViewport(0, 0, window->getWidth(), window->getHeight());
 
     // Get the mouse position relative to the window, in pixels
-    const int mouseX = input.getMouseX();
-    const int mouseY = input.getMouseY();
+    const glm::ivec2 mouseInViewport = input.getMousePosition();
+    const int mouseX = mouseInViewport.x;
+    const int mouseY = mouseInViewport.y;
 
     // Calculate the mouse position in the range 0-1.
     // (If the mouse is outside of the window, these values will lie outside the range).

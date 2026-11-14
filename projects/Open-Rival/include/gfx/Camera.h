@@ -82,7 +82,7 @@ private:
     static constexpr float bottomEdgePadding = tileHeight / 2.0f;
 
     // The camera position, in camera units.
-    glm::vec2 position { 0, 0 };
+    glm::vec2 position { 0.f, 0.f };
 
     // The size of the visible region, in camera units, at the default zoom level.
     // The public-facing getters always take into account the zoom level.

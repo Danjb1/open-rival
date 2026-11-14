@@ -2,21 +2,21 @@
 
 namespace Rival {
 
-KeyEvent::KeyEvent(KeyCode key)
+KeyEvent::KeyEvent(KeyCode key, bool isPress)
     : key(key)
+    , isPress(isPress)
 {
 }
 
-MouseButtonEvent::MouseButtonEvent(MouseButton button, int x, int y)
+MouseButtonEvent::MouseButtonEvent(MouseButton button, glm::ivec2 position, bool isPress)
     : button(button)
-    , x(x)
-    , y(y)
+    , position(position)
+    , isPress(isPress)
 {
 }
 
-MouseMoveEvent::MouseMoveEvent(int x, int y)
-    : x(x)
-    , y(y)
+MouseMoveEvent::MouseMoveEvent(glm::ivec2 position)
+    : position(position)
 {
 }
 
@@ -25,40 +25,42 @@ MouseWheelEvent::MouseWheelEvent(int delta)
 {
 }
 
-void Input::onKeyDown(const KeyEvent& evt)
+void Input::onKeyEvent(const KeyEvent& evt)
 {
-    if (evt.key != KeyCode::Unknown)
+    if (evt.key == KeyCode::Unknown)
+    {
+        return;
+    }
+
+    if (evt.isPress)
     {
         pressedKeys.insert(evt.key);
     }
+    else
+    {
+        pressedKeys.erase(evt.key);
+    }
 }
 
-void Input::onKeyUp(const KeyEvent& evt)
-{
-    pressedKeys.erase(evt.key);
-}
-
-void Input::onMouseDown(const MouseButtonEvent& evt)
+void Input::onMouseButtonEvent(const MouseButtonEvent& evt)
 {
     if (evt.button != MouseButton::Other)
     {
-        pressedMouseButtons.insert(evt.button);
+        if (evt.isPress)
+        {
+            pressedMouseButtons.insert(evt.button);
+        }
+        else
+        {
+            pressedMouseButtons.erase(evt.button);
+        }
     }
-    mouseX = evt.x;
-    mouseY = evt.y;
+    mousePos = evt.position;
 }
 
-void Input::onMouseUp(const MouseButtonEvent& evt)
+void Input::onMouseMoveEvent(const MouseMoveEvent& evt)
 {
-    pressedMouseButtons.erase(evt.button);
-    mouseX = evt.x;
-    mouseY = evt.y;
-}
-
-void Input::onMouseMoved(const MouseMoveEvent& evt)
-{
-    mouseX = evt.x;
-    mouseY = evt.y;
+    mousePos = evt.position;
 }
 
 void Input::releaseAll()

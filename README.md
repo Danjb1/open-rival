@@ -16,6 +16,10 @@ See the [Releases](https://github.com/Danjb1/open-rival/releases) page for the l
 
 See the [Development Quickstart](/docs/dev_quickstart.md) for information on building the project.
 
+## :robot: AI Policy
+
+AI has been used _sparingly_ for code assistance - primarily for refactoring and code reviews. The core engine and features have been written by hand, and all reverse-engineering was done by humans.
+
 ## :briefcase: Legal Stuff
 
 I have tried to track down the copyright holders without much success. If you are reading this and you have any connection to this game, please contact me! But until that time, I consider it to be abandonware.
@@ -36,7 +40,7 @@ That said, I have gone to great lengths to keep any proprietary game assets out 
 - [MIDI Soundtrack](https://youtube.com/playlist?list=PLfJwVz0VSvZn0sx5pwbGimYG6NtHA3TZP)
 - [Lofi Title Theme](https://www.youtube.com/watch?v=4tMEXANdk-g)
 
-### Gameplay
+### Rival Realms Gameplay
 
 - [2016] [Gameplay + Commentary](https://youtu.be/bSefVvZnxKs)
 - [2019] [Multiplayer Gameplay & Set-up Guide](https://youtu.be/KzTm1MCKrLI)
