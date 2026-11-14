@@ -1,9 +1,9 @@
 #pragma once
 
+#include <map>
 #include <memory>
 #include <string>
 #include <type_traits>
-#include <unordered_map>
 
 #include "entity/EntityType.h"
 #include "entity/components/EntityComponent.h"
@@ -431,9 +431,9 @@ protected:
     MapNode pos;
 
     /** EntityComponents owned by this Entity.
-     * We use shared_ptrs here so that we can create weak_ptrs to
-     * components, although in practice the Entity is the sole owner. */
-    std::unordered_map<std::string, std::shared_ptr<EntityComponent>> components;
+     * We use shared_ptrs here so that we can create weak_ptrs to components, although in practice the Entity is the
+     * sole owner. An ordered map ensures that iteration is deterministic across all platforms. */
+    std::map<std::string, std::shared_ptr<EntityComponent>> components;
 
     /** Whether this is a "big" entity (e.g. a Building) */
     bool bIsBig = false;
