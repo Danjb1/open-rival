@@ -91,8 +91,45 @@ inline bool isUpperTile(int tileX)
  */
 inline bool isLowerTile(int tileX)
 {
-    return tileX % 2 == 1;
+    return !isUpperTile(tileX);
 }
+
+/**
+ * Gets the vertical position of a tile, measured in half-rows.
+ *
+ * Because of the zigzag layout of the map, lower tiles (odd columns) sit half a row below upper tiles (even columns).
+ * Measuring vertical position in half-rows accounts for this, so that every movement changes a tile's position by a
+ * fixed amount:
+ *
+ *   - North / South: 2 half-rows
+ *   - East / West:   2 columns
+ *   - Diagonal:      1 column and 1 half-row
+ */
+int getHalfRow(const MapNode& node);
+
+/**
+ * Gets the tile in the given column at the given vertical position, measured in half-rows (see `getHalfRow`).
+ *
+ * `halfRow` must be even for upper tiles (even columns) and odd for lower tiles (odd columns).
+ */
+MapNode fromHalfRow(int x, int halfRow);
+
+/**
+ * The horizontal and vertical distance between 2 tiles, measured in columns and half-rows (see `getHalfRow`).
+ *
+ * Since every movement changes `columns + halfRows` by exactly 2, `columns` and `halfRows` are always either both
+ * even or both odd. In other words, the difference between them is always even.
+ */
+struct TileOffset
+{
+    int columns = 0;
+    int halfRows = 0;
+};
+
+/**
+ * Gets the (absolute) horizontal and vertical distance between 2 tiles.
+ */
+TileOffset getTileOffset(const MapNode& a, const MapNode& b);
 
 /**
  * Finds all valid neighbors of the given MapNode.
@@ -120,31 +157,6 @@ bool isNeighbor(const MapNode& a, const MapNode& b);
 Facing getDir(const MapNode& from, const MapNode& to);
 
 /**
- * The horizontal and vertical distance between 2 tiles.
- *
- * Because of the zigzag layout of the map, lower tiles (odd columns) sit half a row below upper tiles (even columns).
- * To account for this, vertical distance is measured in half-rows. Then, every movement changes these values by a
- * fixed amount:
- *
- *   - North / South: 2 half-rows
- *   - East / West:   2 columns
- *   - Diagonal:      1 column and 1 half-row
- *
- * Since every movement changes `columns + halfRows` by exactly 2, `columns` and `halfRows` are always either both
- * even or both odd. In other words, the difference between them is always even.
- */
-struct TileOffset
-{
-    int columns = 0;
-    int halfRows = 0;
-};
-
-/**
- * Gets the (absolute) horizontal and vertical distance between 2 tiles.
- */
-TileOffset getTileOffset(const MapNode& a, const MapNode& b);
-
-/**
  * Gets the distance between 2 MapNodes, in tiles.
  *
  * For this method, all directions are considered equivalent (even though east-west travel actually represents a change
@@ -161,9 +173,11 @@ int getTileDistance(const MapNode& a, const MapNode& b);
 int getLogicalDistance(const MapNode& a, const MapNode& b);
 
 /**
- * Returns the result of moving by a certain distance in a straight line.
+ * Returns the tile reached by making a number of movements in a straight line.
+ *
+ * The result may lie outside the map.
  */
-MapNode addLogicalDistance(const MapNode& src, Facing dir, int distance);
+MapNode moveInDirection(const MapNode& src, Facing dir, int numMoves);
 
 }  // namespace MapUtils
 }  // namespace Rival

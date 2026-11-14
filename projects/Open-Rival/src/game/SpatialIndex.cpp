@@ -196,8 +196,8 @@ std::vector<const SpatialIndex::Chunk*> SpatialIndex::getChunksInRadius(const Ma
     // NOTE: For simplicity, we assume a rectangular radius here. This is NOT accurate, but it saves us finding every
     //   tile in the radius, which is a non-trivial problem. Worst case scenario, we return a few extra chunks than we
     //   need.
-    MapNode min = MapUtils::addLogicalDistance(pos, Facing::NorthWest, radius);
-    MapNode max = MapUtils::addLogicalDistance(pos, Facing::SouthEast, radius);
+    MapNode min = MapUtils::moveInDirection(pos, Facing::NorthWest, radius);
+    MapNode max = MapUtils::moveInDirection(pos, Facing::SouthEast, radius);
 
     // Clamp to the bounds of the map, since the radius may extend beyond it
     const int minChunkX = std::max(min.x / chunkWidth, 0);

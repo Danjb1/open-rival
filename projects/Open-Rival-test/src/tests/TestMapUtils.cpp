@@ -185,6 +185,47 @@ TEST_CASE("getTileOffset should return the distance in columns and half-rows", "
     }
 }
 
+TEST_CASE("getHalfRow and fromHalfRow should convert between rows and half-rows", "[map-utils]")
+{
+    SECTION("lower tiles are half a row below upper tiles")
+    {
+        REQUIRE(MapUtils::getHalfRow({ 2, 3 }) == 6);
+        REQUIRE(MapUtils::getHalfRow({ 3, 3 }) == 7);
+    }
+
+    SECTION("converting to half-rows and back gives the original tile, even outside the map")
+    {
+        for (int x = -5; x <= 5; ++x)
+        {
+            for (int y = -3; y <= 3; ++y)
+            {
+                const MapNode node(x, y);
+                REQUIRE(MapUtils::fromHalfRow(x, MapUtils::getHalfRow(node)) == node);
+            }
+        }
+    }
+}
+
+TEST_CASE("moveInDirection should move in a straight line", "[map-utils]")
+{
+    SECTION("north/south and east/west")
+    {
+        REQUIRE(MapUtils::moveInDirection({ 2, 3 }, Facing::North, 2) == MapNode(2, 1));
+        REQUIRE(MapUtils::moveInDirection({ 2, 3 }, Facing::East, 2) == MapNode(6, 3));
+    }
+
+    SECTION("diagonally, from either an upper or a lower tile")
+    {
+        REQUIRE(MapUtils::moveInDirection({ 2, 3 }, Facing::NorthEast, 3) == MapNode(5, 1));
+        REQUIRE(MapUtils::moveInDirection({ 3, 3 }, Facing::NorthEast, 3) == MapNode(6, 2));
+    }
+
+    SECTION("outside the map")
+    {
+        REQUIRE(MapUtils::moveInDirection({ 0, 0 }, Facing::NorthWest, 2) == MapNode(-2, -1));
+    }
+}
+
 TEST_CASE("getTileDistance should return the correct distance between 2 tiles", "[map-utils]")
 {
     // These points were plotted using the Scenario Editor to calculate the expected distance

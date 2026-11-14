@@ -1,7 +1,9 @@
 #include "game/MapUtils.h"
 
 #include <algorithm>  // std::max, std::min
-#include <cstdlib>    // std::abs
+#include <array>
+#include <cstdlib>  // std::abs
+#include <optional>
 #include <stdexcept>
 
 namespace Rival {
@@ -10,92 +12,81 @@ constexpr MapNode MapNode::Invalid { -1, -1 };
 
 namespace MapUtils {
 
+namespace {
+
+/** How far a single movement travels, in columns and half-rows (see `getHalfRow`). */
+struct Step
+{
+    int columns;
+    int halfRows;
+};
+
+/** Gets the movement made by a single step in the given direction. */
+Step getStep(Facing dir)
+{
+    switch (dir)
+    {
+    case Facing::South:
+        return { 0, 2 };
+    case Facing::SouthWest:
+        return { -1, 1 };
+    case Facing::West:
+        return { -eastWestTileSpan, 0 };
+    case Facing::NorthWest:
+        return { -1, -1 };
+    case Facing::North:
+        return { 0, -2 };
+    case Facing::NorthEast:
+        return { 1, -1 };
+    case Facing::East:
+        return { eastWestTileSpan, 0 };
+    case Facing::SouthEast:
+        return { 1, 1 };
+    }
+
+    throw std::runtime_error("Invalid facing");
+}
+
+}  // namespace
+
+int getHalfRow(const MapNode& node)
+{
+    return 2 * node.y + (isLowerTile(node.x) ? 1 : 0);
+}
+
+MapNode fromHalfRow(int x, int halfRow)
+{
+    return { x, (halfRow - (isLowerTile(x) ? 1 : 0)) / 2 };
+}
+
+TileOffset getTileOffset(const MapNode& a, const MapNode& b)
+{
+    return { std::abs(a.x - b.x), std::abs(getHalfRow(a) - getHalfRow(b)) };
+}
+
 std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 {
+    // Neighbors are always returned in this order. The order itself is arbitrary, but it should not be changed lightly,
+    // since it affects which route the pathfinder picks when several routes have the same cost.
+    static constexpr std::array<Facing, maxNeighbors> directions = {
+        Facing::North,
+        Facing::East,
+        Facing::South,
+        Facing::West,
+        Facing::NorthEast,
+        Facing::NorthWest,
+        Facing::SouthEast,
+        Facing::SouthWest,
+    };
+
     std::vector<MapNode> neighbors;
     neighbors.reserve(maxNeighbors);
 
-    // First determine which map locations are valid relative to this node.
-    // The neighborhood is very strange due to the zigzag nature of the map.
-    // A direct move east or west actually moves 2 tiles.
-    const bool hasNorth = node.y > 0;
-    const bool hasSouth = node.y < area.getHeight() - 1;
-    const bool hasEast = node.x < area.getWidth() - eastWestTileSpan;
-    const bool hasWest = node.x >= eastWestTileSpan;
-
-    // Find all valid neighbors
-    if (hasNorth)
+    for (Facing dir : directions)
     {
-        neighbors.push_back({ node.x, node.y - 1 });
-    }
-    if (hasEast)
-    {
-        neighbors.push_back({ node.x + eastWestTileSpan, node.y });
-    }
-    if (hasSouth)
-    {
-        neighbors.push_back({ node.x, node.y + 1 });
-    }
-    if (hasWest)
-    {
-        neighbors.push_back({ node.x - eastWestTileSpan, node.y });
-    }
-
-    // The diagonal neighbors depend on which part of the zigzag we are in
-    const bool hasDiagonalEast = node.x < area.getWidth() - 1;
-    const bool hasDiagonalWest = node.x > 0;
-    if (isUpperTile(node.x))
-    {
-        // We are in the top part of the zigzag;
-        // => Moving diagonally north moves us into the row above.
-        // => Moving diagonally south keeps us in the same row.
-        const bool hasNorthEast = hasDiagonalEast && hasNorth;
-        const bool hasNorthWest = hasDiagonalWest && hasNorth;
-        const bool hasSouthEast = hasDiagonalEast;
-        const bool hasSouthWest = hasDiagonalWest;
-
-        if (hasNorthEast)
+        if (std::optional<MapNode> neighbor = getNeighbor(node, dir, area))
         {
-            neighbors.push_back({ node.x + 1, node.y - 1 });
-        }
-        if (hasNorthWest)
-        {
-            neighbors.push_back({ node.x - 1, node.y - 1 });
-        }
-        if (hasSouthEast)
-        {
-            neighbors.push_back({ node.x + 1, node.y });
-        }
-        if (hasSouthWest)
-        {
-            neighbors.push_back({ node.x - 1, node.y });
-        }
-    }
-    else
-    {
-        // We are in the bottom part of the zigzag;
-        // => Moving diagonally north keeps us in the same row.
-        // => Moving diagonally south moves us into the row below.
-        const bool hasNorthEast = hasDiagonalEast;
-        const bool hasNorthWest = hasDiagonalWest;
-        const bool hasSouthEast = hasDiagonalEast && hasSouth;
-        const bool hasSouthWest = hasDiagonalWest && hasSouth;
-
-        if (hasNorthEast)
-        {
-            neighbors.push_back({ node.x + 1, node.y });
-        }
-        if (hasNorthWest)
-        {
-            neighbors.push_back({ node.x - 1, node.y });
-        }
-        if (hasSouthEast)
-        {
-            neighbors.push_back({ node.x + 1, node.y + 1 });
-        }
-        if (hasSouthWest)
-        {
-            neighbors.push_back({ node.x - 1, node.y + 1 });
+            neighbors.push_back(*neighbor);
         }
     }
 
@@ -104,66 +95,7 @@ std::vector<MapNode> findNeighbors(const MapNode& node, const MapBounds& area)
 
 std::optional<MapNode> getNeighbor(const MapNode& node, Facing dir, const MapBounds& area)
 {
-    MapNode neighbor;
-    const bool isUpper = isUpperTile(node.x);
-
-    switch (dir)
-    {
-    case Facing::South:
-        neighbor = { node.x, node.y + 1 };
-        break;
-    case Facing::SouthWest:
-        if (isUpper)
-        {
-            neighbor = { node.x - 1, node.y };
-        }
-        else
-        {
-            neighbor = { node.x - 1, node.y + 1 };
-        }
-        break;
-    case Facing::West:
-        neighbor = { node.x - eastWestTileSpan, node.y };
-        break;
-    case Facing::NorthWest:
-        if (isUpper)
-        {
-            neighbor = { node.x - 1, node.y - 1 };
-        }
-        else
-        {
-            neighbor = { node.x - 1, node.y };
-        }
-        break;
-    case Facing::North:
-        neighbor = { node.x, node.y - 1 };
-        break;
-    case Facing::NorthEast:
-        if (isUpper)
-        {
-            neighbor = { node.x + 1, node.y - 1 };
-        }
-        else
-        {
-            neighbor = { node.x + 1, node.y };
-        }
-        break;
-    case Facing::East:
-        neighbor = { node.x + eastWestTileSpan, node.y };
-        break;
-    case Facing::SouthEast:
-        if (isUpper)
-        {
-            neighbor = { node.x + 1, node.y };
-        }
-        else
-        {
-            neighbor = { node.x + 1, node.y + 1 };
-        }
-        break;
-    default:
-        throw std::runtime_error("Invalid facing");
-    }
+    const MapNode neighbor = moveInDirection(node, dir, 1);
 
     if (neighbor.x >= 0 && neighbor.y >= 0 && neighbor.x < area.getWidth() && neighbor.y < area.getHeight())
     {
@@ -256,17 +188,6 @@ Facing getDir(const MapNode& from, const MapNode& to)
     }
 }
 
-static int ceilInt(float x)
-{
-    return static_cast<int>(std::ceil(x));
-}
-
-TileOffset getTileOffset(const MapNode& a, const MapNode& b)
-{
-    auto toHalfRows = [](const MapNode& node) { return 2 * node.y + (isLowerTile(node.x) ? 1 : 0); };
-    return { std::abs(a.x - b.x), std::abs(toHalfRows(a) - toHalfRows(b)) };
-}
-
 int getTileDistance(const MapNode& a, const MapNode& b)
 {
     // Every movement covers a total of 2 columns and/or half-rows (see TileOffset), so the fewest movements needed is
@@ -290,47 +211,10 @@ int getLogicalDistance(const MapNode& a, const MapNode& b)
     return std::max(offset.columns, offset.halfRows);
 }
 
-MapNode addLogicalDistance(const MapNode& src, Facing dir, int distance)
+MapNode moveInDirection(const MapNode& src, Facing dir, int numMoves)
 {
-    /*
-     * The cardinal directions are straightforward, but the diagonals are a bit more complicated.
-     * Essentially, when travelling diagonally, you traverse 2 tiles in each row, so you cover half the vertical
-     * distance. We also have to adjust depending on whether you start in an upper or lower tile, as this determines
-     * when you first change rows.
-     *
-     * For example, if you are in a lower row and travelling 1 tile northeast, you transition to an upper row but your
-     * y co-ordinate does not actually change.
-     */
-    switch (dir)
-    {
-    case Facing::North:
-        return { src.x, src.y - distance };
-    case Facing::East:
-        return { src.x + eastWestTileSpan * distance, src.y };
-    case Facing::South:
-        return { src.x, src.y + distance };
-    case Facing::West:
-        return { src.x - eastWestTileSpan * distance, src.y };
-
-    case Facing::NorthWest: {
-        int adjustedDist = isLowerTile(src.x) ? distance - 1 : distance;
-        return { src.x - distance, src.y - ceilInt(adjustedDist / 2.f) };
-    }
-    case Facing::NorthEast: {
-        int adjustedDist = isLowerTile(src.x) ? distance - 1 : distance;
-        return { src.x + distance, src.y - ceilInt(adjustedDist / 2.f) };
-    }
-    case Facing::SouthEast: {
-        int adjustedDist = isUpperTile(src.x) ? distance - 1 : distance;
-        return { src.x + distance, src.y + ceilInt(adjustedDist / 2.f) };
-    }
-    case Facing::SouthWest: {
-        int adjustedDist = isUpperTile(src.x) ? distance - 1 : distance;
-        return { src.x - distance, src.y + ceilInt(adjustedDist / 2.f) };
-    }
-    }
-
-    throw std::runtime_error("Direction not supported!");
+    const Step step = getStep(dir);
+    return fromHalfRow(src.x + numMoves * step.columns, getHalfRow(src) + numMoves * step.halfRows);
 }
 
 }  // namespace MapUtils
