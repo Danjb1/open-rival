@@ -17,8 +17,9 @@
 #include "audio/openal/OpenALAudioSystem.h"
 #include "gfx/opengl/GLRenderer.h"
 #include "input/Input.h"
-#include "lobby/LobbyState.h"
 #include "main/ProgramOptions.h"
+#include "menus/lobby/LobbyState.h"
+#include "menus/mainmenu/MainMenuState.h"
 #include "net/NetUtils.h"
 #include "utils/ConfigUtils.h"
 #include "utils/JsonUtils.h"
@@ -116,21 +117,30 @@ static void startApplication(const ProgramOptions& options)
     // Create the application
     Application app(cfg, &window, input, &renderer, audioSystem, res, fontLib);
 
-    // Host or join a game;
-    // eventually this will be handled before we enter the LobbyState
-    if (options.isHost())
+    // In multiplayer, go directly to the lobby
+    if (options.isNetworked())
     {
-        app.startServer(options.getPort());
-    }
-    else if (options.isClient())
-    {
-        app.connectToServer(options.getHostAddress(), options.getPort());
-    }
+        // Host or join a game;
+        // eventually this will be handled before we enter the LobbyState
+        if (options.isHost())
+        {
+            app.startServer(options.getPort());
+        }
+        else if (options.isClient())
+        {
+            app.connectToServer(options.getHostAddress(), options.getPort());
+        }
 
-    bool hostForLobby = options.isNetworked() ? options.isHost() : true;
-    std::string playerName = hostForLobby ? "Host" : "Client";
-    std::unique_ptr<State> initialState = std::make_unique<LobbyState>(app, playerName, hostForLobby);
-    app.start(std::move(initialState));
+        std::string playerName = options.isHost() ? "Host" : "Client";
+        std::unique_ptr<State> initialState = std::make_unique<LobbyState>(app, playerName, options.isHost());
+        app.start(std::move(initialState));
+    }
+    else
+    {
+        // Start in the main menu
+        std::unique_ptr<State> initialState = std::make_unique<MainMenuState>(app);
+        app.start(std::move(initialState));
+    }
 }
 
 static int tryStartApplication(const ProgramOptions& options)

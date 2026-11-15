@@ -17,11 +17,10 @@ class Application;
 class PacketHandler;
 
 /**
- * Application state active when in-game.
+ * State active while in the multiplayer lobby.
  */
 class LobbyState : public State
 {
-
 public:
     LobbyState(Application& app, std::string playerName, bool host);
 
@@ -49,7 +48,6 @@ private:
     void loadLevel(const std::string& filename);
     void requestStartGame();
     std::unique_ptr<State> createGameState() const;
-    bool isNetGame() const;
 
 private:
     unsigned int randomSeed = 0;

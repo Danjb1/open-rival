@@ -1,6 +1,6 @@
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/ClientInfo.h"
 #include "net/packets/AcceptPlayerPacket.h"
 

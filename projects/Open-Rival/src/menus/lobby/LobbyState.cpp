@@ -1,4 +1,4 @@
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 
 #include <magic_enum/magic_enum.hpp>
 
@@ -75,27 +75,18 @@ void LobbyState::onLoad()
     }
     loadLevel(levelName);
 
-    if (isNetGame())
+    if (bIsHost)
     {
-        if (bIsHost)
-        {
-            // Add ourselves to the lobby.
-            // The host should always have a client ID and player ID of 0.
-            ClientInfo localClient(0, localPlayerName);
-            onPlayerAccepted(joinRequestId, 0, localClient);
-        }
-        else
-        {
-            joinRequestId = generateJoinRequestId();
-            auto joinPacket = std::make_shared<RequestJoinPacket>(joinRequestId, localPlayerName);
-            app.getConnection()->send(joinPacket);
-        }
+        // Add ourselves to the lobby.
+        // The host should always have a client ID and player ID of 0.
+        ClientInfo localClient(0, localPlayerName);
+        onPlayerAccepted(joinRequestId, 0, localClient);
     }
     else
     {
-        // Just start the game immediately
-        localPlayerId = 0;
-        startGame();
+        joinRequestId = generateJoinRequestId();
+        auto joinPacket = std::make_shared<RequestJoinPacket>(joinRequestId, localPlayerName);
+        app.getConnection()->send(joinPacket);
     }
 }
 
@@ -132,11 +123,6 @@ void LobbyState::onKeyEvent(const KeyEvent& evt)
 
 void LobbyState::pollNetwork()
 {
-    if (!isNetGame())
-    {
-        return;
-    }
-
     auto& connection = app.getConnection();
     const auto& receivedPackets = connection->getReceivedPackets();
     for (int i = 0; i < receivedPackets.size(); ++i)
@@ -322,11 +308,6 @@ std::unique_ptr<State> LobbyState::createGameState() const
     }
 
     return std::make_unique<GameState>(app, std::move(world), playerStates, clients, localPlayerId, randomizer);
-}
-
-bool LobbyState::isNetGame() const
-{
-    return app.getConnection().has_value();
 }
 
 bool LobbyState::isHost() const

@@ -10,10 +10,12 @@
 #include "gfx/opengl/renderer/CursorRenderer.h"
 #include "gfx/opengl/renderer/GameRenderer.h"
 #include "gfx/opengl/renderer/LobbyRenderer.h"
+#include "gfx/opengl/renderer/UIElementRenderer.h"
 
 namespace Rival {
 
 class Input;
+class UIElement;
 class Window;
 struct CursorDef;
 
@@ -30,11 +32,15 @@ public:
     void beginImGuiFrame() override;
 #endif
 
+    void onEnterMainMenu(MainMenuState* mainMenu) override;
+
     void onEnterLobby(LobbyState* lobby) override;
     void renderLobby(const FrameTiming& frameTiming) override;
 
     void onEnterGame(GameState* game) override;
     void renderGame(const FrameTiming& frameTiming) override;
+
+    void renderUi(UIRoot* uiRoot) override;
 
     std::shared_ptr<const Texture> loadTexture(
             const std::string& filename, const TextureProperties& props = {}) override;
@@ -54,6 +60,7 @@ private:
 private:
     Window* window;
     const Input& input;
+    std::unique_ptr<UIElementRenderer> uiRenderer;
     std::unique_ptr<LobbyRenderer> lobbyRenderer;
     std::unique_ptr<GameRenderer> gameRenderer;
 

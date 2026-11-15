@@ -1,6 +1,6 @@
 #include "gfx/opengl/renderer/LobbyRenderer.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 
 namespace Rival {
 

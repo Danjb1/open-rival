@@ -1,6 +1,6 @@
 #include "net/packet-handlers/RequestJoinPacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/packets/RequestJoinPacket.h"
 
 namespace Rival {

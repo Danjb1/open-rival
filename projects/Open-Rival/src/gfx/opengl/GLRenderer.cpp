@@ -8,7 +8,8 @@
 #include "game/GameState.h"
 #include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
+#include "menus/mainmenu/MainMenuState.h"
 #include "ui/Cursor.h"
 #include "utils/LogUtils.h"
 
@@ -53,6 +54,16 @@ void GLRenderer::renderImGui()
     }
 }
 #endif
+
+void GLRenderer::onEnterMainMenu(MainMenuState* mainMenu)
+{
+    if (gameRenderer)
+    {
+        gameRenderer.reset();
+    }
+
+    initCursorRenderer(mainMenu->getResources());
+}
 
 void GLRenderer::onEnterLobby(LobbyState* lobby)
 {
@@ -208,6 +219,16 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
 #endif
 
     renderCursor(gameRenderer->getCurrentCursor(), frameTiming);
+}
+
+void GLRenderer::renderUi(UIRoot* uiRoot)
+{
+    if (!uiRenderer)
+    {
+        uiRenderer = std::make_unique<UIElementRenderer>();
+    }
+
+    uiRenderer->render(uiRoot);
 }
 
 void GLRenderer::renderCursor(const CursorDef& cursorDef, const FrameTiming& frameTiming)

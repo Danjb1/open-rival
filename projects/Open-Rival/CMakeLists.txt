@@ -108,11 +108,13 @@ set(OPEN_RIVAL_SOURCES
     src/gfx/opengl/renderer/MenuTextRenderer.cpp
     src/gfx/opengl/renderer/TextRenderer.cpp
     src/gfx/opengl/renderer/TileRenderer.cpp
+    src/gfx/opengl/renderer/UIElementRenderer.cpp
     src/gfx/opengl/renderer/UiRenderer.cpp
     src/input/Input.cpp
-    src/lobby/LobbyState.cpp
     src/main/Main.cpp
     src/main/ProgramOptions.cpp
+    src/menus/lobby/LobbyState.cpp
+    src/menus/mainmenu/MainMenuState.cpp
     src/net/ClientInfo.cpp
     src/net/Connection.cpp
     src/net/PacketFactory.cpp
@@ -275,10 +277,12 @@ set(OPEN_RIVAL_HEADERS
     include/gfx/opengl/renderer/MenuTextRenderer.h
     include/gfx/opengl/renderer/TextRenderer.h
     include/gfx/opengl/renderer/TileRenderer.h
+    include/gfx/opengl/renderer/UIElementRenderer.h
     include/gfx/opengl/renderer/UiRenderer.h
     include/input/Input.h
-    include/lobby/LobbyState.h
     include/main/ProgramOptions.h
+    include/menus/lobby/LobbyState.h
+    include/menus/mainmenu/MainMenuState.h
     include/net/ClientInfo.h
     include/net/Connection.h
     include/net/NetUtils.h

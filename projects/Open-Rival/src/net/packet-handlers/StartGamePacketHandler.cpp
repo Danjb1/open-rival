@@ -1,6 +1,6 @@
 #include "net/packet-handlers/StartGamePacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/packets/StartGamePacket.h"
 
 namespace Rival {

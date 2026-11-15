@@ -1,6 +1,6 @@
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/packets/KickPlayerPacket.h"
 
 namespace Rival {

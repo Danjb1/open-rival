@@ -1,6 +1,6 @@
 #include "net/packet-handlers/LobbyWelcomePacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/packets/LobbyWelcomePacket.h"
 
 namespace Rival {

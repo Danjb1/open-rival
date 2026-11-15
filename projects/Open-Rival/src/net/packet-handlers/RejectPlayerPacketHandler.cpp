@@ -1,6 +1,6 @@
 #include "net/packet-handlers/RejectPlayerPacketHandler.h"
 
-#include "lobby/LobbyState.h"
+#include "menus/lobby/LobbyState.h"
 #include "net/packets/RejectPlayerPacket.h"
 
 namespace Rival {

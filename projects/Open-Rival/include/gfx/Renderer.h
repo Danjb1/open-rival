@@ -7,6 +7,8 @@ namespace Rival {
 
 class GameState;
 class LobbyState;
+class MainMenuState;
+class UIRoot;
 
 /** Abstract base class for a rendering subsystem.
  * The idea is that game logic should depend on this class rather than any specific library.
@@ -22,17 +24,23 @@ public:
     virtual void beginImGuiFrame() = 0;
 #endif
 
+    /** Called whenever we enter the MainMenuState. */
+    virtual void onEnterMainMenu(MainMenuState* mainMenu) = 0;
+
     /** Called whenever we enter the LobbyState. */
     virtual void onEnterLobby(LobbyState* lobbyState) = 0;
 
-    /** Renders the LobbyState. */
+    /** Renders the LobbyState to the viewport. */
     virtual void renderLobby(const FrameTiming& frameTiming) = 0;
 
     /** Called whenever we enter the GameState. */
     virtual void onEnterGame(GameState* game) = 0;
 
-    /** Renders the GameState. */
+    /** Renders the GameState to the viewport. */
     virtual void renderGame(const FrameTiming& frameTiming) = 0;
+
+    /** Renders a UI to the viewport. */
+    virtual void renderUi(UIRoot* uiRoot) = 0;
 
     /** Loads a Texture from a file. */
     virtual std::shared_ptr<const Texture> loadTexture(
