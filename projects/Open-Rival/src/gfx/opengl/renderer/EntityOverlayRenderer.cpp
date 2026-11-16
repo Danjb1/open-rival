@@ -31,6 +31,7 @@ EntityOverlayRenderer::EntityOverlayRenderer(const TextureStore& textureStore, c
     , boxRenderable(maxOverlaysToRender)
     , backgroundColor(PaletteUtils::fromHex(Palette::paletteGame[212]))
 {
+    boxes.reserve(maxOverlaysToRender);
     atlasVertexData.reserve(
             maxImagesToRender * AtlasRenderable::numVerticesPerSprite * AtlasRenderable::numVertexDimensions);
     atlasTexCoordData.reserve(
@@ -42,9 +43,7 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
     // Reset
     atlasVertexData.clear();
     atlasTexCoordData.clear();
-    boxVertexData.clear();
-    boxColorData.clear();
-    numBoxes = 0;
+    boxes.clear();
     numSprites = 0;
 
     const auto hoveredEntity = playerContext.weakEntityUnderMouse.lock();
@@ -81,20 +80,8 @@ void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
 
 void EntityOverlayRenderer::renderBoxes()
 {
-    // Bind vertex array
-    glBindVertexArray(boxRenderable.getVao());
-
-    // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getPositionVbo());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, boxVertexData.size() * sizeof(GLfloat), boxVertexData.data());
-
-    // Upload color data
-    glBindBuffer(GL_ARRAY_BUFFER, boxRenderable.getColorVbo());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, boxColorData.size() * sizeof(GLfloat), boxColorData.data());
-
-    // Render
-    const int numIndices = boxRenderable.getIndicesPerBox() * numBoxes;
-    glDrawElements(boxRenderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
+    boxRenderable.setBoxes(boxes);
+    boxRenderable.draw();
 }
 
 void EntityOverlayRenderer::renderTextures()
@@ -139,7 +126,8 @@ bool isMonster(const Entity& entity)
 // TODO: Hovered entities show more info, e.g. experience level, bigger icons, and upgrades
 void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool /* isHovered */)
 {
-    if (numSprites + maxSpritesPerEntity >= maxImagesToRender || numBoxes + 1 >= maxOverlaysToRender)
+    if (numSprites + maxSpritesPerEntity >= maxImagesToRender
+            || static_cast<int>(boxes.size()) + 1 >= maxOverlaysToRender)
     {
         // Don't overflow the buffer
         return;
@@ -183,31 +171,9 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
     // Background //
     ////////////////
 
-    {
-        // Define vertex positions
-        const float x1 = originX;
-        const float y1 = originY;
-        const float x2 = x1 + healthBarWidth;
-        const float y2 = y1 + 2 * healthBarHeight;
-
-        std::vector<GLfloat> newVerts = {
-            /* clang-format off */
-            x1, y1,
-            x2, y1,
-            x2, y2,
-            x1, y2
-            /* clang-format on */
-        };
-        boxVertexData.insert(boxVertexData.end(), newVerts.cbegin(), newVerts.cend());
-
-        // Define colors
-        boxColorData.insert(boxColorData.end(), backgroundColor.cbegin(), backgroundColor.cend());  // top-left
-        boxColorData.insert(boxColorData.end(), backgroundColor.cbegin(), backgroundColor.cend());  // top-right
-        boxColorData.insert(boxColorData.end(), backgroundColor.cbegin(), backgroundColor.cend());  // bottom-right
-        boxColorData.insert(boxColorData.end(), backgroundColor.cbegin(), backgroundColor.cend());  // bottom-left
-
-        ++numBoxes;
-    }
+    const glm::vec2 backgroundTopLeft { originX, originY };
+    const glm::vec2 backgroundSize { healthBarWidth, 2 * healthBarHeight };
+    boxes.push_back({ backgroundTopLeft, backgroundTopLeft + backgroundSize, backgroundColor });
 
     const bool bIsMonster = isMonster(entity);
     const std::string currentHealthBarAtlasKey = bIsMonster ? monsterHealthBarAtlasKey : healthBarAtlasKey;

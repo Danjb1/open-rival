@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec4.hpp>
+
 #include <cstdint>
 #include <memory>
 
@@ -18,7 +20,8 @@ std::shared_ptr<const Texture> createPaletteTexture(Renderer* renderer);
 /** Gets the texture co-ordinate (y) for the given palette index. */
 float getPaletteTxY(int paletteIndex);
 
-std::vector<float> fromHex(std::uint32_t hexValue);
+/** Converts an RGBA hex value (e.g. from a Palette) to a colour with components in the range 0-1. */
+glm::vec4 fromHex(std::uint32_t hexValue);
 
 // Palette index constants
 constexpr int paletteIndexGame = 0;

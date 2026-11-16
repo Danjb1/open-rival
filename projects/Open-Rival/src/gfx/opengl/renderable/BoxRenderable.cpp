@@ -1,13 +1,15 @@
 #include "gfx/opengl/renderable/BoxRenderable.h"
 
-#include <vector>
+#include <algorithm>  // std::min
 
 #include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 BoxRenderable::BoxRenderable(int maxBoxes)
+    : maxBoxes(maxBoxes)
 {
     // Generate VAO
     glGenVertexArrays(1, &vao);
@@ -26,8 +28,7 @@ BoxRenderable::BoxRenderable(int maxBoxes)
 
     // Initialize position buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-    glVertexAttribPointer(
-            Shaders::vertexAttribIndex,
+    glVertexAttribPointer(Shaders::vertexAttribIndex,
             numVertexDimensions,
             GL_FLOAT,
             GL_FALSE,
@@ -39,8 +40,7 @@ BoxRenderable::BoxRenderable(int maxBoxes)
     // Initialize color buffer with empty data
     glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
     const int colorBufferSize = maxBoxes * numColorDimensions * indicesPerBox * sizeof(GLfloat);
-    glVertexAttribPointer(
-            Shaders::colorAttribIndex,
+    glVertexAttribPointer(Shaders::colorAttribIndex,
             numColorDimensions,
             GL_FLOAT,
             GL_FALSE,
@@ -102,34 +102,55 @@ BoxRenderable::~BoxRenderable()
     glBindVertexArray(0);
 }
 
-GLuint BoxRenderable::getVao() const
+void BoxRenderable::setBoxes(const std::vector<Box>& boxes)
 {
-    return vao;
+    if (static_cast<int>(boxes.size()) > maxBoxes)
+    {
+        LOG_WARN("Tried to render {} boxes, but the maximum is {}", boxes.size(), maxBoxes);
+    }
+    numBoxes = std::min(static_cast<int>(boxes.size()), maxBoxes);
+
+    std::vector<GLfloat> vertexData;
+    std::vector<GLfloat> colorData;
+    vertexData.reserve(numBoxes * numVerticesPerBox * numVertexDimensions);
+    colorData.reserve(numBoxes * numVerticesPerBox * numColorDimensions);
+
+    for (int i = 0; i < numBoxes; ++i)
+    {
+        const Box& box = boxes[i];
+        const float x1 = box.topLeft.x;
+        const float y1 = box.topLeft.y;
+        const float x2 = box.bottomRight.x;
+        const float y2 = box.bottomRight.y;
+
+        /* clang-format off */
+        vertexData.insert(vertexData.end(), {
+            x1, y1,
+            x2, y1,
+            x2, y2,
+            x1, y2
+        });
+        /* clang-format on */
+
+        for (int vertex = 0; vertex < numVerticesPerBox; ++vertex)
+        {
+            colorData.insert(colorData.end(), { box.color.r, box.color.g, box.color.b, box.color.a });
+        }
+    }
+
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertexData.size() * sizeof(GLfloat), vertexData.data());
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, colorData.size() * sizeof(GLfloat), colorData.data());
 }
 
-GLuint BoxRenderable::getPositionVbo() const
+void BoxRenderable::draw() const
 {
-    return positionVbo;
-}
-
-GLuint BoxRenderable::getColorVbo() const
-{
-    return colorVbo;
-}
-
-GLuint BoxRenderable::getIbo() const
-{
-    return ibo;
-}
-
-GLenum BoxRenderable::getDrawMode() const
-{
-    return drawMode;
-}
-
-int BoxRenderable::getIndicesPerBox() const
-{
-    return indicesPerBox;
+    glBindVertexArray(vao);
+    glDrawElements(drawMode, indicesPerBox * numBoxes, GL_UNSIGNED_INT, nullptr);
 }
 
 }  // namespace Rival

@@ -2,8 +2,6 @@
 
 #include "gfx/opengl/GLWrapper.h"
 
-#include <vector>
-
 #include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
 #include "ui/UIRoot.h"
@@ -83,39 +81,18 @@ void UIElementRenderer::renderVisual(
     }
 }
 
-void UIElementRenderer::renderBox(const BoxVisual& box, const RenderData& entry, bool needsUpload)
+void UIElementRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload)
 {
-    const BoxRenderable& renderable = *entry.boxRenderable;
-    glBindVertexArray(renderable.getVao());
+    BoxRenderable& renderable = *entry.boxRenderable;
 
     if (needsUpload)
     {
-        const float x1 = static_cast<float>(entry.position.x);
-        const float y1 = static_cast<float>(entry.position.y);
-        const float x2 = static_cast<float>(entry.position.x + entry.size.x);
-        const float y2 = static_cast<float>(entry.position.y + entry.size.y);
-
-        /* clang-format off */
-        const std::vector<GLfloat> vertexData = {
-            x1, y1,
-            x2, y1,
-            x2, y2,
-            x1, y2
-        };
-        /* clang-format on */
-        glBindBuffer(GL_ARRAY_BUFFER, renderable.getPositionVbo());
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexData.size() * sizeof(GLfloat), vertexData.data());
-
-        std::vector<GLfloat> colorData;
-        for (int i = 0; i < BoxRenderable::numVerticesPerBox; ++i)
-        {
-            colorData.insert(colorData.end(), { box.color.r, box.color.g, box.color.b, box.color.a });
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, renderable.getColorVbo());
-        glBufferSubData(GL_ARRAY_BUFFER, 0, colorData.size() * sizeof(GLfloat), colorData.data());
+        const glm::vec2 topLeft = entry.position;
+        const glm::vec2 bottomRight = entry.position + entry.size;
+        renderable.setBoxes({ { topLeft, bottomRight, box.color } });
     }
 
-    glDrawElements(renderable.getDrawMode(), renderable.getIndicesPerBox(), GL_UNSIGNED_INT, nullptr);
+    renderable.draw();
 }
 
 void UIElementRenderer::cleanUpStaleEntries()

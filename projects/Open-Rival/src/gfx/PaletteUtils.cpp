@@ -103,7 +103,7 @@ float byteToFloat(std::uint8_t byte)
     return static_cast<float>(byte) / 255.f;
 }
 
-std::vector<float> fromHex(std::uint32_t hexValue)
+glm::vec4 fromHex(std::uint32_t hexValue)
 {
     // Extract each byte from the hexadecimal value
     std::uint8_t byte1 = (hexValue >> 24) & 0xFF;

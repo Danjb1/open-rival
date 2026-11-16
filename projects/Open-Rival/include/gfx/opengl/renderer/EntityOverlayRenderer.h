@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gfx/opengl/GLWrapper.h"
+#include <glm/vec4.hpp>
 
 #include <string>
 #include <vector>
@@ -63,16 +64,14 @@ private:
 
     std::shared_ptr<const Texture> paletteTexture;
 
-    std::vector<GLfloat> backgroundColor;
-    std::vector<GLfloat> boxVertexData;
-    std::vector<GLfloat> boxColorData;
+    glm::vec4 backgroundColor;
+    std::vector<Box> boxes;
     BoxRenderable boxRenderable;
 
     std::vector<GLfloat> atlasVertexData;
     std::vector<GLfloat> atlasTexCoordData;
     AtlasRenderable overlayRenderable;
 
-    int numBoxes = 0;
     int numSprites = 0;
 };
 

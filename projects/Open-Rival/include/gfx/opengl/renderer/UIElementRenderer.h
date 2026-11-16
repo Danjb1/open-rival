@@ -47,7 +47,7 @@ private:
 
     void renderElement(const UIElement& element, const glm::ivec2& parentPosition);
     void renderVisual(int elementId, const UIVisual& visual, const glm::ivec2& position, const glm::ivec2& size);
-    static void renderBox(const BoxVisual& box, const RenderData& entry, bool needsUpload);
+    static void renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload);
     void cleanUpStaleEntries();
 
 private:
