@@ -72,6 +72,8 @@ private:
 // End of classes
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Builds a texture for each definition in the given directory.
+ * The first image in each definition file defines the palette to be used for the resulting texture. */
 void buildTextures(const std::string& definitionsDir, const std::string& imageDir, const std::string& outputDir);
 
 void readPalette(Palette::Palette& outPalette, const std::string& filename);
