@@ -147,6 +147,11 @@ void UIElement::queueRemoval()
     isQueuedForRemoval = true;
 }
 
+int UIElement::getId() const
+{
+    return id;
+}
+
 UIElement* UIElement::getParent() const
 {
     return parent;
@@ -285,6 +290,21 @@ void UIElement::onDescendantRemoved(const UIElement& descendant)
 bool UIElement::isDispatchingEvent() const
 {
     return parent && parent->isDispatchingEvent();
+}
+
+const UIVisual* UIElement::getVisual() const
+{
+    return visual ? &*visual : nullptr;
+}
+
+void UIElement::setVisual(const UIVisual& newVisual)
+{
+    visual = newVisual;
+}
+
+void UIElement::clearVisual()
+{
+    visual.reset();
 }
 
 bool UIElement::isWithin(const UIElement& ancestor) const

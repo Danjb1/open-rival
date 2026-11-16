@@ -3,9 +3,11 @@
 #include <glm/vec2.hpp>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include "input/Input.h"
+#include "ui/UIVisual.h"
 
 namespace Rival {
 
@@ -69,6 +71,9 @@ class UIElement
 public:
     virtual ~UIElement() = default;
 
+    /** Gets an ID that is unique to this element for the lifetime of the program. */
+    int getId() const;
+
     /** Adds a child to this element. */
     void addChild(std::unique_ptr<UIElement> child);
 
@@ -112,6 +117,9 @@ public:
 
     /** Determines whether this element contains a point (relative to this element). */
     bool containsPoint(const glm::ivec2& point) const;
+
+    /** Gets the visual that should be drawn for this element, or nullptr if it has none. */
+    const UIVisual* getVisual() const;
 
     /** Called when this element becomes the hovered element. */
     virtual void onMouseEnter() {}
@@ -163,7 +171,14 @@ protected:
     /** Removes and destroys any descendants that have been queued for removal. */
     void removeQueuedDescendants();
 
+    void setVisual(const UIVisual& newVisual);
+    void clearVisual();
+
 private:
+    static inline int nextId = 0;
+
+    int id = nextId++;
+
     UIElement* parent = nullptr;
     std::vector<std::unique_ptr<UIElement>> children;
 
@@ -174,6 +189,8 @@ private:
     glm::ivec2 minSize { 0, 0 };
 
     bool isQueuedForRemoval = false;
+
+    std::optional<UIVisual> visual;
 
     // Calculated during layout
     glm::ivec2 requiredSize { 0, 0 };

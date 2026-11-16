@@ -18,7 +18,7 @@ See the [Development Quickstart](/docs/dev_quickstart.md) for information on bui
 
 ## :robot: AI Policy
 
-AI has been used _sparingly_ for code assistance - primarily for refactoring and code reviews. The core engine and features have been written by hand, and all reverse-engineering was done by humans.
+AI has been used _sparingly_ for code assistance - primarily for refactoring, code reviews and unit tests. The core engine and features have been written by hand, and all reverse-engineering was done by humans.
 
 ## :briefcase: Legal Stuff
 

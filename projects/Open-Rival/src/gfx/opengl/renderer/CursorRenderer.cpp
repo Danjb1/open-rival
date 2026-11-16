@@ -58,8 +58,9 @@ void CursorRenderer::render(const CursorDef& cursorDef, float timeSinceLastRende
 
     // Determine the cursor image position
     Rect pos = cursorImage.getPos();
-    pos.x = normalizedMouseX * RenderUtils::getMenuWidth(window->getAspectRatio());
-    pos.y = normalizedMouseY * RenderUtils::menuHeight;
+    glm::ivec2 uiSize = RenderUtils::getUISize(window->getAspectRatio());
+    pos.x = normalizedMouseX * uiSize.x;
+    pos.y = normalizedMouseY * uiSize.y;
 
     // Offset the image based on the cursor hotspot
     pos.x -= cursorDef.hotspotX * RenderUtils::cursorWidthPx;

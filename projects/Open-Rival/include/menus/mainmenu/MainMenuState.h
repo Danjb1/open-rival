@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 #include <memory>
 #include <string>
 
@@ -20,12 +22,14 @@ public:
     // Begin State override
     void onLoad() override;
     void onKeyEvent(const KeyEvent& evt) override;
+    void onMouseButtonEvent(const MouseButtonEvent& evt) override;
+    void onMouseMoveEvent(const MouseMoveEvent& evt) override;
     void update(int delta) override;
     void render(const FrameTiming& frameTiming) override;
     // End State override
 
 private:
-    std::unique_ptr<UIRoot> createUI() const;
+    std::unique_ptr<UIRoot> createUI();
     void startGame();
     std::unique_ptr<State> createGameState() const;
     ScenarioData loadLevel(const std::string& filename) const;

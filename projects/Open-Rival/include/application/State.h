@@ -33,6 +33,11 @@ public:
     virtual void onMouseButtonEvent(const MouseButtonEvent&) {}
 
     /**
+     * Handles mouse move events.
+     */
+    virtual void onMouseMoveEvent(const MouseMoveEvent&) {}
+
+    /**
      * Handles mouse wheel events.
      */
     virtual void onMouseWheelEvent(const MouseWheelEvent&) {}
@@ -57,6 +62,10 @@ public:
 #endif
 
     const Resources& getResources() const;
+
+protected:
+    /** Converts a position from window co-ordinates to UI co-ordinates. */
+    glm::ivec2 windowToUI(const glm::ivec2& position) const;
 
 protected:
     Application& app;

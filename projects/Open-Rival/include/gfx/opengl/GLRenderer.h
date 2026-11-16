@@ -40,7 +40,7 @@ public:
     void onEnterGame(GameState* game) override;
     void renderGame(const FrameTiming& frameTiming) override;
 
-    void renderUi(UIRoot* uiRoot) override;
+    void renderUi(const UIRoot& uiRoot, const FrameTiming& frameTiming) override;
 
     std::shared_ptr<const Texture> loadTexture(
             const std::string& filename, const TextureProperties& props = {}) override;

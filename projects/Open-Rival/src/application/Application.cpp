@@ -210,6 +210,11 @@ void Application::onMouseButtonEvent(const MouseButtonEvent& evt)
 void Application::onMouseMoveEvent(const MouseMoveEvent& evt)
 {
     input.onMouseMoveEvent(evt);
+
+    if (state)
+    {
+        state->onMouseMoveEvent(evt);
+    }
 }
 
 void Application::onMouseWheelEvent(const MouseWheelEvent& evt)

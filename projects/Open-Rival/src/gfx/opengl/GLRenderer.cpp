@@ -221,14 +221,21 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
     renderCursor(gameRenderer->getCurrentCursor(), frameTiming);
 }
 
-void GLRenderer::renderUi(UIRoot* uiRoot)
+void GLRenderer::renderUi(const UIRoot& uiRoot, const FrameTiming& frameTiming)
 {
     if (!uiRenderer)
     {
-        uiRenderer = std::make_unique<UIElementRenderer>();
+        uiRenderer = std::make_unique<UIElementRenderer>(window);
     }
 
+    glClear(GL_COLOR_BUFFER_BIT);
     uiRenderer->render(uiRoot);
+
+#ifdef ENABLE_IMGUI
+    renderImGui();
+#endif
+
+    renderCursor(Cursor::arrow, frameTiming);
 }
 
 void GLRenderer::renderCursor(const CursorDef& cursorDef, const FrameTiming& frameTiming)

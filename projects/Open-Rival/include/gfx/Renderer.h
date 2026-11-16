@@ -40,7 +40,7 @@ public:
     virtual void renderGame(const FrameTiming& frameTiming) = 0;
 
     /** Renders a UI to the viewport. */
-    virtual void renderUi(UIRoot* uiRoot) = 0;
+    virtual void renderUi(const UIRoot& uiRoot, const FrameTiming& frameTiming) = 0;
 
     /** Loads a Texture from a file. */
     virtual std::shared_ptr<const Texture> loadTexture(

@@ -71,9 +71,9 @@ int getCanvasWidth(float cameraWidth);
 int getCanvasHeight(float cameraHeight);
 
 /**
- * Gets the width of the camera used for menus.
+ * Gets the size of the camera used for the UI.
  */
-int getMenuWidth(const double aspectRatio);
+glm::ivec2 getUISize(double aspectRatio);
 
 /**
  * Creates a view matrix focused on the given point.

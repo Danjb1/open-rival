@@ -6,6 +6,7 @@
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "game/World.h"
+#include "gfx/RenderUtils.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
 #include "ui/UIRoot.h"
@@ -21,12 +22,16 @@ MainMenuState::MainMenuState(Application& app)
 {
 }
 
-std::unique_ptr<UIRoot> MainMenuState::createUI() const
+std::unique_ptr<UIRoot> MainMenuState::createUI()
 {
     auto localUiRoot = std::make_unique<UIRoot>();
 
     // TMP: just add a single button for now
     auto testButton = std::make_unique<Button>();
+    testButton->setMinSize({ 200, 40 });
+    testButton->setAnchor(Anchor::Centre);
+    testButton->setOnClick([this]() { startGame(); });
+
     localUiRoot->addChild(std::move(testButton));
 
     return localUiRoot;
@@ -54,11 +59,25 @@ void MainMenuState::onKeyEvent(const KeyEvent& evt)
     }
 }
 
-void MainMenuState::update(int /* delta */) {}
-
-void MainMenuState::render(const FrameTiming& /* frameTiming */)
+void MainMenuState::onMouseButtonEvent(const MouseButtonEvent& evt)
 {
-    app.getRenderer()->renderUi(uiRoot.get());
+    uiRoot->sendMouseButtonEvent({ evt.button, windowToUI(evt.position), evt.isPress });
+}
+
+void MainMenuState::onMouseMoveEvent(const MouseMoveEvent& evt)
+{
+    uiRoot->sendMouseMoveEvent({ windowToUI(evt.position) });
+}
+
+void MainMenuState::update(int /* delta */)
+{
+    const glm::ivec2 uiSize = RenderUtils::getUISize(window->getAspectRatio());
+    uiRoot->update(uiSize);
+}
+
+void MainMenuState::render(const FrameTiming& frameTiming)
+{
+    app.getRenderer()->renderUi(*uiRoot, frameTiming);
 }
 
 void MainMenuState::startGame()

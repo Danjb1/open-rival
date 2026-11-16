@@ -313,6 +313,7 @@ set(OPEN_RIVAL_HEADERS
     include/ui/Cursor.h
     include/ui/UIElement.h
     include/ui/UIRoot.h
+    include/ui/UIVisual.h
     include/ui/containers/FlatContainer.h
     include/ui/widgets/Button.h
     include/utils/BinaryFileReader.h

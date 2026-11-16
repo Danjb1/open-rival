@@ -43,11 +43,11 @@ static constexpr int hitboxSpriteUsefulHeightPx = 10;
 static constexpr int cursorWidthPx = 32;
 static constexpr int cursorHeightPx = 32;
 
-// Size of the camera used for menus.
-// This defines the notion of "menu co-ordinates".
+// Size of the camera used for the UI.
+// This defines the notion of "UI co-ordinates".
 // This height value is based on the original menu image sizes.
 // The width must be calculated at runtime based on the aspect ratio.
-static constexpr int menuHeight = 600;
+static constexpr int uiHeight = 600;
 
 // Render limits.
 // These define the maximum number of tiles that can ever be rendered

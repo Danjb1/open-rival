@@ -14,16 +14,16 @@
 namespace Rival { namespace GameInterface {
 
 /**
- * Height of the in-game UI, in menu co-ordinates.
+ * Height of the in-game UI, in UI co-ordinates.
  */
 static constexpr int uiHeight = 144;
 
 /**
- * Y-position of the in-game UI, in menu co-ordinates.
+ * Y-position of the in-game UI, in UI co-ordinates.
  */
-static constexpr int uiPosY = RenderUtils::menuHeight - uiHeight;
+static constexpr int uiPosY = RenderUtils::uiHeight - uiHeight;
 
-// UI element positions, in menu co-ordinates
+// UI element positions, in UI co-ordinates
 extern const Rect cursor;
 extern const Rect minimapLeftBorder;
 extern const Rect minimapTopBorder;

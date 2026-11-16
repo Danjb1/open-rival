@@ -95,14 +95,15 @@ int getCanvasWidth(float cameraWidth)
 
 int getCanvasHeight(float cameraHeight)
 {
-    int canvasHeight = static_cast<int>(cameraToPx_Y(cameraHeight));
+    const int canvasHeight = static_cast<int>(cameraToPx_Y(cameraHeight));
     // See comments in `getCanvasWidth`.
     return canvasHeight + (canvasHeight & 1);
 }
 
-int getMenuWidth(double aspectRatio)
+glm::ivec2 getUISize(double aspectRatio)
 {
-    return static_cast<int>(menuHeight * aspectRatio);
+    const int uiWidth = static_cast<int>(uiHeight * aspectRatio);
+    return { uiWidth, uiHeight };
 }
 
 glm::mat4 createViewMatrix(float cameraX, float cameraY)
@@ -111,21 +112,20 @@ glm::mat4 createViewMatrix(float cameraX, float cameraY)
     //  - +x points right
     //  - +y points down
     //  - +z points out of the screen
-    return glm::lookAt(
-            glm::vec3(cameraX, cameraY, cameraZ),  // camera position
-            glm::vec3(cameraX, cameraY, 0.f),      // look at
-            upVector                               // camera up
+    return glm::lookAt(glm::vec3(cameraX, cameraY, cameraZ),  // camera position
+            glm::vec3(cameraX, cameraY, 0.f),                 // look at
+            upVector                                          // camera up
     );
 }
 
 glm::mat4 createProjectionMatrix(float width, float height)
 {
-    float left = -width / 2.0f;
-    float top = height / 2.0f;
-    float right = width / 2.0f;
-    float bottom = -height / 2.0f;
-    float near = nearPlane;
-    float far = farPlane;
+    const float left = -width / 2.0f;
+    const float top = height / 2.0f;
+    const float right = width / 2.0f;
+    const float bottom = -height / 2.0f;
+    const float near = nearPlane;
+    const float far = farPlane;
     return glm::ortho(left, right, bottom, top, near, far);
 }
 
@@ -135,14 +135,14 @@ glm::mat4 createGameViewProjectionMatrix(const Camera& camera, int viewportWidth
     // positioned using pixels. Therefore we need to convert the camera
     // co-ordinates to pixels, too.
     const glm::vec2& cameraPos = camera.getPosition();
-    float cameraX = cameraToPx_X(cameraPos.x);
-    float cameraY = cameraToPx_Y(cameraPos.y);
-    glm::mat4 view = createViewMatrix(cameraX, cameraY);
+    const float cameraX = cameraToPx_X(cameraPos.x);
+    const float cameraY = cameraToPx_Y(cameraPos.y);
+    const glm::mat4 view = createViewMatrix(cameraX, cameraY);
 
     // The projection size must match the viewport size *exactly* in order
     // to achieve pixel-perfect rendering. Any differences here could
     // result in seams between tiles.
-    glm::mat4 projection =
+    const glm::mat4 projection =
             createProjectionMatrix(static_cast<float>(viewportWidth), static_cast<float>(viewportHeight));
 
     // Combine matrices
@@ -152,13 +152,13 @@ glm::mat4 createGameViewProjectionMatrix(const Camera& camera, int viewportWidth
 glm::mat4 createMenuViewProjectionMatrix(double aspectRatio)
 {
     // We position our camera to look at the centre of the menu
-    int menuWidth = getMenuWidth(aspectRatio);
-    float cameraX = menuWidth / 2.0f;
-    float cameraY = menuHeight / 2.0f;
-    glm::mat4 view = createViewMatrix(cameraX, cameraY);
+    const glm::ivec2 uiSize = getUISize(aspectRatio);
+    const float cameraX = uiSize.x / 2.0f;
+    const float cameraY = uiSize.y / 2.0f;
+    const glm::mat4 view = createViewMatrix(cameraX, cameraY);
 
     // Determine projection matrix
-    glm::mat4 projection = createProjectionMatrix(static_cast<float>(menuWidth), static_cast<float>(menuHeight));
+    const glm::mat4 projection = createProjectionMatrix(static_cast<float>(uiSize.x), static_cast<float>(uiSize.y));
 
     // Combine matrices
     return projection * view;

@@ -8,6 +8,7 @@
 #include "ui/UIElement.h"
 #include "ui/UIRoot.h"
 #include "ui/containers/FlatContainer.h"
+#include "ui/widgets/Button.h"
 
 using namespace Rival;
 
@@ -411,6 +412,62 @@ SCENARIO("Elements can be removed during event handling", "[ui]")
                 REQUIRE(removed.get() == panelPtr);
                 REQUIRE(removed->getParent() == nullptr);
                 REQUIRE(root.getHoveredElement() == nullptr);
+            }
+        }
+    }
+}
+
+SCENARIO("Each element has a unique ID", "[ui]")
+{
+    UIElement first;
+    UIElement second;
+    REQUIRE(first.getId() != second.getId());
+}
+
+SCENARIO("Buttons respond to the mouse", "[ui]")
+{
+    GIVEN("A root containing a button")
+    {
+        UIRoot root;
+        auto buttonOwner = std::make_unique<Button>();
+        Button* button = buttonOwner.get();
+        button->setMinSize({ 100, 50 });
+        int numClicks = 0;
+        button->setOnClick([&numClicks]() { ++numClicks; });
+        root.addChild(std::move(buttonOwner));
+        root.update(viewportSize);
+
+        const UIVisual normalVisual = *button->getVisual();
+
+        WHEN("the mouse moves onto the button")
+        {
+            root.sendMouseMoveEvent({ { 50, 25 } });
+
+            THEN("its visual changes")
+            {
+                REQUIRE(*button->getVisual() != normalVisual);
+            }
+
+            AND_WHEN("the mouse moves off the button")
+            {
+                root.sendMouseMoveEvent({ { 500, 500 } });
+
+                THEN("its visual changes back")
+                {
+                    REQUIRE(*button->getVisual() == normalVisual);
+                }
+            }
+        }
+
+        WHEN("the button is pressed and released")
+        {
+            root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, true });
+
+            THEN("it is not clicked until the button is released")
+            {
+                REQUIRE(numClicks == 0);
+                root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, false });
+                REQUIRE(numClicks == 1);
             }
         }
     }
