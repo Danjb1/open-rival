@@ -49,6 +49,8 @@ Image Image::readImage(const std::string& filename)
     reader.read(&data);
 
     // HACK: Fix reverse palette in files exported by Photoshop
+    //   This is only needed if we want to load TGA files that were saved by Photoshop directly.
+    //   Any textures created by our texture-builder will skip this section.
     auto bytesRemaining = reader.getBytesRemaining();
     if (static_cast<int>(bytesRemaining) == tgaFooterSize)
     {

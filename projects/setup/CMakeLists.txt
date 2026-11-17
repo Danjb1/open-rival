@@ -65,5 +65,8 @@ if (MSVC)
     target_compile_definitions(setup PRIVATE UNICODE _UNICODE)
 endif()
 
-# Copy "setup" folder to build folder
+# Copy "setup" folder to build folder.
+# This happens during configuration, so re-configure whenever any of these files change.
+file(GLOB_RECURSE SETUP_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/dist/setup/*")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${SETUP_FILES})
 file(COPY "${CMAKE_SOURCE_DIR}/dist/setup" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

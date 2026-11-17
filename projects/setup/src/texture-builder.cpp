@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -205,37 +206,23 @@ int TextureAtlasBuilder::expandTextureToFitRect(int reqWidth, int reqHeight)
 // End of classes
 ///////////////////////////////////////////////////////////////////////////
 
-void readPalette(Palette::Palette& outPalette, const std::string& filename)
+const Palette::Palette& getPaletteByName(const std::string& name)
 {
-    std::ifstream ifs(filename, std::ios::binary | std::ios::in);
-    if (!ifs)
+    static const std::map<std::string, const Palette::Palette*> palettesByName = {
+        { "game", &Palette::paletteGame },
+        { "title", &Palette::paletteTitle },
+        { "loading", &Palette::paletteLoading },
+        { "menu", &Palette::paletteMenu },
+        { "hire_troops", &Palette::paletteHireTroops },
+    };
+
+    auto it = palettesByName.find(name);
+    if (it == palettesByName.end())
     {
-        throw std::runtime_error("Failed to load image for palette: " + filename);
+        throw std::runtime_error("Unknown palette: " + name);
     }
 
-    ifs.seekg(18);
-
-    for (int i = 0; i < Palette::numColors; ++i)
-    {
-        // It is vital to use unsigned values here to prevent incorrect conversions to int
-        unsigned char blue;
-        unsigned char green;
-        unsigned char red;
-        unsigned char alpha;
-
-        ifs.read(reinterpret_cast<char*>(&blue), 1);
-        ifs.read(reinterpret_cast<char*>(&green), 1);
-        ifs.read(reinterpret_cast<char*>(&red), 1);
-        ifs.read(reinterpret_cast<char*>(&alpha), 1);
-
-        std::uint32_t col =                                  //
-                (static_cast<std::uint32_t>(red) << 24)      //
-                | (static_cast<std::uint32_t>(green) << 16)  //
-                | (static_cast<std::uint32_t>(blue) << 8)    //
-                | (static_cast<std::uint32_t>(alpha));
-
-        outPalette[i] = col;
-    }
+    return *it->second;
 }
 
 /**
@@ -263,8 +250,11 @@ void writeAtlas(const std::string& filename, TextureAtlasBuilder& builder)
     atlasFile.close();
 }
 
-std::vector<NamedImage> readDefinitionFile(
-        const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding)
+std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
+        const fs::path& path,
+        bool& outAtlasMode,
+        int& outPadding,
+        const Palette::Palette*& outPalette)
 {
     std::ifstream file(path);
     std::string line;
@@ -275,26 +265,33 @@ std::vector<NamedImage> readDefinitionFile(
     std::vector<NamedImage> sprites;
 
     // Read metadata
+    std::getline(file, line);
+    std::istringstream header(line);
+    std::string textureType;
+    header >> textureType;
+
     bool atlasMode = false;
     int padding = 0;
-    std::getline(file, line);
-    if (line == "atlas")
+    if (textureType == "atlas")
     {
         atlasMode = true;
     }
-    else if (line.rfind("spritesheet", 0) == 0)
+    else if (textureType == "spritesheet")
     {
-        auto pos = line.find(" ", 0);
-        if (pos != std::string::npos)
-        {
-            line.erase(0, pos);
-            padding = std::stoi(line);
-        }
+        header >> padding;
     }
+    else
+    {
+        throw std::runtime_error("Unknown texture type: " + textureType);
+    }
+
+    std::string paletteName = "game";
+    header >> paletteName;
 
     // Pass metadata values back to the caller
     outAtlasMode = atlasMode;
     outPadding = padding;
+    outPalette = &getPaletteByName(paletteName);
 
     // Load all sprites from the definition file
     while (std::getline(file, line))
@@ -485,20 +482,18 @@ void buildTextures(const std::string& definitionsDir, const std::string& imageDi
             // Read images
             bool atlasMode = false;
             int padding = 0;
-            std::vector<NamedImage> images = readDefinitionFile(imageDir, path, /* out */ atlasMode, /* out */ padding);
-
-            // Read palette from the first image
-            Palette::Palette palette { 0 };
-            readPalette(palette, imageDir + "\\" + images[0].name);
+            const Palette::Palette* palette = nullptr;
+            std::vector<NamedImage> images =
+                    readDefinitionFile(imageDir, path, /* out */ atlasMode, /* out */ padding, /* out */ palette);
 
             // Create texture
             if (atlasMode)
             {
-                createTextureAtlas(outputDir, path.filename(), images, palette);
+                createTextureAtlas(outputDir, path.filename(), images, *palette);
             }
             else
             {
-                createSpritesheetTexture(outputDir, path.filename(), images, palette, padding);
+                createSpritesheetTexture(outputDir, path.filename(), images, *palette, padding);
             }
         }
         catch (const std::runtime_error& e)

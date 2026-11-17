@@ -73,13 +73,22 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Builds a texture for each definition in the given directory.
- * The first image in each definition file defines the palette to be used for the resulting texture. */
+ *
+ * The first line of each definition file describes the texture, and must be one of:
+ *   atlas [PALETTE]
+ *   spritesheet PADDING [PALETTE]
+ *
+ * PALETTE is the palette the images use (game, title, loading, menu or hire_troops), and defaults to game.
+ * Each subsequent line is the filename of an image to include. */
 void buildTextures(const std::string& definitionsDir, const std::string& imageDir, const std::string& outputDir);
 
-void readPalette(Palette::Palette& outPalette, const std::string& filename);
+const Palette::Palette& getPaletteByName(const std::string& name);
 
-std::vector<NamedImage> readDefinitionFile(
-        const std::string& imageDir, const fs::path& path, bool& outAtlasMode, int& outPadding);
+std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
+        const fs::path& path,
+        bool& outAtlasMode,
+        int& outPadding,
+        const Palette::Palette*& outPalette);
 
 void createTextureAtlas(const std::string& imageDir,
         const fs::path& definitionFilename,
