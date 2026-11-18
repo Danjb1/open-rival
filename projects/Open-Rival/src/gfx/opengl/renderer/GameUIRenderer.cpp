@@ -116,7 +116,7 @@ void GameUIRenderer::renderPortrait()
     glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
     // Disable transparency for the unit portraits, since they use color 0 for their background
-    glUniform1i(Shaders::indexedTextureShader.transparentIndex, -1);
+    glUniform1f(Shaders::indexedTextureShader.transparentIndex, -1);
 
     const Rect& pos = GameInterface::portrait;
     portraitRenderable.setSprites({ { { pos.x, pos.y }, { pos.width, pos.height }, portraitId } });

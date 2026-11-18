@@ -5,7 +5,6 @@
 <!----------------------------------------------------------------------------->
 
 - Rename UIElementRenderer to UIRenderer
-- Fix black corners on buttons (need transparency)
 - Create pressed image for button
 - Use `AtlasRenderable.draw` everywhere instead of getters
 - Glow effect for labels when a button is pressed

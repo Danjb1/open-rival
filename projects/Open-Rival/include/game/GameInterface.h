@@ -36,6 +36,8 @@ extern const Rect statsPanel;
 
 /**
  * A UI image with a position, that can be used to populate vertex position and texture co-ordinate buffers.
+ *
+ * TODO: Remove this once the game is using the new UI system.
  */
 class UiImage
 {
