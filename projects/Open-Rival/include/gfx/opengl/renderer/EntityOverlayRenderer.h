@@ -68,11 +68,8 @@ private:
     std::vector<Box> boxes;
     BoxRenderable boxRenderable;
 
-    std::vector<GLfloat> atlasVertexData;
-    std::vector<GLfloat> atlasTexCoordData;
+    std::vector<AtlasImage> images;
     AtlasRenderable overlayRenderable;
-
-    int numSprites = 0;
 };
 
 }  // namespace Rival

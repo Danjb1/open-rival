@@ -17,10 +17,10 @@ struct PlayerContext;
 /**
  * Class responsible for rendering the in-game UI.
  */
-class UiRenderer
+class GameUIRenderer
 {
 public:
-    UiRenderer(const PlayerStore& playerStore,
+    GameUIRenderer(const PlayerStore& playerStore,
             const TextureStore& textureStore,
             const FontStore& fontStore,
             const Window* window,
@@ -29,13 +29,13 @@ public:
     void renderUi();
     void renderText();
 
+    static AtlasImage toAtlasImage(const GameInterface::UiImage& image);
+
     static void addToBuffers(
             const GameInterface::UiImage& image, std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords);
 
 private:
     void renderMainUi();
-    bool mainUiNeedsUpdate() const;
-    void sendMainUiDataToGpu();
     bool isInventoryVisible() const;
 
     void renderPortrait();
@@ -49,9 +49,6 @@ private:
     // Maximum number of images we can ever render
     static constexpr int maxMainUiImages = 6;
 
-    // Number of images to render when nothing is selected
-    static constexpr int defaultNumMainUiImages = maxMainUiImages;
-
     // TMP: Portrait to show when multiple units are selected
     static constexpr int multiSelectionPortraitId = 108;
 
@@ -61,7 +58,6 @@ private:
     const PlayerContext& playerContext;
 
     // Main UI
-    int numMainUiImages = 0;
     GameInterface::UiImage minimapLeftBorder;
     GameInterface::UiImage minimapTopBorder;
     GameInterface::UiImage minimapBottomBorder;

@@ -3,10 +3,10 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "application/State.h"
 #include "game/PlayerState.h"
-#include "gfx/opengl/renderer/MenuTextRenderer.h"
 #include "net/ClientInfo.h"
 #include "net/packets/Packet.h"
 #include "scenario/ScenarioData.h"
@@ -15,6 +15,8 @@ namespace Rival {
 
 class Application;
 class PacketHandler;
+class UIElement;
+class UIRoot;
 
 /**
  * State active while in the multiplayer lobby.
@@ -23,6 +25,7 @@ class LobbyState : public State
 {
 public:
     LobbyState(Application& app, std::string playerName, bool host);
+    ~LobbyState() = default;
 
     // Begin State override
     void onLoad() override;
@@ -43,6 +46,10 @@ public:
     std::unordered_map<int, ClientInfo> getClients() const;
 
 private:
+    std::unique_ptr<UIRoot> createUI();
+    std::vector<std::string> getPlayerNames() const;
+    /** Rebuilds the player list; should be called whenever a player joins or leaves. */
+    void refreshPlayerList();
     void pollNetwork();
     int requestPlayerId();
     void loadLevel(const std::string& filename);
@@ -70,6 +77,11 @@ private:
     std::unordered_map<PacketType, std::unique_ptr<PacketHandler>> packetHandlers;
 
     bool isGameStarted = false;
+
+    /** Container holding a Label for each player (set by createUI, so must be declared before uiRoot). */
+    UIElement* playerList = nullptr;
+
+    std::unique_ptr<UIRoot> uiRoot;
 };
 
 }  // namespace Rival

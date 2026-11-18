@@ -62,11 +62,7 @@ void GLRenderer::onEnterMainMenu(MainMenuState* mainMenu)
         gameRenderer.reset();
     }
 
-    if (!uiRenderer)
-    {
-        uiRenderer = std::make_unique<UIElementRenderer>(mainMenu->getResources(), window);
-    }
-
+    initUiRenderer(mainMenu->getResources());
     initCursorRenderer(mainMenu->getResources());
 }
 
@@ -77,22 +73,16 @@ void GLRenderer::onEnterLobby(LobbyState* lobby)
         gameRenderer.reset();
     }
 
-    lobbyRenderer = std::make_unique<LobbyRenderer>(*lobby, window);
+    initUiRenderer(lobby->getResources());
     initCursorRenderer(lobby->getResources());
 }
 
-void GLRenderer::renderLobby(const FrameTiming& frameTiming)
+void GLRenderer::initUiRenderer(const TextureStore& textureStore)
 {
-    if (lobbyRenderer)
+    if (!uiRenderer)
     {
-        lobbyRenderer->render();
+        uiRenderer = std::make_unique<UIElementRenderer>(textureStore, window);
     }
-
-#ifdef ENABLE_IMGUI
-    renderImGui();
-#endif
-
-    renderCursor(Cursor::arrow, frameTiming);
 }
 
 void GLRenderer::initCursorRenderer(const TextureStore& textureStore)
@@ -195,11 +185,6 @@ std::shared_ptr<const Texture> GLRenderer::createTexture(const Image& img, const
 
 void GLRenderer::onEnterGame(GameState* game)
 {
-    if (lobbyRenderer)
-    {
-        lobbyRenderer.reset();
-    }
-
     const World& world = game->getWorld();
     const Camera& camera = game->getCamera();
     const Rect& viewport = game->getViewport();
@@ -218,6 +203,9 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
     }
 
     gameRenderer->render(frameTiming);
+
+    // TODO: remove the lines below once the GameState is using the new UI system, since this is already called by
+    //   renderUi!
 
 #ifdef ENABLE_IMGUI
     renderImGui();

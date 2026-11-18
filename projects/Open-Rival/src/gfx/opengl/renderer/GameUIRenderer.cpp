@@ -1,4 +1,4 @@
-#include "gfx/opengl/renderer/UiRenderer.h"
+#include "gfx/opengl/renderer/GameUIRenderer.h"
 
 #include "gfx/opengl/GLWrapper.h"
 
@@ -14,7 +14,7 @@
 
 namespace Rival {
 
-UiRenderer::UiRenderer(const PlayerStore& playerStore,
+GameUIRenderer::GameUIRenderer(const PlayerStore& playerStore,
         const TextureStore& textureStore,
         const FontStore& fontStore,
         const Window* window,
@@ -45,13 +45,11 @@ UiRenderer::UiRenderer(const PlayerStore& playerStore,
 
     // Text
     , nameProperties({ fontStore.getFontSmall() })
-    , nameRenderable(
-              Entity::maxNameLength, nameProperties, GameInterface::selectionName.x, GameInterface::selectionName.y)
     , textRenderer(window)
 {
 }
 
-void UiRenderer::renderUi()
+void GameUIRenderer::renderUi()
 {
     renderMainUi();
     renderPortrait();
@@ -61,81 +59,29 @@ void UiRenderer::renderUi()
 // Main UI
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderMainUi()
+void GameUIRenderer::renderMainUi()
 {
-    // Use textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mainUiRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
-    // Bind vertex array
-    glBindVertexArray(mainUiRenderable.getVao());
-
-    // Update the data on the GPU
-    if (mainUiNeedsUpdate())
-    {
-        sendMainUiDataToGpu();
-    }
-
-    // Render
-    glDrawElements(mainUiRenderable.getDrawMode(),
-            numMainUiImages * mainUiRenderable.getIndicesPerSprite(),
-            GL_UNSIGNED_INT,
-            nullptr);
-}
-
-bool UiRenderer::mainUiNeedsUpdate() const
-{
-    // Later, perhaps we can optimise this
-    return true;
-}
-
-void UiRenderer::sendMainUiDataToGpu()
-{
-    // First we need to know the number of images to render
-    numMainUiImages = defaultNumMainUiImages;
-
-    // Determine if the inventory should be rendered
-    bool inventoryVisible = isInventoryVisible();
-    if (inventoryVisible)
+    std::vector<AtlasImage> images;
+    images.reserve(maxMainUiImages);
+    images.push_back(toAtlasImage(minimapLeftBorder));
+    images.push_back(toAtlasImage(minimapTopBorder));
+    images.push_back(toAtlasImage(minimapBottomBorder));
+    images.push_back(toAtlasImage(mainPanel));
+    if (!isInventoryVisible())
     {
         // It's counter-intuitive, but to show the inventory we *don't* draw the overlay
-        --numMainUiImages;
+        images.push_back(toAtlasImage(hideInventoryOverlay));
     }
+    images.push_back(toAtlasImage(statsPanel));
 
-    // Create buffers to hold all our vertex data
-    int numVertices = numMainUiImages * AtlasRenderable::numVerticesPerSprite;
-    int positionDataSize = numVertices * AtlasRenderable::numVertexDimensions;
-    int texCoordDataSize = numVertices * AtlasRenderable::numTexCoordDimensions;
-    std::vector<GLfloat> positions;
-    std::vector<GLfloat> texCoords;
-    positions.reserve(positionDataSize);
-    texCoords.reserve(texCoordDataSize);
-
-    // Add data to our buffers
-    addToBuffers(minimapLeftBorder, positions, texCoords);
-    addToBuffers(minimapTopBorder, positions, texCoords);
-    addToBuffers(minimapBottomBorder, positions, texCoords);
-    addToBuffers(mainPanel, positions, texCoords);
-    if (!inventoryVisible)
-    {
-        addToBuffers(hideInventoryOverlay, positions, texCoords);
-    }
-    addToBuffers(statsPanel, positions, texCoords);
-
-    // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getPositionVbo());
-    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
-
-    // Upload tex co-ord data
-    glBindBuffer(GL_ARRAY_BUFFER, mainUiRenderable.getTexCoordVbo());
-    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
+    mainUiRenderable.setImages(images);
+    mainUiRenderable.draw();
 }
 
-bool UiRenderer::isInventoryVisible() const
+bool GameUIRenderer::isInventoryVisible() const
 {
     if (playerContext.weakSelectedEntities.size() != 1)
     {
@@ -158,7 +104,7 @@ bool UiRenderer::isInventoryVisible() const
 // Portrait
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderPortrait()
+void GameUIRenderer::renderPortrait()
 {
     int portraitId = -1;
     bool portraitVisible = isPortraitVisible(portraitId);
@@ -192,13 +138,13 @@ void UiRenderer::renderPortrait()
             portraitRenderable.getDrawMode(), portraitRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
 }
 
-bool UiRenderer::portraitNeedsUpdate() const
+bool GameUIRenderer::portraitNeedsUpdate() const
 {
     // Later, perhaps we can optimise this
     return true;
 }
 
-void UiRenderer::sendPortraitDataToGpu()
+void GameUIRenderer::sendPortraitDataToGpu()
 {
     // Create buffers to hold all our vertex data
     int numVertices = SpriteRenderable::numVerticesPerSprite;
@@ -223,7 +169,7 @@ void UiRenderer::sendPortraitDataToGpu()
     glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
 }
 
-bool UiRenderer::isPortraitVisible(int& outPortraitId) const
+bool GameUIRenderer::isPortraitVisible(int& outPortraitId) const
 {
     if (playerContext.weakSelectedEntities.empty())
     {
@@ -257,21 +203,24 @@ bool UiRenderer::isPortraitVisible(int& outPortraitId) const
 // Text
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::renderText()
+void GameUIRenderer::renderText()
 {
     std::vector<const TextRenderable*> textRenderables;
 
     std::string name;
     if (isNameVisible(name))
     {
-        nameRenderable.setTextSpan({ name, TextRenderable::defaultColor });
+        nameRenderable.setText({ { name, TextRenderable::defaultColor } },
+                nameProperties,
+                GameInterface::selectionName.x,
+                GameInterface::selectionName.y);
         textRenderables.push_back(&nameRenderable);
     }
 
     textRenderer.render(textRenderables);
 }
 
-bool UiRenderer::isNameVisible(std::string& outName) const
+bool GameUIRenderer::isNameVisible(std::string& outName) const
 {
     if (playerContext.weakSelectedEntities.empty())
     {
@@ -306,7 +255,13 @@ bool UiRenderer::isNameVisible(std::string& outName) const
 // Helpers
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void UiRenderer::addToBuffers(
+AtlasImage GameUIRenderer::toAtlasImage(const GameInterface::UiImage& image)
+{
+    const Rect pos = image.getPos();
+    return { { pos.x, pos.y }, { pos.width, pos.height }, image.getImageKey() };
+}
+
+void GameUIRenderer::addToBuffers(
         const GameInterface::UiImage& image, std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords)
 {
     // Define vertex positions

@@ -9,7 +9,7 @@
 #include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
-#include "gfx/opengl/renderer/UiRenderer.h"
+#include "gfx/opengl/renderer/GameUIRenderer.h"
 
 namespace Rival {
 
@@ -90,7 +90,7 @@ void CursorRenderer::render(const CursorDef& cursorDef, float timeSinceLastRende
     texCoords.reserve(texCoordDataSize);
 
     // Add data to our buffers
-    UiRenderer::addToBuffers(cursorImage, positions, texCoords);
+    GameUIRenderer::addToBuffers(cursorImage, positions, texCoords);
 
     // Upload position data
     glBindBuffer(GL_ARRAY_BUFFER, cursorRenderable.getPositionVbo());

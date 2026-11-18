@@ -30,9 +30,6 @@ public:
     /** Called whenever we enter the LobbyState. */
     virtual void onEnterLobby(LobbyState* lobbyState) = 0;
 
-    /** Renders the LobbyState to the viewport. */
-    virtual void renderLobby(const FrameTiming& frameTiming) = 0;
-
     /** Called whenever we enter the GameState. */
     virtual void onEnterGame(GameState* game) = 0;
 

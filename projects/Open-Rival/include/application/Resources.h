@@ -55,7 +55,6 @@ public:
     virtual std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const = 0;
     virtual std::shared_ptr<const TextureAtlas> getMenuTextureAtlas() const = 0;
-    virtual std::shared_ptr<const Texture> getMenuBackgroundTexture() const = 0;
     virtual std::shared_ptr<const Texture> getTexture(int id) const = 0;
 };
 
@@ -115,7 +114,6 @@ public:
     std::shared_ptr<const TextureAtlas> getUiTextureAtlas() const override;
     std::shared_ptr<const TextureAtlas> getOverlayTextureAtlas() const override;
     std::shared_ptr<const TextureAtlas> getMenuTextureAtlas() const override;
-    std::shared_ptr<const Texture> getMenuBackgroundTexture() const override;
     std::shared_ptr<const Texture> getTexture(int id) const override;
     // End TextureStore override
 

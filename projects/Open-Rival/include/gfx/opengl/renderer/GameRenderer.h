@@ -9,7 +9,7 @@
 #include "gfx/opengl/renderer/FramebufferRenderer.h"
 #include "gfx/opengl/renderer/MapBorderRenderer.h"
 #include "gfx/opengl/renderer/TileRenderer.h"
-#include "gfx/opengl/renderer/UiRenderer.h"
+#include "gfx/opengl/renderer/GameUIRenderer.h"
 #include "ui/Cursor.h"
 #include "utils/TimeUtils.h"
 
@@ -82,7 +82,7 @@ private:
     FramebufferRenderer gameFboRenderer;
     TileRenderer tileRenderer;
     MapBorderRenderer mapBorderRenderer;
-    UiRenderer uiRenderer;
+    GameUIRenderer uiRenderer;
     DragSelectRenderer dragSelectRenderer;
 };
 

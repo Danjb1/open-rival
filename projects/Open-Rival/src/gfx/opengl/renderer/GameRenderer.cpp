@@ -234,7 +234,7 @@ void GameRenderer::renderMessages()
 
     // TMP: Hardcoded hacky rendering until we have a proper menu system.
     // The TextRenderables should be long-lived objects - we should not be recreating them every frame.
-    // Same goes for the TextRenderer
+    // Same goes for the MenuTextRenderer
     MenuTextRenderer textRenderer(window);
     std::vector<TextRenderable> textRenderables;
     TextProperties nameProperties = { res.getFontRegular() };
@@ -245,7 +245,7 @@ void GameRenderer::renderMessages()
     // Message
     {
         TextSpan textSpan = { "Waiting for players:", TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        textRenderables.emplace_back().setText({ textSpan }, nameProperties, renderPos.x, renderPos.y);
         renderPos.x += indent;
         renderPos.y += rowHeight;
     }
@@ -256,7 +256,7 @@ void GameRenderer::renderMessages()
     {
         std::string name = client.getName();
         TextSpan textSpan = { name, TextRenderable::defaultColor };
-        textRenderables.emplace_back(textSpan, nameProperties, renderPos.x, renderPos.y);
+        textRenderables.emplace_back().setText({ textSpan }, nameProperties, renderPos.x, renderPos.y);
         renderPos.y += rowHeight;
     }
 

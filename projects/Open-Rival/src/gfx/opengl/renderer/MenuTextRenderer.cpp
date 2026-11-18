@@ -10,7 +10,6 @@ namespace Rival {
 
 MenuTextRenderer::MenuTextRenderer(const Window* window)
     : window(window)
-    , textRenderer()
 {
 }
 
@@ -32,7 +31,7 @@ void MenuTextRenderer::render(const std::vector<const TextRenderable*> textRende
     // Render!
     for (const TextRenderable* textRenderable : textRenderables)
     {
-        textRenderer.render(*textRenderable);
+        textRenderable->draw();
     }
 }
 

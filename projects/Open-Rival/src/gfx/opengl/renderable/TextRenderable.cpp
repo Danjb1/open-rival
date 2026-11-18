@@ -1,60 +1,70 @@
 #include "gfx/opengl/renderable/TextRenderable.h"
 
+#include <utility>  // std::exchange
+
+#include "gfx/Font.h"
 #include "gfx/opengl/Shaders.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 const Color TextRenderable::defaultColor = Color::makeRgb(255, 221, 65);
 const Color TextRenderable::highlightColor = Color::makeRgb(255, 43, 40);
 
-TextRenderable::TextRenderable(TextSpan span, TextProperties props, float x, float y)
-    : spans({ span })
-    , props(props)
-    , x(x)
-    , y(y)
-    , numChars(0)
-    , numVisibleChars(0)
+TextRenderable::TextRenderable()
 {
-    countChars();
-    init();
-}
+    // Generate VAO
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-TextRenderable::TextRenderable(std::vector<TextSpan> spans, const TextProperties props, float x, float y)
-    : spans(spans)
-    , props(props)
-    , x(x)
-    , y(y)
-    , numChars(0)
-    , numVisibleChars(0)
-{
-    countChars();
-    init();
-}
+    // Generate VBOs
+    glGenBuffers(1, &positionVbo);
+    glGenBuffers(1, &texCoordVbo);
+    glGenBuffers(1, &colorVbo);
+    glGenBuffers(1, &ibo);
 
-TextRenderable::TextRenderable(int maxChars, TextProperties props, float x, float y)
-    : props(props)
-    , x(x)
-    , y(y)
-    , numChars(maxChars)
-    , numVisibleChars(maxChars)
-{
-    init();
+    // Describe the vertex attributes (the buffers are sized in setText)
+    glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+    glVertexAttribPointer(Shaders::vertexAttribIndex,
+            numVertexDimensions,
+            GL_FLOAT,
+            GL_FALSE,
+            numVertexDimensions * sizeof(GLfloat),
+            nullptr);
+
+    glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+    glVertexAttribPointer(Shaders::texCoordAttribIndex,
+            numTexCoordDimensions,
+            GL_FLOAT,
+            GL_FALSE,
+            numTexCoordDimensions * sizeof(GLfloat),
+            nullptr);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    glVertexAttribPointer(Shaders::colorAttribIndex,
+            numColorDimensions,
+            GL_FLOAT,
+            GL_FALSE,
+            numColorDimensions * sizeof(GLfloat),
+            nullptr);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    // Enable vertex attributes
+    glEnableVertexAttribArray(Shaders::vertexAttribIndex);
+    glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
+    glEnableVertexAttribArray(Shaders::colorAttribIndex);
 }
 
 TextRenderable::TextRenderable(TextRenderable&& other) noexcept
-    : spans(other.spans)
-    , props(other.props)
-    , x(other.x)
-    , y(other.y)
-    , numChars(other.numChars)
-    , numVisibleChars(other.numVisibleChars)
-
     // Reset the source object so its destructor is harmless
-    , vao(std::exchange(other.vao, 0))
+    : vao(std::exchange(other.vao, 0))
     , positionVbo(std::exchange(other.positionVbo, 0))
     , texCoordVbo(std::exchange(other.texCoordVbo, 0))
     , colorVbo(std::exchange(other.colorVbo, 0))
     , ibo(std::exchange(other.ibo, 0))
+    , props(std::move(other.props))
+    , numIndices(other.numIndices)
 {
 }
 
@@ -81,89 +91,121 @@ TextRenderable::~TextRenderable()
     glBindVertexArray(0);
 }
 
-void TextRenderable::init()
+void TextRenderable::setText(const std::vector<TextSpan>& spans, const TextProperties& newProps, float x, float y)
 {
-    // Generate VAO
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    props = newProps;
+    const Font& font = *props.font;
+    const float glyphScale = font.getGlyphScale(props.scale);
 
-    // Generate VBOs
-    glGenBuffers(1, &positionVbo);
-    glGenBuffers(1, &texCoordVbo);
-    glGenBuffers(1, &colorVbo);
-    glGenBuffers(1, &ibo);
+    std::vector<GLfloat> vertexData;
+    std::vector<GLfloat> texCoordData;
+    std::vector<GLfloat> colorData;
+    std::vector<GLuint> indexData;
+    int numCharsAdded = 0;
 
-    int numLayers = getNumLayers();
-
-    // Initialize position buffer with empty data
-    glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-    glVertexAttribPointer(
-            Shaders::vertexAttribIndex,
-            numVertexDimensions,
-            GL_FLOAT,
-            GL_FALSE,
-            numVertexDimensions * sizeof(GLfloat),
-            nullptr);
-    int positionBufferSize = numVisibleChars * numLayers * numVertexDimensions * numIndicesPerChar * sizeof(GLfloat);
-    glBufferData(GL_ARRAY_BUFFER, positionBufferSize, NULL, GL_STATIC_DRAW);
-
-    // Initialize tex co-ord buffer with empty data
-    glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-    int texCoordBufferSize = numVisibleChars * numLayers * numTexCoordDimensions * numIndicesPerChar * sizeof(GLfloat);
-    glVertexAttribPointer(
-            Shaders::texCoordAttribIndex,
-            numTexCoordDimensions,
-            GL_FLOAT,
-            GL_FALSE,
-            numTexCoordDimensions * sizeof(GLfloat),
-            nullptr);
-    glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize, NULL, GL_STATIC_DRAW);
-
-    // Initialize color buffer with empty data
-    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
-    int colorBufferSize = numVisibleChars * numLayers * numColorDimensions * numIndicesPerChar * sizeof(GLfloat);
-    glVertexAttribPointer(
-            Shaders::colorAttribIndex,
-            numColorDimensions,
-            GL_FLOAT,
-            GL_FALSE,
-            numColorDimensions * sizeof(GLfloat),
-            nullptr);
-    glBufferData(GL_ARRAY_BUFFER, colorBufferSize, NULL, GL_STATIC_DRAW);
-
-    // Initialize index buffer with empty data
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    int numIndices = numVisibleChars * numLayers * numIndicesPerChar * sizeof(GLuint);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices, NULL, GL_STATIC_DRAW);
-
-    // Enable vertex attributes
-    glEnableVertexAttribArray(Shaders::vertexAttribIndex);
-    glEnableVertexAttribArray(Shaders::texCoordAttribIndex);
-    glEnableVertexAttribArray(Shaders::colorAttribIndex);
-}
-
-void TextRenderable::countChars()
-{
-    numChars = 0;
-    numVisibleChars = 0;
-
-    for (TextSpan span : spans)
+    // Each layer is a full copy of the text; the shadow (if any) is drawn first so that it appears underneath
+    for (int layer = 0; layer < getNumLayers(); ++layer)
     {
-        for (char c : span.text)
-        {
-            ++numChars;
+        const bool isShadow = isShadowLayer(layer);
+        const float layerX = isShadow ? x + shadowOffsetX : x;
+        const float layerY = isShadow ? y + shadowOffsetY : y;
+        float penX = layerX;
 
-            if (c != ' ')
+        for (const TextSpan& span : spans)
+        {
+            const Color color = isShadow ? Color::makeRgb(0, 0, 0) : span.color;
+
+            for (char c : span.text)
             {
-                ++numVisibleChars;
+                const CharData* charData = font.getCharData(c);
+                if (!charData)
+                {
+                    LOG_WARN("Trying to render unsupported character: {}", c);
+                    continue;
+                }
+
+                if (c == ' ')
+                {
+                    // Nothing to render for spaces
+                    penX += charData->advance * glyphScale;
+                    continue;
+                }
+
+                const float x1 = penX + charData->bearing.x * glyphScale;
+                const float y1 = layerY - charData->bearing.y * glyphScale;
+                const float x2 = x1 + charData->size.x * glyphScale;
+                const float y2 = y1 + charData->size.y * glyphScale;
+                const float z = 0.f;
+
+                /* clang-format off */
+                vertexData.insert(vertexData.end(), {
+                    x1, y1, z,
+                    x2, y1, z,
+                    x2, y2, z,
+                    x1, y2, z
+                });
+                /* clang-format on */
+
+                const float tx1 = charData->txCoords[0];
+                const float ty1 = charData->txCoords[1];
+                const float tx2 = charData->txCoords[2];
+                const float ty2 = charData->txCoords[3];
+
+                /* clang-format off */
+                texCoordData.insert(texCoordData.end(), {
+                    tx1, ty1,
+                    tx2, ty1,
+                    tx2, ty2,
+                    tx1, ty2
+                });
+                /* clang-format on */
+
+                for (int vertex = 0; vertex < numVerticesPerChar; ++vertex)
+                {
+                    colorData.insert(colorData.end(), { color.r, color.g, color.b });
+                }
+
+                const GLuint startIndex = numCharsAdded * numVerticesPerChar;
+                indexData.insert(indexData.end(),
+                        { startIndex, startIndex + 1, startIndex + 2, startIndex + 2, startIndex + 3, startIndex });
+
+                penX += charData->advance * glyphScale;
+                ++numCharsAdded;
             }
         }
     }
+
+    numIndices = static_cast<int>(indexData.size());
+
+    // The amount of text may have changed, so we recreate each buffer at the new size
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+    glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(GLfloat), vertexData.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+    glBufferData(GL_ARRAY_BUFFER, texCoordData.size() * sizeof(GLfloat), texCoordData.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    glBufferData(GL_ARRAY_BUFFER, colorData.size() * sizeof(GLfloat), colorData.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData.size() * sizeof(GLuint), indexData.data(), GL_DYNAMIC_DRAW);
 }
 
-GLuint TextRenderable::getTextureId() const
+void TextRenderable::draw() const
 {
-    return props.font->getTexture()->getId();
+    if (numIndices == 0)
+    {
+        // Nothing to draw (and we may not have a font yet)
+        return;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, props.font->getTexture()->getId());
+
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
 int TextRenderable::getNumLayers() const
@@ -174,18 +216,6 @@ int TextRenderable::getNumLayers() const
 bool TextRenderable::isShadowLayer(int layer) const
 {
     return props.hasShadow && layer == shadowLayerIndex;
-}
-
-void TextRenderable::setTextSpan(TextSpan newSpan)
-{
-    setTextSpans({ newSpan });
-}
-
-void TextRenderable::setTextSpans(std::vector<TextSpan> newSpans)
-{
-    spans = newSpans;
-    countChars();
-    dirty = true;
 }
 
 }  // namespace Rival

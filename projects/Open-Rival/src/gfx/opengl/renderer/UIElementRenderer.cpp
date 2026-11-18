@@ -121,9 +121,7 @@ UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual
 
     if (std::holds_alternative<TextVisual>(visual))
     {
-        // We create an empty TextRenderable for now, and recreate it in `renderText` once we know the element's
-        // position.
-        return std::unique_ptr<TextRenderable>();
+        return std::make_unique<TextRenderable>();
     }
 
     return std::make_unique<BoxRenderable>(1);
@@ -159,20 +157,19 @@ void UIElementRenderer::renderImage(const ImageVisual& image, RenderData& entry,
     renderable.draw();
 }
 
-void UIElementRenderer::renderText(const TextVisual& text, RenderData& entry, bool needsUpload) const
+void UIElementRenderer::renderText(const TextVisual& text, RenderData& entry, bool needsUpload)
 {
-    auto& renderable = std::get<std::unique_ptr<TextRenderable>>(entry.renderable);
+    TextRenderable& renderable = *std::get<std::unique_ptr<TextRenderable>>(entry.renderable);
 
     if (needsUpload)
     {
-        // A TextRenderable can't be moved or fit more characters, so it's simpler to replace it
         const float x = static_cast<float>(entry.position.x);
         const float baselineY = entry.position.y + text.properties.font->getAscent(text.properties.scale);
-        renderable = std::make_unique<TextRenderable>(text.span, text.properties, x, baselineY);
+        renderable.setText({ text.span }, text.properties, x, baselineY);
     }
 
     glUseProgram(Shaders::fontShader.programId);
-    textRenderer.render(*renderable);
+    renderable.draw();
 }
 
 void UIElementRenderer::cleanUpStaleEntries()

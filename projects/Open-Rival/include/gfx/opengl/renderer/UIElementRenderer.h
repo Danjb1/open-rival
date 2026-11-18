@@ -10,7 +10,6 @@
 #include "gfx/opengl/renderable/AtlasRenderable.h"
 #include "gfx/opengl/renderable/BoxRenderable.h"
 #include "gfx/opengl/renderable/TextRenderable.h"
-#include "gfx/opengl/renderer/TextRenderer.h"
 #include "ui/UIVisual.h"
 
 namespace Rival {
@@ -21,8 +20,7 @@ class UIElement;
 class UIRoot;
 class Window;
 
-// Later, we should rename this to UIRenderer (and deprecate the old one).
-// MenuRenderer should also be deprecated.
+// Later, we should rename this to UIRenderer.
 
 /**
  * Renders an entire UI.
@@ -60,13 +58,12 @@ private:
     static Renderable createRenderable(const UIVisual& visual);
     static void renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload);
     static void renderImage(const ImageVisual& image, RenderData& entry, bool needsUpload);
-    void renderText(const TextVisual& text, RenderData& entry, bool needsUpload) const;
+    static void renderText(const TextVisual& text, RenderData& entry, bool needsUpload);
     void cleanUpStaleEntries();
 
 private:
     const Window* window;
     std::shared_ptr<const Texture> paletteTexture;
-    TextRenderer textRenderer;
 
     /** RenderData by element ID. */
     std::unordered_map<int, RenderData> entries;

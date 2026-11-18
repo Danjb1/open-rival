@@ -169,7 +169,7 @@ void AtlasRenderable::setImages(const std::vector<AtlasImage>& images)
 void AtlasRenderable::draw() const
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, getTextureId());
+    glBindTexture(GL_TEXTURE_2D, texAtlas->texture->getId());
 
     glBindVertexArray(vao);
     glDrawElements(drawMode, indicesPerSprite * numSprites, GL_UNSIGNED_INT, nullptr);

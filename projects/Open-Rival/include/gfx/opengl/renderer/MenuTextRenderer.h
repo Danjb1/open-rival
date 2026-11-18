@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "gfx/opengl/renderable/TextRenderable.h"
-#include "gfx/opengl/renderer/TextRenderer.h"
 
 namespace Rival {
 
@@ -11,6 +10,8 @@ class Window;
 
 /**
  * Class responsible for rendering TextRenderables on the UI layer.
+ *
+ * TODO: Remove this once we migrate the game UI to use the new UI system.
  */
 class MenuTextRenderer
 {
@@ -21,8 +22,6 @@ public:
 
 private:
     const Window* window;
-
-    TextRenderer textRenderer;
 };
 
 }  // namespace Rival

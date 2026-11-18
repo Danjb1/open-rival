@@ -9,7 +9,6 @@
 #include "gfx/Texture.h"
 #include "gfx/opengl/renderer/CursorRenderer.h"
 #include "gfx/opengl/renderer/GameRenderer.h"
-#include "gfx/opengl/renderer/LobbyRenderer.h"
 #include "gfx/opengl/renderer/UIElementRenderer.h"
 
 namespace Rival {
@@ -35,7 +34,6 @@ public:
     void onEnterMainMenu(MainMenuState* mainMenu) override;
 
     void onEnterLobby(LobbyState* lobby) override;
-    void renderLobby(const FrameTiming& frameTiming) override;
 
     void onEnterGame(GameState* game) override;
     void renderGame(const FrameTiming& frameTiming) override;
@@ -50,6 +48,7 @@ private:
     static void initGLEW();
     static void initGL();
 
+    void initUiRenderer(const TextureStore& textureStore);
     void initCursorRenderer(const TextureStore& textureStore);
 #ifdef ENABLE_IMGUI
     static void renderImGui();
@@ -61,7 +60,6 @@ private:
     Window* window;
     const Input& input;
     std::unique_ptr<UIElementRenderer> uiRenderer;
-    std::unique_ptr<LobbyRenderer> lobbyRenderer;
     std::unique_ptr<GameRenderer> gameRenderer;
 
     /** Renders the cursor on top of everything else, regardless of the current State.

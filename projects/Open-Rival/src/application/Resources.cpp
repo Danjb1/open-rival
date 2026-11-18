@@ -100,11 +100,6 @@ std::shared_ptr<const TextureAtlas> Resources::getMenuTextureAtlas() const
     return textureAtlases.at(2);
 }
 
-std::shared_ptr<const Texture> Resources::getMenuBackgroundTexture() const
-{
-    return textures.at(ResourceLoader::txIndexMenuBackground);
-}
-
 std::shared_ptr<const Texture> Resources::getTexture(int id) const
 {
     return textures.at(id);

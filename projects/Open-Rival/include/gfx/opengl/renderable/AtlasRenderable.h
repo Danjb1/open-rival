@@ -28,10 +28,6 @@ struct AtlasImage
 class AtlasRenderable
 {
 public:
-    static constexpr int numVertexDimensions = 3;    // x, y, z
-    static constexpr int numTexCoordDimensions = 2;  // u, v
-    static constexpr int numVerticesPerSprite = 4;
-
     /**
      * Constructs an AtlasRenderable.
      *
@@ -54,45 +50,14 @@ public:
     /** Binds the atlas texture and draws the images most recently passed to setImages. */
     void draw() const;
 
-    GLuint getVao() const
-    {
-        return vao;
-    }
-
-    GLuint getPositionVbo() const
-    {
-        return positionVbo;
-    }
-
-    GLuint getTexCoordVbo() const
-    {
-        return texCoordVbo;
-    }
-
-    GLuint getIbo() const
-    {
-        return ibo;
-    }
-
-    GLuint getTextureId() const
-    {
-        return texAtlas->texture->getId();
-    }
-
-    GLenum getDrawMode() const
-    {
-        return drawMode;
-    }
-
-    int getIndicesPerSprite() const
-    {
-        return indicesPerSprite;
-    }
-
 public:
     std::shared_ptr<const TextureAtlas> texAtlas;
 
 private:
+    static constexpr int numVertexDimensions = 3;    // x, y, z
+    static constexpr int numTexCoordDimensions = 2;  // u, v
+    static constexpr int numVerticesPerSprite = 4;
+
     GLuint vao;
     GLuint positionVbo;
     GLuint texCoordVbo;

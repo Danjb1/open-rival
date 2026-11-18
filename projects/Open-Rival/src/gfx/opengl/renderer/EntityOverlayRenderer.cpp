@@ -32,19 +32,14 @@ EntityOverlayRenderer::EntityOverlayRenderer(const TextureStore& textureStore, c
     , backgroundColor(PaletteUtils::fromHex(Palette::paletteGame[212]))
 {
     boxes.reserve(maxOverlaysToRender);
-    atlasVertexData.reserve(
-            maxImagesToRender * AtlasRenderable::numVerticesPerSprite * AtlasRenderable::numVertexDimensions);
-    atlasTexCoordData.reserve(
-            maxImagesToRender * AtlasRenderable::numVerticesPerSprite * AtlasRenderable::numTexCoordDimensions);
+    images.reserve(maxImagesToRender);
 }
 
 void EntityOverlayRenderer::prepare(const EntityContainer& entityContainer)
 {
     // Reset
-    atlasVertexData.clear();
-    atlasTexCoordData.clear();
     boxes.clear();
-    numSprites = 0;
+    images.clear();
 
     const auto hoveredEntity = playerContext.weakEntityUnderMouse.lock();
     const std::set<int> selectedEntityIds = playerContext.getSelectedEntityIds();
@@ -86,29 +81,14 @@ void EntityOverlayRenderer::renderBoxes()
 
 void EntityOverlayRenderer::renderTextures()
 {
-    // Bind vertex array
-    glBindVertexArray(overlayRenderable.getVao());
-
-    // Set palette
-    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, PaletteUtils::paletteIndexGame);
-
-    // Use textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, overlayRenderable.getTextureId());
+    // Use the palette of the overlay images
+    const int paletteIndex = overlayRenderable.texAtlas->getPaletteIndex();
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc, PaletteUtils::getPaletteTxY(paletteIndex));
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 
-    // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, overlayRenderable.getPositionVbo());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, atlasVertexData.size() * sizeof(GLfloat), atlasVertexData.data());
-
-    // Upload tex co-ord data
-    glBindBuffer(GL_ARRAY_BUFFER, overlayRenderable.getTexCoordVbo());
-    glBufferSubData(GL_ARRAY_BUFFER, 0, atlasTexCoordData.size() * sizeof(GLfloat), atlasTexCoordData.data());
-
-    // Render
-    const int numIndices = overlayRenderable.getIndicesPerSprite() * numSprites;
-    glDrawElements(overlayRenderable.getDrawMode(), numIndices, GL_UNSIGNED_INT, nullptr);
+    overlayRenderable.setImages(images);
+    overlayRenderable.draw();
 }
 
 // TODO: This should be a common utility function
@@ -126,7 +106,7 @@ bool isMonster(const Entity& entity)
 // TODO: Hovered entities show more info, e.g. experience level, bigger icons, and upgrades
 void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool /* isHovered */)
 {
-    if (numSprites + maxSpritesPerEntity >= maxImagesToRender
+    if (static_cast<int>(images.size()) + maxSpritesPerEntity >= maxImagesToRender
             || static_cast<int>(boxes.size()) + 1 >= maxOverlaysToRender)
     {
         // Don't overflow the buffer
@@ -194,26 +174,8 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
             const float widthRatio =
                     MathUtils::clampf(healthComponent->getMaxHealth() / static_cast<float>(healthPerBar), 0.f, 1.f);
 
-            // Define vertex positions
-            const float x2 = x1 + healthBarWidth * widthRatio;
-            const float y2 = y1 + healthBarHeight;
-            const float z = 0.f;  // Unused
-
-            std::vector<GLfloat> newVerts = {
-                /* clang-format off */
-                x1, y1, z,
-                x2, y1, z,
-                x2, y2, z,
-                x1, y2, z
-                /* clang-format on */
-            };
-            atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
-
-            // Define texture co-ords
-            std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentDepletedHealthBarAtlasKey);
-            atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
-
-            ++numSprites;
+            const glm::vec2 size { healthBarWidth * widthRatio, healthBarHeight };
+            images.push_back({ { x1, y1 }, size, currentDepletedHealthBarAtlasKey });
         }
 
         // Remaining
@@ -221,26 +183,8 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
             const float widthRatio =
                     MathUtils::clampf(healthComponent->getHealth() / static_cast<float>(healthPerBar), 0.f, 1.f);
 
-            // Define vertex positions
-            const float x2 = x1 + healthBarWidth * widthRatio;
-            const float y2 = y1 + healthBarHeight;
-            const float z = 0.f;  // Unused
-
-            std::vector<GLfloat> newVerts = {
-                /* clang-format off */
-                x1, y1, z,
-                x2, y1, z,
-                x2, y2, z,
-                x1, y2, z
-                /* clang-format on */
-            };
-            atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
-
-            // Define texture co-ords
-            std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentHealthBarAtlasKey);
-            atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
-
-            ++numSprites;
+            const glm::vec2 size { healthBarWidth * widthRatio, healthBarHeight };
+            images.push_back({ { x1, y1 }, size, currentHealthBarAtlasKey });
         }
     }
 
@@ -260,26 +204,8 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
             const int maxHealthThisBar = healthComponent->getMaxHealth() - healthPerBar;
             const float widthRatio = MathUtils::clampf(maxHealthThisBar / static_cast<float>(healthPerBar), 0.f, 1.f);
 
-            // Define vertex positions
-            const float x2 = x1 + healthBarWidth * widthRatio;
-            const float y2 = y1 + healthBarHeight;
-            const float z = 0.f;  // Unused
-
-            std::vector<GLfloat> newVerts = {
-                /* clang-format off */
-                x1, y1, z,
-                x2, y1, z,
-                x2, y2, z,
-                x1, y2, z
-                /* clang-format on */
-            };
-            atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
-
-            // Define texture co-ords
-            std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentDepletedHealthBarAtlasKey);
-            atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
-
-            ++numSprites;
+            const glm::vec2 size { healthBarWidth * widthRatio, healthBarHeight };
+            images.push_back({ { x1, y1 }, size, currentDepletedHealthBarAtlasKey });
         }
 
         // Remaining
@@ -287,26 +213,8 @@ void EntityOverlayRenderer::addEntityOverlayToBuffers(const Entity& entity, bool
             const int healthThisBar = healthComponent->getHealth() - healthPerBar;
             const float widthRatio = MathUtils::clampf(healthThisBar / static_cast<float>(healthPerBar), 0.f, 1.f);
 
-            // Define vertex positions
-            const float x2 = x1 + healthBarWidth * widthRatio;
-            const float y2 = y1 + healthBarHeight;
-            const float z = 0.f;  // Unused
-
-            std::vector<GLfloat> newVerts = {
-                /* clang-format off */
-            x1, y1, z,
-            x2, y1, z,
-            x2, y2, z,
-            x1, y2, z
-                /* clang-format on */
-            };
-            atlasVertexData.insert(atlasVertexData.end(), newVerts.cbegin(), newVerts.cend());
-
-            // Define texture co-ords
-            std::vector<GLfloat> texCoords = overlayRenderable.texAtlas->getTexCoords(currentHealthBarAtlasKey);
-            atlasTexCoordData.insert(atlasTexCoordData.end(), texCoords.cbegin(), texCoords.cend());
-
-            ++numSprites;
+            const glm::vec2 size { healthBarWidth * widthRatio, healthBarHeight };
+            images.push_back({ { x1, y1 }, size, currentHealthBarAtlasKey });
         }
     }
 }

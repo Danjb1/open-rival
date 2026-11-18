@@ -11,7 +11,9 @@
 #include "game/GameState.h"
 #include "game/PlayerState.h"
 #include "game/World.h"
+#include "gfx/RenderUtils.h"
 #include "gfx/Renderer.h"
+#include "gfx/opengl/renderable/TextRenderable.h"
 #include "net/packet-handlers/AcceptPlayerPacketHandler.h"
 #include "net/packet-handlers/KickPlayerPacketHandler.h"
 #include "net/packet-handlers/LobbyWelcomePacketHandler.h"
@@ -26,6 +28,10 @@
 #include "net/packets/StartGamePacket.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
+#include "ui/UIRoot.h"
+#include "ui/containers/FlatContainer.h"
+#include "ui/widgets/ImageView.h"
+#include "ui/widgets/Label.h"
 #include "utils/ConfigUtils.h"
 #include "utils/LogUtils.h"
 
@@ -35,6 +41,7 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool bIsHost)
     : State(app)
     , bIsHost(bIsHost)
     , localPlayerName(playerName)
+    , uiRoot(createUI())
 {
     // Register PacketHandlers
     packetHandlers.insert({ PacketType::RequestJoin, std::make_unique<RequestJoinPacketHandler>() });
@@ -49,6 +56,70 @@ LobbyState::LobbyState(Application& app, std::string playerName, bool bIsHost)
         // Determine the seed that we will use for all our random numbers once the game starts.
         // It is imperative that all players generate the same sequence of random numbers.
         randomSeed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+    }
+
+    refreshPlayerList();
+}
+
+std::unique_ptr<UIRoot> LobbyState::createUI()
+{
+    auto localUiRoot = std::make_unique<UIRoot>();
+    const TextProperties textProperties { res.getFontRegular() };
+
+    auto background = std::make_unique<ImageView>(ImageVisual { res.getMenuTextureAtlas(), "menu_bg_dark.tga" });
+    background->setResizeMode(ResizeMode::Stretch, ResizeMode::Stretch);
+    localUiRoot->addChild(std::move(background));
+
+    // TMP: Hardcoded layout until we have a proper lobby screen
+    auto header =
+            std::make_unique<Label>(TextSpan { "Connected Players:", TextRenderable::defaultColor }, textProperties);
+    header->setOffset({ 100, 80 });
+    localUiRoot->addChild(std::move(header));
+
+    auto playerListOwner = std::make_unique<FlatContainer>(FlatDirection::Vertical, 8);
+    playerListOwner->setOffset({ 132, 112 });
+    playerList = playerListOwner.get();
+    localUiRoot->addChild(std::move(playerListOwner));
+
+    return localUiRoot;
+}
+
+std::vector<std::string> LobbyState::getPlayerNames() const
+{
+    std::vector<std::string> names;
+
+    // Local player (if hosting, should always come first)
+    if (bIsHost)
+    {
+        names.push_back(localPlayerName);
+    }
+
+    // Other players
+    for (const auto& entry : clients)
+    {
+        names.push_back(entry.second.getName());
+    }
+
+    // Local player (if not hosting, always comes last for now; later we will sort by player ID)
+    if (!bIsHost)
+    {
+        names.push_back(localPlayerName);
+    }
+
+    return names;
+}
+
+void LobbyState::refreshPlayerList()
+{
+    while (!playerList->getAllChildren().empty())
+    {
+        playerList->removeChild(playerList->getAllChildren().front().get());
+    }
+
+    const TextProperties textProperties { res.getFontRegular() };
+    for (const std::string& name : getPlayerNames())
+    {
+        playerList->addChild(std::make_unique<Label>(TextSpan { name, TextRenderable::defaultColor }, textProperties));
     }
 }
 
@@ -93,12 +164,14 @@ void LobbyState::onLoad()
 void LobbyState::update(int /* delta */)
 {
     pollNetwork();
+
+    const glm::ivec2 uiSize = RenderUtils::getUISize(window->getAspectRatio());
+    uiRoot->update(uiSize);
 }
 
 void LobbyState::render(const FrameTiming& frameTiming)
 {
-    Renderer* renderer = app.getRenderer();
-    renderer->renderLobby(frameTiming);
+    app.getRenderer()->renderUi(*uiRoot, frameTiming);
 }
 
 void LobbyState::onKeyEvent(const KeyEvent& evt)
@@ -199,6 +272,7 @@ void LobbyState::onPlayerAccepted(int requestId, int clientId, const ClientInfo&
     }
 
     clients.insert({ clientId, client });
+    refreshPlayerList();
 }
 
 void LobbyState::onPlayerRejected(int requestId, const std::string& playerName)
@@ -226,6 +300,7 @@ void LobbyState::onWelcomeReceived(
 
     clients = newClients;
     randomSeed = newRandomSeed;
+    refreshPlayerList();
 }
 
 void LobbyState::onPlayerKicked(int playerId)

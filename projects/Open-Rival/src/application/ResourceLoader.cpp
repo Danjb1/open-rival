@@ -140,9 +140,6 @@ const std::vector<std::string> textureNames = {
 
     // Hitbox
     "hitbox.tga",
-
-    // Menu Background
-    "menu_bg_dark.tga",
 };
 
 ResourceLoader::ResourceLoader(const json& cfg, Renderer* renderer, FT_Library fontLib, Resources& resources)

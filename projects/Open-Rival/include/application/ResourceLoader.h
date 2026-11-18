@@ -90,7 +90,6 @@ public:
     static constexpr int txIndexBuildings = txIndexCursors + 1;
     static constexpr int txIndexPortraits = txIndexBuildings + 3;
     static constexpr int txIndexHitbox = txIndexPortraits + 1;
-    static constexpr int txIndexMenuBackground = txIndexHitbox + 1;
 
 private:
     // Fonts
@@ -99,7 +98,7 @@ private:
     static const std::string defaultFontRegular;
 
     // Textures
-    static constexpr int numTextures = txIndexMenuBackground + 1;
+    static constexpr int numTextures = txIndexHitbox + 1;
     static constexpr int numTextureAtlases = 3;
 
     // Sounds

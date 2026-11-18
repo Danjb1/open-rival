@@ -95,21 +95,17 @@ set(OPEN_RIVAL_SOURCES
     src/gfx/opengl/renderable/BoxRenderable.cpp
     src/gfx/opengl/renderable/SpriteRenderable.cpp
     src/gfx/opengl/renderable/TextRenderable.cpp
-    src/gfx/opengl/renderable/TextureRenderable.cpp
     src/gfx/opengl/renderer/CursorRenderer.cpp
     src/gfx/opengl/renderer/DragSelectRenderer.cpp
     src/gfx/opengl/renderer/EntityOverlayRenderer.cpp
     src/gfx/opengl/renderer/EntityRenderer.cpp
     src/gfx/opengl/renderer/FramebufferRenderer.cpp
     src/gfx/opengl/renderer/GameRenderer.cpp
-    src/gfx/opengl/renderer/LobbyRenderer.cpp
+    src/gfx/opengl/renderer/GameUIRenderer.cpp
     src/gfx/opengl/renderer/MapBorderRenderer.cpp
-    src/gfx/opengl/renderer/MenuRenderer.cpp
     src/gfx/opengl/renderer/MenuTextRenderer.cpp
-    src/gfx/opengl/renderer/TextRenderer.cpp
     src/gfx/opengl/renderer/TileRenderer.cpp
     src/gfx/opengl/renderer/UIElementRenderer.cpp
-    src/gfx/opengl/renderer/UiRenderer.cpp
     src/input/Input.cpp
     src/main/Main.cpp
     src/main/ProgramOptions.cpp
@@ -268,21 +264,17 @@ set(OPEN_RIVAL_HEADERS
     include/gfx/opengl/renderable/BoxRenderable.h
     include/gfx/opengl/renderable/SpriteRenderable.h
     include/gfx/opengl/renderable/TextRenderable.h
-    include/gfx/opengl/renderable/TextureRenderable.h
     include/gfx/opengl/renderer/CursorRenderer.h
     include/gfx/opengl/renderer/DragSelectRenderer.h
     include/gfx/opengl/renderer/EntityOverlayRenderer.h
     include/gfx/opengl/renderer/EntityRenderer.h
     include/gfx/opengl/renderer/FramebufferRenderer.h
     include/gfx/opengl/renderer/GameRenderer.h
-    include/gfx/opengl/renderer/LobbyRenderer.h
+    include/gfx/opengl/renderer/GameUIRenderer.h
     include/gfx/opengl/renderer/MapBorderRenderer.h
-    include/gfx/opengl/renderer/MenuRenderer.h
     include/gfx/opengl/renderer/MenuTextRenderer.h
-    include/gfx/opengl/renderer/TextRenderer.h
     include/gfx/opengl/renderer/TileRenderer.h
     include/gfx/opengl/renderer/UIElementRenderer.h
-    include/gfx/opengl/renderer/UiRenderer.h
     include/input/Input.h
     include/main/ProgramOptions.h
     include/menus/lobby/LobbyState.h
