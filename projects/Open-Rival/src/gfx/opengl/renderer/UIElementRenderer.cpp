@@ -3,6 +3,7 @@
 #include "gfx/opengl/GLWrapper.h"
 
 #include "application/Resources.h"
+#include "gfx/Font.h"
 #include "gfx/Palette.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
@@ -46,6 +47,10 @@ void UIElementRenderer::setUpShaders() const
     glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
     glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
     glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::globalTransparentColor);
+
+    glUseProgram(Shaders::fontShader.programId);
+    glUniformMatrix4fv(Shaders::fontShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1i(Shaders::fontShader.texUnitUniformLoc, 0);
 
     // The palette is the only texture shared by all images
     glActiveTexture(GL_TEXTURE1);
@@ -101,6 +106,10 @@ void UIElementRenderer::renderVisual(
     {
         renderImage(*image, entry, needsUpload);
     }
+    else if (const TextVisual* text = std::get_if<TextVisual>(&visual))
+    {
+        renderText(*text, entry, needsUpload);
+    }
 }
 
 UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual& visual)
@@ -108,6 +117,13 @@ UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual
     if (const ImageVisual* image = std::get_if<ImageVisual>(&visual))
     {
         return std::make_unique<AtlasRenderable>(image->atlas, 1);
+    }
+
+    if (std::holds_alternative<TextVisual>(visual))
+    {
+        // We create an empty TextRenderable for now, and recreate it in `renderText` once we know the element's
+        // position.
+        return std::unique_ptr<TextRenderable>();
     }
 
     return std::make_unique<BoxRenderable>(1);
@@ -141,6 +157,22 @@ void UIElementRenderer::renderImage(const ImageVisual& image, RenderData& entry,
     glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc,
             PaletteUtils::getPaletteTxY(image.atlas->getPaletteIndex()));
     renderable.draw();
+}
+
+void UIElementRenderer::renderText(const TextVisual& text, RenderData& entry, bool needsUpload) const
+{
+    auto& renderable = std::get<std::unique_ptr<TextRenderable>>(entry.renderable);
+
+    if (needsUpload)
+    {
+        // A TextRenderable can't be moved or fit more characters, so it's simpler to replace it
+        const float x = static_cast<float>(entry.position.x);
+        const float baselineY = entry.position.y + text.properties.font->getAscent(text.properties.scale);
+        renderable = std::make_unique<TextRenderable>(text.span, text.properties, x, baselineY);
+    }
+
+    glUseProgram(Shaders::fontShader.programId);
+    textRenderer.render(*renderable);
 }
 
 void UIElementRenderer::cleanUpStaleEntries()

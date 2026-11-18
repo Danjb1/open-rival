@@ -93,6 +93,18 @@ public:
         return defaultSize;
     }
 
+    /** Gets the factor by which glyph metrics should be multiplied to render text at the given scale. */
+    float getGlyphScale(float scale) const;
+
+    /** Gets the width of the given text when rendered at the given scale, in pixels. */
+    float getTextWidth(const std::string& text, float scale) const;
+
+    /** Gets the distance from the top of a line of text to its baseline at the given scale, in pixels. */
+    float getAscent(float scale) const;
+
+    /** Gets the height of a line of text at the given scale, in pixels. */
+    float getLineHeight(float scale) const;
+
 private:
     static std::shared_ptr<const Font> loadFont(
             FT_Library ft, std::string filename, int defaultSize, Renderer* renderer);
@@ -143,6 +155,12 @@ private:
      * The size at which the font is rendered when scale = 1.
      */
     int defaultSize;
+
+    /** Highest any character rises above the baseline, in font texture pixels. */
+    int ascent = 0;
+
+    /** Lowest any character falls below the baseline, in font texture pixels. */
+    int descent = 0;
 };
 
 }  // namespace Rival

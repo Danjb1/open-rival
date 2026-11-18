@@ -42,7 +42,7 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
 {
     std::vector<TextSpan> spans = textRenderable.getTextSpans();
     std::shared_ptr<const Font> font = textRenderable.getFont();
-    float scale = textRenderable.getScale() * font->getDefaultSize() / Font::fontHeight;
+    float scale = font->getGlyphScale(textRenderable.getScale());
 
     // Create buffers
     std::vector<GLfloat> vertexData;
@@ -94,7 +94,7 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
                 // Determine layer offsets
                 float layerOffsetX;
                 float layerOffsetY;
-                if (layer == TextRenderable::shadowLayerIndex)
+                if (textRenderable.isShadowLayer(layer))
                 {
                     layerOffsetX = TextRenderable::shadowOffsetX;
                     layerOffsetY = TextRenderable::shadowOffsetY;
@@ -150,7 +150,7 @@ void TextRenderer::sendDataToGpu(const TextRenderable& textRenderable) const
                 float r;
                 float g;
                 float b;
-                if (layer == TextRenderable::shadowLayerIndex)
+                if (textRenderable.isShadowLayer(layer))
                 {
                     r = 0.0f;
                     g = 0.0f;

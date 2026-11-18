@@ -7,6 +7,7 @@
 #include "game/PlayerState.h"
 #include "game/World.h"
 #include "gfx/RenderUtils.h"
+#include "gfx/opengl/renderable/TextRenderable.h"
 #include "scenario/ScenarioBuilder.h"
 #include "scenario/ScenarioReader.h"
 #include "ui/UIRoot.h"
@@ -38,6 +39,7 @@ std::unique_ptr<UIRoot> MainMenuState::createUI()
     auto testButton = std::make_unique<Button>(buttonImage, buttonImage);
     testButton->setAnchor(Anchor::Centre);
     testButton->setOnClick([this]() { startGame(); });
+    testButton->setText({ "Start Game", TextRenderable::defaultColor }, { res.getFontRegular(), 1.35f });
     localUiRoot->addChild(std::move(testButton));
 
     return localUiRoot;

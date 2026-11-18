@@ -171,6 +171,11 @@ int TextRenderable::getNumLayers() const
     return props.hasShadow ? numLayersWithShadow : numLayersWithoutShadow;
 }
 
+bool TextRenderable::isShadowLayer(int layer) const
+{
+    return props.hasShadow && layer == shadowLayerIndex;
+}
+
 void TextRenderable::setTextSpan(TextSpan newSpan)
 {
     setTextSpans({ newSpan });

@@ -17,6 +17,8 @@ public:
      */
     static Color makeRgb(int r, int g, int b);
 
+    bool operator==(const Color& other) const = default;
+
 private:
     Color(float r, float g, float b);
 };

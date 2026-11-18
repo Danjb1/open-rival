@@ -4,7 +4,6 @@
 ## UI
 <!----------------------------------------------------------------------------->
 
-- Add a label to buttons
 - Create pressed image for button
 - Use `AtlasRenderable.draw` everywhere instead of getters
 - Glow effect for labels when a button is pressed

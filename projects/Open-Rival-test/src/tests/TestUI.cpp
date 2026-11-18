@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include "gfx/Font.h"
 #include "gfx/PaletteUtils.h"
 #include "gfx/TextureAtlas.h"
 #include "input/Input.h"
@@ -12,6 +13,7 @@
 #include "ui/containers/FlatContainer.h"
 #include "ui/widgets/Button.h"
 #include "ui/widgets/ImageView.h"
+#include "ui/widgets/Label.h"
 
 using namespace Rival;
 
@@ -508,6 +510,86 @@ SCENARIO("Elements are big enough to fit their image", "[ui]")
             THEN("each dimension is the larger of the two")
             {
                 REQUIRE(image->getSize() == glm::ivec2 { 50, 20 });
+            }
+        }
+    }
+}
+
+/** Creates a font with 2 characters: 'a' (10px above the baseline) and 'g' (4px below it). */
+std::shared_ptr<const Font> createTestFont()
+{
+    const std::unordered_map<char, CharData> chars {
+        { 'a', { {}, { 8, 10 }, { 0, 10 }, 9 } },
+        { 'g', { {}, { 8, 12 }, { 0, 8 }, 10 } },
+    };
+
+    // Glyph metrics are unscaled when the default size matches the font texture
+    return std::make_shared<const Font>(nullptr, chars, Font::fontHeight);
+}
+
+SCENARIO("Labels are big enough to fit their text", "[ui]")
+{
+    GIVEN("A root containing a label")
+    {
+        UIRoot root;
+        auto labelOwner = std::make_unique<Label>(
+                TextSpan { "ag", Color::makeRgb(0, 0, 0) }, TextProperties { createTestFont() });
+        Label* label = labelOwner.get();
+        root.addChild(std::move(labelOwner));
+
+        WHEN("the root is updated")
+        {
+            root.update(viewportSize);
+
+            THEN("the label is as wide as the text, and as tall as a line")
+            {
+                REQUIRE(label->getSize() == glm::ivec2 { 19, 14 });
+            }
+        }
+    }
+}
+
+SCENARIO("Buttons can show text", "[ui]")
+{
+    GIVEN("A button with some text")
+    {
+        const TextProperties properties { createTestFont() };
+        const BoxVisual visual {};
+
+        UIRoot root;
+        auto buttonOwner = std::make_unique<Button>(visual, visual);
+        Button* button = buttonOwner.get();
+        int numClicks = 0;
+        button->setOnClick([&numClicks]() { ++numClicks; });
+        button->setText({ "ag", Color::makeRgb(0, 0, 0) }, properties);
+        root.addChild(std::move(buttonOwner));
+        root.update(viewportSize);
+
+        THEN("the button is big enough to fit the text")
+        {
+            REQUIRE(button->getSize() == glm::ivec2 { 19, 14 });
+        }
+
+        WHEN("the text is clicked")
+        {
+            root.sendMouseButtonEvent({ MouseButton::Left, { 5, 5 }, true });
+            root.sendMouseButtonEvent({ MouseButton::Left, { 5, 5 }, false });
+
+            THEN("the button is clicked")
+            {
+                REQUIRE(numClicks == 1);
+            }
+        }
+
+        WHEN("the text is changed")
+        {
+            button->setText({ "agag", Color::makeRgb(0, 0, 0) }, properties);
+            root.update(viewportSize);
+
+            THEN("the existing label is updated")
+            {
+                REQUIRE(button->getAllChildren().size() == 1);
+                REQUIRE(button->getSize() == glm::ivec2 { 38, 14 });
             }
         }
     }

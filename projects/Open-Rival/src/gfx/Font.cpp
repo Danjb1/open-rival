@@ -38,6 +38,11 @@ Font::Font(std::shared_ptr<const Texture> texture, std::unordered_map<char, Char
     , chars(chars)
     , defaultSize(defaultSize)
 {
+    for (const auto& [c, charData] : this->chars)
+    {
+        ascent = std::max(ascent, charData.bearing.y);
+        descent = std::max(descent, charData.size.y - charData.bearing.y);
+    }
 }
 
 const CharData* Font::getCharData(char c) const
@@ -68,6 +73,34 @@ FontFace::~FontFace()
 FontLoadError::FontLoadError(const char* message)
     : std::runtime_error(message)
 {
+}
+
+float Font::getGlyphScale(float scale) const
+{
+    return scale * defaultSize / fontHeight;
+}
+
+float Font::getTextWidth(const std::string& text, float scale) const
+{
+    int width = 0;
+    for (char c : text)
+    {
+        if (const CharData* charData = getCharData(c))
+        {
+            width += charData->advance;
+        }
+    }
+    return width * getGlyphScale(scale);
+}
+
+float Font::getAscent(float scale) const
+{
+    return ascent * getGlyphScale(scale);
+}
+
+float Font::getLineHeight(float scale) const
+{
+    return (ascent + descent) * getGlyphScale(scale);
 }
 
 std::shared_ptr<const Font> Font::loadFont(

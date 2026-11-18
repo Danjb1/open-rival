@@ -8,40 +8,9 @@
 
 #include "gfx/Color.h"
 #include "gfx/Font.h"
+#include "gfx/Text.h"
 
 namespace Rival {
-
-/**
- * A portion of text with a configurable color.
- */
-struct TextSpan
-{
-    std::string text;
-    Color color;
-};
-
-/**
- * Properties that control how some text should be rendered.
- */
-struct TextProperties
-{
-    /**
-     * Font to use when rendering the text.
-     */
-    std::shared_ptr<const Font> font;
-
-    /**
-     * Scale at which to render the text.
-     *
-     * This is a fraction of the default font size.
-     */
-    float scale = 1.0f;
-
-    /**
-     * Whether the text should have a shadow.
-     */
-    bool hasShadow = true;
-};
 
 /**
  * Class that allows colored text to be rendered as textured quads.
@@ -133,6 +102,9 @@ public:
     }
 
     int getNumLayers() const;
+
+    /** Determines whether the given layer is this text's shadow. */
+    bool isShadowLayer(int layer) const;
 
     void setTextSpan(TextSpan newSpan);
     void setTextSpans(std::vector<TextSpan> newSpans);

@@ -150,6 +150,7 @@ set(OPEN_RIVAL_SOURCES
     src/ui/containers/FlatContainer.cpp
     src/ui/widgets/Button.cpp
     src/ui/widgets/ImageView.cpp
+    src/ui/widgets/Label.cpp
     src/utils/BinaryFileReader.cpp
     src/utils/BufferUtils.cpp
     src/utils/DebugUtils.cpp
@@ -254,6 +255,7 @@ set(OPEN_RIVAL_HEADERS
     include/gfx/RenderUtils.h
     include/gfx/Renderer.h
     include/gfx/Spritesheet.h
+    include/gfx/Text.h
     include/gfx/Texture.h
     include/gfx/TextureAtlas.h
     include/gfx/opengl/Framebuffer.h
@@ -319,6 +321,7 @@ set(OPEN_RIVAL_HEADERS
     include/ui/containers/FlatContainer.h
     include/ui/widgets/Button.h
     include/ui/widgets/ImageView.h
+    include/ui/widgets/Label.h
     include/utils/BinaryFileReader.h
     include/utils/BufferUtils.h
     include/utils/CollectionUtils.h

@@ -1,5 +1,7 @@
 #include "ui/widgets/Button.h"
 
+#include "ui/widgets/Label.h"
+
 namespace Rival {
 
 Button::Button(const UIVisual& newNormalVisual, const UIVisual& newPressedVisual)
@@ -12,6 +14,20 @@ Button::Button(const UIVisual& newNormalVisual, const UIVisual& newPressedVisual
 void Button::setOnClick(std::function<void()> callback)
 {
     onClick = std::move(callback);
+}
+
+void Button::setText(const TextSpan& span, const TextProperties& properties)
+{
+    if (label)
+    {
+        label->setText(span, properties);
+        return;
+    }
+
+    auto newLabel = std::make_unique<Label>(span, properties);
+    newLabel->setAnchor(Anchor::Centre);
+    label = newLabel.get();
+    addChild(std::move(newLabel));
 }
 
 void Button::onMouseExit()
