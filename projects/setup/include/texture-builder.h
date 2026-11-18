@@ -88,12 +88,12 @@ std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
         const fs::path& path,
         bool& outAtlasMode,
         int& outPadding,
-        const Palette::Palette*& outPalette);
+        std::string& outPaletteName);
 
 void createTextureAtlas(const std::string& imageDir,
         const fs::path& definitionFilename,
         std::vector<NamedImage>& images,
-        const Palette::Palette& palette);
+        const std::string& paletteName);
 
 void createSpritesheetTexture(const std::string& imageDir,
         const fs::path& definitionFilename,

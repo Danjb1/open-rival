@@ -143,7 +143,8 @@ protected:
      * Assumes that `recalculateRequiredSize` has already been called. */
     void arrange(const glm::ivec2& slotPosition, const glm::ivec2& slotSize);
 
-    /** Gets the minimum size required to fit all of this element's children, based on their required size. */
+    /** Gets the minimum size required to fit this element's visual and all of its children, based on their required
+     * size. */
     virtual glm::ivec2 getContentMinSize() const;
 
     /** Arranges all children within this element. */

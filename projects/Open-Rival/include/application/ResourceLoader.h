@@ -100,7 +100,7 @@ private:
 
     // Textures
     static constexpr int numTextures = txIndexMenuBackground + 1;
-    static constexpr int numTextureAtlases = 2;
+    static constexpr int numTextureAtlases = 3;
 
     // Sounds
     static constexpr int numSounds = 369;

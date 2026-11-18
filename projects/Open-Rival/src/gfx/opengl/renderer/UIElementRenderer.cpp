@@ -2,15 +2,21 @@
 
 #include "gfx/opengl/GLWrapper.h"
 
+#include "application/Resources.h"
+#include "gfx/Palette.h"
+#include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
+#include "gfx/Texture.h"
+#include "gfx/TextureAtlas.h"
 #include "gfx/opengl/Shaders.h"
 #include "ui/UIRoot.h"
 #include "window/Window.h"
 
 namespace Rival {
 
-UIElementRenderer::UIElementRenderer(const Window* window)
+UIElementRenderer::UIElementRenderer(const TextureStore& textureStore, const Window* window)
     : window(window)
+    , paletteTexture(textureStore.getPalette())
 {
 }
 
@@ -21,14 +27,29 @@ void UIElementRenderer::render(const UIRoot& uiRoot)
 
     glViewport(0, 0, window->getWidth(), window->getHeight());
 
-    // For now, all visuals are boxes, so we only need to set the shader once
-    glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
-    glUseProgram(Shaders::boxShader.programId);
-    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    setUpShaders();
 
     drawnElementIds.clear();
     renderElement(uiRoot, { 0, 0 });
     cleanUpStaleEntries();
+}
+
+void UIElementRenderer::setUpShaders() const
+{
+    const glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
+
+    glUseProgram(Shaders::boxShader.programId);
+    glUniformMatrix4fv(Shaders::boxShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+
+    glUseProgram(Shaders::indexedTextureShader.programId);
+    glUniformMatrix4fv(Shaders::indexedTextureShader.viewProjMatrixUniformLoc, 1, GL_FALSE, &viewProjMatrix[0][0]);
+    glUniform1i(Shaders::indexedTextureShader.texUnitUniformLoc, 0);
+    glUniform1i(Shaders::indexedTextureShader.paletteTexUnitUniformLoc, 1);
+    glUniform1f(Shaders::indexedTextureShader.transparentIndex, Palette::globalTransparentColor);
+
+    // The palette is the only texture shared by all images
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 }
 
 void UIElementRenderer::renderElement(const UIElement& element, const glm::ivec2& parentPosition)
@@ -54,14 +75,11 @@ void UIElementRenderer::renderVisual(
     auto it = entries.find(elementId);
     bool needsUpload = false;
 
-    // Create a new renderable if this element has never been drawn, or its visual has changed type
-    if (it == entries.end() || it->second.visual.index() != visual.index())
+    // Create a new renderable if this element has never been drawn.
+    // NOTE: It is assumed that an element's visual type never changes.
+    if (it == entries.end())
     {
-        RenderData newEntry { visual, position, size, nullptr };
-        if (std::holds_alternative<BoxVisual>(visual))
-        {
-            newEntry.boxRenderable = std::make_unique<BoxRenderable>(1);
-        }
+        RenderData newEntry { visual, position, size, createRenderable(visual) };
         it = entries.insert_or_assign(elementId, std::move(newEntry)).first;
         needsUpload = true;
     }
@@ -79,11 +97,25 @@ void UIElementRenderer::renderVisual(
     {
         renderBox(*box, entry, needsUpload);
     }
+    else if (const ImageVisual* image = std::get_if<ImageVisual>(&visual))
+    {
+        renderImage(*image, entry, needsUpload);
+    }
+}
+
+UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual& visual)
+{
+    if (const ImageVisual* image = std::get_if<ImageVisual>(&visual))
+    {
+        return std::make_unique<AtlasRenderable>(image->atlas, 1);
+    }
+
+    return std::make_unique<BoxRenderable>(1);
 }
 
 void UIElementRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload)
 {
-    BoxRenderable& renderable = *entry.boxRenderable;
+    BoxRenderable& renderable = *std::get<std::unique_ptr<BoxRenderable>>(entry.renderable);
 
     if (needsUpload)
     {
@@ -92,6 +124,22 @@ void UIElementRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool 
         renderable.setBoxes({ { topLeft, bottomRight, box.color } });
     }
 
+    glUseProgram(Shaders::boxShader.programId);
+    renderable.draw();
+}
+
+void UIElementRenderer::renderImage(const ImageVisual& image, RenderData& entry, bool needsUpload)
+{
+    AtlasRenderable& renderable = *std::get<std::unique_ptr<AtlasRenderable>>(entry.renderable);
+
+    if (needsUpload)
+    {
+        renderable.setImages({ { entry.position, entry.size, image.imageKey } });
+    }
+
+    glUseProgram(Shaders::indexedTextureShader.programId);
+    glUniform1f(Shaders::indexedTextureShader.paletteTxYUnitUniformLoc,
+            PaletteUtils::getPaletteTxY(image.atlas->getPaletteIndex()));
     renderable.draw();
 }
 

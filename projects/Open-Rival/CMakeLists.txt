@@ -146,8 +146,10 @@ set(OPEN_RIVAL_SOURCES
     src/ui/Cursor.cpp
     src/ui/UIElement.cpp
     src/ui/UIRoot.cpp
+    src/ui/UIVisual.cpp
     src/ui/containers/FlatContainer.cpp
     src/ui/widgets/Button.cpp
+    src/ui/widgets/ImageView.cpp
     src/utils/BinaryFileReader.cpp
     src/utils/BufferUtils.cpp
     src/utils/DebugUtils.cpp
@@ -316,6 +318,7 @@ set(OPEN_RIVAL_HEADERS
     include/ui/UIVisual.h
     include/ui/containers/FlatContainer.h
     include/ui/widgets/Button.h
+    include/ui/widgets/ImageView.h
     include/utils/BinaryFileReader.h
     include/utils/BufferUtils.h
     include/utils/CollectionUtils.h

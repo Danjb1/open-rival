@@ -1,12 +1,16 @@
 #include "gfx/opengl/renderable/AtlasRenderable.h"
 
+#include <algorithm>  // std::min
+
 #include "gfx/opengl/GLUtils.h"
 #include "gfx/opengl/Shaders.h"
+#include "utils/LogUtils.h"
 
 namespace Rival {
 
 AtlasRenderable::AtlasRenderable(std::shared_ptr<const TextureAtlas> texAtlas, int maxSprites)
     : texAtlas(texAtlas)
+    , maxSprites(maxSprites)
 {
     // Generate VAO
     glGenVertexArrays(1, &vao);
@@ -89,6 +93,8 @@ AtlasRenderable::AtlasRenderable(AtlasRenderable&& other) noexcept
     , ibo(other.ibo)
     , drawMode(other.drawMode)
     , indicesPerSprite(other.indicesPerSprite)
+    , maxSprites(other.maxSprites)
+    , numSprites(other.numSprites)
     , texAtlas(other.texAtlas)
 {
     // Reset the source object so its destructor is harmless
@@ -114,6 +120,59 @@ AtlasRenderable::~AtlasRenderable()
     }
     glDeleteVertexArrays(1, &vao);
     glBindVertexArray(0);
+}
+
+void AtlasRenderable::setImages(const std::vector<AtlasImage>& images)
+{
+    if (static_cast<int>(images.size()) > maxSprites)
+    {
+        LOG_WARN("Tried to render {} images, but the maximum is {}", images.size(), maxSprites);
+    }
+    numSprites = std::min(static_cast<int>(images.size()), maxSprites);
+
+    std::vector<GLfloat> vertexData;
+    std::vector<GLfloat> texCoordData;
+    vertexData.reserve(numSprites * numVerticesPerSprite * numVertexDimensions);
+    texCoordData.reserve(numSprites * numVerticesPerSprite * numTexCoordDimensions);
+
+    for (int i = 0; i < numSprites; ++i)
+    {
+        const AtlasImage& image = images[i];
+        const float x1 = image.position.x;
+        const float y1 = image.position.y;
+        const float x2 = x1 + image.size.x;
+        const float y2 = y1 + image.size.y;
+        const float z = 0;
+
+        /* clang-format off */
+        vertexData.insert(vertexData.end(), {
+            x1, y1, z,
+            x2, y1, z,
+            x2, y2, z,
+            x1, y2, z
+        });
+        /* clang-format on */
+
+        const std::vector<float> texCoords = texAtlas->getTexCoords(image.imageKey);
+        texCoordData.insert(texCoordData.end(), texCoords.cbegin(), texCoords.cend());
+    }
+
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertexData.size() * sizeof(GLfloat), vertexData.data());
+
+    glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordData.size() * sizeof(GLfloat), texCoordData.data());
+}
+
+void AtlasRenderable::draw() const
+{
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, getTextureId());
+
+    glBindVertexArray(vao);
+    glDrawElements(drawMode, indicesPerSprite * numSprites, GL_UNSIGNED_INT, nullptr);
 }
 
 }  // namespace Rival

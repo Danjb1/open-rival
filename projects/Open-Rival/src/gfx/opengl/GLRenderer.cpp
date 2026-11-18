@@ -62,6 +62,11 @@ void GLRenderer::onEnterMainMenu(MainMenuState* mainMenu)
         gameRenderer.reset();
     }
 
+    if (!uiRenderer)
+    {
+        uiRenderer = std::make_unique<UIElementRenderer>(mainMenu->getResources(), window);
+    }
+
     initCursorRenderer(mainMenu->getResources());
 }
 
@@ -223,11 +228,6 @@ void GLRenderer::renderGame(const FrameTiming& frameTiming)
 
 void GLRenderer::renderUi(const UIRoot& uiRoot, const FrameTiming& frameTiming)
 {
-    if (!uiRenderer)
-    {
-        uiRenderer = std::make_unique<UIElementRenderer>(window);
-    }
-
     glClear(GL_COLOR_BUFFER_BIT);
     uiRenderer->render(uiRoot);
 

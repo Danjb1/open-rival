@@ -2,15 +2,9 @@
 
 namespace Rival {
 
-namespace {
-
-// TMP: plain boxes until we have some proper button images
-const BoxVisual normalVisual { { 0.4f, 0.4f, 0.4f, 1.f } };
-const BoxVisual hoveredVisual { { 0.6f, 0.6f, 0.6f, 1.f } };
-
-}  // namespace
-
-Button::Button()
+Button::Button(const UIVisual& newNormalVisual, const UIVisual& newPressedVisual)
+    : normalVisual(newNormalVisual)
+    , pressedVisual(newPressedVisual)
 {
     setVisual(normalVisual);
 }
@@ -20,13 +14,9 @@ void Button::setOnClick(std::function<void()> callback)
     onClick = std::move(callback);
 }
 
-void Button::onMouseEnter()
-{
-    setVisual(hoveredVisual);
-}
-
 void Button::onMouseExit()
 {
+    // Moving off the button cancels the press
     setVisual(normalVisual);
 }
 
@@ -42,8 +32,16 @@ bool Button::onMouseButtonEvent(const MouseButtonEvent& evt)
         return false;
     }
 
+    if (evt.isPress)
+    {
+        setVisual(pressedVisual);
+        return true;
+    }
+
+    setVisual(normalVisual);
+
     // TODO: Only click if the press also started on this button
-    if (!evt.isPress && onClick)
+    if (onClick)
     {
         onClick();
     }

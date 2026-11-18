@@ -1,15 +1,18 @@
 #include "gfx/TextureAtlas.h"
 
+#include "gfx/PaletteUtils.h"
 #include "gfx/Renderer.h"
 #include "utils/BinaryFileReader.h"
 #include "utils/LogUtils.h"
 
 namespace Rival {
 
-TextureAtlas::TextureAtlas(
-        std::shared_ptr<const Texture> texture, std::unordered_map<std::string, Rect> imagePlacements)
+TextureAtlas::TextureAtlas(std::shared_ptr<const Texture> texture,
+        std::unordered_map<std::string, Rect> imagePlacements,
+        int paletteIndex)
     : texture(texture)
     , imagePlacements(imagePlacements)
+    , paletteIndex(paletteIndex)
 {
 }
 
@@ -65,6 +68,16 @@ std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::st
         throw std::runtime_error("Failed to load atlas: " + atlasName);
     }
 
+    // Read the header
+    std::string headerLabel;
+    std::string paletteName;
+    reader >> headerLabel >> paletteName;
+    if (headerLabel != "palette")
+    {
+        throw std::runtime_error("Missing palette in atlas: " + atlasName);
+    }
+    const int paletteIndex = PaletteUtils::getPaletteIndex(paletteName);
+
     while (reader.good())
     {
         std::string key;
@@ -91,7 +104,7 @@ std::shared_ptr<const TextureAtlas> TextureAtlas::loadTextureAtlas(const std::st
 
     reader.close();
 
-    return std::make_shared<const TextureAtlas>(renderer->loadTexture(textureName), imagePlacements);
+    return std::make_shared<const TextureAtlas>(renderer->loadTexture(textureName), imagePlacements, paletteIndex);
 }
 
 }  // namespace Rival

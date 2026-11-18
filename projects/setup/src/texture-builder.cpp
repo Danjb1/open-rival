@@ -228,7 +228,7 @@ const Palette::Palette& getPaletteByName(const std::string& name)
 /**
  * Writes an atlas definition to file.
  */
-void writeAtlas(const std::string& filename, TextureAtlasBuilder& builder)
+void writeAtlas(const std::string& filename, TextureAtlasBuilder& builder, const std::string& paletteName)
 {
     // Open the file for writing
     std::ofstream atlasFile;
@@ -237,6 +237,9 @@ void writeAtlas(const std::string& filename, TextureAtlasBuilder& builder)
     {
         throw std::runtime_error("Failed to open atlas file for writing");
     }
+
+    // Print the palette, so the game knows how to draw these images
+    atlasFile << "palette " << paletteName << "\n";
 
     // Print each image placement
     for (auto const& kv : builder.imagePlacements)
@@ -254,7 +257,7 @@ std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
         const fs::path& path,
         bool& outAtlasMode,
         int& outPadding,
-        const Palette::Palette*& outPalette)
+        std::string& outPaletteName)
 {
     std::ifstream file(path);
     std::string line;
@@ -291,7 +294,7 @@ std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
     // Pass metadata values back to the caller
     outAtlasMode = atlasMode;
     outPadding = padding;
-    outPalette = &getPaletteByName(paletteName);
+    outPaletteName = paletteName;
 
     // Load all sprites from the definition file
     while (std::getline(file, line))
@@ -342,7 +345,7 @@ std::vector<NamedImage> readDefinitionFile(const std::string& imageDir,
 void createTextureAtlas(const std::string& outputDir,
         const fs::path& definitionFilename,
         std::vector<NamedImage>& images,
-        const Palette::Palette& palette)
+        const std::string& paletteName)
 {
     TextureAtlasBuilder builder;
 
@@ -374,13 +377,13 @@ void createTextureAtlas(const std::string& outputDir,
     tgaFilename.replace_extension(".tga");
     std::cout << "Saving atlas texture: " << tgaFilename << " (" << texWidth << "x" << texHeight << ")\n ";
     const std::string txFilename = outputDir + "\\" + tgaFilename.string();
-    writeImage(texture, palette, txFilename);
+    writeImage(texture, getPaletteByName(paletteName), txFilename);
 
     // Save the atlas definition
     fs::path atlasFilename = definitionFilename;
     atlasFilename.replace_extension(".atlas");
     const std::string altasFilename = outputDir + "\\" + atlasFilename.string();
-    writeAtlas(altasFilename, builder);
+    writeAtlas(altasFilename, builder, paletteName);
 }
 
 void createSpritesheetTexture(const std::string& outputDir,
@@ -482,18 +485,18 @@ void buildTextures(const std::string& definitionsDir, const std::string& imageDi
             // Read images
             bool atlasMode = false;
             int padding = 0;
-            const Palette::Palette* palette = nullptr;
+            std::string paletteName;
             std::vector<NamedImage> images =
-                    readDefinitionFile(imageDir, path, /* out */ atlasMode, /* out */ padding, /* out */ palette);
+                    readDefinitionFile(imageDir, path, /* out */ atlasMode, /* out */ padding, /* out */ paletteName);
 
             // Create texture
             if (atlasMode)
             {
-                createTextureAtlas(outputDir, path.filename(), images, *palette);
+                createTextureAtlas(outputDir, path.filename(), images, paletteName);
             }
             else
             {
-                createSpritesheetTexture(outputDir, path.filename(), images, *palette, padding);
+                createSpritesheetTexture(outputDir, path.filename(), images, getPaletteByName(paletteName), padding);
             }
         }
         catch (const std::runtime_error& e)

@@ -14,12 +14,20 @@ class Renderer;
 class TextureAtlas
 {
 public:
-    TextureAtlas(std::shared_ptr<const Texture> texture, std::unordered_map<std::string, Rect> imagePlacements);
+    TextureAtlas(std::shared_ptr<const Texture> texture,
+            std::unordered_map<std::string, Rect> imagePlacements,
+            int paletteIndex);
 
     const int getImageWidth(std::string key) const;
     const int getImageHeight(std::string key) const;
 
     const std::vector<float> getTexCoords(const std::string& key) const;
+
+    /** Gets the index of the palette that this atlas's images use. */
+    int getPaletteIndex() const
+    {
+        return paletteIndex;
+    }
 
     static std::shared_ptr<const TextureAtlas> loadTextureAtlas(const std::string& filename, Renderer* renderer);
 
@@ -28,6 +36,7 @@ public:
 
 private:
     std::unordered_map<std::string, Rect> imagePlacements;
+    int paletteIndex;
 };
 
 }  // namespace Rival

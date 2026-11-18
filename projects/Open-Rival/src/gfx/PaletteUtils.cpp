@@ -1,6 +1,8 @@
 #include "gfx/PaletteUtils.h"
 
 #include <cstdint>
+#include <stdexcept>
+#include <unordered_map>
 #include <vector>
 
 #include "gfx/Palette.h"
@@ -91,6 +93,25 @@ std::shared_ptr<const Texture> createPaletteTexture(Renderer* renderer)
     TextureProperties txProps;
     txProps.format = TexturePixelFormat::RGBA;
     return renderer->createTexture(paletteImage, txProps);
+}
+
+int getPaletteIndex(const std::string& name)
+{
+    static const std::unordered_map<std::string, int> paletteIndicesByName = {
+        { "game", paletteIndexGame },
+        { "title", paletteIndexTitle },
+        { "loading", paletteIndexLoading },
+        { "menu", paletteIndexMenu },
+        { "hire_troops", paletteIndexHireTroops },
+    };
+
+    auto it = paletteIndicesByName.find(name);
+    if (it == paletteIndicesByName.end())
+    {
+        throw std::runtime_error("Unknown palette: " + name);
+    }
+
+    return it->second;
 }
 
 float getPaletteTxY(int paletteIndex)

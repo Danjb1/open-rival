@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 
 #include "game/PlayerState.h"
 
@@ -16,6 +17,9 @@ namespace PaletteUtils {
 
 /** Creates the combined palette texture used by the game. */
 std::shared_ptr<const Texture> createPaletteTexture(Renderer* renderer);
+
+/** Gets the palette index for the palette with the given name (game, title, loading, menu or hire_troops). */
+int getPaletteIndex(const std::string& name);
 
 /** Gets the texture co-ordinate (y) for the given palette index. */
 float getPaletteTxY(int paletteIndex);

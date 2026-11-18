@@ -4,11 +4,14 @@
 
 #include <memory>
 
+#include "gfx/PaletteUtils.h"
+#include "gfx/TextureAtlas.h"
 #include "input/Input.h"
 #include "ui/UIElement.h"
 #include "ui/UIRoot.h"
 #include "ui/containers/FlatContainer.h"
 #include "ui/widgets/Button.h"
+#include "ui/widgets/ImageView.h"
 
 using namespace Rival;
 
@@ -429,7 +432,9 @@ SCENARIO("Buttons respond to the mouse", "[ui]")
     GIVEN("A root containing a button")
     {
         UIRoot root;
-        auto buttonOwner = std::make_unique<Button>();
+        const BoxVisual normalVisual { { 0.4f, 0.4f, 0.4f, 1.f } };
+        const BoxVisual pressedVisual { { 0.6f, 0.6f, 0.6f, 1.f } };
+        auto buttonOwner = std::make_unique<Button>(normalVisual, pressedVisual);
         Button* button = buttonOwner.get();
         button->setMinSize({ 100, 50 });
         int numClicks = 0;
@@ -437,37 +442,72 @@ SCENARIO("Buttons respond to the mouse", "[ui]")
         root.addChild(std::move(buttonOwner));
         root.update(viewportSize);
 
-        const UIVisual normalVisual = *button->getVisual();
-
-        WHEN("the mouse moves onto the button")
+        WHEN("the button is pressed")
         {
             root.sendMouseMoveEvent({ { 50, 25 } });
+            root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, true });
 
-            THEN("its visual changes")
+            THEN("it shows its pressed visual, but is not clicked yet")
             {
-                REQUIRE(*button->getVisual() != normalVisual);
+                REQUIRE(*button->getVisual() == UIVisual { pressedVisual });
+                REQUIRE(numClicks == 0);
+            }
+
+            AND_WHEN("the button is released")
+            {
+                root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, false });
+
+                THEN("it shows its normal visual again, and is clicked")
+                {
+                    REQUIRE(*button->getVisual() == UIVisual { normalVisual });
+                    REQUIRE(numClicks == 1);
+                }
             }
 
             AND_WHEN("the mouse moves off the button")
             {
                 root.sendMouseMoveEvent({ { 500, 500 } });
 
-                THEN("its visual changes back")
+                THEN("it shows its normal visual again")
                 {
-                    REQUIRE(*button->getVisual() == normalVisual);
+                    REQUIRE(*button->getVisual() == UIVisual { normalVisual });
                 }
             }
         }
+    }
+}
 
-        WHEN("the button is pressed and released")
+SCENARIO("Elements are big enough to fit their image", "[ui]")
+{
+    GIVEN("A root containing an image")
+    {
+        auto atlas = std::make_shared<const TextureAtlas>(
+                nullptr, std::unordered_map<std::string, Rect> { { "image", Rect(0, 0, 30, 20) } },
+                PaletteUtils::paletteIndexGame);
+
+        UIRoot root;
+        auto imageOwner = std::make_unique<ImageView>(ImageVisual { atlas, "image" });
+        ImageView* image = imageOwner.get();
+        root.addChild(std::move(imageOwner));
+
+        WHEN("the root is updated")
         {
-            root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, true });
+            root.update(viewportSize);
 
-            THEN("it is not clicked until the button is released")
+            THEN("the element is the size of the image")
             {
-                REQUIRE(numClicks == 0);
-                root.sendMouseButtonEvent({ MouseButton::Left, { 50, 25 }, false });
-                REQUIRE(numClicks == 1);
+                REQUIRE(image->getSize() == glm::ivec2 { 30, 20 });
+            }
+        }
+
+        WHEN("the element has a larger minimum size")
+        {
+            image->setMinSize({ 50, 10 });
+            root.update(viewportSize);
+
+            THEN("each dimension is the larger of the two")
+            {
+                REQUIRE(image->getSize() == glm::ivec2 { 50, 20 });
             }
         }
     }

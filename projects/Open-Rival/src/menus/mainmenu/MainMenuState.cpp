@@ -11,6 +11,7 @@
 #include "scenario/ScenarioReader.h"
 #include "ui/UIRoot.h"
 #include "ui/widgets/Button.h"
+#include "ui/widgets/ImageView.h"
 #include "utils/ConfigUtils.h"
 #include "utils/LogUtils.h"
 
@@ -25,13 +26,18 @@ MainMenuState::MainMenuState(Application& app)
 std::unique_ptr<UIRoot> MainMenuState::createUI()
 {
     auto localUiRoot = std::make_unique<UIRoot>();
+    const std::shared_ptr<const TextureAtlas> atlas = res.getMenuTextureAtlas();
 
-    // TMP: just add a single button for now
-    auto testButton = std::make_unique<Button>();
-    testButton->setMinSize({ 200, 40 });
+    auto background = std::make_unique<ImageView>(ImageVisual { atlas, "menu_bg_light.tga" });
+    background->setResizeMode(ResizeMode::Stretch, ResizeMode::Stretch);
+    localUiRoot->addChild(std::move(background));
+
+    // TMP: just add a single button for now.
+    // We don't have a pressed image yet, so for now the button doesn't change when pressed.
+    const ImageVisual buttonImage { atlas, "button.tga" };
+    auto testButton = std::make_unique<Button>(buttonImage, buttonImage);
     testButton->setAnchor(Anchor::Centre);
     testButton->setOnClick([this]() { startGame(); });
-
     localUiRoot->addChild(std::move(testButton));
 
     return localUiRoot;

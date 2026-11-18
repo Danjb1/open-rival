@@ -209,7 +209,7 @@ std::vector<std::shared_ptr<const TextureAtlas>> ResourceLoader::loadTextureAtla
     std::vector<std::shared_ptr<const TextureAtlas>> texAtlasList;
     texAtlasList.reserve(numTextureAtlases);
 
-    std::vector<std::string> resourceNames = { "game_interface", "overlays" };
+    std::vector<std::string> resourceNames = { "game_interface", "overlays", "menus" };
 
     for (const auto& resourceName : resourceNames)
     {

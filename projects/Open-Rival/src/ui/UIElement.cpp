@@ -249,8 +249,8 @@ void UIElement::arrange(const glm::ivec2& slotPosition, const glm::ivec2& slotSi
 
 glm::ivec2 UIElement::getContentMinSize() const
 {
-    // By default, an element is big enough to fit each child at its anchor point
-    glm::ivec2 contentMinSize { 0, 0 };
+    // By default, an element is big enough to fit its visual, and each child at its anchor point
+    glm::ivec2 contentMinSize = visual ? getNaturalSize(*visual) : glm::ivec2 { 0, 0 };
 
     for (const auto& child : children)
     {
