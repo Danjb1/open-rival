@@ -1,4 +1,4 @@
-#include "gfx/opengl/renderer/UIElementRenderer.h"
+#include "gfx/opengl/renderer/UIRenderer.h"
 
 #include "gfx/opengl/GLWrapper.h"
 
@@ -15,13 +15,13 @@
 
 namespace Rival {
 
-UIElementRenderer::UIElementRenderer(const TextureStore& textureStore, const Window* window)
+UIRenderer::UIRenderer(const TextureStore& textureStore, const Window* window)
     : window(window)
     , paletteTexture(textureStore.getPalette())
 {
 }
 
-void UIElementRenderer::render(const UIRoot& uiRoot)
+void UIRenderer::render(const UIRoot& uiRoot)
 {
     // Disable depth testing since we are drawing in tree order
     glDisable(GL_DEPTH_TEST);
@@ -35,7 +35,7 @@ void UIElementRenderer::render(const UIRoot& uiRoot)
     cleanUpStaleEntries();
 }
 
-void UIElementRenderer::setUpShaders() const
+void UIRenderer::setUpShaders() const
 {
     const glm::mat4 viewProjMatrix = RenderUtils::createMenuViewProjectionMatrix(window->getAspectRatio());
 
@@ -57,7 +57,7 @@ void UIElementRenderer::setUpShaders() const
     glBindTexture(GL_TEXTURE_2D, paletteTexture->getId());
 }
 
-void UIElementRenderer::renderElement(const UIElement& element, const glm::ivec2& parentPosition)
+void UIRenderer::renderElement(const UIElement& element, const glm::ivec2& parentPosition)
 {
     const glm::ivec2 position = parentPosition + element.getPosition();
 
@@ -72,8 +72,7 @@ void UIElementRenderer::renderElement(const UIElement& element, const glm::ivec2
     }
 }
 
-void UIElementRenderer::renderVisual(
-        int elementId, const UIVisual& visual, const glm::ivec2& position, const glm::ivec2& size)
+void UIRenderer::renderVisual(int elementId, const UIVisual& visual, const glm::ivec2& position, const glm::ivec2& size)
 {
     drawnElementIds.insert(elementId);
 
@@ -112,7 +111,7 @@ void UIElementRenderer::renderVisual(
     }
 }
 
-UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual& visual)
+UIRenderer::Renderable UIRenderer::createRenderable(const UIVisual& visual)
 {
     if (const ImageVisual* image = std::get_if<ImageVisual>(&visual))
     {
@@ -127,7 +126,7 @@ UIElementRenderer::Renderable UIElementRenderer::createRenderable(const UIVisual
     return std::make_unique<BoxRenderable>(1);
 }
 
-void UIElementRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload)
+void UIRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool needsUpload)
 {
     BoxRenderable& renderable = *std::get<std::unique_ptr<BoxRenderable>>(entry.renderable);
 
@@ -142,7 +141,7 @@ void UIElementRenderer::renderBox(const BoxVisual& box, RenderData& entry, bool 
     renderable.draw();
 }
 
-void UIElementRenderer::renderImage(const ImageVisual& image, RenderData& entry, bool needsUpload)
+void UIRenderer::renderImage(const ImageVisual& image, RenderData& entry, bool needsUpload)
 {
     AtlasRenderable& renderable = *std::get<std::unique_ptr<AtlasRenderable>>(entry.renderable);
 
@@ -157,7 +156,7 @@ void UIElementRenderer::renderImage(const ImageVisual& image, RenderData& entry,
     renderable.draw();
 }
 
-void UIElementRenderer::renderText(const TextVisual& text, RenderData& entry, bool needsUpload)
+void UIRenderer::renderText(const TextVisual& text, RenderData& entry, bool needsUpload)
 {
     TextRenderable& renderable = *std::get<std::unique_ptr<TextRenderable>>(entry.renderable);
 
@@ -172,7 +171,7 @@ void UIElementRenderer::renderText(const TextVisual& text, RenderData& entry, bo
     renderable.draw();
 }
 
-void UIElementRenderer::cleanUpStaleEntries()
+void UIRenderer::cleanUpStaleEntries()
 {
     // Any element that wasn't drawn this frame has been removed (or has lost its visual)
     std::erase_if(entries, [this](const auto& pair) { return !drawnElementIds.contains(pair.first); });

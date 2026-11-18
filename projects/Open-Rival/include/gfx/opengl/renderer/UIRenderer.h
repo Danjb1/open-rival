@@ -20,8 +20,6 @@ class UIElement;
 class UIRoot;
 class Window;
 
-// Later, we should rename this to UIRenderer.
-
 /**
  * Renders an entire UI.
  *
@@ -31,17 +29,19 @@ class Window;
  * A renderable is kept for each element with a visual, and only re-uploaded when that element's visual or bounds have
  * changed since the last frame.
  */
-class UIElementRenderer
+class UIRenderer
 {
 public:
-    UIElementRenderer(const TextureStore& textureStore, const Window* window);
+    UIRenderer(const TextureStore& textureStore, const Window* window);
 
     void render(const UIRoot& uiRoot);
 
 private:
+    /* clang-format off */
     using Renderable = std::variant<std::unique_ptr<BoxRenderable>,
             std::unique_ptr<AtlasRenderable>,
             std::unique_ptr<TextRenderable>>;
+    /* clang-format on */
 
     /** Everything we keep for a single element between frames. */
     struct RenderData

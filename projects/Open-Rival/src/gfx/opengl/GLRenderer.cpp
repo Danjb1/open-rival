@@ -81,7 +81,7 @@ void GLRenderer::initUiRenderer(const TextureStore& textureStore)
 {
     if (!uiRenderer)
     {
-        uiRenderer = std::make_unique<UIElementRenderer>(textureStore, window);
+        uiRenderer = std::make_unique<UIRenderer>(textureStore, window);
     }
 }
 

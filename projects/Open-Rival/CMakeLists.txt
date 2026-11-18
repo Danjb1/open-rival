@@ -105,7 +105,7 @@ set(OPEN_RIVAL_SOURCES
     src/gfx/opengl/renderer/MapBorderRenderer.cpp
     src/gfx/opengl/renderer/MenuTextRenderer.cpp
     src/gfx/opengl/renderer/TileRenderer.cpp
-    src/gfx/opengl/renderer/UIElementRenderer.cpp
+    src/gfx/opengl/renderer/UIRenderer.cpp
     src/input/Input.cpp
     src/main/Main.cpp
     src/main/ProgramOptions.cpp
@@ -274,7 +274,7 @@ set(OPEN_RIVAL_HEADERS
     include/gfx/opengl/renderer/MapBorderRenderer.h
     include/gfx/opengl/renderer/MenuTextRenderer.h
     include/gfx/opengl/renderer/TileRenderer.h
-    include/gfx/opengl/renderer/UIElementRenderer.h
+    include/gfx/opengl/renderer/UIRenderer.h
     include/input/Input.h
     include/main/ProgramOptions.h
     include/menus/lobby/LobbyState.h

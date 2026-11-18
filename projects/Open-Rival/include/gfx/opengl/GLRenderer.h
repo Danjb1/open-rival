@@ -9,7 +9,7 @@
 #include "gfx/Texture.h"
 #include "gfx/opengl/renderer/CursorRenderer.h"
 #include "gfx/opengl/renderer/GameRenderer.h"
-#include "gfx/opengl/renderer/UIElementRenderer.h"
+#include "gfx/opengl/renderer/UIRenderer.h"
 
 namespace Rival {
 
@@ -59,7 +59,7 @@ private:
 private:
     Window* window;
     const Input& input;
-    std::unique_ptr<UIElementRenderer> uiRenderer;
+    std::unique_ptr<UIRenderer> uiRenderer;
     std::unique_ptr<GameRenderer> gameRenderer;
 
     /** Renders the cursor on top of everything else, regardless of the current State.

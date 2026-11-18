@@ -4,9 +4,8 @@
 ## UI
 <!----------------------------------------------------------------------------->
 
-- Rename UIElementRenderer to UIRenderer
+- Convert game interface to new UI system
 - Create pressed image for button
-- Use `AtlasRenderable.draw` everywhere instead of getters
 - Glow effect for labels when a button is pressed
 - Button hover states?
 
