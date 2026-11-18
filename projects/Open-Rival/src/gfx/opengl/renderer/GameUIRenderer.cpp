@@ -41,7 +41,6 @@ GameUIRenderer::GameUIRenderer(const PlayerStore& playerStore,
 
     // Portrait
     , portraitRenderable(textureStore.getPortraitSpritesheet(), 1)
-    , portrait(GameInterface::portrait, textureStore.getPortraitSpritesheet(), 0)
 
     // Text
     , nameProperties({ fontStore.getFontSmall() })
@@ -113,60 +112,15 @@ void GameUIRenderer::renderPortrait()
         return;
     }
 
-    portrait.setSpriteIndex(portraitId);
-
-    // Use textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, portraitRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
-
-    // Bind vertex array
-    glBindVertexArray(portraitRenderable.getVao());
-
-    // Update the data on the GPU
-    if (portraitNeedsUpdate())
-    {
-        sendPortraitDataToGpu();
-    }
 
     // Disable transparency for the unit portraits, since they use color 0 for their background
     glUniform1i(Shaders::indexedTextureShader.transparentIndex, -1);
 
-    // Render
-    glDrawElements(
-            portraitRenderable.getDrawMode(), portraitRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
-}
-
-bool GameUIRenderer::portraitNeedsUpdate() const
-{
-    // Later, perhaps we can optimise this
-    return true;
-}
-
-void GameUIRenderer::sendPortraitDataToGpu()
-{
-    // Create buffers to hold all our vertex data
-    int numVertices = SpriteRenderable::numVerticesPerSprite;
-    int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
-    int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
-    std::vector<GLfloat> positions;
-    std::vector<GLfloat> texCoords;
-    positions.reserve(positionDataSize);
-    texCoords.reserve(texCoordDataSize);
-
-    // Add data to our buffers
-    addToBuffers(portrait, positions, texCoords);
-
-    // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getPositionVbo());
-    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
-
-    // Upload tex co-ord data
-    glBindBuffer(GL_ARRAY_BUFFER, portraitRenderable.getTexCoordVbo());
-    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
+    const Rect& pos = GameInterface::portrait;
+    portraitRenderable.setSprites({ { { pos.x, pos.y }, { pos.width, pos.height }, portraitId } });
+    portraitRenderable.draw();
 }
 
 bool GameUIRenderer::isPortraitVisible(int& outPortraitId) const
@@ -259,58 +213,6 @@ AtlasImage GameUIRenderer::toAtlasImage(const GameInterface::UiImage& image)
 {
     const Rect pos = image.getPos();
     return { { pos.x, pos.y }, { pos.width, pos.height }, image.getImageKey() };
-}
-
-void GameUIRenderer::addToBuffers(
-        const GameInterface::UiImage& image, std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords)
-{
-    // Define vertex positions
-    Rect pos = image.getPos();
-    float x1 = pos.x;
-    float y1 = pos.y;
-    float x2 = x1 + pos.width;
-    float y2 = y1 + pos.height;
-    float z = 0;
-
-    /* clang-format off */
-    std::vector<GLfloat> thisVertexData = {
-        x1, y1, z,
-        x2, y1, z,
-        x2, y2, z,
-        x1, y2, z
-    };
-    /* clang-format on */
-
-    // Determine texture co-ordinates
-    std::vector<GLfloat> thisTexCoords;
-    if (image.getTexAtlas())
-    {
-        thisTexCoords = image.getTexAtlas()->getTexCoords(image.getImageKey());
-    }
-    else if (image.getSpritesheet())
-    {
-        thisTexCoords = image.getSpritesheet()->getTexCoords(image.getSpriteIndex());
-    }
-    else
-    {
-        const float tx1 = 0.f;
-        const float tx2 = 1.f;
-        const float ty1 = 0.f;
-        const float ty2 = 1.f;
-
-        /* clang-format off */
-        thisTexCoords = {
-            tx1, ty1,
-            tx2, ty1,
-            tx2, ty2,
-            tx1, ty2
-        };
-        /* clang-format on */
-    }
-
-    // Copy this data into the main buffers
-    positions.insert(positions.cend(), thisVertexData.cbegin(), thisVertexData.cend());
-    texCoords.insert(texCoords.cend(), thisTexCoords.cbegin(), thisTexCoords.cend());
 }
 
 }  // namespace Rival

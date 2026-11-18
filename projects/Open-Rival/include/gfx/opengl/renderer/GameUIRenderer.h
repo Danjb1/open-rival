@@ -29,19 +29,14 @@ public:
     void renderUi();
     void renderText();
 
+private:
     static AtlasImage toAtlasImage(const GameInterface::UiImage& image);
 
-    static void addToBuffers(
-            const GameInterface::UiImage& image, std::vector<GLfloat>& positions, std::vector<GLfloat>& texCoords);
-
-private:
     void renderMainUi();
     bool isInventoryVisible() const;
 
     void renderPortrait();
     bool isPortraitVisible(int& outPortraitId) const;
-    bool portraitNeedsUpdate() const;
-    void sendPortraitDataToGpu();
 
     bool isNameVisible(std::string& outName) const;
 
@@ -67,7 +62,6 @@ private:
     AtlasRenderable mainUiRenderable;
 
     // Portrait
-    GameInterface::UiImage portrait;
     SpriteRenderable portraitRenderable;
 
     // Text

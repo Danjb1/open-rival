@@ -1,6 +1,5 @@
 #pragma once
 
-#include "game/GameInterface.h"
 #include "gfx/opengl/renderable/SpriteRenderable.h"
 #include "input/Input.h"
 #include "ui/Cursor.h"
@@ -27,7 +26,6 @@ private:
     const Window* window;
     const Input& input;
 
-    GameInterface::UiImage cursorImage;
     SpriteRenderable cursorRenderable;
     CursorDef prevCursor = Cursor::arrow;
 

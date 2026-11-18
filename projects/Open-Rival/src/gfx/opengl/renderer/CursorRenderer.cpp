@@ -9,7 +9,6 @@
 #include "gfx/PaletteUtils.h"
 #include "gfx/RenderUtils.h"
 #include "gfx/opengl/Shaders.h"
-#include "gfx/opengl/renderer/GameUIRenderer.h"
 
 namespace Rival {
 
@@ -18,7 +17,6 @@ CursorRenderer::CursorRenderer(const TextureStore& textureStore, const Window* w
     , window(window)
     , input(input)
     , cursorRenderable(textureStore.getCursorSpritesheet(), 1)
-    , cursorImage(GameInterface::cursor, textureStore.getCursorSpritesheet(), 0)
 {
 }
 
@@ -56,54 +54,20 @@ void CursorRenderer::render(const CursorDef& cursorDef, float timeSinceLastRende
     float normalizedMouseX = static_cast<float>(mouseX) / window->getWidth();
     float normalizedMouseY = static_cast<float>(mouseY) / window->getHeight();
 
-    // Determine the cursor image position
-    Rect pos = cursorImage.getPos();
-    glm::ivec2 uiSize = RenderUtils::getUISize(window->getAspectRatio());
-    pos.x = normalizedMouseX * uiSize.x;
-    pos.y = normalizedMouseY * uiSize.y;
-
-    // Offset the image based on the cursor hotspot
-    pos.x -= cursorDef.hotspotX * RenderUtils::cursorWidthPx;
-    pos.y -= cursorDef.hotspotY * RenderUtils::cursorHeightPx;
-    cursorImage.setPos(pos);
+    // Determine the cursor image position, offset based on the cursor hotspot
+    const glm::vec2 cursorSize = { RenderUtils::cursorWidthPx, RenderUtils::cursorHeightPx };
+    const glm::ivec2 uiSize = RenderUtils::getUISize(window->getAspectRatio());
+    const glm::vec2 position = { normalizedMouseX * uiSize.x - cursorDef.hotspotX * cursorSize.x,
+        normalizedMouseY * uiSize.y - cursorDef.hotspotY * cursorSize.y };
 
     // Animate
-    int spriteIndex = animateCursor(cursorDef, timeSinceLastRender);
-    cursorImage.setSpriteIndex(spriteIndex);
+    const int spriteIndex = animateCursor(cursorDef, timeSinceLastRender);
 
-    // Use textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, cursorRenderable.getTextureId());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textureStore.getPalette()->getId());
 
-    // Bind vertex array
-    glBindVertexArray(cursorRenderable.getVao());
-
-    // Create buffers to hold all our vertex data
-    int numVertices = SpriteRenderable::numVerticesPerSprite;
-    int positionDataSize = numVertices * SpriteRenderable::numVertexDimensions;
-    int texCoordDataSize = numVertices * SpriteRenderable::numTexCoordDimensions;
-    std::vector<GLfloat> positions;
-    std::vector<GLfloat> texCoords;
-    positions.reserve(positionDataSize);
-    texCoords.reserve(texCoordDataSize);
-
-    // Add data to our buffers
-    GameUIRenderer::addToBuffers(cursorImage, positions, texCoords);
-
-    // Upload position data
-    glBindBuffer(GL_ARRAY_BUFFER, cursorRenderable.getPositionVbo());
-    int positionBufferSize = static_cast<int>(positions.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, positionBufferSize, positions.data());
-
-    // Upload tex co-ord data
-    glBindBuffer(GL_ARRAY_BUFFER, cursorRenderable.getTexCoordVbo());
-    int texCoordBufferSize = static_cast<int>(texCoords.size() * sizeof(GLfloat));
-    glBufferSubData(GL_ARRAY_BUFFER, 0, texCoordBufferSize, texCoords.data());
-
-    // Render
-    glDrawElements(cursorRenderable.getDrawMode(), cursorRenderable.getIndicesPerSprite(), GL_UNSIGNED_INT, nullptr);
+    cursorRenderable.setSprites({ { position, cursorSize, spriteIndex } });
+    cursorRenderable.draw();
 }
 
 int CursorRenderer::animateCursor(const CursorDef& cursorDef, float timeSinceLastRender)

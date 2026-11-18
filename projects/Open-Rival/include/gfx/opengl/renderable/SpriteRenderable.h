@@ -1,12 +1,22 @@
 #pragma once
 
 #include "gfx/opengl/GLWrapper.h"
+#include <glm/vec2.hpp>
 
 #include <memory>
+#include <vector>
 
 namespace Rival {
 
 class Spritesheet;
+
+/** A sprite from a Spritesheet, stretched to fill a rectangle. */
+struct SpriteImage
+{
+    glm::vec2 position;
+    glm::vec2 size;
+    int spriteIndex;
+};
 
 /**
  * Class that allows one or more Sprites to be rendered from a Spritesheet as textured quads.
@@ -39,6 +49,13 @@ public:
     SpriteRenderable& operator=(const SpriteRenderable& other) = delete;
     SpriteRenderable& operator=(SpriteRenderable&& other) = delete;
 
+    /** Uploads the given sprites to the GPU, replacing any previous ones.
+     * Any sprites beyond the maximum are ignored. */
+    void setSprites(const std::vector<SpriteImage>& sprites);
+
+    /** Binds the spritesheet texture and draws the sprites most recently passed to setSprites. */
+    void draw() const;
+
     GLuint getVao() const;
     GLuint getPositionVbo() const;
     GLuint getTexCoordVbo() const;
@@ -59,6 +76,8 @@ private:
     GLenum drawMode;
 
     int indicesPerSprite;
+    int maxSprites;
+    int numSprites = 0;
 };
 
 }  // namespace Rival
